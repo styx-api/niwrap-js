@@ -215,14 +215,16 @@ function v_3d_setup_group_in_corr_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dSetupGroupInCorrOutputs`).
  */
 function v_3d_setup_group_in_corr_execute(
     params: V3dSetupGroupInCorrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dSetupGroupInCorrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_SETUP_GROUP_IN_CORR_METADATA);
     params = execution.params(params)
     const cargs = v_3d_setup_group_in_corr_cargs(params, execution)
     const ret = v_3d_setup_group_in_corr_outputs(params, execution)
@@ -263,10 +265,8 @@ function v_3d_setup_group_in_corr(
     lr_pairs: Array<string> | null = null,
     runner: Runner | null = null,
 ): V3dSetupGroupInCorrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_SETUP_GROUP_IN_CORR_METADATA);
     const params = v_3d_setup_group_in_corr_params(datasets, prefix, mask_dataset, short_flag, byte_flag, labels_file, delete_flag, prep_method, lr_pairs)
-    return v_3d_setup_group_in_corr_execute(params, execution);
+    return v_3d_setup_group_in_corr_execute(params, runner);
 }
 
 
@@ -275,8 +275,6 @@ export {
       V3dSetupGroupInCorrParameters,
       V_3D_SETUP_GROUP_IN_CORR_METADATA,
       v_3d_setup_group_in_corr,
-      v_3d_setup_group_in_corr_cargs,
       v_3d_setup_group_in_corr_execute,
-      v_3d_setup_group_in_corr_outputs,
       v_3d_setup_group_in_corr_params,
 };

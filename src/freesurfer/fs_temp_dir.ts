@@ -147,14 +147,16 @@ function fs_temp_dir_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsTempDirOutputs`).
  */
 function fs_temp_dir_execute(
     params: FsTempDirParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsTempDirOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FS_TEMP_DIR_METADATA);
     params = execution.params(params)
     const cargs = fs_temp_dir_cargs(params, execution)
     const ret = fs_temp_dir_outputs(params, execution)
@@ -181,10 +183,8 @@ function fs_temp_dir(
     scratch: boolean = false,
     runner: Runner | null = null,
 ): FsTempDirOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FS_TEMP_DIR_METADATA);
     const params = fs_temp_dir_params(base_directory, scratch)
-    return fs_temp_dir_execute(params, execution);
+    return fs_temp_dir_execute(params, runner);
 }
 
 
@@ -193,8 +193,6 @@ export {
       FsTempDirOutputs,
       FsTempDirParameters,
       fs_temp_dir,
-      fs_temp_dir_cargs,
       fs_temp_dir_execute,
-      fs_temp_dir_outputs,
       fs_temp_dir_params,
 };

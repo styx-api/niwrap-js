@@ -288,14 +288,16 @@ function mm_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MmOutputs`).
  */
 function mm_execute(
     params: MmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MM_METADATA);
     params = execution.params(params)
     const cargs = mm_cargs(params, execution)
     const ret = mm_outputs(params, execution)
@@ -352,10 +354,8 @@ function mm(
     threshold: number | null = null,
     runner: Runner | null = null,
 ): MmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MM_METADATA);
     const params = mm_params(spatial_data_file, mask_file, verbose_flag, debug_level, timing_flag, example_epi_file, log_directory, nonspatial_flag, fix_mrf_precision_flag, mrf_prec_start, mrf_prec_multiplier, init_multiplier, no_update_theta_flag, zfstat_flag, phi, niters, threshold)
-    return mm_execute(params, execution);
+    return mm_execute(params, runner);
 }
 
 
@@ -364,8 +364,6 @@ export {
       MmOutputs,
       MmParameters,
       mm,
-      mm_cargs,
       mm_execute,
-      mm_outputs,
       mm_params,
 };

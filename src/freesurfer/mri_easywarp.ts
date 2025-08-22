@@ -175,14 +175,16 @@ function mri_easywarp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriEasywarpOutputs`).
  */
 function mri_easywarp_execute(
     params: MriEasywarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriEasywarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_EASYWARP_METADATA);
     params = execution.params(params)
     const cargs = mri_easywarp_cargs(params, execution)
     const ret = mri_easywarp_outputs(params, execution)
@@ -215,10 +217,8 @@ function mri_easywarp(
     num_threads: number | null = null,
     runner: Runner | null = null,
 ): MriEasywarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_EASYWARP_METADATA);
     const params = mri_easywarp_params(input_image, output_image, deformation_field, nearest_neighbor, num_threads)
-    return mri_easywarp_execute(params, execution);
+    return mri_easywarp_execute(params, runner);
 }
 
 
@@ -227,8 +227,6 @@ export {
       MriEasywarpOutputs,
       MriEasywarpParameters,
       mri_easywarp,
-      mri_easywarp_cargs,
       mri_easywarp_execute,
-      mri_easywarp_outputs,
       mri_easywarp_params,
 };

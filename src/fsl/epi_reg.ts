@@ -290,14 +290,16 @@ function epi_reg_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `EpiRegOutputs`).
  */
 function epi_reg_execute(
     params: EpiRegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): EpiRegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EPI_REG_METADATA);
     params = execution.params(params)
     const cargs = epi_reg_cargs(params, execution)
     const ret = epi_reg_outputs(params, execution)
@@ -346,10 +348,8 @@ function epi_reg(
     wmseg: InputPathType | null = null,
     runner: Runner | null = null,
 ): EpiRegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EPI_REG_METADATA);
     const params = epi_reg_params(epi, t1_head, t1_brain, out_base_name, echospacing, fmap, fmapmag, fmapmagbrain, no_clean, no_fmapreg, pedir, weight_image, wmseg)
-    return epi_reg_execute(params, execution);
+    return epi_reg_execute(params, runner);
 }
 
 
@@ -358,8 +358,6 @@ export {
       EpiRegOutputs,
       EpiRegParameters,
       epi_reg,
-      epi_reg_cargs,
       epi_reg_execute,
-      epi_reg_outputs,
       epi_reg_params,
 };

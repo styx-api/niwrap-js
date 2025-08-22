@@ -230,14 +230,16 @@ function bedpostx_gpu_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BedpostxGpuOutputs`).
  */
 function bedpostx_gpu_execute(
     params: BedpostxGpuParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BedpostxGpuOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BEDPOSTX_GPU_METADATA);
     params = execution.params(params)
     const cargs = bedpostx_gpu_cargs(params, execution)
     const ret = bedpostx_gpu_outputs(params, execution)
@@ -280,10 +282,8 @@ function bedpostx_gpu(
     grad_nonlinear: boolean = false,
     runner: Runner | null = null,
 ): BedpostxGpuOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BEDPOSTX_GPU_METADATA);
     const params = bedpostx_gpu_params(subject_dir, gpu_queue, num_jobs, num_fibers, ard_weight, burnin_period, num_jumps, sample_every, deconv_model, grad_nonlinear)
-    return bedpostx_gpu_execute(params, execution);
+    return bedpostx_gpu_execute(params, runner);
 }
 
 
@@ -292,8 +292,6 @@ export {
       BedpostxGpuOutputs,
       BedpostxGpuParameters,
       bedpostx_gpu,
-      bedpostx_gpu_cargs,
       bedpostx_gpu_execute,
-      bedpostx_gpu_outputs,
       bedpostx_gpu_params,
 };

@@ -241,14 +241,16 @@ function dmri_motion_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriMotionOutputs`).
  */
 function dmri_motion_execute(
     params: DmriMotionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriMotionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_MOTION_METADATA);
     params = execution.params(params)
     const cargs = dmri_motion_cargs(params, execution)
     const ret = dmri_motion_outputs(params, execution)
@@ -293,10 +295,8 @@ function dmri_motion(
     version: boolean = false,
     runner: Runner | null = null,
 ): DmriMotionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_MOTION_METADATA);
     const params = dmri_motion_params(outfile, outf, mat, dwi, bval, threshold, diffusivity, debug, checkopts, help, version)
-    return dmri_motion_execute(params, execution);
+    return dmri_motion_execute(params, runner);
 }
 
 
@@ -305,8 +305,6 @@ export {
       DmriMotionOutputs,
       DmriMotionParameters,
       dmri_motion,
-      dmri_motion_cargs,
       dmri_motion_execute,
-      dmri_motion_outputs,
       dmri_motion_params,
 };

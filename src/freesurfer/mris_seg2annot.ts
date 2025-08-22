@@ -229,14 +229,16 @@ function mris_seg2annot_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisSeg2annotOutputs`).
  */
 function mris_seg2annot_execute(
     params: MrisSeg2annotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisSeg2annotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_SEG2ANNOT_METADATA);
     params = execution.params(params)
     const cargs = mris_seg2annot_cargs(params, execution)
     const ret = mris_seg2annot_outputs(params, execution)
@@ -281,10 +283,8 @@ function mris_seg2annot(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrisSeg2annotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_SEG2ANNOT_METADATA);
     const params = mris_seg2annot_params(surfseg, subject, hemi, output_annotation, colortable, auto_ctab, surf, debug, debug_vertex, checkopts, version)
-    return mris_seg2annot_execute(params, execution);
+    return mris_seg2annot_execute(params, runner);
 }
 
 
@@ -293,8 +293,6 @@ export {
       MrisSeg2annotOutputs,
       MrisSeg2annotParameters,
       mris_seg2annot,
-      mris_seg2annot_cargs,
       mris_seg2annot_execute,
-      mris_seg2annot_outputs,
       mris_seg2annot_params,
 };

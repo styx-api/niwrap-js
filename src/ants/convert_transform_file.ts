@@ -165,14 +165,16 @@ function convert_transform_file_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertTransformFileOutputs`).
  */
 function convert_transform_file_execute(
     params: ConvertTransformFileParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvertTransformFileOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVERT_TRANSFORM_FILE_METADATA);
     params = execution.params(params)
     const cargs = convert_transform_file_cargs(params, execution)
     const ret = convert_transform_file_outputs(params, execution)
@@ -209,10 +211,8 @@ function convert_transform_file(
     convert_to_affine_type: boolean = false,
     runner: Runner | null = null,
 ): ConvertTransformFileOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVERT_TRANSFORM_FILE_METADATA);
     const params = convert_transform_file_params(dimensions, input_transform_file, output_transform_file, matrix, homogeneous_matrix, ras, convert_to_affine_type)
-    return convert_transform_file_execute(params, execution);
+    return convert_transform_file_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       ConvertTransformFileOutputs,
       ConvertTransformFileParameters,
       convert_transform_file,
-      convert_transform_file_cargs,
       convert_transform_file_execute,
-      convert_transform_file_outputs,
       convert_transform_file_params,
 };

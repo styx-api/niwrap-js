@@ -235,14 +235,16 @@ function v__dice_metric_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDiceMetricOutputs`).
  */
 function v__dice_metric_execute(
     params: VDiceMetricParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDiceMetricOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DICE_METRIC_METADATA);
     params = execution.params(params)
     const cargs = v__dice_metric_cargs(params, execution)
     const ret = v__dice_metric_outputs(params, execution)
@@ -291,10 +293,8 @@ function v__dice_metric(
     keep_tmp: boolean = false,
     runner: Runner | null = null,
 ): VDiceMetricOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DICE_METRIC_METADATA);
     const params = v__dice_metric_params(base, dsets, max_roi, labeltable, forceoutput, echo, save_match, save_diff, do_not_mask_by_base, mask_by_base, prefix, ignore_bad, keep_tmp)
-    return v__dice_metric_execute(params, execution);
+    return v__dice_metric_execute(params, runner);
 }
 
 
@@ -303,8 +303,6 @@ export {
       VDiceMetricParameters,
       V__DICE_METRIC_METADATA,
       v__dice_metric,
-      v__dice_metric_cargs,
       v__dice_metric_execute,
-      v__dice_metric_outputs,
       v__dice_metric_params,
 };

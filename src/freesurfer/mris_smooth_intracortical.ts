@@ -232,14 +232,16 @@ function mris_smooth_intracortical_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisSmoothIntracorticalOutputs`).
  */
 function mris_smooth_intracortical_execute(
     params: MrisSmoothIntracorticalParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisSmoothIntracorticalOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_SMOOTH_INTRACORTICAL_METADATA);
     params = execution.params(params)
     const cargs = mris_smooth_intracortical_cargs(params, execution)
     const ret = mris_smooth_intracortical_outputs(params, execution)
@@ -282,10 +284,8 @@ function mris_smooth_intracortical(
     tan_weights: string | null = null,
     runner: Runner | null = null,
 ): MrisSmoothIntracorticalOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_SMOOTH_INTRACORTICAL_METADATA);
     const params = mris_smooth_intracortical_params(surf_dir, surf_name, overlay_dir, overlay_name, output_dir, output_name, tan_size, rad_size, rad_start, tan_weights)
-    return mris_smooth_intracortical_execute(params, execution);
+    return mris_smooth_intracortical_execute(params, runner);
 }
 
 
@@ -294,8 +294,6 @@ export {
       MrisSmoothIntracorticalOutputs,
       MrisSmoothIntracorticalParameters,
       mris_smooth_intracortical,
-      mris_smooth_intracortical_cargs,
       mris_smooth_intracortical_execute,
-      mris_smooth_intracortical_outputs,
       mris_smooth_intracortical_params,
 };

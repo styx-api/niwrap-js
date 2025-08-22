@@ -189,14 +189,16 @@ function smooth_displacement_field_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SmoothDisplacementFieldOutputs`).
  */
 function smooth_displacement_field_execute(
     params: SmoothDisplacementFieldParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SmoothDisplacementFieldOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SMOOTH_DISPLACEMENT_FIELD_METADATA);
     params = execution.params(params)
     const cargs = smooth_displacement_field_cargs(params, execution)
     const ret = smooth_displacement_field_outputs(params, execution)
@@ -235,10 +237,8 @@ function smooth_displacement_field(
     confidence_image: InputPathType | null = null,
     runner: Runner | null = null,
 ): SmoothDisplacementFieldOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SMOOTH_DISPLACEMENT_FIELD_METADATA);
     const params = smooth_displacement_field_params(image_dimension, input_field, output_field, variance_or_mesh_size_base_level, number_of_levels, spline_order, estimate_inverse, confidence_image)
-    return smooth_displacement_field_execute(params, execution);
+    return smooth_displacement_field_execute(params, runner);
 }
 
 
@@ -247,8 +247,6 @@ export {
       SmoothDisplacementFieldOutputs,
       SmoothDisplacementFieldParameters,
       smooth_displacement_field,
-      smooth_displacement_field_cargs,
       smooth_displacement_field_execute,
-      smooth_displacement_field_outputs,
       smooth_displacement_field_params,
 };

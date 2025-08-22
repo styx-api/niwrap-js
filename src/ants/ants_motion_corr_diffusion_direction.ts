@@ -168,14 +168,16 @@ function ants_motion_corr_diffusion_direction_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsMotionCorrDiffusionDirectionOutputs`).
  */
 function ants_motion_corr_diffusion_direction_execute(
     params: AntsMotionCorrDiffusionDirectionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsMotionCorrDiffusionDirectionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_MOTION_CORR_DIFFUSION_DIRECTION_METADATA);
     params = execution.params(params)
     const cargs = ants_motion_corr_diffusion_direction_cargs(params, execution)
     const ret = ants_motion_corr_diffusion_direction_outputs(params, execution)
@@ -208,10 +210,8 @@ function ants_motion_corr_diffusion_direction(
     output: string,
     runner: Runner | null = null,
 ): AntsMotionCorrDiffusionDirectionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_MOTION_CORR_DIFFUSION_DIRECTION_METADATA);
     const params = ants_motion_corr_diffusion_direction_params(scheme, bvec, physical, moco, output)
-    return ants_motion_corr_diffusion_direction_execute(params, execution);
+    return ants_motion_corr_diffusion_direction_execute(params, runner);
 }
 
 
@@ -220,8 +220,6 @@ export {
       AntsMotionCorrDiffusionDirectionOutputs,
       AntsMotionCorrDiffusionDirectionParameters,
       ants_motion_corr_diffusion_direction,
-      ants_motion_corr_diffusion_direction_cargs,
       ants_motion_corr_diffusion_direction_execute,
-      ants_motion_corr_diffusion_direction_outputs,
       ants_motion_corr_diffusion_direction_params,
 };

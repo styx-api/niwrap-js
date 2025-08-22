@@ -134,14 +134,16 @@ function v_4swap_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V4swapOutputs`).
  */
 function v_4swap_execute(
     params: V4swapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V4swapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_4SWAP_METADATA);
     params = execution.params(params)
     const cargs = v_4swap_cargs(params, execution)
     const ret = v_4swap_outputs(params, execution)
@@ -168,10 +170,8 @@ function v_4swap(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V4swapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_4SWAP_METADATA);
     const params = v_4swap_params(files, quiet)
-    return v_4swap_execute(params, execution);
+    return v_4swap_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       V4swapParameters,
       V_4SWAP_METADATA,
       v_4swap,
-      v_4swap_cargs,
       v_4swap_execute,
-      v_4swap_outputs,
       v_4swap_params,
 };

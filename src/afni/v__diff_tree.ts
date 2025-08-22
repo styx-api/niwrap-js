@@ -279,14 +279,16 @@ function v__diff_tree_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDiffTreeOutputs`).
  */
 function v__diff_tree_execute(
     params: VDiffTreeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDiffTreeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DIFF_TREE_METADATA);
     params = execution.params(params)
     const cargs = v__diff_tree_cargs(params, execution)
     const ret = v__diff_tree_outputs(params, execution)
@@ -345,10 +347,8 @@ function v__diff_tree(
     x_option: boolean = false,
     runner: Runner | null = null,
 ): VDiffTreeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DIFF_TREE_METADATA);
     const params = v__diff_tree_params(new_dir, old_dir, diff_opts, ignore_append, ia, ignore_list, il, ignore_missing, no_diffs, quiet, save, show, show_list_comp, skip_data, verb, diff_prog, xxdiff, x_option)
-    return v__diff_tree_execute(params, execution);
+    return v__diff_tree_execute(params, runner);
 }
 
 
@@ -357,8 +357,6 @@ export {
       VDiffTreeParameters,
       V__DIFF_TREE_METADATA,
       v__diff_tree,
-      v__diff_tree_cargs,
       v__diff_tree_execute,
-      v__diff_tree_outputs,
       v__diff_tree_params,
 };

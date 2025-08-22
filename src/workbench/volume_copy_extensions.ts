@@ -153,14 +153,16 @@ function volume_copy_extensions_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeCopyExtensionsOutputs`).
  */
 function volume_copy_extensions_execute(
     params: VolumeCopyExtensionsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeCopyExtensionsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_COPY_EXTENSIONS_METADATA);
     params = execution.params(params)
     const cargs = volume_copy_extensions_cargs(params, execution)
     const ret = volume_copy_extensions_outputs(params, execution)
@@ -193,10 +195,8 @@ function volume_copy_extensions(
     opt_drop_unknown: boolean = false,
     runner: Runner | null = null,
 ): VolumeCopyExtensionsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_COPY_EXTENSIONS_METADATA);
     const params = volume_copy_extensions_params(data_volume, extension_volume, volume_out, opt_drop_unknown)
-    return volume_copy_extensions_execute(params, execution);
+    return volume_copy_extensions_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       VolumeCopyExtensionsOutputs,
       VolumeCopyExtensionsParameters,
       volume_copy_extensions,
-      volume_copy_extensions_cargs,
       volume_copy_extensions_execute,
-      volume_copy_extensions_outputs,
       volume_copy_extensions_params,
 };

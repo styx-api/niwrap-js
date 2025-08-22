@@ -146,14 +146,16 @@ function ptoz_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PtozOutputs`).
  */
 function ptoz_execute(
     params: PtozParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PtozOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PTOZ_METADATA);
     params = execution.params(params)
     const cargs = ptoz_cargs(params, execution)
     const ret = ptoz_outputs(params, execution)
@@ -182,10 +184,8 @@ function ptoz(
     grf_flag: number | null = null,
     runner: Runner | null = null,
 ): PtozOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PTOZ_METADATA);
     const params = ptoz_params(p_value, tail_flag, grf_flag)
-    return ptoz_execute(params, execution);
+    return ptoz_execute(params, runner);
 }
 
 
@@ -194,8 +194,6 @@ export {
       PtozOutputs,
       PtozParameters,
       ptoz,
-      ptoz_cargs,
       ptoz_execute,
-      ptoz_outputs,
       ptoz_params,
 };

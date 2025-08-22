@@ -138,14 +138,16 @@ function possum_plot_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PossumPlotOutputs`).
  */
 function possum_plot_execute(
     params: PossumPlotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PossumPlotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(POSSUM_PLOT_METADATA);
     params = execution.params(params)
     const cargs = possum_plot_cargs(params, execution)
     const ret = possum_plot_outputs(params, execution)
@@ -172,10 +174,8 @@ function possum_plot(
     output_basename: string,
     runner: Runner | null = null,
 ): PossumPlotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(POSSUM_PLOT_METADATA);
     const params = possum_plot_params(input_file, output_basename)
-    return possum_plot_execute(params, execution);
+    return possum_plot_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       PossumPlotOutputs,
       PossumPlotParameters,
       possum_plot,
-      possum_plot_cargs,
       possum_plot_execute,
-      possum_plot_outputs,
       possum_plot_params,
 };

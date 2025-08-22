@@ -142,14 +142,16 @@ function print_header_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PrintHeaderOutputs`).
  */
 function print_header_execute(
     params: PrintHeaderParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PrintHeaderOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PRINT_HEADER_METADATA);
     params = execution.params(params)
     const cargs = print_header_cargs(params, execution)
     const ret = print_header_outputs(params, execution)
@@ -176,10 +178,8 @@ function print_header(
     what_information: 0 | 1 | 2 | 3 | 4 | null = null,
     runner: Runner | null = null,
 ): PrintHeaderOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PRINT_HEADER_METADATA);
     const params = print_header_params(image, what_information)
-    return print_header_execute(params, execution);
+    return print_header_execute(params, runner);
 }
 
 
@@ -188,8 +188,6 @@ export {
       PrintHeaderOutputs,
       PrintHeaderParameters,
       print_header,
-      print_header_cargs,
       print_header_execute,
-      print_header_outputs,
       print_header_params,
 };

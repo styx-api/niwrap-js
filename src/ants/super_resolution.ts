@@ -163,14 +163,16 @@ function super_resolution_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SuperResolutionOutputs`).
  */
 function super_resolution_execute(
     params: SuperResolutionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SuperResolutionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SUPER_RESOLUTION_METADATA);
     params = execution.params(params)
     const cargs = super_resolution_cargs(params, execution)
     const ret = super_resolution_outputs(params, execution)
@@ -207,10 +209,8 @@ function super_resolution(
     input_image_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): SuperResolutionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SUPER_RESOLUTION_METADATA);
     const params = super_resolution_params(image_dimension, output_image, domain_image, gradient_sigma, mesh_size, number_of_levels, input_image_files)
-    return super_resolution_execute(params, execution);
+    return super_resolution_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       SuperResolutionOutputs,
       SuperResolutionParameters,
       super_resolution,
-      super_resolution_cargs,
       super_resolution_execute,
-      super_resolution_outputs,
       super_resolution_params,
 };

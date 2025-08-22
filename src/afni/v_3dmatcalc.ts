@@ -169,14 +169,16 @@ function v_3dmatcalc_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dmatcalcOutputs`).
  */
 function v_3dmatcalc_execute(
     params: V3dmatcalcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dmatcalcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DMATCALC_METADATA);
     params = execution.params(params)
     const cargs = v_3dmatcalc_cargs(params, execution)
     const ret = v_3dmatcalc_outputs(params, execution)
@@ -207,10 +209,8 @@ function v_3dmatcalc(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dmatcalcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DMATCALC_METADATA);
     const params = v_3dmatcalc_params(input_dataset, input_matrix, output_dataset, mask)
-    return v_3dmatcalc_execute(params, execution);
+    return v_3dmatcalc_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       V3dmatcalcParameters,
       V_3DMATCALC_METADATA,
       v_3dmatcalc,
-      v_3dmatcalc_cargs,
       v_3dmatcalc_execute,
-      v_3dmatcalc_outputs,
       v_3dmatcalc_params,
 };

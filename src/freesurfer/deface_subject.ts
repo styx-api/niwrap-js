@@ -160,14 +160,16 @@ function deface_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DefaceSubjectOutputs`).
  */
 function deface_subject_execute(
     params: DefaceSubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DefaceSubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DEFACE_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = deface_subject_cargs(params, execution)
     const ret = deface_subject_outputs(params, execution)
@@ -198,10 +200,8 @@ function deface_subject(
     volume_output: string,
     runner: Runner | null = null,
 ): DefaceSubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DEFACE_SUBJECT_METADATA);
     const params = deface_subject_params(subjects_dir, subject_id, volume_input, volume_output)
-    return deface_subject_execute(params, execution);
+    return deface_subject_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       DefaceSubjectOutputs,
       DefaceSubjectParameters,
       deface_subject,
-      deface_subject_cargs,
       deface_subject_execute,
-      deface_subject_outputs,
       deface_subject_params,
 };

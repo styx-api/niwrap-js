@@ -191,14 +191,16 @@ function fs_temp_file_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsTempFileOutputs`).
  */
 function fs_temp_file_execute(
     params: FsTempFileParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsTempFileOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FS_TEMP_FILE_METADATA);
     params = execution.params(params)
     const cargs = fs_temp_file_cargs(params, execution)
     const ret = fs_temp_file_outputs(params, execution)
@@ -235,10 +237,8 @@ function fs_temp_file(
     help_alt: boolean = false,
     runner: Runner | null = null,
 ): FsTempFileOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FS_TEMP_FILE_METADATA);
     const params = fs_temp_file_params(base_dir, base_dir_alt, suffix, suffix_alt, scratch, help, help_alt)
-    return fs_temp_file_execute(params, execution);
+    return fs_temp_file_execute(params, runner);
 }
 
 
@@ -247,8 +247,6 @@ export {
       FsTempFileOutputs,
       FsTempFileParameters,
       fs_temp_file,
-      fs_temp_file_cargs,
       fs_temp_file_execute,
-      fs_temp_file_outputs,
       fs_temp_file_params,
 };

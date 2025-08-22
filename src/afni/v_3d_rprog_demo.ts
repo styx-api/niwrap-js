@@ -215,14 +215,16 @@ function v_3d_rprog_demo_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dRprogDemoOutputs`).
  */
 function v_3d_rprog_demo_execute(
     params: V3dRprogDemoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dRprogDemoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_RPROG_DEMO_METADATA);
     params = execution.params(params)
     const cargs = v_3d_rprog_demo_cargs(params, execution)
     const ret = v_3d_rprog_demo_outputs(params, execution)
@@ -267,10 +269,8 @@ function v_3d_rprog_demo(
     verbosity_level: number | null = null,
     runner: Runner | null = null,
 ): V3dRprogDemoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_RPROG_DEMO_METADATA);
     const params = v_3d_rprog_demo_params(input_dsets, scale, prefix, mask, help_aspx, help_raw, help_spx, help_txt, help, show_allowed_options, verbosity_level)
-    return v_3d_rprog_demo_execute(params, execution);
+    return v_3d_rprog_demo_execute(params, runner);
 }
 
 
@@ -279,8 +279,6 @@ export {
       V3dRprogDemoParameters,
       V_3D_RPROG_DEMO_METADATA,
       v_3d_rprog_demo,
-      v_3d_rprog_demo_cargs,
       v_3d_rprog_demo_execute,
-      v_3d_rprog_demo_outputs,
       v_3d_rprog_demo_params,
 };

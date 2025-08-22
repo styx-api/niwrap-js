@@ -137,14 +137,16 @@ function mris_init_global_tractography_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisInitGlobalTractographyOutputs`).
  */
 function mris_init_global_tractography_execute(
     params: MrisInitGlobalTractographyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisInitGlobalTractographyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_INIT_GLOBAL_TRACTOGRAPHY_METADATA);
     params = execution.params(params)
     const cargs = mris_init_global_tractography_cargs(params, execution)
     const ret = mris_init_global_tractography_outputs(params, execution)
@@ -173,10 +175,8 @@ function mris_init_global_tractography(
     output_volume: string,
     runner: Runner | null = null,
 ): MrisInitGlobalTractographyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_INIT_GLOBAL_TRACTOGRAPHY_METADATA);
     const params = mris_init_global_tractography_params(subject, parcellation, output_volume)
-    return mris_init_global_tractography_execute(params, execution);
+    return mris_init_global_tractography_execute(params, runner);
 }
 
 
@@ -185,8 +185,6 @@ export {
       MrisInitGlobalTractographyOutputs,
       MrisInitGlobalTractographyParameters,
       mris_init_global_tractography,
-      mris_init_global_tractography_cargs,
       mris_init_global_tractography_execute,
-      mris_init_global_tractography_outputs,
       mris_init_global_tractography_params,
 };

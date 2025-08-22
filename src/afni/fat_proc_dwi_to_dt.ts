@@ -401,14 +401,16 @@ function fat_proc_dwi_to_dt_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatProcDwiToDtOutputs`).
  */
 function fat_proc_dwi_to_dt_execute(
     params: FatProcDwiToDtParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatProcDwiToDtOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_PROC_DWI_TO_DT_METADATA);
     params = execution.params(params)
     const cargs = fat_proc_dwi_to_dt_cargs(params, execution)
     const ret = fat_proc_dwi_to_dt_outputs(params, execution)
@@ -489,10 +491,8 @@ function fat_proc_dwi_to_dt(
     check_abs_min: number | null = null,
     runner: Runner | null = null,
 ): FatProcDwiToDtOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_PROC_DWI_TO_DT_METADATA);
     const params = fat_proc_dwi_to_dt_params(in_dwi, in_gradmat, prefix, in_bvals, mask, mask_from_struc, in_struc_res, in_ref_orig, prefix_dti, flip_x, flip_y, flip_z, no_flip, no_scale_out_1000, no_reweight, no_cumulative_wts, qc_fa_thr, qc_fa_max, qc_fa_unc_max, qc_v12_unc_max, qc_prefix, no_qc_view, no_cmd_out, workdir, no_clean, uncert_off, uncert_iters, uncert_extra_cmds, check_abs_min)
-    return fat_proc_dwi_to_dt_execute(params, execution);
+    return fat_proc_dwi_to_dt_execute(params, runner);
 }
 
 
@@ -501,8 +501,6 @@ export {
       FatProcDwiToDtOutputs,
       FatProcDwiToDtParameters,
       fat_proc_dwi_to_dt,
-      fat_proc_dwi_to_dt_cargs,
       fat_proc_dwi_to_dt_execute,
-      fat_proc_dwi_to_dt_outputs,
       fat_proc_dwi_to_dt_params,
 };

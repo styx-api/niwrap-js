@@ -189,14 +189,16 @@ function metric_erode_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricErodeOutputs`).
  */
 function metric_erode_execute(
     params: MetricErodeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricErodeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_ERODE_METADATA);
     params = execution.params(params)
     const cargs = metric_erode_cargs(params, execution)
     const ret = metric_erode_outputs(params, execution)
@@ -237,10 +239,8 @@ function metric_erode(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricErodeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_ERODE_METADATA);
     const params = metric_erode_params(metric, surface, distance, metric_out, opt_roi_roi_metric, opt_column_column, opt_corrected_areas_area_metric)
-    return metric_erode_execute(params, execution);
+    return metric_erode_execute(params, runner);
 }
 
 
@@ -249,8 +249,6 @@ export {
       MetricErodeOutputs,
       MetricErodeParameters,
       metric_erode,
-      metric_erode_cargs,
       metric_erode_execute,
-      metric_erode_outputs,
       metric_erode_params,
 };

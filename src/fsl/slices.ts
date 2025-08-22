@@ -172,14 +172,16 @@ function slices_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SlicesOutputs`).
  */
 function slices_execute(
     params: SlicesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SlicesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SLICES_METADATA);
     params = execution.params(params)
     const cargs = slices_cargs(params, execution)
     const ret = slices_outputs(params, execution)
@@ -212,10 +214,8 @@ function slices(
     output_gif: string | null = null,
     runner: Runner | null = null,
 ): SlicesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SLICES_METADATA);
     const params = slices_params(primary_input, secondary_input, scale_factor, intensity_range, output_gif)
-    return slices_execute(params, execution);
+    return slices_execute(params, runner);
 }
 
 
@@ -224,8 +224,6 @@ export {
       SlicesOutputs,
       SlicesParameters,
       slices,
-      slices_cargs,
       slices_execute,
-      slices_outputs,
       slices_params,
 };

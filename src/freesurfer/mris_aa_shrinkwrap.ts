@@ -170,14 +170,16 @@ function mris_aa_shrinkwrap_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisAaShrinkwrapOutputs`).
  */
 function mris_aa_shrinkwrap_execute(
     params: MrisAaShrinkwrapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisAaShrinkwrapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_AA_SHRINKWRAP_METADATA);
     params = execution.params(params)
     const cargs = mris_aa_shrinkwrap_cargs(params, execution)
     const ret = mris_aa_shrinkwrap_outputs(params, execution)
@@ -214,10 +216,8 @@ function mris_aa_shrinkwrap(
     white_only: boolean = false,
     runner: Runner | null = null,
 ): MrisAaShrinkwrapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_AA_SHRINKWRAP_METADATA);
     const params = mris_aa_shrinkwrap_params(t1_vol, pd_vol, output_dir, omit_self_intersection, create_curvature_area, average_curvature, white_only)
-    return mris_aa_shrinkwrap_execute(params, execution);
+    return mris_aa_shrinkwrap_execute(params, runner);
 }
 
 
@@ -226,8 +226,6 @@ export {
       MrisAaShrinkwrapOutputs,
       MrisAaShrinkwrapParameters,
       mris_aa_shrinkwrap,
-      mris_aa_shrinkwrap_cargs,
       mris_aa_shrinkwrap_execute,
-      mris_aa_shrinkwrap_outputs,
       mris_aa_shrinkwrap_params,
 };

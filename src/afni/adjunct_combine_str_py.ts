@@ -143,14 +143,16 @@ function adjunct_combine_str_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AdjunctCombineStrPyOutputs`).
  */
 function adjunct_combine_str_py_execute(
     params: AdjunctCombineStrPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AdjunctCombineStrPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADJUNCT_COMBINE_STR_PY_METADATA);
     params = execution.params(params)
     const cargs = adjunct_combine_str_py_cargs(params, execution)
     const ret = adjunct_combine_str_py_outputs(params, execution)
@@ -179,10 +181,8 @@ function adjunct_combine_str_py(
     string_selectors: Array<string>,
     runner: Runner | null = null,
 ): AdjunctCombineStrPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADJUNCT_COMBINE_STR_PY_METADATA);
     const params = adjunct_combine_str_py_params(output_file, upper_index, string_selectors)
-    return adjunct_combine_str_py_execute(params, execution);
+    return adjunct_combine_str_py_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       AdjunctCombineStrPyOutputs,
       AdjunctCombineStrPyParameters,
       adjunct_combine_str_py,
-      adjunct_combine_str_py_cargs,
       adjunct_combine_str_py_execute,
-      adjunct_combine_str_py_outputs,
       adjunct_combine_str_py_params,
 };

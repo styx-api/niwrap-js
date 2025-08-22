@@ -132,14 +132,16 @@ function proj_thresh_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ProjThreshOutputs`).
  */
 function proj_thresh_execute(
     params: ProjThreshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ProjThreshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PROJ_THRESH_METADATA);
     params = execution.params(params)
     const cargs = proj_thresh_cargs(params, execution)
     const ret = proj_thresh_outputs(params, execution)
@@ -166,10 +168,8 @@ function proj_thresh(
     threshold: number,
     runner: Runner | null = null,
 ): ProjThreshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PROJ_THRESH_METADATA);
     const params = proj_thresh_params(input_paths, threshold)
-    return proj_thresh_execute(params, execution);
+    return proj_thresh_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       ProjThreshOutputs,
       ProjThreshParameters,
       proj_thresh,
-      proj_thresh_cargs,
       proj_thresh_execute,
-      proj_thresh_outputs,
       proj_thresh_params,
 };

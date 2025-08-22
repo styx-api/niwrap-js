@@ -264,14 +264,16 @@ function mrisp_paint_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrispPaintOutputs`).
  */
 function mrisp_paint_execute(
     params: MrispPaintParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrispPaintOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRISP_PAINT_METADATA);
     params = execution.params(params)
     const cargs = mrisp_paint_cargs(params, execution)
     const ret = mrisp_paint_outputs(params, execution)
@@ -326,10 +328,8 @@ function mrisp_paint(
     diag_write_flag: boolean = false,
     runner: Runner | null = null,
 ): MrispPaintOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRISP_PAINT_METADATA);
     const params = mrisp_paint_params(template_file, input_surface, output_name, subjects_dir, vertex_coords, average_flag, normalize_flag, frame_number, square_root_flag, variance_params, usage_flag, birn_info_flag, help_flag, diag_vertex, version_flag, diag_write_flag)
-    return mrisp_paint_execute(params, execution);
+    return mrisp_paint_execute(params, runner);
 }
 
 
@@ -338,8 +338,6 @@ export {
       MrispPaintOutputs,
       MrispPaintParameters,
       mrisp_paint,
-      mrisp_paint_cargs,
       mrisp_paint_execute,
-      mrisp_paint_outputs,
       mrisp_paint_params,
 };

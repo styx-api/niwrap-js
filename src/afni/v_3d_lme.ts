@@ -431,14 +431,16 @@ function v_3d_lme_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dLmeOutputs`).
  */
 function v_3d_lme_execute(
     params: V3dLmeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dLmeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_LME_METADATA);
     params = execution.params(params)
     const cargs = v_3d_lme_cargs(params, execution)
     const ret = v_3d_lme_outputs(params, execution)
@@ -521,10 +523,8 @@ function v_3d_lme(
     ss_type: number | null = null,
     runner: Runner | null = null,
 ): V3dLmeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_LME_METADATA);
     const params = v_3d_lme_params(prefix, model, data_table, bounds, cio_flag, cor_str, cutoff, dbg_args_flag, jobs, glt_code, glt_label, glf_label, glf_code, icc_flag, iccb_flag, log_lik_flag, logit_flag, ml_flag, qvars_centers, qvars, raneff, mask, num_glf, num_glt, resid, re, reprefix, rio_flag, show_options_flag, ss_type)
-    return v_3d_lme_execute(params, execution);
+    return v_3d_lme_execute(params, runner);
 }
 
 
@@ -533,8 +533,6 @@ export {
       V3dLmeParameters,
       V_3D_LME_METADATA,
       v_3d_lme,
-      v_3d_lme_cargs,
       v_3d_lme_execute,
-      v_3d_lme_outputs,
       v_3d_lme_params,
 };

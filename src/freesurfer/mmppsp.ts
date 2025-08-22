@@ -222,14 +222,16 @@ function mmppsp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MmppspOutputs`).
  */
 function mmppsp_execute(
     params: MmppspParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MmppspOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MMPPSP_METADATA);
     params = execution.params(params)
     const cargs = mmppsp_cargs(params, execution)
     const ret = mmppsp_outputs(params, execution)
@@ -274,10 +276,8 @@ function mmppsp(
     wexpanddist: number | null = null,
     runner: Runner | null = null,
 ): MmppspOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MMPPSP_METADATA);
     const params = mmppsp_params(samseg_dir, outdir, lh_flag, rh_flag, likelihood_flag, posterior_flag, force_update_flag, threads, no_initsphreg_flag, stop_after, wexpanddist)
-    return mmppsp_execute(params, execution);
+    return mmppsp_execute(params, runner);
 }
 
 
@@ -286,8 +286,6 @@ export {
       MmppspOutputs,
       MmppspParameters,
       mmppsp,
-      mmppsp_cargs,
       mmppsp_execute,
-      mmppsp_outputs,
       mmppsp_params,
 };

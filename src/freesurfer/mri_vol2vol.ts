@@ -565,14 +565,16 @@ function mri_vol2vol_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriVol2volOutputs`).
  */
 function mri_vol2vol_execute(
     params: MriVol2volParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriVol2volOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_VOL2VOL_METADATA);
     params = execution.params(params)
     const cargs = mri_vol2vol_cargs(params, execution)
     const ret = mri_vol2vol_outputs(params, execution)
@@ -683,10 +685,8 @@ function mri_vol2vol(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriVol2volOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_VOL2VOL_METADATA);
     const params = mri_vol2vol_params(movvol, targvol, outvol, dispvol, downsample, register_dat, lta, lta_inv, fsl, xfm, inv, tal, talres, talxfm, m3z, inv_morph, fstarg, crop, slice_crop, slice_reverse, slice_bias, interp, fill_average, fill_conserve, fill_up, mul, precision, keep_precision, kernel, copy_ctab, gcam, spm_warp, map_point, map_point_inv_lta, no_resample, rot, trans, shear, reg_final, synth, seed, save_reg, debug, version)
-    return mri_vol2vol_execute(params, execution);
+    return mri_vol2vol_execute(params, runner);
 }
 
 
@@ -695,8 +695,6 @@ export {
       MriVol2volOutputs,
       MriVol2volParameters,
       mri_vol2vol,
-      mri_vol2vol_cargs,
       mri_vol2vol_execute,
-      mri_vol2vol_outputs,
       mri_vol2vol_params,
 };

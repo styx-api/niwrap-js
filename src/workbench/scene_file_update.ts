@@ -340,14 +340,16 @@ function scene_file_update_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SceneFileUpdateOutputs`).
  */
 function scene_file_update_execute(
     params: SceneFileUpdateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SceneFileUpdateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SCENE_FILE_UPDATE_METADATA);
     params = execution.params(params)
     const cargs = scene_file_update_cargs(params, execution)
     const ret = scene_file_update_outputs(params, execution)
@@ -401,10 +403,8 @@ function scene_file_update(
     data_file_remove: Array<SceneFileUpdateDataFileRemoveParameters> | null = null,
     runner: Runner | null = null,
 ): SceneFileUpdateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SCENE_FILE_UPDATE_METADATA);
     const params = scene_file_update_params(input_scene_file, output_scene_file, scene_name_or_number, opt_fix_map_palette_settings, opt_remove_missing_files, opt_error, opt_verbose, copy_map_one_palette, data_file_add, data_file_remove)
-    return scene_file_update_execute(params, execution);
+    return scene_file_update_execute(params, runner);
 }
 
 
@@ -416,14 +416,9 @@ export {
       SceneFileUpdateOutputs,
       SceneFileUpdateParameters,
       scene_file_update,
-      scene_file_update_cargs,
-      scene_file_update_copy_map_one_palette_cargs,
       scene_file_update_copy_map_one_palette_params,
-      scene_file_update_data_file_add_cargs,
       scene_file_update_data_file_add_params,
-      scene_file_update_data_file_remove_cargs,
       scene_file_update_data_file_remove_params,
       scene_file_update_execute,
-      scene_file_update_outputs,
       scene_file_update_params,
 };

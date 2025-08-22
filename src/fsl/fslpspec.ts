@@ -142,14 +142,16 @@ function fslpspec_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslpspecOutputs`).
  */
 function fslpspec_execute(
     params: FslpspecParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslpspecOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLPSPEC_METADATA);
     params = execution.params(params)
     const cargs = fslpspec_cargs(params, execution)
     const ret = fslpspec_outputs(params, execution)
@@ -176,10 +178,8 @@ function fslpspec(
     outfile: string | null = null,
     runner: Runner | null = null,
 ): FslpspecOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLPSPEC_METADATA);
     const params = fslpspec_params(infile, outfile)
-    return fslpspec_execute(params, execution);
+    return fslpspec_execute(params, runner);
 }
 
 
@@ -188,8 +188,6 @@ export {
       FslpspecOutputs,
       FslpspecParameters,
       fslpspec,
-      fslpspec_cargs,
       fslpspec_execute,
-      fslpspec_outputs,
       fslpspec_params,
 };

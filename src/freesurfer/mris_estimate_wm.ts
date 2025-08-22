@@ -207,14 +207,16 @@ function mris_estimate_wm_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisEstimateWmOutputs`).
  */
 function mris_estimate_wm_execute(
     params: MrisEstimateWmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisEstimateWmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_ESTIMATE_WM_METADATA);
     params = execution.params(params)
     const cargs = mris_estimate_wm_cargs(params, execution)
     const ret = mris_estimate_wm_outputs(params, execution)
@@ -255,10 +257,8 @@ function mris_estimate_wm(
     vol: string | null = null,
     runner: Runner | null = null,
 ): MrisEstimateWmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_ESTIMATE_WM_METADATA);
     const params = mris_estimate_wm_params(subjs, hemi, sdir, model, suffix, gpu, rsi, single_iter, vol)
-    return mris_estimate_wm_execute(params, execution);
+    return mris_estimate_wm_execute(params, runner);
 }
 
 
@@ -267,8 +267,6 @@ export {
       MrisEstimateWmOutputs,
       MrisEstimateWmParameters,
       mris_estimate_wm,
-      mris_estimate_wm_cargs,
       mris_estimate_wm_execute,
-      mris_estimate_wm_outputs,
       mris_estimate_wm_params,
 };

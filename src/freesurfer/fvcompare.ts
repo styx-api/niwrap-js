@@ -364,14 +364,16 @@ function fvcompare_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FvcompareOutputs`).
  */
 function fvcompare_execute(
     params: FvcompareParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FvcompareOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FVCOMPARE_METADATA);
     params = execution.params(params)
     const cargs = fvcompare_cargs(params, execution)
     const ret = fvcompare_outputs(params, execution)
@@ -444,10 +446,8 @@ function fvcompare(
     wot2: boolean = false,
     runner: Runner | null = null,
 ): FvcompareOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FVCOMPARE_METADATA);
     const params = fvcompare_params(subject1, subject2, subject_dir1, subject_dir2, name1, name2, color1, volume, segmentation, aseg, no_seg, left_hemi, right_hemi, no_surf, gray_levels, cursor_position, zoom_level, annotation, aparc, inflated, white, orig, surf_name, pointset, wot2)
-    return fvcompare_execute(params, execution);
+    return fvcompare_execute(params, runner);
 }
 
 
@@ -456,8 +456,6 @@ export {
       FvcompareOutputs,
       FvcompareParameters,
       fvcompare,
-      fvcompare_cargs,
       fvcompare_execute,
-      fvcompare_outputs,
       fvcompare_params,
 };

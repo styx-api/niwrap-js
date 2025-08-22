@@ -136,14 +136,16 @@ function tbss_3_postreg_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Tbss3PostregOutputs`).
  */
 function tbss_3_postreg_execute(
     params: Tbss3PostregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Tbss3PostregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TBSS_3_POSTREG_METADATA);
     params = execution.params(params)
     const cargs = tbss_3_postreg_cargs(params, execution)
     const ret = tbss_3_postreg_outputs(params, execution)
@@ -170,10 +172,8 @@ function tbss_3_postreg(
     use_fmrib58: boolean = false,
     runner: Runner | null = null,
 ): Tbss3PostregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TBSS_3_POSTREG_METADATA);
     const params = tbss_3_postreg_params(derive_mean_from_study, use_fmrib58)
-    return tbss_3_postreg_execute(params, execution);
+    return tbss_3_postreg_execute(params, runner);
 }
 
 
@@ -182,8 +182,6 @@ export {
       Tbss3PostregOutputs,
       Tbss3PostregParameters,
       tbss_3_postreg,
-      tbss_3_postreg_cargs,
       tbss_3_postreg_execute,
-      tbss_3_postreg_outputs,
       tbss_3_postreg_params,
 };

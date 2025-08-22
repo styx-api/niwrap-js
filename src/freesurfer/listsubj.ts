@@ -190,14 +190,16 @@ function listsubj_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ListsubjOutputs`).
  */
 function listsubj_execute(
     params: ListsubjParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ListsubjOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LISTSUBJ_METADATA);
     params = execution.params(params)
     const cargs = listsubj_cargs(params, execution)
     const ret = listsubj_outputs(params, execution)
@@ -240,10 +242,8 @@ function listsubj(
     help: boolean = false,
     runner: Runner | null = null,
 ): ListsubjOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LISTSUBJ_METADATA);
     const params = listsubj_params(subject_dir, cross, base, long, done, error, running, full_path, count, help)
-    return listsubj_execute(params, execution);
+    return listsubj_execute(params, runner);
 }
 
 
@@ -252,8 +252,6 @@ export {
       ListsubjOutputs,
       ListsubjParameters,
       listsubj,
-      listsubj_cargs,
       listsubj_execute,
-      listsubj_outputs,
       listsubj_params,
 };

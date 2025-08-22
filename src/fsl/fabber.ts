@@ -553,14 +553,16 @@ function fabber_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FabberOutputs`).
  */
 function fabber_execute(
     params: FabberParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FabberOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FABBER_METADATA);
     params = execution.params(params)
     const cargs = fabber_cargs(params, execution)
     const ret = fabber_outputs(params, execution)
@@ -655,10 +657,8 @@ function fabber(
     old_optfile: InputPathType | null = null,
     runner: Runner | null = null,
 ): FabberOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FABBER_METADATA);
     const params = fabber_params(output, method, model, data_file, data_files, data_order, mask_file, mt_n, supp_data, evaluate_output, evaluate_params, evaluate_nt, simple_output, overwrite, link_to_latest, load_models, debug, optfile, save_model_fit, save_residuals, save_model_extras, save_mvn, save_mean, save_std, save_var, save_zstat, save_noise_mean, save_noise_std, save_free_energy, help, list_methods, list_models, list_params, desc_params, list_outputs, old_optfile)
-    return fabber_execute(params, execution);
+    return fabber_execute(params, runner);
 }
 
 
@@ -668,10 +668,7 @@ export {
       FabberOutputs,
       FabberParameters,
       fabber,
-      fabber_cargs,
       fabber_execute,
-      fabber_optfile_cargs,
       fabber_optfile_params,
-      fabber_outputs,
       fabber_params,
 };

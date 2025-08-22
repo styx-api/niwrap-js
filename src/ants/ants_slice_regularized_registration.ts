@@ -225,14 +225,16 @@ function ants_slice_regularized_registration_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsSliceRegularizedRegistrationOutputs`).
  */
 function ants_slice_regularized_registration_execute(
     params: AntsSliceRegularizedRegistrationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsSliceRegularizedRegistrationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_SLICE_REGULARIZED_REGISTRATION_METADATA);
     params = execution.params(params)
     const cargs = ants_slice_regularized_registration_cargs(params, execution)
     const ret = ants_slice_regularized_registration_outputs(params, execution)
@@ -275,10 +277,8 @@ function ants_slice_regularized_registration(
     verbose: 0 | null = null,
     runner: Runner | null = null,
 ): AntsSliceRegularizedRegistrationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_SLICE_REGULARIZED_REGISTRATION_METADATA);
     const params = ants_slice_regularized_registration_params(polydegree, output, metric, transform, iterations, shrink_factors, smoothing_sigmas, mask, interpolation, verbose)
-    return ants_slice_regularized_registration_execute(params, execution);
+    return ants_slice_regularized_registration_execute(params, runner);
 }
 
 
@@ -287,8 +287,6 @@ export {
       AntsSliceRegularizedRegistrationOutputs,
       AntsSliceRegularizedRegistrationParameters,
       ants_slice_regularized_registration,
-      ants_slice_regularized_registration_cargs,
       ants_slice_regularized_registration_execute,
-      ants_slice_regularized_registration_outputs,
       ants_slice_regularized_registration_params,
 };

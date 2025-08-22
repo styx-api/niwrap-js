@@ -130,14 +130,16 @@ function apqc_make_html_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ApqcMakeHtmlOutputs`).
  */
 function apqc_make_html_execute(
     params: ApqcMakeHtmlParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ApqcMakeHtmlOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(APQC_MAKE_HTML_METADATA);
     params = execution.params(params)
     const cargs = apqc_make_html_cargs(params, execution)
     const ret = apqc_make_html_outputs(params, execution)
@@ -162,10 +164,8 @@ function apqc_make_html(
     qc_dir: string,
     runner: Runner | null = null,
 ): ApqcMakeHtmlOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(APQC_MAKE_HTML_METADATA);
     const params = apqc_make_html_params(qc_dir)
-    return apqc_make_html_execute(params, execution);
+    return apqc_make_html_execute(params, runner);
 }
 
 
@@ -174,8 +174,6 @@ export {
       ApqcMakeHtmlOutputs,
       ApqcMakeHtmlParameters,
       apqc_make_html,
-      apqc_make_html_cargs,
       apqc_make_html_execute,
-      apqc_make_html_outputs,
       apqc_make_html_params,
 };

@@ -152,14 +152,16 @@ function imgreg_4dfp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Imgreg4dfpOutputs`).
  */
 function imgreg_4dfp_execute(
     params: Imgreg4dfpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Imgreg4dfpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMGREG_4DFP_METADATA);
     params = execution.params(params)
     const cargs = imgreg_4dfp_cargs(params, execution)
     const ret = imgreg_4dfp_outputs(params, execution)
@@ -194,10 +196,8 @@ function imgreg_4dfp(
     source_mask: string = "none",
     runner: Runner | null = null,
 ): Imgreg4dfpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMGREG_4DFP_METADATA);
     const params = imgreg_4dfp_params(target_image, source_image, t4file, mode, target_mask, source_mask)
-    return imgreg_4dfp_execute(params, execution);
+    return imgreg_4dfp_execute(params, runner);
 }
 
 
@@ -206,8 +206,6 @@ export {
       Imgreg4dfpOutputs,
       Imgreg4dfpParameters,
       imgreg_4dfp,
-      imgreg_4dfp_cargs,
       imgreg_4dfp_execute,
-      imgreg_4dfp_outputs,
       imgreg_4dfp_params,
 };

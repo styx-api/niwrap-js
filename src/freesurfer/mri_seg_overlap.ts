@@ -219,14 +219,16 @@ function mri_seg_overlap_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSegOverlapOutputs`).
  */
 function mri_seg_overlap_execute(
     params: MriSegOverlapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSegOverlapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SEG_OVERLAP_METADATA);
     params = execution.params(params)
     const cargs = mri_seg_overlap_cargs(params, execution)
     const ret = mri_seg_overlap_outputs(params, execution)
@@ -269,10 +271,8 @@ function mri_seg_overlap(
     quiet_flag: boolean = false,
     runner: Runner | null = null,
 ): MriSegOverlapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SEG_OVERLAP_METADATA);
     const params = mri_seg_overlap_params(vol1, vol2, out_file, measures, labels, label_names, label_file, no_names_flag, seg_flag, quiet_flag)
-    return mri_seg_overlap_execute(params, execution);
+    return mri_seg_overlap_execute(params, runner);
 }
 
 
@@ -281,8 +281,6 @@ export {
       MriSegOverlapOutputs,
       MriSegOverlapParameters,
       mri_seg_overlap,
-      mri_seg_overlap_cargs,
       mri_seg_overlap_execute,
-      mri_seg_overlap_outputs,
       mri_seg_overlap_params,
 };

@@ -613,14 +613,16 @@ function mris_preproc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisPreprocOutputs`).
  */
 function mris_preproc_execute(
     params: MrisPreprocParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisPreprocOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_PREPROC_METADATA);
     params = execution.params(params)
     const cargs = mris_preproc_cargs(params, execution)
     const ret = mris_preproc_outputs(params, execution)
@@ -741,10 +743,8 @@ function mris_preproc(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisPreprocOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_PREPROC_METADATA);
     const params = mris_preproc_params(outfile, target_subject, hemi, meas, label, measdir, subjects, fsgd, subjectlist, qdec, qdec_long, surfmeasfile, volmeasfile_reg, projfrac, projfrac_max, projfrac_avg, no_mask_non_cortex, session_file, dir_file, analysis, contrast, cvar_flag, offset_flag, map, etiv_flag, fwhm, fwhm_src, niters, niters_src, cortex_only, mgz_flag, no_jac_flag, paired_diff_flag, cache_out, cache_in, cache_out_only, no_prune_flag, mean_flag, std_flag, reshape_flag, surfreg, subjects_dir, synth_flag, tmpdir, nocleanup_flag, cleanup_flag, log, nolog_flag, debug_flag)
-    return mris_preproc_execute(params, execution);
+    return mris_preproc_execute(params, runner);
 }
 
 
@@ -753,8 +753,6 @@ export {
       MrisPreprocOutputs,
       MrisPreprocParameters,
       mris_preproc,
-      mris_preproc_cargs,
       mris_preproc_execute,
-      mris_preproc_outputs,
       mris_preproc_params,
 };

@@ -472,14 +472,16 @@ function fslvbm_3_proc_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fslvbm3ProcOutputs`).
  */
 function fslvbm_3_proc_execute(
     params: Fslvbm3ProcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fslvbm3ProcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLVBM_3_PROC_METADATA);
     params = execution.params(params)
     const cargs = fslvbm_3_proc_cargs(params, execution)
     const ret = fslvbm_3_proc_outputs(params, execution)
@@ -566,10 +568,8 @@ function fslvbm_3_proc(
     config_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): Fslvbm3ProcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLVBM_3_PROC_METADATA);
     const params = fslvbm_3_proc_params(arch, coprocessor, coprocessor_multi, coprocessor_class, coprocessor_class_strict, coprocessor_toolkit, not_requeueable, jobhold, array_hold, logdir, mailoptions, mailto, name, priority, queue, resource, delete_job, memory_gb, parallel_env_threads, array_task, array_native, number_jobscripts, keep_jobscript, coprocessor_name, has_queues, project, submit_scheduler, runtime_limit, show_config, verbose, version, config_file)
-    return fslvbm_3_proc_execute(params, execution);
+    return fslvbm_3_proc_execute(params, runner);
 }
 
 
@@ -578,8 +578,6 @@ export {
       Fslvbm3ProcOutputs,
       Fslvbm3ProcParameters,
       fslvbm_3_proc,
-      fslvbm_3_proc_cargs,
       fslvbm_3_proc_execute,
-      fslvbm_3_proc_outputs,
       fslvbm_3_proc_params,
 };

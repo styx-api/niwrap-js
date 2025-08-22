@@ -458,14 +458,16 @@ function mri_binarize_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriBinarizeOutputs`).
  */
 function mri_binarize_execute(
     params: MriBinarizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriBinarizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_BINARIZE_METADATA);
     params = execution.params(params)
     const cargs = mri_binarize_cargs(params, execution)
     const ret = mri_binarize_outputs(params, execution)
@@ -556,10 +558,8 @@ function mri_binarize(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): MriBinarizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_BINARIZE_METADATA);
     const params = mri_binarize_params(input_volume, output_volume, min_threshold, max_threshold, pct_threshold, rmin, rmax, fdr_threshold, match_values, replace_values, binval, binval_not, frame, merge_volume, mask_volume, mask_threshold, surf_name, surf_smooth, threads, ctx_wm_flag, all_wm_flag, ventricles_flag, wm_vcsf_flag, gm_flag, subcort_gm_flag, scm_lh_flag, scm_rh_flag, zero_edges_flag, zero_slice_edges_flag, dilate_vertex, remove_islands_flag, fill_holes_flag, noverbose_flag, debug_flag)
-    return mri_binarize_execute(params, execution);
+    return mri_binarize_execute(params, runner);
 }
 
 
@@ -568,8 +568,6 @@ export {
       MriBinarizeOutputs,
       MriBinarizeParameters,
       mri_binarize,
-      mri_binarize_cargs,
       mri_binarize_execute,
-      mri_binarize_outputs,
       mri_binarize_params,
 };

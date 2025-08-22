@@ -138,14 +138,16 @@ function dmri_neighboring_regions_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriNeighboringRegionsOutputs`).
  */
 function dmri_neighboring_regions_execute(
     params: DmriNeighboringRegionsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriNeighboringRegionsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_NEIGHBORING_REGIONS_METADATA);
     params = execution.params(params)
     const cargs = dmri_neighboring_regions_cargs(params, execution)
     const ret = dmri_neighboring_regions_outputs(params, execution)
@@ -172,10 +174,8 @@ function dmri_neighboring_regions(
     output_file: string,
     runner: Runner | null = null,
 ): DmriNeighboringRegionsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_NEIGHBORING_REGIONS_METADATA);
     const params = dmri_neighboring_regions_params(input_file, output_file)
-    return dmri_neighboring_regions_execute(params, execution);
+    return dmri_neighboring_regions_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       DmriNeighboringRegionsOutputs,
       DmriNeighboringRegionsParameters,
       dmri_neighboring_regions,
-      dmri_neighboring_regions_cargs,
       dmri_neighboring_regions_execute,
-      dmri_neighboring_regions_outputs,
       dmri_neighboring_regions_params,
 };

@@ -127,14 +127,16 @@ function build_desikan_killiany_gcs_csh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BuildDesikanKillianyGcsCshOutputs`).
  */
 function build_desikan_killiany_gcs_csh_execute(
     params: BuildDesikanKillianyGcsCshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BuildDesikanKillianyGcsCshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BUILD_DESIKAN_KILLIANY_GCS_CSH_METADATA);
     params = execution.params(params)
     const cargs = build_desikan_killiany_gcs_csh_cargs(params, execution)
     const ret = build_desikan_killiany_gcs_csh_outputs(params, execution)
@@ -159,10 +161,8 @@ function build_desikan_killiany_gcs_csh(
     hemi: string,
     runner: Runner | null = null,
 ): BuildDesikanKillianyGcsCshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BUILD_DESIKAN_KILLIANY_GCS_CSH_METADATA);
     const params = build_desikan_killiany_gcs_csh_params(hemi)
-    return build_desikan_killiany_gcs_csh_execute(params, execution);
+    return build_desikan_killiany_gcs_csh_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       BuildDesikanKillianyGcsCshOutputs,
       BuildDesikanKillianyGcsCshParameters,
       build_desikan_killiany_gcs_csh,
-      build_desikan_killiany_gcs_csh_cargs,
       build_desikan_killiany_gcs_csh_execute,
-      build_desikan_killiany_gcs_csh_outputs,
       build_desikan_killiany_gcs_csh_params,
 };

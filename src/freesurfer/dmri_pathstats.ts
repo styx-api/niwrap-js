@@ -338,14 +338,16 @@ function dmri_pathstats_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriPathstatsOutputs`).
  */
 function dmri_pathstats_execute(
     params: DmriPathstatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriPathstatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_PATHSTATS_METADATA);
     params = execution.params(params)
     const cargs = dmri_pathstats_cargs(params, execution)
     const ret = dmri_pathstats_outputs(params, execution)
@@ -406,10 +408,8 @@ function dmri_pathstats(
     version: boolean = false,
     runner: Runner | null = null,
 ): DmriPathstatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_PATHSTATS_METADATA);
     const params = dmri_pathstats_params(intrk, intrc, rois, meas, measname, dtbase, path, subj, out, outvox, median, ends, ref, pthr, fthr, debug, checkopts, help, version)
-    return dmri_pathstats_execute(params, execution);
+    return dmri_pathstats_execute(params, runner);
 }
 
 
@@ -418,8 +418,6 @@ export {
       DmriPathstatsOutputs,
       DmriPathstatsParameters,
       dmri_pathstats,
-      dmri_pathstats_cargs,
       dmri_pathstats_execute,
-      dmri_pathstats_outputs,
       dmri_pathstats_params,
 };

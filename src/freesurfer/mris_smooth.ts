@@ -246,14 +246,16 @@ function mris_smooth_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisSmoothOutputs`).
  */
 function mris_smooth_execute(
     params: MrisSmoothParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisSmoothOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_SMOOTH_METADATA);
     params = execution.params(params)
     const cargs = mris_smooth_cargs(params, execution)
     const ret = mris_smooth_outputs(params, execution)
@@ -298,10 +300,8 @@ function mris_smooth(
     snapshot_interval: number | null = null,
     runner: Runner | null = null,
 ): MrisSmoothOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_SMOOTH_METADATA);
     const params = mris_smooth_params(input_surface, output_surface, average_iters, smoothing_iters, no_write, curvature_name, area_name, gaussian_params, normalize_area, momentum, snapshot_interval)
-    return mris_smooth_execute(params, execution);
+    return mris_smooth_execute(params, runner);
 }
 
 
@@ -310,8 +310,6 @@ export {
       MrisSmoothOutputs,
       MrisSmoothParameters,
       mris_smooth,
-      mris_smooth_cargs,
       mris_smooth_execute,
-      mris_smooth_outputs,
       mris_smooth_params,
 };

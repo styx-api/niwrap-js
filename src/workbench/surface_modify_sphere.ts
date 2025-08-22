@@ -155,14 +155,16 @@ function surface_modify_sphere_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceModifySphereOutputs`).
  */
 function surface_modify_sphere_execute(
     params: SurfaceModifySphereParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceModifySphereOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_MODIFY_SPHERE_METADATA);
     params = execution.params(params)
     const cargs = surface_modify_sphere_cargs(params, execution)
     const ret = surface_modify_sphere_outputs(params, execution)
@@ -197,10 +199,8 @@ function surface_modify_sphere(
     opt_recenter: boolean = false,
     runner: Runner | null = null,
 ): SurfaceModifySphereOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_MODIFY_SPHERE_METADATA);
     const params = surface_modify_sphere_params(sphere_in, radius, sphere_out, opt_recenter)
-    return surface_modify_sphere_execute(params, execution);
+    return surface_modify_sphere_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       SurfaceModifySphereOutputs,
       SurfaceModifySphereParameters,
       surface_modify_sphere,
-      surface_modify_sphere_cargs,
       surface_modify_sphere_execute,
-      surface_modify_sphere_outputs,
       surface_modify_sphere_params,
 };

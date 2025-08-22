@@ -273,14 +273,16 @@ function v_3d_unifize_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dUnifizeOutputs`).
  */
 function v_3d_unifize_execute(
     params: V3dUnifizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dUnifizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_UNIFIZE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_unifize_cargs(params, execution)
     const ret = v_3d_unifize_outputs(params, execution)
@@ -338,10 +340,8 @@ function v_3d_unifize(
     urad: number | null = null,
     runner: Runner | null = null,
 ): V3dUnifizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_UNIFIZE_METADATA);
     const params = v_3d_unifize_params(in_file, cl_frac, epi, gm, no_duplo, num_threads, outputtype, quiet, rbt, prefix, scale_file, t2, t2_up, urad)
-    return v_3d_unifize_execute(params, execution);
+    return v_3d_unifize_execute(params, runner);
 }
 
 
@@ -350,8 +350,6 @@ export {
       V3dUnifizeParameters,
       V_3D_UNIFIZE_METADATA,
       v_3d_unifize,
-      v_3d_unifize_cargs,
       v_3d_unifize_execute,
-      v_3d_unifize_outputs,
       v_3d_unifize_params,
 };

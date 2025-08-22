@@ -336,14 +336,16 @@ function mri_label2vol_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriLabel2volOutputs`).
  */
 function mri_label2vol_execute(
     params: MriLabel2volParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriLabel2volOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_LABEL2VOL_METADATA);
     params = execution.params(params)
     const cargs = mri_label2vol_cargs(params, execution)
     const ret = mri_label2vol_outputs(params, execution)
@@ -402,10 +404,8 @@ function mri_label2vol(
     native_vox2ras_flag: boolean = false,
     runner: Runner | null = null,
 ): MriLabel2volOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_LABEL2VOL_METADATA);
     const params = mri_label2vol_params(template, output_volume, labels, annotation, segmentation, registration, identity_flag, fill_threshold, label_vox_vol, projection, subject, hemisphere, hits_volume, label_stat_volume, stat_threshold, offset, defects, native_vox2ras_flag)
-    return mri_label2vol_execute(params, execution);
+    return mri_label2vol_execute(params, runner);
 }
 
 
@@ -414,8 +414,6 @@ export {
       MriLabel2volOutputs,
       MriLabel2volParameters,
       mri_label2vol,
-      mri_label2vol_cargs,
       mri_label2vol_execute,
-      mri_label2vol_outputs,
       mri_label2vol_params,
 };

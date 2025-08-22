@@ -395,14 +395,16 @@ function cifti_smoothing_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiSmoothingOutputs`).
  */
 function cifti_smoothing_execute(
     params: CiftiSmoothingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiSmoothingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_SMOOTHING_METADATA);
     params = execution.params(params)
     const cargs = cifti_smoothing_cargs(params, execution)
     const ret = cifti_smoothing_outputs(params, execution)
@@ -457,10 +459,8 @@ function cifti_smoothing(
     opt_merged_volume: boolean = false,
     runner: Runner | null = null,
 ): CiftiSmoothingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_SMOOTHING_METADATA);
     const params = cifti_smoothing_params(cifti, surface_kernel, volume_kernel, direction, cifti_out, opt_fwhm, left_surface, right_surface, cerebellum_surface, opt_cifti_roi_roi_cifti, opt_fix_zeros_volume, opt_fix_zeros_surface, opt_merged_volume)
-    return cifti_smoothing_execute(params, execution);
+    return cifti_smoothing_execute(params, runner);
 }
 
 
@@ -472,14 +472,9 @@ export {
       CiftiSmoothingParameters,
       CiftiSmoothingRightSurfaceParameters,
       cifti_smoothing,
-      cifti_smoothing_cargs,
-      cifti_smoothing_cerebellum_surface_cargs,
       cifti_smoothing_cerebellum_surface_params,
       cifti_smoothing_execute,
-      cifti_smoothing_left_surface_cargs,
       cifti_smoothing_left_surface_params,
-      cifti_smoothing_outputs,
       cifti_smoothing_params,
-      cifti_smoothing_right_surface_cargs,
       cifti_smoothing_right_surface_params,
 };

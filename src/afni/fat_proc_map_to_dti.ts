@@ -244,14 +244,16 @@ function fat_proc_map_to_dti_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatProcMapToDtiOutputs`).
  */
 function fat_proc_map_to_dti_execute(
     params: FatProcMapToDtiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatProcMapToDtiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_PROC_MAP_TO_DTI_METADATA);
     params = execution.params(params)
     const cargs = fat_proc_map_to_dti_cargs(params, execution)
     const ret = fat_proc_map_to_dti_outputs(params, execution)
@@ -298,10 +300,8 @@ function fat_proc_map_to_dti(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): FatProcMapToDtiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_PROC_MAP_TO_DTI_METADATA);
     const params = fat_proc_map_to_dti_params(source, base, prefix, followers_nn, followers_wsinc5, followers_surf, followers_ndset, followers_spec, matrix, workdir, no_cmd_out, no_clean)
-    return fat_proc_map_to_dti_execute(params, execution);
+    return fat_proc_map_to_dti_execute(params, runner);
 }
 
 
@@ -310,8 +310,6 @@ export {
       FatProcMapToDtiOutputs,
       FatProcMapToDtiParameters,
       fat_proc_map_to_dti,
-      fat_proc_map_to_dti_cargs,
       fat_proc_map_to_dti_execute,
-      fat_proc_map_to_dti_outputs,
       fat_proc_map_to_dti_params,
 };

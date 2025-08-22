@@ -157,14 +157,16 @@ function mri_distance_transform_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriDistanceTransformOutputs`).
  */
 function mri_distance_transform_execute(
     params: MriDistanceTransformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriDistanceTransformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_DISTANCE_TRANSFORM_METADATA);
     params = execution.params(params)
     const cargs = mri_distance_transform_cargs(params, execution)
     const ret = mri_distance_transform_outputs(params, execution)
@@ -197,10 +199,8 @@ function mri_distance_transform(
     mode: number | null = 1,
     runner: Runner | null = null,
 ): MriDistanceTransformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_DISTANCE_TRANSFORM_METADATA);
     const params = mri_distance_transform_params(input_volume, label, max_distance, output_volume, mode)
-    return mri_distance_transform_execute(params, execution);
+    return mri_distance_transform_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       MriDistanceTransformOutputs,
       MriDistanceTransformParameters,
       mri_distance_transform,
-      mri_distance_transform_cargs,
       mri_distance_transform_execute,
-      mri_distance_transform_outputs,
       mri_distance_transform_params,
 };

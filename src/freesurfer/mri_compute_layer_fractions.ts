@@ -259,14 +259,16 @@ function mri_compute_layer_fractions_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriComputeLayerFractionsOutputs`).
  */
 function mri_compute_layer_fractions_execute(
     params: MriComputeLayerFractionsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriComputeLayerFractionsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_COMPUTE_LAYER_FRACTIONS_METADATA);
     params = execution.params(params)
     const cargs = mri_compute_layer_fractions_cargs(params, execution)
     const ret = mri_compute_layer_fractions_outputs(params, execution)
@@ -317,10 +319,8 @@ function mri_compute_layer_fractions(
     identity_file: string | null = null,
     runner: Runner | null = null,
 ): MriComputeLayerFractionsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_COMPUTE_LAYER_FRACTIONS_METADATA);
     const params = mri_compute_layer_fractions_params(reg_file, input_volume, output_stem, output_directory, aseg_file, target_volume, hemi_flag, fs_names_flag, subject_id, n_layers, synth_flag, thickness, random_file, identity_file)
-    return mri_compute_layer_fractions_execute(params, execution);
+    return mri_compute_layer_fractions_execute(params, runner);
 }
 
 
@@ -329,8 +329,6 @@ export {
       MriComputeLayerFractionsOutputs,
       MriComputeLayerFractionsParameters,
       mri_compute_layer_fractions,
-      mri_compute_layer_fractions_cargs,
       mri_compute_layer_fractions_execute,
-      mri_compute_layer_fractions_outputs,
       mri_compute_layer_fractions_params,
 };

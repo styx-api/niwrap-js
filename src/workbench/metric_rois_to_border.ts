@@ -175,14 +175,16 @@ function metric_rois_to_border_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricRoisToBorderOutputs`).
  */
 function metric_rois_to_border_execute(
     params: MetricRoisToBorderParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricRoisToBorderOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_ROIS_TO_BORDER_METADATA);
     params = execution.params(params)
     const cargs = metric_rois_to_border_cargs(params, execution)
     const ret = metric_rois_to_border_outputs(params, execution)
@@ -219,10 +221,8 @@ function metric_rois_to_border(
     opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): MetricRoisToBorderOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_ROIS_TO_BORDER_METADATA);
     const params = metric_rois_to_border_params(surface, metric, class_name, border_out, opt_placement_fraction, opt_column_column)
-    return metric_rois_to_border_execute(params, execution);
+    return metric_rois_to_border_execute(params, runner);
 }
 
 
@@ -231,8 +231,6 @@ export {
       MetricRoisToBorderOutputs,
       MetricRoisToBorderParameters,
       metric_rois_to_border,
-      metric_rois_to_border_cargs,
       metric_rois_to_border_execute,
-      metric_rois_to_border_outputs,
       metric_rois_to_border_params,
 };

@@ -236,14 +236,16 @@ function v_3dmerge_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dmergeOutputs`).
  */
 function v_3dmerge_execute(
     params: V3dmergeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dmergeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DMERGE_METADATA);
     params = execution.params(params)
     const cargs = v_3dmerge_cargs(params, execution)
     const ret = v_3dmerge_outputs(params, execution)
@@ -290,10 +292,8 @@ function v_3dmerge(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dmergeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DMERGE_METADATA);
     const params = v_3dmerge_params(input_files, output_file, blur_fwhm, threshold, clust, dindex, tindex, absolute, dxyz, gmean, gmax, quiet)
-    return v_3dmerge_execute(params, execution);
+    return v_3dmerge_execute(params, runner);
 }
 
 
@@ -302,8 +302,6 @@ export {
       V3dmergeParameters,
       V_3DMERGE_METADATA,
       v_3dmerge,
-      v_3dmerge_cargs,
       v_3dmerge_execute,
-      v_3dmerge_outputs,
       v_3dmerge_params,
 };

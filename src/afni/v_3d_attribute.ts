@@ -190,14 +190,16 @@ function v_3d_attribute_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dAttributeOutputs`).
  */
 function v_3d_attribute_execute(
     params: V3dAttributeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dAttributeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ATTRIBUTE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_attribute_cargs(params, execution)
     const ret = v_3d_attribute_outputs(params, execution)
@@ -236,10 +238,8 @@ function v_3d_attribute(
     quote: boolean = false,
     runner: Runner | null = null,
 ): V3dAttributeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ATTRIBUTE_METADATA);
     const params = v_3d_attribute_params(aname, dset, all, name, center, ssep, sprep, quote)
-    return v_3d_attribute_execute(params, execution);
+    return v_3d_attribute_execute(params, runner);
 }
 
 
@@ -248,8 +248,6 @@ export {
       V3dAttributeParameters,
       V_3D_ATTRIBUTE_METADATA,
       v_3d_attribute,
-      v_3d_attribute_cargs,
       v_3d_attribute_execute,
-      v_3d_attribute_outputs,
       v_3d_attribute_params,
 };

@@ -439,14 +439,16 @@ function tcksift_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TcksiftOutputs`).
  */
 function tcksift_execute(
     params: TcksiftParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TcksiftOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCKSIFT_METADATA);
     params = execution.params(params)
     const cargs = tcksift_cargs(params, execution)
     const ret = tcksift_outputs(params, execution)
@@ -530,10 +532,8 @@ function tcksift(
     version: boolean = false,
     runner: Runner | null = null,
 ): TcksiftOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCKSIFT_METADATA);
     const params = tcksift_params(in_tracks, in_fod, out_tracks, nofilter, output_at_counts, proc_mask, act, fd_scale_gm, no_dilate_lut, make_null_lobes, remove_untracked, fd_thresh, csv, out_mu, output_debug, out_selection, term_number, term_ratio, term_mu, info, quiet, debug, force, nthreads, config, help, version)
-    return tcksift_execute(params, execution);
+    return tcksift_execute(params, runner);
 }
 
 
@@ -543,10 +543,7 @@ export {
       TcksiftOutputs,
       TcksiftParameters,
       tcksift,
-      tcksift_cargs,
-      tcksift_config_cargs,
       tcksift_config_params,
       tcksift_execute,
-      tcksift_outputs,
       tcksift_params,
 };

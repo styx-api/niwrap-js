@@ -153,14 +153,16 @@ function v_3d_afnito_niml_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dAfnitoNimlOutputs`).
  */
 function v_3d_afnito_niml_execute(
     params: V3dAfnitoNimlParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dAfnitoNimlOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_AFNITO_NIML_METADATA);
     params = execution.params(params)
     const cargs = v_3d_afnito_niml_cargs(params, execution)
     const ret = v_3d_afnito_niml_outputs(params, execution)
@@ -191,10 +193,8 @@ function v_3d_afnito_niml(
     tcp: string | null = null,
     runner: Runner | null = null,
 ): V3dAfnitoNimlOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_AFNITO_NIML_METADATA);
     const params = v_3d_afnito_niml_params(dset, data, ascii, tcp)
-    return v_3d_afnito_niml_execute(params, execution);
+    return v_3d_afnito_niml_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       V3dAfnitoNimlParameters,
       V_3D_AFNITO_NIML_METADATA,
       v_3d_afnito_niml,
-      v_3d_afnito_niml_cargs,
       v_3d_afnito_niml_execute,
-      v_3d_afnito_niml_outputs,
       v_3d_afnito_niml_params,
 };

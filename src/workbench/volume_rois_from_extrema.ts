@@ -194,14 +194,16 @@ function volume_rois_from_extrema_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeRoisFromExtremaOutputs`).
  */
 function volume_rois_from_extrema_execute(
     params: VolumeRoisFromExtremaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeRoisFromExtremaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_ROIS_FROM_EXTREMA_METADATA);
     params = execution.params(params)
     const cargs = volume_rois_from_extrema_cargs(params, execution)
     const ret = volume_rois_from_extrema_outputs(params, execution)
@@ -240,10 +242,8 @@ function volume_rois_from_extrema(
     opt_subvolume_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeRoisFromExtremaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_ROIS_FROM_EXTREMA_METADATA);
     const params = volume_rois_from_extrema_params(volume_in, limit, volume_out, opt_gaussian_sigma, opt_roi_roi_volume, opt_overlap_logic_method, opt_subvolume_subvol)
-    return volume_rois_from_extrema_execute(params, execution);
+    return volume_rois_from_extrema_execute(params, runner);
 }
 
 
@@ -252,8 +252,6 @@ export {
       VolumeRoisFromExtremaOutputs,
       VolumeRoisFromExtremaParameters,
       volume_rois_from_extrema,
-      volume_rois_from_extrema_cargs,
       volume_rois_from_extrema_execute,
-      volume_rois_from_extrema_outputs,
       volume_rois_from_extrema_params,
 };

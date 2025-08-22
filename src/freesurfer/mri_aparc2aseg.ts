@@ -320,14 +320,16 @@ function mri_aparc2aseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriAparc2asegOutputs`).
  */
 function mri_aparc2aseg_execute(
     params: MriAparc2asegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriAparc2asegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_APARC2ASEG_METADATA);
     params = execution.params(params)
     const cargs = mri_aparc2aseg_cargs(params, execution)
     const ret = mri_aparc2aseg_outputs(params, execution)
@@ -392,10 +394,8 @@ function mri_aparc2aseg(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriAparc2asegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_APARC2ASEG_METADATA);
     const params = mri_aparc2aseg_params(subject, output_volfile, old_ribbon, new_ribbon, a2005s, a2009s, annot_name, annot_table, base_offset, label_wm, wmparc_dmax, rip_unknown, hypo_as_wm, no_fix_parahip, smooth_normals, crs_test, left_hemisphere, right_hemisphere, threads, help, version)
-    return mri_aparc2aseg_execute(params, execution);
+    return mri_aparc2aseg_execute(params, runner);
 }
 
 
@@ -404,8 +404,6 @@ export {
       MriAparc2asegOutputs,
       MriAparc2asegParameters,
       mri_aparc2aseg,
-      mri_aparc2aseg_cargs,
       mri_aparc2aseg_execute,
-      mri_aparc2aseg_outputs,
       mri_aparc2aseg_params,
 };

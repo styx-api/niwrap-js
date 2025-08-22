@@ -173,14 +173,16 @@ function fs_time_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsTimeOutputs`).
  */
 function fs_time_execute(
     params: FsTimeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsTimeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FS_TIME_METADATA);
     params = execution.params(params)
     const cargs = fs_time_cargs(params, execution)
     const ret = fs_time_outputs(params, execution)
@@ -213,10 +215,8 @@ function fs_time(
     args: Array<string> | null = null,
     runner: Runner | null = null,
 ): FsTimeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FS_TIME_METADATA);
     const params = fs_time_params(command, output_file, key, load_avg, args)
-    return fs_time_execute(params, execution);
+    return fs_time_execute(params, runner);
 }
 
 
@@ -225,8 +225,6 @@ export {
       FsTimeOutputs,
       FsTimeParameters,
       fs_time,
-      fs_time_cargs,
       fs_time_execute,
-      fs_time_outputs,
       fs_time_params,
 };

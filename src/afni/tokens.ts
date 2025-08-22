@@ -146,14 +146,16 @@ function tokens_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TokensOutputs`).
  */
 function tokens_execute(
     params: TokensParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TokensOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TOKENS_METADATA);
     params = execution.params(params)
     const cargs = tokens_cargs(params, execution)
     const ret = tokens_outputs(params, execution)
@@ -180,10 +182,8 @@ function tokens(
     extra_char: Array<string> | null = null,
     runner: Runner | null = null,
 ): TokensOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TOKENS_METADATA);
     const params = tokens_params(infile, extra_char)
-    return tokens_execute(params, execution);
+    return tokens_execute(params, runner);
 }
 
 
@@ -192,8 +192,6 @@ export {
       TokensOutputs,
       TokensParameters,
       tokens,
-      tokens_cargs,
       tokens_execute,
-      tokens_outputs,
       tokens_params,
 };

@@ -214,14 +214,16 @@ function tsplot_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TsplotOutputs`).
  */
 function tsplot_execute(
     params: TsplotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TsplotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TSPLOT_METADATA);
     params = execution.params(params)
     const cargs = tsplot_cargs(params, execution)
     const ret = tsplot_outputs(params, execution)
@@ -262,10 +264,8 @@ function tsplot(
     no_raw_flag: boolean = false,
     runner: Runner | null = null,
 ): TsplotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TSPLOT_METADATA);
     const params = tsplot_params(input_directory, main_filtered_data, coordinates, coordinates_output, mask, output_directory, no_weight_flag, prewhiten_flag, no_raw_flag)
-    return tsplot_execute(params, execution);
+    return tsplot_execute(params, runner);
 }
 
 
@@ -274,8 +274,6 @@ export {
       TsplotOutputs,
       TsplotParameters,
       tsplot,
-      tsplot_cargs,
       tsplot_execute,
-      tsplot_outputs,
       tsplot_params,
 };

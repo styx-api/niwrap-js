@@ -217,14 +217,16 @@ function vol2symsurf_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Vol2symsurfOutputs`).
  */
 function vol2symsurf_execute(
     params: Vol2symsurfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Vol2symsurfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOL2SYMSURF_METADATA);
     params = execution.params(params)
     const cargs = vol2symsurf_cargs(params, execution)
     const ret = vol2symsurf_outputs(params, execution)
@@ -263,10 +265,8 @@ function vol2symsurf(
     laterality_index: boolean = false,
     runner: Runner | null = null,
 ): Vol2symsurfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOL2SYMSURF_METADATA);
     const params = vol2symsurf_params(registration_file, input_volume, fwhm, output_stem, regheader, projection_fraction, no_diff, laterality_index)
-    return vol2symsurf_execute(params, execution);
+    return vol2symsurf_execute(params, runner);
 }
 
 
@@ -275,8 +275,6 @@ export {
       Vol2symsurfOutputs,
       Vol2symsurfParameters,
       vol2symsurf,
-      vol2symsurf_cargs,
       vol2symsurf_execute,
-      vol2symsurf_outputs,
       vol2symsurf_params,
 };

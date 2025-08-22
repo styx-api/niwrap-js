@@ -564,14 +564,16 @@ function eddy_cuda9_1_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `EddyCuda91Outputs`).
  */
 function eddy_cuda9_1_execute(
     params: EddyCuda91Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): EddyCuda91Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EDDY_CUDA9_1_METADATA);
     params = execution.params(params)
     const cargs = eddy_cuda9_1_cargs(params, execution)
     const ret = eddy_cuda9_1_outputs(params, execution)
@@ -682,10 +684,8 @@ function eddy_cuda9_1(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): EddyCuda91Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EDDY_CUDA9_1_METADATA);
     const params = eddy_cuda9_1_params(imain, mask, index, acqp, bvecs, bvals, out, mb, mb_offs, slspec, json, mporder, s2v_lambda, topup, field, field_mat, flm, slm, fwhm, niter, s2v_niter, cnr_maps, residuals, fep, interp, s2v_interp, resamp, nvoxhp, initrand, ff, repol, ol_nstd, ol_nvox, ol_type, ol_pos, ol_sqr, estimate_move_by_susceptibility, mbs_niter, mbs_lambda, mbs_ksp, dont_sep_offs_move, dont_peas, data_is_shelled, verbose)
-    return eddy_cuda9_1_execute(params, execution);
+    return eddy_cuda9_1_execute(params, runner);
 }
 
 
@@ -694,8 +694,6 @@ export {
       EddyCuda91Outputs,
       EddyCuda91Parameters,
       eddy_cuda9_1,
-      eddy_cuda9_1_cargs,
       eddy_cuda9_1_execute,
-      eddy_cuda9_1_outputs,
       eddy_cuda9_1_params,
 };

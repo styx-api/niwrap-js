@@ -374,14 +374,16 @@ function ss3t_csd_beta1_outputs(
  * URL: https://3tissue.github.io/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Ss3tCsdBeta1Outputs`).
  */
 function ss3t_csd_beta1_execute(
     params: Ss3tCsdBeta1Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Ss3tCsdBeta1Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SS3T_CSD_BETA1_METADATA);
     params = execution.params(params)
     const cargs = ss3t_csd_beta1_cargs(params, execution)
     const ret = ss3t_csd_beta1_outputs(params, execution)
@@ -432,10 +434,8 @@ function ss3t_csd_beta1(
     version: boolean = false,
     runner: Runner | null = null,
 ): Ss3tCsdBeta1Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SS3T_CSD_BETA1_METADATA);
     const params = ss3t_csd_beta1_params(dwi, response_odf, mask, bzero_pct, niter, info, quiet, debug, force, nthreads, config, help, version)
-    return ss3t_csd_beta1_execute(params, execution);
+    return ss3t_csd_beta1_execute(params, runner);
 }
 
 
@@ -447,13 +447,8 @@ export {
       Ss3tCsdBeta1ResponseOdfOutputs,
       Ss3tCsdBeta1ResponseOdfParameters,
       ss3t_csd_beta1,
-      ss3t_csd_beta1_cargs,
-      ss3t_csd_beta1_config_cargs,
       ss3t_csd_beta1_config_params,
       ss3t_csd_beta1_execute,
-      ss3t_csd_beta1_outputs,
       ss3t_csd_beta1_params,
-      ss3t_csd_beta1_response_odf_cargs,
-      ss3t_csd_beta1_response_odf_outputs,
       ss3t_csd_beta1_response_odf_params,
 };

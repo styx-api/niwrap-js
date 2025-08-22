@@ -198,14 +198,16 @@ function v_3d_surf_mask_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dSurfMaskOutputs`).
  */
 function v_3d_surf_mask_execute(
     params: V3dSurfMaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dSurfMaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_SURF_MASK_METADATA);
     params = execution.params(params)
     const cargs = v_3d_surf_mask_cargs(params, execution)
     const ret = v_3d_surf_mask_outputs(params, execution)
@@ -246,10 +248,8 @@ function v_3d_surf_mask(
     no_distance: boolean = false,
     runner: Runner | null = null,
 ): V3dSurfMaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_SURF_MASK_METADATA);
     const params = v_3d_surf_mask_params(surface_type, surface_file, prefix, grid_parent, fill_method, surface_volume, mask_only, flip_orientation, no_distance)
-    return v_3d_surf_mask_execute(params, execution);
+    return v_3d_surf_mask_execute(params, runner);
 }
 
 
@@ -258,8 +258,6 @@ export {
       V3dSurfMaskParameters,
       V_3D_SURF_MASK_METADATA,
       v_3d_surf_mask,
-      v_3d_surf_mask_cargs,
       v_3d_surf_mask_execute,
-      v_3d_surf_mask_outputs,
       v_3d_surf_mask_params,
 };

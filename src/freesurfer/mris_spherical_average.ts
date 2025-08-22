@@ -233,14 +233,16 @@ function mris_spherical_average_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisSphericalAverageOutputs`).
  */
 function mris_spherical_average_execute(
     params: MrisSphericalAverageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisSphericalAverageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_SPHERICAL_AVERAGE_METADATA);
     params = execution.params(params)
     const cargs = mris_spherical_average_cargs(params, execution)
     const ret = mris_spherical_average_outputs(params, execution)
@@ -291,10 +293,8 @@ function mris_spherical_average(
     summary_statistics: string | null = null,
     runner: Runner | null = null,
 ): MrisSphericalAverageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_SPHERICAL_AVERAGE_METADATA);
     const params = mris_spherical_average_params(which, fname, hemi, spherical_surf, subjects, output, segment, normalize, orig, output_subject_name, output_subject_dir, subjects_dir, average_area, summary_statistics)
-    return mris_spherical_average_execute(params, execution);
+    return mris_spherical_average_execute(params, runner);
 }
 
 
@@ -303,8 +303,6 @@ export {
       MrisSphericalAverageOutputs,
       MrisSphericalAverageParameters,
       mris_spherical_average,
-      mris_spherical_average_cargs,
       mris_spherical_average_execute,
-      mris_spherical_average_outputs,
       mris_spherical_average_params,
 };

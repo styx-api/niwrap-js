@@ -164,14 +164,16 @@ function imstat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImstatOutputs`).
  */
 function imstat_execute(
     params: ImstatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImstatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMSTAT_METADATA);
     params = execution.params(params)
     const cargs = imstat_cargs(params, execution)
     const ret = imstat_outputs(params, execution)
@@ -202,10 +204,8 @@ function imstat(
     pixstat_prefix: string | null = null,
     runner: Runner | null = null,
 ): ImstatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMSTAT_METADATA);
     const params = imstat_params(image_files, no_label, quiet, pixstat_prefix)
-    return imstat_execute(params, execution);
+    return imstat_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       ImstatOutputs,
       ImstatParameters,
       imstat,
-      imstat_cargs,
       imstat_execute,
-      imstat_outputs,
       imstat_params,
 };

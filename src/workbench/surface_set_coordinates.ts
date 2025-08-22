@@ -148,14 +148,16 @@ function surface_set_coordinates_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceSetCoordinatesOutputs`).
  */
 function surface_set_coordinates_execute(
     params: SurfaceSetCoordinatesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceSetCoordinatesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_SET_COORDINATES_METADATA);
     params = execution.params(params)
     const cargs = surface_set_coordinates_cargs(params, execution)
     const ret = surface_set_coordinates_outputs(params, execution)
@@ -188,10 +190,8 @@ function surface_set_coordinates(
     surface_out: string,
     runner: Runner | null = null,
 ): SurfaceSetCoordinatesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_SET_COORDINATES_METADATA);
     const params = surface_set_coordinates_params(surface_in, coord_metric, surface_out)
-    return surface_set_coordinates_execute(params, execution);
+    return surface_set_coordinates_execute(params, runner);
 }
 
 
@@ -200,8 +200,6 @@ export {
       SurfaceSetCoordinatesOutputs,
       SurfaceSetCoordinatesParameters,
       surface_set_coordinates,
-      surface_set_coordinates_cargs,
       surface_set_coordinates_execute,
-      surface_set_coordinates_outputs,
       surface_set_coordinates_params,
 };

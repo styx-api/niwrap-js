@@ -167,14 +167,16 @@ function surface_curvature_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceCurvatureOutputs`).
  */
 function surface_curvature_execute(
     params: SurfaceCurvatureParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceCurvatureOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_CURVATURE_METADATA);
     params = execution.params(params)
     const cargs = surface_curvature_cargs(params, execution)
     const ret = surface_curvature_outputs(params, execution)
@@ -207,10 +209,8 @@ function surface_curvature(
     opt_gauss_gauss_out: string | null = null,
     runner: Runner | null = null,
 ): SurfaceCurvatureOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_CURVATURE_METADATA);
     const params = surface_curvature_params(surface, opt_mean_mean_out, opt_gauss_gauss_out)
-    return surface_curvature_execute(params, execution);
+    return surface_curvature_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       SurfaceCurvatureOutputs,
       SurfaceCurvatureParameters,
       surface_curvature,
-      surface_curvature_cargs,
       surface_curvature_execute,
-      surface_curvature_outputs,
       surface_curvature_params,
 };

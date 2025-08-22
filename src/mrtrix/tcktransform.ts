@@ -261,14 +261,16 @@ function tcktransform_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TcktransformOutputs`).
  */
 function tcktransform_execute(
     params: TcktransformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TcktransformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCKTRANSFORM_METADATA);
     params = execution.params(params)
     const cargs = tcktransform_cargs(params, execution)
     const ret = tcktransform_outputs(params, execution)
@@ -319,10 +321,8 @@ function tcktransform(
     version: boolean = false,
     runner: Runner | null = null,
 ): TcktransformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCKTRANSFORM_METADATA);
     const params = tcktransform_params(tracks, transform, output, info, quiet, debug, force, nthreads, config, help, version)
-    return tcktransform_execute(params, execution);
+    return tcktransform_execute(params, runner);
 }
 
 
@@ -332,10 +332,7 @@ export {
       TcktransformOutputs,
       TcktransformParameters,
       tcktransform,
-      tcktransform_cargs,
-      tcktransform_config_cargs,
       tcktransform_config_params,
       tcktransform_execute,
-      tcktransform_outputs,
       tcktransform_params,
 };

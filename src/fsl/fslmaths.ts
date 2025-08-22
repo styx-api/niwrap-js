@@ -1066,14 +1066,16 @@ function fslmaths_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslmathsOutputs`).
  */
 function fslmaths_execute(
     params: FslmathsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslmathsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLMATHS_METADATA);
     params = execution.params(params)
     const cargs = fslmaths_cargs(params, execution)
     const ret = fslmaths_outputs(params, execution)
@@ -1106,10 +1108,8 @@ function fslmaths(
     output_datatype: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
     runner: Runner | null = null,
 ): FslmathsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLMATHS_METADATA);
     const params = fslmaths_params(input_files, operations, output, datatype_internal, output_datatype)
-    return fslmaths_execute(params, execution);
+    return fslmaths_execute(params, runner);
 }
 
 
@@ -1119,10 +1119,7 @@ export {
       FslmathsOutputs,
       FslmathsParameters,
       fslmaths,
-      fslmaths_cargs,
       fslmaths_execute,
-      fslmaths_operation_cargs,
       fslmaths_operation_params,
-      fslmaths_outputs,
       fslmaths_params,
 };

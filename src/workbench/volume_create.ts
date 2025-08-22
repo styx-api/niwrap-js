@@ -342,14 +342,16 @@ function volume_create_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeCreateOutputs`).
  */
 function volume_create_execute(
     params: VolumeCreateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeCreateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_CREATE_METADATA);
     params = execution.params(params)
     const cargs = volume_create_cargs(params, execution)
     const ret = volume_create_outputs(params, execution)
@@ -386,10 +388,8 @@ function volume_create(
     sform: VolumeCreateSformParameters | null = null,
     runner: Runner | null = null,
 ): VolumeCreateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_CREATE_METADATA);
     const params = volume_create_params(i_dim, j_dim, k_dim, volume_out, plumb, sform)
-    return volume_create_execute(params, execution);
+    return volume_create_execute(params, runner);
 }
 
 
@@ -400,12 +400,8 @@ export {
       VolumeCreatePlumbParameters,
       VolumeCreateSformParameters,
       volume_create,
-      volume_create_cargs,
       volume_create_execute,
-      volume_create_outputs,
       volume_create_params,
-      volume_create_plumb_cargs,
       volume_create_plumb_params,
-      volume_create_sform_cargs,
       volume_create_sform_params,
 };

@@ -263,14 +263,16 @@ function v_3d_tshift_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTshiftOutputs`).
  */
 function v_3d_tshift_execute(
     params: V3dTshiftParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTshiftOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TSHIFT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tshift_cargs(params, execution)
     const ret = v_3d_tshift_outputs(params, execution)
@@ -319,10 +321,8 @@ function v_3d_tshift(
     tzero: number | null = null,
     runner: Runner | null = null,
 ): V3dTshiftOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TSHIFT_METADATA);
     const params = v_3d_tshift_params(in_file, prefix, ignore, interp, num_threads, outputtype, rlt, rltplus, slice_encoding_direction, tpattern, tr, tslice, tzero)
-    return v_3d_tshift_execute(params, execution);
+    return v_3d_tshift_execute(params, runner);
 }
 
 
@@ -331,8 +331,6 @@ export {
       V3dTshiftParameters,
       V_3D_TSHIFT_METADATA,
       v_3d_tshift,
-      v_3d_tshift_cargs,
       v_3d_tshift_execute,
-      v_3d_tshift_outputs,
       v_3d_tshift_params,
 };

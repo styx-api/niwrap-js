@@ -155,14 +155,16 @@ function tbss_fill_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TbssFillOutputs`).
  */
 function tbss_fill_execute(
     params: TbssFillParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TbssFillOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TBSS_FILL_METADATA);
     params = execution.params(params)
     const cargs = tbss_fill_cargs(params, execution)
     const ret = tbss_fill_outputs(params, execution)
@@ -195,10 +197,8 @@ function tbss_fill(
     include_negative_flag: boolean = false,
     runner: Runner | null = null,
 ): TbssFillOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TBSS_FILL_METADATA);
     const params = tbss_fill_params(stats_image, threshold, mean_fa, output, include_negative_flag)
-    return tbss_fill_execute(params, execution);
+    return tbss_fill_execute(params, runner);
 }
 
 
@@ -207,8 +207,6 @@ export {
       TbssFillOutputs,
       TbssFillParameters,
       tbss_fill,
-      tbss_fill_cargs,
       tbss_fill_execute,
-      tbss_fill_outputs,
       tbss_fill_params,
 };

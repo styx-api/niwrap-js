@@ -151,14 +151,16 @@ function v__clust_exp_cat_lab_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VClustExpCatLabOutputs`).
  */
 function v__clust_exp_cat_lab_execute(
     params: VClustExpCatLabParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VClustExpCatLabOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__CLUST_EXP_CAT_LAB_METADATA);
     params = execution.params(params)
     const cargs = v__clust_exp_cat_lab_cargs(params, execution)
     const ret = v__clust_exp_cat_lab_outputs(params, execution)
@@ -187,10 +189,8 @@ function v__clust_exp_cat_lab(
     help: boolean = false,
     runner: Runner | null = null,
 ): VClustExpCatLabOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__CLUST_EXP_CAT_LAB_METADATA);
     const params = v__clust_exp_cat_lab_params(prefix, input_file, help)
-    return v__clust_exp_cat_lab_execute(params, execution);
+    return v__clust_exp_cat_lab_execute(params, runner);
 }
 
 
@@ -199,8 +199,6 @@ export {
       VClustExpCatLabParameters,
       V__CLUST_EXP_CAT_LAB_METADATA,
       v__clust_exp_cat_lab,
-      v__clust_exp_cat_lab_cargs,
       v__clust_exp_cat_lab_execute,
-      v__clust_exp_cat_lab_outputs,
       v__clust_exp_cat_lab_params,
 };

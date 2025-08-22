@@ -132,14 +132,16 @@ function reconbatchjobs_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ReconbatchjobsOutputs`).
  */
 function reconbatchjobs_execute(
     params: ReconbatchjobsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ReconbatchjobsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RECONBATCHJOBS_METADATA);
     params = execution.params(params)
     const cargs = reconbatchjobs_cargs(params, execution)
     const ret = reconbatchjobs_outputs(params, execution)
@@ -166,10 +168,8 @@ function reconbatchjobs(
     cmdfiles: Array<string>,
     runner: Runner | null = null,
 ): ReconbatchjobsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RECONBATCHJOBS_METADATA);
     const params = reconbatchjobs_params(logfile, cmdfiles)
-    return reconbatchjobs_execute(params, execution);
+    return reconbatchjobs_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       ReconbatchjobsOutputs,
       ReconbatchjobsParameters,
       reconbatchjobs,
-      reconbatchjobs_cargs,
       reconbatchjobs_execute,
-      reconbatchjobs_outputs,
       reconbatchjobs_params,
 };

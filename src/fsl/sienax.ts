@@ -238,14 +238,16 @@ function sienax_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SienaxOutputs`).
  */
 function sienax_execute(
     params: SienaxParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SienaxOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SIENAX_METADATA);
     params = execution.params(params)
     const cargs = sienax_cargs(params, execution)
     const ret = sienax_outputs(params, execution)
@@ -290,10 +292,8 @@ function sienax(
     fast_options: string | null = null,
     runner: Runner | null = null,
 ): SienaxOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SIENAX_METADATA);
     const params = sienax_params(infile, output_dir, debug_flag, bet_options, twoclass_segment_flag, t2_flag, top_threshold, bottom_threshold, regional_flag, lesion_mask, fast_options)
-    return sienax_execute(params, execution);
+    return sienax_execute(params, runner);
 }
 
 
@@ -302,8 +302,6 @@ export {
       SienaxOutputs,
       SienaxParameters,
       sienax,
-      sienax_cargs,
       sienax_execute,
-      sienax_outputs,
       sienax_params,
 };

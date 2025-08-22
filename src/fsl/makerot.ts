@@ -198,14 +198,16 @@ function makerot_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakerotOutputs`).
  */
 function makerot_execute(
     params: MakerotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakerotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKEROT_METADATA);
     params = execution.params(params)
     const cargs = makerot_cargs(params, execution)
     const ret = makerot_outputs(params, execution)
@@ -242,10 +244,8 @@ function makerot(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MakerotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKEROT_METADATA);
     const params = makerot_params(theta, axis, cov, center, output_file, verbose_flag, help_flag)
-    return makerot_execute(params, execution);
+    return makerot_execute(params, runner);
 }
 
 
@@ -254,8 +254,6 @@ export {
       MakerotOutputs,
       MakerotParameters,
       makerot,
-      makerot_cargs,
       makerot_execute,
-      makerot_outputs,
       makerot_params,
 };

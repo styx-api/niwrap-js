@@ -180,14 +180,16 @@ function paste_image_into_image_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PasteImageIntoImageOutputs`).
  */
 function paste_image_into_image_execute(
     params: PasteImageIntoImageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PasteImageIntoImageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PASTE_IMAGE_INTO_IMAGE_METADATA);
     params = execution.params(params)
     const cargs = paste_image_into_image_cargs(params, execution)
     const ret = paste_image_into_image_outputs(params, execution)
@@ -226,10 +228,8 @@ function paste_image_into_image(
     conflict_label: number | null = -1,
     runner: Runner | null = null,
 ): PasteImageIntoImageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PASTE_IMAGE_INTO_IMAGE_METADATA);
     const params = paste_image_into_image_params(image_dimension, input_canvas_image, input_image, output_image, start_index, background_label, paint_over_non_background_voxels, conflict_label)
-    return paste_image_into_image_execute(params, execution);
+    return paste_image_into_image_execute(params, runner);
 }
 
 
@@ -238,8 +238,6 @@ export {
       PasteImageIntoImageOutputs,
       PasteImageIntoImageParameters,
       paste_image_into_image,
-      paste_image_into_image_cargs,
       paste_image_into_image_execute,
-      paste_image_into_image_outputs,
       paste_image_into_image_params,
 };

@@ -157,14 +157,16 @@ function v_3dcopy_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dcopyOutputs`).
  */
 function v_3dcopy_execute(
     params: V3dcopyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dcopyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DCOPY_METADATA);
     params = execution.params(params)
     const cargs = v_3dcopy_cargs(params, execution)
     const ret = v_3dcopy_outputs(params, execution)
@@ -197,10 +199,8 @@ function v_3dcopy(
     view: string | null = null,
     runner: Runner | null = null,
 ): V3dcopyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DCOPY_METADATA);
     const params = v_3dcopy_params(old_prefix, new_prefix, verbose, denote, view)
-    return v_3dcopy_execute(params, execution);
+    return v_3dcopy_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       V3dcopyParameters,
       V_3DCOPY_METADATA,
       v_3dcopy,
-      v_3dcopy_cargs,
       v_3dcopy_execute,
-      v_3dcopy_outputs,
       v_3dcopy_params,
 };

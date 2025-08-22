@@ -360,14 +360,16 @@ function mris_fix_topology_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisFixTopologyOutputs`).
  */
 function mris_fix_topology_execute(
     params: MrisFixTopologyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisFixTopologyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_FIX_TOPOLOGY_METADATA);
     params = execution.params(params)
     const cargs = mris_fix_topology_cargs(params, execution)
     const ret = mris_fix_topology_outputs(params, execution)
@@ -442,10 +444,8 @@ function mris_fix_topology(
     threads: number | null = null,
     runner: Runner | null = null,
 ): MrisFixTopologyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_FIX_TOPOLOGY_METADATA);
     const params = mris_fix_topology_params(subject_name, hemisphere, orig_name, sphere_name, inflated_name, output_name, defect_base_name, write_fixed_inflated, verbose, verbose_low, warnings, errors, movies, intersect, mappings, correct_defect, niters, genetic, optimize, random, seed, diag, mgz, smooth, diagnostic_level, threads)
-    return mris_fix_topology_execute(params, execution);
+    return mris_fix_topology_execute(params, runner);
 }
 
 
@@ -454,8 +454,6 @@ export {
       MrisFixTopologyOutputs,
       MrisFixTopologyParameters,
       mris_fix_topology,
-      mris_fix_topology_cargs,
       mris_fix_topology_execute,
-      mris_fix_topology_outputs,
       mris_fix_topology_params,
 };

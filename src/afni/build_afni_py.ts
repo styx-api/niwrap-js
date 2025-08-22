@@ -296,14 +296,16 @@ function build_afni_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BuildAfniPyOutputs`).
  */
 function build_afni_py_execute(
     params: BuildAfniPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BuildAfniPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BUILD_AFNI_PY_METADATA);
     params = execution.params(params)
     const cargs = build_afni_py_cargs(params, execution)
     const ret = build_afni_py_outputs(params, execution)
@@ -358,10 +360,8 @@ function build_afni_py(
     version: boolean = false,
     runner: Runner | null = null,
 ): BuildAfniPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BUILD_AFNI_PY_METADATA);
     const params = build_afni_py_params(build_root, clean_root, git_branch, git_tag, git_update, make_target, makefile, package_, prep_only, run_cmake, run_make, verbose_level, help, history, show_valid_opts, version)
-    return build_afni_py_execute(params, execution);
+    return build_afni_py_execute(params, runner);
 }
 
 
@@ -370,8 +370,6 @@ export {
       BuildAfniPyOutputs,
       BuildAfniPyParameters,
       build_afni_py,
-      build_afni_py_cargs,
       build_afni_py_execute,
-      build_afni_py_outputs,
       build_afni_py_params,
 };

@@ -299,14 +299,16 @@ function c3d_affine_tool_outputs(
  * URL: http://www.itksnap.org/pmwiki/pmwiki.php?n=Convert3D.Convert3D
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `C3dAffineToolOutputs`).
  */
 function c3d_affine_tool_execute(
     params: C3dAffineToolParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): C3dAffineToolOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(C3D_AFFINE_TOOL_METADATA);
     params = execution.params(params)
     const cargs = c3d_affine_tool_cargs(params, execution)
     const ret = c3d_affine_tool_outputs(params, execution)
@@ -363,10 +365,8 @@ function c3d_affine_tool(
     info_full: boolean = false,
     runner: Runner | null = null,
 ): C3dAffineToolOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(C3D_AFFINE_TOOL_METADATA);
     const params = c3d_affine_tool_params(transform_file, reference_file, source_file, sform_file, invert, determinant, multiply, sqrt, itk_transform, irtk_transform, fsl2ras, ras2fsl, out_itk_transform, out_irtk_transform, out_matfile, info, info_full)
-    return c3d_affine_tool_execute(params, execution);
+    return c3d_affine_tool_execute(params, runner);
 }
 
 
@@ -375,8 +375,6 @@ export {
       C3dAffineToolOutputs,
       C3dAffineToolParameters,
       c3d_affine_tool,
-      c3d_affine_tool_cargs,
       c3d_affine_tool_execute,
-      c3d_affine_tool_outputs,
       c3d_affine_tool_params,
 };

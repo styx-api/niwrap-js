@@ -239,14 +239,16 @@ function fat_proc_filter_dwis_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatProcFilterDwisOutputs`).
  */
 function fat_proc_filter_dwis_execute(
     params: FatProcFilterDwisParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatProcFilterDwisOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_PROC_FILTER_DWIS_METADATA);
     params = execution.params(params)
     const cargs = fat_proc_filter_dwis_cargs(params, execution)
     const ret = fat_proc_filter_dwis_outputs(params, execution)
@@ -291,10 +293,8 @@ function fat_proc_filter_dwis(
     do_movie: "AGIF" | "MPEG" | null = null,
     runner: Runner | null = null,
 ): FatProcFilterDwisOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_PROC_FILTER_DWIS_METADATA);
     const params = fat_proc_filter_dwis_params(input_dwi, input_gradient, select_string, output_prefix, select_file, input_bvals, unit_mag_out, qc_prefix, no_qc_view, no_cmd_out, do_movie)
-    return fat_proc_filter_dwis_execute(params, execution);
+    return fat_proc_filter_dwis_execute(params, runner);
 }
 
 
@@ -303,8 +303,6 @@ export {
       FatProcFilterDwisOutputs,
       FatProcFilterDwisParameters,
       fat_proc_filter_dwis,
-      fat_proc_filter_dwis_cargs,
       fat_proc_filter_dwis_execute,
-      fat_proc_filter_dwis_outputs,
       fat_proc_filter_dwis_params,
 };

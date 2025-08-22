@@ -256,14 +256,16 @@ function cifti_label_to_border_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelToBorderOutputs`).
  */
 function cifti_label_to_border_execute(
     params: CiftiLabelToBorderParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiLabelToBorderOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_LABEL_TO_BORDER_METADATA);
     params = execution.params(params)
     const cargs = cifti_label_to_border_cargs(params, execution)
     const ret = cifti_label_to_border_outputs(params, execution)
@@ -296,10 +298,8 @@ function cifti_label_to_border(
     border: Array<CiftiLabelToBorderBorderParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiLabelToBorderOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_LABEL_TO_BORDER_METADATA);
     const params = cifti_label_to_border_params(cifti_in, opt_placement_fraction, opt_column_column, border)
-    return cifti_label_to_border_execute(params, execution);
+    return cifti_label_to_border_execute(params, runner);
 }
 
 
@@ -310,11 +310,7 @@ export {
       CiftiLabelToBorderOutputs,
       CiftiLabelToBorderParameters,
       cifti_label_to_border,
-      cifti_label_to_border_border_cargs,
-      cifti_label_to_border_border_outputs,
       cifti_label_to_border_border_params,
-      cifti_label_to_border_cargs,
       cifti_label_to_border_execute,
-      cifti_label_to_border_outputs,
       cifti_label_to_border_params,
 };

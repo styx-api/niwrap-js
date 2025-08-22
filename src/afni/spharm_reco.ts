@@ -202,14 +202,16 @@ function spharm_reco_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SpharmRecoOutputs`).
  */
 function spharm_reco_execute(
     params: SpharmRecoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SpharmRecoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SPHARM_RECO_METADATA);
     params = execution.params(params)
     const cargs = spharm_reco_cargs(params, execution)
     const ret = spharm_reco_outputs(params, execution)
@@ -248,10 +250,8 @@ function spharm_reco(
     smoothing: number | null = null,
     runner: Runner | null = null,
 ): SpharmRecoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SPHARM_RECO_METADATA);
     const params = spharm_reco_params(input_surface, decomposition_order, bases_prefix, coefficients, output_prefix, output_surface, debug, smoothing)
-    return spharm_reco_execute(params, execution);
+    return spharm_reco_execute(params, runner);
 }
 
 
@@ -260,8 +260,6 @@ export {
       SpharmRecoOutputs,
       SpharmRecoParameters,
       spharm_reco,
-      spharm_reco_cargs,
       spharm_reco_execute,
-      spharm_reco_outputs,
       spharm_reco_params,
 };

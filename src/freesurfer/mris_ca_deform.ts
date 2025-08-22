@@ -153,14 +153,16 @@ function mris_ca_deform_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisCaDeformOutputs`).
  */
 function mris_ca_deform_execute(
     params: MrisCaDeformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisCaDeformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_CA_DEFORM_METADATA);
     params = execution.params(params)
     const cargs = mris_ca_deform_cargs(params, execution)
     const ret = mris_ca_deform_outputs(params, execution)
@@ -193,10 +195,8 @@ function mris_ca_deform(
     output_surface: string,
     runner: Runner | null = null,
 ): MrisCaDeformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_CA_DEFORM_METADATA);
     const params = mris_ca_deform_params(input_surface, label_vol, transform, intensity_vol, output_surface)
-    return mris_ca_deform_execute(params, execution);
+    return mris_ca_deform_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       MrisCaDeformOutputs,
       MrisCaDeformParameters,
       mris_ca_deform,
-      mris_ca_deform_cargs,
       mris_ca_deform_execute,
-      mris_ca_deform_outputs,
       mris_ca_deform_params,
 };

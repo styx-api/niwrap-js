@@ -137,14 +137,16 @@ function mri_linear_align_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriLinearAlignOutputs`).
  */
 function mri_linear_align_execute(
     params: MriLinearAlignParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriLinearAlignOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_LINEAR_ALIGN_METADATA);
     params = execution.params(params)
     const cargs = mri_linear_align_cargs(params, execution)
     const ret = mri_linear_align_outputs(params, execution)
@@ -173,10 +175,8 @@ function mri_linear_align(
     output_xform: string,
     runner: Runner | null = null,
 ): MriLinearAlignOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_LINEAR_ALIGN_METADATA);
     const params = mri_linear_align_params(source, target, output_xform)
-    return mri_linear_align_execute(params, execution);
+    return mri_linear_align_execute(params, runner);
 }
 
 
@@ -185,8 +185,6 @@ export {
       MriLinearAlignOutputs,
       MriLinearAlignParameters,
       mri_linear_align,
-      mri_linear_align_cargs,
       mri_linear_align_execute,
-      mri_linear_align_outputs,
       mri_linear_align_params,
 };

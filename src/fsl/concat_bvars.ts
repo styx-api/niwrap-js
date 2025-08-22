@@ -138,14 +138,16 @@ function concat_bvars_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConcatBvarsOutputs`).
  */
 function concat_bvars_execute(
     params: ConcatBvarsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConcatBvarsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONCAT_BVARS_METADATA);
     params = execution.params(params)
     const cargs = concat_bvars_cargs(params, execution)
     const ret = concat_bvars_outputs(params, execution)
@@ -172,10 +174,8 @@ function concat_bvars(
     input_bvars: Array<InputPathType>,
     runner: Runner | null = null,
 ): ConcatBvarsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONCAT_BVARS_METADATA);
     const params = concat_bvars_params(output_bvars, input_bvars)
-    return concat_bvars_execute(params, execution);
+    return concat_bvars_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       ConcatBvarsOutputs,
       ConcatBvarsParameters,
       concat_bvars,
-      concat_bvars_cargs,
       concat_bvars_execute,
-      concat_bvars_outputs,
       concat_bvars_params,
 };

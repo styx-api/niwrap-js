@@ -208,14 +208,16 @@ function v_1dsvd_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dsvdOutputs`).
  */
 function v_1dsvd_execute(
     params: V1dsvdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dsvdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1DSVD_METADATA);
     params = execution.params(params)
     const cargs = v_1dsvd_cargs(params, execution)
     const ret = v_1dsvd_outputs(params, execution)
@@ -260,10 +262,8 @@ function v_1dsvd(
     num_eigenvectors: string | null = null,
     runner: Runner | null = null,
 ): V1dsvdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1DSVD_METADATA);
     const params = v_1dsvd_params(input_files, one, vmean, vnorm, cond, sing, sort, nosort, asort, left_eigenvectors, num_eigenvectors)
-    return v_1dsvd_execute(params, execution);
+    return v_1dsvd_execute(params, runner);
 }
 
 
@@ -272,8 +272,6 @@ export {
       V1dsvdParameters,
       V_1DSVD_METADATA,
       v_1dsvd,
-      v_1dsvd_cargs,
       v_1dsvd_execute,
-      v_1dsvd_outputs,
       v_1dsvd_params,
 };

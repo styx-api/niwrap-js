@@ -189,14 +189,16 @@ function v_3d_notes_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dNotesOutputs`).
  */
 function v_3d_notes_execute(
     params: V3dNotesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dNotesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_NOTES_METADATA);
     params = execution.params(params)
     const cargs = v_3d_notes_cargs(params, execution)
     const ret = v_3d_notes_outputs(params, execution)
@@ -233,10 +235,8 @@ function v_3d_notes(
     help: boolean = false,
     runner: Runner | null = null,
 ): V3dNotesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_NOTES_METADATA);
     const params = v_3d_notes_params(dataset, add_note, append_history, replace_history, delete_note, print_notes, help)
-    return v_3d_notes_execute(params, execution);
+    return v_3d_notes_execute(params, runner);
 }
 
 
@@ -245,8 +245,6 @@ export {
       V3dNotesParameters,
       V_3D_NOTES_METADATA,
       v_3d_notes,
-      v_3d_notes_cargs,
       v_3d_notes_execute,
-      v_3d_notes_outputs,
       v_3d_notes_params,
 };

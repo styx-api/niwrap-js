@@ -127,14 +127,16 @@ function csvprint_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CsvprintOutputs`).
  */
 function csvprint_execute(
     params: CsvprintParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CsvprintOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CSVPRINT_METADATA);
     params = execution.params(params)
     const cargs = csvprint_cargs(params, execution)
     const ret = csvprint_outputs(params, execution)
@@ -159,10 +161,8 @@ function csvprint(
     infile: InputPathType,
     runner: Runner | null = null,
 ): CsvprintOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CSVPRINT_METADATA);
     const params = csvprint_params(infile)
-    return csvprint_execute(params, execution);
+    return csvprint_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       CsvprintOutputs,
       CsvprintParameters,
       csvprint,
-      csvprint_cargs,
       csvprint_execute,
-      csvprint_outputs,
       csvprint_params,
 };

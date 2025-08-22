@@ -192,14 +192,16 @@ function mri_map_cpdat_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMapCpdatOutputs`).
  */
 function mri_map_cpdat_execute(
     params: MriMapCpdatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMapCpdatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MAP_CPDAT_METADATA);
     params = execution.params(params)
     const cargs = mri_map_cpdat_cargs(params, execution)
     const ret = mri_map_cpdat_outputs(params, execution)
@@ -234,10 +236,8 @@ function mri_map_cpdat(
     subject_list_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriMapCpdatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MAP_CPDAT_METADATA);
     const params = mri_map_cpdat_params(input_file, output_file, lta_file, to_mni305, from_mni305, subject_list_file)
-    return mri_map_cpdat_execute(params, execution);
+    return mri_map_cpdat_execute(params, runner);
 }
 
 
@@ -246,8 +246,6 @@ export {
       MriMapCpdatOutputs,
       MriMapCpdatParameters,
       mri_map_cpdat,
-      mri_map_cpdat_cargs,
       mri_map_cpdat_execute,
-      mri_map_cpdat_outputs,
       mri_map_cpdat_params,
 };

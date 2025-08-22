@@ -183,14 +183,16 @@ function cutoffcalc_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CutoffcalcOutputs`).
  */
 function cutoffcalc_execute(
     params: CutoffcalcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CutoffcalcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CUTOFFCALC_METADATA);
     params = execution.params(params)
     const cargs = cutoffcalc_cargs(params, execution)
     const ret = cutoffcalc_outputs(params, execution)
@@ -227,10 +229,8 @@ function cutoffcalc(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): CutoffcalcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CUTOFFCALC_METADATA);
     const params = cutoffcalc_params(input_design, threshold, tr, lower_limit, example_sigma, verbose_flag, debug_flag)
-    return cutoffcalc_execute(params, execution);
+    return cutoffcalc_execute(params, runner);
 }
 
 
@@ -239,8 +239,6 @@ export {
       CutoffcalcOutputs,
       CutoffcalcParameters,
       cutoffcalc,
-      cutoffcalc_cargs,
       cutoffcalc_execute,
-      cutoffcalc_outputs,
       cutoffcalc_params,
 };

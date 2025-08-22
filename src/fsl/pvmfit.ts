@@ -257,14 +257,16 @@ function pvmfit_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PvmfitOutputs`).
  */
 function pvmfit_execute(
     params: PvmfitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PvmfitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PVMFIT_METADATA);
     params = execution.params(params)
     const cargs = pvmfit_cargs(params, execution)
     const ret = pvmfit_outputs(params, execution)
@@ -317,10 +319,8 @@ function pvmfit(
     help: boolean = false,
     runner: Runner | null = null,
 ): PvmfitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PVMFIT_METADATA);
     const params = pvmfit_params(data_file, mask_file, bvec_file, bval_file, output_basename, number_of_fibres, model_type, fit_all_models, constrained_nonlinear, constrained_nonlinear_f, grid_search, include_noise_floor, save_bic, verbose, help)
-    return pvmfit_execute(params, execution);
+    return pvmfit_execute(params, runner);
 }
 
 
@@ -329,8 +329,6 @@ export {
       PvmfitOutputs,
       PvmfitParameters,
       pvmfit,
-      pvmfit_cargs,
       pvmfit_execute,
-      pvmfit_outputs,
       pvmfit_params,
 };

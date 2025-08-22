@@ -147,14 +147,16 @@ function t4img_4dfp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `T4img4dfpOutputs`).
  */
 function t4img_4dfp_execute(
     params: T4img4dfpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): T4img4dfpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(T4IMG_4DFP_METADATA);
     params = execution.params(params)
     const cargs = t4img_4dfp_cargs(params, execution)
     const ret = t4img_4dfp_outputs(params, execution)
@@ -183,10 +185,8 @@ function t4img_4dfp(
     outfile: string | null = null,
     runner: Runner | null = null,
 ): T4img4dfpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(T4IMG_4DFP_METADATA);
     const params = t4img_4dfp_params(t4file, imgfile, outfile)
-    return t4img_4dfp_execute(params, execution);
+    return t4img_4dfp_execute(params, runner);
 }
 
 
@@ -195,8 +195,6 @@ export {
       T4img4dfpOutputs,
       T4img4dfpParameters,
       t4img_4dfp,
-      t4img_4dfp_cargs,
       t4img_4dfp_execute,
-      t4img_4dfp_outputs,
       t4img_4dfp_params,
 };

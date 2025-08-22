@@ -134,14 +134,16 @@ function fslsize_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslsizeOutputs`).
  */
 function fslsize_execute(
     params: FslsizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslsizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLSIZE_METADATA);
     params = execution.params(params)
     const cargs = fslsize_cargs(params, execution)
     const ret = fslsize_outputs(params, execution)
@@ -168,10 +170,8 @@ function fslsize(
     short_format_flag: boolean = false,
     runner: Runner | null = null,
 ): FslsizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLSIZE_METADATA);
     const params = fslsize_params(input_file, short_format_flag)
-    return fslsize_execute(params, execution);
+    return fslsize_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       FslsizeOutputs,
       FslsizeParameters,
       fslsize,
-      fslsize_cargs,
       fslsize_execute,
-      fslsize_outputs,
       fslsize_params,
 };

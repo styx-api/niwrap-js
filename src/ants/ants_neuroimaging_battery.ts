@@ -326,14 +326,16 @@ function ants_neuroimaging_battery_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsNeuroimagingBatteryOutputs`).
  */
 function ants_neuroimaging_battery_execute(
     params: AntsNeuroimagingBatteryParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsNeuroimagingBatteryOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_NEUROIMAGING_BATTERY_METADATA);
     params = execution.params(params)
     const cargs = ants_neuroimaging_battery_cargs(params, execution)
     const ret = ants_neuroimaging_battery_outputs(params, execution)
@@ -394,10 +396,8 @@ function ants_neuroimaging_battery(
     info_only: boolean = false,
     runner: Runner | null = null,
 ): AntsNeuroimagingBatteryOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_NEUROIMAGING_BATTERY_METADATA);
     const params = ants_neuroimaging_battery_params(input_directory, output_directory, output_name, anatomical_image, anatomical_mask, template, template_transform_name, template_labels, dti_flag, pcasl_flag, pasl_flag, pasl_m0_flag, bold_flag, rsbold_flag, mt_flag, no_mt_flag, temp_directory, help, info_only)
-    return ants_neuroimaging_battery_execute(params, execution);
+    return ants_neuroimaging_battery_execute(params, runner);
 }
 
 
@@ -406,8 +406,6 @@ export {
       AntsNeuroimagingBatteryOutputs,
       AntsNeuroimagingBatteryParameters,
       ants_neuroimaging_battery,
-      ants_neuroimaging_battery_cargs,
       ants_neuroimaging_battery_execute,
-      ants_neuroimaging_battery_outputs,
       ants_neuroimaging_battery_params,
 };

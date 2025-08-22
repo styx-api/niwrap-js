@@ -444,14 +444,16 @@ function tckresample_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TckresampleOutputs`).
  */
 function tckresample_execute(
     params: TckresampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TckresampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCKRESAMPLE_METADATA);
     params = execution.params(params)
     const cargs = tckresample_cargs(params, execution)
     const ret = tckresample_outputs(params, execution)
@@ -516,10 +518,8 @@ function tckresample(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckresampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCKRESAMPLE_METADATA);
     const params = tckresample_params(in_tracks, out_tracks, upsample, downsample, step_size, num_points, endpoints, line, arc, info, quiet, debug, force, nthreads, config, help, version)
-    return tckresample_execute(params, execution);
+    return tckresample_execute(params, runner);
 }
 
 
@@ -531,14 +531,9 @@ export {
       TckresampleOutputs,
       TckresampleParameters,
       tckresample,
-      tckresample_arc_cargs,
       tckresample_arc_params,
-      tckresample_cargs,
-      tckresample_config_cargs,
       tckresample_config_params,
       tckresample_execute,
-      tckresample_line_cargs,
       tckresample_line_params,
-      tckresample_outputs,
       tckresample_params,
 };

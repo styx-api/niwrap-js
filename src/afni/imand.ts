@@ -150,14 +150,16 @@ function imand_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImandOutputs`).
  */
 function imand_execute(
     params: ImandParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImandOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMAND_METADATA);
     params = execution.params(params)
     const cargs = imand_cargs(params, execution)
     const ret = imand_outputs(params, execution)
@@ -186,10 +188,8 @@ function imand(
     threshold: number | null = null,
     runner: Runner | null = null,
 ): ImandOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMAND_METADATA);
     const params = imand_params(input_images, output_image, threshold)
-    return imand_execute(params, execution);
+    return imand_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       ImandOutputs,
       ImandParameters,
       imand,
-      imand_cargs,
       imand_execute,
-      imand_outputs,
       imand_params,
 };

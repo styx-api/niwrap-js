@@ -1192,14 +1192,16 @@ function ants_apply_transforms_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsApplyTransformsOutputs`).
  */
 function ants_apply_transforms_execute(
     params: AntsApplyTransformsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsApplyTransformsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_APPLY_TRANSFORMS_METADATA);
     params = execution.params(params)
     const cargs = ants_apply_transforms_cargs(params, execution)
     const ret = ants_apply_transforms_outputs(params, execution)
@@ -1246,10 +1248,8 @@ function ants_apply_transforms(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsApplyTransformsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_APPLY_TRANSFORMS_METADATA);
     const params = ants_apply_transforms_params(reference_image, output, dimensionality, input_image_type, input_image, interpolation, output_data_type, transform, default_value, static_cast_for_r, float, verbose)
-    return ants_apply_transforms_execute(params, execution);
+    return ants_apply_transforms_execute(params, runner);
 }
 
 
@@ -1280,49 +1280,25 @@ export {
       AntsApplyTransformsWarpedOutputParameters,
       AntsApplyTransformsWelchWindowedSincParameters,
       ants_apply_transforms,
-      ants_apply_transforms_alpha_cargs,
       ants_apply_transforms_alpha_params,
-      ants_apply_transforms_bspline_cargs,
       ants_apply_transforms_bspline_params,
-      ants_apply_transforms_cargs,
-      ants_apply_transforms_composite_displacement_field_output_cargs,
-      ants_apply_transforms_composite_displacement_field_output_outputs,
       ants_apply_transforms_composite_displacement_field_output_params,
-      ants_apply_transforms_cosine_windowed_sinc_cargs,
       ants_apply_transforms_cosine_windowed_sinc_params,
       ants_apply_transforms_execute,
-      ants_apply_transforms_gaussian_cargs,
       ants_apply_transforms_gaussian_params,
-      ants_apply_transforms_generic_affine_transform_output_cargs,
-      ants_apply_transforms_generic_affine_transform_output_outputs,
       ants_apply_transforms_generic_affine_transform_output_params,
-      ants_apply_transforms_generic_label_cargs,
       ants_apply_transforms_generic_label_params,
-      ants_apply_transforms_hamming_windowed_sinc_cargs,
       ants_apply_transforms_hamming_windowed_sinc_params,
-      ants_apply_transforms_lanczos_windowed_sinc_cargs,
       ants_apply_transforms_lanczos_windowed_sinc_params,
-      ants_apply_transforms_linear_cargs,
       ants_apply_transforms_linear_params,
-      ants_apply_transforms_multi_label_cargs,
       ants_apply_transforms_multi_label_params,
-      ants_apply_transforms_multi_labelnoparams_cargs,
       ants_apply_transforms_multi_labelnoparams_params,
-      ants_apply_transforms_nearest_neighbor_cargs,
       ants_apply_transforms_nearest_neighbor_params,
-      ants_apply_transforms_outputs,
-      ants_apply_transforms_param_cargs,
       ants_apply_transforms_param_params,
       ants_apply_transforms_params,
-      ants_apply_transforms_sigma_cargs,
       ants_apply_transforms_sigma_params,
-      ants_apply_transforms_transform_file_name_cargs,
       ants_apply_transforms_transform_file_name_params,
-      ants_apply_transforms_use_inverse_cargs,
       ants_apply_transforms_use_inverse_params,
-      ants_apply_transforms_warped_output_cargs,
-      ants_apply_transforms_warped_output_outputs,
       ants_apply_transforms_warped_output_params,
-      ants_apply_transforms_welch_windowed_sinc_cargs,
       ants_apply_transforms_welch_windowed_sinc_params,
 };

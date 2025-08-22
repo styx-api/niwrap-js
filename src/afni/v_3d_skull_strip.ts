@@ -159,14 +159,16 @@ function v_3d_skull_strip_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dSkullStripOutputs`).
  */
 function v_3d_skull_strip_execute(
     params: V3dSkullStripParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dSkullStripOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_SKULL_STRIP_METADATA);
     params = execution.params(params)
     const cargs = v_3d_skull_strip_cargs(params, execution)
     const ret = v_3d_skull_strip_outputs(params, execution)
@@ -195,10 +197,8 @@ function v_3d_skull_strip(
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     runner: Runner | null = null,
 ): V3dSkullStripOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_SKULL_STRIP_METADATA);
     const params = v_3d_skull_strip_params(in_file, num_threads, outputtype)
-    return v_3d_skull_strip_execute(params, execution);
+    return v_3d_skull_strip_execute(params, runner);
 }
 
 
@@ -207,8 +207,6 @@ export {
       V3dSkullStripParameters,
       V_3D_SKULL_STRIP_METADATA,
       v_3d_skull_strip,
-      v_3d_skull_strip_cargs,
       v_3d_skull_strip_execute,
-      v_3d_skull_strip_outputs,
       v_3d_skull_strip_params,
 };

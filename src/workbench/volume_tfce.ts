@@ -291,14 +291,16 @@ function volume_tfce_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeTfceOutputs`).
  */
 function volume_tfce_execute(
     params: VolumeTfceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeTfceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_TFCE_METADATA);
     params = execution.params(params)
     const cargs = volume_tfce_cargs(params, execution)
     const ret = volume_tfce_outputs(params, execution)
@@ -343,10 +345,8 @@ function volume_tfce(
     opt_subvolume_subvolume: string | null = null,
     runner: Runner | null = null,
 ): VolumeTfceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_TFCE_METADATA);
     const params = volume_tfce_params(volume_in, volume_out, presmooth, opt_roi_roi_volume, parameters, opt_subvolume_subvolume)
-    return volume_tfce_execute(params, execution);
+    return volume_tfce_execute(params, runner);
 }
 
 
@@ -357,12 +357,8 @@ export {
       VolumeTfceParametersParameters,
       VolumeTfcePresmoothParameters,
       volume_tfce,
-      volume_tfce_cargs,
       volume_tfce_execute,
-      volume_tfce_outputs,
-      volume_tfce_parameters_cargs,
       volume_tfce_parameters_params,
       volume_tfce_params,
-      volume_tfce_presmooth_cargs,
       volume_tfce_presmooth_params,
 };

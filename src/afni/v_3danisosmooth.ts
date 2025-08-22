@@ -365,14 +365,16 @@ function v_3danisosmooth_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3danisosmoothOutputs`).
  */
 function v_3danisosmooth_execute(
     params: V3danisosmoothParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3danisosmoothOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DANISOSMOOTH_METADATA);
     params = execution.params(params)
     const cargs = v_3danisosmooth_cargs(params, execution)
     const ret = v_3danisosmooth_outputs(params, execution)
@@ -439,10 +441,8 @@ function v_3danisosmooth(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): V3danisosmoothOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DANISOSMOOTH_METADATA);
     const params = v_3danisosmooth_params(input_dataset, prefix, iterations, v_2d_flag, v_3d_flag, mask_dataset, automask_flag, viewer_flag, nosmooth_flag, sigma1, sigma2, deltat, savetempdata_flag, save_temp_with_diff_measures_flag, phiding_flag, phiexp_flag, noneg_flag, setneg_value, edgefraction, datum_type, matchorig_flag, help_flag)
-    return v_3danisosmooth_execute(params, execution);
+    return v_3danisosmooth_execute(params, runner);
 }
 
 
@@ -451,8 +451,6 @@ export {
       V3danisosmoothParameters,
       V_3DANISOSMOOTH_METADATA,
       v_3danisosmooth,
-      v_3danisosmooth_cargs,
       v_3danisosmooth_execute,
-      v_3danisosmooth_outputs,
       v_3danisosmooth_params,
 };

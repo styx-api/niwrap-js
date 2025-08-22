@@ -214,14 +214,16 @@ function uber_skel_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `UberSkelOutputs`).
  */
 function uber_skel_execute(
     params: UberSkelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): UberSkelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(UBER_SKEL_METADATA);
     params = execution.params(params)
     const cargs = uber_skel_cargs(params, execution)
     const ret = uber_skel_outputs(params, execution)
@@ -266,10 +268,8 @@ function uber_skel(
     version: boolean = false,
     runner: Runner | null = null,
 ): UberSkelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UBER_SKEL_METADATA);
     const params = uber_skel_params(qt_options, no_gui_flag, print_script, save_script, user_var, help_howto_program, help, help_gui, history, show_valid_opts, version)
-    return uber_skel_execute(params, execution);
+    return uber_skel_execute(params, runner);
 }
 
 
@@ -278,8 +278,6 @@ export {
       UberSkelOutputs,
       UberSkelParameters,
       uber_skel,
-      uber_skel_cargs,
       uber_skel_execute,
-      uber_skel_outputs,
       uber_skel_params,
 };

@@ -376,14 +376,16 @@ function shconv_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ShconvOutputs`).
  */
 function shconv_execute(
     params: ShconvParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ShconvOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SHCONV_METADATA);
     params = execution.params(params)
     const cargs = shconv_cargs(params, execution)
     const ret = shconv_outputs(params, execution)
@@ -446,10 +448,8 @@ function shconv(
     version: boolean = false,
     runner: Runner | null = null,
 ): ShconvOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SHCONV_METADATA);
     const params = shconv_params(odf_response, sh_out, datatype, strides, info, quiet, debug, force, nthreads, config, help, version)
-    return shconv_execute(params, execution);
+    return shconv_execute(params, runner);
 }
 
 
@@ -461,14 +461,9 @@ export {
       ShconvVariousFileParameters,
       ShconvVariousStringParameters,
       shconv,
-      shconv_cargs,
-      shconv_config_cargs,
       shconv_config_params,
       shconv_execute,
-      shconv_outputs,
       shconv_params,
-      shconv_various_file_cargs,
       shconv_various_file_params,
-      shconv_various_string_cargs,
       shconv_various_string_params,
 };

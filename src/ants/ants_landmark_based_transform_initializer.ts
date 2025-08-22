@@ -198,14 +198,16 @@ function ants_landmark_based_transform_initializer_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsLandmarkBasedTransformInitializerOutputs`).
  */
 function ants_landmark_based_transform_initializer_execute(
     params: AntsLandmarkBasedTransformInitializerParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsLandmarkBasedTransformInitializerOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_LANDMARK_BASED_TRANSFORM_INITIALIZER_METADATA);
     params = execution.params(params)
     const cargs = ants_landmark_based_transform_initializer_cargs(params, execution)
     const ret = ants_landmark_based_transform_initializer_outputs(params, execution)
@@ -248,10 +250,8 @@ function ants_landmark_based_transform_initializer(
     landmark_weights: InputPathType | null = null,
     runner: Runner | null = null,
 ): AntsLandmarkBasedTransformInitializerOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_LANDMARK_BASED_TRANSFORM_INITIALIZER_METADATA);
     const params = ants_landmark_based_transform_initializer_params(dimension, fixed_image, moving_image, transform_type, output_transform, mesh_size, number_of_levels, order, enforce_stationary_boundaries, landmark_weights)
-    return ants_landmark_based_transform_initializer_execute(params, execution);
+    return ants_landmark_based_transform_initializer_execute(params, runner);
 }
 
 
@@ -260,8 +260,6 @@ export {
       AntsLandmarkBasedTransformInitializerOutputs,
       AntsLandmarkBasedTransformInitializerParameters,
       ants_landmark_based_transform_initializer,
-      ants_landmark_based_transform_initializer_cargs,
       ants_landmark_based_transform_initializer_execute,
-      ants_landmark_based_transform_initializer_outputs,
       ants_landmark_based_transform_initializer_params,
 };

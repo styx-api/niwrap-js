@@ -261,14 +261,16 @@ function mri_3d_photo_recon_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Mri3dPhotoReconOutputs`).
  */
 function mri_3d_photo_recon_execute(
     params: Mri3dPhotoReconParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Mri3dPhotoReconOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_3D_PHOTO_RECON_METADATA);
     params = execution.params(params)
     const cargs = mri_3d_photo_recon_cargs(params, execution)
     const ret = mri_3d_photo_recon_outputs(params, execution)
@@ -319,10 +321,8 @@ function mri_3d_photo_recon(
     gpu_index: number | null = null,
     runner: Runner | null = null,
 ): Mri3dPhotoReconOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_3D_PHOTO_RECON_METADATA);
     const params = mri_3d_photo_recon_params(input_photo_dir, input_segmentation_dir, slice_thickness, photo_resolution, output_directory, ref_mask, ref_surface, ref_soft_mask, mesh_reorient_with_indices, photos_posterior_side, order_posterior_to_anterior, allow_z_stretch, rigid_only_for_photos, gpu_index)
-    return mri_3d_photo_recon_execute(params, execution);
+    return mri_3d_photo_recon_execute(params, runner);
 }
 
 
@@ -331,8 +331,6 @@ export {
       Mri3dPhotoReconOutputs,
       Mri3dPhotoReconParameters,
       mri_3d_photo_recon,
-      mri_3d_photo_recon_cargs,
       mri_3d_photo_recon_execute,
-      mri_3d_photo_recon_outputs,
       mri_3d_photo_recon_params,
 };

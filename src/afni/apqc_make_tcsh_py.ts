@@ -169,14 +169,16 @@ function apqc_make_tcsh_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ApqcMakeTcshPyOutputs`).
  */
 function apqc_make_tcsh_py_execute(
     params: ApqcMakeTcshPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ApqcMakeTcshPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(APQC_MAKE_TCSH_PY_METADATA);
     params = execution.params(params)
     const cargs = apqc_make_tcsh_py_cargs(params, execution)
     const ret = apqc_make_tcsh_py_outputs(params, execution)
@@ -209,10 +211,8 @@ function apqc_make_tcsh_py(
     vstat_list: Array<string> | null = null,
     runner: Runner | null = null,
 ): ApqcMakeTcshPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(APQC_MAKE_TCSH_PY_METADATA);
     const params = apqc_make_tcsh_py_params(uvar_json, subj_dir, review_style, mot_grayplot_off, vstat_list)
-    return apqc_make_tcsh_py_execute(params, execution);
+    return apqc_make_tcsh_py_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       ApqcMakeTcshPyOutputs,
       ApqcMakeTcshPyParameters,
       apqc_make_tcsh_py,
-      apqc_make_tcsh_py_cargs,
       apqc_make_tcsh_py_execute,
-      apqc_make_tcsh_py_outputs,
       apqc_make_tcsh_py_params,
 };

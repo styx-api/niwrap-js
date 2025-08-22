@@ -173,14 +173,16 @@ function gauss_4dfp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Gauss4dfpOutputs`).
  */
 function gauss_4dfp_execute(
     params: Gauss4dfpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Gauss4dfpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GAUSS_4DFP_METADATA);
     params = execution.params(params)
     const cargs = gauss_4dfp_cargs(params, execution)
     const ret = gauss_4dfp_outputs(params, execution)
@@ -215,10 +217,8 @@ function gauss_4dfp(
     differentiate_flag: boolean = false,
     runner: Runner | null = null,
 ): Gauss4dfpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GAUSS_4DFP_METADATA);
     const params = gauss_4dfp_params(input_file, f_half, output_root, endian_flag, wrap_flag, differentiate_flag)
-    return gauss_4dfp_execute(params, execution);
+    return gauss_4dfp_execute(params, runner);
 }
 
 
@@ -227,8 +227,6 @@ export {
       Gauss4dfpOutputs,
       Gauss4dfpParameters,
       gauss_4dfp,
-      gauss_4dfp_cargs,
       gauss_4dfp_execute,
-      gauss_4dfp_outputs,
       gauss_4dfp_params,
 };

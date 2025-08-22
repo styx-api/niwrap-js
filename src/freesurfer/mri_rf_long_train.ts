@@ -209,14 +209,16 @@ function mri_rf_long_train_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriRfLongTrainOutputs`).
  */
 function mri_rf_long_train_execute(
     params: MriRfLongTrainParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriRfLongTrainOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_RF_LONG_TRAIN_METADATA);
     params = execution.params(params)
     const cargs = mri_rf_long_train_cargs(params, execution)
     const ret = mri_rf_long_train_outputs(params, execution)
@@ -257,10 +259,8 @@ function mri_rf_long_train(
     check: boolean = false,
     runner: Runner | null = null,
 ): MriRfLongTrainOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_RF_LONG_TRAIN_METADATA);
     const params = mri_rf_long_train_params(seg_dir, xform, subjects, output_rfa, mask, node_spacing, prior_spacing, input_data, check)
-    return mri_rf_long_train_execute(params, execution);
+    return mri_rf_long_train_execute(params, runner);
 }
 
 
@@ -269,8 +269,6 @@ export {
       MriRfLongTrainOutputs,
       MriRfLongTrainParameters,
       mri_rf_long_train,
-      mri_rf_long_train_cargs,
       mri_rf_long_train_execute,
-      mri_rf_long_train_outputs,
       mri_rf_long_train_params,
 };

@@ -146,14 +146,16 @@ function gifti_all_labels_to_rois_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GiftiAllLabelsToRoisOutputs`).
  */
 function gifti_all_labels_to_rois_execute(
     params: GiftiAllLabelsToRoisParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GiftiAllLabelsToRoisOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GIFTI_ALL_LABELS_TO_ROIS_METADATA);
     params = execution.params(params)
     const cargs = gifti_all_labels_to_rois_cargs(params, execution)
     const ret = gifti_all_labels_to_rois_outputs(params, execution)
@@ -184,10 +186,8 @@ function gifti_all_labels_to_rois(
     metric_out: string,
     runner: Runner | null = null,
 ): GiftiAllLabelsToRoisOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GIFTI_ALL_LABELS_TO_ROIS_METADATA);
     const params = gifti_all_labels_to_rois_params(label_in, map, metric_out)
-    return gifti_all_labels_to_rois_execute(params, execution);
+    return gifti_all_labels_to_rois_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       GiftiAllLabelsToRoisOutputs,
       GiftiAllLabelsToRoisParameters,
       gifti_all_labels_to_rois,
-      gifti_all_labels_to_rois_cargs,
       gifti_all_labels_to_rois_execute,
-      gifti_all_labels_to_rois_outputs,
       gifti_all_labels_to_rois_params,
 };

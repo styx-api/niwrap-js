@@ -298,14 +298,16 @@ function v_3d_mvm_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dMvmOutputs`).
  */
 function v_3d_mvm_execute(
     params: V3dMvmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dMvmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_MVM_METADATA);
     params = execution.params(params)
     const cargs = v_3d_mvm_cargs(params, execution)
     const ret = v_3d_mvm_outputs(params, execution)
@@ -358,10 +360,8 @@ function v_3d_mvm(
     glf_code: string | null = null,
     runner: Runner | null = null,
 ): V3dMvmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_MVM_METADATA);
     const params = v_3d_mvm_params(prefix, bs_vars, data_table, dbg_args, jobs, mask, ws_vars, q_vars, q_var_centers, num_glt, glt_label, glt_code, num_glf, glf_label, glf_code)
-    return v_3d_mvm_execute(params, execution);
+    return v_3d_mvm_execute(params, runner);
 }
 
 
@@ -370,8 +370,6 @@ export {
       V3dMvmParameters,
       V_3D_MVM_METADATA,
       v_3d_mvm,
-      v_3d_mvm_cargs,
       v_3d_mvm_execute,
-      v_3d_mvm_outputs,
       v_3d_mvm_params,
 };

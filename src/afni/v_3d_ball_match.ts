@@ -178,14 +178,16 @@ function v_3d_ball_match_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dBallMatchOutputs`).
  */
 function v_3d_ball_match_execute(
     params: V3dBallMatchParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dBallMatchOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_BALL_MATCH_METADATA);
     params = execution.params(params)
     const cargs = v_3d_ball_match_cargs(params, execution)
     const ret = v_3d_ball_match_outputs(params, execution)
@@ -218,10 +220,8 @@ function v_3d_ball_match(
     spheroid_axes: Array<number> | null = null,
     runner: Runner | null = null,
 ): V3dBallMatchOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_BALL_MATCH_METADATA);
     const params = v_3d_ball_match_params(input_dataset, radius, dataset_option, ball_radius, spheroid_axes)
-    return v_3d_ball_match_execute(params, execution);
+    return v_3d_ball_match_execute(params, runner);
 }
 
 
@@ -230,8 +230,6 @@ export {
       V3dBallMatchParameters,
       V_3D_BALL_MATCH_METADATA,
       v_3d_ball_match,
-      v_3d_ball_match_cargs,
       v_3d_ball_match_execute,
-      v_3d_ball_match_outputs,
       v_3d_ball_match_params,
 };

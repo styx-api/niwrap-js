@@ -208,14 +208,16 @@ function xsanatreg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `XsanatregOutputs`).
  */
 function xsanatreg_execute(
     params: XsanatregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): XsanatregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(XSANATREG_METADATA);
     params = execution.params(params)
     const cargs = xsanatreg_cargs(params, execution)
     const ret = xsanatreg_outputs(params, execution)
@@ -256,10 +258,8 @@ function xsanatreg(
     umask: string | null = null,
     runner: Runner | null = null,
 ): XsanatregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(XSANATREG_METADATA);
     const params = xsanatreg_params(src_cordir, targ_cordir, transform_file, temp_directory, source_minc, target_minc, no_cleanup, version, umask)
-    return xsanatreg_execute(params, execution);
+    return xsanatreg_execute(params, runner);
 }
 
 
@@ -268,8 +268,6 @@ export {
       XsanatregOutputs,
       XsanatregParameters,
       xsanatreg,
-      xsanatreg_cargs,
       xsanatreg_execute,
-      xsanatreg_outputs,
       xsanatreg_params,
 };

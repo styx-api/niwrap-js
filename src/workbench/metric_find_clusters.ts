@@ -235,14 +235,16 @@ function metric_find_clusters_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricFindClustersOutputs`).
  */
 function metric_find_clusters_execute(
     params: MetricFindClustersParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricFindClustersOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_FIND_CLUSTERS_METADATA);
     params = execution.params(params)
     const cargs = metric_find_clusters_cargs(params, execution)
     const ret = metric_find_clusters_outputs(params, execution)
@@ -291,10 +293,8 @@ function metric_find_clusters(
     opt_start_startval: number | null = null,
     runner: Runner | null = null,
 ): MetricFindClustersOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_FIND_CLUSTERS_METADATA);
     const params = metric_find_clusters_params(surface, metric_in, value_threshold, minimum_area, metric_out, opt_less_than, opt_roi_roi_metric, opt_corrected_areas_area_metric, opt_column_column, opt_size_ratio_ratio, opt_distance_distance, opt_start_startval)
-    return metric_find_clusters_execute(params, execution);
+    return metric_find_clusters_execute(params, runner);
 }
 
 
@@ -303,8 +303,6 @@ export {
       MetricFindClustersOutputs,
       MetricFindClustersParameters,
       metric_find_clusters,
-      metric_find_clusters_cargs,
       metric_find_clusters_execute,
-      metric_find_clusters_outputs,
       metric_find_clusters_params,
 };

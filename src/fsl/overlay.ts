@@ -214,14 +214,16 @@ function overlay_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `OverlayOutputs`).
  */
 function overlay_execute(
     params: OverlayParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): OverlayOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(OVERLAY_METADATA);
     params = execution.params(params)
     const cargs = overlay_cargs(params, execution)
     const ret = overlay_outputs(params, execution)
@@ -268,10 +270,8 @@ function overlay(
     use_checkerboard: boolean = false,
     runner: Runner | null = null,
 ): OverlayOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(OVERLAY_METADATA);
     const params = overlay_params(background_image, bg_thresh, stat_image, stat_thresh, auto_thresh_bg, full_bg_range, out_file, out_type, output_type, stat_image2, stat_thresh2, use_checkerboard)
-    return overlay_execute(params, execution);
+    return overlay_execute(params, runner);
 }
 
 
@@ -280,8 +280,6 @@ export {
       OverlayOutputs,
       OverlayParameters,
       overlay,
-      overlay_cargs,
       overlay_execute,
-      overlay_outputs,
       overlay_params,
 };

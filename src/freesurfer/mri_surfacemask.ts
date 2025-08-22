@@ -143,14 +143,16 @@ function mri_surfacemask_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSurfacemaskOutputs`).
  */
 function mri_surfacemask_execute(
     params: MriSurfacemaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSurfacemaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SURFACEMASK_METADATA);
     params = execution.params(params)
     const cargs = mri_surfacemask_cargs(params, execution)
     const ret = mri_surfacemask_outputs(params, execution)
@@ -179,10 +181,8 @@ function mri_surfacemask(
     output_volume: string,
     runner: Runner | null = null,
 ): MriSurfacemaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SURFACEMASK_METADATA);
     const params = mri_surfacemask_params(input_volume, input_surface, output_volume)
-    return mri_surfacemask_execute(params, execution);
+    return mri_surfacemask_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MriSurfacemaskOutputs,
       MriSurfacemaskParameters,
       mri_surfacemask,
-      mri_surfacemask_cargs,
       mri_surfacemask_execute,
-      mri_surfacemask_outputs,
       mri_surfacemask_params,
 };

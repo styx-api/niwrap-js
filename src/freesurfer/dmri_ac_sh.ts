@@ -131,14 +131,16 @@ function dmri_ac_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriAcShOutputs`).
  */
 function dmri_ac_sh_execute(
     params: DmriAcShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriAcShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_AC_SH_METADATA);
     params = execution.params(params)
     const cargs = dmri_ac_sh_cargs(params, execution)
     const ret = dmri_ac_sh_outputs(params, execution)
@@ -163,10 +165,8 @@ function dmri_ac_sh(
     additional_args: string | null = null,
     runner: Runner | null = null,
 ): DmriAcShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_AC_SH_METADATA);
     const params = dmri_ac_sh_params(additional_args)
-    return dmri_ac_sh_execute(params, execution);
+    return dmri_ac_sh_execute(params, runner);
 }
 
 
@@ -175,8 +175,6 @@ export {
       DmriAcShOutputs,
       DmriAcShParameters,
       dmri_ac_sh,
-      dmri_ac_sh_cargs,
       dmri_ac_sh_execute,
-      dmri_ac_sh_outputs,
       dmri_ac_sh_params,
 };

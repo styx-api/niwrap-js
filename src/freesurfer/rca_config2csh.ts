@@ -130,14 +130,16 @@ function rca_config2csh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RcaConfig2cshOutputs`).
  */
 function rca_config2csh_execute(
     params: RcaConfig2cshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RcaConfig2cshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RCA_CONFIG2CSH_METADATA);
     params = execution.params(params)
     const cargs = rca_config2csh_cargs(params, execution)
     const ret = rca_config2csh_outputs(params, execution)
@@ -162,10 +164,8 @@ function rca_config2csh(
     configfile: InputPathType,
     runner: Runner | null = null,
 ): RcaConfig2cshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RCA_CONFIG2CSH_METADATA);
     const params = rca_config2csh_params(configfile)
-    return rca_config2csh_execute(params, execution);
+    return rca_config2csh_execute(params, runner);
 }
 
 
@@ -174,8 +174,6 @@ export {
       RcaConfig2cshOutputs,
       RcaConfig2cshParameters,
       rca_config2csh,
-      rca_config2csh_cargs,
       rca_config2csh_execute,
-      rca_config2csh_outputs,
       rca_config2csh_params,
 };

@@ -153,14 +153,16 @@ function antsintegrate_vector_field_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsintegrateVectorFieldOutputs`).
  */
 function antsintegrate_vector_field_execute(
     params: AntsintegrateVectorFieldParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsintegrateVectorFieldOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTSINTEGRATE_VECTOR_FIELD_METADATA);
     params = execution.params(params)
     const cargs = antsintegrate_vector_field_cargs(params, execution)
     const ret = antsintegrate_vector_field_outputs(params, execution)
@@ -191,10 +193,8 @@ function antsintegrate_vector_field(
     length_image_output: string,
     runner: Runner | null = null,
 ): AntsintegrateVectorFieldOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTSINTEGRATE_VECTOR_FIELD_METADATA);
     const params = antsintegrate_vector_field_params(vector_field_input, roi_mask_input, fibers_output, length_image_output)
-    return antsintegrate_vector_field_execute(params, execution);
+    return antsintegrate_vector_field_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       AntsintegrateVectorFieldOutputs,
       AntsintegrateVectorFieldParameters,
       antsintegrate_vector_field,
-      antsintegrate_vector_field_cargs,
       antsintegrate_vector_field_execute,
-      antsintegrate_vector_field_outputs,
       antsintegrate_vector_field_params,
 };

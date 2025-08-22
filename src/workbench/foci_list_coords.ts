@@ -147,14 +147,16 @@ function foci_list_coords_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FociListCoordsOutputs`).
  */
 function foci_list_coords_execute(
     params: FociListCoordsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FociListCoordsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FOCI_LIST_COORDS_METADATA);
     params = execution.params(params)
     const cargs = foci_list_coords_cargs(params, execution)
     const ret = foci_list_coords_outputs(params, execution)
@@ -185,10 +187,8 @@ function foci_list_coords(
     opt_names_out_names_file_out: string | null = null,
     runner: Runner | null = null,
 ): FociListCoordsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FOCI_LIST_COORDS_METADATA);
     const params = foci_list_coords_params(foci_file, coord_file_out, opt_names_out_names_file_out)
-    return foci_list_coords_execute(params, execution);
+    return foci_list_coords_execute(params, runner);
 }
 
 
@@ -197,8 +197,6 @@ export {
       FociListCoordsOutputs,
       FociListCoordsParameters,
       foci_list_coords,
-      foci_list_coords_cargs,
       foci_list_coords_execute,
-      foci_list_coords_outputs,
       foci_list_coords_params,
 };

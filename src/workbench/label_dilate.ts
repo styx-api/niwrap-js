@@ -187,14 +187,16 @@ function label_dilate_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelDilateOutputs`).
  */
 function label_dilate_execute(
     params: LabelDilateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelDilateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_DILATE_METADATA);
     params = execution.params(params)
     const cargs = label_dilate_cargs(params, execution)
     const ret = label_dilate_outputs(params, execution)
@@ -233,10 +235,8 @@ function label_dilate(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelDilateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_DILATE_METADATA);
     const params = label_dilate_params(label, surface, dilate_dist, label_out, opt_bad_vertex_roi_roi_metric, opt_column_column, opt_corrected_areas_area_metric)
-    return label_dilate_execute(params, execution);
+    return label_dilate_execute(params, runner);
 }
 
 
@@ -245,8 +245,6 @@ export {
       LabelDilateOutputs,
       LabelDilateParameters,
       label_dilate,
-      label_dilate_cargs,
       label_dilate_execute,
-      label_dilate_outputs,
       label_dilate_params,
 };

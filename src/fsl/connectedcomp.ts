@@ -151,14 +151,16 @@ function connectedcomp_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConnectedcompOutputs`).
  */
 function connectedcomp_execute(
     params: ConnectedcompParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConnectedcompOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONNECTEDCOMP_METADATA);
     params = execution.params(params)
     const cargs = connectedcomp_cargs(params, execution)
     const ret = connectedcomp_outputs(params, execution)
@@ -187,10 +189,8 @@ function connectedcomp(
     num_connect: number | null = null,
     runner: Runner | null = null,
 ): ConnectedcompOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONNECTEDCOMP_METADATA);
     const params = connectedcomp_params(in_volume, output_volume, num_connect)
-    return connectedcomp_execute(params, execution);
+    return connectedcomp_execute(params, runner);
 }
 
 
@@ -199,8 +199,6 @@ export {
       ConnectedcompOutputs,
       ConnectedcompParameters,
       connectedcomp,
-      connectedcomp_cargs,
       connectedcomp_execute,
-      connectedcomp_outputs,
       connectedcomp_params,
 };

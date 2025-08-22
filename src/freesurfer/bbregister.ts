@@ -278,14 +278,16 @@ function bbregister_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BbregisterOutputs`).
  */
 function bbregister_execute(
     params: BbregisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BbregisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BBREGISTER_METADATA);
     params = execution.params(params)
     const cargs = bbregister_cargs(params, execution)
     const ret = bbregister_outputs(params, execution)
@@ -340,10 +342,8 @@ function bbregister(
     s_from_reg: boolean = false,
     runner: Runner | null = null,
 ): BbregisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BBREGISTER_METADATA);
     const params = bbregister_params(subject, moveable_volume, reg_file, contrast_type_t1, contrast_type_t2, vsm, init_coreg, no_coreg_ref_mask, init_header, init_reg, intvol, mid_frame, frame_no, template_out, o_outvol, s_from_reg)
-    return bbregister_execute(params, execution);
+    return bbregister_execute(params, runner);
 }
 
 
@@ -352,8 +352,6 @@ export {
       BbregisterOutputs,
       BbregisterParameters,
       bbregister,
-      bbregister_cargs,
       bbregister_execute,
-      bbregister_outputs,
       bbregister_params,
 };

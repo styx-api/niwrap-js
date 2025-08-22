@@ -296,14 +296,16 @@ function mri_wbc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriWbcOutputs`).
  */
 function mri_wbc_execute(
     params: MriWbcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriWbcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_WBC_METADATA);
     params = execution.params(params)
     const cargs = mri_wbc_cargs(params, execution)
     const ret = mri_wbc_outputs(params, execution)
@@ -360,10 +362,8 @@ function mri_wbc(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MriWbcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_WBC_METADATA);
     const params = mri_wbc_params(functional_volume, lh_functional_surface, lh_surface, rh_functional_surface, rh_surface, volume_mask, lh_inflated, lh_mask, lh_label, rh_inflated, rh_mask, rh_label, rho_threshold, dist_threshold, threads, debug, checkopts)
-    return mri_wbc_execute(params, execution);
+    return mri_wbc_execute(params, runner);
 }
 
 
@@ -372,8 +372,6 @@ export {
       MriWbcOutputs,
       MriWbcParameters,
       mri_wbc,
-      mri_wbc_cargs,
       mri_wbc_execute,
-      mri_wbc_outputs,
       mri_wbc_params,
 };

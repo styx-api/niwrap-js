@@ -483,14 +483,16 @@ function surf_clust_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfClustOutputs`).
  */
 function surf_clust_execute(
     params: SurfClustParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfClustOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_CLUST_METADATA);
     params = execution.params(params)
     const cargs = surf_clust_cargs(params, execution)
     const ret = surf_clust_outputs(params, execution)
@@ -591,10 +593,8 @@ function surf_clust(
     aspx_help: boolean = false,
     runner: Runner | null = null,
 ): SurfClustOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_CLUST_METADATA);
     const params = surf_clust_params(input_dataset, rmm, specfile, input_surface, input_surf_name, amm2, min_nodes, prefix, out_clusterdset, out_roidset, out_fulllist, sort_none, sort_n_nodes, sort_area, thresh_col, thresh, athresh, ir_range, ex_range, prepend_node_index, update, no_cent, cent, novolreg, noxform, set_env, trace, trace_extreme, no_memory_trace, yes_memory_trace, mini_help, help, extreme_help, view_help, web_help, find_help, raw_help, spx_help, aspx_help)
-    return surf_clust_execute(params, execution);
+    return surf_clust_execute(params, runner);
 }
 
 
@@ -603,8 +603,6 @@ export {
       SurfClustOutputs,
       SurfClustParameters,
       surf_clust,
-      surf_clust_cargs,
       surf_clust_execute,
-      surf_clust_outputs,
       surf_clust_params,
 };

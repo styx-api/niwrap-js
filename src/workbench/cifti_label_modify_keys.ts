@@ -164,14 +164,16 @@ function cifti_label_modify_keys_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelModifyKeysOutputs`).
  */
 function cifti_label_modify_keys_execute(
     params: CiftiLabelModifyKeysParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiLabelModifyKeysOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_LABEL_MODIFY_KEYS_METADATA);
     params = execution.params(params)
     const cargs = cifti_label_modify_keys_cargs(params, execution)
     const ret = cifti_label_modify_keys_outputs(params, execution)
@@ -210,10 +212,8 @@ function cifti_label_modify_keys(
     opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): CiftiLabelModifyKeysOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_LABEL_MODIFY_KEYS_METADATA);
     const params = cifti_label_modify_keys_params(cifti_in, remap_file, cifti_out, opt_column_column)
-    return cifti_label_modify_keys_execute(params, execution);
+    return cifti_label_modify_keys_execute(params, runner);
 }
 
 
@@ -222,8 +222,6 @@ export {
       CiftiLabelModifyKeysOutputs,
       CiftiLabelModifyKeysParameters,
       cifti_label_modify_keys,
-      cifti_label_modify_keys_cargs,
       cifti_label_modify_keys_execute,
-      cifti_label_modify_keys_outputs,
       cifti_label_modify_keys_params,
 };

@@ -138,14 +138,16 @@ function fiducials_correction_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FiducialsCorrectionOutputs`).
  */
 function fiducials_correction_execute(
     params: FiducialsCorrectionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FiducialsCorrectionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIDUCIALS_CORRECTION_METADATA);
     params = execution.params(params)
     const cargs = fiducials_correction_cargs(params, execution)
     const ret = fiducials_correction_outputs(params, execution)
@@ -172,10 +174,8 @@ function fiducials_correction(
     output_file: string,
     runner: Runner | null = null,
 ): FiducialsCorrectionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIDUCIALS_CORRECTION_METADATA);
     const params = fiducials_correction_params(input_file, output_file)
-    return fiducials_correction_execute(params, execution);
+    return fiducials_correction_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       FiducialsCorrectionOutputs,
       FiducialsCorrectionParameters,
       fiducials_correction,
-      fiducials_correction_cargs,
       fiducials_correction_execute,
-      fiducials_correction_outputs,
       fiducials_correction_params,
 };

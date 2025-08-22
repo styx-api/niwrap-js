@@ -150,14 +150,16 @@ function ztop_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ZtopOutputs`).
  */
 function ztop_execute(
     params: ZtopParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ZtopOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ZTOP_METADATA);
     params = execution.params(params)
     const cargs = ztop_cargs(params, execution)
     const ret = ztop_outputs(params, execution)
@@ -188,10 +190,8 @@ function ztop(
     number_of_resels: number | null = null,
     runner: Runner | null = null,
 ): ZtopOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ZTOP_METADATA);
     const params = ztop_params(z_score, tail_flag, grf_flag, number_of_resels)
-    return ztop_execute(params, execution);
+    return ztop_execute(params, runner);
 }
 
 
@@ -200,8 +200,6 @@ export {
       ZtopOutputs,
       ZtopParameters,
       ztop,
-      ztop_cargs,
       ztop_execute,
-      ztop_outputs,
       ztop_params,
 };

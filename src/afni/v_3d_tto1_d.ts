@@ -187,14 +187,16 @@ function v_3d_tto1_d_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTto1DOutputs`).
  */
 function v_3d_tto1_d_execute(
     params: V3dTto1DParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTto1DOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TTO1_D_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tto1_d_cargs(params, execution)
     const ret = v_3d_tto1_d_outputs(params, execution)
@@ -229,10 +231,8 @@ function v_3d_tto1_d(
     verbose: number | null = null,
     runner: Runner | null = null,
 ): V3dTto1DOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TTO1_D_METADATA);
     const params = v_3d_tto1_d_params(input_dataset, method, automask, mask, prefix, verbose)
-    return v_3d_tto1_d_execute(params, execution);
+    return v_3d_tto1_d_execute(params, runner);
 }
 
 
@@ -241,8 +241,6 @@ export {
       V3dTto1DParameters,
       V_3D_TTO1_D_METADATA,
       v_3d_tto1_d,
-      v_3d_tto1_d_cargs,
       v_3d_tto1_d_execute,
-      v_3d_tto1_d_outputs,
       v_3d_tto1_d_params,
 };

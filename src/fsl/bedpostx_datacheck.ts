@@ -127,14 +127,16 @@ function bedpostx_datacheck_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BedpostxDatacheckOutputs`).
  */
 function bedpostx_datacheck_execute(
     params: BedpostxDatacheckParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BedpostxDatacheckOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BEDPOSTX_DATACHECK_METADATA);
     params = execution.params(params)
     const cargs = bedpostx_datacheck_cargs(params, execution)
     const ret = bedpostx_datacheck_outputs(params, execution)
@@ -159,10 +161,8 @@ function bedpostx_datacheck(
     data_dir: string,
     runner: Runner | null = null,
 ): BedpostxDatacheckOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BEDPOSTX_DATACHECK_METADATA);
     const params = bedpostx_datacheck_params(data_dir)
-    return bedpostx_datacheck_execute(params, execution);
+    return bedpostx_datacheck_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       BedpostxDatacheckOutputs,
       BedpostxDatacheckParameters,
       bedpostx_datacheck,
-      bedpostx_datacheck_cargs,
       bedpostx_datacheck_execute,
-      bedpostx_datacheck_outputs,
       bedpostx_datacheck_params,
 };

@@ -324,14 +324,16 @@ function mrstats_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrstatsOutputs`).
  */
 function mrstats_execute(
     params: MrstatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrstatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRSTATS_METADATA);
     params = execution.params(params)
     const cargs = mrstats_cargs(params, execution)
     const ret = mrstats_outputs(params, execution)
@@ -386,10 +388,8 @@ function mrstats(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrstatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRSTATS_METADATA);
     const params = mrstats_params(image, output, mask, ignorezero, allvolumes, info, quiet, debug, force, nthreads, config, help, version)
-    return mrstats_execute(params, execution);
+    return mrstats_execute(params, runner);
 }
 
 
@@ -400,12 +400,8 @@ export {
       MrstatsOutputs,
       MrstatsParameters,
       mrstats,
-      mrstats_cargs,
-      mrstats_config_cargs,
       mrstats_config_params,
       mrstats_execute,
-      mrstats_output_cargs,
       mrstats_output_params,
-      mrstats_outputs,
       mrstats_params,
 };

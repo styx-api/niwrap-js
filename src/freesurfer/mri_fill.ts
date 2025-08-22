@@ -308,14 +308,16 @@ function mri_fill_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriFillOutputs`).
  */
 function mri_fill_execute(
     params: MriFillParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriFillOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_FILL_METADATA);
     params = execution.params(params)
     const cargs = mri_fill_cargs(params, execution)
     const ret = mri_fill_outputs(params, execution)
@@ -372,10 +374,8 @@ function mri_fill(
     ctab_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriFillOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_FILL_METADATA);
     const params = mri_fill_params(input_mr_dir, output_mr_dir, threshold, xform_name, segmentation_file, atlas_file, fill_ven, seed_cc_tal, seed_pons_tal, seed_lh_tal, seed_rh_tal, seed_cc_vox, seed_pons_vox, auto_man_files, no_auto_man, pointset_args, ctab_file)
-    return mri_fill_execute(params, execution);
+    return mri_fill_execute(params, runner);
 }
 
 
@@ -384,8 +384,6 @@ export {
       MriFillOutputs,
       MriFillParameters,
       mri_fill,
-      mri_fill_cargs,
       mri_fill_execute,
-      mri_fill_outputs,
       mri_fill_params,
 };

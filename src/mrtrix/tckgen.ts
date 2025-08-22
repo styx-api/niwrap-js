@@ -1436,14 +1436,16 @@ function tckgen_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TckgenOutputs`).
  */
 function tckgen_execute(
     params: TckgenParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TckgenOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCKGEN_METADATA);
     params = execution.params(params)
     const cargs = tckgen_cargs(params, execution)
     const ret = tckgen_outputs(params, execution)
@@ -1613,10 +1615,8 @@ function tckgen(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckgenOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCKGEN_METADATA);
     const params = tckgen_params(source, tracks, algorithm, select, step, angle, minlength, maxlength, cutoff, trials, noprecomputed, rk4, stop, downsample, seed_image, seed_sphere, seed_random_per_voxel, seed_grid_per_voxel, seed_rejection, seed_gmwmi, seed_dynamic, seeds, max_attempts_per_seed, seed_cutoff, seed_unidirectional, seed_direction, output_seeds, include, include_ordered, exclude, mask, act, backtrack, crop_at_gmwmi, power, samples, grad, fslgrad, info, quiet, debug, force, nthreads, config, help, version)
-    return tckgen_execute(params, execution);
+    return tckgen_execute(params, runner);
 }
 
 
@@ -1643,44 +1643,24 @@ export {
       TckgenVariousString2Parameters,
       TckgenVariousStringParameters,
       tckgen,
-      tckgen_cargs,
-      tckgen_config_cargs,
       tckgen_config_params,
-      tckgen_exclude_cargs,
       tckgen_exclude_params,
       tckgen_execute,
-      tckgen_fslgrad_cargs,
       tckgen_fslgrad_params,
-      tckgen_include_cargs,
-      tckgen_include_ordered_cargs,
       tckgen_include_ordered_params,
       tckgen_include_params,
-      tckgen_mask_cargs,
       tckgen_mask_params,
-      tckgen_outputs,
       tckgen_params,
-      tckgen_seed_gmwmi_cargs,
       tckgen_seed_gmwmi_params,
-      tckgen_seed_grid_per_voxel_cargs,
       tckgen_seed_grid_per_voxel_params,
-      tckgen_seed_image_cargs,
       tckgen_seed_image_params,
-      tckgen_seed_random_per_voxel_cargs,
       tckgen_seed_random_per_voxel_params,
-      tckgen_seed_rejection_cargs,
       tckgen_seed_rejection_params,
-      tckgen_seed_sphere_cargs,
       tckgen_seed_sphere_params,
-      tckgen_various_file_1_cargs,
       tckgen_various_file_1_params,
-      tckgen_various_file_2_cargs,
       tckgen_various_file_2_params,
-      tckgen_various_file_cargs,
       tckgen_various_file_params,
-      tckgen_various_string_1_cargs,
       tckgen_various_string_1_params,
-      tckgen_various_string_2_cargs,
       tckgen_various_string_2_params,
-      tckgen_various_string_cargs,
       tckgen_various_string_params,
 };

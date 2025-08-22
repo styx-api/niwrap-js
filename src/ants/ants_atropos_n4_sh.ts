@@ -447,14 +447,16 @@ function ants_atropos_n4_sh_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsAtroposN4ShOutputs`).
  */
 function ants_atropos_n4_sh_execute(
     params: AntsAtroposN4ShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsAtroposN4ShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_ATROPOS_N4_SH_METADATA);
     params = execution.params(params)
     const cargs = ants_atropos_n4_sh_cargs(params, execution)
     const ret = ants_atropos_n4_sh_outputs(params, execution)
@@ -527,10 +529,8 @@ function ants_atropos_n4_sh(
     test_debug_mode: number | null = null,
     runner: Runner | null = null,
 ): AntsAtroposN4ShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_ATROPOS_N4_SH_METADATA);
     const params = ants_atropos_n4_sh_params(image_dimension, input_image, mask_image, number_of_classes, output_prefix, segmentation_priors, max_n4_atropos_iterations, max_atropos_iterations, mrf, denoise_anatomical_images, posterior_formulation, label_propagation, posterior_label_for_n4_weight_mask, image_file_suffix, keep_temporary_files, use_random_seeding, atropos_segmentation_prior_weight, n4_convergence, n4_shrink_factor, n4_bspline_params, atropos_segmentation_icm, atropos_segmentation_use_euclidean_distance, test_debug_mode)
-    return ants_atropos_n4_sh_execute(params, execution);
+    return ants_atropos_n4_sh_execute(params, runner);
 }
 
 
@@ -540,10 +540,7 @@ export {
       AntsAtroposN4ShParameters,
       AntsAtroposN4ShSegmentationPriorsParameters,
       ants_atropos_n4_sh,
-      ants_atropos_n4_sh_cargs,
       ants_atropos_n4_sh_execute,
-      ants_atropos_n4_sh_outputs,
       ants_atropos_n4_sh_params,
-      ants_atropos_n4_sh_segmentation_priors_cargs,
       ants_atropos_n4_sh_segmentation_priors_params,
 };

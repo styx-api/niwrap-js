@@ -141,14 +141,16 @@ function make_average_subcort_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeAverageSubcortOutputs`).
  */
 function make_average_subcort_execute(
     params: MakeAverageSubcortParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeAverageSubcortOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_AVERAGE_SUBCORT_METADATA);
     params = execution.params(params)
     const cargs = make_average_subcort_cargs(params, execution)
     const ret = make_average_subcort_outputs(params, execution)
@@ -175,10 +177,8 @@ function make_average_subcort(
     output_volume: string,
     runner: Runner | null = null,
 ): MakeAverageSubcortOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_AVERAGE_SUBCORT_METADATA);
     const params = make_average_subcort_params(subjects, output_volume)
-    return make_average_subcort_execute(params, execution);
+    return make_average_subcort_execute(params, runner);
 }
 
 
@@ -187,8 +187,6 @@ export {
       MakeAverageSubcortOutputs,
       MakeAverageSubcortParameters,
       make_average_subcort,
-      make_average_subcort_cargs,
       make_average_subcort_execute,
-      make_average_subcort_outputs,
       make_average_subcort_params,
 };

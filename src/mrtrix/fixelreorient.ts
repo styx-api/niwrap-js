@@ -261,14 +261,16 @@ function fixelreorient_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FixelreorientOutputs`).
  */
 function fixelreorient_execute(
     params: FixelreorientParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FixelreorientOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIXELREORIENT_METADATA);
     params = execution.params(params)
     const cargs = fixelreorient_cargs(params, execution)
     const ret = fixelreorient_outputs(params, execution)
@@ -319,10 +321,8 @@ function fixelreorient(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelreorientOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIXELREORIENT_METADATA);
     const params = fixelreorient_params(fixel_in, warp, fixel_out, info, quiet, debug, force, nthreads, config, help, version)
-    return fixelreorient_execute(params, execution);
+    return fixelreorient_execute(params, runner);
 }
 
 
@@ -332,10 +332,7 @@ export {
       FixelreorientOutputs,
       FixelreorientParameters,
       fixelreorient,
-      fixelreorient_cargs,
-      fixelreorient_config_cargs,
       fixelreorient_config_params,
       fixelreorient_execute,
-      fixelreorient_outputs,
       fixelreorient_params,
 };

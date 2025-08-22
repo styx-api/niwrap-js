@@ -199,14 +199,16 @@ function susan_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SusanOutputs`).
  */
 function susan_execute(
     params: SusanParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SusanOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SUSAN_METADATA);
     params = execution.params(params)
     const cargs = susan_cargs(params, execution)
     const ret = susan_outputs(params, execution)
@@ -251,10 +253,8 @@ function susan(
     brightness_threshold2: number | null = null,
     runner: Runner | null = null,
 ): SusanOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SUSAN_METADATA);
     const params = susan_params(input_file, brightness_threshold, spatial_size, dimensionality, use_median_filter, n_usans, output_file, usan1, brightness_threshold1, usan2, brightness_threshold2)
-    return susan_execute(params, execution);
+    return susan_execute(params, runner);
 }
 
 
@@ -263,8 +263,6 @@ export {
       SusanOutputs,
       SusanParameters,
       susan,
-      susan_cargs,
       susan_execute,
-      susan_outputs,
       susan_params,
 };

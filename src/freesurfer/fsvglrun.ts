@@ -162,14 +162,16 @@ function fsvglrun_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsvglrunOutputs`).
  */
 function fsvglrun_execute(
     params: FsvglrunParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsvglrunOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSVGLRUN_METADATA);
     params = execution.params(params)
     const cargs = fsvglrun_cargs(params, execution)
     const ret = fsvglrun_outputs(params, execution)
@@ -202,10 +204,8 @@ function fsvglrun(
     command_args: Array<string> | null = null,
     runner: Runner | null = null,
 ): FsvglrunOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSVGLRUN_METADATA);
     const params = fsvglrun_params(command, zeroth_arg_name, empty_env, dashed_arg, command_args)
-    return fsvglrun_execute(params, execution);
+    return fsvglrun_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       FsvglrunOutputs,
       FsvglrunParameters,
       fsvglrun,
-      fsvglrun_cargs,
       fsvglrun_execute,
-      fsvglrun_outputs,
       fsvglrun_params,
 };

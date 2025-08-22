@@ -296,14 +296,16 @@ function make_bianca_mask_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeBiancaMaskOutputs`).
  */
 function make_bianca_mask_execute(
     params: MakeBiancaMaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeBiancaMaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_BIANCA_MASK_METADATA);
     params = execution.params(params)
     const cargs = make_bianca_mask_cargs(params, execution)
     const ret = make_bianca_mask_outputs(params, execution)
@@ -368,10 +370,8 @@ function make_bianca_mask(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): MakeBiancaMaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_BIANCA_MASK_METADATA);
     const params = make_bianca_mask_params(input_image, output_image, overlay_flag, binary_mask_flag, approx_skull_flag, no_seg_output_flag, fractional_intensity, vg_fractional_intensity, head_radius, center_of_gravity, thresholding_flag, vtk_mesh, robust_iters_flag, residual_optic_cleanup_flag, reduce_bias_flag, slice_padding_flag, whole_set_mask_flag, additional_surfaces_flag, additional_surfaces_t2, verbose_flag, debug_flag)
-    return make_bianca_mask_execute(params, execution);
+    return make_bianca_mask_execute(params, runner);
 }
 
 
@@ -380,8 +380,6 @@ export {
       MakeBiancaMaskOutputs,
       MakeBiancaMaskParameters,
       make_bianca_mask,
-      make_bianca_mask_cargs,
       make_bianca_mask_execute,
-      make_bianca_mask_outputs,
       make_bianca_mask_params,
 };

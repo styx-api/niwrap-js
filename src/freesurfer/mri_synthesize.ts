@@ -165,14 +165,16 @@ function mri_synthesize_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSynthesizeOutputs`).
  */
 function mri_synthesize_execute(
     params: MriSynthesizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSynthesizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SYNTHESIZE_METADATA);
     params = execution.params(params)
     const cargs = mri_synthesize_cargs(params, execution)
     const ret = mri_synthesize_outputs(params, execution)
@@ -209,10 +211,8 @@ function mri_synthesize(
     fixed_weight: boolean = false,
     runner: Runner | null = null,
 ): MriSynthesizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SYNTHESIZE_METADATA);
     const params = mri_synthesize_params(tr, alpha, te, t1_volume, pd_volume, output_volume, fixed_weight)
-    return mri_synthesize_execute(params, execution);
+    return mri_synthesize_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       MriSynthesizeOutputs,
       MriSynthesizeParameters,
       mri_synthesize,
-      mri_synthesize_cargs,
       mri_synthesize_execute,
-      mri_synthesize_outputs,
       mri_synthesize_params,
 };

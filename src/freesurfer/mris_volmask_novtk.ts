@@ -301,14 +301,16 @@ function mris_volmask_novtk_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisVolmaskNovtkOutputs`).
  */
 function mris_volmask_novtk_execute(
     params: MrisVolmaskNovtkParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisVolmaskNovtkOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_VOLMASK_NOVTK_METADATA);
     params = execution.params(params)
     const cargs = mris_volmask_novtk_cargs(params, execution)
     const ret = mris_volmask_novtk_outputs(params, execution)
@@ -367,10 +369,8 @@ function mris_volmask_novtk(
     save_ribbon: boolean = false,
     runner: Runner | null = null,
 ): MrisVolmaskNovtkOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_VOLMASK_NOVTK_METADATA);
     const params = mris_volmask_novtk_params(io, cap_distance, label_background, label_left_white, label_left_ribbon, label_right_white, label_right_ribbon, surf_white, surf_pial, aseg_name, out_root, subjects_dir, save_distance, lh_only, rh_only, parallel, edit_aseg, save_ribbon)
-    return mris_volmask_novtk_execute(params, execution);
+    return mris_volmask_novtk_execute(params, runner);
 }
 
 
@@ -379,8 +379,6 @@ export {
       MrisVolmaskNovtkOutputs,
       MrisVolmaskNovtkParameters,
       mris_volmask_novtk,
-      mris_volmask_novtk_cargs,
       mris_volmask_novtk_execute,
-      mris_volmask_novtk_outputs,
       mris_volmask_novtk_params,
 };

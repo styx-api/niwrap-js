@@ -177,14 +177,16 @@ function strblast_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `StrblastOutputs`).
  */
 function strblast_execute(
     params: StrblastParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): StrblastOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(STRBLAST_METADATA);
     params = execution.params(params)
     const cargs = strblast_cargs(params, execution)
     const ret = strblast_outputs(params, execution)
@@ -221,10 +223,8 @@ function strblast(
     help: boolean = false,
     runner: Runner | null = null,
 ): StrblastOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(STRBLAST_METADATA);
     const params = strblast_params(targetstring, input_files, new_char, new_string, unescape, quiet, help)
-    return strblast_execute(params, execution);
+    return strblast_execute(params, runner);
 }
 
 
@@ -233,8 +233,6 @@ export {
       StrblastOutputs,
       StrblastParameters,
       strblast,
-      strblast_cargs,
       strblast_execute,
-      strblast_outputs,
       strblast_params,
 };

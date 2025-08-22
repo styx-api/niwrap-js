@@ -164,14 +164,16 @@ function v_3d_edu_01_scale_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dEdu01ScaleOutputs`).
  */
 function v_3d_edu_01_scale_execute(
     params: V3dEdu01ScaleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dEdu01ScaleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_EDU_01_SCALE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_edu_01_scale_cargs(params, execution)
     const ret = v_3d_edu_01_scale_outputs(params, execution)
@@ -202,10 +204,8 @@ function v_3d_edu_01_scale(
     option_flag: boolean = false,
     runner: Runner | null = null,
 ): V3dEdu01ScaleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_EDU_01_SCALE_METADATA);
     const params = v_3d_edu_01_scale_params(input, mask, mult_factors, option_flag)
-    return v_3d_edu_01_scale_execute(params, execution);
+    return v_3d_edu_01_scale_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       V3dEdu01ScaleParameters,
       V_3D_EDU_01_SCALE_METADATA,
       v_3d_edu_01_scale,
-      v_3d_edu_01_scale_cargs,
       v_3d_edu_01_scale_execute,
-      v_3d_edu_01_scale_outputs,
       v_3d_edu_01_scale_params,
 };

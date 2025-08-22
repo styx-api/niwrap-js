@@ -127,14 +127,16 @@ function getfullpath_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GetfullpathOutputs`).
  */
 function getfullpath_execute(
     params: GetfullpathParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GetfullpathOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GETFULLPATH_METADATA);
     params = execution.params(params)
     const cargs = getfullpath_cargs(params, execution)
     const ret = getfullpath_outputs(params, execution)
@@ -159,10 +161,8 @@ function getfullpath(
     filename: string,
     runner: Runner | null = null,
 ): GetfullpathOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GETFULLPATH_METADATA);
     const params = getfullpath_params(filename)
-    return getfullpath_execute(params, execution);
+    return getfullpath_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       GetfullpathOutputs,
       GetfullpathParameters,
       getfullpath,
-      getfullpath_cargs,
       getfullpath_execute,
-      getfullpath_outputs,
       getfullpath_params,
 };

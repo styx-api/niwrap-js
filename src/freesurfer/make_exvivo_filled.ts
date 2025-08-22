@@ -142,14 +142,16 @@ function make_exvivo_filled_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeExvivoFilledOutputs`).
  */
 function make_exvivo_filled_execute(
     params: MakeExvivoFilledParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeExvivoFilledOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_EXVIVO_FILLED_METADATA);
     params = execution.params(params)
     const cargs = make_exvivo_filled_cargs(params, execution)
     const ret = make_exvivo_filled_outputs(params, execution)
@@ -180,10 +182,8 @@ function make_exvivo_filled(
     hemi_both: string,
     runner: Runner | null = null,
 ): MakeExvivoFilledOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_EXVIVO_FILLED_METADATA);
     const params = make_exvivo_filled_params(subject_name, input_samseg, input_intensity_vol, hemi_both)
-    return make_exvivo_filled_execute(params, execution);
+    return make_exvivo_filled_execute(params, runner);
 }
 
 
@@ -192,8 +192,6 @@ export {
       MakeExvivoFilledOutputs,
       MakeExvivoFilledParameters,
       make_exvivo_filled,
-      make_exvivo_filled_cargs,
       make_exvivo_filled_execute,
-      make_exvivo_filled_outputs,
       make_exvivo_filled_params,
 };

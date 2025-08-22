@@ -139,14 +139,16 @@ function cluster2html_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Cluster2htmlOutputs`).
  */
 function cluster2html_execute(
     params: Cluster2htmlParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Cluster2htmlOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CLUSTER2HTML_METADATA);
     params = execution.params(params)
     const cargs = cluster2html_cargs(params, execution)
     const ret = cluster2html_outputs(params, execution)
@@ -175,10 +177,8 @@ function cluster2html(
     std_flag: boolean = false,
     runner: Runner | null = null,
 ): Cluster2htmlOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CLUSTER2HTML_METADATA);
     const params = cluster2html_params(featdir, inroot, std_flag)
-    return cluster2html_execute(params, execution);
+    return cluster2html_execute(params, runner);
 }
 
 
@@ -187,8 +187,6 @@ export {
       Cluster2htmlOutputs,
       Cluster2htmlParameters,
       cluster2html,
-      cluster2html_cargs,
       cluster2html_execute,
-      cluster2html_outputs,
       cluster2html_params,
 };

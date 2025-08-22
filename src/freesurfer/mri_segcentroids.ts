@@ -194,14 +194,16 @@ function mri_segcentroids_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSegcentroidsOutputs`).
  */
 function mri_segcentroids_execute(
     params: MriSegcentroidsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSegcentroidsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SEGCENTROIDS_METADATA);
     params = execution.params(params)
     const cargs = mri_segcentroids_cargs(params, execution)
     const ret = mri_segcentroids_outputs(params, execution)
@@ -238,10 +240,8 @@ function mri_segcentroids(
     default_lut_flag: boolean = false,
     runner: Runner | null = null,
 ): MriSegcentroidsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SEGCENTROIDS_METADATA);
     const params = mri_segcentroids_params(input_segmentation, output_file, pointset_flag, registration_file, weights_file, lut_file, default_lut_flag)
-    return mri_segcentroids_execute(params, execution);
+    return mri_segcentroids_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       MriSegcentroidsOutputs,
       MriSegcentroidsParameters,
       mri_segcentroids,
-      mri_segcentroids_cargs,
       mri_segcentroids_execute,
-      mri_segcentroids_outputs,
       mri_segcentroids_params,
 };

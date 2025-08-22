@@ -143,14 +143,16 @@ function unconfound_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `UnconfoundOutputs`).
  */
 function unconfound_execute(
     params: UnconfoundParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): UnconfoundOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(UNCONFOUND_METADATA);
     params = execution.params(params)
     const cargs = unconfound_cargs(params, execution)
     const ret = unconfound_outputs(params, execution)
@@ -179,10 +181,8 @@ function unconfound(
     confound_mat: InputPathType,
     runner: Runner | null = null,
 ): UnconfoundOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UNCONFOUND_METADATA);
     const params = unconfound_params(in4d, out4d, confound_mat)
-    return unconfound_execute(params, execution);
+    return unconfound_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       UnconfoundOutputs,
       UnconfoundParameters,
       unconfound,
-      unconfound_cargs,
       unconfound_execute,
-      unconfound_outputs,
       unconfound_params,
 };

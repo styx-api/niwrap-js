@@ -197,14 +197,16 @@ function vecwarp_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VecwarpOutputs`).
  */
 function vecwarp_execute(
     params: VecwarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VecwarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VECWARP_METADATA);
     params = execution.params(params)
     const cargs = vecwarp_cargs(params, execution)
     const ret = vecwarp_outputs(params, execution)
@@ -241,10 +243,8 @@ function vecwarp(
     force: boolean = false,
     runner: Runner | null = null,
 ): VecwarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VECWARP_METADATA);
     const params = vecwarp_params(apar, matvec, forward, backward, input, output, force)
-    return vecwarp_execute(params, execution);
+    return vecwarp_execute(params, runner);
 }
 
 
@@ -253,8 +253,6 @@ export {
       VecwarpOutputs,
       VecwarpParameters,
       vecwarp,
-      vecwarp_cargs,
       vecwarp_execute,
-      vecwarp_outputs,
       vecwarp_params,
 };

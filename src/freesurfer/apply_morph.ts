@@ -167,14 +167,16 @@ function apply_morph_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ApplyMorphOutputs`).
  */
 function apply_morph_execute(
     params: ApplyMorphParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ApplyMorphOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(APPLY_MORPH_METADATA);
     params = execution.params(params)
     const cargs = apply_morph_cargs(params, execution)
     const ret = apply_morph_outputs(params, execution)
@@ -207,10 +209,8 @@ function apply_morph(
     dbg_coords: Array<number> | null = null,
     runner: Runner | null = null,
 ): ApplyMorphOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(APPLY_MORPH_METADATA);
     const params = apply_morph_params(inputs, template, transform, zlib_buffer, dbg_coords)
-    return apply_morph_execute(params, execution);
+    return apply_morph_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       ApplyMorphOutputs,
       ApplyMorphParameters,
       apply_morph,
-      apply_morph_cargs,
       apply_morph_execute,
-      apply_morph_outputs,
       apply_morph_params,
 };

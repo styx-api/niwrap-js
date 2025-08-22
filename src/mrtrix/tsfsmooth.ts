@@ -268,14 +268,16 @@ function tsfsmooth_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TsfsmoothOutputs`).
  */
 function tsfsmooth_execute(
     params: TsfsmoothParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TsfsmoothOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TSFSMOOTH_METADATA);
     params = execution.params(params)
     const cargs = tsfsmooth_cargs(params, execution)
     const ret = tsfsmooth_outputs(params, execution)
@@ -326,10 +328,8 @@ function tsfsmooth(
     version: boolean = false,
     runner: Runner | null = null,
 ): TsfsmoothOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TSFSMOOTH_METADATA);
     const params = tsfsmooth_params(input, output, stdev, info, quiet, debug, force, nthreads, config, help, version)
-    return tsfsmooth_execute(params, execution);
+    return tsfsmooth_execute(params, runner);
 }
 
 
@@ -339,10 +339,7 @@ export {
       TsfsmoothOutputs,
       TsfsmoothParameters,
       tsfsmooth,
-      tsfsmooth_cargs,
-      tsfsmooth_config_cargs,
       tsfsmooth_config_params,
       tsfsmooth_execute,
-      tsfsmooth_outputs,
       tsfsmooth_params,
 };

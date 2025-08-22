@@ -201,14 +201,16 @@ function v__fat_tract_colorize_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VFatTractColorizeOutputs`).
  */
 function v__fat_tract_colorize_execute(
     params: VFatTractColorizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VFatTractColorizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__FAT_TRACT_COLORIZE_METADATA);
     params = execution.params(params)
     const cargs = v__fat_tract_colorize_cargs(params, execution)
     const ret = v__fat_tract_colorize_outputs(params, execution)
@@ -245,10 +247,8 @@ function v__fat_tract_colorize(
     only_view: boolean = false,
     runner: Runner | null = null,
 ): VFatTractColorizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__FAT_TRACT_COLORIZE_METADATA);
     const params = v__fat_tract_colorize_params(in_fa, in_v1, in_tracts, prefix, in_ulay, no_view, only_view)
-    return v__fat_tract_colorize_execute(params, execution);
+    return v__fat_tract_colorize_execute(params, runner);
 }
 
 
@@ -257,8 +257,6 @@ export {
       VFatTractColorizeParameters,
       V__FAT_TRACT_COLORIZE_METADATA,
       v__fat_tract_colorize,
-      v__fat_tract_colorize_cargs,
       v__fat_tract_colorize_execute,
-      v__fat_tract_colorize_outputs,
       v__fat_tract_colorize_params,
 };

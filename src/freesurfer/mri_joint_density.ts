@@ -143,14 +143,16 @@ function mri_joint_density_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriJointDensityOutputs`).
  */
 function mri_joint_density_execute(
     params: MriJointDensityParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriJointDensityOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_JOINT_DENSITY_METADATA);
     params = execution.params(params)
     const cargs = mri_joint_density_cargs(params, execution)
     const ret = mri_joint_density_outputs(params, execution)
@@ -179,10 +181,8 @@ function mri_joint_density(
     output_density_file: string,
     runner: Runner | null = null,
 ): MriJointDensityOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_JOINT_DENSITY_METADATA);
     const params = mri_joint_density_params(vol1, vol2, output_density_file)
-    return mri_joint_density_execute(params, execution);
+    return mri_joint_density_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MriJointDensityOutputs,
       MriJointDensityParameters,
       mri_joint_density,
-      mri_joint_density_cargs,
       mri_joint_density_execute,
-      mri_joint_density_outputs,
       mri_joint_density_params,
 };

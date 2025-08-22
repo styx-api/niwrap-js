@@ -230,14 +230,16 @@ function cifti_create_scalar_series_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCreateScalarSeriesOutputs`).
  */
 function cifti_create_scalar_series_execute(
     params: CiftiCreateScalarSeriesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiCreateScalarSeriesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_CREATE_SCALAR_SERIES_METADATA);
     params = execution.params(params)
     const cargs = cifti_create_scalar_series_cargs(params, execution)
     const ret = cifti_create_scalar_series_outputs(params, execution)
@@ -279,10 +281,8 @@ function cifti_create_scalar_series(
     series: CiftiCreateScalarSeriesSeriesParameters | null = null,
     runner: Runner | null = null,
 ): CiftiCreateScalarSeriesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_CREATE_SCALAR_SERIES_METADATA);
     const params = cifti_create_scalar_series_params(input, cifti_out, opt_transpose, opt_name_file_file, series)
-    return cifti_create_scalar_series_execute(params, execution);
+    return cifti_create_scalar_series_execute(params, runner);
 }
 
 
@@ -292,10 +292,7 @@ export {
       CiftiCreateScalarSeriesParameters,
       CiftiCreateScalarSeriesSeriesParameters,
       cifti_create_scalar_series,
-      cifti_create_scalar_series_cargs,
       cifti_create_scalar_series_execute,
-      cifti_create_scalar_series_outputs,
       cifti_create_scalar_series_params,
-      cifti_create_scalar_series_series_cargs,
       cifti_create_scalar_series_series_params,
 };

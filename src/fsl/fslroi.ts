@@ -210,14 +210,16 @@ function fslroi_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslroiOutputs`).
  */
 function fslroi_execute(
     params: FslroiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslroiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLROI_METADATA);
     params = execution.params(params)
     const cargs = fslroi_cargs(params, execution)
     const ret = fslroi_outputs(params, execution)
@@ -260,10 +262,8 @@ function fslroi(
     tsize: number | null = null,
     runner: Runner | null = null,
 ): FslroiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLROI_METADATA);
     const params = fslroi_params(infile, outfile, xmin, xsize, ymin, ysize, zmin, zsize, tmin, tsize)
-    return fslroi_execute(params, execution);
+    return fslroi_execute(params, runner);
 }
 
 
@@ -272,8 +272,6 @@ export {
       FslroiOutputs,
       FslroiParameters,
       fslroi,
-      fslroi_cargs,
       fslroi_execute,
-      fslroi_outputs,
       fslroi_params,
 };

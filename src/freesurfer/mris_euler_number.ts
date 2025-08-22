@@ -145,14 +145,16 @@ function mris_euler_number_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisEulerNumberOutputs`).
  */
 function mris_euler_number_execute(
     params: MrisEulerNumberParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisEulerNumberOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_EULER_NUMBER_METADATA);
     params = execution.params(params)
     const cargs = mris_euler_number_cargs(params, execution)
     const ret = mris_euler_number_outputs(params, execution)
@@ -179,10 +181,8 @@ function mris_euler_number(
     output_file: string | null = null,
     runner: Runner | null = null,
 ): MrisEulerNumberOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_EULER_NUMBER_METADATA);
     const params = mris_euler_number_params(input_surface, output_file)
-    return mris_euler_number_execute(params, execution);
+    return mris_euler_number_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MrisEulerNumberOutputs,
       MrisEulerNumberParameters,
       mris_euler_number,
-      mris_euler_number_cargs,
       mris_euler_number_execute,
-      mris_euler_number_outputs,
       mris_euler_number_params,
 };

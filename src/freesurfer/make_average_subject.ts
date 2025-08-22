@@ -318,14 +318,16 @@ function make_average_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeAverageSubjectOutputs`).
  */
 function make_average_subject_execute(
     params: MakeAverageSubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeAverageSubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_AVERAGE_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = make_average_subject_cargs(params, execution)
     const ret = make_average_subject_outputs(params, execution)
@@ -392,10 +394,8 @@ function make_average_subject(
     debug: boolean = false,
     runner: Runner | null = null,
 ): MakeAverageSubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_AVERAGE_SUBJECT_METADATA);
     const params = make_average_subject_params(subjects, average_subject_name, fsgd_file, subject_list_file, sd_out, no_link, sdir, ico_order, transform_file, surface_registration, no_surfaces, no_volumes, force, keep_all_orig, no_symlink, no_ribbon, no_surf2surf, rca_threads, help, version, echo, debug)
-    return make_average_subject_execute(params, execution);
+    return make_average_subject_execute(params, runner);
 }
 
 
@@ -404,8 +404,6 @@ export {
       MakeAverageSubjectOutputs,
       MakeAverageSubjectParameters,
       make_average_subject,
-      make_average_subject_cargs,
       make_average_subject_execute,
-      make_average_subject_outputs,
       make_average_subject_params,
 };

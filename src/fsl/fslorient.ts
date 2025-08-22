@@ -249,14 +249,16 @@ function fslorient_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslorientOutputs`).
  */
 function fslorient_execute(
     params: FslorientParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslorientOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLORIENT_METADATA);
     params = execution.params(params)
     const cargs = fslorient_cargs(params, execution)
     const ret = fslorient_outputs(params, execution)
@@ -311,10 +313,8 @@ function fslorient(
     swap_orient: boolean = false,
     runner: Runner | null = null,
 ): FslorientOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLORIENT_METADATA);
     const params = fslorient_params(filename, get_orient, get_sform, get_qform, set_sform, set_qform, set_sform_code, set_qform_code, get_qform_code, get_sform_code, copy_qform_to_sform, copy_sform_to_qform, delete_orient, force_neurological, force_radiological, swap_orient)
-    return fslorient_execute(params, execution);
+    return fslorient_execute(params, runner);
 }
 
 
@@ -323,8 +323,6 @@ export {
       FslorientOutputs,
       FslorientParameters,
       fslorient,
-      fslorient_cargs,
       fslorient_execute,
-      fslorient_outputs,
       fslorient_params,
 };

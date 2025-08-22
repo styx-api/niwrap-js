@@ -366,14 +366,16 @@ function v_3dkmeans_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dkmeansOutputs`).
  */
 function v_3dkmeans_execute(
     params: V3dkmeansParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dkmeansOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DKMEANS_METADATA);
     params = execution.params(params)
     const cargs = v_3dkmeans_cargs(params, execution)
     const ret = v_3dkmeans_outputs(params, execution)
@@ -433,10 +435,8 @@ function v_3dkmeans(
     seed: number | null = null,
     runner: Runner | null = null,
 ): V3dkmeansOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DKMEANS_METADATA);
     const params = v_3dkmeans_params(input, version, mask, mask_range, cmask, jobname, prefix, distance_measure, num_clusters, remap_method, labeltable, clabels, clust_init, num_repeats, rsigs, verbose, write_dists, voxdbg, seed)
-    return v_3dkmeans_execute(params, execution);
+    return v_3dkmeans_execute(params, runner);
 }
 
 
@@ -445,8 +445,6 @@ export {
       V3dkmeansParameters,
       V_3DKMEANS_METADATA,
       v_3dkmeans,
-      v_3dkmeans_cargs,
       v_3dkmeans_execute,
-      v_3dkmeans_outputs,
       v_3dkmeans_params,
 };

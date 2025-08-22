@@ -214,14 +214,16 @@ function set_structure_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SetStructureOutputs`).
  */
 function set_structure_execute(
     params: SetStructureParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SetStructureOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SET_STRUCTURE_METADATA);
     params = execution.params(params)
     const cargs = set_structure_cargs(params, execution)
     const ret = set_structure_outputs(params, execution)
@@ -309,10 +311,8 @@ function set_structure(
     opt_surface_secondary_type_secondary_type: string | null = null,
     runner: Runner | null = null,
 ): SetStructureOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SET_STRUCTURE_METADATA);
     const params = set_structure_params(data_file, structure, opt_surface_type_type, opt_surface_secondary_type_secondary_type)
-    return set_structure_execute(params, execution);
+    return set_structure_execute(params, runner);
 }
 
 
@@ -321,8 +321,6 @@ export {
       SetStructureOutputs,
       SetStructureParameters,
       set_structure,
-      set_structure_cargs,
       set_structure_execute,
-      set_structure_outputs,
       set_structure_params,
 };

@@ -250,14 +250,16 @@ function mri_easyreg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriEasyregOutputs`).
  */
 function mri_easyreg_execute(
     params: MriEasyregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriEasyregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_EASYREG_METADATA);
     params = execution.params(params)
     const cargs = mri_easyreg_cargs(params, execution)
     const ret = mri_easyreg_outputs(params, execution)
@@ -300,10 +302,8 @@ function mri_easyreg(
     threads: number | null = null,
     runner: Runner | null = null,
 ): MriEasyregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_EASYREG_METADATA);
     const params = mri_easyreg_params(reference_image, floating_image, reference_segmentation, floating_segmentation, registered_reference, registered_floating, forward_field, inverse_field, affine_only, threads)
-    return mri_easyreg_execute(params, execution);
+    return mri_easyreg_execute(params, runner);
 }
 
 
@@ -312,8 +312,6 @@ export {
       MriEasyregOutputs,
       MriEasyregParameters,
       mri_easyreg,
-      mri_easyreg_cargs,
       mri_easyreg_execute,
-      mri_easyreg_outputs,
       mri_easyreg_params,
 };

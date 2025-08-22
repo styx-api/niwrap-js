@@ -127,14 +127,16 @@ function imrm_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImrmOutputs`).
  */
 function imrm_execute(
     params: ImrmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImrmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMRM_METADATA);
     params = execution.params(params)
     const cargs = imrm_cargs(params, execution)
     const ret = imrm_outputs(params, execution)
@@ -159,10 +161,8 @@ function imrm(
     images_to_remove: Array<string>,
     runner: Runner | null = null,
 ): ImrmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMRM_METADATA);
     const params = imrm_params(images_to_remove)
-    return imrm_execute(params, execution);
+    return imrm_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       ImrmOutputs,
       ImrmParameters,
       imrm,
-      imrm_cargs,
       imrm_execute,
-      imrm_outputs,
       imrm_params,
 };

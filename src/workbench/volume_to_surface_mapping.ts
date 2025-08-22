@@ -577,14 +577,16 @@ function volume_to_surface_mapping_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeToSurfaceMappingOutputs`).
  */
 function volume_to_surface_mapping_execute(
     params: VolumeToSurfaceMappingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeToSurfaceMappingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_TO_SURFACE_MAPPING_METADATA);
     params = execution.params(params)
     const cargs = volume_to_surface_mapping_cargs(params, execution)
     const ret = volume_to_surface_mapping_outputs(params, execution)
@@ -631,10 +633,8 @@ function volume_to_surface_mapping(
     opt_subvol_select_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeToSurfaceMappingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_TO_SURFACE_MAPPING_METADATA);
     const params = volume_to_surface_mapping_params(volume, surface, metric_out, opt_trilinear, opt_enclosing, opt_cubic, ribbon_constrained, myelin_style, opt_subvol_select_subvol)
-    return volume_to_surface_mapping_execute(params, execution);
+    return volume_to_surface_mapping_execute(params, runner);
 }
 
 
@@ -649,18 +649,10 @@ export {
       VolumeToSurfaceMappingRibbonConstrainedParameters,
       VolumeToSurfaceMappingVolumeRoiParameters,
       volume_to_surface_mapping,
-      volume_to_surface_mapping_cargs,
       volume_to_surface_mapping_execute,
-      volume_to_surface_mapping_myelin_style_cargs,
       volume_to_surface_mapping_myelin_style_params,
-      volume_to_surface_mapping_output_weights_cargs,
-      volume_to_surface_mapping_output_weights_outputs,
       volume_to_surface_mapping_output_weights_params,
-      volume_to_surface_mapping_outputs,
       volume_to_surface_mapping_params,
-      volume_to_surface_mapping_ribbon_constrained_cargs,
-      volume_to_surface_mapping_ribbon_constrained_outputs,
       volume_to_surface_mapping_ribbon_constrained_params,
-      volume_to_surface_mapping_volume_roi_cargs,
       volume_to_surface_mapping_volume_roi_params,
 };

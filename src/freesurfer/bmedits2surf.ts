@@ -228,14 +228,16 @@ function bmedits2surf_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Bmedits2surfOutputs`).
  */
 function bmedits2surf_execute(
     params: Bmedits2surfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Bmedits2surfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BMEDITS2SURF_METADATA);
     params = execution.params(params)
     const cargs = bmedits2surf_cargs(params, execution)
     const ret = bmedits2surf_outputs(params, execution)
@@ -277,10 +279,8 @@ function bmedits2surf(
     no_surfs: boolean = false,
     runner: Runner | null = null,
 ): Bmedits2surfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BMEDITS2SURF_METADATA);
     const params = bmedits2surf_params(subject, self, overwrite, tmp_dir, cleanup, no_cleanup, debug, left_hemisphere, right_hemisphere, no_surfs)
-    return bmedits2surf_execute(params, execution);
+    return bmedits2surf_execute(params, runner);
 }
 
 
@@ -289,8 +289,6 @@ export {
       Bmedits2surfOutputs,
       Bmedits2surfParameters,
       bmedits2surf,
-      bmedits2surf_cargs,
       bmedits2surf_execute,
-      bmedits2surf_outputs,
       bmedits2surf_params,
 };

@@ -166,14 +166,16 @@ function zip_scene_file_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ZipSceneFileOutputs`).
  */
 function zip_scene_file_execute(
     params: ZipSceneFileParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ZipSceneFileOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ZIP_SCENE_FILE_METADATA);
     params = execution.params(params)
     const cargs = zip_scene_file_cargs(params, execution)
     const ret = zip_scene_file_outputs(params, execution)
@@ -210,10 +212,8 @@ function zip_scene_file(
     opt_write_scene_file: boolean = false,
     runner: Runner | null = null,
 ): ZipSceneFileOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ZIP_SCENE_FILE_METADATA);
     const params = zip_scene_file_params(scene_file, extract_folder, zip_file, opt_base_dir_directory, opt_skip_missing, opt_write_scene_file)
-    return zip_scene_file_execute(params, execution);
+    return zip_scene_file_execute(params, runner);
 }
 
 
@@ -222,8 +222,6 @@ export {
       ZipSceneFileOutputs,
       ZipSceneFileParameters,
       zip_scene_file,
-      zip_scene_file_cargs,
       zip_scene_file_execute,
-      zip_scene_file_outputs,
       zip_scene_file_params,
 };

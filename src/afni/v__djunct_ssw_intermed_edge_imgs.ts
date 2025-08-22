@@ -246,14 +246,16 @@ function v__djunct_ssw_intermed_edge_imgs_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDjunctSswIntermedEdgeImgsOutputs`).
  */
 function v__djunct_ssw_intermed_edge_imgs_execute(
     params: VDjunctSswIntermedEdgeImgsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDjunctSswIntermedEdgeImgsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DJUNCT_SSW_INTERMED_EDGE_IMGS_METADATA);
     params = execution.params(params)
     const cargs = v__djunct_ssw_intermed_edge_imgs_cargs(params, execution)
     const ret = v__djunct_ssw_intermed_edge_imgs_outputs(params, execution)
@@ -302,10 +304,8 @@ function v__djunct_ssw_intermed_edge_imgs(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): VDjunctSswIntermedEdgeImgsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DJUNCT_SSW_INTERMED_EDGE_IMGS_METADATA);
     const params = v__djunct_ssw_intermed_edge_imgs_params(prefix, ulay, olay, box_focus_slices, montgap, cbar, ulay_range, montx, monty, help_view, help, version, no_clean)
-    return v__djunct_ssw_intermed_edge_imgs_execute(params, execution);
+    return v__djunct_ssw_intermed_edge_imgs_execute(params, runner);
 }
 
 
@@ -314,8 +314,6 @@ export {
       VDjunctSswIntermedEdgeImgsParameters,
       V__DJUNCT_SSW_INTERMED_EDGE_IMGS_METADATA,
       v__djunct_ssw_intermed_edge_imgs,
-      v__djunct_ssw_intermed_edge_imgs_cargs,
       v__djunct_ssw_intermed_edge_imgs_execute,
-      v__djunct_ssw_intermed_edge_imgs_outputs,
       v__djunct_ssw_intermed_edge_imgs_params,
 };

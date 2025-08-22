@@ -160,14 +160,16 @@ function slicedelay_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SlicedelayOutputs`).
  */
 function slicedelay_execute(
     params: SlicedelayParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SlicedelayOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SLICEDELAY_METADATA);
     params = execution.params(params)
     const cargs = slicedelay_cargs(params, execution)
     const ret = slicedelay_outputs(params, execution)
@@ -198,10 +200,8 @@ function slicedelay(
     ngroups: number,
     runner: Runner | null = null,
 ): SlicedelayOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SLICEDELAY_METADATA);
     const params = slicedelay_params(slicedelayfile, nslices, order, ngroups)
-    return slicedelay_execute(params, execution);
+    return slicedelay_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       SlicedelayOutputs,
       SlicedelayParameters,
       slicedelay,
-      slicedelay_cargs,
       slicedelay_execute,
-      slicedelay_outputs,
       slicedelay_params,
 };

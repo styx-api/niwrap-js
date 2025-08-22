@@ -388,14 +388,16 @@ function mri_entowm_seg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriEntowmSegOutputs`).
  */
 function mri_entowm_seg_execute(
     params: MriEntowmSegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriEntowmSegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_ENTOWM_SEG_METADATA);
     params = execution.params(params)
     const cargs = mri_entowm_seg_cargs(params, execution)
     const ret = mri_entowm_seg_outputs(params, execution)
@@ -468,10 +470,8 @@ function mri_entowm_seg(
     nchannels: number | null = null,
     runner: Runner | null = null,
 ): MriEntowmSegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_ENTOWM_SEG_METADATA);
     const params = mri_entowm_seg_params(input_image, output_segmentation, recon_subjects, subjects_directory, conform, etiv, tal, write_posteriors, write_volumes, write_qa_stats, exclude_labels, keep_ac, vox_count_volumes, model_weights, color_table, population_stats, debug, vmp, threads, seven_tesla, percentile, cuda_device, output_base, no_cite_sclimbic, nchannels)
-    return mri_entowm_seg_execute(params, execution);
+    return mri_entowm_seg_execute(params, runner);
 }
 
 
@@ -480,8 +480,6 @@ export {
       MriEntowmSegOutputs,
       MriEntowmSegParameters,
       mri_entowm_seg,
-      mri_entowm_seg_cargs,
       mri_entowm_seg_execute,
-      mri_entowm_seg_outputs,
       mri_entowm_seg_params,
 };

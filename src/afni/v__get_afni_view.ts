@@ -133,14 +133,16 @@ function v__get_afni_view_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VGetAfniViewOutputs`).
  */
 function v__get_afni_view_execute(
     params: VGetAfniViewParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VGetAfniViewOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__GET_AFNI_VIEW_METADATA);
     params = execution.params(params)
     const cargs = v__get_afni_view_cargs(params, execution)
     const ret = v__get_afni_view_outputs(params, execution)
@@ -165,10 +167,8 @@ function v__get_afni_view(
     dataset_name: string,
     runner: Runner | null = null,
 ): VGetAfniViewOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__GET_AFNI_VIEW_METADATA);
     const params = v__get_afni_view_params(dataset_name)
-    return v__get_afni_view_execute(params, execution);
+    return v__get_afni_view_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       VGetAfniViewParameters,
       V__GET_AFNI_VIEW_METADATA,
       v__get_afni_view,
-      v__get_afni_view_cargs,
       v__get_afni_view_execute,
-      v__get_afni_view_outputs,
       v__get_afni_view_params,
 };

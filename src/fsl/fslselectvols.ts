@@ -173,14 +173,16 @@ function fslselectvols_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslselectvolsOutputs`).
  */
 function fslselectvols_execute(
     params: FslselectvolsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslselectvolsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLSELECTVOLS_METADATA);
     params = execution.params(params)
     const cargs = fslselectvols_cargs(params, execution)
     const ret = fslselectvols_outputs(params, execution)
@@ -215,10 +217,8 @@ function fslselectvols(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FslselectvolsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLSELECTVOLS_METADATA);
     const params = fslselectvols_params(input_file, output_file, vols_list, output_mean_flag, output_variance_flag, help_flag)
-    return fslselectvols_execute(params, execution);
+    return fslselectvols_execute(params, runner);
 }
 
 
@@ -227,8 +227,6 @@ export {
       FslselectvolsOutputs,
       FslselectvolsParameters,
       fslselectvols,
-      fslselectvols_cargs,
       fslselectvols_execute,
-      fslselectvols_outputs,
       fslselectvols_params,
 };

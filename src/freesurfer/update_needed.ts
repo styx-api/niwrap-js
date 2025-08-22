@@ -141,14 +141,16 @@ function update_needed_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `UpdateNeededOutputs`).
  */
 function update_needed_execute(
     params: UpdateNeededParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): UpdateNeededOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(UPDATE_NEEDED_METADATA);
     params = execution.params(params)
     const cargs = update_needed_cargs(params, execution)
     const ret = update_needed_outputs(params, execution)
@@ -177,10 +179,8 @@ function update_needed(
     additional_source_files: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): UpdateNeededOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UPDATE_NEEDED_METADATA);
     const params = update_needed_params(target_file, source_file, additional_source_files)
-    return update_needed_execute(params, execution);
+    return update_needed_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       UpdateNeededOutputs,
       UpdateNeededParameters,
       update_needed,
-      update_needed_cargs,
       update_needed_execute,
-      update_needed_outputs,
       update_needed_params,
 };

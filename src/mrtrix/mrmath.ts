@@ -296,14 +296,16 @@ function mrmath_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrmathOutputs`).
  */
 function mrmath_execute(
     params: MrmathParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrmathOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRMATH_METADATA);
     params = execution.params(params)
     const cargs = mrmath_cargs(params, execution)
     const ret = mrmath_outputs(params, execution)
@@ -364,10 +366,8 @@ function mrmath(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrmathOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRMATH_METADATA);
     const params = mrmath_params(input, operation, output, axis, keep_unary_axes, datatype, info, quiet, debug, force, nthreads, config, help, version)
-    return mrmath_execute(params, execution);
+    return mrmath_execute(params, runner);
 }
 
 
@@ -377,10 +377,7 @@ export {
       MrmathOutputs,
       MrmathParameters,
       mrmath,
-      mrmath_cargs,
-      mrmath_config_cargs,
       mrmath_config_params,
       mrmath_execute,
-      mrmath_outputs,
       mrmath_params,
 };

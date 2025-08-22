@@ -238,14 +238,16 @@ function samseg2recon_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Samseg2reconOutputs`).
  */
 function samseg2recon_execute(
     params: Samseg2reconParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Samseg2reconOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SAMSEG2RECON_METADATA);
     params = execution.params(params)
     const cargs = samseg2recon_cargs(params, execution)
     const ret = samseg2recon_outputs(params, execution)
@@ -292,10 +294,8 @@ function samseg2recon(
     force_update: boolean = false,
     runner: Runner | null = null,
 ): Samseg2reconOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SAMSEG2RECON_METADATA);
     const params = samseg2recon_params(subject, samseg_dir, no_cc, fill, normalization2, uchar, no_keep_exc, long_tp, base, mask_file, from_recon_all, force_update)
-    return samseg2recon_execute(params, execution);
+    return samseg2recon_execute(params, runner);
 }
 
 
@@ -304,8 +304,6 @@ export {
       Samseg2reconOutputs,
       Samseg2reconParameters,
       samseg2recon,
-      samseg2recon_cargs,
       samseg2recon_execute,
-      samseg2recon_outputs,
       samseg2recon_params,
 };

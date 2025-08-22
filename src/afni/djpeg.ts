@@ -178,14 +178,16 @@ function djpeg_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DjpegOutputs`).
  */
 function djpeg_execute(
     params: DjpegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DjpegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DJPEG_METADATA);
     params = execution.params(params)
     const cargs = djpeg_cargs(params, execution)
     const ret = djpeg_outputs(params, execution)
@@ -222,10 +224,8 @@ function djpeg(
     crop_region: string | null = null,
     runner: Runner | null = null,
 ): DjpegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DJPEG_METADATA);
     const params = djpeg_params(input_file, output_file, gray, fast_dct, one_pixel_height, pseudo_pixel_ratio, crop_region)
-    return djpeg_execute(params, execution);
+    return djpeg_execute(params, runner);
 }
 
 
@@ -234,8 +234,6 @@ export {
       DjpegOutputs,
       DjpegParameters,
       djpeg,
-      djpeg_cargs,
       djpeg_execute,
-      djpeg_outputs,
       djpeg_params,
 };

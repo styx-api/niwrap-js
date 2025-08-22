@@ -318,14 +318,16 @@ function metric_weighted_stats_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricWeightedStatsOutputs`).
  */
 function metric_weighted_stats_execute(
     params: MetricWeightedStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricWeightedStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_WEIGHTED_STATS_METADATA);
     params = execution.params(params)
     const cargs = metric_weighted_stats_cargs(params, execution)
     const ret = metric_weighted_stats_outputs(params, execution)
@@ -374,10 +376,8 @@ function metric_weighted_stats(
     opt_show_map_name: boolean = false,
     runner: Runner | null = null,
 ): MetricWeightedStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_WEIGHTED_STATS_METADATA);
     const params = metric_weighted_stats_params(metric_in, opt_area_surface_area_surface, opt_weight_metric_weight_metric, opt_column_column, roi, opt_mean, stdev, opt_percentile_percent, opt_sum, opt_show_map_name)
-    return metric_weighted_stats_execute(params, execution);
+    return metric_weighted_stats_execute(params, runner);
 }
 
 
@@ -388,12 +388,8 @@ export {
       MetricWeightedStatsRoiParameters,
       MetricWeightedStatsStdevParameters,
       metric_weighted_stats,
-      metric_weighted_stats_cargs,
       metric_weighted_stats_execute,
-      metric_weighted_stats_outputs,
       metric_weighted_stats_params,
-      metric_weighted_stats_roi_cargs,
       metric_weighted_stats_roi_params,
-      metric_weighted_stats_stdev_cargs,
       metric_weighted_stats_stdev_params,
 };

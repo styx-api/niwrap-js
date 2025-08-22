@@ -423,14 +423,16 @@ function maskfilter_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MaskfilterOutputs`).
  */
 function maskfilter_execute(
     params: MaskfilterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MaskfilterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MASKFILTER_METADATA);
     params = execution.params(params)
     const cargs = maskfilter_cargs(params, execution)
     const ret = maskfilter_outputs(params, execution)
@@ -497,10 +499,8 @@ function maskfilter(
     version: boolean = false,
     runner: Runner | null = null,
 ): MaskfilterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MASKFILTER_METADATA);
     const params = maskfilter_params(input, filter, output, scale, axes, largest, connectivity, npass, extent, strides, info, quiet, debug, force, nthreads, config, help, version)
-    return maskfilter_execute(params, execution);
+    return maskfilter_execute(params, runner);
 }
 
 
@@ -512,14 +512,9 @@ export {
       MaskfilterVariousFileParameters,
       MaskfilterVariousStringParameters,
       maskfilter,
-      maskfilter_cargs,
-      maskfilter_config_cargs,
       maskfilter_config_params,
       maskfilter_execute,
-      maskfilter_outputs,
       maskfilter_params,
-      maskfilter_various_file_cargs,
       maskfilter_various_file_params,
-      maskfilter_various_string_cargs,
       maskfilter_various_string_params,
 };

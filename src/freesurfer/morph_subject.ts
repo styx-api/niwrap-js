@@ -127,14 +127,16 @@ function morph_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MorphSubjectOutputs`).
  */
 function morph_subject_execute(
     params: MorphSubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MorphSubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MORPH_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = morph_subject_cargs(params, execution)
     const ret = morph_subject_outputs(params, execution)
@@ -159,10 +161,8 @@ function morph_subject(
     subjid: string,
     runner: Runner | null = null,
 ): MorphSubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MORPH_SUBJECT_METADATA);
     const params = morph_subject_params(subjid)
-    return morph_subject_execute(params, execution);
+    return morph_subject_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       MorphSubjectOutputs,
       MorphSubjectParameters,
       morph_subject,
-      morph_subject_cargs,
       morph_subject_execute,
-      morph_subject_outputs,
       morph_subject_params,
 };

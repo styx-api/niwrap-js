@@ -172,14 +172,16 @@ function v_3d_nwarp_funcs_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dNwarpFuncsOutputs`).
  */
 function v_3d_nwarp_funcs_execute(
     params: V3dNwarpFuncsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dNwarpFuncsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_NWARP_FUNCS_METADATA);
     params = execution.params(params)
     const cargs = v_3d_nwarp_funcs_cargs(params, execution)
     const ret = v_3d_nwarp_funcs_outputs(params, execution)
@@ -214,10 +216,8 @@ function v_3d_nwarp_funcs(
     all_flag: boolean = false,
     runner: Runner | null = null,
 ): V3dNwarpFuncsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_NWARP_FUNCS_METADATA);
     const params = v_3d_nwarp_funcs_params(input_warp, output_prefix, bulk_flag, shear_flag, vorticity_flag, all_flag)
-    return v_3d_nwarp_funcs_execute(params, execution);
+    return v_3d_nwarp_funcs_execute(params, runner);
 }
 
 
@@ -226,8 +226,6 @@ export {
       V3dNwarpFuncsParameters,
       V_3D_NWARP_FUNCS_METADATA,
       v_3d_nwarp_funcs,
-      v_3d_nwarp_funcs_cargs,
       v_3d_nwarp_funcs_execute,
-      v_3d_nwarp_funcs_outputs,
       v_3d_nwarp_funcs_params,
 };

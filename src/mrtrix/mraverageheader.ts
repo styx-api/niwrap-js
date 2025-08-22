@@ -299,14 +299,16 @@ function mraverageheader_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MraverageheaderOutputs`).
  */
 function mraverageheader_execute(
     params: MraverageheaderParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MraverageheaderOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRAVERAGEHEADER_METADATA);
     params = execution.params(params)
     const cargs = mraverageheader_cargs(params, execution)
     const ret = mraverageheader_outputs(params, execution)
@@ -363,10 +365,8 @@ function mraverageheader(
     version: boolean = false,
     runner: Runner | null = null,
 ): MraverageheaderOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRAVERAGEHEADER_METADATA);
     const params = mraverageheader_params(input, output, padding, resolution, fill, datatype, info, quiet, debug, force, nthreads, config, help, version)
-    return mraverageheader_execute(params, execution);
+    return mraverageheader_execute(params, runner);
 }
 
 
@@ -376,10 +376,7 @@ export {
       MraverageheaderOutputs,
       MraverageheaderParameters,
       mraverageheader,
-      mraverageheader_cargs,
-      mraverageheader_config_cargs,
       mraverageheader_config_params,
       mraverageheader_execute,
-      mraverageheader_outputs,
       mraverageheader_params,
 };

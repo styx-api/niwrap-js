@@ -144,14 +144,16 @@ function reg_mni305_2mm_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegMni3052mmOutputs`).
  */
 function reg_mni305_2mm_execute(
     params: RegMni3052mmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegMni3052mmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REG_MNI305_2MM_METADATA);
     params = execution.params(params)
     const cargs = reg_mni305_2mm_cargs(params, execution)
     const ret = reg_mni305_2mm_outputs(params, execution)
@@ -178,10 +180,8 @@ function reg_mni305_2mm(
     regfile: InputPathType,
     runner: Runner | null = null,
 ): RegMni3052mmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REG_MNI305_2MM_METADATA);
     const params = reg_mni305_2mm_params(subject_id, regfile)
-    return reg_mni305_2mm_execute(params, execution);
+    return reg_mni305_2mm_execute(params, runner);
 }
 
 
@@ -190,8 +190,6 @@ export {
       RegMni3052mmOutputs,
       RegMni3052mmParameters,
       reg_mni305_2mm,
-      reg_mni305_2mm_cargs,
       reg_mni305_2mm_execute,
-      reg_mni305_2mm_outputs,
       reg_mni305_2mm_params,
 };

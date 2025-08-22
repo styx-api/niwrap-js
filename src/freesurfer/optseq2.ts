@@ -501,14 +501,16 @@ function optseq2_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Optseq2Outputs`).
  */
 function optseq2_execute(
     params: Optseq2Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Optseq2Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(OPTSEQ2_METADATA);
     params = execution.params(params)
     const cargs = optseq2_cargs(params, execution)
     const ret = optseq2_outputs(params, execution)
@@ -595,10 +597,8 @@ function optseq2(
     version: boolean = false,
     runner: Runner | null = null,
 ): Optseq2Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(OPTSEQ2_METADATA);
     const params = optseq2_params(ntp, tr, tprescan, psdwin, event, repvar, polyfit, tnullmin, tnullmax, nsearch, tsearch, first_order_cb, ar1, penalize, evc, cmtx, cost, sumdelays, seed, nkeep, outstem, mtxstem, cmtxfile, summaryfile, logfile, pctupdate, sviterfile, instem, input_schedule, nosearch, help, version)
-    return optseq2_execute(params, execution);
+    return optseq2_execute(params, runner);
 }
 
 
@@ -607,8 +607,6 @@ export {
       Optseq2Outputs,
       Optseq2Parameters,
       optseq2,
-      optseq2_cargs,
       optseq2_execute,
-      optseq2_outputs,
       optseq2_params,
 };

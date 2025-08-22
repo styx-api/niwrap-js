@@ -147,14 +147,16 @@ function sphere_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SphereSubjectOutputs`).
  */
 function sphere_subject_execute(
     params: SphereSubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SphereSubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SPHERE_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = sphere_subject_cargs(params, execution)
     const ret = sphere_subject_outputs(params, execution)
@@ -183,10 +185,8 @@ function sphere_subject(
     license_file: string | null = "/usr/local/freesurfer/.license",
     runner: Runner | null = null,
 ): SphereSubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SPHERE_SUBJECT_METADATA);
     const params = sphere_subject_params(input_dir, output_file, license_file)
-    return sphere_subject_execute(params, execution);
+    return sphere_subject_execute(params, runner);
 }
 
 
@@ -195,8 +195,6 @@ export {
       SphereSubjectOutputs,
       SphereSubjectParameters,
       sphere_subject,
-      sphere_subject_cargs,
       sphere_subject_execute,
-      sphere_subject_outputs,
       sphere_subject_params,
 };

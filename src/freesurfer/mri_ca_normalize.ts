@@ -414,14 +414,16 @@ function mri_ca_normalize_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCaNormalizeOutputs`).
  */
 function mri_ca_normalize_execute(
     params: MriCaNormalizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCaNormalizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CA_NORMALIZE_METADATA);
     params = execution.params(params)
     const cargs = mri_ca_normalize_cargs(params, execution)
     const ret = mri_ca_normalize_outputs(params, execution)
@@ -498,10 +500,8 @@ function mri_ca_normalize(
     flash_flag: boolean = false,
     runner: Runner | null = null,
 ): MriCaNormalizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CA_NORMALIZE_METADATA);
     const params = mri_ca_normalize_params(input_brain_volumes, atlas_file, xform_file, output_volumes, seg_file, sigma_value, fsamples_file, dilate_iters, nsamples_file, mask_vol, control_points_file, fonly_file, diag_file, debug_voxel_coords, debug_node_coords, tr_value, te_value, alpha_value, example_mri_vol, extra_norm_pctl, prior_threshold, n_regions, verbose_value, top_percent, novar_flag, renorm_file, flash_flag)
-    return mri_ca_normalize_execute(params, execution);
+    return mri_ca_normalize_execute(params, runner);
 }
 
 
@@ -510,8 +510,6 @@ export {
       MriCaNormalizeOutputs,
       MriCaNormalizeParameters,
       mri_ca_normalize,
-      mri_ca_normalize_cargs,
       mri_ca_normalize_execute,
-      mri_ca_normalize_outputs,
       mri_ca_normalize_params,
 };

@@ -381,14 +381,16 @@ function imcat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImcatOutputs`).
  */
 function imcat_execute(
     params: ImcatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImcatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMCAT_METADATA);
     params = execution.params(params)
     const cargs = imcat_cargs(params, execution)
     const ret = imcat_outputs(params, execution)
@@ -461,10 +463,8 @@ function imcat(
     gap_col: Array<number> | null = null,
     runner: Runner | null = null,
 ): ImcatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMCAT_METADATA);
     const params = imcat_params(input_files, scale_image, scale_pixels, scale_intensity, gscale, rgb_out, res_in, respad_in, pad_val, crop, autocrop_ctol, autocrop_atol, autocrop, zero_wrap, white_wrap, gray_wrap, image_wrap, rand_wrap, prefix, matrix, nx, ny, matrix_from_scale, gap, gap_col)
-    return imcat_execute(params, execution);
+    return imcat_execute(params, runner);
 }
 
 
@@ -473,8 +473,6 @@ export {
       ImcatOutputs,
       ImcatParameters,
       imcat,
-      imcat_cargs,
       imcat_execute,
-      imcat_outputs,
       imcat_params,
 };

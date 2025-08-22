@@ -329,14 +329,16 @@ function afni_history_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AfniHistoryOutputs`).
  */
 function afni_history_execute(
     params: AfniHistoryParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AfniHistoryOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AFNI_HISTORY_METADATA);
     params = execution.params(params)
     const cargs = afni_history_cargs(params, execution)
     const ret = afni_history_outputs(params, execution)
@@ -401,10 +403,8 @@ function afni_history(
     show_field_names: boolean = false,
     runner: Runner | null = null,
 ): AfniHistoryOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AFNI_HISTORY_METADATA);
     const params = afni_history_params(verb_level, check_date, help, history, list_authors, list_types, version, author, level, min_level, program, past_entries, past_days, past_months, past_years, type_, html, dline, reverse, show_field, show_field_names)
-    return afni_history_execute(params, execution);
+    return afni_history_execute(params, runner);
 }
 
 
@@ -413,8 +413,6 @@ export {
       AfniHistoryOutputs,
       AfniHistoryParameters,
       afni_history,
-      afni_history_cargs,
       afni_history_execute,
-      afni_history_outputs,
       afni_history_params,
 };

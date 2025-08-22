@@ -209,14 +209,16 @@ function mris_warp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisWarpOutputs`).
  */
 function mris_warp_execute(
     params: MrisWarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisWarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_WARP_METADATA);
     params = execution.params(params)
     const cargs = mris_warp_cargs(params, execution)
     const ret = mris_warp_outputs(params, execution)
@@ -255,10 +257,8 @@ function mris_warp(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrisWarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_WARP_METADATA);
     const params = mris_warp_params(deformvol, m3z, regfile, surf, out, abs, help, version)
-    return mris_warp_execute(params, execution);
+    return mris_warp_execute(params, runner);
 }
 
 
@@ -267,8 +267,6 @@ export {
       MrisWarpOutputs,
       MrisWarpParameters,
       mris_warp,
-      mris_warp_cargs,
       mris_warp_execute,
-      mris_warp_outputs,
       mris_warp_params,
 };

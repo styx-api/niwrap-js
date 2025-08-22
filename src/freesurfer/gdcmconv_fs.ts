@@ -453,14 +453,16 @@ function gdcmconv_fs_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GdcmconvFsOutputs`).
  */
 function gdcmconv_fs_execute(
     params: GdcmconvFsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GdcmconvFsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GDCMCONV_FS_METADATA);
     params = execution.params(params)
     const cargs = gdcmconv_fs_cargs(params, execution)
     const ret = gdcmconv_fs_outputs(params, execution)
@@ -563,10 +565,8 @@ function gdcmconv_fs(
     ignore_errors_flag: boolean = false,
     runner: Runner | null = null,
 ): GdcmconvFsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GDCMCONV_FS_METADATA);
     const params = gdcmconv_fs_params(input_file, output_file, explicit_flag, implicit_flag, use_dict_flag, with_private_dict_flag, check_meta_flag, root_uid, remove_gl_flag, remove_private_tags_flag, remove_retired_flag, apply_lut_flag, photometric_interpretation, raw_flag, deflated_flag, jpeg_flag, j2k_flag, jpegls_flag, rle_flag, force_flag, generate_icon_flag, icon_minmax, icon_auto_minmax_flag, compress_icon_flag, planar_configuration, lossy_flag, split, verbose_flag, warning_flag, debug_flag, error_flag, quiet_flag, jpeg_quality, lossy_error, rate, j2k_quality, tile, number_resolution, irreversible_flag, ignore_errors_flag)
-    return gdcmconv_fs_execute(params, execution);
+    return gdcmconv_fs_execute(params, runner);
 }
 
 
@@ -575,8 +575,6 @@ export {
       GdcmconvFsOutputs,
       GdcmconvFsParameters,
       gdcmconv_fs,
-      gdcmconv_fs_cargs,
       gdcmconv_fs_execute,
-      gdcmconv_fs_outputs,
       gdcmconv_fs_params,
 };

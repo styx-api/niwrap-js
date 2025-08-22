@@ -429,14 +429,16 @@ function v_3d_pfm_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dPfmOutputs`).
  */
 function v_3d_pfm_execute(
     params: V3dPfmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dPfmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_PFM_METADATA);
     params = execution.params(params)
     const cargs = v_3d_pfm_cargs(params, execution)
     const ret = v_3d_pfm_outputs(params, execution)
@@ -489,10 +491,8 @@ function v_3d_pfm(
     verb: number | null = null,
     runner: Runner | null = null,
 ): V3dPfmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_PFM_METADATA);
     const params = v_3d_pfm_params(input, mask, algorithm, criteria, nonzeros, maxiter, maxiterfactor, tr, hrf, hrf_vol, idx_hrf, lhs, jobs, n_seg, verb)
-    return v_3d_pfm_execute(params, execution);
+    return v_3d_pfm_execute(params, runner);
 }
 
 
@@ -501,8 +501,6 @@ export {
       V3dPfmParameters,
       V_3D_PFM_METADATA,
       v_3d_pfm,
-      v_3d_pfm_cargs,
       v_3d_pfm_execute,
-      v_3d_pfm_outputs,
       v_3d_pfm_params,
 };

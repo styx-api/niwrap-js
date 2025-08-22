@@ -169,14 +169,16 @@ function v_3d_xyzcat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dXyzcatOutputs`).
  */
 function v_3d_xyzcat_execute(
     params: V3dXyzcatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dXyzcatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_XYZCAT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_xyzcat_cargs(params, execution)
     const ret = v_3d_xyzcat_outputs(params, execution)
@@ -207,10 +209,8 @@ function v_3d_xyzcat(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dXyzcatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_XYZCAT_METADATA);
     const params = v_3d_xyzcat_params(datasets, direction, prefix, verbose)
-    return v_3d_xyzcat_execute(params, execution);
+    return v_3d_xyzcat_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       V3dXyzcatParameters,
       V_3D_XYZCAT_METADATA,
       v_3d_xyzcat,
-      v_3d_xyzcat_cargs,
       v_3d_xyzcat_execute,
-      v_3d_xyzcat_outputs,
       v_3d_xyzcat_params,
 };

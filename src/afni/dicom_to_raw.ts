@@ -133,14 +133,16 @@ function dicom_to_raw_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DicomToRawOutputs`).
  */
 function dicom_to_raw_execute(
     params: DicomToRawParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DicomToRawOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DICOM_TO_RAW_METADATA);
     params = execution.params(params)
     const cargs = dicom_to_raw_cargs(params, execution)
     const ret = dicom_to_raw_outputs(params, execution)
@@ -165,10 +167,8 @@ function dicom_to_raw(
     input_dicom: InputPathType,
     runner: Runner | null = null,
 ): DicomToRawOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DICOM_TO_RAW_METADATA);
     const params = dicom_to_raw_params(input_dicom)
-    return dicom_to_raw_execute(params, execution);
+    return dicom_to_raw_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       DicomToRawOutputs,
       DicomToRawParameters,
       dicom_to_raw,
-      dicom_to_raw_cargs,
       dicom_to_raw_execute,
-      dicom_to_raw_outputs,
       dicom_to_raw_params,
 };

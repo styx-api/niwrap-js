@@ -264,14 +264,16 @@ function create_tiled_mosaic_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CreateTiledMosaicOutputs`).
  */
 function create_tiled_mosaic_execute(
     params: CreateTiledMosaicParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CreateTiledMosaicOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CREATE_TILED_MOSAIC_METADATA);
     params = execution.params(params)
     const cargs = create_tiled_mosaic_cargs(params, execution)
     const ret = create_tiled_mosaic_outputs(params, execution)
@@ -318,10 +320,8 @@ function create_tiled_mosaic(
     permute_axes: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): CreateTiledMosaicOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CREATE_TILED_MOSAIC_METADATA);
     const params = create_tiled_mosaic_params(input_image, output, rgb_image, mask_image, alpha, functional_overlay, tile_geometry, direction, pad_or_crop, slices, flip_slice, permute_axes)
-    return create_tiled_mosaic_execute(params, execution);
+    return create_tiled_mosaic_execute(params, runner);
 }
 
 
@@ -330,8 +330,6 @@ export {
       CreateTiledMosaicOutputs,
       CreateTiledMosaicParameters,
       create_tiled_mosaic,
-      create_tiled_mosaic_cargs,
       create_tiled_mosaic_execute,
-      create_tiled_mosaic_outputs,
       create_tiled_mosaic_params,
 };

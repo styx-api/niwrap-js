@@ -323,14 +323,16 @@ function mean_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MeanOutputs`).
  */
 function mean_execute(
     params: MeanParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MeanOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MEAN_METADATA);
     params = execution.params(params)
     const cargs = mean_cargs(params, execution)
     const ret = mean_outputs(params, execution)
@@ -391,10 +393,8 @@ function mean(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MeanOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MEAN_METADATA);
     const params = mean_params(datafile, maskfile, verbose_flag, debug_level, timing_flag, log_dir, forcedir_flag, inference_tech, num_jumps, num_burnin, num_sample_every, num_update_proposalevery, acceptance_rate, seed, error_precision, noamp_flag, prior_mean, prior_std, help_flag)
-    return mean_execute(params, execution);
+    return mean_execute(params, runner);
 }
 
 
@@ -403,8 +403,6 @@ export {
       MeanOutputs,
       MeanParameters,
       mean,
-      mean_cargs,
       mean_execute,
-      mean_outputs,
       mean_params,
 };

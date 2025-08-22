@@ -152,14 +152,16 @@ function calc_grad_perc_dev_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CalcGradPercDevOutputs`).
  */
 function calc_grad_perc_dev_execute(
     params: CalcGradPercDevParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CalcGradPercDevOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CALC_GRAD_PERC_DEV_METADATA);
     params = execution.params(params)
     const cargs = calc_grad_perc_dev_cargs(params, execution)
     const ret = calc_grad_perc_dev_outputs(params, execution)
@@ -190,10 +192,8 @@ function calc_grad_perc_dev(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): CalcGradPercDevOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CALC_GRAD_PERC_DEV_METADATA);
     const params = calc_grad_perc_dev_params(fullwarp_image, out_basename, verbose_flag, help_flag)
-    return calc_grad_perc_dev_execute(params, execution);
+    return calc_grad_perc_dev_execute(params, runner);
 }
 
 
@@ -202,8 +202,6 @@ export {
       CalcGradPercDevOutputs,
       CalcGradPercDevParameters,
       calc_grad_perc_dev,
-      calc_grad_perc_dev_cargs,
       calc_grad_perc_dev_execute,
-      calc_grad_perc_dev_outputs,
       calc_grad_perc_dev_params,
 };

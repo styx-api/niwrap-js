@@ -238,14 +238,16 @@ function vecreg_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VecregOutputs`).
  */
 function vecreg_execute(
     params: VecregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VecregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VECREG_METADATA);
     params = execution.params(params)
     const cargs = vecreg_cargs(params, execution)
     const ret = vecreg_outputs(params, execution)
@@ -290,10 +292,8 @@ function vecreg(
     ref_brain_mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): VecregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VECREG_METADATA);
     const params = vecreg_params(input_file, output_file, reference_volume, transform_file, verbose_flag, help_flag, secondary_affine, secondary_warp, interp_method, brain_mask, ref_brain_mask)
-    return vecreg_execute(params, execution);
+    return vecreg_execute(params, runner);
 }
 
 
@@ -302,8 +302,6 @@ export {
       VecregOutputs,
       VecregParameters,
       vecreg,
-      vecreg_cargs,
       vecreg_execute,
-      vecreg_outputs,
       vecreg_params,
 };

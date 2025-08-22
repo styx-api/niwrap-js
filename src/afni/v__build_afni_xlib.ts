@@ -162,14 +162,16 @@ function v__build_afni_xlib_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VBuildAfniXlibOutputs`).
  */
 function v__build_afni_xlib_execute(
     params: VBuildAfniXlibParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VBuildAfniXlibOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__BUILD_AFNI_XLIB_METADATA);
     params = execution.params(params)
     const cargs = v__build_afni_xlib_cargs(params, execution)
     const ret = v__build_afni_xlib_outputs(params, execution)
@@ -204,10 +206,8 @@ function v__build_afni_xlib(
     lib64: boolean = false,
     runner: Runner | null = null,
 ): VBuildAfniXlibOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__BUILD_AFNI_XLIB_METADATA);
     const params = v__build_afni_xlib_params(packages, afni_x, localinstall, debug_symbols, lib32, lib64)
-    return v__build_afni_xlib_execute(params, execution);
+    return v__build_afni_xlib_execute(params, runner);
 }
 
 
@@ -216,8 +216,6 @@ export {
       VBuildAfniXlibParameters,
       V__BUILD_AFNI_XLIB_METADATA,
       v__build_afni_xlib,
-      v__build_afni_xlib_cargs,
       v__build_afni_xlib_execute,
-      v__build_afni_xlib_outputs,
       v__build_afni_xlib_params,
 };

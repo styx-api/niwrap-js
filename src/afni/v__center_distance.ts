@@ -141,14 +141,16 @@ function v__center_distance_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VCenterDistanceOutputs`).
  */
 function v__center_distance_execute(
     params: VCenterDistanceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VCenterDistanceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__CENTER_DISTANCE_METADATA);
     params = execution.params(params)
     const cargs = v__center_distance_cargs(params, execution)
     const ret = v__center_distance_outputs(params, execution)
@@ -175,10 +177,8 @@ function v__center_distance(
     dset2: InputPathType,
     runner: Runner | null = null,
 ): VCenterDistanceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__CENTER_DISTANCE_METADATA);
     const params = v__center_distance_params(dset1, dset2)
-    return v__center_distance_execute(params, execution);
+    return v__center_distance_execute(params, runner);
 }
 
 
@@ -187,8 +187,6 @@ export {
       VCenterDistanceParameters,
       V__CENTER_DISTANCE_METADATA,
       v__center_distance,
-      v__center_distance_cargs,
       v__center_distance_execute,
-      v__center_distance_outputs,
       v__center_distance_params,
 };

@@ -482,14 +482,16 @@ function mris_convert_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisConvertOutputs`).
  */
 function mris_convert_execute(
     params: MrisConvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisConvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_CONVERT_METADATA);
     params = execution.params(params)
     const cargs = mris_convert_cargs(params, execution)
     const ret = mris_convert_outputs(params, execution)
@@ -588,10 +590,8 @@ function mris_convert(
     cras_subtract: boolean = false,
     runner: Runner | null = null,
 ): MrisConvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_CONVERT_METADATA);
     const params = mris_convert_params(input_file, output_file, second_input_file, patch, curv_overlay_files, functional_data_file, orig_positions, scale, rescale, talairach_xfm, normals, neighbors, xyz, annotation_file, parcstats_file, gifti_dataarray_num, label_file, label_stats_file, combine_surfs, merge_gifti, split_gifti, gifti_outdir, delete_cmds, center, vol_geom, remove_vol_geom, to_surf, to_scanner, to_tkr, userealras, usesurfras, upsample, volume, area, angle, label_to_mask, cras_add, cras_subtract)
-    return mris_convert_execute(params, execution);
+    return mris_convert_execute(params, runner);
 }
 
 
@@ -600,8 +600,6 @@ export {
       MrisConvertOutputs,
       MrisConvertParameters,
       mris_convert,
-      mris_convert_cargs,
       mris_convert_execute,
-      mris_convert_outputs,
       mris_convert_params,
 };

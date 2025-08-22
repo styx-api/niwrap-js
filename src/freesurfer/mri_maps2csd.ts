@@ -236,14 +236,16 @@ function mri_maps2csd_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMaps2csdOutputs`).
  */
 function mri_maps2csd_execute(
     params: MriMaps2csdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMaps2csdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MAPS2CSD_METADATA);
     params = execution.params(params)
     const cargs = mri_maps2csd_cargs(params, execution)
     const ret = mri_maps2csd_outputs(params, execution)
@@ -287,10 +289,8 @@ function mri_maps2csd(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MriMaps2csdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MAPS2CSD_METADATA);
     const params = mri_maps2csd_params(input_files, csd_file, pdf_file, subject_hemi_surf, thresh, sign, csd_apply_file, apply_out, subjects_dir, debug, checkopts)
-    return mri_maps2csd_execute(params, execution);
+    return mri_maps2csd_execute(params, runner);
 }
 
 
@@ -299,8 +299,6 @@ export {
       MriMaps2csdOutputs,
       MriMaps2csdParameters,
       mri_maps2csd,
-      mri_maps2csd_cargs,
       mri_maps2csd_execute,
-      mri_maps2csd_outputs,
       mri_maps2csd_params,
 };

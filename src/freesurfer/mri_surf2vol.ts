@@ -447,14 +447,16 @@ function mri_surf2vol_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSurf2volOutputs`).
  */
 function mri_surf2vol_execute(
     params: MriSurf2volParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSurf2volOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SURF2VOL_METADATA);
     params = execution.params(params)
     const cargs = mri_surf2vol_cargs(params, execution)
     const ret = mri_surf2vol_outputs(params, execution)
@@ -535,10 +537,8 @@ function mri_surf2vol(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriSurf2volOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SURF2VOL_METADATA);
     const params = mri_surf2vol_params(outfile, surface_overlay, ltafile, subject, ribbonfile, merge_volume, surface_values, mkmask, hemi, surfname, projfrac, fill_ribbon, fill_projfrac, reg_volume, identity, template_volume, fstal_res, vtxvol, flat2mri, sphpvf, mask_to_cortex, mask_to_label, surface_mask, add_const, copy_ctab, subjects_dir, gdiagno, version, help)
-    return mri_surf2vol_execute(params, execution);
+    return mri_surf2vol_execute(params, runner);
 }
 
 
@@ -547,8 +547,6 @@ export {
       MriSurf2volOutputs,
       MriSurf2volParameters,
       mri_surf2vol,
-      mri_surf2vol_cargs,
       mri_surf2vol_execute,
-      mri_surf2vol_outputs,
       mri_surf2vol_params,
 };

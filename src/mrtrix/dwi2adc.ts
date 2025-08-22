@@ -326,14 +326,16 @@ function dwi2adc_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Dwi2adcOutputs`).
  */
 function dwi2adc_execute(
     params: Dwi2adcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Dwi2adcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DWI2ADC_METADATA);
     params = execution.params(params)
     const cargs = dwi2adc_cargs(params, execution)
     const ret = dwi2adc_outputs(params, execution)
@@ -386,10 +388,8 @@ function dwi2adc(
     version: boolean = false,
     runner: Runner | null = null,
 ): Dwi2adcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DWI2ADC_METADATA);
     const params = dwi2adc_params(input, output, grad, fslgrad, info, quiet, debug, force, nthreads, config, help, version)
-    return dwi2adc_execute(params, execution);
+    return dwi2adc_execute(params, runner);
 }
 
 
@@ -400,12 +400,8 @@ export {
       Dwi2adcOutputs,
       Dwi2adcParameters,
       dwi2adc,
-      dwi2adc_cargs,
-      dwi2adc_config_cargs,
       dwi2adc_config_params,
       dwi2adc_execute,
-      dwi2adc_fslgrad_cargs,
       dwi2adc_fslgrad_params,
-      dwi2adc_outputs,
       dwi2adc_params,
 };

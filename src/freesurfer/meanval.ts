@@ -159,14 +159,16 @@ function meanval_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MeanvalOutputs`).
  */
 function meanval_execute(
     params: MeanvalParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MeanvalOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MEANVAL_METADATA);
     params = execution.params(params)
     const cargs = meanval_cargs(params, execution)
     const ret = meanval_outputs(params, execution)
@@ -197,10 +199,8 @@ function meanval(
     avgwf_flag: boolean = false,
     runner: Runner | null = null,
 ): MeanvalOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MEANVAL_METADATA);
     const params = meanval_params(input_file, mask_file, output_file, avgwf_flag)
-    return meanval_execute(params, execution);
+    return meanval_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       MeanvalOutputs,
       MeanvalParameters,
       meanval,
-      meanval_cargs,
       meanval_execute,
-      meanval_outputs,
       meanval_params,
 };

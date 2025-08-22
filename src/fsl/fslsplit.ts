@@ -170,14 +170,16 @@ function fslsplit_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslsplitOutputs`).
  */
 function fslsplit_execute(
     params: FslsplitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslsplitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLSPLIT_METADATA);
     params = execution.params(params)
     const cargs = fslsplit_cargs(params, execution)
     const ret = fslsplit_outputs(params, execution)
@@ -212,10 +214,8 @@ function fslsplit(
     separation_time: boolean = false,
     runner: Runner | null = null,
 ): FslsplitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLSPLIT_METADATA);
     const params = fslsplit_params(infile, output_basename, separation_x, separation_y, separation_z, separation_time)
-    return fslsplit_execute(params, execution);
+    return fslsplit_execute(params, runner);
 }
 
 
@@ -224,8 +224,6 @@ export {
       FslsplitOutputs,
       FslsplitParameters,
       fslsplit,
-      fslsplit_cargs,
       fslsplit_execute,
-      fslsplit_outputs,
       fslsplit_params,
 };

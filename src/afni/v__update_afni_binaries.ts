@@ -325,14 +325,16 @@ function v__update_afni_binaries_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VUpdateAfniBinariesOutputs`).
  */
 function v__update_afni_binaries_execute(
     params: VUpdateAfniBinariesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VUpdateAfniBinariesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__UPDATE_AFNI_BINARIES_METADATA);
     params = execution.params(params)
     const cargs = v__update_afni_binaries_cargs(params, execution)
     const ret = v__update_afni_binaries_outputs(params, execution)
@@ -403,10 +405,8 @@ function v__update_afni_binaries(
     package_: string | null = null,
     runner: Runner | null = null,
 ): VUpdateAfniBinariesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__UPDATE_AFNI_BINARIES_METADATA);
     const params = v__update_afni_binaries_params(defaults_flag, help_flag, help_sys_progs_flag, apsearch, bindir, curl_flag, do_dotfiles_flag, do_extras_flag, echo_flag, make_backup, no_cert_verify_flag, no_recur_flag, proto, quick_flag, show_obsoletes_flag, show_obsoletes_grep_flag, show_system_progs_flag, sys_ok_flag, test_flag, test_protos_flag, revert_flag, local_package, prog_list, package_)
-    return v__update_afni_binaries_execute(params, execution);
+    return v__update_afni_binaries_execute(params, runner);
 }
 
 
@@ -415,8 +415,6 @@ export {
       VUpdateAfniBinariesParameters,
       V__UPDATE_AFNI_BINARIES_METADATA,
       v__update_afni_binaries,
-      v__update_afni_binaries_cargs,
       v__update_afni_binaries_execute,
-      v__update_afni_binaries_outputs,
       v__update_afni_binaries_params,
 };

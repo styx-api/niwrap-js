@@ -268,14 +268,16 @@ function tsfthreshold_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TsfthresholdOutputs`).
  */
 function tsfthreshold_execute(
     params: TsfthresholdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TsfthresholdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TSFTHRESHOLD_METADATA);
     params = execution.params(params)
     const cargs = tsfthreshold_cargs(params, execution)
     const ret = tsfthreshold_outputs(params, execution)
@@ -328,10 +330,8 @@ function tsfthreshold(
     version: boolean = false,
     runner: Runner | null = null,
 ): TsfthresholdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TSFTHRESHOLD_METADATA);
     const params = tsfthreshold_params(input, t, output, invert, info, quiet, debug, force, nthreads, config, help, version)
-    return tsfthreshold_execute(params, execution);
+    return tsfthreshold_execute(params, runner);
 }
 
 
@@ -341,10 +341,7 @@ export {
       TsfthresholdOutputs,
       TsfthresholdParameters,
       tsfthreshold,
-      tsfthreshold_cargs,
-      tsfthreshold_config_cargs,
       tsfthreshold_config_params,
       tsfthreshold_execute,
-      tsfthreshold_outputs,
       tsfthreshold_params,
 };

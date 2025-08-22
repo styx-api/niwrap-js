@@ -332,14 +332,16 @@ function dcmedit_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DcmeditOutputs`).
  */
 function dcmedit_execute(
     params: DcmeditParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DcmeditOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DCMEDIT_METADATA);
     params = execution.params(params)
     const cargs = dcmedit_cargs(params, execution)
     const ret = dcmedit_outputs(params, execution)
@@ -397,10 +399,8 @@ function dcmedit(
     version: boolean = false,
     runner: Runner | null = null,
 ): DcmeditOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DCMEDIT_METADATA);
     const params = dcmedit_params(file, anonymise, id, tag, info, quiet, debug, force, nthreads, config, help, version)
-    return dcmedit_execute(params, execution);
+    return dcmedit_execute(params, runner);
 }
 
 
@@ -411,12 +411,8 @@ export {
       DcmeditParameters,
       DcmeditTagParameters,
       dcmedit,
-      dcmedit_cargs,
-      dcmedit_config_cargs,
       dcmedit_config_params,
       dcmedit_execute,
-      dcmedit_outputs,
       dcmedit_params,
-      dcmedit_tag_cargs,
       dcmedit_tag_params,
 };

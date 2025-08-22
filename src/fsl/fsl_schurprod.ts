@@ -197,14 +197,16 @@ function fsl_schurprod_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslSchurprodOutputs`).
  */
 function fsl_schurprod_execute(
     params: FslSchurprodParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslSchurprodOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_SCHURPROD_METADATA);
     params = execution.params(params)
     const cargs = fsl_schurprod_cargs(params, execution)
     const ret = fsl_schurprod_outputs(params, execution)
@@ -243,10 +245,8 @@ function fsl_schurprod(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FslSchurprodOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_SCHURPROD_METADATA);
     const params = fsl_schurprod_params(input_file, design_file, output_file, regression_flag, index, mask_file, verbose_flag, help_flag)
-    return fsl_schurprod_execute(params, execution);
+    return fsl_schurprod_execute(params, runner);
 }
 
 
@@ -255,8 +255,6 @@ export {
       FslSchurprodOutputs,
       FslSchurprodParameters,
       fsl_schurprod,
-      fsl_schurprod_cargs,
       fsl_schurprod_execute,
-      fsl_schurprod_outputs,
       fsl_schurprod_params,
 };

@@ -213,14 +213,16 @@ function v__fast_roi_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VFastRoiOutputs`).
  */
 function v__fast_roi_execute(
     params: VFastRoiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VFastRoiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__FAST_ROI_METADATA);
     params = execution.params(params)
     const cargs = v__fast_roi_cargs(params, execution)
     const ret = v__fast_roi_outputs(params, execution)
@@ -263,10 +265,8 @@ function v__fast_roi(
     help: boolean = false,
     runner: Runner | null = null,
 ): VFastRoiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__FAST_ROI_METADATA);
     const params = v__fast_roi_params(region, anat, base, roi_grid, prefix, drawn_roi, anat_ns, time, twopass, help)
-    return v__fast_roi_execute(params, execution);
+    return v__fast_roi_execute(params, runner);
 }
 
 
@@ -275,8 +275,6 @@ export {
       VFastRoiParameters,
       V__FAST_ROI_METADATA,
       v__fast_roi,
-      v__fast_roi_cargs,
       v__fast_roi_execute,
-      v__fast_roi_outputs,
       v__fast_roi_params,
 };

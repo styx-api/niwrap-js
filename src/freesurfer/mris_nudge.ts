@@ -153,14 +153,16 @@ function mris_nudge_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisNudgeOutputs`).
  */
 function mris_nudge_execute(
     params: MrisNudgeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisNudgeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_NUDGE_METADATA);
     params = execution.params(params)
     const cargs = mris_nudge_cargs(params, execution)
     const ret = mris_nudge_outputs(params, execution)
@@ -193,10 +195,8 @@ function mris_nudge(
     nbhd: number,
     runner: Runner | null = null,
 ): MrisNudgeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_NUDGE_METADATA);
     const params = mris_nudge_params(input_surface, input_volume, vertex, target_val, nbhd)
-    return mris_nudge_execute(params, execution);
+    return mris_nudge_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       MrisNudgeOutputs,
       MrisNudgeParameters,
       mris_nudge,
-      mris_nudge_cargs,
       mris_nudge_execute,
-      mris_nudge_outputs,
       mris_nudge_params,
 };

@@ -330,14 +330,16 @@ function gca_apply_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GcaApplyOutputs`).
  */
 function gca_apply_execute(
     params: GcaApplyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GcaApplyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GCA_APPLY_METADATA);
     params = execution.params(params)
     const cargs = gca_apply_cargs(params, execution)
     const ret = gca_apply_outputs(params, execution)
@@ -396,10 +398,8 @@ function gca_apply(
     gcareg_iters: number | null = null,
     runner: Runner | null = null,
 ): GcaApplyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GCA_APPLY_METADATA);
     const params = gca_apply_params(gcafile, subject, nthreads, base, no_segstats, subjects_dir, dice_seg, dice_file, lta, norm, input_mgz, brainmask, output_dir, no_v6labopts, m3z_file, gca_rb_2016, force_update, gcareg_iters)
-    return gca_apply_execute(params, execution);
+    return gca_apply_execute(params, runner);
 }
 
 
@@ -408,8 +408,6 @@ export {
       GcaApplyOutputs,
       GcaApplyParameters,
       gca_apply,
-      gca_apply_cargs,
       gca_apply_execute,
-      gca_apply_outputs,
       gca_apply_params,
 };

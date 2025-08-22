@@ -218,14 +218,16 @@ function afni_proc_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AfniProcPyOutputs`).
  */
 function afni_proc_py_execute(
     params: AfniProcPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AfniProcPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AFNI_PROC_PY_METADATA);
     params = execution.params(params)
     const cargs = afni_proc_py_cargs(params, execution)
     const ret = afni_proc_py_outputs(params, execution)
@@ -270,10 +272,8 @@ function afni_proc_py(
     regress_params: Array<string> | null = null,
     runner: Runner | null = null,
 ): AfniProcPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AFNI_PROC_PY_METADATA);
     const params = afni_proc_py_params(dsets, subj_id, anat, out_dir, blocks, echo_times, stim_times, stim_files, copy_files, copy_anat, regress_params)
-    return afni_proc_py_execute(params, execution);
+    return afni_proc_py_execute(params, runner);
 }
 
 
@@ -282,8 +282,6 @@ export {
       AfniProcPyOutputs,
       AfniProcPyParameters,
       afni_proc_py,
-      afni_proc_py_cargs,
       afni_proc_py_execute,
-      afni_proc_py_outputs,
       afni_proc_py_params,
 };

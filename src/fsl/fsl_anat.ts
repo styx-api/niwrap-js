@@ -284,14 +284,16 @@ function fsl_anat_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslAnatOutputs`).
  */
 function fsl_anat_execute(
     params: FslAnatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslAnatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_ANAT_METADATA);
     params = execution.params(params)
     const cargs = fsl_anat_cargs(params, execution)
     const ret = fsl_anat_outputs(params, execution)
@@ -350,10 +352,8 @@ function fsl_anat(
     nocleanup_flag: boolean = false,
     runner: Runner | null = null,
 ): FslAnatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_ANAT_METADATA);
     const params = fsl_anat_params(structural_image, existing_anat_dir, output_dir, clobber_flag, strongbias_flag, weakbias_flag, noreorient_flag, nocrop_flag, nobias_flag, noreg_flag, nononlinreg_flag, noseg_flag, nosubcortseg_flag, bias_smoothing, image_type, nosearch_flag, bet_f_param, nocleanup_flag)
-    return fsl_anat_execute(params, execution);
+    return fsl_anat_execute(params, runner);
 }
 
 
@@ -362,8 +362,6 @@ export {
       FslAnatOutputs,
       FslAnatParameters,
       fsl_anat,
-      fsl_anat_cargs,
       fsl_anat_execute,
-      fsl_anat_outputs,
       fsl_anat_params,
 };

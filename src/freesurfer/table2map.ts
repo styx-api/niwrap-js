@@ -186,14 +186,16 @@ function table2map_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Table2mapOutputs`).
  */
 function table2map_execute(
     params: Table2mapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Table2mapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TABLE2MAP_METADATA);
     params = execution.params(params)
     const cargs = table2map_cargs(params, execution)
     const ret = table2map_outputs(params, execution)
@@ -228,10 +230,8 @@ function table2map(
     lookup_table: InputPathType | null = null,
     runner: Runner | null = null,
 ): Table2mapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TABLE2MAP_METADATA);
     const params = table2map_params(input_table, output_map, segmentation, parcellation, columns, lookup_table)
-    return table2map_execute(params, execution);
+    return table2map_execute(params, runner);
 }
 
 
@@ -240,8 +240,6 @@ export {
       Table2mapOutputs,
       Table2mapParameters,
       table2map,
-      table2map_cargs,
       table2map_execute,
-      table2map_outputs,
       table2map_params,
 };

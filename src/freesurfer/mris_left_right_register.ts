@@ -153,14 +153,16 @@ function mris_left_right_register_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisLeftRightRegisterOutputs`).
  */
 function mris_left_right_register_execute(
     params: MrisLeftRightRegisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisLeftRightRegisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_LEFT_RIGHT_REGISTER_METADATA);
     params = execution.params(params)
     const cargs = mris_left_right_register_cargs(params, execution)
     const ret = mris_left_right_register_outputs(params, execution)
@@ -191,10 +193,8 @@ function mris_left_right_register(
     rh_sphere_left_right: string,
     runner: Runner | null = null,
 ): MrisLeftRightRegisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_LEFT_RIGHT_REGISTER_METADATA);
     const params = mris_left_right_register_params(lh_sphere, rh_sphere, lh_sphere_left_right, rh_sphere_left_right)
-    return mris_left_right_register_execute(params, execution);
+    return mris_left_right_register_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       MrisLeftRightRegisterOutputs,
       MrisLeftRightRegisterParameters,
       mris_left_right_register,
-      mris_left_right_register_cargs,
       mris_left_right_register_execute,
-      mris_left_right_register_outputs,
       mris_left_right_register_params,
 };

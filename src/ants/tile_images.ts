@@ -148,14 +148,16 @@ function tile_images_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TileImagesOutputs`).
  */
 function tile_images_execute(
     params: TileImagesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TileImagesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TILE_IMAGES_METADATA);
     params = execution.params(params)
     const cargs = tile_images_cargs(params, execution)
     const ret = tile_images_outputs(params, execution)
@@ -186,10 +188,8 @@ function tile_images(
     input_images: Array<InputPathType>,
     runner: Runner | null = null,
 ): TileImagesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TILE_IMAGES_METADATA);
     const params = tile_images_params(image_dimension, output_image, layout, input_images)
-    return tile_images_execute(params, execution);
+    return tile_images_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       TileImagesOutputs,
       TileImagesParameters,
       tile_images,
-      tile_images_cargs,
       tile_images_execute,
-      tile_images_outputs,
       tile_images_params,
 };

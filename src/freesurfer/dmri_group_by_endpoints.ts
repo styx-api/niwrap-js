@@ -146,14 +146,16 @@ function dmri_group_by_endpoints_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriGroupByEndpointsOutputs`).
  */
 function dmri_group_by_endpoints_execute(
     params: DmriGroupByEndpointsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriGroupByEndpointsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_GROUP_BY_ENDPOINTS_METADATA);
     params = execution.params(params)
     const cargs = dmri_group_by_endpoints_cargs(params, execution)
     const ret = dmri_group_by_endpoints_outputs(params, execution)
@@ -182,10 +184,8 @@ function dmri_group_by_endpoints(
     output_directory: string,
     runner: Runner | null = null,
 ): DmriGroupByEndpointsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_GROUP_BY_ENDPOINTS_METADATA);
     const params = dmri_group_by_endpoints_params(streamline_file, image_file, output_directory)
-    return dmri_group_by_endpoints_execute(params, execution);
+    return dmri_group_by_endpoints_execute(params, runner);
 }
 
 
@@ -194,8 +194,6 @@ export {
       DmriGroupByEndpointsOutputs,
       DmriGroupByEndpointsParameters,
       dmri_group_by_endpoints,
-      dmri_group_by_endpoints_cargs,
       dmri_group_by_endpoints_execute,
-      dmri_group_by_endpoints_outputs,
       dmri_group_by_endpoints_params,
 };

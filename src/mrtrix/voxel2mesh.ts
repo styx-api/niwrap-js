@@ -277,14 +277,16 @@ function voxel2mesh_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Voxel2meshOutputs`).
  */
 function voxel2mesh_execute(
     params: Voxel2meshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Voxel2meshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOXEL2MESH_METADATA);
     params = execution.params(params)
     const cargs = voxel2mesh_cargs(params, execution)
     const ret = voxel2mesh_outputs(params, execution)
@@ -339,10 +341,8 @@ function voxel2mesh(
     version: boolean = false,
     runner: Runner | null = null,
 ): Voxel2meshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOXEL2MESH_METADATA);
     const params = voxel2mesh_params(input, output, blocky, threshold, info, quiet, debug, force, nthreads, config, help, version)
-    return voxel2mesh_execute(params, execution);
+    return voxel2mesh_execute(params, runner);
 }
 
 
@@ -352,10 +352,7 @@ export {
       Voxel2meshOutputs,
       Voxel2meshParameters,
       voxel2mesh,
-      voxel2mesh_cargs,
-      voxel2mesh_config_cargs,
       voxel2mesh_config_params,
       voxel2mesh_execute,
-      voxel2mesh_outputs,
       voxel2mesh_params,
 };

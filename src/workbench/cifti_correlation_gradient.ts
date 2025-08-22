@@ -493,14 +493,16 @@ function cifti_correlation_gradient_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCorrelationGradientOutputs`).
  */
 function cifti_correlation_gradient_execute(
     params: CiftiCorrelationGradientParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiCorrelationGradientOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_CORRELATION_GRADIENT_METADATA);
     params = execution.params(params)
     const cargs = cifti_correlation_gradient_cargs(params, execution)
     const ret = cifti_correlation_gradient_outputs(params, execution)
@@ -555,10 +557,8 @@ function cifti_correlation_gradient(
     double_correlation: CiftiCorrelationGradientDoubleCorrelationParameters | null = null,
     runner: Runner | null = null,
 ): CiftiCorrelationGradientOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_CORRELATION_GRADIENT_METADATA);
     const params = cifti_correlation_gradient_params(cifti, cifti_out, left_surface, right_surface, cerebellum_surface, opt_surface_presmooth_surface_kernel, opt_volume_presmooth_volume_kernel, opt_presmooth_fwhm, opt_undo_fisher_z, opt_fisher_z, opt_surface_exclude_distance, opt_volume_exclude_distance, opt_covariance, opt_mem_limit_limit_gb, double_correlation)
-    return cifti_correlation_gradient_execute(params, execution);
+    return cifti_correlation_gradient_execute(params, runner);
 }
 
 
@@ -571,16 +571,10 @@ export {
       CiftiCorrelationGradientParameters,
       CiftiCorrelationGradientRightSurfaceParameters,
       cifti_correlation_gradient,
-      cifti_correlation_gradient_cargs,
-      cifti_correlation_gradient_cerebellum_surface_cargs,
       cifti_correlation_gradient_cerebellum_surface_params,
-      cifti_correlation_gradient_double_correlation_cargs,
       cifti_correlation_gradient_double_correlation_params,
       cifti_correlation_gradient_execute,
-      cifti_correlation_gradient_left_surface_cargs,
       cifti_correlation_gradient_left_surface_params,
-      cifti_correlation_gradient_outputs,
       cifti_correlation_gradient_params,
-      cifti_correlation_gradient_right_surface_cargs,
       cifti_correlation_gradient_right_surface_params,
 };

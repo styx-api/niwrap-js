@@ -187,14 +187,16 @@ function register_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegisterSubjectOutputs`).
  */
 function register_subject_execute(
     params: RegisterSubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegisterSubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REGISTER_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = register_subject_cargs(params, execution)
     const ret = register_subject_outputs(params, execution)
@@ -229,10 +231,8 @@ function register_subject(
     gca_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): RegisterSubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REGISTER_SUBJECT_METADATA);
     const params = register_subject_params(input_volume, mask_volume, control_points, output_directory, log_file, gca_file)
-    return register_subject_execute(params, execution);
+    return register_subject_execute(params, runner);
 }
 
 
@@ -241,8 +241,6 @@ export {
       RegisterSubjectOutputs,
       RegisterSubjectParameters,
       register_subject,
-      register_subject_cargs,
       register_subject_execute,
-      register_subject_outputs,
       register_subject_params,
 };

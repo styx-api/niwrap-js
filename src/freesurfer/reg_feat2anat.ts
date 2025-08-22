@@ -312,14 +312,16 @@ function reg_feat2anat_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegFeat2anatOutputs`).
  */
 function reg_feat2anat_execute(
     params: RegFeat2anatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegFeat2anatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REG_FEAT2ANAT_METADATA);
     params = execution.params(params)
     const cargs = reg_feat2anat_cargs(params, execution)
     const ret = reg_feat2anat_outputs(params, execution)
@@ -374,10 +376,8 @@ function reg_feat2anat(
     debug: boolean = false,
     runner: Runner | null = null,
 ): RegFeat2anatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REG_FEAT2ANAT_METADATA);
     const params = reg_feat2anat_params(feat_dir, subject_id, overwrite_exf2std, manual, manxfm_type, dof, bins, cost, max_angle, bet, title, no_bbr, spm, no_inorm, fmov, debug)
-    return reg_feat2anat_execute(params, execution);
+    return reg_feat2anat_execute(params, runner);
 }
 
 
@@ -386,8 +386,6 @@ export {
       RegFeat2anatOutputs,
       RegFeat2anatParameters,
       reg_feat2anat,
-      reg_feat2anat_cargs,
       reg_feat2anat_execute,
-      reg_feat2anat_outputs,
       reg_feat2anat_params,
 };

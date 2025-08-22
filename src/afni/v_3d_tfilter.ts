@@ -152,14 +152,16 @@ function v_3d_tfilter_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTfilterOutputs`).
  */
 function v_3d_tfilter_execute(
     params: V3dTfilterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTfilterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TFILTER_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tfilter_cargs(params, execution)
     const ret = v_3d_tfilter_outputs(params, execution)
@@ -188,10 +190,8 @@ function v_3d_tfilter(
     filters: Array<string>,
     runner: Runner | null = null,
 ): V3dTfilterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TFILTER_METADATA);
     const params = v_3d_tfilter_params(inputdataset, outputdataset, filters)
-    return v_3d_tfilter_execute(params, execution);
+    return v_3d_tfilter_execute(params, runner);
 }
 
 
@@ -200,8 +200,6 @@ export {
       V3dTfilterParameters,
       V_3D_TFILTER_METADATA,
       v_3d_tfilter,
-      v_3d_tfilter_cargs,
       v_3d_tfilter_execute,
-      v_3d_tfilter_outputs,
       v_3d_tfilter_params,
 };

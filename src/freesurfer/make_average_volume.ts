@@ -258,14 +258,16 @@ function make_average_volume_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeAverageVolumeOutputs`).
  */
 function make_average_volume_execute(
     params: MakeAverageVolumeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeAverageVolumeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_AVERAGE_VOLUME_METADATA);
     params = execution.params(params)
     const cargs = make_average_volume_cargs(params, execution)
     const ret = make_average_volume_outputs(params, execution)
@@ -318,10 +320,8 @@ function make_average_volume(
     nocleanup_flag: boolean = false,
     runner: Runner | null = null,
 ): MakeAverageVolumeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_AVERAGE_VOLUME_METADATA);
     const params = make_average_volume_params(subjects, fsgd, out, topdir, xform, sdir, sd_flag, force_flag, keep_all_orig_flag, no_aseg_flag, ctab, ctab_default_flag, echo_flag, debug_flag, nocleanup_flag)
-    return make_average_volume_execute(params, execution);
+    return make_average_volume_execute(params, runner);
 }
 
 
@@ -330,8 +330,6 @@ export {
       MakeAverageVolumeOutputs,
       MakeAverageVolumeParameters,
       make_average_volume,
-      make_average_volume_cargs,
       make_average_volume_execute,
-      make_average_volume_outputs,
       make_average_volume_params,
 };

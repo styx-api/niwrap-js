@@ -391,14 +391,16 @@ function mri_diff_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriDiffOutputs`).
  */
 function mri_diff_execute(
     params: MriDiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriDiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_DIFF_METADATA);
     params = execution.params(params)
     const cargs = mri_diff_cargs(params, execution)
     const ret = mri_diff_outputs(params, execution)
@@ -483,10 +485,8 @@ function mri_diff(
     check_options: boolean = false,
     runner: Runner | null = null,
 ): MriDiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_DIFF_METADATA);
     const params = mri_diff_params(vol1file, vol2file, resolution_check, acquisition_param_check, geometry_check, precision_check, pixel_check, orientation_check, file_type_diff_check, no_exit_on_diff, quality_assurance, pixel_only, abs_difference, no_abs_difference, difference_abs, percentage_difference, rss_save, ssd_print, rms_print, count_diff_voxels, pixel_threshold, count_thresh_voxels, log_file, difference_image, suspicious_diff_volume, segmentation_diff, merge_edits, average_difference, debug_mode, verbose_mode, check_options)
-    return mri_diff_execute(params, execution);
+    return mri_diff_execute(params, runner);
 }
 
 
@@ -495,8 +495,6 @@ export {
       MriDiffOutputs,
       MriDiffParameters,
       mri_diff,
-      mri_diff_cargs,
       mri_diff_execute,
-      mri_diff_outputs,
       mri_diff_params,
 };

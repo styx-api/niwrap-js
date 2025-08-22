@@ -206,14 +206,16 @@ function threshold_image_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ThresholdImageOutputs`).
  */
 function threshold_image_execute(
     params: ThresholdImageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ThresholdImageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(THRESHOLD_IMAGE_METADATA);
     params = execution.params(params)
     const cargs = threshold_image_cargs(params, execution)
     const ret = threshold_image_outputs(params, execution)
@@ -256,10 +258,8 @@ function threshold_image(
     mask_image: InputPathType | null = null,
     runner: Runner | null = null,
 ): ThresholdImageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(THRESHOLD_IMAGE_METADATA);
     const params = threshold_image_params(image_dimension, image_in, out_image, threshlo, threshhi, inside_value, outside_value, otsu_number_of_thresholds, kmeans_number_of_thresholds, mask_image)
-    return threshold_image_execute(params, execution);
+    return threshold_image_execute(params, runner);
 }
 
 
@@ -268,8 +268,6 @@ export {
       ThresholdImageOutputs,
       ThresholdImageParameters,
       threshold_image,
-      threshold_image_cargs,
       threshold_image_execute,
-      threshold_image_outputs,
       threshold_image_params,
 };

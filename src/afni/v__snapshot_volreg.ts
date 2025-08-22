@@ -156,14 +156,16 @@ function v__snapshot_volreg_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSnapshotVolregOutputs`).
  */
 function v__snapshot_volreg_execute(
     params: VSnapshotVolregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSnapshotVolregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SNAPSHOT_VOLREG_METADATA);
     params = execution.params(params)
     const cargs = v__snapshot_volreg_cargs(params, execution)
     const ret = v__snapshot_volreg_outputs(params, execution)
@@ -194,10 +196,8 @@ function v__snapshot_volreg(
     xdisplay: string | null = null,
     runner: Runner | null = null,
 ): VSnapshotVolregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SNAPSHOT_VOLREG_METADATA);
     const params = v__snapshot_volreg_params(anatdataset, epidataset, jname, xdisplay)
-    return v__snapshot_volreg_execute(params, execution);
+    return v__snapshot_volreg_execute(params, runner);
 }
 
 
@@ -206,8 +206,6 @@ export {
       VSnapshotVolregParameters,
       V__SNAPSHOT_VOLREG_METADATA,
       v__snapshot_volreg,
-      v__snapshot_volreg_cargs,
       v__snapshot_volreg_execute,
-      v__snapshot_volreg_outputs,
       v__snapshot_volreg_params,
 };

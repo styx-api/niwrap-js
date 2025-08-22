@@ -737,14 +737,16 @@ function mri_surf2surf_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSurf2surfOutputs`).
  */
 function mri_surf2surf_execute(
     params: MriSurf2surfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSurf2surfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SURF2SURF_METADATA);
     params = execution.params(params)
     const cargs = mri_surf2surf_cargs(params, execution)
     const ret = mri_surf2surf_outputs(params, execution)
@@ -879,10 +881,8 @@ function mri_surf2surf(
     rms_mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriSurf2surfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SURF2SURF_METADATA);
     const params = mri_surf2surf_params(src_subject, trg_subject, sval_path, sval_xyz, projfrac, projabs, sval_tal_xyz, sval_area, sval_annot, sval_nxyz, patch, sfmt, reg, reg_inv, srcicoorder, trgicoorder, tval_path, tval_xyz, tfmt, trg_dist, s, hemi, src_hemi, trg_hemi, dual_hemi, jac, surfreg, src_surfreg, trg_surfreg, mapmethod, frame, fwhm_src, fwhm_trg, nsmooth_in, nsmooth_out, cortex, no_cortex, label_src, label_trg, mul, div, reshape, reshape_factor, reshape3d, split, synth, ones, normvar, seed, prune, no_prune, proj_surf, proj_norm, reg_diff, rms, rms_mask)
-    return mri_surf2surf_execute(params, execution);
+    return mri_surf2surf_execute(params, runner);
 }
 
 
@@ -891,8 +891,6 @@ export {
       MriSurf2surfOutputs,
       MriSurf2surfParameters,
       mri_surf2surf,
-      mri_surf2surf_cargs,
       mri_surf2surf_execute,
-      mri_surf2surf_outputs,
       mri_surf2surf_params,
 };

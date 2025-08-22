@@ -253,14 +253,16 @@ function metric_stats_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricStatsOutputs`).
  */
 function metric_stats_execute(
     params: MetricStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_STATS_METADATA);
     params = execution.params(params)
     const cargs = metric_stats_cargs(params, execution)
     const ret = metric_stats_outputs(params, execution)
@@ -317,10 +319,8 @@ function metric_stats(
     opt_show_map_name: boolean = false,
     runner: Runner | null = null,
 ): MetricStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_STATS_METADATA);
     const params = metric_stats_params(metric_in, opt_reduce_operation, opt_percentile_percent, opt_column_column, roi, opt_show_map_name)
-    return metric_stats_execute(params, execution);
+    return metric_stats_execute(params, runner);
 }
 
 
@@ -330,10 +330,7 @@ export {
       MetricStatsParameters,
       MetricStatsRoiParameters,
       metric_stats,
-      metric_stats_cargs,
       metric_stats_execute,
-      metric_stats_outputs,
       metric_stats_params,
-      metric_stats_roi_cargs,
       metric_stats_roi_params,
 };

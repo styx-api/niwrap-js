@@ -81,3 +81,167 @@ export * from './ants/tile_images'
 export * from './ants/time_sccan'
 export * from './ants/warp_tensor_image_multi_transform'
 export * from './ants/warp_time_series_image_multi_transform'
+import { Runner } from 'styxdefs';
+import { add_noise_to_image_execute } from './ants/add_noise_to_image'
+import { ants_ai_execute } from './ants/ants_ai'
+import { ants_align_origin_execute } from './ants/ants_align_origin'
+import { ants_apply_transforms_execute } from './ants/ants_apply_transforms'
+import { ants_apply_transforms_to_points_execute } from './ants/ants_apply_transforms_to_points'
+import { ants_atropos_n4_sh_execute } from './ants/ants_atropos_n4_sh'
+import { ants_brain_extraction_sh_execute } from './ants/ants_brain_extraction_sh'
+import { ants_cortical_thickness_sh_execute } from './ants/ants_cortical_thickness_sh'
+import { ants_intermodality_intrasubject_sh_execute } from './ants/ants_intermodality_intrasubject_sh'
+import { ants_introduction_sh_execute } from './ants/ants_introduction_sh'
+import { ants_joint_fusion_execute } from './ants/ants_joint_fusion'
+import { ants_joint_label_fusion_sh_execute } from './ants/ants_joint_label_fusion_sh'
+import { ants_joint_tensor_fusion_execute } from './ants/ants_joint_tensor_fusion'
+import { ants_landmark_based_transform_initializer_execute } from './ants/ants_landmark_based_transform_initializer'
+import { ants_motion_corr_diffusion_direction_execute } from './ants/ants_motion_corr_diffusion_direction'
+import { ants_motion_corr_execute } from './ants/ants_motion_corr'
+import { ants_motion_corr_stats_execute } from './ants/ants_motion_corr_stats'
+import { ants_multivariate_template_construction2_sh_execute } from './ants/ants_multivariate_template_construction2_sh'
+import { ants_neuroimaging_battery_execute } from './ants/ants_neuroimaging_battery'
+import { ants_registration_execute } from './ants/ants_registration'
+import { ants_registration_sy_n_sh_execute } from './ants/ants_registration_sy_n_sh'
+import { ants_registration_sy_nquick_sh_execute } from './ants/ants_registration_sy_nquick_sh'
+import { ants_slice_regularized_registration_execute } from './ants/ants_slice_regularized_registration'
+import { ants_transform_info_execute } from './ants/ants_transform_info'
+import { antsintegrate_vector_field_execute } from './ants/antsintegrate_vector_field'
+import { antsjacobian_execute } from './ants/antsjacobian'
+import { antsuse_deformation_field_to_get_affine_transform_execute } from './ants/antsuse_deformation_field_to_get_affine_transform'
+import { antsuse_landmark_images_to_get_affine_transform_execute } from './ants/antsuse_landmark_images_to_get_affine_transform'
+import { antsuse_landmark_images_to_get_bspline_displacement_field_execute } from './ants/antsuse_landmark_images_to_get_bspline_displacement_field'
+import { atropos_execute } from './ants/atropos'
+import { convert_scalar_image_to_rgb_execute } from './ants/convert_scalar_image_to_rgb'
+import { convert_to_jpg_execute } from './ants/convert_to_jpg'
+import { convert_transform_file_execute } from './ants/convert_transform_file'
+import { create_displacement_field_execute } from './ants/create_displacement_field'
+import { create_dticohort_execute } from './ants/create_dticohort'
+import { create_tiled_mosaic_execute } from './ants/create_tiled_mosaic'
+import { create_warped_grid_image_execute } from './ants/create_warped_grid_image'
+import { denoise_image_execute } from './ants/denoise_image'
+import { extract_region_from_image_by_mask_execute } from './ants/extract_region_from_image_by_mask'
+import { extract_region_from_image_execute } from './ants/extract_region_from_image'
+import { i_math_execute } from './ants/i_math'
+import { image_intensity_statistics_execute } from './ants/image_intensity_statistics'
+import { image_math_execute } from './ants/image_math'
+import { image_set_statistics_execute } from './ants/image_set_statistics'
+import { kelly_kapowski_execute } from './ants/kelly_kapowski'
+import { label_geometry_measures_execute } from './ants/label_geometry_measures'
+import { lesion_filling_execute } from './ants/lesion_filling'
+import { multiply_images_execute } from './ants/multiply_images'
+import { n3_bias_field_correction_execute } from './ants/n3_bias_field_correction'
+import { n4_bias_field_correction_execute } from './ants/n4_bias_field_correction'
+import { non_local_super_resolution_execute } from './ants/non_local_super_resolution'
+import { paste_image_into_image_execute } from './ants/paste_image_into_image'
+import { print_header_execute } from './ants/print_header'
+import { rebase_tensor_image_execute } from './ants/rebase_tensor_image'
+import { resample_image_execute } from './ants/resample_image'
+import { sccan_execute } from './ants/sccan'
+import { set_spacing_execute } from './ants/set_spacing'
+import { simple_syn_registration_execute } from './ants/simple_syn_registration'
+import { simulate_displacement_field_execute } from './ants/simulate_displacement_field'
+import { smooth_displacement_field_execute } from './ants/smooth_displacement_field'
+import { smooth_image_execute } from './ants/smooth_image'
+import { super_resolution_execute } from './ants/super_resolution'
+import { surface_based_smoothing_execute } from './ants/surface_based_smoothing'
+import { surface_curvature_execute } from './ants/surface_curvature'
+import { texture_cooccurrence_features_execute } from './ants/texture_cooccurrence_features'
+import { texture_run_length_features_execute } from './ants/texture_run_length_features'
+import { threshold_image_execute } from './ants/threshold_image'
+import { tile_images_execute } from './ants/tile_images'
+import { time_sccan_execute } from './ants/time_sccan'
+import { warp_tensor_image_multi_transform_execute } from './ants/warp_tensor_image_multi_transform'
+import { warp_time_series_image_multi_transform_execute } from './ants/warp_time_series_image_multi_transform'
+
+
+/**
+ * Run a command in this package dynamically from a params object.
+ *
+ * @param params The parameters.
+ * @param runner Command runner
+ *
+ */
+function execute(
+    params: any,
+    runner: Runner | null = null,
+) {
+    return {
+        "ants.ANTSIntegrateVectorField": antsintegrate_vector_field_execute,
+        "ants.ANTSJacobian": antsjacobian_execute,
+        "ants.ANTSUseDeformationFieldToGetAffineTransform": antsuse_deformation_field_to_get_affine_transform_execute,
+        "ants.ANTSUseLandmarkImagesToGetAffineTransform": antsuse_landmark_images_to_get_affine_transform_execute,
+        "ants.ANTSUseLandmarkImagesToGetBSplineDisplacementField": antsuse_landmark_images_to_get_bspline_displacement_field_execute,
+        "ants.AddNoiseToImage": add_noise_to_image_execute,
+        "ants.Atropos": atropos_execute,
+        "ants.ConvertScalarImageToRGB": convert_scalar_image_to_rgb_execute,
+        "ants.ConvertToJpg": convert_to_jpg_execute,
+        "ants.ConvertTransformFile": convert_transform_file_execute,
+        "ants.CreateDTICohort": create_dticohort_execute,
+        "ants.CreateDisplacementField": create_displacement_field_execute,
+        "ants.CreateTiledMosaic": create_tiled_mosaic_execute,
+        "ants.CreateWarpedGridImage": create_warped_grid_image_execute,
+        "ants.DenoiseImage": denoise_image_execute,
+        "ants.ExtractRegionFromImage": extract_region_from_image_execute,
+        "ants.ExtractRegionFromImageByMask": extract_region_from_image_by_mask_execute,
+        "ants.ImageIntensityStatistics": image_intensity_statistics_execute,
+        "ants.ImageMath": image_math_execute,
+        "ants.ImageSetStatistics": image_set_statistics_execute,
+        "ants.KellyKapowski": kelly_kapowski_execute,
+        "ants.LabelGeometryMeasures": label_geometry_measures_execute,
+        "ants.LesionFilling": lesion_filling_execute,
+        "ants.MultiplyImages": multiply_images_execute,
+        "ants.N3BiasFieldCorrection": n3_bias_field_correction_execute,
+        "ants.N4BiasFieldCorrection": n4_bias_field_correction_execute,
+        "ants.NonLocalSuperResolution": non_local_super_resolution_execute,
+        "ants.PasteImageIntoImage": paste_image_into_image_execute,
+        "ants.PrintHeader": print_header_execute,
+        "ants.RebaseTensorImage": rebase_tensor_image_execute,
+        "ants.ResampleImage": resample_image_execute,
+        "ants.SetSpacing": set_spacing_execute,
+        "ants.SimulateDisplacementField": simulate_displacement_field_execute,
+        "ants.SmoothDisplacementField": smooth_displacement_field_execute,
+        "ants.SmoothImage": smooth_image_execute,
+        "ants.SuperResolution": super_resolution_execute,
+        "ants.SurfaceBasedSmoothing": surface_based_smoothing_execute,
+        "ants.SurfaceCurvature": surface_curvature_execute,
+        "ants.TextureCooccurrenceFeatures": texture_cooccurrence_features_execute,
+        "ants.TextureRunLengthFeatures": texture_run_length_features_execute,
+        "ants.ThresholdImage": threshold_image_execute,
+        "ants.TileImages": tile_images_execute,
+        "ants.TimeSCCAN": time_sccan_execute,
+        "ants.WarpTensorImageMultiTransform": warp_tensor_image_multi_transform_execute,
+        "ants.WarpTimeSeriesImageMultiTransform": warp_time_series_image_multi_transform_execute,
+        "ants.antsAI": ants_ai_execute,
+        "ants.antsAlignOrigin": ants_align_origin_execute,
+        "ants.antsApplyTransforms": ants_apply_transforms_execute,
+        "ants.antsApplyTransformsToPoints": ants_apply_transforms_to_points_execute,
+        "ants.antsAtroposN4.sh": ants_atropos_n4_sh_execute,
+        "ants.antsBrainExtraction.sh": ants_brain_extraction_sh_execute,
+        "ants.antsCorticalThickness.sh": ants_cortical_thickness_sh_execute,
+        "ants.antsIntermodalityIntrasubject.sh": ants_intermodality_intrasubject_sh_execute,
+        "ants.antsIntroduction.sh": ants_introduction_sh_execute,
+        "ants.antsJointFusion": ants_joint_fusion_execute,
+        "ants.antsJointLabelFusion.sh": ants_joint_label_fusion_sh_execute,
+        "ants.antsJointTensorFusion": ants_joint_tensor_fusion_execute,
+        "ants.antsLandmarkBasedTransformInitializer": ants_landmark_based_transform_initializer_execute,
+        "ants.antsMotionCorr": ants_motion_corr_execute,
+        "ants.antsMotionCorrDiffusionDirection": ants_motion_corr_diffusion_direction_execute,
+        "ants.antsMotionCorrStats": ants_motion_corr_stats_execute,
+        "ants.antsMultivariateTemplateConstruction2.sh": ants_multivariate_template_construction2_sh_execute,
+        "ants.antsNeuroimagingBattery": ants_neuroimaging_battery_execute,
+        "ants.antsRegistration": ants_registration_execute,
+        "ants.antsRegistrationSyN.sh": ants_registration_sy_n_sh_execute,
+        "ants.antsRegistrationSyNQuick.sh": ants_registration_sy_nquick_sh_execute,
+        "ants.antsSliceRegularizedRegistration": ants_slice_regularized_registration_execute,
+        "ants.antsTransformInfo": ants_transform_info_execute,
+        "ants.iMath": i_math_execute,
+        "ants.sccan": sccan_execute,
+        "ants.simpleSynRegistration": simple_syn_registration_execute,
+    }[params["@type"]](params, runner)
+}
+
+
+export {
+      execute,
+};

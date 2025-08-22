@@ -299,14 +299,16 @@ function mrcolour_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrcolourOutputs`).
  */
 function mrcolour_execute(
     params: MrcolourParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrcolourOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRCOLOUR_METADATA);
     params = execution.params(params)
     const cargs = mrcolour_cargs(params, execution)
     const ret = mrcolour_outputs(params, execution)
@@ -365,10 +367,8 @@ function mrcolour(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrcolourOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRCOLOUR_METADATA);
     const params = mrcolour_params(input, map, output, upper, lower, colour, info, quiet, debug, force, nthreads, config, help, version)
-    return mrcolour_execute(params, execution);
+    return mrcolour_execute(params, runner);
 }
 
 
@@ -378,10 +378,7 @@ export {
       MrcolourOutputs,
       MrcolourParameters,
       mrcolour,
-      mrcolour_cargs,
-      mrcolour_config_cargs,
       mrcolour_config_params,
       mrcolour_execute,
-      mrcolour_outputs,
       mrcolour_params,
 };

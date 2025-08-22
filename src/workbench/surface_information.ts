@@ -131,14 +131,16 @@ function surface_information_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceInformationOutputs`).
  */
 function surface_information_execute(
     params: SurfaceInformationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceInformationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_INFORMATION_METADATA);
     params = execution.params(params)
     const cargs = surface_information_cargs(params, execution)
     const ret = surface_information_outputs(params, execution)
@@ -166,10 +168,8 @@ function surface_information(
     surface_file: InputPathType,
     runner: Runner | null = null,
 ): SurfaceInformationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_INFORMATION_METADATA);
     const params = surface_information_params(surface_file)
-    return surface_information_execute(params, execution);
+    return surface_information_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       SurfaceInformationOutputs,
       SurfaceInformationParameters,
       surface_information,
-      surface_information_cargs,
       surface_information_execute,
-      surface_information_outputs,
       surface_information_params,
 };

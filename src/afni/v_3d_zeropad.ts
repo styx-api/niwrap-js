@@ -296,14 +296,16 @@ function v_3d_zeropad_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dZeropadOutputs`).
  */
 function v_3d_zeropad_execute(
     params: V3dZeropadParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dZeropadOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ZEROPAD_METADATA);
     params = execution.params(params)
     const cargs = v_3d_zeropad_cargs(params, execution)
     const ret = v_3d_zeropad_outputs(params, execution)
@@ -356,10 +358,8 @@ function v_3d_zeropad(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dZeropadOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ZEROPAD_METADATA);
     const params = v_3d_zeropad_params(dataset, i, s, a, p, l, r, z, rl, ap, is, pad2even, mm_flag, master_dataset, prefix)
-    return v_3d_zeropad_execute(params, execution);
+    return v_3d_zeropad_execute(params, runner);
 }
 
 
@@ -368,8 +368,6 @@ export {
       V3dZeropadParameters,
       V_3D_ZEROPAD_METADATA,
       v_3d_zeropad,
-      v_3d_zeropad_cargs,
       v_3d_zeropad_execute,
-      v_3d_zeropad_outputs,
       v_3d_zeropad_params,
 };

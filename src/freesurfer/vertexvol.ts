@@ -176,14 +176,16 @@ function vertexvol_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VertexvolOutputs`).
  */
 function vertexvol_execute(
     params: VertexvolParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VertexvolOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VERTEXVOL_METADATA);
     params = execution.params(params)
     const cargs = vertexvol_cargs(params, execution)
     const ret = vertexvol_outputs(params, execution)
@@ -218,10 +220,8 @@ function vertexvol(
     no_th3: boolean = false,
     runner: Runner | null = null,
 ): VertexvolOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VERTEXVOL_METADATA);
     const params = vertexvol_params(subject, left_hemisphere, right_hemisphere, output_file, use_th3, no_th3)
-    return vertexvol_execute(params, execution);
+    return vertexvol_execute(params, runner);
 }
 
 
@@ -230,8 +230,6 @@ export {
       VertexvolOutputs,
       VertexvolParameters,
       vertexvol,
-      vertexvol_cargs,
       vertexvol_execute,
-      vertexvol_outputs,
       vertexvol_params,
 };

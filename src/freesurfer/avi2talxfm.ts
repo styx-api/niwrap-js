@@ -148,14 +148,16 @@ function avi2talxfm_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Avi2talxfmOutputs`).
  */
 function avi2talxfm_execute(
     params: Avi2talxfmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Avi2talxfmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AVI2TALXFM_METADATA);
     params = execution.params(params)
     const cargs = avi2talxfm_cargs(params, execution)
     const ret = avi2talxfm_outputs(params, execution)
@@ -186,10 +188,8 @@ function avi2talxfm(
     output_xfm: string,
     runner: Runner | null = null,
 ): Avi2talxfmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AVI2TALXFM_METADATA);
     const params = avi2talxfm_params(input_volume, target_volume, vox2vox_transform, output_xfm)
-    return avi2talxfm_execute(params, execution);
+    return avi2talxfm_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       Avi2talxfmOutputs,
       Avi2talxfmParameters,
       avi2talxfm,
-      avi2talxfm_cargs,
       avi2talxfm_execute,
-      avi2talxfm_outputs,
       avi2talxfm_params,
 };

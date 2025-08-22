@@ -179,14 +179,16 @@ function long_qdec_table_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LongQdecTableOutputs`).
  */
 function long_qdec_table_execute(
     params: LongQdecTableParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LongQdecTableOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LONG_QDEC_TABLE_METADATA);
     params = execution.params(params)
     const cargs = long_qdec_table_cargs(params, execution)
     const ret = long_qdec_table_outputs(params, execution)
@@ -219,10 +221,8 @@ function long_qdec_table(
     out: string | null = null,
     runner: Runner | null = null,
 ): LongQdecTableOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LONG_QDEC_TABLE_METADATA);
     const params = long_qdec_table_params(qdec_table, split, cross_flag, sort, out)
-    return long_qdec_table_execute(params, execution);
+    return long_qdec_table_execute(params, runner);
 }
 
 
@@ -231,8 +231,6 @@ export {
       LongQdecTableOutputs,
       LongQdecTableParameters,
       long_qdec_table,
-      long_qdec_table_cargs,
       long_qdec_table_execute,
-      long_qdec_table_outputs,
       long_qdec_table_params,
 };

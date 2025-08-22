@@ -253,14 +253,16 @@ function train_gcs_atlas_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TrainGcsAtlasOutputs`).
  */
 function train_gcs_atlas_execute(
     params: TrainGcsAtlasParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TrainGcsAtlasOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TRAIN_GCS_ATLAS_METADATA);
     params = execution.params(params)
     const cargs = train_gcs_atlas_cargs(params, execution)
     const ret = train_gcs_atlas_outputs(params, execution)
@@ -307,10 +309,8 @@ function train_gcs_atlas(
     threads: number | null = null,
     runner: Runner | null = null,
 ): TrainGcsAtlasOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TRAIN_GCS_ATLAS_METADATA);
     const params = train_gcs_atlas_params(output_gcs, manual_parcellation, subjlist_file, left_hemi, right_hemi, hemi_spec, surf_reg, color_table, exclude_subject, jackknife_flag, aseg_filename, threads)
-    return train_gcs_atlas_execute(params, execution);
+    return train_gcs_atlas_execute(params, runner);
 }
 
 
@@ -319,8 +319,6 @@ export {
       TrainGcsAtlasOutputs,
       TrainGcsAtlasParameters,
       train_gcs_atlas,
-      train_gcs_atlas_cargs,
       train_gcs_atlas_execute,
-      train_gcs_atlas_outputs,
       train_gcs_atlas_params,
 };

@@ -306,14 +306,16 @@ function border_merge_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BorderMergeOutputs`).
  */
 function border_merge_execute(
     params: BorderMergeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BorderMergeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BORDER_MERGE_METADATA);
     params = execution.params(params)
     const cargs = border_merge_cargs(params, execution)
     const ret = border_merge_outputs(params, execution)
@@ -346,10 +348,8 @@ function border_merge(
     border: Array<BorderMergeBorderParameters> | null = null,
     runner: Runner | null = null,
 ): BorderMergeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BORDER_MERGE_METADATA);
     const params = border_merge_params(border_file_out, border)
-    return border_merge_execute(params, execution);
+    return border_merge_execute(params, runner);
 }
 
 
@@ -361,14 +361,9 @@ export {
       BorderMergeSelectParameters,
       BorderMergeUpToParameters,
       border_merge,
-      border_merge_border_cargs,
       border_merge_border_params,
-      border_merge_cargs,
       border_merge_execute,
-      border_merge_outputs,
       border_merge_params,
-      border_merge_select_cargs,
       border_merge_select_params,
-      border_merge_up_to_cargs,
       border_merge_up_to_params,
 };

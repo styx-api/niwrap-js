@@ -260,14 +260,16 @@ function rtview_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RtviewOutputs`).
  */
 function rtview_execute(
     params: RtviewParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RtviewOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RTVIEW_METADATA);
     params = execution.params(params)
     const cargs = rtview_cargs(params, execution)
     const ret = rtview_outputs(params, execution)
@@ -318,10 +320,8 @@ function rtview(
     no_cleanup: boolean = false,
     runner: Runner | null = null,
 ): RtviewOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RTVIEW_METADATA);
     const params = rtview_params(subject, hemi, left_hemi, right_hemi, eccen, polar, real_file, imag_file, fsig_file, reg_file, flat_display, patch, tcl_file, no_cleanup)
-    return rtview_execute(params, execution);
+    return rtview_execute(params, runner);
 }
 
 
@@ -330,8 +330,6 @@ export {
       RtviewOutputs,
       RtviewParameters,
       rtview,
-      rtview_cargs,
       rtview_execute,
-      rtview_outputs,
       rtview_params,
 };

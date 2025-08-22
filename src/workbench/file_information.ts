@@ -284,14 +284,16 @@ function file_information_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FileInformationOutputs`).
  */
 function file_information_execute(
     params: FileInformationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FileInformationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FILE_INFORMATION_METADATA);
     params = execution.params(params)
     const cargs = file_information_cargs(params, execution)
     const ret = file_information_outputs(params, execution)
@@ -374,10 +376,8 @@ function file_information(
     opt_czi_xml: boolean = false,
     runner: Runner | null = null,
 ): FileInformationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FILE_INFORMATION_METADATA);
     const params = file_information_params(data_file, opt_no_map_info, opt_only_step_interval, opt_only_number_of_maps, opt_only_map_names, only_metadata, opt_only_cifti_xml, opt_czi, opt_czi_all_sub_blocks, opt_czi_xml)
-    return file_information_execute(params, execution);
+    return file_information_execute(params, runner);
 }
 
 
@@ -387,10 +387,7 @@ export {
       FileInformationOutputs,
       FileInformationParameters,
       file_information,
-      file_information_cargs,
       file_information_execute,
-      file_information_only_metadata_cargs,
       file_information_only_metadata_params,
-      file_information_outputs,
       file_information_params,
 };

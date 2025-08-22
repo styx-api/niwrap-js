@@ -143,14 +143,16 @@ function old_betall_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `OldBetallOutputs`).
  */
 function old_betall_execute(
     params: OldBetallParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): OldBetallOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(OLD_BETALL_METADATA);
     params = execution.params(params)
     const cargs = old_betall_cargs(params, execution)
     const ret = old_betall_outputs(params, execution)
@@ -177,10 +179,8 @@ function old_betall(
     t2_filerout: string,
     runner: Runner | null = null,
 ): OldBetallOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(OLD_BETALL_METADATA);
     const params = old_betall_params(t1_filerout, t2_filerout)
-    return old_betall_execute(params, execution);
+    return old_betall_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       OldBetallOutputs,
       OldBetallParameters,
       old_betall,
-      old_betall_cargs,
       old_betall_execute,
-      old_betall_outputs,
       old_betall_params,
 };

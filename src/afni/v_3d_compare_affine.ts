@@ -164,14 +164,16 @@ function v_3d_compare_affine_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dCompareAffineOutputs`).
  */
 function v_3d_compare_affine_execute(
     params: V3dCompareAffineParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dCompareAffineOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_COMPARE_AFFINE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_compare_affine_cargs(params, execution)
     const ret = v_3d_compare_affine_outputs(params, execution)
@@ -200,10 +202,8 @@ function v_3d_compare_affine(
     affine: Array<string> | null = null,
     runner: Runner | null = null,
 ): V3dCompareAffineOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_COMPARE_AFFINE_METADATA);
     const params = v_3d_compare_affine_params(mask, dset, affine)
-    return v_3d_compare_affine_execute(params, execution);
+    return v_3d_compare_affine_execute(params, runner);
 }
 
 
@@ -212,8 +212,6 @@ export {
       V3dCompareAffineParameters,
       V_3D_COMPARE_AFFINE_METADATA,
       v_3d_compare_affine,
-      v_3d_compare_affine_cargs,
       v_3d_compare_affine_execute,
-      v_3d_compare_affine_outputs,
       v_3d_compare_affine_params,
 };

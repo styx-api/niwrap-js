@@ -280,14 +280,16 @@ function align_epi_anat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AlignEpiAnatOutputs`).
  */
 function align_epi_anat_execute(
     params: AlignEpiAnatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AlignEpiAnatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ALIGN_EPI_ANAT_METADATA);
     params = execution.params(params)
     const cargs = align_epi_anat_cargs(params, execution)
     const ret = align_epi_anat_outputs(params, execution)
@@ -344,10 +346,8 @@ function align_epi_anat(
     overwrite: boolean = false,
     runner: Runner | null = null,
 ): AlignEpiAnatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ALIGN_EPI_ANAT_METADATA);
     const params = align_epi_anat_params(epi, anat, epi_base, anat2epi, epi2anat, suffix, add_edge, big_move, giant_move, ginormous_move, keep_rm_files, prep_only, ana_has_skull, epi_strip, volreg_method, ex_mode, overwrite)
-    return align_epi_anat_execute(params, execution);
+    return align_epi_anat_execute(params, runner);
 }
 
 
@@ -356,8 +356,6 @@ export {
       AlignEpiAnatOutputs,
       AlignEpiAnatParameters,
       align_epi_anat,
-      align_epi_anat_cargs,
       align_epi_anat_execute,
-      align_epi_anat_outputs,
       align_epi_anat_params,
 };

@@ -165,14 +165,16 @@ function slicesdir_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SlicesdirOutputs`).
  */
 function slicesdir_execute(
     params: SlicesdirParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SlicesdirOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SLICESDIR_METADATA);
     params = execution.params(params)
     const cargs = slicesdir_cargs(params, execution)
     const ret = slicesdir_outputs(params, execution)
@@ -205,10 +207,8 @@ function slicesdir(
     slice_option: boolean = false,
     runner: Runner | null = null,
 ): SlicesdirOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SLICESDIR_METADATA);
     const params = slicesdir_params(filelist, flag_filelist, outline_image, edge_threshold, slice_option)
-    return slicesdir_execute(params, execution);
+    return slicesdir_execute(params, runner);
 }
 
 
@@ -217,8 +217,6 @@ export {
       SlicesdirOutputs,
       SlicesdirParameters,
       slicesdir,
-      slicesdir_cargs,
       slicesdir_execute,
-      slicesdir_outputs,
       slicesdir_params,
 };

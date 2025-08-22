@@ -262,14 +262,16 @@ function mri_ca_train_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCaTrainOutputs`).
  */
 function mri_ca_train_execute(
     params: MriCaTrainParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCaTrainOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CA_TRAIN_METADATA);
     params = execution.params(params)
     const cargs = mri_ca_train_cargs(params, execution)
     const ret = mri_ca_train_outputs(params, execution)
@@ -320,10 +322,8 @@ function mri_ca_train(
     done_file: string | null = null,
     runner: Runner | null = null,
 ): MriCaTrainOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CA_TRAIN_METADATA);
     const params = mri_ca_train_params(subjects, output_gca, segmentation, transform, mask_volume, node_spacing, prior_spacing, input_training, symmetrize, makesym, check_symmetry, sanity_check, threads, done_file)
-    return mri_ca_train_execute(params, execution);
+    return mri_ca_train_execute(params, runner);
 }
 
 
@@ -332,8 +332,6 @@ export {
       MriCaTrainOutputs,
       MriCaTrainParameters,
       mri_ca_train,
-      mri_ca_train_cargs,
       mri_ca_train_execute,
-      mri_ca_train_outputs,
       mri_ca_train_params,
 };

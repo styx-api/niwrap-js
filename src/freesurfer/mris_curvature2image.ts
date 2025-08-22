@@ -196,14 +196,16 @@ function mris_curvature2image_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisCurvature2imageOutputs`).
  */
 function mris_curvature2image_execute(
     params: MrisCurvature2imageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisCurvature2imageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_CURVATURE2IMAGE_METADATA);
     params = execution.params(params)
     const cargs = mris_curvature2image_cargs(params, execution)
     const ret = mris_curvature2image_outputs(params, execution)
@@ -242,10 +244,8 @@ function mris_curvature2image(
     invert_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisCurvature2imageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_CURVATURE2IMAGE_METADATA);
     const params = mris_curvature2image_params(surface, mask, output_overlay, output_distance, overlay, label, radius, invert_flag)
-    return mris_curvature2image_execute(params, execution);
+    return mris_curvature2image_execute(params, runner);
 }
 
 
@@ -254,8 +254,6 @@ export {
       MrisCurvature2imageOutputs,
       MrisCurvature2imageParameters,
       mris_curvature2image,
-      mris_curvature2image_cargs,
       mris_curvature2image_execute,
-      mris_curvature2image_outputs,
       mris_curvature2image_params,
 };

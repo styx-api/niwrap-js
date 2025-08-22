@@ -159,14 +159,16 @@ function setlabelstat_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SetlabelstatOutputs`).
  */
 function setlabelstat_execute(
     params: SetlabelstatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SetlabelstatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SETLABELSTAT_METADATA);
     params = execution.params(params)
     const cargs = setlabelstat_cargs(params, execution)
     const ret = setlabelstat_outputs(params, execution)
@@ -197,10 +199,8 @@ function setlabelstat(
     help: boolean = false,
     runner: Runner | null = null,
 ): SetlabelstatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SETLABELSTAT_METADATA);
     const params = setlabelstat_params(inlabelfile, outlabelfile, statval, help)
-    return setlabelstat_execute(params, execution);
+    return setlabelstat_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       SetlabelstatOutputs,
       SetlabelstatParameters,
       setlabelstat,
-      setlabelstat_cargs,
       setlabelstat_execute,
-      setlabelstat_outputs,
       setlabelstat_params,
 };

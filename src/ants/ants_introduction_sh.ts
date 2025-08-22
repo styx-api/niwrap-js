@@ -242,14 +242,16 @@ function ants_introduction_sh_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsIntroductionShOutputs`).
  */
 function ants_introduction_sh_execute(
     params: AntsIntroductionShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsIntroductionShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_INTRODUCTION_SH_METADATA);
     params = execution.params(params)
     const cargs = ants_introduction_sh_cargs(params, execution)
     const ret = ants_introduction_sh_outputs(params, execution)
@@ -294,10 +296,8 @@ function ants_introduction_sh(
     transformation_model: string | null = null,
     runner: Runner | null = null,
 ): AntsIntroductionShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_INTRODUCTION_SH_METADATA);
     const params = ants_introduction_sh_params(image_dimension, reference_image, input_image, force, labels_in_fixed_image_space, max_iterations, n4_bias_field_correction, outprefix, quality_check, similarity_metric, transformation_model)
-    return ants_introduction_sh_execute(params, execution);
+    return ants_introduction_sh_execute(params, runner);
 }
 
 
@@ -306,8 +306,6 @@ export {
       AntsIntroductionShOutputs,
       AntsIntroductionShParameters,
       ants_introduction_sh,
-      ants_introduction_sh_cargs,
       ants_introduction_sh_execute,
-      ants_introduction_sh_outputs,
       ants_introduction_sh_params,
 };

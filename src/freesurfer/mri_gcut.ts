@@ -169,14 +169,16 @@ function mri_gcut_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriGcutOutputs`).
  */
 function mri_gcut_execute(
     params: MriGcutParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriGcutOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_GCUT_METADATA);
     params = execution.params(params)
     const cargs = mri_gcut_cargs(params, execution)
     const ret = mri_gcut_outputs(params, execution)
@@ -209,10 +211,8 @@ function mri_gcut(
     threshold_value: number | null = null,
     runner: Runner | null = null,
 ): MriGcutOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_GCUT_METADATA);
     const params = mri_gcut_params(infile, outfile, wmmask_110, mult_file, threshold_value)
-    return mri_gcut_execute(params, execution);
+    return mri_gcut_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       MriGcutOutputs,
       MriGcutParameters,
       mri_gcut,
-      mri_gcut_cargs,
       mri_gcut_execute,
-      mri_gcut_outputs,
       mri_gcut_params,
 };

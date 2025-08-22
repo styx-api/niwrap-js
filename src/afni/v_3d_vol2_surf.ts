@@ -534,14 +534,16 @@ function v_3d_vol2_surf_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dVol2SurfOutputs`).
  */
 function v_3d_vol2_surf_execute(
     params: V3dVol2SurfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dVol2SurfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_VOL2_SURF_METADATA);
     params = execution.params(params)
     const cargs = v_3d_vol2_surf_cargs(params, execution)
     const ret = v_3d_vol2_surf_outputs(params, execution)
@@ -648,10 +650,8 @@ function v_3d_vol2_surf(
     reverse_norm_dir: boolean = false,
     runner: Runner | null = null,
 ): V3dVol2SurfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_VOL2_SURF_METADATA);
     const params = v_3d_vol2_surf_params(spec_file, sv, grid_parent, map_func, surf_a, surf_b, out_1_d, out_niml, use_norms, norm_len, first_node, last_node, debug_level, dnode, f_steps, f_index, f_p1_mm, f_pn_mm, f_p1_fr, f_pn_fr, skip_col_nodes, skip_col_1dindex, skip_col_i, skip_col_j, skip_col_k, skip_col_vals, no_headers, save_seg_coords, cmask, gp_index, oob_index, oob_value, oom_value, outcols_afni_nsd, outcols_1_result, outcols_results, outcols_nsd_format, help, hist, version, keep_norm_dir, reverse_norm_dir)
-    return v_3d_vol2_surf_execute(params, execution);
+    return v_3d_vol2_surf_execute(params, runner);
 }
 
 
@@ -660,8 +660,6 @@ export {
       V3dVol2SurfParameters,
       V_3D_VOL2_SURF_METADATA,
       v_3d_vol2_surf,
-      v_3d_vol2_surf_cargs,
       v_3d_vol2_surf_execute,
-      v_3d_vol2_surf_outputs,
       v_3d_vol2_surf_params,
 };

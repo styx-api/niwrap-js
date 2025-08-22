@@ -145,14 +145,16 @@ function v_1d_upsample_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dUpsampleOutputs`).
  */
 function v_1d_upsample_execute(
     params: V1dUpsampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dUpsampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_UPSAMPLE_METADATA);
     params = execution.params(params)
     const cargs = v_1d_upsample_cargs(params, execution)
     const ret = v_1d_upsample_outputs(params, execution)
@@ -181,10 +183,8 @@ function v_1d_upsample(
     linear_interpolation: boolean = false,
     runner: Runner | null = null,
 ): V1dUpsampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_UPSAMPLE_METADATA);
     const params = v_1d_upsample_params(upsample_factor, input_file, linear_interpolation)
-    return v_1d_upsample_execute(params, execution);
+    return v_1d_upsample_execute(params, runner);
 }
 
 
@@ -193,8 +193,6 @@ export {
       V1dUpsampleParameters,
       V_1D_UPSAMPLE_METADATA,
       v_1d_upsample,
-      v_1d_upsample_cargs,
       v_1d_upsample_execute,
-      v_1d_upsample_outputs,
       v_1d_upsample_params,
 };

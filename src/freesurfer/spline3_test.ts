@@ -148,14 +148,16 @@ function spline3_test_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Spline3TestOutputs`).
  */
 function spline3_test_execute(
     params: Spline3TestParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Spline3TestOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SPLINE3_TEST_METADATA);
     params = execution.params(params)
     const cargs = spline3_test_cargs(params, execution)
     const ret = spline3_test_outputs(params, execution)
@@ -184,10 +186,8 @@ function spline3_test(
     x_new_values: Array<number>,
     runner: Runner | null = null,
 ): Spline3TestOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SPLINE3_TEST_METADATA);
     const params = spline3_test_params(x_values, y_values, x_new_values)
-    return spline3_test_execute(params, execution);
+    return spline3_test_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       Spline3TestOutputs,
       Spline3TestParameters,
       spline3_test,
-      spline3_test_cargs,
       spline3_test_execute,
-      spline3_test_outputs,
       spline3_test_params,
 };

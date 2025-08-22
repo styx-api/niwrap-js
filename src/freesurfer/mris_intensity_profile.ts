@@ -263,14 +263,16 @@ function mris_intensity_profile_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisIntensityProfileOutputs`).
  */
 function mris_intensity_profile_execute(
     params: MrisIntensityProfileParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisIntensityProfileOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_INTENSITY_PROFILE_METADATA);
     params = execution.params(params)
     const cargs = mris_intensity_profile_cargs(params, execution)
     const ret = mris_intensity_profile_outputs(params, execution)
@@ -321,10 +323,8 @@ function mris_intensity_profile(
     invert_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisIntensityProfileOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_INTENSITY_PROFILE_METADATA);
     const params = mris_intensity_profile_params(subject_name, hemi, volume, output_file, write_surf, sdir, white, pial, normalize_flag, mean, xform, src, dst, invert_flag)
-    return mris_intensity_profile_execute(params, execution);
+    return mris_intensity_profile_execute(params, runner);
 }
 
 
@@ -333,8 +333,6 @@ export {
       MrisIntensityProfileOutputs,
       MrisIntensityProfileParameters,
       mris_intensity_profile,
-      mris_intensity_profile_cargs,
       mris_intensity_profile_execute,
-      mris_intensity_profile_outputs,
       mris_intensity_profile_params,
 };

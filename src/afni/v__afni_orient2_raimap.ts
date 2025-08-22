@@ -127,14 +127,16 @@ function v__afni_orient2_raimap_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAfniOrient2RaimapOutputs`).
  */
 function v__afni_orient2_raimap_execute(
     params: VAfniOrient2RaimapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAfniOrient2RaimapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__AFNI_ORIENT2_RAIMAP_METADATA);
     params = execution.params(params)
     const cargs = v__afni_orient2_raimap_cargs(params, execution)
     const ret = v__afni_orient2_raimap_outputs(params, execution)
@@ -159,10 +161,8 @@ function v__afni_orient2_raimap(
     orientation_code: string,
     runner: Runner | null = null,
 ): VAfniOrient2RaimapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__AFNI_ORIENT2_RAIMAP_METADATA);
     const params = v__afni_orient2_raimap_params(orientation_code)
-    return v__afni_orient2_raimap_execute(params, execution);
+    return v__afni_orient2_raimap_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       VAfniOrient2RaimapParameters,
       V__AFNI_ORIENT2_RAIMAP_METADATA,
       v__afni_orient2_raimap,
-      v__afni_orient2_raimap_cargs,
       v__afni_orient2_raimap_execute,
-      v__afni_orient2_raimap_outputs,
       v__afni_orient2_raimap_params,
 };

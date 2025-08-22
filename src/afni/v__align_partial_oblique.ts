@@ -218,14 +218,16 @@ function v__align_partial_oblique_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAlignPartialObliqueOutputs`).
  */
 function v__align_partial_oblique_execute(
     params: VAlignPartialObliqueParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAlignPartialObliqueOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__ALIGN_PARTIAL_OBLIQUE_METADATA);
     params = execution.params(params)
     const cargs = v__align_partial_oblique_cargs(params, execution)
     const ret = v__align_partial_oblique_outputs(params, execution)
@@ -266,10 +268,8 @@ function v__align_partial_oblique(
     dz: number | null = null,
     runner: Runner | null = null,
 ): VAlignPartialObliqueOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__ALIGN_PARTIAL_OBLIQUE_METADATA);
     const params = v__align_partial_oblique_params(base, input, suffix, keep_tmp, clean, dxyz, dx, dy, dz)
-    return v__align_partial_oblique_execute(params, execution);
+    return v__align_partial_oblique_execute(params, runner);
 }
 
 
@@ -278,8 +278,6 @@ export {
       VAlignPartialObliqueParameters,
       V__ALIGN_PARTIAL_OBLIQUE_METADATA,
       v__align_partial_oblique,
-      v__align_partial_oblique_cargs,
       v__align_partial_oblique_execute,
-      v__align_partial_oblique_outputs,
       v__align_partial_oblique_params,
 };

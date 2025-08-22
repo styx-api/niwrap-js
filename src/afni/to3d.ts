@@ -536,14 +536,16 @@ function to3d_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `To3dOutputs`).
  */
 function to3d_execute(
     params: To3dParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): To3dOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TO3D_METADATA);
     params = execution.params(params)
     const cargs = to3d_cargs(params, execution)
     const ret = to3d_outputs(params, execution)
@@ -646,10 +648,8 @@ function to3d(
     quit_on_err_flag: boolean = false,
     runner: Runner | null = null,
 ): To3dOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TO3D_METADATA);
     const params = to3d_params(input_files, type_, statpar, prefix, session, geomparent, anatparent, nosave_flag, nowritebrik_flag, view, time_zt, time_tz, tr_units, torg, x_fov, y_fov, z_fov, x_slab, y_slab, z_slab, zorigin, data_type, global_scaling_factor, nofloatscan_flag, in1_flag, orient, skip_outliers_flag, text_outliers_flag, save_outliers, assume_dicom_mosaic_flag, oblique_origin_flag, reverse_list_flag, use_last_elem_flag, use_old_mosaic_code_flag, ushort2float_flag, verbose_flag, gamma, ncolors, xtwarns_flag, quit_on_err_flag)
-    return to3d_execute(params, execution);
+    return to3d_execute(params, runner);
 }
 
 
@@ -658,8 +658,6 @@ export {
       To3dOutputs,
       To3dParameters,
       to3d,
-      to3d_cargs,
       to3d_execute,
-      to3d_outputs,
       to3d_params,
 };

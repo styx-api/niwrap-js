@@ -266,14 +266,16 @@ function sh2power_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Sh2powerOutputs`).
  */
 function sh2power_execute(
     params: Sh2powerParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Sh2powerOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SH2POWER_METADATA);
     params = execution.params(params)
     const cargs = sh2power_cargs(params, execution)
     const ret = sh2power_outputs(params, execution)
@@ -327,10 +329,8 @@ function sh2power(
     version: boolean = false,
     runner: Runner | null = null,
 ): Sh2powerOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SH2POWER_METADATA);
     const params = sh2power_params(sh, power, spectrum, info, quiet, debug, force, nthreads, config, help, version)
-    return sh2power_execute(params, execution);
+    return sh2power_execute(params, runner);
 }
 
 
@@ -340,10 +340,7 @@ export {
       Sh2powerOutputs,
       Sh2powerParameters,
       sh2power,
-      sh2power_cargs,
-      sh2power_config_cargs,
       sh2power_config_params,
       sh2power_execute,
-      sh2power_outputs,
       sh2power_params,
 };

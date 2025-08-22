@@ -269,14 +269,16 @@ function cifti_rois_from_extrema_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiRoisFromExtremaOutputs`).
  */
 function cifti_rois_from_extrema_execute(
     params: CiftiRoisFromExtremaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiRoisFromExtremaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_ROIS_FROM_EXTREMA_METADATA);
     params = execution.params(params)
     const cargs = cifti_rois_from_extrema_cargs(params, execution)
     const ret = cifti_rois_from_extrema_outputs(params, execution)
@@ -323,10 +325,8 @@ function cifti_rois_from_extrema(
     opt_merged_volume: boolean = false,
     runner: Runner | null = null,
 ): CiftiRoisFromExtremaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_ROIS_FROM_EXTREMA_METADATA);
     const params = cifti_rois_from_extrema_params(cifti, surf_limit, vol_limit, direction, cifti_out, opt_left_surface_surface, opt_right_surface_surface, opt_cerebellum_surface_surface, gaussian, opt_overlap_logic_method, opt_merged_volume)
-    return cifti_rois_from_extrema_execute(params, execution);
+    return cifti_rois_from_extrema_execute(params, runner);
 }
 
 
@@ -336,10 +336,7 @@ export {
       CiftiRoisFromExtremaOutputs,
       CiftiRoisFromExtremaParameters,
       cifti_rois_from_extrema,
-      cifti_rois_from_extrema_cargs,
       cifti_rois_from_extrema_execute,
-      cifti_rois_from_extrema_gaussian_cargs,
       cifti_rois_from_extrema_gaussian_params,
-      cifti_rois_from_extrema_outputs,
       cifti_rois_from_extrema_params,
 };

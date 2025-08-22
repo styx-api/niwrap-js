@@ -190,14 +190,16 @@ function surface_geodesic_distance_all_to_all_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicDistanceAllToAllOutputs`).
  */
 function surface_geodesic_distance_all_to_all_execute(
     params: SurfaceGeodesicDistanceAllToAllParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceGeodesicDistanceAllToAllOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_GEODESIC_DISTANCE_ALL_TO_ALL_METADATA);
     params = execution.params(params)
     const cargs = surface_geodesic_distance_all_to_all_cargs(params, execution)
     const ret = surface_geodesic_distance_all_to_all_outputs(params, execution)
@@ -240,10 +242,8 @@ function surface_geodesic_distance_all_to_all(
     opt_naive: boolean = false,
     runner: Runner | null = null,
 ): SurfaceGeodesicDistanceAllToAllOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_GEODESIC_DISTANCE_ALL_TO_ALL_METADATA);
     const params = surface_geodesic_distance_all_to_all_params(surface, cifti_out, opt_roi_roi_metric, opt_limit_limit_mm, opt_corrected_areas_area_metric, opt_naive)
-    return surface_geodesic_distance_all_to_all_execute(params, execution);
+    return surface_geodesic_distance_all_to_all_execute(params, runner);
 }
 
 
@@ -252,8 +252,6 @@ export {
       SurfaceGeodesicDistanceAllToAllOutputs,
       SurfaceGeodesicDistanceAllToAllParameters,
       surface_geodesic_distance_all_to_all,
-      surface_geodesic_distance_all_to_all_cargs,
       surface_geodesic_distance_all_to_all_execute,
-      surface_geodesic_distance_all_to_all_outputs,
       surface_geodesic_distance_all_to_all_params,
 };

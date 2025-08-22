@@ -392,14 +392,16 @@ function mri_surf2volseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSurf2volsegOutputs`).
  */
 function mri_surf2volseg_execute(
     params: MriSurf2volsegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSurf2volsegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SURF2VOLSEG_METADATA);
     params = execution.params(params)
     const cargs = mri_surf2volseg_cargs(params, execution)
     const ret = mri_surf2volseg_outputs(params, execution)
@@ -472,10 +474,8 @@ function mri_surf2volseg(
     threads_number: number | null = null,
     runner: Runner | null = null,
 ): MriSurf2volsegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SURF2VOLSEG_METADATA);
     const params = mri_surf2volseg_params(input_segmentation, output_segmentation, source_segmentation, lh_white_surf, lh_pial_surf, rh_white_surf, rh_pial_surf, lh_cortex_mask, rh_cortex_mask, fix_presurf_ribbon, label_cortex, label_wm, label_wm_unknown, lh_annotation, rh_annotation, wmparc_dmax, rip_unknown, hypo_as_wm, hashres, nhops, help_flag, version_flag, crs_test, ctab_file, threads_number)
-    return mri_surf2volseg_execute(params, execution);
+    return mri_surf2volseg_execute(params, runner);
 }
 
 
@@ -484,8 +484,6 @@ export {
       MriSurf2volsegOutputs,
       MriSurf2volsegParameters,
       mri_surf2volseg,
-      mri_surf2volseg_cargs,
       mri_surf2volseg_execute,
-      mri_surf2volseg_outputs,
       mri_surf2volseg_params,
 };

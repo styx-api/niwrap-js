@@ -153,14 +153,16 @@ function nicat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `NicatOutputs`).
  */
 function nicat_execute(
     params: NicatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): NicatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(NICAT_METADATA);
     params = execution.params(params)
     const cargs = nicat_cargs(params, execution)
     const ret = nicat_outputs(params, execution)
@@ -191,10 +193,8 @@ function nicat(
     read_only: boolean = false,
     runner: Runner | null = null,
 ): NicatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(NICAT_METADATA);
     const params = nicat_params(stream_spec, reopen, copy_stream, read_only)
-    return nicat_execute(params, execution);
+    return nicat_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       NicatOutputs,
       NicatParameters,
       nicat,
-      nicat_cargs,
       nicat_execute,
-      nicat_outputs,
       nicat_params,
 };

@@ -145,14 +145,16 @@ function v_3d_despike_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dDespikeOutputs`).
  */
 function v_3d_despike_execute(
     params: V3dDespikeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dDespikeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_DESPIKE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_despike_cargs(params, execution)
     const ret = v_3d_despike_outputs(params, execution)
@@ -179,10 +181,8 @@ function v_3d_despike(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dDespikeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_DESPIKE_METADATA);
     const params = v_3d_despike_params(in_file, prefix)
-    return v_3d_despike_execute(params, execution);
+    return v_3d_despike_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       V3dDespikeParameters,
       V_3D_DESPIKE_METADATA,
       v_3d_despike,
-      v_3d_despike_cargs,
       v_3d_despike_execute,
-      v_3d_despike_outputs,
       v_3d_despike_params,
 };

@@ -157,14 +157,16 @@ function mri_probedicom_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriProbedicomOutputs`).
  */
 function mri_probedicom_execute(
     params: MriProbedicomParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriProbedicomOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_PROBEDICOM_METADATA);
     params = execution.params(params)
     const cargs = mri_probedicom_cargs(params, execution)
     const ret = mri_probedicom_outputs(params, execution)
@@ -193,10 +195,8 @@ function mri_probedicom(
     option2: string | null = null,
     runner: Runner | null = null,
 ): MriProbedicomOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_PROBEDICOM_METADATA);
     const params = mri_probedicom_params(dicom_file, option1, option2)
-    return mri_probedicom_execute(params, execution);
+    return mri_probedicom_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       MriProbedicomOutputs,
       MriProbedicomParameters,
       mri_probedicom,
-      mri_probedicom_cargs,
       mri_probedicom_execute,
-      mri_probedicom_outputs,
       mri_probedicom_params,
 };

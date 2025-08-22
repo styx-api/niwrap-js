@@ -178,14 +178,16 @@ function mris_compute_overlap_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisComputeOverlapOutputs`).
  */
 function mris_compute_overlap_execute(
     params: MrisComputeOverlapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisComputeOverlapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_COMPUTE_OVERLAP_METADATA);
     params = execution.params(params)
     const cargs = mris_compute_overlap_cargs(params, execution)
     const ret = mris_compute_overlap_outputs(params, execution)
@@ -224,10 +226,8 @@ function mris_compute_overlap(
     brain_volume: InputPathType | null = null,
     runner: Runner | null = null,
 ): MrisComputeOverlapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_COMPUTE_OVERLAP_METADATA);
     const params = mris_compute_overlap_params(subject, hemi, surface, annotation, labels, percentage, log_file, brain_volume)
-    return mris_compute_overlap_execute(params, execution);
+    return mris_compute_overlap_execute(params, runner);
 }
 
 
@@ -236,8 +236,6 @@ export {
       MrisComputeOverlapOutputs,
       MrisComputeOverlapParameters,
       mris_compute_overlap,
-      mris_compute_overlap_cargs,
       mris_compute_overlap_execute,
-      mris_compute_overlap_outputs,
       mris_compute_overlap_params,
 };

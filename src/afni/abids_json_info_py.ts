@@ -181,14 +181,16 @@ function abids_json_info_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AbidsJsonInfoPyOutputs`).
  */
 function abids_json_info_py_execute(
     params: AbidsJsonInfoPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AbidsJsonInfoPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ABIDS_JSON_INFO_PY_METADATA);
     params = execution.params(params)
     const cargs = abids_json_info_py_cargs(params, execution)
     const ret = abids_json_info_py_outputs(params, execution)
@@ -227,10 +229,8 @@ function abids_json_info_py(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): AbidsJsonInfoPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ABIDS_JSON_INFO_PY_METADATA);
     const params = abids_json_info_py_params(json_files, tr_flag, te_flag, te_sec_flag, match_nii_flag, field_list, list_fields_flag, help_flag)
-    return abids_json_info_py_execute(params, execution);
+    return abids_json_info_py_execute(params, runner);
 }
 
 
@@ -239,8 +239,6 @@ export {
       AbidsJsonInfoPyOutputs,
       AbidsJsonInfoPyParameters,
       abids_json_info_py,
-      abids_json_info_py_cargs,
       abids_json_info_py_execute,
-      abids_json_info_py_outputs,
       abids_json_info_py_params,
 };

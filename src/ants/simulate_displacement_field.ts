@@ -287,14 +287,16 @@ function simulate_displacement_field_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SimulateDisplacementFieldOutputs`).
  */
 function simulate_displacement_field_execute(
     params: SimulateDisplacementFieldParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SimulateDisplacementFieldOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SIMULATE_DISPLACEMENT_FIELD_METADATA);
     params = execution.params(params)
     const cargs = simulate_displacement_field_cargs(params, execution)
     const ret = simulate_displacement_field_outputs(params, execution)
@@ -333,10 +335,8 @@ function simulate_displacement_field(
     displacement_specific_options: SimulateDisplacementFieldBsplineOptionsParameters | SimulateDisplacementFieldExponentialOptionsParameters | null = null,
     runner: Runner | null = null,
 ): SimulateDisplacementFieldOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SIMULATE_DISPLACEMENT_FIELD_METADATA);
     const params = simulate_displacement_field_params(image_dimension, displacement_field_type, domain_image, output_field, number_of_random_points, standard_deviation_displacement_field, enforce_stationary_boundary, displacement_specific_options)
-    return simulate_displacement_field_execute(params, execution);
+    return simulate_displacement_field_execute(params, runner);
 }
 
 
@@ -347,12 +347,8 @@ export {
       SimulateDisplacementFieldOutputs,
       SimulateDisplacementFieldParameters,
       simulate_displacement_field,
-      simulate_displacement_field_bspline_options_cargs,
       simulate_displacement_field_bspline_options_params,
-      simulate_displacement_field_cargs,
       simulate_displacement_field_execute,
-      simulate_displacement_field_exponential_options_cargs,
       simulate_displacement_field_exponential_options_params,
-      simulate_displacement_field_outputs,
       simulate_displacement_field_params,
 };

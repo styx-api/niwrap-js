@@ -136,14 +136,16 @@ function ants_transform_info_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsTransformInfoOutputs`).
  */
 function ants_transform_info_execute(
     params: AntsTransformInfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsTransformInfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_TRANSFORM_INFO_METADATA);
     params = execution.params(params)
     const cargs = ants_transform_info_cargs(params, execution)
     const ret = ants_transform_info_outputs(params, execution)
@@ -168,10 +170,8 @@ function ants_transform_info(
     transform_file: InputPathType,
     runner: Runner | null = null,
 ): AntsTransformInfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_TRANSFORM_INFO_METADATA);
     const params = ants_transform_info_params(transform_file)
-    return ants_transform_info_execute(params, execution);
+    return ants_transform_info_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       AntsTransformInfoOutputs,
       AntsTransformInfoParameters,
       ants_transform_info,
-      ants_transform_info_cargs,
       ants_transform_info_execute,
-      ants_transform_info_outputs,
       ants_transform_info_params,
 };

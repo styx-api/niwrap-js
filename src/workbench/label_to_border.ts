@@ -170,14 +170,16 @@ function label_to_border_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelToBorderOutputs`).
  */
 function label_to_border_execute(
     params: LabelToBorderParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelToBorderOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_TO_BORDER_METADATA);
     params = execution.params(params)
     const cargs = label_to_border_cargs(params, execution)
     const ret = label_to_border_outputs(params, execution)
@@ -212,10 +214,8 @@ function label_to_border(
     opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): LabelToBorderOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_TO_BORDER_METADATA);
     const params = label_to_border_params(surface, label_in, border_out, opt_placement_fraction, opt_column_column)
-    return label_to_border_execute(params, execution);
+    return label_to_border_execute(params, runner);
 }
 
 
@@ -224,8 +224,6 @@ export {
       LabelToBorderOutputs,
       LabelToBorderParameters,
       label_to_border,
-      label_to_border_cargs,
       label_to_border_execute,
-      label_to_border_outputs,
       label_to_border_params,
 };

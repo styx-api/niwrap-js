@@ -131,14 +131,16 @@ function mri_rf_long_label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriRfLongLabelOutputs`).
  */
 function mri_rf_long_label_execute(
     params: MriRfLongLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriRfLongLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_RF_LONG_LABEL_METADATA);
     params = execution.params(params)
     const cargs = mri_rf_long_label_cargs(params, execution)
     const ret = mri_rf_long_label_outputs(params, execution)
@@ -163,10 +165,8 @@ function mri_rf_long_label(
     help_flag: string | null = null,
     runner: Runner | null = null,
 ): MriRfLongLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_RF_LONG_LABEL_METADATA);
     const params = mri_rf_long_label_params(help_flag)
-    return mri_rf_long_label_execute(params, execution);
+    return mri_rf_long_label_execute(params, runner);
 }
 
 
@@ -175,8 +175,6 @@ export {
       MriRfLongLabelOutputs,
       MriRfLongLabelParameters,
       mri_rf_long_label,
-      mri_rf_long_label_cargs,
       mri_rf_long_label_execute,
-      mri_rf_long_label_outputs,
       mri_rf_long_label_params,
 };

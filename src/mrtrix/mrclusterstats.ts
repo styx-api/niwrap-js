@@ -525,14 +525,16 @@ function mrclusterstats_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrclusterstatsOutputs`).
  */
 function mrclusterstats_execute(
     params: MrclusterstatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrclusterstatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRCLUSTERSTATS_METADATA);
     params = execution.params(params)
     const cargs = mrclusterstats_cargs(params, execution)
     const ret = mrclusterstats_outputs(params, execution)
@@ -631,10 +633,8 @@ function mrclusterstats(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrclusterstatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRCLUSTERSTATS_METADATA);
     const params = mrclusterstats_params(input, design, contrast, mask, output, notest, errors, exchange_within, exchange_whole, strong, nshuffles, permutations, nonstationarity, skew_nonstationarity, nshuffles_nonstationarity, permutations_nonstationarity, tfce_dh, tfce_e, tfce_h, variance, ftests, fonly, column, threshold, connectivity, info, quiet, debug, force, nthreads, config, help, version)
-    return mrclusterstats_execute(params, execution);
+    return mrclusterstats_execute(params, runner);
 }
 
 
@@ -645,12 +645,8 @@ export {
       MrclusterstatsOutputs,
       MrclusterstatsParameters,
       mrclusterstats,
-      mrclusterstats_cargs,
-      mrclusterstats_column_cargs,
       mrclusterstats_column_params,
-      mrclusterstats_config_cargs,
       mrclusterstats_config_params,
       mrclusterstats_execute,
-      mrclusterstats_outputs,
       mrclusterstats_params,
 };

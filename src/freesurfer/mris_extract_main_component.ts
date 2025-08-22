@@ -138,14 +138,16 @@ function mris_extract_main_component_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisExtractMainComponentOutputs`).
  */
 function mris_extract_main_component_execute(
     params: MrisExtractMainComponentParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisExtractMainComponentOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_EXTRACT_MAIN_COMPONENT_METADATA);
     params = execution.params(params)
     const cargs = mris_extract_main_component_cargs(params, execution)
     const ret = mris_extract_main_component_outputs(params, execution)
@@ -172,10 +174,8 @@ function mris_extract_main_component(
     output_surface: string,
     runner: Runner | null = null,
 ): MrisExtractMainComponentOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_EXTRACT_MAIN_COMPONENT_METADATA);
     const params = mris_extract_main_component_params(input_surface, output_surface)
-    return mris_extract_main_component_execute(params, execution);
+    return mris_extract_main_component_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MrisExtractMainComponentOutputs,
       MrisExtractMainComponentParameters,
       mris_extract_main_component,
-      mris_extract_main_component_cargs,
       mris_extract_main_component_execute,
-      mris_extract_main_component_outputs,
       mris_extract_main_component_params,
 };

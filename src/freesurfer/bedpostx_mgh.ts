@@ -206,14 +206,16 @@ function bedpostx_mgh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BedpostxMghOutputs`).
  */
 function bedpostx_mgh_execute(
     params: BedpostxMghParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BedpostxMghOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BEDPOSTX_MGH_METADATA);
     params = execution.params(params)
     const cargs = bedpostx_mgh_cargs(params, execution)
     const ret = bedpostx_mgh_outputs(params, execution)
@@ -252,10 +254,8 @@ function bedpostx_mgh(
     gradient_nonlin: boolean = false,
     runner: Runner | null = null,
 ): BedpostxMghOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BEDPOSTX_MGH_METADATA);
     const params = bedpostx_mgh_params(subject_directory, fibres, ard_weight, burnin, jumps, sample_every, deconv_model, gradient_nonlin)
-    return bedpostx_mgh_execute(params, execution);
+    return bedpostx_mgh_execute(params, runner);
 }
 
 
@@ -264,8 +264,6 @@ export {
       BedpostxMghOutputs,
       BedpostxMghParameters,
       bedpostx_mgh,
-      bedpostx_mgh_cargs,
       bedpostx_mgh_execute,
-      bedpostx_mgh_outputs,
       bedpostx_mgh_params,
 };

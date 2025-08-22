@@ -448,14 +448,16 @@ function run_samseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RunSamsegOutputs`).
  */
 function run_samseg_execute(
     params: RunSamsegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RunSamsegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RUN_SAMSEG_METADATA);
     params = execution.params(params)
     const cargs = run_samseg_cargs(params, execution)
     const ret = run_samseg_outputs(params, execution)
@@ -542,10 +544,8 @@ function run_samseg(
     movie: boolean = false,
     runner: Runner | null = null,
 ): RunSamsegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RUN_SAMSEG_METADATA);
     const params = run_samseg_params(output_dir, input_files, input_mode, threads, reg_only, reg_file, init_reg_file, atlas_dir, gmm_file, ignore_unknown, options_file, pallidum_separate, mesh_stiffness, smooth_wm_cortex_priors, bias_field_smoothing_kernel, lesion, threshold, samples, burnin, lesion_pseudo_samples, lesion_rho, lesion_mask_structure, lesion_mask_pattern, random_seed, dissection_photo, history, save_posteriors, save_probabilities, showfigs, save_mesh, save_warp, movie)
-    return run_samseg_execute(params, execution);
+    return run_samseg_execute(params, runner);
 }
 
 
@@ -554,8 +554,6 @@ export {
       RunSamsegOutputs,
       RunSamsegParameters,
       run_samseg,
-      run_samseg_cargs,
       run_samseg_execute,
-      run_samseg_outputs,
       run_samseg_params,
 };

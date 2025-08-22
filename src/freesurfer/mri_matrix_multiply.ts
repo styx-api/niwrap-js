@@ -189,14 +189,16 @@ function mri_matrix_multiply_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMatrixMultiplyOutputs`).
  */
 function mri_matrix_multiply_execute(
     params: MriMatrixMultiplyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMatrixMultiplyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MATRIX_MULTIPLY_METADATA);
     params = execution.params(params)
     const cargs = mri_matrix_multiply_cargs(params, execution)
     const ret = mri_matrix_multiply_outputs(params, execution)
@@ -233,10 +235,8 @@ function mri_matrix_multiply(
     subject_name: string | null = null,
     runner: Runner | null = null,
 ): MriMatrixMultiplyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MATRIX_MULTIPLY_METADATA);
     const params = mri_matrix_multiply_params(input_matrices, output_matrix, inverted_input_matrices, verbose, fsl, binarize, subject_name)
-    return mri_matrix_multiply_execute(params, execution);
+    return mri_matrix_multiply_execute(params, runner);
 }
 
 
@@ -245,8 +245,6 @@ export {
       MriMatrixMultiplyOutputs,
       MriMatrixMultiplyParameters,
       mri_matrix_multiply,
-      mri_matrix_multiply_cargs,
       mri_matrix_multiply_execute,
-      mri_matrix_multiply_outputs,
       mri_matrix_multiply_params,
 };

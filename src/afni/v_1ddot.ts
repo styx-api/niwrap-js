@@ -187,14 +187,16 @@ function v_1ddot_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1ddotOutputs`).
  */
 function v_1ddot_execute(
     params: V1ddotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1ddotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1DDOT_METADATA);
     params = execution.params(params)
     const cargs = v_1ddot_cargs(params, execution)
     const ret = v_1ddot_outputs(params, execution)
@@ -233,10 +235,8 @@ function v_1ddot(
     okzero_flag: boolean = false,
     runner: Runner | null = null,
 ): V1ddotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1DDOT_METADATA);
     const params = v_1ddot_params(input_files, one_flag, dem_flag, cov_flag, inn_flag, rank_flag, terse_flag, okzero_flag)
-    return v_1ddot_execute(params, execution);
+    return v_1ddot_execute(params, runner);
 }
 
 
@@ -245,8 +245,6 @@ export {
       V1ddotParameters,
       V_1DDOT_METADATA,
       v_1ddot,
-      v_1ddot_cargs,
       v_1ddot_execute,
-      v_1ddot_outputs,
       v_1ddot_params,
 };

@@ -132,14 +132,16 @@ function inflate_subject3_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `InflateSubject3Outputs`).
  */
 function inflate_subject3_execute(
     params: InflateSubject3Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): InflateSubject3Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(INFLATE_SUBJECT3_METADATA);
     params = execution.params(params)
     const cargs = inflate_subject3_cargs(params, execution)
     const ret = inflate_subject3_outputs(params, execution)
@@ -166,10 +168,8 @@ function inflate_subject3(
     script_name: string,
     runner: Runner | null = null,
 ): InflateSubject3Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(INFLATE_SUBJECT3_METADATA);
     const params = inflate_subject3_params(subjects_dir, script_name)
-    return inflate_subject3_execute(params, execution);
+    return inflate_subject3_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       InflateSubject3Outputs,
       InflateSubject3Parameters,
       inflate_subject3,
-      inflate_subject3_cargs,
       inflate_subject3_execute,
-      inflate_subject3_outputs,
       inflate_subject3_params,
 };

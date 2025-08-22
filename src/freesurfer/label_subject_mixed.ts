@@ -156,14 +156,16 @@ function label_subject_mixed_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelSubjectMixedOutputs`).
  */
 function label_subject_mixed_execute(
     params: LabelSubjectMixedParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelSubjectMixedOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_SUBJECT_MIXED_METADATA);
     params = execution.params(params)
     const cargs = label_subject_mixed_cargs(params, execution)
     const ret = label_subject_mixed_outputs(params, execution)
@@ -196,10 +198,8 @@ function label_subject_mixed(
     aseg_output: string,
     runner: Runner | null = null,
 ): LabelSubjectMixedOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_SUBJECT_MIXED_METADATA);
     const params = label_subject_mixed_params(brain_mask, norm_volume, transform, gca_file, aseg_output)
-    return label_subject_mixed_execute(params, execution);
+    return label_subject_mixed_execute(params, runner);
 }
 
 
@@ -208,8 +208,6 @@ export {
       LabelSubjectMixedOutputs,
       LabelSubjectMixedParameters,
       label_subject_mixed,
-      label_subject_mixed_cargs,
       label_subject_mixed_execute,
-      label_subject_mixed_outputs,
       label_subject_mixed_params,
 };

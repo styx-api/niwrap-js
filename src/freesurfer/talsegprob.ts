@@ -312,14 +312,16 @@ function talsegprob_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TalsegprobOutputs`).
  */
 function talsegprob_execute(
     params: TalsegprobParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TalsegprobOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TALSEGPROB_METADATA);
     params = execution.params(params)
     const cargs = talsegprob_cargs(params, execution)
     const ret = talsegprob_outputs(params, execution)
@@ -376,10 +378,8 @@ function talsegprob(
     echo_flag: boolean = false,
     runner: Runner | null = null,
 ): TalsegprobOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TALSEGPROB_METADATA);
     const params = talsegprob_params(subjects_list, fsgd_file, segmentation_number, second_segmentation_number, hippo_flag, left_hippo_flag, right_hippo_flag, segmentation_file, probability_output, vote_output, concat_output, xform_file, subjects_dir, tmpdir, nocleanup_flag, version_flag, echo_flag)
-    return talsegprob_execute(params, execution);
+    return talsegprob_execute(params, runner);
 }
 
 
@@ -388,8 +388,6 @@ export {
       TalsegprobOutputs,
       TalsegprobParameters,
       talsegprob,
-      talsegprob_cargs,
       talsegprob_execute,
-      talsegprob_outputs,
       talsegprob_params,
 };

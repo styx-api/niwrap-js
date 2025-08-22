@@ -138,14 +138,16 @@ function fsl_fix_text_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslFixTextOutputs`).
  */
 function fsl_fix_text_execute(
     params: FslFixTextParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslFixTextOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_FIX_TEXT_METADATA);
     params = execution.params(params)
     const cargs = fsl_fix_text_cargs(params, execution)
     const ret = fsl_fix_text_outputs(params, execution)
@@ -172,10 +174,8 @@ function fsl_fix_text(
     output_text_file: string,
     runner: Runner | null = null,
 ): FslFixTextOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_FIX_TEXT_METADATA);
     const params = fsl_fix_text_params(input_text_file, output_text_file)
-    return fsl_fix_text_execute(params, execution);
+    return fsl_fix_text_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       FslFixTextOutputs,
       FslFixTextParameters,
       fsl_fix_text,
-      fsl_fix_text_cargs,
       fsl_fix_text_execute,
-      fsl_fix_text_outputs,
       fsl_fix_text_params,
 };

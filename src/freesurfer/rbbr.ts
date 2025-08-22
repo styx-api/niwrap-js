@@ -348,14 +348,16 @@ function rbbr_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RbbrOutputs`).
  */
 function rbbr_execute(
     params: RbbrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RbbrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RBBR_METADATA);
     params = execution.params(params)
     const cargs = rbbr_cargs(params, execution)
     const ret = rbbr_outputs(params, execution)
@@ -422,10 +424,8 @@ function rbbr(
     no_merge: boolean = false,
     runner: Runner | null = null,
 ): RbbrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RBBR_METADATA);
     const params = rbbr_params(moving_image, subject, t1_contrast, t2_contrast, init_reg, init_spm, init_fsl, init_header, cost_threshold, gtm_synthesize, tt_reduce, iterations, output_reg, output_lta, left_hemi, right_hemi, gm_proj_frac, gm_proj_abs, wm_proj_abs, frame_no, output_template, no_merge)
-    return rbbr_execute(params, execution);
+    return rbbr_execute(params, runner);
 }
 
 
@@ -434,8 +434,6 @@ export {
       RbbrOutputs,
       RbbrParameters,
       rbbr,
-      rbbr_cargs,
       rbbr_execute,
-      rbbr_outputs,
       rbbr_params,
 };

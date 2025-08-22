@@ -697,14 +697,16 @@ function mri_coreg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCoregOutputs`).
  */
 function mri_coreg_execute(
     params: MriCoregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCoregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_COREG_METADATA);
     params = execution.params(params)
     const cargs = mri_coreg_cargs(params, execution)
     const ret = mri_coreg_outputs(params, execution)
@@ -833,10 +835,8 @@ function mri_coreg(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriCoregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_COREG_METADATA);
     const params = mri_coreg_params(movvol, refvol, reg, subject, dof, zscale, xztrans_yrot, xytrans_zrot, xytrans_zrot_xyscale_xyshear, ref_maskvol, no_ref_mask, mov_maskvol, threads, subjects_dir, regdat, no_coord_dither, no_intensity_dither, spatial_scales, trans, rot, scale, shear, init_reg, out_param_file, out_cost_file, no_cras0, centroid, ras2ras, nitersmax, ftol, linmintol, seed, sat, conf_ref, no_bf, bf_lim, bf_nsamp, no_smooth, ref_fwhm, mov_oob, init_reg_save, init_reg_save_only, mat2par, mat2rot, par2mat, lrrev, landmarks, rms, movout, mov_idither, debug, checkopts, version)
-    return mri_coreg_execute(params, execution);
+    return mri_coreg_execute(params, runner);
 }
 
 
@@ -845,8 +845,6 @@ export {
       MriCoregOutputs,
       MriCoregParameters,
       mri_coreg,
-      mri_coreg_cargs,
       mri_coreg_execute,
-      mri_coreg_outputs,
       mri_coreg_params,
 };

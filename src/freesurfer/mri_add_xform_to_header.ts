@@ -157,14 +157,16 @@ function mri_add_xform_to_header_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriAddXformToHeaderOutputs`).
  */
 function mri_add_xform_to_header_execute(
     params: MriAddXformToHeaderParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriAddXformToHeaderOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_ADD_XFORM_TO_HEADER_METADATA);
     params = execution.params(params)
     const cargs = mri_add_xform_to_header_cargs(params, execution)
     const ret = mri_add_xform_to_header_outputs(params, execution)
@@ -197,10 +199,8 @@ function mri_add_xform_to_header(
     copy_name: boolean = false,
     runner: Runner | null = null,
 ): MriAddXformToHeaderOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_ADD_XFORM_TO_HEADER_METADATA);
     const params = mri_add_xform_to_header_params(xfm_file, input_volume, output_volume, verbose, copy_name)
-    return mri_add_xform_to_header_execute(params, execution);
+    return mri_add_xform_to_header_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       MriAddXformToHeaderOutputs,
       MriAddXformToHeaderParameters,
       mri_add_xform_to_header,
-      mri_add_xform_to_header_cargs,
       mri_add_xform_to_header_execute,
-      mri_add_xform_to_header_outputs,
       mri_add_xform_to_header_params,
 };

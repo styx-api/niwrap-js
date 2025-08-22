@@ -143,14 +143,16 @@ function labels_disjoint_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelsDisjointOutputs`).
  */
 function labels_disjoint_execute(
     params: LabelsDisjointParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelsDisjointOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABELS_DISJOINT_METADATA);
     params = execution.params(params)
     const cargs = labels_disjoint_cargs(params, execution)
     const ret = labels_disjoint_outputs(params, execution)
@@ -179,10 +181,8 @@ function labels_disjoint(
     outputname: string,
     runner: Runner | null = null,
 ): LabelsDisjointOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABELS_DISJOINT_METADATA);
     const params = labels_disjoint_params(label1, label2, outputname)
-    return labels_disjoint_execute(params, execution);
+    return labels_disjoint_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       LabelsDisjointOutputs,
       LabelsDisjointParameters,
       labels_disjoint,
-      labels_disjoint_cargs,
       labels_disjoint_execute,
-      labels_disjoint_outputs,
       labels_disjoint_params,
 };

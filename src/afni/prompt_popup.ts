@@ -190,14 +190,16 @@ function prompt_popup_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PromptPopupOutputs`).
  */
 function prompt_popup_execute(
     params: PromptPopupParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PromptPopupOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PROMPT_POPUP_METADATA);
     params = execution.params(params)
     const cargs = prompt_popup_cargs(params, execution)
     const ret = prompt_popup_outputs(params, execution)
@@ -232,10 +234,8 @@ function prompt_popup(
     timeout_to: number | null = null,
     runner: Runner | null = null,
 ): PromptPopupOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PROMPT_POPUP_METADATA);
     const params = prompt_popup_params(message, message_pause, buttons, buttons_b, timeout, timeout_to)
-    return prompt_popup_execute(params, execution);
+    return prompt_popup_execute(params, runner);
 }
 
 
@@ -244,8 +244,6 @@ export {
       PromptPopupOutputs,
       PromptPopupParameters,
       prompt_popup,
-      prompt_popup_cargs,
       prompt_popup_execute,
-      prompt_popup_outputs,
       prompt_popup_params,
 };

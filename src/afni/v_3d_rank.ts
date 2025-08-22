@@ -169,14 +169,16 @@ function v_3d_rank_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dRankOutputs`).
  */
 function v_3d_rank_execute(
     params: V3dRankParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dRankOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_RANK_METADATA);
     params = execution.params(params)
     const cargs = v_3d_rank_cargs(params, execution)
     const ret = v_3d_rank_outputs(params, execution)
@@ -207,10 +209,8 @@ function v_3d_rank(
     help_info: boolean = false,
     runner: Runner | null = null,
 ): V3dRankOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_RANK_METADATA);
     const params = v_3d_rank_params(input_datasets, output_prefix, version_info, help_info)
-    return v_3d_rank_execute(params, execution);
+    return v_3d_rank_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       V3dRankParameters,
       V_3D_RANK_METADATA,
       v_3d_rank,
-      v_3d_rank_cargs,
       v_3d_rank_execute,
-      v_3d_rank_outputs,
       v_3d_rank_params,
 };

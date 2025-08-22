@@ -127,14 +127,16 @@ function ms_refine_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MsRefineSubjectOutputs`).
  */
 function ms_refine_subject_execute(
     params: MsRefineSubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MsRefineSubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MS_REFINE_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = ms_refine_subject_cargs(params, execution)
     const ret = ms_refine_subject_outputs(params, execution)
@@ -159,10 +161,8 @@ function ms_refine_subject(
     subjects_dir: string,
     runner: Runner | null = null,
 ): MsRefineSubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MS_REFINE_SUBJECT_METADATA);
     const params = ms_refine_subject_params(subjects_dir)
-    return ms_refine_subject_execute(params, execution);
+    return ms_refine_subject_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       MsRefineSubjectOutputs,
       MsRefineSubjectParameters,
       ms_refine_subject,
-      ms_refine_subject_cargs,
       ms_refine_subject_execute,
-      ms_refine_subject_outputs,
       ms_refine_subject_params,
 };

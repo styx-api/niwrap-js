@@ -197,14 +197,16 @@ function mri_voldiff_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriVoldiffOutputs`).
  */
 function mri_voldiff_execute(
     params: MriVoldiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriVoldiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_VOLDIFF_METADATA);
     params = execution.params(params)
     const cargs = mri_voldiff_cargs(params, execution)
     const ret = mri_voldiff_outputs(params, execution)
@@ -245,10 +247,8 @@ function mri_voldiff(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MriVoldiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_VOLDIFF_METADATA);
     const params = mri_voldiff_params(volume1, volume2, vox2ras_thresh, pix_thresh, allow_precision, allow_resolution, allow_vox2ras, debug, checkopts)
-    return mri_voldiff_execute(params, execution);
+    return mri_voldiff_execute(params, runner);
 }
 
 
@@ -257,8 +257,6 @@ export {
       MriVoldiffOutputs,
       MriVoldiffParameters,
       mri_voldiff,
-      mri_voldiff_cargs,
       mri_voldiff_execute,
-      mri_voldiff_outputs,
       mri_voldiff_params,
 };

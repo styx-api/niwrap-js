@@ -301,14 +301,16 @@ function aparcstats2table_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Aparcstats2tableOutputs`).
  */
 function aparcstats2table_execute(
     params: Aparcstats2tableParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Aparcstats2tableOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(APARCSTATS2TABLE_METADATA);
     params = execution.params(params)
     const cargs = aparcstats2table_cargs(params, execution)
     const ret = aparcstats2table_outputs(params, execution)
@@ -367,10 +369,8 @@ function aparcstats2table(
     scale: number | null = 1,
     runner: Runner | null = null,
 ): Aparcstats2tableOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(APARCSTATS2TABLE_METADATA);
     const params = aparcstats2table_params(hemi, tablefile, subjects, subjectsfile, qdec, qdec_long, parcellation, measure, delimiter, skip_missing, parcid_only, common_parcs, parcs_file, report_rois, transpose, debug, etiv, scale)
-    return aparcstats2table_execute(params, execution);
+    return aparcstats2table_execute(params, runner);
 }
 
 
@@ -379,8 +379,6 @@ export {
       Aparcstats2tableOutputs,
       Aparcstats2tableParameters,
       aparcstats2table,
-      aparcstats2table_cargs,
       aparcstats2table_execute,
-      aparcstats2table_outputs,
       aparcstats2table_params,
 };

@@ -142,14 +142,16 @@ function rotcom_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RotcomOutputs`).
  */
 function rotcom_execute(
     params: RotcomParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RotcomOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ROTCOM_METADATA);
     params = execution.params(params)
     const cargs = rotcom_cargs(params, execution)
     const ret = rotcom_outputs(params, execution)
@@ -176,10 +178,8 @@ function rotcom(
     dataset: InputPathType | null = null,
     runner: Runner | null = null,
 ): RotcomOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ROTCOM_METADATA);
     const params = rotcom_params(rotate_ashift, dataset)
-    return rotcom_execute(params, execution);
+    return rotcom_execute(params, runner);
 }
 
 
@@ -188,8 +188,6 @@ export {
       RotcomOutputs,
       RotcomParameters,
       rotcom,
-      rotcom_cargs,
       rotcom_execute,
-      rotcom_outputs,
       rotcom_params,
 };

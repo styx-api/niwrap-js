@@ -250,14 +250,16 @@ function v_3d_tsgen_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTsgenOutputs`).
  */
 function v_3d_tsgen_execute(
     params: V3dTsgenParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTsgenOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TSGEN_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tsgen_cargs(params, execution)
     const ret = v_3d_tsgen_outputs(params, execution)
@@ -306,10 +308,8 @@ function v_3d_tsgen(
     brick_config: string | null = null,
     runner: Runner | null = null,
 ): V3dTsgenOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TSGEN_METADATA);
     const params = v_3d_tsgen_params(input_file, signal_label, noise_label, sigma_value, output_file, in_tr_flag, signal_constr, noise_constr, voxel_number, signal_coef, noise_coef, bucket_config, brick_config)
-    return v_3d_tsgen_execute(params, execution);
+    return v_3d_tsgen_execute(params, runner);
 }
 
 
@@ -318,8 +318,6 @@ export {
       V3dTsgenParameters,
       V_3D_TSGEN_METADATA,
       v_3d_tsgen,
-      v_3d_tsgen_cargs,
       v_3d_tsgen_execute,
-      v_3d_tsgen_outputs,
       v_3d_tsgen_params,
 };

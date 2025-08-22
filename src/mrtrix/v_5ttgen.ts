@@ -727,14 +727,16 @@ function v_5ttgen_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V5ttgenOutputs`).
  */
 function v_5ttgen_execute(
     params: V5ttgenParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V5ttgenOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_5TTGEN_METADATA);
     params = execution.params(params)
     const cargs = v_5ttgen_cargs(params, execution)
     const ret = v_5ttgen_outputs(params, execution)
@@ -788,10 +790,8 @@ function v_5ttgen(
     version: boolean = false,
     runner: Runner | null = null,
 ): V5ttgenOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_5TTGEN_METADATA);
     const params = v_5ttgen_params(algorithm, nocrop, sgm_amyg_hipp, nocleanup, scratch, continue_, info, quiet, debug, force, nthreads, config, help, version)
-    return v_5ttgen_execute(params, execution);
+    return v_5ttgen_execute(params, runner);
 }
 
 
@@ -809,22 +809,11 @@ export {
       V5ttgenParameters,
       V_5TTGEN_METADATA,
       v_5ttgen,
-      v_5ttgen_cargs,
-      v_5ttgen_config_cargs,
       v_5ttgen_config_params,
       v_5ttgen_execute,
-      v_5ttgen_freesurfer_cargs,
-      v_5ttgen_freesurfer_outputs,
       v_5ttgen_freesurfer_params,
-      v_5ttgen_fsl_cargs,
-      v_5ttgen_fsl_outputs,
       v_5ttgen_fsl_params,
-      v_5ttgen_gif_cargs,
-      v_5ttgen_gif_outputs,
       v_5ttgen_gif_params,
-      v_5ttgen_hsvs_cargs,
-      v_5ttgen_hsvs_outputs,
       v_5ttgen_hsvs_params,
-      v_5ttgen_outputs,
       v_5ttgen_params,
 };

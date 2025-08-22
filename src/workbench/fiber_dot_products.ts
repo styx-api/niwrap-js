@@ -166,14 +166,16 @@ function fiber_dot_products_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FiberDotProductsOutputs`).
  */
 function fiber_dot_products_execute(
     params: FiberDotProductsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FiberDotProductsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIBER_DOT_PRODUCTS_METADATA);
     params = execution.params(params)
     const cargs = fiber_dot_products_cargs(params, execution)
     const ret = fiber_dot_products_outputs(params, execution)
@@ -210,10 +212,8 @@ function fiber_dot_products(
     f_metric: string,
     runner: Runner | null = null,
 ): FiberDotProductsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIBER_DOT_PRODUCTS_METADATA);
     const params = fiber_dot_products_params(white_surf, fiber_file, max_dist, direction, dot_metric, f_metric)
-    return fiber_dot_products_execute(params, execution);
+    return fiber_dot_products_execute(params, runner);
 }
 
 
@@ -222,8 +222,6 @@ export {
       FiberDotProductsOutputs,
       FiberDotProductsParameters,
       fiber_dot_products,
-      fiber_dot_products_cargs,
       fiber_dot_products_execute,
-      fiber_dot_products_outputs,
       fiber_dot_products_params,
 };

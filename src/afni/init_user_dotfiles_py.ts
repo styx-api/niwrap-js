@@ -276,14 +276,16 @@ function init_user_dotfiles_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `InitUserDotfilesPyOutputs`).
  */
 function init_user_dotfiles_py_execute(
     params: InitUserDotfilesPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): InitUserDotfilesPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(INIT_USER_DOTFILES_PY_METADATA);
     params = execution.params(params)
     const cargs = init_user_dotfiles_py_cargs(params, execution)
     const ret = init_user_dotfiles_py_outputs(params, execution)
@@ -340,10 +342,8 @@ function init_user_dotfiles_py(
     verbosity_level: number | null = null,
     runner: Runner | null = null,
 ): InitUserDotfilesPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(INIT_USER_DOTFILES_PY_METADATA);
     const params = init_user_dotfiles_py_params(help, help_dotfiles_all, help_dotfiles_mod, help_shells, hist, show_valid_opts, ver, dot_files_list, dir_bin, dir_dot, do_updates, dry_run, force, make_backup, shell_list, test, verbosity_level)
-    return init_user_dotfiles_py_execute(params, execution);
+    return init_user_dotfiles_py_execute(params, runner);
 }
 
 
@@ -352,8 +352,6 @@ export {
       InitUserDotfilesPyOutputs,
       InitUserDotfilesPyParameters,
       init_user_dotfiles_py,
-      init_user_dotfiles_py_cargs,
       init_user_dotfiles_py_execute,
-      init_user_dotfiles_py_outputs,
       init_user_dotfiles_py_params,
 };

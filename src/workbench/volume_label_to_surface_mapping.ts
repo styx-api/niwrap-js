@@ -247,14 +247,16 @@ function volume_label_to_surface_mapping_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelToSurfaceMappingOutputs`).
  */
 function volume_label_to_surface_mapping_execute(
     params: VolumeLabelToSurfaceMappingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeLabelToSurfaceMappingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_LABEL_TO_SURFACE_MAPPING_METADATA);
     params = execution.params(params)
     const cargs = volume_label_to_surface_mapping_cargs(params, execution)
     const ret = volume_label_to_surface_mapping_outputs(params, execution)
@@ -289,10 +291,8 @@ function volume_label_to_surface_mapping(
     opt_subvol_select_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeLabelToSurfaceMappingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_LABEL_TO_SURFACE_MAPPING_METADATA);
     const params = volume_label_to_surface_mapping_params(volume, surface, label_out, ribbon_constrained, opt_subvol_select_subvol)
-    return volume_label_to_surface_mapping_execute(params, execution);
+    return volume_label_to_surface_mapping_execute(params, runner);
 }
 
 
@@ -302,10 +302,7 @@ export {
       VolumeLabelToSurfaceMappingParameters,
       VolumeLabelToSurfaceMappingRibbonConstrainedParameters,
       volume_label_to_surface_mapping,
-      volume_label_to_surface_mapping_cargs,
       volume_label_to_surface_mapping_execute,
-      volume_label_to_surface_mapping_outputs,
       volume_label_to_surface_mapping_params,
-      volume_label_to_surface_mapping_ribbon_constrained_cargs,
       volume_label_to_surface_mapping_ribbon_constrained_params,
 };

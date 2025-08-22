@@ -133,14 +133,16 @@ function feat_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FeatOutputs`).
  */
 function feat_execute(
     params: FeatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FeatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FEAT_METADATA);
     params = execution.params(params)
     const cargs = feat_cargs(params, execution)
     const ret = feat_outputs(params, execution)
@@ -165,10 +167,8 @@ function feat(
     design_file: InputPathType,
     runner: Runner | null = null,
 ): FeatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FEAT_METADATA);
     const params = feat_params(design_file)
-    return feat_execute(params, execution);
+    return feat_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       FeatOutputs,
       FeatParameters,
       feat,
-      feat_cargs,
       feat_execute,
-      feat_outputs,
       feat_params,
 };

@@ -164,14 +164,16 @@ function label_modify_keys_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelModifyKeysOutputs`).
  */
 function label_modify_keys_execute(
     params: LabelModifyKeysParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelModifyKeysOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_MODIFY_KEYS_METADATA);
     params = execution.params(params)
     const cargs = label_modify_keys_cargs(params, execution)
     const ret = label_modify_keys_outputs(params, execution)
@@ -210,10 +212,8 @@ function label_modify_keys(
     opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): LabelModifyKeysOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_MODIFY_KEYS_METADATA);
     const params = label_modify_keys_params(label_in, remap_file, label_out, opt_column_column)
-    return label_modify_keys_execute(params, execution);
+    return label_modify_keys_execute(params, runner);
 }
 
 
@@ -222,8 +222,6 @@ export {
       LabelModifyKeysOutputs,
       LabelModifyKeysParameters,
       label_modify_keys,
-      label_modify_keys_cargs,
       label_modify_keys_execute,
-      label_modify_keys_outputs,
       label_modify_keys_params,
 };

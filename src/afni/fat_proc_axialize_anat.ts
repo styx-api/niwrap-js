@@ -321,14 +321,16 @@ function fat_proc_axialize_anat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatProcAxializeAnatOutputs`).
  */
 function fat_proc_axialize_anat_execute(
     params: FatProcAxializeAnatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatProcAxializeAnatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_PROC_AXIALIZE_ANAT_METADATA);
     params = execution.params(params)
     const cargs = fat_proc_axialize_anat_cargs(params, execution)
     const ret = fat_proc_axialize_anat_outputs(params, execution)
@@ -395,10 +397,8 @@ function fat_proc_axialize_anat(
     qc_prefix: string | null = null,
     runner: Runner | null = null,
 ): FatProcAxializeAnatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_PROC_AXIALIZE_ANAT_METADATA);
     const params = fat_proc_axialize_anat_params(in_file, ref_file, prefix, mode_t2w, mode_t1w, workdir, out_match_ref, do_ceil_out, extra_al_wtmask, extra_al_cost, extra_al_opts, focus_mask, focus_by_ss, remove_inf_sli, pre_align_center_mass, pre_center_mass, post_lr_symm, no_pre_lr_symm, no_clean, qc_ulay_range, no_qc_view, qc_prefix)
-    return fat_proc_axialize_anat_execute(params, execution);
+    return fat_proc_axialize_anat_execute(params, runner);
 }
 
 
@@ -407,8 +407,6 @@ export {
       FatProcAxializeAnatOutputs,
       FatProcAxializeAnatParameters,
       fat_proc_axialize_anat,
-      fat_proc_axialize_anat_cargs,
       fat_proc_axialize_anat_execute,
-      fat_proc_axialize_anat_outputs,
       fat_proc_axialize_anat_params,
 };

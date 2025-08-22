@@ -261,14 +261,16 @@ function rsfgen_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RsfgenOutputs`).
  */
 function rsfgen_execute(
     params: RsfgenParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RsfgenOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RSFGEN_METADATA);
     params = execution.params(params)
     const cargs = rsfgen_cargs(params, execution)
     const ret = rsfgen_outputs(params, execution)
@@ -317,10 +319,8 @@ function rsfgen(
     input_table: InputPathType | null = null,
     runner: Runner | null = null,
 ): RsfgenOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RSFGEN_METADATA);
     const params = rsfgen_params(length, num_experimental_conditions, block_length, random_seed, suppress_output_flag, single_file_flag, single_column_flag, output_prefix, num_reps, permutation_seed, markov_file, prob_zero, input_table)
-    return rsfgen_execute(params, execution);
+    return rsfgen_execute(params, runner);
 }
 
 
@@ -329,8 +329,6 @@ export {
       RsfgenOutputs,
       RsfgenParameters,
       rsfgen,
-      rsfgen_cargs,
       rsfgen_execute,
-      rsfgen_outputs,
       rsfgen_params,
 };

@@ -148,14 +148,16 @@ function create_displacement_field_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CreateDisplacementFieldOutputs`).
  */
 function create_displacement_field_execute(
     params: CreateDisplacementFieldParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CreateDisplacementFieldOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CREATE_DISPLACEMENT_FIELD_METADATA);
     params = execution.params(params)
     const cargs = create_displacement_field_cargs(params, execution)
     const ret = create_displacement_field_outputs(params, execution)
@@ -186,10 +188,8 @@ function create_displacement_field(
     output_image: string,
     runner: Runner | null = null,
 ): CreateDisplacementFieldOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CREATE_DISPLACEMENT_FIELD_METADATA);
     const params = create_displacement_field_params(image_dimension, enforce_zero_boundary_flag, component_images, output_image)
-    return create_displacement_field_execute(params, execution);
+    return create_displacement_field_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       CreateDisplacementFieldOutputs,
       CreateDisplacementFieldParameters,
       create_displacement_field,
-      create_displacement_field_cargs,
       create_displacement_field_execute,
-      create_displacement_field_outputs,
       create_displacement_field_params,
 };

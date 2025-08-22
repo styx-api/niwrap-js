@@ -188,14 +188,16 @@ function wbsparse_merge_dense_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WbsparseMergeDenseOutputs`).
  */
 function wbsparse_merge_dense_execute(
     params: WbsparseMergeDenseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WbsparseMergeDenseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WBSPARSE_MERGE_DENSE_METADATA);
     params = execution.params(params)
     const cargs = wbsparse_merge_dense_cargs(params, execution)
     const ret = wbsparse_merge_dense_outputs(params, execution)
@@ -226,10 +228,8 @@ function wbsparse_merge_dense(
     wbsparse: Array<WbsparseMergeDenseWbsparseParameters> | null = null,
     runner: Runner | null = null,
 ): WbsparseMergeDenseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WBSPARSE_MERGE_DENSE_METADATA);
     const params = wbsparse_merge_dense_params(direction, wbsparse_out, wbsparse)
-    return wbsparse_merge_dense_execute(params, execution);
+    return wbsparse_merge_dense_execute(params, runner);
 }
 
 
@@ -239,10 +239,7 @@ export {
       WbsparseMergeDenseParameters,
       WbsparseMergeDenseWbsparseParameters,
       wbsparse_merge_dense,
-      wbsparse_merge_dense_cargs,
       wbsparse_merge_dense_execute,
-      wbsparse_merge_dense_outputs,
       wbsparse_merge_dense_params,
-      wbsparse_merge_dense_wbsparse_cargs,
       wbsparse_merge_dense_wbsparse_params,
 };

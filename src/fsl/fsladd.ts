@@ -152,14 +152,16 @@ function fsladd_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsladdOutputs`).
  */
 function fsladd_execute(
     params: FsladdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsladdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLADD_METADATA);
     params = execution.params(params)
     const cargs = fsladd_cargs(params, execution)
     const ret = fsladd_outputs(params, execution)
@@ -190,10 +192,8 @@ function fsladd(
     scale_flag: boolean = false,
     runner: Runner | null = null,
 ): FsladdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLADD_METADATA);
     const params = fsladd_params(output_file, volume_list, mean_flag, scale_flag)
-    return fsladd_execute(params, execution);
+    return fsladd_execute(params, runner);
 }
 
 
@@ -202,8 +202,6 @@ export {
       FsladdOutputs,
       FsladdParameters,
       fsladd,
-      fsladd_cargs,
       fsladd_execute,
-      fsladd_outputs,
       fsladd_params,
 };

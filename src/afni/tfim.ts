@@ -209,14 +209,16 @@ function tfim_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TfimOutputs`).
  */
 function tfim_execute(
     params: TfimParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TfimOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TFIM_METADATA);
     params = execution.params(params)
     const cargs = tfim_cargs(params, execution)
     const ret = tfim_outputs(params, execution)
@@ -253,10 +255,8 @@ function tfim(
     base1_value: number | null = null,
     runner: Runner | null = null,
 ): TfimOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TFIM_METADATA);
     const params = tfim_params(set1_images, set2_images, prefix, pthresh, eqcorr, paired, base1_value)
-    return tfim_execute(params, execution);
+    return tfim_execute(params, runner);
 }
 
 
@@ -265,8 +265,6 @@ export {
       TfimOutputs,
       TfimParameters,
       tfim,
-      tfim_cargs,
       tfim_execute,
-      tfim_outputs,
       tfim_params,
 };

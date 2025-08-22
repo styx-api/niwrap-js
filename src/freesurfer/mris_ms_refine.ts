@@ -201,14 +201,16 @@ function mris_ms_refine_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisMsRefineOutputs`).
  */
 function mris_ms_refine_execute(
     params: MrisMsRefineParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisMsRefineOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_MS_REFINE_METADATA);
     params = execution.params(params)
     const cargs = mris_ms_refine_cargs(params, execution)
     const ret = mris_ms_refine_outputs(params, execution)
@@ -249,10 +251,8 @@ function mris_ms_refine(
     white_only: boolean = false,
     runner: Runner | null = null,
 ): MrisMsRefineOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_MS_REFINE_METADATA);
     const params = mris_ms_refine_params(subject_name, hemisphere, xform, flash_files, residuals, omit_self_intersection, create_curvature_files, average_curvature, white_only)
-    return mris_ms_refine_execute(params, execution);
+    return mris_ms_refine_execute(params, runner);
 }
 
 
@@ -261,8 +261,6 @@ export {
       MrisMsRefineOutputs,
       MrisMsRefineParameters,
       mris_ms_refine,
-      mris_ms_refine_cargs,
       mris_ms_refine_execute,
-      mris_ms_refine_outputs,
       mris_ms_refine_params,
 };

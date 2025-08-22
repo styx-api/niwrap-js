@@ -420,14 +420,16 @@ function vectorstats_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VectorstatsOutputs`).
  */
 function vectorstats_execute(
     params: VectorstatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VectorstatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VECTORSTATS_METADATA);
     params = execution.params(params)
     const cargs = vectorstats_cargs(params, execution)
     const ret = vectorstats_outputs(params, execution)
@@ -504,10 +506,8 @@ function vectorstats(
     version: boolean = false,
     runner: Runner | null = null,
 ): VectorstatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VECTORSTATS_METADATA);
     const params = vectorstats_params(input, design, contrast, output, notest, errors, exchange_within, exchange_whole, strong, nshuffles, permutations, variance, ftests, fonly, column, info, quiet, debug, force, nthreads, config, help, version)
-    return vectorstats_execute(params, execution);
+    return vectorstats_execute(params, runner);
 }
 
 
@@ -518,12 +518,8 @@ export {
       VectorstatsOutputs,
       VectorstatsParameters,
       vectorstats,
-      vectorstats_cargs,
-      vectorstats_column_cargs,
       vectorstats_column_params,
-      vectorstats_config_cargs,
       vectorstats_config_params,
       vectorstats_execute,
-      vectorstats_outputs,
       vectorstats_params,
 };

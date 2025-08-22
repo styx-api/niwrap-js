@@ -222,14 +222,16 @@ function spharm_deco_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SpharmDecoOutputs`).
  */
 function spharm_deco_execute(
     params: SpharmDecoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SpharmDecoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SPHARM_DECO_METADATA);
     params = execution.params(params)
     const cargs = spharm_deco_cargs(params, execution)
     const ret = spharm_deco_outputs(params, execution)
@@ -272,10 +274,8 @@ function spharm_deco(
     sigma: number | null = null,
     runner: Runner | null = null,
 ): SpharmDecoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SPHARM_DECO_METADATA);
     const params = spharm_deco_params(i_type_s, unit_sph_label, order_l, i_type_sd, data_d, bases_prefix, prefix, o_type_sdr, debug, sigma)
-    return spharm_deco_execute(params, execution);
+    return spharm_deco_execute(params, runner);
 }
 
 
@@ -284,8 +284,6 @@ export {
       SpharmDecoOutputs,
       SpharmDecoParameters,
       spharm_deco,
-      spharm_deco_cargs,
       spharm_deco_execute,
-      spharm_deco_outputs,
       spharm_deco_params,
 };

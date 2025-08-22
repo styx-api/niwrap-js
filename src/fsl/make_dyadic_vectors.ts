@@ -161,14 +161,16 @@ function make_dyadic_vectors_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeDyadicVectorsOutputs`).
  */
 function make_dyadic_vectors_execute(
     params: MakeDyadicVectorsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeDyadicVectorsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_DYADIC_VECTORS_METADATA);
     params = execution.params(params)
     const cargs = make_dyadic_vectors_cargs(params, execution)
     const ret = make_dyadic_vectors_outputs(params, execution)
@@ -201,10 +203,8 @@ function make_dyadic_vectors(
     perc: number | null = null,
     runner: Runner | null = null,
 ): MakeDyadicVectorsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_DYADIC_VECTORS_METADATA);
     const params = make_dyadic_vectors_params(theta_vol, phi_vol, output, mask, perc)
-    return make_dyadic_vectors_execute(params, execution);
+    return make_dyadic_vectors_execute(params, runner);
 }
 
 
@@ -213,8 +213,6 @@ export {
       MakeDyadicVectorsOutputs,
       MakeDyadicVectorsParameters,
       make_dyadic_vectors,
-      make_dyadic_vectors_cargs,
       make_dyadic_vectors_execute,
-      make_dyadic_vectors_outputs,
       make_dyadic_vectors_params,
 };

@@ -239,14 +239,16 @@ function dmri_bset_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriBsetOutputs`).
  */
 function dmri_bset_execute(
     params: DmriBsetParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriBsetOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_BSET_METADATA);
     params = execution.params(params)
     const cargs = dmri_bset_cargs(params, execution)
     const ret = dmri_bset_outputs(params, execution)
@@ -289,10 +291,8 @@ function dmri_bset(
     output_g_table: string | null = null,
     runner: Runner | null = null,
 ): DmriBsetOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_BSET_METADATA);
     const params = dmri_bset_params(input_dwi, output_dwi, b_values, btol, bsort, bmax, input_b_table, input_g_table, output_b_table, output_g_table)
-    return dmri_bset_execute(params, execution);
+    return dmri_bset_execute(params, runner);
 }
 
 
@@ -301,8 +301,6 @@ export {
       DmriBsetOutputs,
       DmriBsetParameters,
       dmri_bset,
-      dmri_bset_cargs,
       dmri_bset_execute,
-      dmri_bset_outputs,
       dmri_bset_params,
 };

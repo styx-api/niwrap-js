@@ -363,14 +363,16 @@ function mri_mcsim_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMcsimOutputs`).
  */
 function mri_mcsim_execute(
     params: MriMcsimParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMcsimOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MCSIM_METADATA);
     params = execution.params(params)
     const cargs = mri_mcsim_cargs(params, execution)
     const ret = mri_mcsim_outputs(params, execution)
@@ -439,10 +441,8 @@ function mri_mcsim(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriMcsimOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MCSIM_METADATA);
     const params = mri_mcsim_params(top_output_dir, base_name, surface, num_repetitions, fwhm_values, fwhm_max, avg_vertex_area, random_seed, label_file, mask_file, no_label, no_save_mask, surface_name, log_file, done_file, stop_file, save_file, save_iter, subjects_dir, debug, check_opts, help, version)
-    return mri_mcsim_execute(params, execution);
+    return mri_mcsim_execute(params, runner);
 }
 
 
@@ -451,8 +451,6 @@ export {
       MriMcsimOutputs,
       MriMcsimParameters,
       mri_mcsim,
-      mri_mcsim_cargs,
       mri_mcsim_execute,
-      mri_mcsim_outputs,
       mri_mcsim_params,
 };

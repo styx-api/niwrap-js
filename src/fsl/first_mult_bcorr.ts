@@ -174,14 +174,16 @@ function first_mult_bcorr_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FirstMultBcorrOutputs`).
  */
 function first_mult_bcorr_execute(
     params: FirstMultBcorrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FirstMultBcorrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIRST_MULT_BCORR_METADATA);
     params = execution.params(params)
     const cargs = first_mult_bcorr_cargs(params, execution)
     const ret = first_mult_bcorr_outputs(params, execution)
@@ -216,10 +218,8 @@ function first_mult_bcorr(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FirstMultBcorrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIRST_MULT_BCORR_METADATA);
     const params = first_mult_bcorr_params(input_image, corrected_4d_labels, uncorrected_4d_labels, output_image, verbose_flag, help_flag)
-    return first_mult_bcorr_execute(params, execution);
+    return first_mult_bcorr_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       FirstMultBcorrOutputs,
       FirstMultBcorrParameters,
       first_mult_bcorr,
-      first_mult_bcorr_cargs,
       first_mult_bcorr_execute,
-      first_mult_bcorr_outputs,
       first_mult_bcorr_params,
 };

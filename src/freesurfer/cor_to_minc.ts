@@ -138,14 +138,16 @@ function cor_to_minc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CorToMincOutputs`).
  */
 function cor_to_minc_execute(
     params: CorToMincParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CorToMincOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(COR_TO_MINC_METADATA);
     params = execution.params(params)
     const cargs = cor_to_minc_cargs(params, execution)
     const ret = cor_to_minc_outputs(params, execution)
@@ -172,10 +174,8 @@ function cor_to_minc(
     minc_file: string,
     runner: Runner | null = null,
 ): CorToMincOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(COR_TO_MINC_METADATA);
     const params = cor_to_minc_params(cor_directory, minc_file)
-    return cor_to_minc_execute(params, execution);
+    return cor_to_minc_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       CorToMincOutputs,
       CorToMincParameters,
       cor_to_minc,
-      cor_to_minc_cargs,
       cor_to_minc_execute,
-      cor_to_minc_outputs,
       cor_to_minc_params,
 };

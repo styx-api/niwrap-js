@@ -207,14 +207,16 @@ function v_3dedge3_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dedge3Outputs`).
  */
 function v_3dedge3_execute(
     params: V3dedge3Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dedge3Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DEDGE3_METADATA);
     params = execution.params(params)
     const cargs = v_3dedge3_cargs(params, execution)
     const ret = v_3dedge3_outputs(params, execution)
@@ -255,10 +257,8 @@ function v_3dedge3(
     automask: boolean = false,
     runner: Runner | null = null,
 ): V3dedge3Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DEDGE3_METADATA);
     const params = v_3dedge3_params(input_file, verbose, prefix, datum, fscale, gscale, nscale, scale_floats, automask)
-    return v_3dedge3_execute(params, execution);
+    return v_3dedge3_execute(params, runner);
 }
 
 
@@ -267,8 +267,6 @@ export {
       V3dedge3Parameters,
       V_3DEDGE3_METADATA,
       v_3dedge3,
-      v_3dedge3_cargs,
       v_3dedge3_execute,
-      v_3dedge3_outputs,
       v_3dedge3_params,
 };

@@ -229,14 +229,16 @@ function slicetimer_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SlicetimerOutputs`).
  */
 function slicetimer_execute(
     params: SlicetimerParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SlicetimerOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SLICETIMER_METADATA);
     params = execution.params(params)
     const cargs = slicetimer_cargs(params, execution)
     const ret = slicetimer_outputs(params, execution)
@@ -279,10 +281,8 @@ function slicetimer(
     ocustom_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): SlicetimerOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SLICETIMER_METADATA);
     const params = slicetimer_params(infile, outfile, verbose_flag, down_flag, tr_value, direction, odd_flag, tcustom_file, tglobal_value, ocustom_file)
-    return slicetimer_execute(params, execution);
+    return slicetimer_execute(params, runner);
 }
 
 
@@ -291,8 +291,6 @@ export {
       SlicetimerOutputs,
       SlicetimerParameters,
       slicetimer,
-      slicetimer_cargs,
       slicetimer_execute,
-      slicetimer_outputs,
       slicetimer_params,
 };

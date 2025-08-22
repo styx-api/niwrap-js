@@ -127,14 +127,16 @@ function v__float_fix_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VFloatFixOutputs`).
  */
 function v__float_fix_execute(
     params: VFloatFixParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VFloatFixOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__FLOAT_FIX_METADATA);
     params = execution.params(params)
     const cargs = v__float_fix_cargs(params, execution)
     const ret = v__float_fix_outputs(params, execution)
@@ -159,10 +161,8 @@ function v__float_fix(
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): VFloatFixOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__FLOAT_FIX_METADATA);
     const params = v__float_fix_params(input_files)
-    return v__float_fix_execute(params, execution);
+    return v__float_fix_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       VFloatFixParameters,
       V__FLOAT_FIX_METADATA,
       v__float_fix,
-      v__float_fix_cargs,
       v__float_fix_execute,
-      v__float_fix_outputs,
       v__float_fix_params,
 };

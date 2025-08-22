@@ -153,14 +153,16 @@ function v_3d_nwarp_xyz_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dNwarpXyzOutputs`).
  */
 function v_3d_nwarp_xyz_execute(
     params: V3dNwarpXyzParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dNwarpXyzOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_NWARP_XYZ_METADATA);
     params = execution.params(params)
     const cargs = v_3d_nwarp_xyz_cargs(params, execution)
     const ret = v_3d_nwarp_xyz_outputs(params, execution)
@@ -191,10 +193,8 @@ function v_3d_nwarp_xyz(
     iwarp: boolean = false,
     runner: Runner | null = null,
 ): V3dNwarpXyzOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_NWARP_XYZ_METADATA);
     const params = v_3d_nwarp_xyz_params(xyzfile, warp_spec, output_file, iwarp)
-    return v_3d_nwarp_xyz_execute(params, execution);
+    return v_3d_nwarp_xyz_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       V3dNwarpXyzParameters,
       V_3D_NWARP_XYZ_METADATA,
       v_3d_nwarp_xyz,
-      v_3d_nwarp_xyz_cargs,
       v_3d_nwarp_xyz_execute,
-      v_3d_nwarp_xyz_outputs,
       v_3d_nwarp_xyz_params,
 };

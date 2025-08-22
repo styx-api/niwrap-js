@@ -151,14 +151,16 @@ function cifti_reorder_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiReorderOutputs`).
  */
 function cifti_reorder_execute(
     params: CiftiReorderParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiReorderOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_REORDER_METADATA);
     params = execution.params(params)
     const cargs = cifti_reorder_cargs(params, execution)
     const ret = cifti_reorder_outputs(params, execution)
@@ -191,10 +193,8 @@ function cifti_reorder(
     cifti_out: string,
     runner: Runner | null = null,
 ): CiftiReorderOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_REORDER_METADATA);
     const params = cifti_reorder_params(cifti_in, direction, reorder_list, cifti_out)
-    return cifti_reorder_execute(params, execution);
+    return cifti_reorder_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       CiftiReorderOutputs,
       CiftiReorderParameters,
       cifti_reorder,
-      cifti_reorder_cargs,
       cifti_reorder_execute,
-      cifti_reorder_outputs,
       cifti_reorder_params,
 };

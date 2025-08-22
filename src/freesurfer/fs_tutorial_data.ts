@@ -137,14 +137,16 @@ function fs_tutorial_data_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsTutorialDataOutputs`).
  */
 function fs_tutorial_data_execute(
     params: FsTutorialDataParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsTutorialDataOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FS_TUTORIAL_DATA_METADATA);
     params = execution.params(params)
     const cargs = fs_tutorial_data_cargs(params, execution)
     const ret = fs_tutorial_data_outputs(params, execution)
@@ -169,10 +171,8 @@ function fs_tutorial_data(
     rsync_options: Array<string> | null = null,
     runner: Runner | null = null,
 ): FsTutorialDataOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FS_TUTORIAL_DATA_METADATA);
     const params = fs_tutorial_data_params(rsync_options)
-    return fs_tutorial_data_execute(params, execution);
+    return fs_tutorial_data_execute(params, runner);
 }
 
 
@@ -181,8 +181,6 @@ export {
       FsTutorialDataOutputs,
       FsTutorialDataParameters,
       fs_tutorial_data,
-      fs_tutorial_data_cargs,
       fs_tutorial_data_execute,
-      fs_tutorial_data_outputs,
       fs_tutorial_data_params,
 };

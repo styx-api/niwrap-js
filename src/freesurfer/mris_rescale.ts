@@ -138,14 +138,16 @@ function mris_rescale_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRescaleOutputs`).
  */
 function mris_rescale_execute(
     params: MrisRescaleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRescaleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_RESCALE_METADATA);
     params = execution.params(params)
     const cargs = mris_rescale_cargs(params, execution)
     const ret = mris_rescale_outputs(params, execution)
@@ -172,10 +174,8 @@ function mris_rescale(
     output_surface: string,
     runner: Runner | null = null,
 ): MrisRescaleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_RESCALE_METADATA);
     const params = mris_rescale_params(input_surface, output_surface)
-    return mris_rescale_execute(params, execution);
+    return mris_rescale_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MrisRescaleOutputs,
       MrisRescaleParameters,
       mris_rescale,
-      mris_rescale_cargs,
       mris_rescale_execute,
-      mris_rescale_outputs,
       mris_rescale_params,
 };

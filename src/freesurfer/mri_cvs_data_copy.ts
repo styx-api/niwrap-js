@@ -160,14 +160,16 @@ function mri_cvs_data_copy_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCvsDataCopyOutputs`).
  */
 function mri_cvs_data_copy_execute(
     params: MriCvsDataCopyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCvsDataCopyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CVS_DATA_COPY_METADATA);
     params = execution.params(params)
     const cargs = mri_cvs_data_copy_cargs(params, execution)
     const ret = mri_cvs_data_copy_outputs(params, execution)
@@ -200,10 +202,8 @@ function mri_cvs_data_copy(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriCvsDataCopyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CVS_DATA_COPY_METADATA);
     const params = mri_cvs_data_copy_params(subjid, olddir, newdir, version, help)
-    return mri_cvs_data_copy_execute(params, execution);
+    return mri_cvs_data_copy_execute(params, runner);
 }
 
 
@@ -212,8 +212,6 @@ export {
       MriCvsDataCopyOutputs,
       MriCvsDataCopyParameters,
       mri_cvs_data_copy,
-      mri_cvs_data_copy_cargs,
       mri_cvs_data_copy_execute,
-      mri_cvs_data_copy_outputs,
       mri_cvs_data_copy_params,
 };

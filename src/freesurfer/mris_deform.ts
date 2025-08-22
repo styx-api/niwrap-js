@@ -148,14 +148,16 @@ function mris_deform_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisDeformOutputs`).
  */
 function mris_deform_execute(
     params: MrisDeformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisDeformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_DEFORM_METADATA);
     params = execution.params(params)
     const cargs = mris_deform_cargs(params, execution)
     const ret = mris_deform_outputs(params, execution)
@@ -186,10 +188,8 @@ function mris_deform(
     output_surface: string,
     runner: Runner | null = null,
 ): MrisDeformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_DEFORM_METADATA);
     const params = mris_deform_params(input_surface, input_volume, xform, output_surface)
-    return mris_deform_execute(params, execution);
+    return mris_deform_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MrisDeformOutputs,
       MrisDeformParameters,
       mris_deform,
-      mris_deform_cargs,
       mris_deform_execute,
-      mris_deform_outputs,
       mris_deform_params,
 };

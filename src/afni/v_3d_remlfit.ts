@@ -290,14 +290,16 @@ function v_3d_remlfit_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dRemlfitOutputs`).
  */
 function v_3d_remlfit_execute(
     params: V3dRemlfitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dRemlfitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_REMLFIT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_remlfit_cargs(params, execution)
     const ret = v_3d_remlfit_outputs(params, execution)
@@ -350,10 +352,8 @@ function v_3d_remlfit(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dRemlfitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_REMLFIT_METADATA);
     const params = v_3d_remlfit_params(input_file, regression_matrix, baseline_files, sort_nods, temp_storage, mask, output_prefix, no_fdr_curve, go_for_it, max_a_param, max_b_param, grid_param, negative_corr, quiet, verbose)
-    return v_3d_remlfit_execute(params, execution);
+    return v_3d_remlfit_execute(params, runner);
 }
 
 
@@ -362,8 +362,6 @@ export {
       V3dRemlfitParameters,
       V_3D_REMLFIT_METADATA,
       v_3d_remlfit,
-      v_3d_remlfit_cargs,
       v_3d_remlfit_execute,
-      v_3d_remlfit_outputs,
       v_3d_remlfit_params,
 };

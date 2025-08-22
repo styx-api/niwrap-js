@@ -318,14 +318,16 @@ function aparc_stats_aseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AparcStatsAsegOutputs`).
  */
 function aparc_stats_aseg_execute(
     params: AparcStatsAsegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AparcStatsAsegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(APARC_STATS_ASEG_METADATA);
     params = execution.params(params)
     const cargs = aparc_stats_aseg_cargs(params, execution)
     const ret = aparc_stats_aseg_outputs(params, execution)
@@ -392,10 +394,8 @@ function aparc_stats_aseg(
     expert_overwrite_flag: boolean = false,
     runner: Runner | null = null,
 ): AparcStatsAsegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(APARC_STATS_ASEG_METADATA);
     const params = aparc_stats_aseg_params(subject_name, gcs_name, subject_dir, gcs_dir, parc_name, output_dir, log_file, lh_flag, rh_flag, a2009s_flag, no_aseg_flag, no_cortparc_flag, no_parcstats_flag, no_aparc2aseg_flag, random_seed, th3_flag, no_th3_flag, longitudinal, expert_file, expert_use_flag, expert_clean_flag, expert_overwrite_flag)
-    return aparc_stats_aseg_execute(params, execution);
+    return aparc_stats_aseg_execute(params, runner);
 }
 
 
@@ -404,8 +404,6 @@ export {
       AparcStatsAsegOutputs,
       AparcStatsAsegParameters,
       aparc_stats_aseg,
-      aparc_stats_aseg_cargs,
       aparc_stats_aseg_execute,
-      aparc_stats_aseg_outputs,
       aparc_stats_aseg_params,
 };

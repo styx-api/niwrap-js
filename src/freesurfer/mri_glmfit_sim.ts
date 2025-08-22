@@ -447,14 +447,16 @@ function mri_glmfit_sim_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriGlmfitSimOutputs`).
  */
 function mri_glmfit_sim_execute(
     params: MriGlmfitSimParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriGlmfitSimOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_GLMFIT_SIM_METADATA);
     params = execution.params(params)
     const cargs = mri_glmfit_sim_cargs(params, execution)
     const ret = mri_glmfit_sim_outputs(params, execution)
@@ -535,10 +537,8 @@ function mri_glmfit_sim(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriGlmfitSimOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_GLMFIT_SIM_METADATA);
     const params = mri_glmfit_sim_params(glmdir, cwp, mczsim, mczsim_dir, mczsim_label, perm, perm_resid, perm_signflip, grf, spaces_2, spaces_3, overwrite, bg, sleep, a2009s, annot, log, base, no_sim, seed, fwhm_override, fwhm_add, uniform, no_out_annot, no_cluster_mean, y_file, centroid, spatial_sum, help)
-    return mri_glmfit_sim_execute(params, execution);
+    return mri_glmfit_sim_execute(params, runner);
 }
 
 
@@ -547,8 +547,6 @@ export {
       MriGlmfitSimOutputs,
       MriGlmfitSimParameters,
       mri_glmfit_sim,
-      mri_glmfit_sim_cargs,
       mri_glmfit_sim_execute,
-      mri_glmfit_sim_outputs,
       mri_glmfit_sim_params,
 };

@@ -360,14 +360,16 @@ function dirstat_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DirstatOutputs`).
  */
 function dirstat_execute(
     params: DirstatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DirstatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DIRSTAT_METADATA);
     params = execution.params(params)
     const cargs = dirstat_cargs(params, execution)
     const ret = dirstat_outputs(params, execution)
@@ -443,10 +445,8 @@ function dirstat(
     version: boolean = false,
     runner: Runner | null = null,
 ): DirstatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DIRSTAT_METADATA);
     const params = dirstat_params(dirs, output, shells, grad, fslgrad, info, quiet, debug, force, nthreads, config, help, version)
-    return dirstat_execute(params, execution);
+    return dirstat_execute(params, runner);
 }
 
 
@@ -457,12 +457,8 @@ export {
       DirstatOutputs,
       DirstatParameters,
       dirstat,
-      dirstat_cargs,
-      dirstat_config_cargs,
       dirstat_config_params,
       dirstat_execute,
-      dirstat_fslgrad_cargs,
       dirstat_fslgrad_params,
-      dirstat_outputs,
       dirstat_params,
 };

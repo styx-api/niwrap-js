@@ -198,14 +198,16 @@ function mris_exvivo_surfaces_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisExvivoSurfacesOutputs`).
  */
 function mris_exvivo_surfaces_execute(
     params: MrisExvivoSurfacesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisExvivoSurfacesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_EXVIVO_SURFACES_METADATA);
     params = execution.params(params)
     const cargs = mris_exvivo_surfaces_cargs(params, execution)
     const ret = mris_exvivo_surfaces_outputs(params, execution)
@@ -242,10 +244,8 @@ function mris_exvivo_surfaces(
     formalin: number | null = null,
     runner: Runner | null = null,
 ): MrisExvivoSurfacesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_EXVIVO_SURFACES_METADATA);
     const params = mris_exvivo_surfaces_params(subject_name, hemisphere, omit_self_intersection, create_curvature_area, average_curvature, white_only, formalin)
-    return mris_exvivo_surfaces_execute(params, execution);
+    return mris_exvivo_surfaces_execute(params, runner);
 }
 
 
@@ -254,8 +254,6 @@ export {
       MrisExvivoSurfacesOutputs,
       MrisExvivoSurfacesParameters,
       mris_exvivo_surfaces,
-      mris_exvivo_surfaces_cargs,
       mris_exvivo_surfaces_execute,
-      mris_exvivo_surfaces_outputs,
       mris_exvivo_surfaces_params,
 };

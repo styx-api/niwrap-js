@@ -297,14 +297,16 @@ function mri_convert_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriConvertOutputs`).
  */
 function mri_convert_execute(
     params: MriConvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriConvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CONVERT_METADATA);
     params = execution.params(params)
     const cargs = mri_convert_cargs(params, execution)
     const ret = mri_convert_outputs(params, execution)
@@ -365,10 +367,8 @@ function mri_convert(
     sphinx: boolean = false,
     runner: Runner | null = null,
 ): MriConvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CONVERT_METADATA);
     const params = mri_convert_params(inp_volume, out_volume, read_only, no_write, in_info, out_info, in_stats, out_stats, upsample, force_ras_good, apply_transform, apply_inverse_transform, in_type, out_type, in_orientation, out_orientation, scale_factor, bfile_little_endian, sphinx)
-    return mri_convert_execute(params, execution);
+    return mri_convert_execute(params, runner);
 }
 
 
@@ -377,8 +377,6 @@ export {
       MriConvertOutputs,
       MriConvertParameters,
       mri_convert,
-      mri_convert_cargs,
       mri_convert_execute,
-      mri_convert_outputs,
       mri_convert_params,
 };

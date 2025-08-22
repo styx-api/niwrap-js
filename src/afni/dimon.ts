@@ -237,14 +237,16 @@ function dimon_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DimonOutputs`).
  */
 function dimon_execute(
     params: DimonParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DimonOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DIMON_METADATA);
     params = execution.params(params)
     const cargs = dimon_cargs(params, execution)
     const ret = dimon_outputs(params, execution)
@@ -285,10 +287,8 @@ function dimon(
     sort_method: string | null = null,
     runner: Runner | null = null,
 ): DimonOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DIMON_METADATA);
     const params = dimon_params(infile_prefix, infile_pattern, infile_list, rt_cmd, host, drive_afni, drive_wait, te_list, sort_method)
-    return dimon_execute(params, execution);
+    return dimon_execute(params, runner);
 }
 
 
@@ -297,8 +297,6 @@ export {
       DimonOutputs,
       DimonParameters,
       dimon,
-      dimon_cargs,
       dimon_execute,
-      dimon_outputs,
       dimon_params,
 };

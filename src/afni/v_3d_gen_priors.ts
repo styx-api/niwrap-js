@@ -396,14 +396,16 @@ function v_3d_gen_priors_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dGenPriorsOutputs`).
  */
 function v_3d_gen_priors_execute(
     params: V3dGenPriorsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dGenPriorsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_GEN_PRIORS_METADATA);
     params = execution.params(params)
     const cargs = v_3d_gen_priors_cargs(params, execution)
     const ret = v_3d_gen_priors_outputs(params, execution)
@@ -478,10 +480,8 @@ function v_3d_gen_priors(
     slow: boolean = false,
     runner: Runner | null = null,
 ): V3dGenPriorsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_GEN_PRIORS_METADATA);
     const params = v_3d_gen_priors_params(sigs, tdist, cprefix, pprefix, labeltable, do_, prefix, cmask, mask, mrange, debug, vox_debug, vox_debug_file, uid, use_tmp, no_tmp, pset, cset, regroup_classes, classes, features, strict_feature_match, featgroups, show_this_dist, fast, slow)
-    return v_3d_gen_priors_execute(params, execution);
+    return v_3d_gen_priors_execute(params, runner);
 }
 
 
@@ -490,8 +490,6 @@ export {
       V3dGenPriorsParameters,
       V_3D_GEN_PRIORS_METADATA,
       v_3d_gen_priors,
-      v_3d_gen_priors_cargs,
       v_3d_gen_priors_execute,
-      v_3d_gen_priors_outputs,
       v_3d_gen_priors_params,
 };

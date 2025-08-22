@@ -138,14 +138,16 @@ function find_the_biggest_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FindTheBiggestOutputs`).
  */
 function find_the_biggest_execute(
     params: FindTheBiggestParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FindTheBiggestOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIND_THE_BIGGEST_METADATA);
     params = execution.params(params)
     const cargs = find_the_biggest_cargs(params, execution)
     const ret = find_the_biggest_outputs(params, execution)
@@ -172,10 +174,8 @@ function find_the_biggest(
     output_index: string,
     runner: Runner | null = null,
 ): FindTheBiggestOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIND_THE_BIGGEST_METADATA);
     const params = find_the_biggest_params(volumes_surfaces, output_index)
-    return find_the_biggest_execute(params, execution);
+    return find_the_biggest_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       FindTheBiggestOutputs,
       FindTheBiggestParameters,
       find_the_biggest,
-      find_the_biggest_cargs,
       find_the_biggest_execute,
-      find_the_biggest_outputs,
       find_the_biggest_params,
 };

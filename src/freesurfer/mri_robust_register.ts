@@ -664,14 +664,16 @@ function mri_robust_register_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriRobustRegisterOutputs`).
  */
 function mri_robust_register_execute(
     params: MriRobustRegisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriRobustRegisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_ROBUST_REGISTER_METADATA);
     params = execution.params(params)
     const cargs = mri_robust_register_cargs(params, execution)
     const ret = mri_robust_register_outputs(params, execution)
@@ -792,10 +794,8 @@ function mri_robust_register(
     verbose: number | null = null,
     runner: Runner | null = null,
 ): MriRobustRegisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_ROBUST_REGISTER_METADATA);
     const params = mri_robust_register_params(movable_volume, target_volume, output_registration, outlier_sensitivity, satit, mapped_movable, mapped_movable_hdr, weights, oneminus_w, iscale, iscale_only, iscale_out, iscale_in, trans_only, affine, ixform, init_orient, no_init, vox2vox, cost, ent_radius, ent_correction, ent_ball, ent_mov, powell_tolerance, sobel, no_sym, maximum_iterations, ent_dst, high_iter, eps_iteration, no_multiscale, max_size, min_size, w_limit, sub_sample, float_type, white_bg_mov, white_bg_dst, uchar, mask_mov, mask_dst, half_mov, half_dst, half_weights, half_mov_lta, half_dst_lta, debug, verbose)
-    return mri_robust_register_execute(params, execution);
+    return mri_robust_register_execute(params, runner);
 }
 
 
@@ -804,8 +804,6 @@ export {
       MriRobustRegisterOutputs,
       MriRobustRegisterParameters,
       mri_robust_register,
-      mri_robust_register_cargs,
       mri_robust_register_execute,
-      mri_robust_register_outputs,
       mri_robust_register_params,
 };

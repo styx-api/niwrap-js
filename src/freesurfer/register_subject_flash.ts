@@ -133,14 +133,16 @@ function register_subject_flash_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegisterSubjectFlashOutputs`).
  */
 function register_subject_flash_execute(
     params: RegisterSubjectFlashParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegisterSubjectFlashOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REGISTER_SUBJECT_FLASH_METADATA);
     params = execution.params(params)
     const cargs = register_subject_flash_cargs(params, execution)
     const ret = register_subject_flash_outputs(params, execution)
@@ -165,10 +167,8 @@ function register_subject_flash(
     input_volumes: Array<InputPathType>,
     runner: Runner | null = null,
 ): RegisterSubjectFlashOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REGISTER_SUBJECT_FLASH_METADATA);
     const params = register_subject_flash_params(input_volumes)
-    return register_subject_flash_execute(params, execution);
+    return register_subject_flash_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       RegisterSubjectFlashOutputs,
       RegisterSubjectFlashParameters,
       register_subject_flash,
-      register_subject_flash_cargs,
       register_subject_flash_execute,
-      register_subject_flash_outputs,
       register_subject_flash_params,
 };

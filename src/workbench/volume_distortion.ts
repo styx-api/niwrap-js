@@ -169,14 +169,16 @@ function volume_distortion_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeDistortionOutputs`).
  */
 function volume_distortion_execute(
     params: VolumeDistortionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeDistortionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_DISTORTION_METADATA);
     params = execution.params(params)
     const cargs = volume_distortion_cargs(params, execution)
     const ret = volume_distortion_outputs(params, execution)
@@ -213,10 +215,8 @@ function volume_distortion(
     opt_log2: boolean = false,
     runner: Runner | null = null,
 ): VolumeDistortionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_DISTORTION_METADATA);
     const params = volume_distortion_params(warpfield, volume_out, opt_fnirt_source_volume, opt_circular, opt_log2)
-    return volume_distortion_execute(params, execution);
+    return volume_distortion_execute(params, runner);
 }
 
 
@@ -225,8 +225,6 @@ export {
       VolumeDistortionOutputs,
       VolumeDistortionParameters,
       volume_distortion,
-      volume_distortion_cargs,
       volume_distortion_execute,
-      volume_distortion_outputs,
       volume_distortion_params,
 };

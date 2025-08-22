@@ -423,14 +423,16 @@ function mris_fwhm_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisFwhmOutputs`).
  */
 function mris_fwhm_execute(
     params: MrisFwhmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisFwhmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_FWHM_METADATA);
     params = execution.params(params)
     const cargs = mris_fwhm_cargs(params, execution)
     const ret = mris_fwhm_outputs(params, execution)
@@ -515,10 +517,8 @@ function mris_fwhm(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisFwhmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_FWHM_METADATA);
     const params = mris_fwhm_params(input_file, subject, hemi, output_file, surf, label_file, cortex_flag, mask_file, x_matrix, detrend_order, smooth_only_flag, no_detrend_flag, sqr_flag, sum_file, dat_file, ar1dat_file, ar1vol, fwhmmap, prune_flag, no_prune_flag, out_mask, varnorm_flag, fwhm, niters_only, sd, synth_flag, synth_frames, threads, debug_flag, checkopts_flag, version_flag)
-    return mris_fwhm_execute(params, execution);
+    return mris_fwhm_execute(params, runner);
 }
 
 
@@ -527,8 +527,6 @@ export {
       MrisFwhmOutputs,
       MrisFwhmParameters,
       mris_fwhm,
-      mris_fwhm_cargs,
       mris_fwhm_execute,
-      mris_fwhm_outputs,
       mris_fwhm_params,
 };

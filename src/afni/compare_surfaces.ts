@@ -262,14 +262,16 @@ function compare_surfaces_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CompareSurfacesOutputs`).
  */
 function compare_surfaces_execute(
     params: CompareSurfacesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CompareSurfacesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(COMPARE_SURFACES_METADATA);
     params = execution.params(params)
     const cargs = compare_surfaces_cargs(params, execution)
     const ret = compare_surfaces_outputs(params, execution)
@@ -322,10 +324,8 @@ function compare_surfaces(
     yes_memory_trace: boolean = false,
     runner: Runner | null = null,
 ): CompareSurfacesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(COMPARE_SURFACES_METADATA);
     const params = compare_surfaces_params(spec_file, hemisphere, volume_parent_1, volume_parent_2, file_prefix, one_node, node_range, no_consistency_check, no_volreg, no_transform, set_environment_variable, trace, extreme_trace, no_memory_trace, yes_memory_trace)
-    return compare_surfaces_execute(params, execution);
+    return compare_surfaces_execute(params, runner);
 }
 
 
@@ -334,8 +334,6 @@ export {
       CompareSurfacesOutputs,
       CompareSurfacesParameters,
       compare_surfaces,
-      compare_surfaces_cargs,
       compare_surfaces_execute,
-      compare_surfaces_outputs,
       compare_surfaces_params,
 };

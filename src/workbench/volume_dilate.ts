@@ -323,14 +323,16 @@ function volume_dilate_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeDilateOutputs`).
  */
 function volume_dilate_execute(
     params: VolumeDilateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeDilateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_DILATE_METADATA);
     params = execution.params(params)
     const cargs = volume_dilate_cargs(params, execution)
     const ret = volume_dilate_outputs(params, execution)
@@ -384,10 +386,8 @@ function volume_dilate(
     grad_extrapolate: VolumeDilateGradExtrapolateParameters | null = null,
     runner: Runner | null = null,
 ): VolumeDilateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_DILATE_METADATA);
     const params = volume_dilate_params(volume, distance, method, volume_out, opt_exponent_exponent, opt_bad_voxel_roi_roi_volume, opt_data_roi_roi_volume, opt_subvolume_subvol, opt_legacy_cutoff, grad_extrapolate)
-    return volume_dilate_execute(params, execution);
+    return volume_dilate_execute(params, runner);
 }
 
 
@@ -398,12 +398,8 @@ export {
       VolumeDilateParameters,
       VolumeDilatePresmoothParameters,
       volume_dilate,
-      volume_dilate_cargs,
       volume_dilate_execute,
-      volume_dilate_grad_extrapolate_cargs,
       volume_dilate_grad_extrapolate_params,
-      volume_dilate_outputs,
       volume_dilate_params,
-      volume_dilate_presmooth_cargs,
       volume_dilate_presmooth_params,
 };

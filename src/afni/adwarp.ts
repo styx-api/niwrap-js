@@ -223,14 +223,16 @@ function adwarp_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AdwarpOutputs`).
  */
 function adwarp_execute(
     params: AdwarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AdwarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADWARP_METADATA);
     params = execution.params(params)
     const cargs = adwarp_cargs(params, execution)
     const ret = adwarp_outputs(params, execution)
@@ -271,10 +273,8 @@ function adwarp(
     func: string | null = null,
     runner: Runner | null = null,
 ): AdwarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADWARP_METADATA);
     const params = adwarp_params(apar, dpar, prefix, dxyz, verbose, force, resam, thr, func)
-    return adwarp_execute(params, execution);
+    return adwarp_execute(params, runner);
 }
 
 
@@ -283,8 +283,6 @@ export {
       AdwarpOutputs,
       AdwarpParameters,
       adwarp,
-      adwarp_cargs,
       adwarp_execute,
-      adwarp_outputs,
       adwarp_params,
 };

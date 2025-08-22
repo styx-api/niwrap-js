@@ -164,14 +164,16 @@ function dmri_save_histograms_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriSaveHistogramsOutputs`).
  */
 function dmri_save_histograms_execute(
     params: DmriSaveHistogramsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriSaveHistogramsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_SAVE_HISTOGRAMS_METADATA);
     params = execution.params(params)
     const cargs = dmri_save_histograms_cargs(params, execution)
     const ret = dmri_save_histograms_outputs(params, execution)
@@ -204,10 +206,8 @@ function dmri_save_histograms(
     brain_bundle_flag: boolean = false,
     runner: Runner | null = null,
 ): DmriSaveHistogramsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_SAVE_HISTOGRAMS_METADATA);
     const params = dmri_save_histograms_params(parcellation, number_of_bundles, vtk_bundle_list, output_csv, brain_bundle_flag)
-    return dmri_save_histograms_execute(params, execution);
+    return dmri_save_histograms_execute(params, runner);
 }
 
 
@@ -216,8 +216,6 @@ export {
       DmriSaveHistogramsOutputs,
       DmriSaveHistogramsParameters,
       dmri_save_histograms,
-      dmri_save_histograms_cargs,
       dmri_save_histograms_execute,
-      dmri_save_histograms_outputs,
       dmri_save_histograms_params,
 };

@@ -177,14 +177,16 @@ function midtrans_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MidtransOutputs`).
  */
 function midtrans_execute(
     params: MidtransParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MidtransOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MIDTRANS_METADATA);
     params = execution.params(params)
     const cargs = midtrans_cargs(params, execution)
     const ret = midtrans_outputs(params, execution)
@@ -219,10 +221,8 @@ function midtrans(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): MidtransOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MIDTRANS_METADATA);
     const params = midtrans_params(transforms, output_matrix, template_image, separate_basename, debug_flag, verbose_flag)
-    return midtrans_execute(params, execution);
+    return midtrans_execute(params, runner);
 }
 
 
@@ -231,8 +231,6 @@ export {
       MidtransOutputs,
       MidtransParameters,
       midtrans,
-      midtrans_cargs,
       midtrans_execute,
-      midtrans_outputs,
       midtrans_params,
 };

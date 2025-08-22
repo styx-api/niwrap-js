@@ -138,14 +138,16 @@ function morph_kernel_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MorphKernelOutputs`).
  */
 function morph_kernel_execute(
     params: MorphKernelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MorphKernelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MORPH_KERNEL_METADATA);
     params = execution.params(params)
     const cargs = morph_kernel_cargs(params, execution)
     const ret = morph_kernel_outputs(params, execution)
@@ -172,10 +174,8 @@ function morph_kernel(
     sphere_radius: number,
     runner: Runner | null = null,
 ): MorphKernelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MORPH_KERNEL_METADATA);
     const params = morph_kernel_params(cube_side_length, sphere_radius)
-    return morph_kernel_execute(params, execution);
+    return morph_kernel_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MorphKernelOutputs,
       MorphKernelParameters,
       morph_kernel,
-      morph_kernel_cargs,
       morph_kernel_execute,
-      morph_kernel_outputs,
       morph_kernel_params,
 };

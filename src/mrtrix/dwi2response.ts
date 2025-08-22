@@ -1232,14 +1232,16 @@ function dwi2response_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Dwi2responseOutputs`).
  */
 function dwi2response_execute(
     params: Dwi2responseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Dwi2responseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DWI2RESPONSE_METADATA);
     params = execution.params(params)
     const cargs = dwi2response_cargs(params, execution)
     const ret = dwi2response_outputs(params, execution)
@@ -1300,10 +1302,8 @@ function dwi2response(
     version: boolean = false,
     runner: Runner | null = null,
 ): Dwi2responseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DWI2RESPONSE_METADATA);
     const params = dwi2response_params(algorithm, grad, fslgrad, mask, voxels, shells, lmax, nocleanup, scratch, continue_, info, quiet, debug, force, nthreads, config, help, version)
-    return dwi2response_execute(params, execution);
+    return dwi2response_execute(params, runner);
 }
 
 
@@ -1326,30 +1326,14 @@ export {
       Dwi2responseTournierOutputs,
       Dwi2responseTournierParameters,
       dwi2response,
-      dwi2response_cargs,
-      dwi2response_config_cargs,
       dwi2response_config_params,
-      dwi2response_dhollander_cargs,
-      dwi2response_dhollander_outputs,
       dwi2response_dhollander_params,
       dwi2response_execute,
-      dwi2response_fa_cargs,
-      dwi2response_fa_outputs,
       dwi2response_fa_params,
-      dwi2response_fslgrad_cargs,
       dwi2response_fslgrad_params,
-      dwi2response_manual_cargs,
-      dwi2response_manual_outputs,
       dwi2response_manual_params,
-      dwi2response_msmt_5tt_cargs,
-      dwi2response_msmt_5tt_outputs,
       dwi2response_msmt_5tt_params,
-      dwi2response_outputs,
       dwi2response_params,
-      dwi2response_tax_cargs,
-      dwi2response_tax_outputs,
       dwi2response_tax_params,
-      dwi2response_tournier_cargs,
-      dwi2response_tournier_outputs,
       dwi2response_tournier_params,
 };

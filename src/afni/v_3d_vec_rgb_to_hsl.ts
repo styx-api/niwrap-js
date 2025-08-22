@@ -168,14 +168,16 @@ function v_3d_vec_rgb_to_hsl_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dVecRgbToHslOutputs`).
  */
 function v_3d_vec_rgb_to_hsl_execute(
     params: V3dVecRgbToHslParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dVecRgbToHslOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_VEC_RGB_TO_HSL_METADATA);
     params = execution.params(params)
     const cargs = v_3d_vec_rgb_to_hsl_cargs(params, execution)
     const ret = v_3d_vec_rgb_to_hsl_outputs(params, execution)
@@ -206,10 +208,8 @@ function v_3d_vec_rgb_to_hsl(
     in_scal: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dVecRgbToHslOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_VEC_RGB_TO_HSL_METADATA);
     const params = v_3d_vec_rgb_to_hsl_params(prefix, in_vec, mask, in_scal)
-    return v_3d_vec_rgb_to_hsl_execute(params, execution);
+    return v_3d_vec_rgb_to_hsl_execute(params, runner);
 }
 
 
@@ -218,8 +218,6 @@ export {
       V3dVecRgbToHslParameters,
       V_3D_VEC_RGB_TO_HSL_METADATA,
       v_3d_vec_rgb_to_hsl,
-      v_3d_vec_rgb_to_hsl_cargs,
       v_3d_vec_rgb_to_hsl_execute,
-      v_3d_vec_rgb_to_hsl_outputs,
       v_3d_vec_rgb_to_hsl_params,
 };

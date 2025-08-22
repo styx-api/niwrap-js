@@ -230,14 +230,16 @@ function afni_open_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AfniOpenOutputs`).
  */
 function afni_open_execute(
     params: AfniOpenParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AfniOpenOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AFNI_OPEN_METADATA);
     params = execution.params(params)
     const cargs = afni_open_cargs(params, execution)
     const ret = afni_open_outputs(params, execution)
@@ -290,10 +292,8 @@ function afni_open(
     h_web: boolean = false,
     runner: Runner | null = null,
 ): AfniOpenOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AFNI_OPEN_METADATA);
     const params = afni_open_params(files, method, editor, downloader, examinexmat, browser, readme, afniweb, global_help, gopts_help, help, mini_help, extreme_help, h_view, h_web)
-    return afni_open_execute(params, execution);
+    return afni_open_execute(params, runner);
 }
 
 
@@ -302,8 +302,6 @@ export {
       AfniOpenOutputs,
       AfniOpenParameters,
       afni_open,
-      afni_open_cargs,
       afni_open_execute,
-      afni_open_outputs,
       afni_open_params,
 };

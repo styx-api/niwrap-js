@@ -133,14 +133,16 @@ function v__1d_diff_mag_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dDiffMagOutputs`).
  */
 function v__1d_diff_mag_execute(
     params: V1dDiffMagParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dDiffMagOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__1D_DIFF_MAG_METADATA);
     params = execution.params(params)
     const cargs = v__1d_diff_mag_cargs(params, execution)
     const ret = v__1d_diff_mag_outputs(params, execution)
@@ -165,10 +167,8 @@ function v__1d_diff_mag(
     infile: InputPathType,
     runner: Runner | null = null,
 ): V1dDiffMagOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__1D_DIFF_MAG_METADATA);
     const params = v__1d_diff_mag_params(infile)
-    return v__1d_diff_mag_execute(params, execution);
+    return v__1d_diff_mag_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       V1dDiffMagParameters,
       V__1D_DIFF_MAG_METADATA,
       v__1d_diff_mag,
-      v__1d_diff_mag_cargs,
       v__1d_diff_mag_execute,
-      v__1d_diff_mag_outputs,
       v__1d_diff_mag_params,
 };

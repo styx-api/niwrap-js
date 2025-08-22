@@ -485,14 +485,16 @@ function v__auto_tlrc_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAutoTlrcOutputs`).
  */
 function v__auto_tlrc_execute(
     params: VAutoTlrcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAutoTlrcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__AUTO_TLRC_METADATA);
     params = execution.params(params)
     const cargs = v__auto_tlrc_cargs(params, execution)
     const ret = v__auto_tlrc_outputs(params, execution)
@@ -593,10 +595,8 @@ function v__auto_tlrc(
     verb: boolean = false,
     runner: Runner | null = null,
 ): VAutoTlrcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__AUTO_TLRC_METADATA);
     const params = v__auto_tlrc_params(base_template, input_anat, apar, input_dataset, no_ss, warp_orig_vol, dxyz, dx, dy, dz, pad_base, keep_tmp, clean, xform, no_avoid_eyes, ncr, onepass, twopass, maxite, not_ok_maxite, inweight, rigid_equiv, init_xform, no_pre, out_space, v_3d_allineate, v_3d_alcost, overwrite, pad_input, onewarp, twowarp, rmode, prefix, suffix, keep_view, base_copy, base_list, use_gz, verb)
-    return v__auto_tlrc_execute(params, execution);
+    return v__auto_tlrc_execute(params, runner);
 }
 
 
@@ -605,8 +605,6 @@ export {
       VAutoTlrcParameters,
       V__AUTO_TLRC_METADATA,
       v__auto_tlrc,
-      v__auto_tlrc_cargs,
       v__auto_tlrc_execute,
-      v__auto_tlrc_outputs,
       v__auto_tlrc_params,
 };

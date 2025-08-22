@@ -368,14 +368,16 @@ function mcflirt_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `McflirtOutputs`).
  */
 function mcflirt_execute(
     params: McflirtParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): McflirtOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MCFLIRT_METADATA);
     params = execution.params(params)
     const cargs = mcflirt_cargs(params, execution)
     const ret = mcflirt_outputs(params, execution)
@@ -440,10 +442,8 @@ function mcflirt(
     use_gradient: boolean = false,
     runner: Runner | null = null,
 ): McflirtOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MCFLIRT_METADATA);
     const params = mcflirt_params(in_file, bins, cost, dof, init, interpolation, mean_vol, out_file, ref_file, ref_vol, rotation, save_mats, save_plots, save_rmsabs, save_rmsrel, scaling, smooth, stages, stats_imgs, use_contour, use_gradient)
-    return mcflirt_execute(params, execution);
+    return mcflirt_execute(params, runner);
 }
 
 
@@ -452,8 +452,6 @@ export {
       McflirtOutputs,
       McflirtParameters,
       mcflirt,
-      mcflirt_cargs,
       mcflirt_execute,
-      mcflirt_outputs,
       mcflirt_params,
 };

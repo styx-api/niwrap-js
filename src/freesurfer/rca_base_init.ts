@@ -152,14 +152,16 @@ function rca_base_init_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RcaBaseInitOutputs`).
  */
 function rca_base_init_execute(
     params: RcaBaseInitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RcaBaseInitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RCA_BASE_INIT_METADATA);
     params = execution.params(params)
     const cargs = rca_base_init_cargs(params, execution)
     const ret = rca_base_init_outputs(params, execution)
@@ -188,10 +190,8 @@ function rca_base_init(
     cmd_file: string | null = null,
     runner: Runner | null = null,
 ): RcaBaseInitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RCA_BASE_INIT_METADATA);
     const params = rca_base_init_params(log_file, status_file, cmd_file)
-    return rca_base_init_execute(params, execution);
+    return rca_base_init_execute(params, runner);
 }
 
 
@@ -200,8 +200,6 @@ export {
       RcaBaseInitOutputs,
       RcaBaseInitParameters,
       rca_base_init,
-      rca_base_init_cargs,
       rca_base_init_execute,
-      rca_base_init_outputs,
       rca_base_init_params,
 };

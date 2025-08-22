@@ -143,14 +143,16 @@ function viena_quant_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VienaQuantOutputs`).
  */
 function viena_quant_execute(
     params: VienaQuantParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VienaQuantOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VIENA_QUANT_METADATA);
     params = execution.params(params)
     const cargs = viena_quant_cargs(params, execution)
     const ret = viena_quant_outputs(params, execution)
@@ -179,10 +181,8 @@ function viena_quant(
     ventricle_mask: InputPathType,
     runner: Runner | null = null,
 ): VienaQuantOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VIENA_QUANT_METADATA);
     const params = viena_quant_params(input1, input2, ventricle_mask)
-    return viena_quant_execute(params, execution);
+    return viena_quant_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       VienaQuantOutputs,
       VienaQuantParameters,
       viena_quant,
-      viena_quant_cargs,
       viena_quant_execute,
-      viena_quant_outputs,
       viena_quant_params,
 };

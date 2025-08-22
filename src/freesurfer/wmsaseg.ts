@@ -226,14 +226,16 @@ function wmsaseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WmsasegOutputs`).
  */
 function wmsaseg_execute(
     params: WmsasegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WmsasegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WMSASEG_METADATA);
     params = execution.params(params)
     const cargs = wmsaseg_cargs(params, execution)
     const ret = wmsaseg_outputs(params, execution)
@@ -278,10 +280,8 @@ function wmsaseg(
     halo2: boolean = false,
     runner: Runner | null = null,
 ): WmsasegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WMSASEG_METADATA);
     const params = wmsaseg_params(subject, source_orig, source_long, output_subdir, gca_file, no_reg, no_canorm, init_spm, reg_only, halo1, halo2)
-    return wmsaseg_execute(params, execution);
+    return wmsaseg_execute(params, runner);
 }
 
 
@@ -290,8 +290,6 @@ export {
       WmsasegOutputs,
       WmsasegParameters,
       wmsaseg,
-      wmsaseg_cargs,
       wmsaseg_execute,
-      wmsaseg_outputs,
       wmsaseg_params,
 };

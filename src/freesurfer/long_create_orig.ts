@@ -142,14 +142,16 @@ function long_create_orig_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LongCreateOrigOutputs`).
  */
 function long_create_orig_execute(
     params: LongCreateOrigParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LongCreateOrigOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LONG_CREATE_ORIG_METADATA);
     params = execution.params(params)
     const cargs = long_create_orig_cargs(params, execution)
     const ret = long_create_orig_outputs(params, execution)
@@ -176,10 +178,8 @@ function long_create_orig(
     tp_id: string | null = null,
     runner: Runner | null = null,
 ): LongCreateOrigOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LONG_CREATE_ORIG_METADATA);
     const params = long_create_orig_params(base_id, tp_id)
-    return long_create_orig_execute(params, execution);
+    return long_create_orig_execute(params, runner);
 }
 
 
@@ -188,8 +188,6 @@ export {
       LongCreateOrigOutputs,
       LongCreateOrigParameters,
       long_create_orig,
-      long_create_orig_cargs,
       long_create_orig_execute,
-      long_create_orig_outputs,
       long_create_orig_params,
 };

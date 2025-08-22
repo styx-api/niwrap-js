@@ -499,14 +499,16 @@ function mri_robust_template_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriRobustTemplateOutputs`).
  */
 function mri_robust_template_execute(
     params: MriRobustTemplateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriRobustTemplateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_ROBUST_TEMPLATE_METADATA);
     params = execution.params(params)
     const cargs = mri_robust_template_cargs(params, execution)
     const ret = mri_robust_template_outputs(params, execution)
@@ -603,10 +605,8 @@ function mri_robust_template(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): MriRobustTemplateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_ROBUST_TEMPLATE_METADATA);
     const params = mri_robust_template_params(mov_files, template_file, sat_value, satit_flag, lta_files, mapmov_files, mapmovhdr_files, weights_files, oneminusw_flag, average_type, inittp, fixtp_flag, iscale_flag, iscaleonly_flag, iscalein_files, iscaleout_files, transonly_flag, affine_flag, ixforms_files, masks_files, vox2vox_flag, leastsquares_flag, noit_flag, maxit, highit, epsit, pairmaxit, pairepsit, subsample, nomulti_flag, floattype_flag, finalnearest_flag, doubleprec_flag, cras_flag, res_thresh, frobnorm_thresh, debug_flag)
-    return mri_robust_template_execute(params, execution);
+    return mri_robust_template_execute(params, runner);
 }
 
 
@@ -615,8 +615,6 @@ export {
       MriRobustTemplateOutputs,
       MriRobustTemplateParameters,
       mri_robust_template,
-      mri_robust_template_cargs,
       mri_robust_template_execute,
-      mri_robust_template_outputs,
       mri_robust_template_params,
 };

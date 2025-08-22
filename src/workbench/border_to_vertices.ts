@@ -158,14 +158,16 @@ function border_to_vertices_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BorderToVerticesOutputs`).
  */
 function border_to_vertices_execute(
     params: BorderToVerticesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BorderToVerticesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BORDER_TO_VERTICES_METADATA);
     params = execution.params(params)
     const cargs = border_to_vertices_cargs(params, execution)
     const ret = border_to_vertices_outputs(params, execution)
@@ -198,10 +200,8 @@ function border_to_vertices(
     opt_border_name: string | null = null,
     runner: Runner | null = null,
 ): BorderToVerticesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BORDER_TO_VERTICES_METADATA);
     const params = border_to_vertices_params(surface, border_file, metric_out, opt_border_name)
-    return border_to_vertices_execute(params, execution);
+    return border_to_vertices_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       BorderToVerticesOutputs,
       BorderToVerticesParameters,
       border_to_vertices,
-      border_to_vertices_cargs,
       border_to_vertices_execute,
-      border_to_vertices_outputs,
       border_to_vertices_params,
 };

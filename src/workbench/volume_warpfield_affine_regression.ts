@@ -219,14 +219,16 @@ function volume_warpfield_affine_regression_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeWarpfieldAffineRegressionOutputs`).
  */
 function volume_warpfield_affine_regression_execute(
     params: VolumeWarpfieldAffineRegressionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeWarpfieldAffineRegressionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_WARPFIELD_AFFINE_REGRESSION_METADATA);
     params = execution.params(params)
     const cargs = volume_warpfield_affine_regression_cargs(params, execution)
     const ret = volume_warpfield_affine_regression_outputs(params, execution)
@@ -263,10 +265,8 @@ function volume_warpfield_affine_regression(
     flirt_out: VolumeWarpfieldAffineRegressionFlirtOutParameters | null = null,
     runner: Runner | null = null,
 ): VolumeWarpfieldAffineRegressionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_WARPFIELD_AFFINE_REGRESSION_METADATA);
     const params = volume_warpfield_affine_regression_params(warpfield, affine_out, opt_roi_roi_vol, opt_fnirt_source_volume, flirt_out)
-    return volume_warpfield_affine_regression_execute(params, execution);
+    return volume_warpfield_affine_regression_execute(params, runner);
 }
 
 
@@ -276,10 +276,7 @@ export {
       VolumeWarpfieldAffineRegressionOutputs,
       VolumeWarpfieldAffineRegressionParameters,
       volume_warpfield_affine_regression,
-      volume_warpfield_affine_regression_cargs,
       volume_warpfield_affine_regression_execute,
-      volume_warpfield_affine_regression_flirt_out_cargs,
       volume_warpfield_affine_regression_flirt_out_params,
-      volume_warpfield_affine_regression_outputs,
       volume_warpfield_affine_regression_params,
 };

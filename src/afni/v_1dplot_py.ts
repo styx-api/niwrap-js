@@ -469,14 +469,16 @@ function v_1dplot_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dplotPyOutputs`).
  */
 function v_1dplot_py_execute(
     params: V1dplotPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dplotPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1DPLOT_PY_METADATA);
     params = execution.params(params)
     const cargs = v_1dplot_py_cargs(params, execution)
     const ret = v_1dplot_py_outputs(params, execution)
@@ -563,10 +565,8 @@ function v_1dplot_py(
     bkgd_color: string | null = null,
     runner: Runner | null = null,
 ): V1dplotPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1DPLOT_PY_METADATA);
     const params = v_1dplot_py_params(infiles, prefix, help, boxplot_on, bplot_view, margin_off, scale, xfile, xvals, yaxis, ylabels, ylabels_maxlen, legend_on, legend_labels, legend_locs, xlabel, title, reverse_order, sepscl, one_graph, dpi, figsize, fontsize, fontfamily, fontstyles, colors, patches, censor_trs, censor_files, censor_hline, censor_rgb, bkgd_color)
-    return v_1dplot_py_execute(params, execution);
+    return v_1dplot_py_execute(params, runner);
 }
 
 
@@ -575,8 +575,6 @@ export {
       V1dplotPyParameters,
       V_1DPLOT_PY_METADATA,
       v_1dplot_py,
-      v_1dplot_py_cargs,
       v_1dplot_py_execute,
-      v_1dplot_py_outputs,
       v_1dplot_py_params,
 };

@@ -285,14 +285,16 @@ function groupstatsdiff_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GroupstatsdiffOutputs`).
  */
 function groupstatsdiff_execute(
     params: GroupstatsdiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GroupstatsdiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GROUPSTATSDIFF_METADATA);
     params = execution.params(params)
     const cargs = groupstatsdiff_cargs(params, execution)
     const ret = groupstatsdiff_outputs(params, execution)
@@ -355,10 +357,8 @@ function groupstatsdiff(
     dice_ctab: string | null = null,
     runner: Runner | null = null,
 ): GroupstatsdiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GROUPSTATSDIFF_METADATA);
     const params = groupstatsdiff_params(group1_dir, group2_dir, output_dir, no_maps, osgm, no_common, allow_subj_diff, no_area, no_volume, no_ba, no_aparcstats, no_asegstats, no_wparcstats, no_stats, no_prune, fwhm_value, subjects_dir1, subjects_dir2, no_dice, dice_ctab)
-    return groupstatsdiff_execute(params, execution);
+    return groupstatsdiff_execute(params, runner);
 }
 
 
@@ -367,8 +367,6 @@ export {
       GroupstatsdiffOutputs,
       GroupstatsdiffParameters,
       groupstatsdiff,
-      groupstatsdiff_cargs,
       groupstatsdiff_execute,
-      groupstatsdiff_outputs,
       groupstatsdiff_params,
 };

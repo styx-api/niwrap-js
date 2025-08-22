@@ -164,14 +164,16 @@ function v__command_globb_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VCommandGlobbOutputs`).
  */
 function v__command_globb_execute(
     params: VCommandGlobbParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VCommandGlobbOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__COMMAND_GLOBB_METADATA);
     params = execution.params(params)
     const cargs = v__command_globb_cargs(params, execution)
     const ret = v__command_globb_outputs(params, execution)
@@ -202,10 +204,8 @@ function v__command_globb(
     extension: string | null = null,
     runner: Runner | null = null,
 ): VCommandGlobbOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__COMMAND_GLOBB_METADATA);
     const params = v__command_globb_params(program_command, output_dir, brick_list, extension)
-    return v__command_globb_execute(params, execution);
+    return v__command_globb_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       VCommandGlobbParameters,
       V__COMMAND_GLOBB_METADATA,
       v__command_globb,
-      v__command_globb_cargs,
       v__command_globb_execute,
-      v__command_globb_outputs,
       v__command_globb_params,
 };

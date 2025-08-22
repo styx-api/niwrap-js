@@ -218,14 +218,16 @@ function v_3d_toutcount_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dToutcountOutputs`).
  */
 function v_3d_toutcount_execute(
     params: V3dToutcountParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dToutcountOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TOUTCOUNT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_toutcount_cargs(params, execution)
     const ret = v_3d_toutcount_outputs(params, execution)
@@ -268,10 +270,8 @@ function v_3d_toutcount(
     legendre: boolean = false,
     runner: Runner | null = null,
 ): V3dToutcountOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TOUTCOUNT_METADATA);
     const params = v_3d_toutcount_params(input_dataset, output_prefix, mask_dataset, q_threshold, autoclip, automask, fraction, range, polort_order, legendre)
-    return v_3d_toutcount_execute(params, execution);
+    return v_3d_toutcount_execute(params, runner);
 }
 
 
@@ -280,8 +280,6 @@ export {
       V3dToutcountParameters,
       V_3D_TOUTCOUNT_METADATA,
       v_3d_toutcount,
-      v_3d_toutcount_cargs,
       v_3d_toutcount_execute,
-      v_3d_toutcount_outputs,
       v_3d_toutcount_params,
 };

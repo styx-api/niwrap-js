@@ -237,14 +237,16 @@ function v_3d_multi_thresh_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dMultiThreshOutputs`).
  */
 function v_3d_multi_thresh_execute(
     params: V3dMultiThreshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dMultiThreshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_MULTI_THRESH_METADATA);
     params = execution.params(params)
     const cargs = v_3d_multi_thresh_cargs(params, execution)
     const ret = v_3d_multi_thresh_outputs(params, execution)
@@ -289,10 +291,8 @@ function v_3d_multi_thresh(
     quiet_flag: boolean = false,
     runner: Runner | null = null,
 ): V3dMultiThreshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_MULTI_THRESH_METADATA);
     const params = v_3d_multi_thresh_params(mthresh_file, input_file, index, signed_flag, positive_sign_flag, negative_sign_flag, prefix, mask_only_flag, all_mask, no_zero_flag, quiet_flag)
-    return v_3d_multi_thresh_execute(params, execution);
+    return v_3d_multi_thresh_execute(params, runner);
 }
 
 
@@ -301,8 +301,6 @@ export {
       V3dMultiThreshParameters,
       V_3D_MULTI_THRESH_METADATA,
       v_3d_multi_thresh,
-      v_3d_multi_thresh_cargs,
       v_3d_multi_thresh_execute,
-      v_3d_multi_thresh_outputs,
       v_3d_multi_thresh_params,
 };

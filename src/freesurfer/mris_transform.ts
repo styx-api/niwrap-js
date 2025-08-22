@@ -174,14 +174,16 @@ function mris_transform_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisTransformOutputs`).
  */
 function mris_transform_execute(
     params: MrisTransformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisTransformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_TRANSFORM_METADATA);
     params = execution.params(params)
     const cargs = mris_transform_cargs(params, execution)
     const ret = mris_transform_outputs(params, execution)
@@ -216,10 +218,8 @@ function mris_transform(
     is_inverse: boolean = false,
     runner: Runner | null = null,
 ): MrisTransformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_TRANSFORM_METADATA);
     const params = mris_transform_params(input_surface, transform, output_surface, trx_src, trx_dst, is_inverse)
-    return mris_transform_execute(params, execution);
+    return mris_transform_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       MrisTransformOutputs,
       MrisTransformParameters,
       mris_transform,
-      mris_transform_cargs,
       mris_transform_execute,
-      mris_transform_outputs,
       mris_transform_params,
 };

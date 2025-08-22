@@ -248,14 +248,16 @@ function surf_layers_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfLayersOutputs`).
  */
 function surf_layers_execute(
     params: SurfLayersParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfLayersOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_LAYERS_METADATA);
     params = execution.params(params)
     const cargs = surf_layers_cargs(params, execution)
     const ret = surf_layers_outputs(params, execution)
@@ -298,10 +300,8 @@ function surf_layers(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): SurfLayersOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_LAYERS_METADATA);
     const params = surf_layers_params(spec_dset, outdir, states, hemi, n_intermed_surfs, surf_a, surf_b, surf_intermed_pref, echo, no_clean)
-    return surf_layers_execute(params, execution);
+    return surf_layers_execute(params, runner);
 }
 
 
@@ -310,8 +310,6 @@ export {
       SurfLayersOutputs,
       SurfLayersParameters,
       surf_layers,
-      surf_layers_cargs,
       surf_layers_execute,
-      surf_layers_outputs,
       surf_layers_params,
 };

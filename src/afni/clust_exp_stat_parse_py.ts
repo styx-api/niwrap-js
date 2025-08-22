@@ -285,14 +285,16 @@ function clust_exp_stat_parse_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ClustExpStatParsePyOutputs`).
  */
 function clust_exp_stat_parse_py_execute(
     params: ClustExpStatParsePyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ClustExpStatParsePyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CLUST_EXP_STAT_PARSE_PY_METADATA);
     params = execution.params(params)
     const cargs = clust_exp_stat_parse_py_cargs(params, execution)
     const ret = clust_exp_stat_parse_py_outputs(params, execution)
@@ -341,10 +343,8 @@ function clust_exp_stat_parse_py(
     overwrite: boolean = false,
     runner: Runner | null = null,
 ): ClustExpStatParsePyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CLUST_EXP_STAT_PARSE_PY_METADATA);
     const params = clust_exp_stat_parse_py_params(statdset, meanbrik, threshbrik, subjdset, subjtable, master, prefix, pval, minvox, atlas, session, noshiny, overwrite)
-    return clust_exp_stat_parse_py_execute(params, execution);
+    return clust_exp_stat_parse_py_execute(params, runner);
 }
 
 
@@ -353,8 +353,6 @@ export {
       ClustExpStatParsePyOutputs,
       ClustExpStatParsePyParameters,
       clust_exp_stat_parse_py,
-      clust_exp_stat_parse_py_cargs,
       clust_exp_stat_parse_py_execute,
-      clust_exp_stat_parse_py_outputs,
       clust_exp_stat_parse_py_params,
 };

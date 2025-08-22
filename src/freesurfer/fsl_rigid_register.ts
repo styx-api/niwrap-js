@@ -350,14 +350,16 @@ function fsl_rigid_register_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslRigidRegisterOutputs`).
  */
 function fsl_rigid_register_execute(
     params: FslRigidRegisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslRigidRegisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_RIGID_REGISTER_METADATA);
     params = execution.params(params)
     const cargs = fsl_rigid_register_cargs(params, execution)
     const ret = fsl_rigid_register_outputs(params, execution)
@@ -424,10 +426,8 @@ function fsl_rigid_register(
     help: boolean = false,
     runner: Runner | null = null,
 ): FslRigidRegisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_RIGID_REGISTER_METADATA);
     const params = fsl_rigid_register_params(refvol, inputvol, outputvol, fslmat, regmat, xfmmat, ltamat, noinitgeom, applyxfm, applyinitxfm, initxfm, maxangle, interp, dof, bins, cost, tmpdir, nocleanup, cleanup, subject, version, help)
-    return fsl_rigid_register_execute(params, execution);
+    return fsl_rigid_register_execute(params, runner);
 }
 
 
@@ -436,8 +436,6 @@ export {
       FslRigidRegisterOutputs,
       FslRigidRegisterParameters,
       fsl_rigid_register,
-      fsl_rigid_register_cargs,
       fsl_rigid_register_execute,
-      fsl_rigid_register_outputs,
       fsl_rigid_register_params,
 };

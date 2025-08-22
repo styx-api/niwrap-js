@@ -238,14 +238,16 @@ function metric_dilate_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricDilateOutputs`).
  */
 function metric_dilate_execute(
     params: MetricDilateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricDilateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_DILATE_METADATA);
     params = execution.params(params)
     const cargs = metric_dilate_cargs(params, execution)
     const ret = metric_dilate_outputs(params, execution)
@@ -300,10 +302,8 @@ function metric_dilate(
     opt_legacy_cutoff: boolean = false,
     runner: Runner | null = null,
 ): MetricDilateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_DILATE_METADATA);
     const params = metric_dilate_params(metric, surface, distance, metric_out, opt_bad_vertex_roi_roi_metric, opt_data_roi_roi_metric, opt_column_column, opt_nearest, opt_linear, opt_exponent_exponent, opt_corrected_areas_area_metric, opt_legacy_cutoff)
-    return metric_dilate_execute(params, execution);
+    return metric_dilate_execute(params, runner);
 }
 
 
@@ -312,8 +312,6 @@ export {
       MetricDilateOutputs,
       MetricDilateParameters,
       metric_dilate,
-      metric_dilate_cargs,
       metric_dilate_execute,
-      metric_dilate_outputs,
       metric_dilate_params,
 };

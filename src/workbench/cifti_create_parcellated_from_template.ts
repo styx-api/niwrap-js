@@ -211,14 +211,16 @@ function cifti_create_parcellated_from_template_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCreateParcellatedFromTemplateOutputs`).
  */
 function cifti_create_parcellated_from_template_execute(
     params: CiftiCreateParcellatedFromTemplateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiCreateParcellatedFromTemplateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_CREATE_PARCELLATED_FROM_TEMPLATE_METADATA);
     params = execution.params(params)
     const cargs = cifti_create_parcellated_from_template_cargs(params, execution)
     const ret = cifti_create_parcellated_from_template_outputs(params, execution)
@@ -253,10 +255,8 @@ function cifti_create_parcellated_from_template(
     cifti: Array<CiftiCreateParcellatedFromTemplateCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiCreateParcellatedFromTemplateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_CREATE_PARCELLATED_FROM_TEMPLATE_METADATA);
     const params = cifti_create_parcellated_from_template_params(cifti_template, modify_direction, cifti_out, opt_fill_value_value, cifti)
-    return cifti_create_parcellated_from_template_execute(params, execution);
+    return cifti_create_parcellated_from_template_execute(params, runner);
 }
 
 
@@ -266,10 +266,7 @@ export {
       CiftiCreateParcellatedFromTemplateOutputs,
       CiftiCreateParcellatedFromTemplateParameters,
       cifti_create_parcellated_from_template,
-      cifti_create_parcellated_from_template_cargs,
-      cifti_create_parcellated_from_template_cifti_cargs,
       cifti_create_parcellated_from_template_cifti_params,
       cifti_create_parcellated_from_template_execute,
-      cifti_create_parcellated_from_template_outputs,
       cifti_create_parcellated_from_template_params,
 };

@@ -228,14 +228,16 @@ function wmedits2surf_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Wmedits2surfOutputs`).
  */
 function wmedits2surf_execute(
     params: Wmedits2surfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Wmedits2surfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WMEDITS2SURF_METADATA);
     params = execution.params(params)
     const cargs = wmedits2surf_cargs(params, execution)
     const ret = wmedits2surf_outputs(params, execution)
@@ -277,10 +279,8 @@ function wmedits2surf(
     no_surfs: boolean = false,
     runner: Runner | null = null,
 ): Wmedits2surfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WMEDITS2SURF_METADATA);
     const params = wmedits2surf_params(subject, self, overwrite, tmp_dir, cleanup, no_cleanup, debug, lh, rh, no_surfs)
-    return wmedits2surf_execute(params, execution);
+    return wmedits2surf_execute(params, runner);
 }
 
 
@@ -289,8 +289,6 @@ export {
       Wmedits2surfOutputs,
       Wmedits2surfParameters,
       wmedits2surf,
-      wmedits2surf_cargs,
       wmedits2surf_execute,
-      wmedits2surf_outputs,
       wmedits2surf_params,
 };

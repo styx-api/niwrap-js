@@ -152,14 +152,16 @@ function quantify_hasubregions_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `QuantifyHasubregionsShOutputs`).
  */
 function quantify_hasubregions_sh_execute(
     params: QuantifyHasubregionsShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): QuantifyHasubregionsShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(QUANTIFY_HASUBREGIONS_SH_METADATA);
     params = execution.params(params)
     const cargs = quantify_hasubregions_sh_cargs(params, execution)
     const ret = quantify_hasubregions_sh_outputs(params, execution)
@@ -190,10 +192,8 @@ function quantify_hasubregions_sh(
     subjects_directory: string | null = null,
     runner: Runner | null = null,
 ): QuantifyHasubregionsShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(QUANTIFY_HASUBREGIONS_SH_METADATA);
     const params = quantify_hasubregions_sh_params(prefix, suffix, output_file, subjects_directory)
-    return quantify_hasubregions_sh_execute(params, execution);
+    return quantify_hasubregions_sh_execute(params, runner);
 }
 
 
@@ -202,8 +202,6 @@ export {
       QuantifyHasubregionsShOutputs,
       QuantifyHasubregionsShParameters,
       quantify_hasubregions_sh,
-      quantify_hasubregions_sh_cargs,
       quantify_hasubregions_sh_execute,
-      quantify_hasubregions_sh_outputs,
       quantify_hasubregions_sh_params,
 };

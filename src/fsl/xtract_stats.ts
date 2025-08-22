@@ -219,14 +219,16 @@ function xtract_stats_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `XtractStatsOutputs`).
  */
 function xtract_stats_execute(
     params: XtractStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): XtractStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(XTRACT_STATS_METADATA);
     params = execution.params(params)
     const cargs = xtract_stats_cargs(params, execution)
     const ret = xtract_stats_outputs(params, execution)
@@ -267,10 +269,8 @@ function xtract_stats(
     keep_temp_files: boolean = false,
     runner: Runner | null = null,
 ): XtractStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(XTRACT_STATS_METADATA);
     const params = xtract_stats_params(folder_basename, xtract_dir, xtract2diff, reference_image, output_file, structures_file, threshold, measurements, keep_temp_files)
-    return xtract_stats_execute(params, execution);
+    return xtract_stats_execute(params, runner);
 }
 
 
@@ -279,8 +279,6 @@ export {
       XtractStatsOutputs,
       XtractStatsParameters,
       xtract_stats,
-      xtract_stats_cargs,
       xtract_stats_execute,
-      xtract_stats_outputs,
       xtract_stats_params,
 };

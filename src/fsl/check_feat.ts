@@ -143,14 +143,16 @@ function check_feat_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CheckFeatOutputs`).
  */
 function check_feat_execute(
     params: CheckFeatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CheckFeatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CHECK_FEAT_METADATA);
     params = execution.params(params)
     const cargs = check_feat_cargs(params, execution)
     const ret = check_feat_outputs(params, execution)
@@ -177,10 +179,8 @@ function check_feat(
     report_log_file: InputPathType,
     runner: Runner | null = null,
 ): CheckFeatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CHECK_FEAT_METADATA);
     const params = check_feat_params(report_file, report_log_file)
-    return check_feat_execute(params, execution);
+    return check_feat_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       CheckFeatOutputs,
       CheckFeatParameters,
       check_feat,
-      check_feat_cargs,
       check_feat_execute,
-      check_feat_outputs,
       check_feat_params,
 };

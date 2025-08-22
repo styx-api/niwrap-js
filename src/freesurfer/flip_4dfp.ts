@@ -175,14 +175,16 @@ function flip_4dfp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Flip4dfpOutputs`).
  */
 function flip_4dfp_execute(
     params: Flip4dfpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Flip4dfpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FLIP_4DFP_METADATA);
     params = execution.params(params)
     const cargs = flip_4dfp_cargs(params, execution)
     const ret = flip_4dfp_outputs(params, execution)
@@ -217,10 +219,8 @@ function flip_4dfp(
     endianness: "b" | "l" | null = null,
     runner: Runner | null = null,
 ): Flip4dfpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FLIP_4DFP_METADATA);
     const params = flip_4dfp_params(input_image, output_image, flip_x, flip_y, flip_z, endianness)
-    return flip_4dfp_execute(params, execution);
+    return flip_4dfp_execute(params, runner);
 }
 
 
@@ -229,8 +229,6 @@ export {
       Flip4dfpOutputs,
       Flip4dfpParameters,
       flip_4dfp,
-      flip_4dfp_cargs,
       flip_4dfp_execute,
-      flip_4dfp_outputs,
       flip_4dfp_params,
 };

@@ -241,14 +241,16 @@ function v_3d_toy_prog_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dToyProgOutputs`).
  */
 function v_3d_toy_prog_execute(
     params: V3dToyProgParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dToyProgOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TOY_PROG_METADATA);
     params = execution.params(params)
     const cargs = v_3d_toy_prog_cargs(params, execution)
     const ret = v_3d_toy_prog_outputs(params, execution)
@@ -299,10 +301,8 @@ function v_3d_toy_prog(
     help_all_opts: boolean = false,
     runner: Runner | null = null,
 ): V3dToyProgOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TOY_PROG_METADATA);
     const params = v_3d_toy_prog_params(input_dataset, output_prefix, mask_dataset, output_datum, mini_help, help, extreme_help, help_view, help_web, help_find, help_raw, help_spx, help_aspx, help_all_opts)
-    return v_3d_toy_prog_execute(params, execution);
+    return v_3d_toy_prog_execute(params, runner);
 }
 
 
@@ -311,8 +311,6 @@ export {
       V3dToyProgParameters,
       V_3D_TOY_PROG_METADATA,
       v_3d_toy_prog,
-      v_3d_toy_prog_cargs,
       v_3d_toy_prog_execute,
-      v_3d_toy_prog_outputs,
       v_3d_toy_prog_params,
 };

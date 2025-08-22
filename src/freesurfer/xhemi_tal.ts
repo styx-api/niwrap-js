@@ -130,14 +130,16 @@ function xhemi_tal_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `XhemiTalOutputs`).
  */
 function xhemi_tal_execute(
     params: XhemiTalParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): XhemiTalOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(XHEMI_TAL_METADATA);
     params = execution.params(params)
     const cargs = xhemi_tal_cargs(params, execution)
     const ret = xhemi_tal_outputs(params, execution)
@@ -162,10 +164,8 @@ function xhemi_tal(
     subject: string,
     runner: Runner | null = null,
 ): XhemiTalOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(XHEMI_TAL_METADATA);
     const params = xhemi_tal_params(subject)
-    return xhemi_tal_execute(params, execution);
+    return xhemi_tal_execute(params, runner);
 }
 
 
@@ -174,8 +174,6 @@ export {
       XhemiTalOutputs,
       XhemiTalParameters,
       xhemi_tal,
-      xhemi_tal_cargs,
       xhemi_tal_execute,
-      xhemi_tal_outputs,
       xhemi_tal_params,
 };

@@ -431,14 +431,16 @@ function qdelaunay_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `QdelaunayOutputs`).
  */
 function qdelaunay_execute(
     params: QdelaunayParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): QdelaunayOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(QDELAUNAY_METADATA);
     params = execution.params(params)
     const cargs = qdelaunay_cargs(params, execution)
     const ret = qdelaunay_outputs(params, execution)
@@ -527,10 +529,8 @@ function qdelaunay(
     summary: boolean = false,
     runner: Runner | null = null,
 ): QdelaunayOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(QDELAUNAY_METADATA);
     const params = qdelaunay_params(input_file, furthest_site, triangulated_output, joggled_input, joggle_range, search_simplex, point_infinity, delaunay_visible, delaunay_regions, trace_level, check, statistics, verify, output_stdout, facets_summary, input_file_option, output_file_option, trace_point, trace_merge, trace_merge_width, stop_point, stop_cone_point, centrum_radius, max_angle_cosine, perturb_factor, min_facet_width, facet_dump, geomview, vertices_incident, mathematica, off_format, point_coordinates, summary)
-    return qdelaunay_execute(params, execution);
+    return qdelaunay_execute(params, runner);
 }
 
 
@@ -539,8 +539,6 @@ export {
       QdelaunayOutputs,
       QdelaunayParameters,
       qdelaunay,
-      qdelaunay_cargs,
       qdelaunay_execute,
-      qdelaunay_outputs,
       qdelaunay_params,
 };

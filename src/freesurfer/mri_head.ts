@@ -166,14 +166,16 @@ function mri_head_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriHeadOutputs`).
  */
 function mri_head_execute(
     params: MriHeadParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriHeadOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_HEAD_METADATA);
     params = execution.params(params)
     const cargs = mri_head_cargs(params, execution)
     const ret = mri_head_outputs(params, execution)
@@ -208,10 +210,8 @@ function mri_head(
     question_mark_help: boolean = false,
     runner: Runner | null = null,
 ): MriHeadOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_HEAD_METADATA);
     const params = mri_head_params(identify, read, filename, help, usage, question_mark_help)
-    return mri_head_execute(params, execution);
+    return mri_head_execute(params, runner);
 }
 
 
@@ -220,8 +220,6 @@ export {
       MriHeadOutputs,
       MriHeadParameters,
       mri_head,
-      mri_head_cargs,
       mri_head_execute,
-      mri_head_outputs,
       mri_head_params,
 };

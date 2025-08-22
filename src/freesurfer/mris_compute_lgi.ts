@@ -186,14 +186,16 @@ function mris_compute_lgi_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisComputeLgiOutputs`).
  */
 function mris_compute_lgi_execute(
     params: MrisComputeLgiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisComputeLgiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_COMPUTE_LGI_METADATA);
     params = execution.params(params)
     const cargs = mris_compute_lgi_cargs(params, execution)
     const ret = mris_compute_lgi_outputs(params, execution)
@@ -228,10 +230,8 @@ function mris_compute_lgi(
     dontrun: boolean = false,
     runner: Runner | null = null,
 ): MrisComputeLgiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_COMPUTE_LGI_METADATA);
     const params = mris_compute_lgi_params(input_surface, close_sphere_size, smooth_iters, step_size, echo, dontrun)
-    return mris_compute_lgi_execute(params, execution);
+    return mris_compute_lgi_execute(params, runner);
 }
 
 
@@ -240,8 +240,6 @@ export {
       MrisComputeLgiOutputs,
       MrisComputeLgiParameters,
       mris_compute_lgi,
-      mris_compute_lgi_cargs,
       mris_compute_lgi_execute,
-      mris_compute_lgi_outputs,
       mris_compute_lgi_params,
 };

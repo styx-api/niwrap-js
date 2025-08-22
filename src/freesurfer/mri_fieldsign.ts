@@ -345,14 +345,16 @@ function mri_fieldsign_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriFieldsignOutputs`).
  */
 function mri_fieldsign_execute(
     params: MriFieldsignParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriFieldsignOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_FIELDSIGN_METADATA);
     params = execution.params(params)
     const cargs = mri_fieldsign_cargs(params, execution)
     const ret = mri_fieldsign_outputs(params, execution)
@@ -423,10 +425,8 @@ function mri_fieldsign(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): MriFieldsignOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_FIELDSIGN_METADATA);
     const params = mri_fieldsign_params(fieldsign_file, eccen_values, polar_values, subject, hemisphere, patch_file, occip_flag, sphere_flag, fwhm, nsmooth, reverse_flag, old_flag, eccen_rotation, polar_rotation, eccen_output, polar_output, eccen_sfa_file, polar_sfa_file, sfa_dir, sfa_true_flag, debug_flag, checkopts_flag, help_flag, version_flag)
-    return mri_fieldsign_execute(params, execution);
+    return mri_fieldsign_execute(params, runner);
 }
 
 
@@ -435,8 +435,6 @@ export {
       MriFieldsignOutputs,
       MriFieldsignParameters,
       mri_fieldsign,
-      mri_fieldsign_cargs,
       mri_fieldsign_execute,
-      mri_fieldsign_outputs,
       mri_fieldsign_params,
 };

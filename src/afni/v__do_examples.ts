@@ -135,14 +135,16 @@ function v__do_examples_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDoExamplesOutputs`).
  */
 function v__do_examples_execute(
     params: VDoExamplesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDoExamplesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DO_EXAMPLES_METADATA);
     params = execution.params(params)
     const cargs = v__do_examples_cargs(params, execution)
     const ret = v__do_examples_outputs(params, execution)
@@ -167,10 +169,8 @@ function v__do_examples(
     auto_test: boolean = false,
     runner: Runner | null = null,
 ): VDoExamplesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DO_EXAMPLES_METADATA);
     const params = v__do_examples_params(auto_test)
-    return v__do_examples_execute(params, execution);
+    return v__do_examples_execute(params, runner);
 }
 
 
@@ -179,8 +179,6 @@ export {
       VDoExamplesParameters,
       V__DO_EXAMPLES_METADATA,
       v__do_examples,
-      v__do_examples_cargs,
       v__do_examples_execute,
-      v__do_examples_outputs,
       v__do_examples_params,
 };

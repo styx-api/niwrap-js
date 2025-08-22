@@ -729,14 +729,16 @@ function mri_em_register_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriEmRegisterOutputs`).
  */
 function mri_em_register_execute(
     params: MriEmRegisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriEmRegisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_EM_REGISTER_METADATA);
     params = execution.params(params)
     const cargs = mri_em_register_cargs(params, execution)
     const ret = mri_em_register_outputs(params, execution)
@@ -871,10 +873,8 @@ function mri_em_register(
     threads: number | null = null,
     runner: Runner | null = null,
 ): MriEmRegisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_EM_REGISTER_METADATA);
     const params = mri_em_register_params(input_volume, template_gca, output_transform, distance, nomap, flash, mask, skull, uns, diag, debug_voxel, debug_label, tr, te, alpha, example, samples, fsamples, nsamples, contrast, flash_parms, transonly, write_mean, prior, spacing, scales, novar, dt, tol, center, noscale, noiscale, num_transforms, area, nlarea, levels, intensity, reduce, n_samples, norm, trans, steps, long_reg, cpfile, translation_vector, rotation_vector, xform, blur, diagno, s, max_angle, niters, write_iters, ctl_point_pct, momentum, threads)
-    return mri_em_register_execute(params, execution);
+    return mri_em_register_execute(params, runner);
 }
 
 
@@ -883,8 +883,6 @@ export {
       MriEmRegisterOutputs,
       MriEmRegisterParameters,
       mri_em_register,
-      mri_em_register_cargs,
       mri_em_register_execute,
-      mri_em_register_outputs,
       mri_em_register_params,
 };

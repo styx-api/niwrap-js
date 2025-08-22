@@ -146,14 +146,16 @@ function surface_create_sphere_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceCreateSphereOutputs`).
  */
 function surface_create_sphere_execute(
     params: SurfaceCreateSphereParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceCreateSphereOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_CREATE_SPHERE_METADATA);
     params = execution.params(params)
     const cargs = surface_create_sphere_cargs(params, execution)
     const ret = surface_create_sphere_outputs(params, execution)
@@ -187,10 +189,8 @@ function surface_create_sphere(
     sphere_out: string,
     runner: Runner | null = null,
 ): SurfaceCreateSphereOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_CREATE_SPHERE_METADATA);
     const params = surface_create_sphere_params(num_vertices, sphere_out)
-    return surface_create_sphere_execute(params, execution);
+    return surface_create_sphere_execute(params, runner);
 }
 
 
@@ -199,8 +199,6 @@ export {
       SurfaceCreateSphereOutputs,
       SurfaceCreateSphereParameters,
       surface_create_sphere,
-      surface_create_sphere_cargs,
       surface_create_sphere_execute,
-      surface_create_sphere_outputs,
       surface_create_sphere_params,
 };

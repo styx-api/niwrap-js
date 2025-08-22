@@ -174,14 +174,16 @@ function mni152reg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Mni152regOutputs`).
  */
 function mni152reg_execute(
     params: Mni152regParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Mni152regOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MNI152REG_METADATA);
     params = execution.params(params)
     const cargs = mni152reg_cargs(params, execution)
     const ret = mni152reg_outputs(params, execution)
@@ -214,10 +216,8 @@ function mni152reg(
     save_volume: boolean = false,
     runner: Runner | null = null,
 ): Mni152regOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MNI152REG_METADATA);
     const params = mni152reg_params(subject, register_1mm, output, symmetric, save_volume)
-    return mni152reg_execute(params, execution);
+    return mni152reg_execute(params, runner);
 }
 
 
@@ -226,8 +226,6 @@ export {
       Mni152regOutputs,
       Mni152regParameters,
       mni152reg,
-      mni152reg_cargs,
       mni152reg_execute,
-      mni152reg_outputs,
       mni152reg_params,
 };

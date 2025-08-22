@@ -212,14 +212,16 @@ function set_map_names_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SetMapNamesOutputs`).
  */
 function set_map_names_execute(
     params: SetMapNamesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SetMapNamesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SET_MAP_NAMES_METADATA);
     params = execution.params(params)
     const cargs = set_map_names_cargs(params, execution)
     const ret = set_map_names_outputs(params, execution)
@@ -252,10 +254,8 @@ function set_map_names(
     map: Array<SetMapNamesMapParameters> | null = null,
     runner: Runner | null = null,
 ): SetMapNamesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SET_MAP_NAMES_METADATA);
     const params = set_map_names_params(data_file, opt_name_file_file, opt_from_data_file_file, map)
-    return set_map_names_execute(params, execution);
+    return set_map_names_execute(params, runner);
 }
 
 
@@ -265,10 +265,7 @@ export {
       SetMapNamesOutputs,
       SetMapNamesParameters,
       set_map_names,
-      set_map_names_cargs,
       set_map_names_execute,
-      set_map_names_map_cargs,
       set_map_names_map_params,
-      set_map_names_outputs,
       set_map_names_params,
 };

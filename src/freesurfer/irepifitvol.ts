@@ -138,14 +138,16 @@ function irepifitvol_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `IrepifitvolOutputs`).
  */
 function irepifitvol_execute(
     params: IrepifitvolParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): IrepifitvolOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IREPIFITVOL_METADATA);
     params = execution.params(params)
     const cargs = irepifitvol_cargs(params, execution)
     const ret = irepifitvol_outputs(params, execution)
@@ -172,10 +174,8 @@ function irepifitvol(
     output_file: string = "fitted_output",
     runner: Runner | null = null,
 ): IrepifitvolOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IREPIFITVOL_METADATA);
     const params = irepifitvol_params(input_file, output_file)
-    return irepifitvol_execute(params, execution);
+    return irepifitvol_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       IrepifitvolOutputs,
       IrepifitvolParameters,
       irepifitvol,
-      irepifitvol_cargs,
       irepifitvol_execute,
-      irepifitvol_outputs,
       irepifitvol_params,
 };

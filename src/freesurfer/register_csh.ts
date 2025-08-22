@@ -147,14 +147,16 @@ function register_csh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegisterCshOutputs`).
  */
 function register_csh_execute(
     params: RegisterCshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegisterCshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REGISTER_CSH_METADATA);
     params = execution.params(params)
     const cargs = register_csh_cargs(params, execution)
     const ret = register_csh_outputs(params, execution)
@@ -183,10 +185,8 @@ function register_csh(
     options: string | null = null,
     runner: Runner | null = null,
 ): RegisterCshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REGISTER_CSH_METADATA);
     const params = register_csh_params(base_image, new_image, options)
-    return register_csh_execute(params, execution);
+    return register_csh_execute(params, runner);
 }
 
 
@@ -195,8 +195,6 @@ export {
       RegisterCshOutputs,
       RegisterCshParameters,
       register_csh,
-      register_csh_cargs,
       register_csh_execute,
-      register_csh_outputs,
       register_csh_params,
 };

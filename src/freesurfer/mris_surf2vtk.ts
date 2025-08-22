@@ -144,14 +144,16 @@ function mris_surf2vtk_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisSurf2vtkOutputs`).
  */
 function mris_surf2vtk_execute(
     params: MrisSurf2vtkParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisSurf2vtkOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_SURF2VTK_METADATA);
     params = execution.params(params)
     const cargs = mris_surf2vtk_cargs(params, execution)
     const ret = mris_surf2vtk_outputs(params, execution)
@@ -178,10 +180,8 @@ function mris_surf2vtk(
     output_surface: string,
     runner: Runner | null = null,
 ): MrisSurf2vtkOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_SURF2VTK_METADATA);
     const params = mris_surf2vtk_params(input_surface, output_surface)
-    return mris_surf2vtk_execute(params, execution);
+    return mris_surf2vtk_execute(params, runner);
 }
 
 
@@ -190,8 +190,6 @@ export {
       MrisSurf2vtkOutputs,
       MrisSurf2vtkParameters,
       mris_surf2vtk,
-      mris_surf2vtk_cargs,
       mris_surf2vtk_execute,
-      mris_surf2vtk_outputs,
       mris_surf2vtk_params,
 };

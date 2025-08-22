@@ -304,14 +304,16 @@ function surface_metrics_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceMetricsOutputs`).
  */
 function surface_metrics_execute(
     params: SurfaceMetricsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceMetricsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_METRICS_METADATA);
     params = execution.params(params)
     const cargs = surface_metrics_cargs(params, execution)
     const ret = surface_metrics_outputs(params, execution)
@@ -380,10 +382,8 @@ function surface_metrics(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): SurfaceMetricsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_METRICS_METADATA);
     const params = surface_metrics_params(surf1, volume, convexity, closest_node, area, tri_sines, tri_cosines, tri_co_sines, tri_angles, node_angles, curvature, edges, node_normals, face_normals, normals_scale, coords, sph_coords, sph_coords_center, boundary_nodes, boundary_triangles, internal_nodes, tlrc, prefix)
-    return surface_metrics_execute(params, execution);
+    return surface_metrics_execute(params, runner);
 }
 
 
@@ -392,8 +392,6 @@ export {
       SurfaceMetricsOutputs,
       SurfaceMetricsParameters,
       surface_metrics,
-      surface_metrics_cargs,
       surface_metrics_execute,
-      surface_metrics_outputs,
       surface_metrics_params,
 };

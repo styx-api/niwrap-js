@@ -171,14 +171,16 @@ function mri_synthsr_hyperfine_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSynthsrHyperfineOutputs`).
  */
 function mri_synthsr_hyperfine_execute(
     params: MriSynthsrHyperfineParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSynthsrHyperfineOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SYNTHSR_HYPERFINE_METADATA);
     params = execution.params(params)
     const cargs = mri_synthsr_hyperfine_cargs(params, execution)
     const ret = mri_synthsr_hyperfine_outputs(params, execution)
@@ -211,10 +213,8 @@ function mri_synthsr_hyperfine(
     cpu: boolean = false,
     runner: Runner | null = null,
 ): MriSynthsrHyperfineOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SYNTHSR_HYPERFINE_METADATA);
     const params = mri_synthsr_hyperfine_params(t1_image, t2_image, output, threads, cpu)
-    return mri_synthsr_hyperfine_execute(params, execution);
+    return mri_synthsr_hyperfine_execute(params, runner);
 }
 
 
@@ -223,8 +223,6 @@ export {
       MriSynthsrHyperfineOutputs,
       MriSynthsrHyperfineParameters,
       mri_synthsr_hyperfine,
-      mri_synthsr_hyperfine_cargs,
       mri_synthsr_hyperfine_execute,
-      mri_synthsr_hyperfine_outputs,
       mri_synthsr_hyperfine_params,
 };

@@ -148,14 +148,16 @@ function cifti_all_labels_to_rois_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiAllLabelsToRoisOutputs`).
  */
 function cifti_all_labels_to_rois_execute(
     params: CiftiAllLabelsToRoisParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiAllLabelsToRoisOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_ALL_LABELS_TO_ROIS_METADATA);
     params = execution.params(params)
     const cargs = cifti_all_labels_to_rois_cargs(params, execution)
     const ret = cifti_all_labels_to_rois_outputs(params, execution)
@@ -188,10 +190,8 @@ function cifti_all_labels_to_rois(
     cifti_out: string,
     runner: Runner | null = null,
 ): CiftiAllLabelsToRoisOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_ALL_LABELS_TO_ROIS_METADATA);
     const params = cifti_all_labels_to_rois_params(label_in, map, cifti_out)
-    return cifti_all_labels_to_rois_execute(params, execution);
+    return cifti_all_labels_to_rois_execute(params, runner);
 }
 
 
@@ -200,8 +200,6 @@ export {
       CiftiAllLabelsToRoisOutputs,
       CiftiAllLabelsToRoisParameters,
       cifti_all_labels_to_rois,
-      cifti_all_labels_to_rois_cargs,
       cifti_all_labels_to_rois_execute,
-      cifti_all_labels_to_rois_outputs,
       cifti_all_labels_to_rois_params,
 };

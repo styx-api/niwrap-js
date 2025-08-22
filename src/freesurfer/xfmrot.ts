@@ -147,14 +147,16 @@ function xfmrot_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `XfmrotOutputs`).
  */
 function xfmrot_execute(
     params: XfmrotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): XfmrotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(XFMROT_METADATA);
     params = execution.params(params)
     const cargs = xfmrot_cargs(params, execution)
     const ret = xfmrot_outputs(params, execution)
@@ -183,10 +185,8 @@ function xfmrot(
     output_vector_file: string | null = null,
     runner: Runner | null = null,
 ): XfmrotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(XFMROT_METADATA);
     const params = xfmrot_params(transform_file, input_vector_file, output_vector_file)
-    return xfmrot_execute(params, execution);
+    return xfmrot_execute(params, runner);
 }
 
 
@@ -195,8 +195,6 @@ export {
       XfmrotOutputs,
       XfmrotParameters,
       xfmrot,
-      xfmrot_cargs,
       xfmrot_execute,
-      xfmrot_outputs,
       xfmrot_params,
 };

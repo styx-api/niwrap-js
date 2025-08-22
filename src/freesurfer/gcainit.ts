@@ -130,14 +130,16 @@ function gcainit_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GcainitOutputs`).
  */
 function gcainit_execute(
     params: GcainitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GcainitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GCAINIT_METADATA);
     params = execution.params(params)
     const cargs = gcainit_cargs(params, execution)
     const ret = gcainit_outputs(params, execution)
@@ -162,10 +164,8 @@ function gcainit(
     gcadir: string,
     runner: Runner | null = null,
 ): GcainitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GCAINIT_METADATA);
     const params = gcainit_params(gcadir)
-    return gcainit_execute(params, execution);
+    return gcainit_execute(params, runner);
 }
 
 
@@ -174,8 +174,6 @@ export {
       GcainitOutputs,
       GcainitParameters,
       gcainit,
-      gcainit_cargs,
       gcainit_execute,
-      gcainit_outputs,
       gcainit_params,
 };

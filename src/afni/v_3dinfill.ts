@@ -244,14 +244,16 @@ function v_3dinfill_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dinfillOutputs`).
  */
 function v_3dinfill_execute(
     params: V3dinfillParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dinfillOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DINFILL_METADATA);
     params = execution.params(params)
     const cargs = v_3dinfill_cargs(params, execution)
     const ret = v_3dinfill_outputs(params, execution)
@@ -294,10 +296,8 @@ function v_3dinfill(
     cmask: string | null = null,
     runner: Runner | null = null,
 ): V3dinfillOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DINFILL_METADATA);
     const params = v_3dinfill_params(input, prefix, niter, blend, minhits, ed, mask, mask_range, mrange, cmask)
-    return v_3dinfill_execute(params, execution);
+    return v_3dinfill_execute(params, runner);
 }
 
 
@@ -306,8 +306,6 @@ export {
       V3dinfillParameters,
       V_3DINFILL_METADATA,
       v_3dinfill,
-      v_3dinfill_cargs,
       v_3dinfill_execute,
-      v_3dinfill_outputs,
       v_3dinfill_params,
 };

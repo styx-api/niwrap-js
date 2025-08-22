@@ -520,14 +520,16 @@ function mri_fwhm_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriFwhmOutputs`).
  */
 function mri_fwhm_execute(
     params: MriFwhmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriFwhmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_FWHM_METADATA);
     params = execution.params(params)
     const cargs = mri_fwhm_cargs(params, execution)
     const ret = mri_fwhm_outputs(params, execution)
@@ -620,10 +622,8 @@ function mri_fwhm(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriFwhmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_FWHM_METADATA);
     const params = mri_fwhm_params(inputvol, outputvol, save_detrended, save_unmasked, smooth_only, mask, mask_thresh, auto_mask, nerode, mask_inv, out_mask, detrend_matrix, detrend_order, square_input, smooth_by_fwhm, smooth_by_gstd, median_filter, smooth_to_fwhm, to_fwhm_tol, to_fwhm_nmax, to_fwhm_file, summary_file, dat_file, fwhm_dat_file, fwhm_vol_mean_file, fwhm_vol, synth, synth_frames, nframes_min, ispm, nspm_zero_padding, threads, debug, checkopts, version)
-    return mri_fwhm_execute(params, execution);
+    return mri_fwhm_execute(params, runner);
 }
 
 
@@ -632,8 +632,6 @@ export {
       MriFwhmOutputs,
       MriFwhmParameters,
       mri_fwhm,
-      mri_fwhm_cargs,
       mri_fwhm_execute,
-      mri_fwhm_outputs,
       mri_fwhm_params,
 };

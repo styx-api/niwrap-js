@@ -213,14 +213,16 @@ function dmri_match_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriMatchOutputs`).
  */
 function dmri_match_execute(
     params: DmriMatchParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriMatchOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_MATCH_METADATA);
     params = execution.params(params)
     const cargs = dmri_match_cargs(params, execution)
     const ret = dmri_match_outputs(params, execution)
@@ -265,10 +267,8 @@ function dmri_match(
     inter_hemi_ratio_removal: string | null = null,
     runner: Runner | null = null,
 ): DmriMatchOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_MATCH_METADATA);
     const params = dmri_match_params(parcellation1, parcellation2, num_clusters, clustering_path1, clustering_path2, output, labels, euclidean, bounding_box, symmetry, inter_hemi_ratio_removal)
-    return dmri_match_execute(params, execution);
+    return dmri_match_execute(params, runner);
 }
 
 
@@ -277,8 +277,6 @@ export {
       DmriMatchOutputs,
       DmriMatchParameters,
       dmri_match,
-      dmri_match_cargs,
       dmri_match_execute,
-      dmri_match_outputs,
       dmri_match_params,
 };

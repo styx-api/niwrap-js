@@ -809,14 +809,16 @@ function v_1dplot_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dplotOutputs`).
  */
 function v_1dplot_execute(
     params: V1dplotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dplotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1DPLOT_METADATA);
     params = execution.params(params)
     const cargs = v_1dplot_cargs(params, execution)
     const ret = v_1dplot_outputs(params, execution)
@@ -941,10 +943,8 @@ function v_1dplot(
     line: string | null = null,
     runner: Runner | null = null,
 ): V1dplotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1DPLOT_METADATA);
     const params = v_1dplot_params(tsfiles, install, sep, one, sepscl, noline, box, hist, norm2, normx, norm1, demean, x, xl10, dx, xzero, nopush, ignore, use, xlabel, ylabel, plabel, title, wintitle, naked, aspect, stdin, ps, jpg, jpeg, png, pnm, pngs, jpgs, jpegs, pnms, ytran, xtran, xaxis, yaxis, ynames, volreg, thick, dashed, setenv, censor_rgb, censor, censortr, concat, rbox, line)
-    return v_1dplot_execute(params, execution);
+    return v_1dplot_execute(params, runner);
 }
 
 
@@ -956,14 +956,9 @@ export {
       V1dplotThickParameters,
       V_1DPLOT_METADATA,
       v_1dplot,
-      v_1dplot_cargs,
       v_1dplot_execute,
-      v_1dplot_noline_cargs,
       v_1dplot_noline_params,
-      v_1dplot_outputs,
       v_1dplot_params,
-      v_1dplot_rbox_cargs,
       v_1dplot_rbox_params,
-      v_1dplot_thick_cargs,
       v_1dplot_thick_params,
 };

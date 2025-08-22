@@ -495,14 +495,16 @@ function fixelfilter_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FixelfilterOutputs`).
  */
 function fixelfilter_execute(
     params: FixelfilterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FixelfilterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIXELFILTER_METADATA);
     params = execution.params(params)
     const cargs = fixelfilter_cargs(params, execution)
     const ret = fixelfilter_outputs(params, execution)
@@ -565,10 +567,8 @@ function fixelfilter(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelfilterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIXELFILTER_METADATA);
     const params = fixelfilter_params(matrix, input, filter, output, threshold_value, threshold_connectivity, fwhm, minweight, mask, info, quiet, debug, force, nthreads, config, help, version)
-    return fixelfilter_execute(params, execution);
+    return fixelfilter_execute(params, runner);
 }
 
 
@@ -582,18 +582,11 @@ export {
       FixelfilterVariousString1Parameters,
       FixelfilterVariousStringParameters,
       fixelfilter,
-      fixelfilter_cargs,
-      fixelfilter_config_cargs,
       fixelfilter_config_params,
       fixelfilter_execute,
-      fixelfilter_outputs,
       fixelfilter_params,
-      fixelfilter_various_file_1_cargs,
       fixelfilter_various_file_1_params,
-      fixelfilter_various_file_cargs,
       fixelfilter_various_file_params,
-      fixelfilter_various_string_1_cargs,
       fixelfilter_various_string_1_params,
-      fixelfilter_various_string_cargs,
       fixelfilter_various_string_params,
 };

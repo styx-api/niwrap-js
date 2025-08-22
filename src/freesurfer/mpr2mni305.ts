@@ -127,14 +127,16 @@ function mpr2mni305_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Mpr2mni305Outputs`).
  */
 function mpr2mni305_execute(
     params: Mpr2mni305Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Mpr2mni305Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MPR2MNI305_METADATA);
     params = execution.params(params)
     const cargs = mpr2mni305_cargs(params, execution)
     const ret = mpr2mni305_outputs(params, execution)
@@ -159,10 +161,8 @@ function mpr2mni305(
     mpr_anat: string,
     runner: Runner | null = null,
 ): Mpr2mni305Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MPR2MNI305_METADATA);
     const params = mpr2mni305_params(mpr_anat)
-    return mpr2mni305_execute(params, execution);
+    return mpr2mni305_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       Mpr2mni305Outputs,
       Mpr2mni305Parameters,
       mpr2mni305,
-      mpr2mni305_cargs,
       mpr2mni305_execute,
-      mpr2mni305_outputs,
       mpr2mni305_params,
 };

@@ -147,14 +147,16 @@ function inflate_subject_sc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `InflateSubjectScOutputs`).
  */
 function inflate_subject_sc_execute(
     params: InflateSubjectScParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): InflateSubjectScOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(INFLATE_SUBJECT_SC_METADATA);
     params = execution.params(params)
     const cargs = inflate_subject_sc_cargs(params, execution)
     const ret = inflate_subject_sc_outputs(params, execution)
@@ -183,10 +185,8 @@ function inflate_subject_sc(
     debug: boolean = false,
     runner: Runner | null = null,
 ): InflateSubjectScOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(INFLATE_SUBJECT_SC_METADATA);
     const params = inflate_subject_sc_params(subject_dir, verbose, debug)
-    return inflate_subject_sc_execute(params, execution);
+    return inflate_subject_sc_execute(params, runner);
 }
 
 
@@ -195,8 +195,6 @@ export {
       InflateSubjectScOutputs,
       InflateSubjectScParameters,
       inflate_subject_sc,
-      inflate_subject_sc_cargs,
       inflate_subject_sc_execute,
-      inflate_subject_sc_outputs,
       inflate_subject_sc_params,
 };

@@ -167,14 +167,16 @@ function mri_vessel_segment_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriVesselSegmentOutputs`).
  */
 function mri_vessel_segment_execute(
     params: MriVesselSegmentParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriVesselSegmentOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_VESSEL_SEGMENT_METADATA);
     params = execution.params(params)
     const cargs = mri_vessel_segment_cargs(params, execution)
     const ret = mri_vessel_segment_outputs(params, execution)
@@ -207,10 +209,8 @@ function mri_vessel_segment(
     shape_flag: boolean = false,
     runner: Runner | null = null,
 ): MriVesselSegmentOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_VESSEL_SEGMENT_METADATA);
     const params = mri_vessel_segment_params(t1_image, t2_image, aseg_file, output_file, shape_flag)
-    return mri_vessel_segment_execute(params, execution);
+    return mri_vessel_segment_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       MriVesselSegmentOutputs,
       MriVesselSegmentParameters,
       mri_vessel_segment,
-      mri_vessel_segment_cargs,
       mri_vessel_segment_execute,
-      mri_vessel_segment_outputs,
       mri_vessel_segment_params,
 };

@@ -672,14 +672,16 @@ function dwi2fod_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Dwi2fodOutputs`).
  */
 function dwi2fod_execute(
     params: Dwi2fodParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Dwi2fodOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DWI2FOD_METADATA);
     params = execution.params(params)
     const cargs = dwi2fod_cargs(params, execution)
     const ret = dwi2fod_outputs(params, execution)
@@ -768,10 +770,8 @@ function dwi2fod(
     version: boolean = false,
     runner: Runner | null = null,
 ): Dwi2fodOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DWI2FOD_METADATA);
     const params = dwi2fod_params(algorithm, dwi, response_odf, grad, fslgrad, shells, directions, lmax, mask, filter, neg_lambda, norm_lambda, threshold, niter, norm_lambda_1, neg_lambda_1, predicted_signal, strides, info, quiet, debug, force, nthreads, config, help, version)
-    return dwi2fod_execute(params, execution);
+    return dwi2fod_execute(params, runner);
 }
 
 
@@ -786,19 +786,11 @@ export {
       Dwi2fodVariousFileParameters,
       Dwi2fodVariousStringParameters,
       dwi2fod,
-      dwi2fod_cargs,
-      dwi2fod_config_cargs,
       dwi2fod_config_params,
       dwi2fod_execute,
-      dwi2fod_fslgrad_cargs,
       dwi2fod_fslgrad_params,
-      dwi2fod_outputs,
       dwi2fod_params,
-      dwi2fod_response_odf_cargs,
-      dwi2fod_response_odf_outputs,
       dwi2fod_response_odf_params,
-      dwi2fod_various_file_cargs,
       dwi2fod_various_file_params,
-      dwi2fod_various_string_cargs,
       dwi2fod_various_string_params,
 };

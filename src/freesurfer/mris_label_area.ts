@@ -178,14 +178,16 @@ function mris_label_area_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisLabelAreaOutputs`).
  */
 function mris_label_area_execute(
     params: MrisLabelAreaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisLabelAreaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_LABEL_AREA_METADATA);
     params = execution.params(params)
     const cargs = mris_label_area_cargs(params, execution)
     const ret = mris_label_area_outputs(params, execution)
@@ -224,10 +226,8 @@ function mris_label_area(
     brain_vol: string | null = null,
     runner: Runner | null = null,
 ): MrisLabelAreaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_LABEL_AREA_METADATA);
     const params = mris_label_area_params(subject_name, hemi, surf_name, annot_name, labels, pct_flag, log_file, brain_vol)
-    return mris_label_area_execute(params, execution);
+    return mris_label_area_execute(params, runner);
 }
 
 
@@ -236,8 +236,6 @@ export {
       MrisLabelAreaOutputs,
       MrisLabelAreaParameters,
       mris_label_area,
-      mris_label_area_cargs,
       mris_label_area_execute,
-      mris_label_area_outputs,
       mris_label_area_params,
 };

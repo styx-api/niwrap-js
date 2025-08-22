@@ -271,14 +271,16 @@ function cifti_average_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiAverageOutputs`).
  */
 function cifti_average_execute(
     params: CiftiAverageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiAverageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_AVERAGE_METADATA);
     params = execution.params(params)
     const cargs = cifti_average_cargs(params, execution)
     const ret = cifti_average_outputs(params, execution)
@@ -311,10 +313,8 @@ function cifti_average(
     cifti: Array<CiftiAverageCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiAverageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_AVERAGE_METADATA);
     const params = cifti_average_params(cifti_out, exclude_outliers, opt_mem_limit_limit_gb, cifti)
-    return cifti_average_execute(params, execution);
+    return cifti_average_execute(params, runner);
 }
 
 
@@ -325,12 +325,8 @@ export {
       CiftiAverageOutputs,
       CiftiAverageParameters,
       cifti_average,
-      cifti_average_cargs,
-      cifti_average_cifti_cargs,
       cifti_average_cifti_params,
-      cifti_average_exclude_outliers_cargs,
       cifti_average_exclude_outliers_params,
       cifti_average_execute,
-      cifti_average_outputs,
       cifti_average_params,
 };

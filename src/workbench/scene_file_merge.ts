@@ -300,14 +300,16 @@ function scene_file_merge_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SceneFileMergeOutputs`).
  */
 function scene_file_merge_execute(
     params: SceneFileMergeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SceneFileMergeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SCENE_FILE_MERGE_METADATA);
     params = execution.params(params)
     const cargs = scene_file_merge_cargs(params, execution)
     const ret = scene_file_merge_outputs(params, execution)
@@ -340,10 +342,8 @@ function scene_file_merge(
     scene_file: Array<SceneFileMergeSceneFileParameters> | null = null,
     runner: Runner | null = null,
 ): SceneFileMergeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SCENE_FILE_MERGE_METADATA);
     const params = scene_file_merge_params(scene_file_out, scene_file)
-    return scene_file_merge_execute(params, execution);
+    return scene_file_merge_execute(params, runner);
 }
 
 
@@ -355,14 +355,9 @@ export {
       SceneFileMergeSceneParameters,
       SceneFileMergeUpToParameters,
       scene_file_merge,
-      scene_file_merge_cargs,
       scene_file_merge_execute,
-      scene_file_merge_outputs,
       scene_file_merge_params,
-      scene_file_merge_scene_cargs,
-      scene_file_merge_scene_file_cargs,
       scene_file_merge_scene_file_params,
       scene_file_merge_scene_params,
-      scene_file_merge_up_to_cargs,
       scene_file_merge_up_to_params,
 };

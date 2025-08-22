@@ -259,14 +259,16 @@ function mri_vol2label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriVol2labelOutputs`).
  */
 function mri_vol2label_execute(
     params: MriVol2labelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriVol2labelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_VOL2LABEL_METADATA);
     params = execution.params(params)
     const cargs = mri_vol2label_cargs(params, execution)
     const ret = mri_vol2label_outputs(params, execution)
@@ -313,10 +315,8 @@ function mri_vol2label(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriVol2labelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_VOL2LABEL_METADATA);
     const params = mri_vol2label_params(input, label_file, label_id, threshold, vol_file, surf_subject_hemi, surf_path, opt_params, remove_holes, dilations, erosions, help)
-    return mri_vol2label_execute(params, execution);
+    return mri_vol2label_execute(params, runner);
 }
 
 
@@ -325,8 +325,6 @@ export {
       MriVol2labelOutputs,
       MriVol2labelParameters,
       mri_vol2label,
-      mri_vol2label_cargs,
       mri_vol2label_execute,
-      mri_vol2label_outputs,
       mri_vol2label_params,
 };

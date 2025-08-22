@@ -138,14 +138,16 @@ function reg_average_outputs(
  * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegAverageOutputs`).
  */
 function reg_average_execute(
     params: RegAverageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegAverageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REG_AVERAGE_METADATA);
     params = execution.params(params)
     const cargs = reg_average_cargs(params, execution)
     const ret = reg_average_outputs(params, execution)
@@ -172,10 +174,8 @@ function reg_average(
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): RegAverageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REG_AVERAGE_METADATA);
     const params = reg_average_params(output_file, input_files)
-    return reg_average_execute(params, execution);
+    return reg_average_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       RegAverageOutputs,
       RegAverageParameters,
       reg_average,
-      reg_average_cargs,
       reg_average_execute,
-      reg_average_outputs,
       reg_average_params,
 };

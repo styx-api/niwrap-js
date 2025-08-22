@@ -174,14 +174,16 @@ function v_3d_pvmap_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dPvmapOutputs`).
  */
 function v_3d_pvmap_execute(
     params: V3dPvmapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dPvmapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_PVMAP_METADATA);
     params = execution.params(params)
     const cargs = v_3d_pvmap_cargs(params, execution)
     const ret = v_3d_pvmap_outputs(params, execution)
@@ -212,10 +214,8 @@ function v_3d_pvmap(
     automask: boolean = false,
     runner: Runner | null = null,
 ): V3dPvmapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_PVMAP_METADATA);
     const params = v_3d_pvmap_params(inputdataset, prefix, mask, automask)
-    return v_3d_pvmap_execute(params, execution);
+    return v_3d_pvmap_execute(params, runner);
 }
 
 
@@ -224,8 +224,6 @@ export {
       V3dPvmapParameters,
       V_3D_PVMAP_METADATA,
       v_3d_pvmap,
-      v_3d_pvmap_cargs,
       v_3d_pvmap_execute,
-      v_3d_pvmap_outputs,
       v_3d_pvmap_params,
 };

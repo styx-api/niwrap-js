@@ -260,14 +260,16 @@ function v_1d_tool_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dToolPyOutputs`).
  */
 function v_1d_tool_py_execute(
     params: V1dToolPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dToolPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_TOOL_PY_METADATA);
     params = execution.params(params)
     const cargs = v_1d_tool_py_cargs(params, execution)
     const ret = v_1d_tool_py_outputs(params, execution)
@@ -316,10 +318,8 @@ function v_1d_tool_py(
     show_max_displace: boolean = false,
     runner: Runner | null = null,
 ): V1dToolPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_TOOL_PY_METADATA);
     const params = v_1d_tool_py_params(infile, write, select_cols, select_rows, select_groups, censor_motion, pad_into_many_runs, set_nruns, set_run_lengths, show_rows_cols, transpose, reverse, show_max_displace)
-    return v_1d_tool_py_execute(params, execution);
+    return v_1d_tool_py_execute(params, runner);
 }
 
 
@@ -328,8 +328,6 @@ export {
       V1dToolPyParameters,
       V_1D_TOOL_PY_METADATA,
       v_1d_tool_py,
-      v_1d_tool_py_cargs,
       v_1d_tool_py_execute,
-      v_1d_tool_py_outputs,
       v_1d_tool_py_params,
 };

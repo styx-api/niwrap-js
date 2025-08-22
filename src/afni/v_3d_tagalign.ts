@@ -257,14 +257,16 @@ function v_3d_tagalign_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTagalignOutputs`).
  */
 function v_3d_tagalign_execute(
     params: V3dTagalignParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTagalignOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TAGALIGN_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tagalign_cargs(params, execution)
     const ret = v_3d_tagalign_outputs(params, execution)
@@ -317,10 +319,8 @@ function v_3d_tagalign(
     quintic_interpolation: boolean = false,
     runner: Runner | null = null,
 ): V3dTagalignOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TAGALIGN_METADATA);
     const params = v_3d_tagalign_params(input_dataset, master_dataset, tagset_file, no_keep_tags, matvec_file, rotate, affine, rotscl, prefix, verbose, dummy, linear_interpolation, cubic_interpolation, nearest_neighbor_interpolation, quintic_interpolation)
-    return v_3d_tagalign_execute(params, execution);
+    return v_3d_tagalign_execute(params, runner);
 }
 
 
@@ -329,8 +329,6 @@ export {
       V3dTagalignParameters,
       V_3D_TAGALIGN_METADATA,
       v_3d_tagalign,
-      v_3d_tagalign_cargs,
       v_3d_tagalign_execute,
-      v_3d_tagalign_outputs,
       v_3d_tagalign_params,
 };

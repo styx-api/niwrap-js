@@ -183,14 +183,16 @@ function mris_calc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisCalcOutputs`).
  */
 function mris_calc_execute(
     params: MrisCalcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisCalcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_CALC_METADATA);
     params = execution.params(params)
     const cargs = mris_calc_cargs(params, execution)
     const ret = mris_calc_outputs(params, execution)
@@ -225,10 +227,8 @@ function mris_calc(
     verbosity: string | null = null,
     runner: Runner | null = null,
 ): MrisCalcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_CALC_METADATA);
     const params = mris_calc_params(input_file1, action, input_file2_or_float, output_file, label_file, verbosity)
-    return mris_calc_execute(params, execution);
+    return mris_calc_execute(params, runner);
 }
 
 
@@ -237,8 +237,6 @@ export {
       MrisCalcOutputs,
       MrisCalcParameters,
       mris_calc,
-      mris_calc_cargs,
       mris_calc_execute,
-      mris_calc_outputs,
       mris_calc_params,
 };

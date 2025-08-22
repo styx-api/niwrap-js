@@ -461,14 +461,16 @@ function sh2amp_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Sh2ampOutputs`).
  */
 function sh2amp_execute(
     params: Sh2ampParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Sh2ampOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SH2AMP_METADATA);
     params = execution.params(params)
     const cargs = sh2amp_cargs(params, execution)
     const ret = sh2amp_outputs(params, execution)
@@ -542,10 +544,8 @@ function sh2amp(
     version: boolean = false,
     runner: Runner | null = null,
 ): Sh2ampOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SH2AMP_METADATA);
     const params = sh2amp_params(input, directions, output, nonnegative, grad, fslgrad, strides, datatype, info, quiet, debug, force, nthreads, config, help, version)
-    return sh2amp_execute(params, execution);
+    return sh2amp_execute(params, runner);
 }
 
 
@@ -558,16 +558,10 @@ export {
       Sh2ampVariousFileParameters,
       Sh2ampVariousStringParameters,
       sh2amp,
-      sh2amp_cargs,
-      sh2amp_config_cargs,
       sh2amp_config_params,
       sh2amp_execute,
-      sh2amp_fslgrad_cargs,
       sh2amp_fslgrad_params,
-      sh2amp_outputs,
       sh2amp_params,
-      sh2amp_various_file_cargs,
       sh2amp_various_file_params,
-      sh2amp_various_string_cargs,
       sh2amp_various_string_params,
 };

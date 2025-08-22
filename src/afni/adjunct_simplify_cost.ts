@@ -127,14 +127,16 @@ function adjunct_simplify_cost_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AdjunctSimplifyCostOutputs`).
  */
 function adjunct_simplify_cost_execute(
     params: AdjunctSimplifyCostParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AdjunctSimplifyCostOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADJUNCT_SIMPLIFY_COST_METADATA);
     params = execution.params(params)
     const cargs = adjunct_simplify_cost_cargs(params, execution)
     const ret = adjunct_simplify_cost_outputs(params, execution)
@@ -159,10 +161,8 @@ function adjunct_simplify_cost(
     cost_function: string,
     runner: Runner | null = null,
 ): AdjunctSimplifyCostOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADJUNCT_SIMPLIFY_COST_METADATA);
     const params = adjunct_simplify_cost_params(cost_function)
-    return adjunct_simplify_cost_execute(params, execution);
+    return adjunct_simplify_cost_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       AdjunctSimplifyCostOutputs,
       AdjunctSimplifyCostParameters,
       adjunct_simplify_cost,
-      adjunct_simplify_cost_cargs,
       adjunct_simplify_cost_execute,
-      adjunct_simplify_cost_outputs,
       adjunct_simplify_cost_params,
 };

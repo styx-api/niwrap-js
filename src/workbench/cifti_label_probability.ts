@@ -148,14 +148,16 @@ function cifti_label_probability_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelProbabilityOutputs`).
  */
 function cifti_label_probability_execute(
     params: CiftiLabelProbabilityParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiLabelProbabilityOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_LABEL_PROBABILITY_METADATA);
     params = execution.params(params)
     const cargs = cifti_label_probability_cargs(params, execution)
     const ret = cifti_label_probability_outputs(params, execution)
@@ -186,10 +188,8 @@ function cifti_label_probability(
     opt_exclude_unlabeled: boolean = false,
     runner: Runner | null = null,
 ): CiftiLabelProbabilityOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_LABEL_PROBABILITY_METADATA);
     const params = cifti_label_probability_params(label_maps, probability_dscalar_out, opt_exclude_unlabeled)
-    return cifti_label_probability_execute(params, execution);
+    return cifti_label_probability_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       CiftiLabelProbabilityOutputs,
       CiftiLabelProbabilityParameters,
       cifti_label_probability,
-      cifti_label_probability_cargs,
       cifti_label_probability_execute,
-      cifti_label_probability_outputs,
       cifti_label_probability_params,
 };

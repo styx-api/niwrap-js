@@ -278,14 +278,16 @@ function groupstats_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GroupstatsOutputs`).
  */
 function groupstats_execute(
     params: GroupstatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GroupstatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GROUPSTATS_METADATA);
     params = execution.params(params)
     const cargs = groupstats_cargs(params, execution)
     const ret = groupstats_outputs(params, execution)
@@ -342,10 +344,8 @@ function groupstats(
     keep53: boolean = false,
     runner: Runner | null = null,
 ): GroupstatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GROUPSTATS_METADATA);
     const params = groupstats_params(outdir, group_fsgd, subjectfile, fwhm, subject_dir, mapname, srcsurfreg, no_maps, lh_only, rh_only, no_aparcstats, no_asegstats, no_wparcstats, no_stats, new_, base, keep53)
-    return groupstats_execute(params, execution);
+    return groupstats_execute(params, runner);
 }
 
 
@@ -354,8 +354,6 @@ export {
       GroupstatsOutputs,
       GroupstatsParameters,
       groupstats,
-      groupstats_cargs,
       groupstats_execute,
-      groupstats_outputs,
       groupstats_params,
 };

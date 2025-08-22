@@ -247,14 +247,16 @@ function lpcregister_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LpcregisterOutputs`).
  */
 function lpcregister_execute(
     params: LpcregisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LpcregisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LPCREGISTER_METADATA);
     params = execution.params(params)
     const cargs = lpcregister_cargs(params, execution)
     const ret = lpcregister_outputs(params, execution)
@@ -303,10 +305,8 @@ function lpcregister(
     help: boolean = false,
     runner: Runner | null = null,
 ): LpcregisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LPCREGISTER_METADATA);
     const params = lpcregister_params(subject_id, mov_volume, reg_file, dof_9, dof_12, frame_number, mid_frame, fsvol, output_volume, tmp_dir, no_cleanup, version, help)
-    return lpcregister_execute(params, execution);
+    return lpcregister_execute(params, runner);
 }
 
 
@@ -315,8 +315,6 @@ export {
       LpcregisterOutputs,
       LpcregisterParameters,
       lpcregister,
-      lpcregister_cargs,
       lpcregister_execute,
-      lpcregister_outputs,
       lpcregister_params,
 };

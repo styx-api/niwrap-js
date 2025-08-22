@@ -224,14 +224,16 @@ function fat_proc_convert_dcm_anat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatProcConvertDcmAnatOutputs`).
  */
 function fat_proc_convert_dcm_anat_execute(
     params: FatProcConvertDcmAnatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatProcConvertDcmAnatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_PROC_CONVERT_DCM_ANAT_METADATA);
     params = execution.params(params)
     const cargs = fat_proc_convert_dcm_anat_cargs(params, execution)
     const ret = fat_proc_convert_dcm_anat_outputs(params, execution)
@@ -274,10 +276,8 @@ function fat_proc_convert_dcm_anat(
     no_qc_view: boolean = false,
     runner: Runner | null = null,
 ): FatProcConvertDcmAnatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_PROC_CONVERT_DCM_ANAT_METADATA);
     const params = fat_proc_convert_dcm_anat_params(prefix, dicom_directory, nifti_input, workdir, orient, no_clean, reorig_reorient_off, qc_prefix, no_cmd_out, no_qc_view)
-    return fat_proc_convert_dcm_anat_execute(params, execution);
+    return fat_proc_convert_dcm_anat_execute(params, runner);
 }
 
 
@@ -286,8 +286,6 @@ export {
       FatProcConvertDcmAnatOutputs,
       FatProcConvertDcmAnatParameters,
       fat_proc_convert_dcm_anat,
-      fat_proc_convert_dcm_anat_cargs,
       fat_proc_convert_dcm_anat_execute,
-      fat_proc_convert_dcm_anat_outputs,
       fat_proc_convert_dcm_anat_params,
 };

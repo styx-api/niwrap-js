@@ -133,14 +133,16 @@ function v_3d_conformist_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dConformistOutputs`).
  */
 function v_3d_conformist_execute(
     params: V3dConformistParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dConformistOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_CONFORMIST_METADATA);
     params = execution.params(params)
     const cargs = v_3d_conformist_cargs(params, execution)
     const ret = v_3d_conformist_outputs(params, execution)
@@ -165,10 +167,8 @@ function v_3d_conformist(
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): V3dConformistOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_CONFORMIST_METADATA);
     const params = v_3d_conformist_params(input_files)
-    return v_3d_conformist_execute(params, execution);
+    return v_3d_conformist_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       V3dConformistParameters,
       V_3D_CONFORMIST_METADATA,
       v_3d_conformist,
-      v_3d_conformist_cargs,
       v_3d_conformist_execute,
-      v_3d_conformist_outputs,
       v_3d_conformist_params,
 };

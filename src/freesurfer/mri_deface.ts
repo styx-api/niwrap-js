@@ -148,14 +148,16 @@ function mri_deface_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriDefaceOutputs`).
  */
 function mri_deface_execute(
     params: MriDefaceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriDefaceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_DEFACE_METADATA);
     params = execution.params(params)
     const cargs = mri_deface_cargs(params, execution)
     const ret = mri_deface_outputs(params, execution)
@@ -186,10 +188,8 @@ function mri_deface(
     output_volume: string,
     runner: Runner | null = null,
 ): MriDefaceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_DEFACE_METADATA);
     const params = mri_deface_params(input_volume, brain_template, face_template, output_volume)
-    return mri_deface_execute(params, execution);
+    return mri_deface_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MriDefaceOutputs,
       MriDefaceParameters,
       mri_deface,
-      mri_deface_cargs,
       mri_deface_execute,
-      mri_deface_outputs,
       mri_deface_params,
 };

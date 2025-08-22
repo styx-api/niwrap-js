@@ -189,14 +189,16 @@ function mris_resample_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisResampleOutputs`).
  */
 function mris_resample_execute(
     params: MrisResampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisResampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_RESAMPLE_METADATA);
     params = execution.params(params)
     const cargs = mris_resample_cargs(params, execution)
     const ret = mris_resample_outputs(params, execution)
@@ -231,10 +233,8 @@ function mris_resample(
     annot_out: string | null = null,
     runner: Runner | null = null,
 ): MrisResampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_RESAMPLE_METADATA);
     const params = mris_resample_params(atlas_reg, subject_reg, subject_surf, output, annot_in, annot_out)
-    return mris_resample_execute(params, execution);
+    return mris_resample_execute(params, runner);
 }
 
 
@@ -243,8 +243,6 @@ export {
       MrisResampleOutputs,
       MrisResampleParameters,
       mris_resample,
-      mris_resample_cargs,
       mris_resample_execute,
-      mris_resample_outputs,
       mris_resample_params,
 };

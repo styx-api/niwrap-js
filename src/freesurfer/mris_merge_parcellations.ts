@@ -149,14 +149,16 @@ function mris_merge_parcellations_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisMergeParcellationsOutputs`).
  */
 function mris_merge_parcellations_execute(
     params: MrisMergeParcellationsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisMergeParcellationsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_MERGE_PARCELLATIONS_METADATA);
     params = execution.params(params)
     const cargs = mris_merge_parcellations_cargs(params, execution)
     const ret = mris_merge_parcellations_outputs(params, execution)
@@ -187,10 +189,8 @@ function mris_merge_parcellations(
     annot_name: string | null = null,
     runner: Runner | null = null,
 ): MrisMergeParcellationsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_MERGE_PARCELLATIONS_METADATA);
     const params = mris_merge_parcellations_params(surface, label1, label2, annot_name)
-    return mris_merge_parcellations_execute(params, execution);
+    return mris_merge_parcellations_execute(params, runner);
 }
 
 
@@ -199,8 +199,6 @@ export {
       MrisMergeParcellationsOutputs,
       MrisMergeParcellationsParameters,
       mris_merge_parcellations,
-      mris_merge_parcellations_cargs,
       mris_merge_parcellations_execute,
-      mris_merge_parcellations_outputs,
       mris_merge_parcellations_params,
 };

@@ -421,14 +421,16 @@ function dwibiascorrect_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DwibiascorrectOutputs`).
  */
 function dwibiascorrect_execute(
     params: DwibiascorrectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DwibiascorrectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DWIBIASCORRECT_METADATA);
     params = execution.params(params)
     const cargs = dwibiascorrect_cargs(params, execution)
     const ret = dwibiascorrect_outputs(params, execution)
@@ -493,10 +495,8 @@ function dwibiascorrect(
     ants_s: string | null = null,
     runner: Runner | null = null,
 ): DwibiascorrectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DWIBIASCORRECT_METADATA);
     const params = dwibiascorrect_params(algorithm, input_image, output_image, grad, fslgrad, mask_image, bias_image, nocleanup, scratch_dir, continue_scratch_dir, info, quiet, debug, force, nthreads, config, help, version, ants_b, ants_c, ants_s)
-    return dwibiascorrect_execute(params, execution);
+    return dwibiascorrect_execute(params, runner);
 }
 
 
@@ -507,12 +507,8 @@ export {
       DwibiascorrectOutputs,
       DwibiascorrectParameters,
       dwibiascorrect,
-      dwibiascorrect_cargs,
-      dwibiascorrect_config_cargs,
       dwibiascorrect_config_params,
       dwibiascorrect_execute,
-      dwibiascorrect_fslgrad_cargs,
       dwibiascorrect_fslgrad_params,
-      dwibiascorrect_outputs,
       dwibiascorrect_params,
 };

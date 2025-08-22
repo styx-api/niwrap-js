@@ -179,14 +179,16 @@ function atlasquery_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AtlasqueryOutputs`).
  */
 function atlasquery_execute(
     params: AtlasqueryParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AtlasqueryOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ATLASQUERY_METADATA);
     params = execution.params(params)
     const cargs = atlasquery_cargs(params, execution)
     const ret = atlasquery_outputs(params, execution)
@@ -221,10 +223,8 @@ function atlasquery(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): AtlasqueryOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ATLASQUERY_METADATA);
     const params = atlasquery_params(dumpatlases_flag, atlas, coord, mask, verbose_flag, help_flag)
-    return atlasquery_execute(params, execution);
+    return atlasquery_execute(params, runner);
 }
 
 
@@ -233,8 +233,6 @@ export {
       AtlasqueryOutputs,
       AtlasqueryParameters,
       atlasquery,
-      atlasquery_cargs,
       atlasquery_execute,
-      atlasquery_outputs,
       atlasquery_params,
 };

@@ -187,14 +187,16 @@ function v_3d_tcorr1_d_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTcorr1DOutputs`).
  */
 function v_3d_tcorr1_d_execute(
     params: V3dTcorr1DParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTcorr1DOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TCORR1_D_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tcorr1_d_cargs(params, execution)
     const ret = v_3d_tcorr1_d_outputs(params, execution)
@@ -233,10 +235,8 @@ function v_3d_tcorr1_d(
     spearman: boolean = false,
     runner: Runner | null = null,
 ): V3dTcorr1DOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TCORR1_D_METADATA);
     const params = v_3d_tcorr1_d_params(xset, y_1d, ktaub, num_threads, outputtype, pearson, quadrant, spearman)
-    return v_3d_tcorr1_d_execute(params, execution);
+    return v_3d_tcorr1_d_execute(params, runner);
 }
 
 
@@ -245,8 +245,6 @@ export {
       V3dTcorr1DParameters,
       V_3D_TCORR1_D_METADATA,
       v_3d_tcorr1_d,
-      v_3d_tcorr1_d_cargs,
       v_3d_tcorr1_d_execute,
-      v_3d_tcorr1_d_outputs,
       v_3d_tcorr1_d_params,
 };

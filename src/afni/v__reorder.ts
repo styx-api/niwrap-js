@@ -176,14 +176,16 @@ function v__reorder_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VReorderOutputs`).
  */
 function v__reorder_execute(
     params: VReorderParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VReorderOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__REORDER_METADATA);
     params = execution.params(params)
     const cargs = v__reorder_cargs(params, execution)
     const ret = v__reorder_outputs(params, execution)
@@ -220,10 +222,8 @@ function v__reorder(
     help: boolean = false,
     runner: Runner | null = null,
 ): VReorderOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__REORDER_METADATA);
     const params = v__reorder_params(input_dataset, mapfile, prefix, offset, save_work, test, help)
-    return v__reorder_execute(params, execution);
+    return v__reorder_execute(params, runner);
 }
 
 
@@ -232,8 +232,6 @@ export {
       VReorderParameters,
       V__REORDER_METADATA,
       v__reorder,
-      v__reorder_cargs,
       v__reorder_execute,
-      v__reorder_outputs,
       v__reorder_params,
 };

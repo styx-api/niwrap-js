@@ -252,14 +252,16 @@ function v_3d_auto_tcorrelate_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dAutoTcorrelateOutputs`).
  */
 function v_3d_auto_tcorrelate_execute(
     params: V3dAutoTcorrelateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dAutoTcorrelateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_AUTO_TCORRELATE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_auto_tcorrelate_cargs(params, execution)
     const ret = v_3d_auto_tcorrelate_outputs(params, execution)
@@ -308,10 +310,8 @@ function v_3d_auto_tcorrelate(
     mmap: boolean = false,
     runner: Runner | null = null,
 ): V3dAutoTcorrelateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_AUTO_TCORRELATE_METADATA);
     const params = v_3d_auto_tcorrelate_params(input_dataset, pearson, eta2, polort, autoclip, automask, mask, mask_only_targets, mask_source, prefix, out1d, time, mmap)
-    return v_3d_auto_tcorrelate_execute(params, execution);
+    return v_3d_auto_tcorrelate_execute(params, runner);
 }
 
 
@@ -320,8 +320,6 @@ export {
       V3dAutoTcorrelateParameters,
       V_3D_AUTO_TCORRELATE_METADATA,
       v_3d_auto_tcorrelate,
-      v_3d_auto_tcorrelate_cargs,
       v_3d_auto_tcorrelate_execute,
-      v_3d_auto_tcorrelate_outputs,
       v_3d_auto_tcorrelate_params,
 };

@@ -160,14 +160,16 @@ function mri_ribbon_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriRibbonOutputs`).
  */
 function mri_ribbon_execute(
     params: MriRibbonParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriRibbonOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_RIBBON_METADATA);
     params = execution.params(params)
     const cargs = mri_ribbon_cargs(params, execution)
     const ret = mri_ribbon_outputs(params, execution)
@@ -200,10 +202,8 @@ function mri_ribbon(
     label_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriRibbonOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_RIBBON_METADATA);
     const params = mri_ribbon_params(inner_surface, outer_surface, input_volume, output_volume, label_file)
-    return mri_ribbon_execute(params, execution);
+    return mri_ribbon_execute(params, runner);
 }
 
 
@@ -212,8 +212,6 @@ export {
       MriRibbonOutputs,
       MriRibbonParameters,
       mri_ribbon,
-      mri_ribbon_cargs,
       mri_ribbon_execute,
-      mri_ribbon_outputs,
       mri_ribbon_params,
 };

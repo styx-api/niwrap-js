@@ -480,14 +480,16 @@ function fsl_sub_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslSubOutputs`).
  */
 function fsl_sub_execute(
     params: FslSubParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslSubOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_SUB_METADATA);
     params = execution.params(params)
     const cargs = fsl_sub_cargs(params, execution)
     const ret = fsl_sub_outputs(params, execution)
@@ -578,10 +580,8 @@ function fsl_sub(
     fileisimage: InputPathType | null = null,
     runner: Runner | null = null,
 ): FslSubOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_SUB_METADATA);
     const params = fsl_sub_params(arch, coprocessor, coprocessor_multi, coprocessor_class, coprocessor_class_strict, coprocessor_toolkit, usescript, jobhold, not_requeueable, array_hold, logdir, mailoptions, mailto, novalidation, name, priority, queue, resource, delete_job, jobram, parallelenv_threads, array_task, array_native, array_limit, keep_jobscript, project, noramsplit, jobtime, has_coprocessor, has_queues, show_config, verbose, version, fileisimage)
-    return fsl_sub_execute(params, execution);
+    return fsl_sub_execute(params, runner);
 }
 
 
@@ -590,8 +590,6 @@ export {
       FslSubOutputs,
       FslSubParameters,
       fsl_sub,
-      fsl_sub_cargs,
       fsl_sub_execute,
-      fsl_sub_outputs,
       fsl_sub_params,
 };

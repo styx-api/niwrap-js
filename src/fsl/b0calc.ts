@@ -295,14 +295,16 @@ function b0calc_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `B0calcOutputs`).
  */
 function b0calc_execute(
     params: B0calcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): B0calcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(B0CALC_METADATA);
     params = execution.params(params)
     const cargs = b0calc_cargs(params, execution)
     const ret = b0calc_outputs(params, execution)
@@ -355,10 +357,8 @@ function b0calc(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): B0calcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(B0CALC_METADATA);
     const params = b0calc_params(input_file, output_file, zero_order_x, zero_order_y, zero_order_z, b0_x, b0_y, b0_z, delta, chi0, xyz_flag, extend_boundary, direct_conv, verbose_flag, help_flag)
-    return b0calc_execute(params, execution);
+    return b0calc_execute(params, runner);
 }
 
 
@@ -367,8 +367,6 @@ export {
       B0calcOutputs,
       B0calcParameters,
       b0calc,
-      b0calc_cargs,
       b0calc_execute,
-      b0calc_outputs,
       b0calc_params,
 };

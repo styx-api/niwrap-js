@@ -210,14 +210,16 @@ function texture_run_length_features_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TextureRunLengthFeaturesOutputs`).
  */
 function texture_run_length_features_execute(
     params: TextureRunLengthFeaturesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TextureRunLengthFeaturesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TEXTURE_RUN_LENGTH_FEATURES_METADATA);
     params = execution.params(params)
     const cargs = texture_run_length_features_cargs(params, execution)
     const ret = texture_run_length_features_outputs(params, execution)
@@ -250,10 +252,8 @@ function texture_run_length_features(
     mask_label: number | null = 1,
     runner: Runner | null = null,
 ): TextureRunLengthFeaturesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TEXTURE_RUN_LENGTH_FEATURES_METADATA);
     const params = texture_run_length_features_params(image_dimension, input_image, number_of_bins_per_axis, mask_image, mask_label)
-    return texture_run_length_features_execute(params, execution);
+    return texture_run_length_features_execute(params, runner);
 }
 
 
@@ -262,8 +262,6 @@ export {
       TextureRunLengthFeaturesOutputs,
       TextureRunLengthFeaturesParameters,
       texture_run_length_features,
-      texture_run_length_features_cargs,
       texture_run_length_features_execute,
-      texture_run_length_features_outputs,
       texture_run_length_features_params,
 };

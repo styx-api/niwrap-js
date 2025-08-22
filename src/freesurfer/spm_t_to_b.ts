@@ -132,14 +132,16 @@ function spm_t_to_b_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SpmTToBOutputs`).
  */
 function spm_t_to_b_execute(
     params: SpmTToBParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SpmTToBOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SPM_T_TO_B_METADATA);
     params = execution.params(params)
     const cargs = spm_t_to_b_cargs(params, execution)
     const ret = spm_t_to_b_outputs(params, execution)
@@ -166,10 +168,8 @@ function spm_t_to_b(
     bshort_stem: string,
     runner: Runner | null = null,
 ): SpmTToBOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SPM_T_TO_B_METADATA);
     const params = spm_t_to_b_params(spm_stem_format, bshort_stem)
-    return spm_t_to_b_execute(params, execution);
+    return spm_t_to_b_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       SpmTToBOutputs,
       SpmTToBParameters,
       spm_t_to_b,
-      spm_t_to_b_cargs,
       spm_t_to_b_execute,
-      spm_t_to_b_outputs,
       spm_t_to_b_params,
 };

@@ -155,14 +155,16 @@ function mris_multiscale_stats_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisMultiscaleStatsOutputs`).
  */
 function mris_multiscale_stats_execute(
     params: MrisMultiscaleStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisMultiscaleStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_MULTISCALE_STATS_METADATA);
     params = execution.params(params)
     const cargs = mris_multiscale_stats_cargs(params, execution)
     const ret = mris_multiscale_stats_outputs(params, execution)
@@ -197,10 +199,8 @@ function mris_multiscale_stats(
     class2_subjects: Array<string>,
     runner: Runner | null = null,
 ): MrisMultiscaleStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_MULTISCALE_STATS_METADATA);
     const params = mris_multiscale_stats_params(output_subject, hemi, surf, curv, class1_subjects, class2_subjects)
-    return mris_multiscale_stats_execute(params, execution);
+    return mris_multiscale_stats_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       MrisMultiscaleStatsOutputs,
       MrisMultiscaleStatsParameters,
       mris_multiscale_stats,
-      mris_multiscale_stats_cargs,
       mris_multiscale_stats_execute,
-      mris_multiscale_stats_outputs,
       mris_multiscale_stats_params,
 };

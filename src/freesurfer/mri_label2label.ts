@@ -641,14 +641,16 @@ function mri_label2label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriLabel2labelOutputs`).
  */
 function mri_label2label_execute(
     params: MriLabel2labelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriLabel2labelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_LABEL2LABEL_METADATA);
     params = execution.params(params)
     const cargs = mri_label2label_cargs(params, execution)
     const ret = mri_label2label_outputs(params, execution)
@@ -763,10 +765,8 @@ function mri_label2label(
     scanner: boolean = false,
     runner: Runner | null = null,
 ): MriLabel2labelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_LABEL2LABEL_METADATA);
     const params = mri_label2label_params(src_label, trg_label, erode, open, close, dilate, ring, src_subject, trg_subject, subject, outmask, outstat, sample, regmethod, usepathfiles, hemi, src_hemi, trg_hemi, src_ico_order, trg_ico_order, direct, trgsurf, surfreg, srcsurfreg, trgsurfreg, srcsurfreg_file, trgsurfreg_file, paint, dmindmin, baryfill, label_cortex, surf_label2mask, srcmask, srcmasksign, srcmaskframe, xfm, reg, xfm_invert, projabs, projfrac, sd, nohash, norevmap, to_scanner, to_tkr, scanner)
-    return mri_label2label_execute(params, execution);
+    return mri_label2label_execute(params, runner);
 }
 
 
@@ -775,8 +775,6 @@ export {
       MriLabel2labelOutputs,
       MriLabel2labelParameters,
       mri_label2label,
-      mri_label2label_cargs,
       mri_label2label_execute,
-      mri_label2label_outputs,
       mri_label2label_params,
 };

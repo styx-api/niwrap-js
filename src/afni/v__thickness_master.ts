@@ -166,14 +166,16 @@ function v__thickness_master_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VThicknessMasterOutputs`).
  */
 function v__thickness_master_execute(
     params: VThicknessMasterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VThicknessMasterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__THICKNESS_MASTER_METADATA);
     params = execution.params(params)
     const cargs = v__thickness_master_cargs(params, execution)
     const ret = v__thickness_master_outputs(params, execution)
@@ -202,10 +204,8 @@ function v__thickness_master(
     outdir: string | null = null,
     runner: Runner | null = null,
 ): VThicknessMasterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__THICKNESS_MASTER_METADATA);
     const params = v__thickness_master_params(maskset, surfset, outdir)
-    return v__thickness_master_execute(params, execution);
+    return v__thickness_master_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       VThicknessMasterParameters,
       V__THICKNESS_MASTER_METADATA,
       v__thickness_master,
-      v__thickness_master_cargs,
       v__thickness_master_execute,
-      v__thickness_master_outputs,
       v__thickness_master_params,
 };

@@ -138,14 +138,16 @@ function mri_topologycorrection_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriTopologycorrectionOutputs`).
  */
 function mri_topologycorrection_execute(
     params: MriTopologycorrectionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriTopologycorrectionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_TOPOLOGYCORRECTION_METADATA);
     params = execution.params(params)
     const cargs = mri_topologycorrection_cargs(params, execution)
     const ret = mri_topologycorrection_outputs(params, execution)
@@ -172,10 +174,8 @@ function mri_topologycorrection(
     input_segmented_file: InputPathType,
     runner: Runner | null = null,
 ): MriTopologycorrectionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_TOPOLOGYCORRECTION_METADATA);
     const params = mri_topologycorrection_params(input_orig_file, input_segmented_file)
-    return mri_topologycorrection_execute(params, execution);
+    return mri_topologycorrection_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MriTopologycorrectionOutputs,
       MriTopologycorrectionParameters,
       mri_topologycorrection,
-      mri_topologycorrection_cargs,
       mri_topologycorrection_execute,
-      mri_topologycorrection_outputs,
       mri_topologycorrection_params,
 };

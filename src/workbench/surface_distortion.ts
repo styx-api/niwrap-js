@@ -281,14 +281,16 @@ function surface_distortion_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceDistortionOutputs`).
  */
 function surface_distortion_execute(
     params: SurfaceDistortionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceDistortionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_DISTORTION_METADATA);
     params = execution.params(params)
     const cargs = surface_distortion_cargs(params, execution)
     const ret = surface_distortion_outputs(params, execution)
@@ -333,10 +335,8 @@ function surface_distortion(
     local_affine_method: SurfaceDistortionLocalAffineMethodParameters | null = null,
     runner: Runner | null = null,
 ): SurfaceDistortionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_DISTORTION_METADATA);
     const params = surface_distortion_params(surface_reference, surface_distorted, metric_out, smooth, opt_caret5_method, opt_edge_method, local_affine_method)
-    return surface_distortion_execute(params, execution);
+    return surface_distortion_execute(params, runner);
 }
 
 
@@ -347,12 +347,8 @@ export {
       SurfaceDistortionParameters,
       SurfaceDistortionSmoothParameters,
       surface_distortion,
-      surface_distortion_cargs,
       surface_distortion_execute,
-      surface_distortion_local_affine_method_cargs,
       surface_distortion_local_affine_method_params,
-      surface_distortion_outputs,
       surface_distortion_params,
-      surface_distortion_smooth_cargs,
       surface_distortion_smooth_params,
 };

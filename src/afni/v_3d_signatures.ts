@@ -176,14 +176,16 @@ function v_3d_signatures_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dSignaturesOutputs`).
  */
 function v_3d_signatures_execute(
     params: V3dSignaturesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dSignaturesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_SIGNATURES_METADATA);
     params = execution.params(params)
     const cargs = v_3d_signatures_cargs(params, execution)
     const ret = v_3d_signatures_outputs(params, execution)
@@ -218,10 +220,8 @@ function v_3d_signatures(
     smoothing: number | null = null,
     runner: Runner | null = null,
 ): V3dSignaturesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_SIGNATURES_METADATA);
     const params = v_3d_signatures_params(infile, outfile, segmentation, filter, threshold, smoothing)
-    return v_3d_signatures_execute(params, execution);
+    return v_3d_signatures_execute(params, runner);
 }
 
 
@@ -230,8 +230,6 @@ export {
       V3dSignaturesParameters,
       V_3D_SIGNATURES_METADATA,
       v_3d_signatures,
-      v_3d_signatures_cargs,
       v_3d_signatures_execute,
-      v_3d_signatures_outputs,
       v_3d_signatures_params,
 };

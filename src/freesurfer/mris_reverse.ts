@@ -138,14 +138,16 @@ function mris_reverse_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisReverseOutputs`).
  */
 function mris_reverse_execute(
     params: MrisReverseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisReverseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_REVERSE_METADATA);
     params = execution.params(params)
     const cargs = mris_reverse_cargs(params, execution)
     const ret = mris_reverse_outputs(params, execution)
@@ -172,10 +174,8 @@ function mris_reverse(
     output_surface: string,
     runner: Runner | null = null,
 ): MrisReverseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_REVERSE_METADATA);
     const params = mris_reverse_params(input_surface, output_surface)
-    return mris_reverse_execute(params, execution);
+    return mris_reverse_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MrisReverseOutputs,
       MrisReverseParameters,
       mris_reverse,
-      mris_reverse_cargs,
       mris_reverse_execute,
-      mris_reverse_outputs,
       mris_reverse_params,
 };

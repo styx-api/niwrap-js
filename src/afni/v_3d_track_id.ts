@@ -516,14 +516,16 @@ function v_3d_track_id_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTrackIdOutputs`).
  */
 function v_3d_track_id_execute(
     params: V3dTrackIdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTrackIdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TRACK_ID_METADATA);
     params = execution.params(params)
     const cargs = v_3d_track_id_cargs(params, execution)
     const ret = v_3d_track_id_outputs(params, execution)
@@ -634,10 +636,8 @@ function v_3d_track_id(
     verb: number | null = null,
     runner: Runner | null = null,
 ): V3dTrackIdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TRACK_ID_METADATA);
     const params = v_3d_track_id_params(mode, netrois, prefix, logic, dti_in, dti_list, dti_extra, dti_search_no, hardi_gfa, hardi_dirs, hardi_pars, mask, thru_mask, targ_surf_stop, targ_surf_twixt, mini_num, uncert, unc_min_fa, unc_min_v, algopt, alg_thresh_fa, alg_thresh_ang, alg_thresh_len, alg_nseed_x, alg_nseed_y, alg_nseed_z, alg_thresh_frac, alg_nseed_vox, alg_nmonte, extra_tr_par, uncut_at_rois, dump_rois, dump_no_labtab, dump_lab_consec, posteriori, rec_orig, do_trk_out, trk_opp_orient, nifti, no_indipair_out, write_rois, write_opts, pair_out_power, verb)
-    return v_3d_track_id_execute(params, execution);
+    return v_3d_track_id_execute(params, runner);
 }
 
 
@@ -646,8 +646,6 @@ export {
       V3dTrackIdParameters,
       V_3D_TRACK_ID_METADATA,
       v_3d_track_id,
-      v_3d_track_id_cargs,
       v_3d_track_id_execute,
-      v_3d_track_id_outputs,
       v_3d_track_id_params,
 };

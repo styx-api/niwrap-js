@@ -235,14 +235,16 @@ function test_recon_all_csh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TestReconAllCshOutputs`).
  */
 function test_recon_all_csh_execute(
     params: TestReconAllCshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TestReconAllCshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TEST_RECON_ALL_CSH_METADATA);
     params = execution.params(params)
     const cargs = test_recon_all_csh_cargs(params, execution)
     const ret = test_recon_all_csh_outputs(params, execution)
@@ -277,10 +279,8 @@ function test_recon_all_csh(
     norecon: boolean = false,
     runner: Runner | null = null,
 ): TestReconAllCshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TEST_RECON_ALL_CSH_METADATA);
     const params = test_recon_all_csh_params(reference_subj_source_dir, reference_subjid, test_subject_dest_dir, test_subjid, freesurfer_home, norecon)
-    return test_recon_all_csh_execute(params, execution);
+    return test_recon_all_csh_execute(params, runner);
 }
 
 
@@ -289,8 +289,6 @@ export {
       TestReconAllCshOutputs,
       TestReconAllCshParameters,
       test_recon_all_csh,
-      test_recon_all_csh_cargs,
       test_recon_all_csh_execute,
-      test_recon_all_csh_outputs,
       test_recon_all_csh_params,
 };

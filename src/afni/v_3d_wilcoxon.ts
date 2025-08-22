@@ -176,14 +176,16 @@ function v_3d_wilcoxon_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dWilcoxonOutputs`).
  */
 function v_3d_wilcoxon_execute(
     params: V3dWilcoxonParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dWilcoxonOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_WILCOXON_METADATA);
     params = execution.params(params)
     const cargs = v_3d_wilcoxon_cargs(params, execution)
     const ret = v_3d_wilcoxon_outputs(params, execution)
@@ -216,10 +218,8 @@ function v_3d_wilcoxon(
     voxel: number | null = null,
     runner: Runner | null = null,
 ): V3dWilcoxonOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_WILCOXON_METADATA);
     const params = v_3d_wilcoxon_params(dset1_x, dset2_y, output_prefix, workmem, voxel)
-    return v_3d_wilcoxon_execute(params, execution);
+    return v_3d_wilcoxon_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       V3dWilcoxonParameters,
       V_3D_WILCOXON_METADATA,
       v_3d_wilcoxon,
-      v_3d_wilcoxon_cargs,
       v_3d_wilcoxon_execute,
-      v_3d_wilcoxon_outputs,
       v_3d_wilcoxon_params,
 };

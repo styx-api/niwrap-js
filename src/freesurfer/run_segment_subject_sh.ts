@@ -142,14 +142,16 @@ function run_segment_subject_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RunSegmentSubjectShOutputs`).
  */
 function run_segment_subject_sh_execute(
     params: RunSegmentSubjectShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RunSegmentSubjectShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RUN_SEGMENT_SUBJECT_SH_METADATA);
     params = execution.params(params)
     const cargs = run_segment_subject_sh_cargs(params, execution)
     const ret = run_segment_subject_sh_outputs(params, execution)
@@ -176,10 +178,8 @@ function run_segment_subject_sh(
     arguments_: string | null = null,
     runner: Runner | null = null,
 ): RunSegmentSubjectShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RUN_SEGMENT_SUBJECT_SH_METADATA);
     const params = run_segment_subject_sh_params(deployed_mcrroot, arguments_)
-    return run_segment_subject_sh_execute(params, execution);
+    return run_segment_subject_sh_execute(params, runner);
 }
 
 
@@ -188,8 +188,6 @@ export {
       RunSegmentSubjectShOutputs,
       RunSegmentSubjectShParameters,
       run_segment_subject_sh,
-      run_segment_subject_sh_cargs,
       run_segment_subject_sh_execute,
-      run_segment_subject_sh_outputs,
       run_segment_subject_sh_params,
 };

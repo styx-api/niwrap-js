@@ -138,14 +138,16 @@ function mri_align_long_csh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriAlignLongCshOutputs`).
  */
 function mri_align_long_csh_execute(
     params: MriAlignLongCshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriAlignLongCshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_ALIGN_LONG_CSH_METADATA);
     params = execution.params(params)
     const cargs = mri_align_long_csh_cargs(params, execution)
     const ret = mri_align_long_csh_outputs(params, execution)
@@ -170,10 +172,8 @@ function mri_align_long_csh(
     base_id: string,
     runner: Runner | null = null,
 ): MriAlignLongCshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_ALIGN_LONG_CSH_METADATA);
     const params = mri_align_long_csh_params(base_id)
-    return mri_align_long_csh_execute(params, execution);
+    return mri_align_long_csh_execute(params, runner);
 }
 
 
@@ -182,8 +182,6 @@ export {
       MriAlignLongCshOutputs,
       MriAlignLongCshParameters,
       mri_align_long_csh,
-      mri_align_long_csh_cargs,
       mri_align_long_csh_execute,
-      mri_align_long_csh_outputs,
       mri_align_long_csh_params,
 };

@@ -190,14 +190,16 @@ function v_3d_zcat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dZcatOutputs`).
  */
 function v_3d_zcat_execute(
     params: V3dZcatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dZcatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ZCAT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_zcat_cargs(params, execution)
     const ret = v_3d_zcat_outputs(params, execution)
@@ -234,10 +236,8 @@ function v_3d_zcat(
     frugal: boolean = false,
     runner: Runner | null = null,
 ): V3dZcatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ZCAT_METADATA);
     const params = v_3d_zcat_params(input_files, prefix, datum, fscale, nscale, verb, frugal)
-    return v_3d_zcat_execute(params, execution);
+    return v_3d_zcat_execute(params, runner);
 }
 
 
@@ -246,8 +246,6 @@ export {
       V3dZcatParameters,
       V_3D_ZCAT_METADATA,
       v_3d_zcat,
-      v_3d_zcat_cargs,
       v_3d_zcat_execute,
-      v_3d_zcat_outputs,
       v_3d_zcat_params,
 };

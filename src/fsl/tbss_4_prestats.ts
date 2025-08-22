@@ -127,14 +127,16 @@ function tbss_4_prestats_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Tbss4PrestatsOutputs`).
  */
 function tbss_4_prestats_execute(
     params: Tbss4PrestatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Tbss4PrestatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TBSS_4_PRESTATS_METADATA);
     params = execution.params(params)
     const cargs = tbss_4_prestats_cargs(params, execution)
     const ret = tbss_4_prestats_outputs(params, execution)
@@ -159,10 +161,8 @@ function tbss_4_prestats(
     threshold: number = 0.2,
     runner: Runner | null = null,
 ): Tbss4PrestatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TBSS_4_PRESTATS_METADATA);
     const params = tbss_4_prestats_params(threshold)
-    return tbss_4_prestats_execute(params, execution);
+    return tbss_4_prestats_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       Tbss4PrestatsOutputs,
       Tbss4PrestatsParameters,
       tbss_4_prestats,
-      tbss_4_prestats_cargs,
       tbss_4_prestats_execute,
-      tbss_4_prestats_outputs,
       tbss_4_prestats_params,
 };

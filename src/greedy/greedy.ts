@@ -1645,14 +1645,16 @@ function greedy_outputs(
  * URL: https://sites.google.com/view/greedyreg/about
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GreedyOutputs`).
  */
 function greedy_execute(
     params: GreedyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GreedyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GREEDY_METADATA);
     params = execution.params(params)
     const cargs = greedy_cargs(params, execution)
     const ret = greedy_outputs(params, execution)
@@ -1819,10 +1821,8 @@ function greedy_(
     verbosity: 0 | 1 | 2 | null = null,
     runner: Runner | null = null,
 ): GreedyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GREEDY_METADATA);
     const params = greedy_params(dimensions, input_images, output, affine, brute, moments, reslice, invert, root, jacobian, metric_mode, defopt, weight, metric, step_size, iterations, threads, fixed_mask, gm_trim, moving_mask, wncc_mask_dilate, reference_image, ref_pad, background, input_transform, zero_last_dimension, time_step_mode, smoothing, inverse_warp, root_warp, warp_precision, noise, exponent, svf_mode, svlb, sv_incompr, initial_warp, tjr, wr, initial_affine, ia_identity, ia_voxel_grid, ia_image_centers, ia_image_side, ia_moments, affine_dof, jitter, search, det, cov_id, fixed_reslicing_image, reslice_moving_image, reslice_surface, interpolation, reslice_background, reslice_datatype, reslice_composite, reslice_jacobian, reslice_simplex_jacobian, reslice_mask, metric_gradient, debug_deriv, debug_deriv_eps, debug_aff_obj, dump_pyramid, dump_moving, dump_frequency, dump_prefix, powell, float, version, verbosity)
-    return greedy_execute(params, execution);
+    return greedy_execute(params, runner);
 }
 
 
@@ -1847,34 +1847,16 @@ export {
       GreedySearchParameters,
       GreedyTjrParameters,
       greedy_,
-      greedy_cargs,
       greedy_execute,
-      greedy_input_images_cargs,
       greedy_input_images_params,
-      greedy_invert_cargs,
-      greedy_invert_outputs,
       greedy_invert_params,
-      greedy_jacobian_cargs,
-      greedy_jacobian_outputs,
       greedy_jacobian_params,
-      greedy_metric_cargs,
       greedy_metric_params,
-      greedy_outputs,
       greedy_params,
-      greedy_reslice_moving_image_cargs,
-      greedy_reslice_moving_image_outputs,
       greedy_reslice_moving_image_params,
-      greedy_reslice_simplex_jacobian_cargs,
-      greedy_reslice_simplex_jacobian_outputs,
       greedy_reslice_simplex_jacobian_params,
-      greedy_reslice_surface_cargs,
-      greedy_reslice_surface_outputs,
       greedy_reslice_surface_params,
-      greedy_root_cargs,
-      greedy_root_outputs,
       greedy_root_params,
-      greedy_search_cargs,
       greedy_search_params,
-      greedy_tjr_cargs,
       greedy_tjr_params,
 };

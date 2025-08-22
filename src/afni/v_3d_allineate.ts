@@ -285,14 +285,16 @@ function v_3d_allineate_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dAllineateOutputs`).
  */
 function v_3d_allineate_execute(
     params: V3dAllineateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dAllineateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ALLINEATE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_allineate_cargs(params, execution)
     const ret = v_3d_allineate_outputs(params, execution)
@@ -343,10 +345,8 @@ function v_3d_allineate(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dAllineateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ALLINEATE_METADATA);
     const params = v_3d_allineate_params(source, prefix, base, param_save, param_apply, matrix_save, matrix_apply, cost, interp, final, nmatch, nopad, verbose, quiet)
-    return v_3d_allineate_execute(params, execution);
+    return v_3d_allineate_execute(params, runner);
 }
 
 
@@ -355,8 +355,6 @@ export {
       V3dAllineateParameters,
       V_3D_ALLINEATE_METADATA,
       v_3d_allineate,
-      v_3d_allineate_cargs,
       v_3d_allineate_execute,
-      v_3d_allineate_outputs,
       v_3d_allineate_params,
 };

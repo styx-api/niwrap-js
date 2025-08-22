@@ -434,14 +434,16 @@ function fabber_dwi_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FabberDwiOutputs`).
  */
 function fabber_dwi_execute(
     params: FabberDwiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FabberDwiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FABBER_DWI_METADATA);
     params = execution.params(params)
     const cargs = fabber_dwi_cargs(params, execution)
     const ret = fabber_dwi_outputs(params, execution)
@@ -536,10 +538,8 @@ function fabber_dwi(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): FabberDwiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FABBER_DWI_METADATA);
     const params = fabber_dwi_params(output_dir, method, model, data_file, help_flag, listmethods_flag, listmodels_flag, listparams_flag, descparams_flag, listoutputs_flag, evaluate, evaluate_params, evaluate_nt, simple_output_flag, overwrite_flag, link_to_latest_flag, loadmodels, multiple_data_files, data_order, mask_file, masked_timepoints, supp_data, dump_param_names_flag, save_model_fit_flag, save_residuals_flag, save_model_extras_flag, save_mvn_flag, save_mean_flag, save_std_flag, save_var_flag, save_zstat_flag, save_noise_mean_flag, save_noise_std_flag, save_free_energy_flag, optfile, debug_flag)
-    return fabber_dwi_execute(params, execution);
+    return fabber_dwi_execute(params, runner);
 }
 
 
@@ -548,8 +548,6 @@ export {
       FabberDwiOutputs,
       FabberDwiParameters,
       fabber_dwi,
-      fabber_dwi_cargs,
       fabber_dwi_execute,
-      fabber_dwi_outputs,
       fabber_dwi_params,
 };

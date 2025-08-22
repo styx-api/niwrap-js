@@ -164,14 +164,16 @@ function apas2aseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Apas2asegOutputs`).
  */
 function apas2aseg_execute(
     params: Apas2asegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Apas2asegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(APAS2ASEG_METADATA);
     params = execution.params(params)
     const cargs = apas2aseg_cargs(params, execution)
     const ret = apas2aseg_outputs(params, execution)
@@ -200,10 +202,8 @@ function apas2aseg(
     output_seg: string | null = "apas-aseg.mgz",
     runner: Runner | null = null,
 ): Apas2asegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(APAS2ASEG_METADATA);
     const params = apas2aseg_params(subject, input_aparc_aseg, output_seg)
-    return apas2aseg_execute(params, execution);
+    return apas2aseg_execute(params, runner);
 }
 
 
@@ -212,8 +212,6 @@ export {
       Apas2asegOutputs,
       Apas2asegParameters,
       apas2aseg,
-      apas2aseg_cargs,
       apas2aseg_execute,
-      apas2aseg_outputs,
       apas2aseg_params,
 };

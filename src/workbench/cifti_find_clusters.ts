@@ -515,14 +515,16 @@ function cifti_find_clusters_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiFindClustersOutputs`).
  */
 function cifti_find_clusters_execute(
     params: CiftiFindClustersParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiFindClustersOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_FIND_CLUSTERS_METADATA);
     params = execution.params(params)
     const cargs = cifti_find_clusters_cargs(params, execution)
     const ret = cifti_find_clusters_outputs(params, execution)
@@ -579,10 +581,8 @@ function cifti_find_clusters(
     opt_start_startval: number | null = null,
     runner: Runner | null = null,
 ): CiftiFindClustersOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_FIND_CLUSTERS_METADATA);
     const params = cifti_find_clusters_params(cifti, surface_value_threshold, surface_minimum_area, volume_value_threshold, volume_minimum_size, direction, cifti_out, opt_less_than, left_surface, right_surface, cerebellum_surface, opt_cifti_roi_roi_cifti, opt_merged_volume, size_ratio, distance, opt_start_startval)
-    return cifti_find_clusters_execute(params, execution);
+    return cifti_find_clusters_execute(params, runner);
 }
 
 
@@ -596,18 +596,11 @@ export {
       CiftiFindClustersRightSurfaceParameters,
       CiftiFindClustersSizeRatioParameters,
       cifti_find_clusters,
-      cifti_find_clusters_cargs,
-      cifti_find_clusters_cerebellum_surface_cargs,
       cifti_find_clusters_cerebellum_surface_params,
-      cifti_find_clusters_distance_cargs,
       cifti_find_clusters_distance_params,
       cifti_find_clusters_execute,
-      cifti_find_clusters_left_surface_cargs,
       cifti_find_clusters_left_surface_params,
-      cifti_find_clusters_outputs,
       cifti_find_clusters_params,
-      cifti_find_clusters_right_surface_cargs,
       cifti_find_clusters_right_surface_params,
-      cifti_find_clusters_size_ratio_cargs,
       cifti_find_clusters_size_ratio_params,
 };

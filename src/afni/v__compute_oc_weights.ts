@@ -239,14 +239,16 @@ function v__compute_oc_weights_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VComputeOcWeightsOutputs`).
  */
 function v__compute_oc_weights_execute(
     params: VComputeOcWeightsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VComputeOcWeightsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__COMPUTE_OC_WEIGHTS_METADATA);
     params = execution.params(params)
     const cargs = v__compute_oc_weights_cargs(params, execution)
     const ret = v__compute_oc_weights_outputs(params, execution)
@@ -289,10 +291,8 @@ function v__compute_oc_weights(
     verbosity: boolean = false,
     runner: Runner | null = null,
 ): VComputeOcWeightsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__COMPUTE_OC_WEIGHTS_METADATA);
     const params = v__compute_oc_weights_params(echo_dsets, echo_times, echo_times_file, prefix, def_to_equal, oc_method, sum_weight_tolerance, t2_star_limit, work_dir, verbosity)
-    return v__compute_oc_weights_execute(params, execution);
+    return v__compute_oc_weights_execute(params, runner);
 }
 
 
@@ -301,8 +301,6 @@ export {
       VComputeOcWeightsParameters,
       V__COMPUTE_OC_WEIGHTS_METADATA,
       v__compute_oc_weights,
-      v__compute_oc_weights_cargs,
       v__compute_oc_weights_execute,
-      v__compute_oc_weights_outputs,
       v__compute_oc_weights_params,
 };

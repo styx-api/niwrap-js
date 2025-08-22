@@ -257,14 +257,16 @@ function v__t1scale_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VT1scaleOutputs`).
  */
 function v__t1scale_execute(
     params: VT1scaleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VT1scaleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__T1SCALE_METADATA);
     params = execution.params(params)
     const cargs = v__t1scale_cargs(params, execution)
     const ret = v__t1scale_outputs(params, execution)
@@ -315,10 +317,8 @@ function v__t1scale(
     h_find_word: string | null = null,
     runner: Runner | null = null,
 ): VT1scaleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__T1SCALE_METADATA);
     const params = v__t1scale_params(t1_volume, pd_volume, output_directory, align, mask, head_mask, unmasked_uni, masked_uni, echo, help, h_web, h_view, all_opts, h_find_word)
-    return v__t1scale_execute(params, execution);
+    return v__t1scale_execute(params, runner);
 }
 
 
@@ -327,8 +327,6 @@ export {
       VT1scaleParameters,
       V__T1SCALE_METADATA,
       v__t1scale,
-      v__t1scale_cargs,
       v__t1scale_execute,
-      v__t1scale_outputs,
       v__t1scale_params,
 };

@@ -177,14 +177,16 @@ function mris_divide_parcellation_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisDivideParcellationOutputs`).
  */
 function mris_divide_parcellation_execute(
     params: MrisDivideParcellationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisDivideParcellationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_DIVIDE_PARCELLATION_METADATA);
     params = execution.params(params)
     const cargs = mris_divide_parcellation_cargs(params, execution)
     const ret = mris_divide_parcellation_outputs(params, execution)
@@ -221,10 +223,8 @@ function mris_divide_parcellation(
     label_name: string | null = null,
     runner: Runner | null = null,
 ): MrisDivideParcellationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_DIVIDE_PARCELLATION_METADATA);
     const params = mris_divide_parcellation_params(subject, hemi, sourceannot, splitfile_or_areathresh, outannot, scale, label_name)
-    return mris_divide_parcellation_execute(params, execution);
+    return mris_divide_parcellation_execute(params, runner);
 }
 
 
@@ -233,8 +233,6 @@ export {
       MrisDivideParcellationOutputs,
       MrisDivideParcellationParameters,
       mris_divide_parcellation,
-      mris_divide_parcellation_cargs,
       mris_divide_parcellation_execute,
-      mris_divide_parcellation_outputs,
       mris_divide_parcellation_params,
 };

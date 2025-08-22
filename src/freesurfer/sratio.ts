@@ -157,14 +157,16 @@ function sratio_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SratioOutputs`).
  */
 function sratio_execute(
     params: SratioParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SratioOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SRATIO_METADATA);
     params = execution.params(params)
     const cargs = sratio_cargs(params, execution)
     const ret = sratio_outputs(params, execution)
@@ -195,10 +197,8 @@ function sratio(
     mask_threshold: number | null = null,
     runner: Runner | null = null,
 ): SratioOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SRATIO_METADATA);
     const params = sratio_params(value_a, value_b, abs_flag, mask_threshold)
-    return sratio_execute(params, execution);
+    return sratio_execute(params, runner);
 }
 
 
@@ -207,8 +207,6 @@ export {
       SratioOutputs,
       SratioParameters,
       sratio,
-      sratio_cargs,
       sratio_execute,
-      sratio_outputs,
       sratio_params,
 };

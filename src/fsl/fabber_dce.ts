@@ -434,14 +434,16 @@ function fabber_dce_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FabberDceOutputs`).
  */
 function fabber_dce_execute(
     params: FabberDceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FabberDceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FABBER_DCE_METADATA);
     params = execution.params(params)
     const cargs = fabber_dce_cargs(params, execution)
     const ret = fabber_dce_outputs(params, execution)
@@ -536,10 +538,8 @@ function fabber_dce(
     debug: boolean = false,
     runner: Runner | null = null,
 ): FabberDceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FABBER_DCE_METADATA);
     const params = fabber_dce_params(output_directory, inference_method, forward_model, input_data, help_flag, list_methods, list_models, list_params, describe_params, list_outputs, evaluate_model, evaluate_params, evaluate_nt, simple_output, overwrite, link_to_latest, load_models, multiple_data, data_order, mask, masked_time_points, supplemental_data, dump_param_names, save_model_fit, save_residuals, save_model_extras, save_mvn, save_mean, save_std, save_variances, save_zstat, save_noise_mean, save_noise_std, save_free_energy, option_file, debug)
-    return fabber_dce_execute(params, execution);
+    return fabber_dce_execute(params, runner);
 }
 
 
@@ -548,8 +548,6 @@ export {
       FabberDceOutputs,
       FabberDceParameters,
       fabber_dce,
-      fabber_dce_cargs,
       fabber_dce_execute,
-      fabber_dce_outputs,
       fabber_dce_params,
 };

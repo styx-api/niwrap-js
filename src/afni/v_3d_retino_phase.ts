@@ -316,14 +316,16 @@ function v_3d_retino_phase_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dRetinoPhaseOutputs`).
  */
 function v_3d_retino_phase_execute(
     params: V3dRetinoPhaseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dRetinoPhaseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_RETINO_PHASE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_retino_phase_cargs(params, execution)
     const ret = v_3d_retino_phase_outputs(params, execution)
@@ -378,10 +380,8 @@ function v_3d_retino_phase(
     multi_ref_ts: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dRetinoPhaseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_RETINO_PHASE_METADATA);
     const params = v_3d_retino_phase_params(prefix, dataset, exp, con, clw, ccw, spectra, tstim, nrings, nwedges, ort_adjust, pre_stim, sum_adjust, phase_estimate, ref_ts, multi_ref_ts)
-    return v_3d_retino_phase_execute(params, execution);
+    return v_3d_retino_phase_execute(params, runner);
 }
 
 
@@ -390,8 +390,6 @@ export {
       V3dRetinoPhaseParameters,
       V_3D_RETINO_PHASE_METADATA,
       v_3d_retino_phase,
-      v_3d_retino_phase_cargs,
       v_3d_retino_phase_execute,
-      v_3d_retino_phase_outputs,
       v_3d_retino_phase_params,
 };

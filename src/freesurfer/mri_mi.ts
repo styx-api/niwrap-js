@@ -151,14 +151,16 @@ function mri_mi_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMiOutputs`).
  */
 function mri_mi_execute(
     params: MriMiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MI_METADATA);
     params = execution.params(params)
     const cargs = mri_mi_cargs(params, execution)
     const ret = mri_mi_outputs(params, execution)
@@ -189,10 +191,8 @@ function mri_mi(
     silent: boolean = false,
     runner: Runner | null = null,
 ): MriMiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MI_METADATA);
     const params = mri_mi_params(input_file1, input_file2, bins, silent)
-    return mri_mi_execute(params, execution);
+    return mri_mi_execute(params, runner);
 }
 
 
@@ -201,8 +201,6 @@ export {
       MriMiOutputs,
       MriMiParameters,
       mri_mi,
-      mri_mi_cargs,
       mri_mi_execute,
-      mri_mi_outputs,
       mri_mi_params,
 };

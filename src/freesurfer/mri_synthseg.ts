@@ -263,14 +263,16 @@ function mri_synthseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSynthsegOutputs`).
  */
 function mri_synthseg_execute(
     params: MriSynthsegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSynthsegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SYNTHSEG_METADATA);
     params = execution.params(params)
     const cargs = mri_synthseg_cargs(params, execution)
     const ret = mri_synthseg_outputs(params, execution)
@@ -323,10 +325,8 @@ function mri_synthseg(
     photo_synthseg: string | null = null,
     runner: Runner | null = null,
 ): MriSynthsegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SYNTHSEG_METADATA);
     const params = mri_synthseg_params(input_image, output_segmentation, cortex_parcellation, robust_prediction, fast_prediction, clip_ct, output_volume, output_qc, output_posteriors, resampled_images, image_patch_size, threads, cpu, version_1, photo_synthseg)
-    return mri_synthseg_execute(params, execution);
+    return mri_synthseg_execute(params, runner);
 }
 
 
@@ -335,8 +335,6 @@ export {
       MriSynthsegOutputs,
       MriSynthsegParameters,
       mri_synthseg,
-      mri_synthseg_cargs,
       mri_synthseg_execute,
-      mri_synthseg_outputs,
       mri_synthseg_params,
 };

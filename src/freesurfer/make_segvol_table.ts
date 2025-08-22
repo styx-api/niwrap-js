@@ -226,14 +226,16 @@ function make_segvol_table_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeSegvolTableOutputs`).
  */
 function make_segvol_table_execute(
     params: MakeSegvolTableParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeSegvolTableOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_SEGVOL_TABLE_METADATA);
     params = execution.params(params)
     const cargs = make_segvol_table_cargs(params, execution)
     const ret = make_segvol_table_outputs(params, execution)
@@ -276,10 +278,8 @@ function make_segvol_table(
     help: boolean = false,
     runner: Runner | null = null,
 ): MakeSegvolTableOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_SEGVOL_TABLE_METADATA);
     const params = make_segvol_table_params(subjects, subject_file, outfile, idmap, structure_ids, segdir, subjects_dir, umask, version, help)
-    return make_segvol_table_execute(params, execution);
+    return make_segvol_table_execute(params, runner);
 }
 
 
@@ -288,8 +288,6 @@ export {
       MakeSegvolTableOutputs,
       MakeSegvolTableParameters,
       make_segvol_table,
-      make_segvol_table_cargs,
       make_segvol_table_execute,
-      make_segvol_table_outputs,
       make_segvol_table_params,
 };

@@ -181,14 +181,16 @@ function v_3d_slice_ndice_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dSliceNdiceOutputs`).
  */
 function v_3d_slice_ndice_execute(
     params: V3dSliceNdiceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dSliceNdiceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_SLICE_NDICE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_slice_ndice_cargs(params, execution)
     const ret = v_3d_slice_ndice_outputs(params, execution)
@@ -221,10 +223,8 @@ function v_3d_slice_ndice(
     no_cmd_echo: boolean = false,
     runner: Runner | null = null,
 ): V3dSliceNdiceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_SLICE_NDICE_METADATA);
     const params = v_3d_slice_ndice_params(infile_a, infile_b, output_prefix, out_domain, no_cmd_echo)
-    return v_3d_slice_ndice_execute(params, execution);
+    return v_3d_slice_ndice_execute(params, runner);
 }
 
 
@@ -233,8 +233,6 @@ export {
       V3dSliceNdiceParameters,
       V_3D_SLICE_NDICE_METADATA,
       v_3d_slice_ndice,
-      v_3d_slice_ndice_cargs,
       v_3d_slice_ndice_execute,
-      v_3d_slice_ndice_outputs,
       v_3d_slice_ndice_params,
 };

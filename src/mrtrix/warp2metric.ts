@@ -343,14 +343,16 @@ function warp2metric_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Warp2metricOutputs`).
  */
 function warp2metric_execute(
     params: Warp2metricParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Warp2metricOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WARP2METRIC_METADATA);
     params = execution.params(params)
     const cargs = warp2metric_cargs(params, execution)
     const ret = warp2metric_outputs(params, execution)
@@ -403,10 +405,8 @@ function warp2metric(
     version: boolean = false,
     runner: Runner | null = null,
 ): Warp2metricOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WARP2METRIC_METADATA);
     const params = warp2metric_params(in_, fc, jmat, jdet, info, quiet, debug, force, nthreads, config, help, version)
-    return warp2metric_execute(params, execution);
+    return warp2metric_execute(params, runner);
 }
 
 
@@ -417,12 +417,8 @@ export {
       Warp2metricOutputs,
       Warp2metricParameters,
       warp2metric,
-      warp2metric_cargs,
-      warp2metric_config_cargs,
       warp2metric_config_params,
       warp2metric_execute,
-      warp2metric_fc_cargs,
       warp2metric_fc_params,
-      warp2metric_outputs,
       warp2metric_params,
 };

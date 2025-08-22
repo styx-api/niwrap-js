@@ -243,14 +243,16 @@ function mri_edit_wm_with_aseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriEditWmWithAsegOutputs`).
  */
 function mri_edit_wm_with_aseg_execute(
     params: MriEditWmWithAsegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriEditWmWithAsegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_EDIT_WM_WITH_ASEG_METADATA);
     params = execution.params(params)
     const cargs = mri_edit_wm_with_aseg_cargs(params, execution)
     const ret = mri_edit_wm_with_aseg_outputs(params, execution)
@@ -301,10 +303,8 @@ function mri_edit_wm_with_aseg(
     debug_voxel: Array<number> | null = null,
     runner: Runner | null = null,
 ): MriEditWmWithAsegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_EDIT_WM_WITH_ASEG_METADATA);
     const params = mri_edit_wm_with_aseg_params(input_wm, input_t1_brain, aseg, output_wm, fillven, fix_scm_ha, fix_scm_ha_only, keep, keep_in, lh, rh, fix_ento_wm, sa_fix_ento_wm, debug_voxel)
-    return mri_edit_wm_with_aseg_execute(params, execution);
+    return mri_edit_wm_with_aseg_execute(params, runner);
 }
 
 
@@ -313,8 +313,6 @@ export {
       MriEditWmWithAsegOutputs,
       MriEditWmWithAsegParameters,
       mri_edit_wm_with_aseg,
-      mri_edit_wm_with_aseg_cargs,
       mri_edit_wm_with_aseg_execute,
-      mri_edit_wm_with_aseg_outputs,
       mri_edit_wm_with_aseg_params,
 };

@@ -437,14 +437,16 @@ function cifti_create_dense_scalar_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCreateDenseScalarOutputs`).
  */
 function cifti_create_dense_scalar_execute(
     params: CiftiCreateDenseScalarParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiCreateDenseScalarOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_CREATE_DENSE_SCALAR_METADATA);
     params = execution.params(params)
     const cargs = cifti_create_dense_scalar_cargs(params, execution)
     const ret = cifti_create_dense_scalar_outputs(params, execution)
@@ -517,10 +519,8 @@ function cifti_create_dense_scalar(
     opt_name_file_file: string | null = null,
     runner: Runner | null = null,
 ): CiftiCreateDenseScalarOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_CREATE_DENSE_SCALAR_METADATA);
     const params = cifti_create_dense_scalar_params(cifti_out, volume, left_metric, right_metric, cerebellum_metric, opt_name_file_file)
-    return cifti_create_dense_scalar_execute(params, execution);
+    return cifti_create_dense_scalar_execute(params, runner);
 }
 
 
@@ -533,16 +533,10 @@ export {
       CiftiCreateDenseScalarRightMetricParameters,
       CiftiCreateDenseScalarVolumeParameters,
       cifti_create_dense_scalar,
-      cifti_create_dense_scalar_cargs,
-      cifti_create_dense_scalar_cerebellum_metric_cargs,
       cifti_create_dense_scalar_cerebellum_metric_params,
       cifti_create_dense_scalar_execute,
-      cifti_create_dense_scalar_left_metric_cargs,
       cifti_create_dense_scalar_left_metric_params,
-      cifti_create_dense_scalar_outputs,
       cifti_create_dense_scalar_params,
-      cifti_create_dense_scalar_right_metric_cargs,
       cifti_create_dense_scalar_right_metric_params,
-      cifti_create_dense_scalar_volume_cargs,
       cifti_create_dense_scalar_volume_params,
 };

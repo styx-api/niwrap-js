@@ -149,14 +149,16 @@ function rca_config_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RcaConfigOutputs`).
  */
 function rca_config_execute(
     params: RcaConfigParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RcaConfigOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RCA_CONFIG_METADATA);
     params = execution.params(params)
     const cargs = rca_config_cargs(params, execution)
     const ret = rca_config_outputs(params, execution)
@@ -187,10 +189,8 @@ function rca_config(
     args: Array<string> | null = null,
     runner: Runner | null = null,
 ): RcaConfigOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RCA_CONFIG_METADATA);
     const params = rca_config_params(source_config, updated_config, unknown_args_file, args)
-    return rca_config_execute(params, execution);
+    return rca_config_execute(params, runner);
 }
 
 
@@ -199,8 +199,6 @@ export {
       RcaConfigOutputs,
       RcaConfigParameters,
       rca_config,
-      rca_config_cargs,
       rca_config_execute,
-      rca_config_outputs,
       rca_config_params,
 };

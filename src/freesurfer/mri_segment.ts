@@ -477,14 +477,16 @@ function mri_segment_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSegmentOutputs`).
  */
 function mri_segment_execute(
     params: MriSegmentParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSegmentOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SEGMENT_METADATA);
     params = execution.params(params)
     const cargs = mri_segment_cargs(params, execution)
     const ret = mri_segment_outputs(params, execution)
@@ -575,10 +577,8 @@ function mri_segment(
     diag_verbose: boolean = false,
     runner: Runner | null = null,
 ): MriSegmentOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SEGMENT_METADATA);
     const params = mri_segment_params(in_vol, out_vol, no1d_remove, slope, pslope, nslope, debug_voxel, auto, noauto, log, keep, gray_hi, wm_low, wm_low_factor, wm_hi, nseg, thicken, fillbg, fillv, blur_sigma, iterations, thin_strand_limit, verbose, threshold, extract_options, wsize, wsizemm, polvw_size, polv_len, datfile, segmentation, diagno, diag_write, diag_verbose)
-    return mri_segment_execute(params, execution);
+    return mri_segment_execute(params, runner);
 }
 
 
@@ -587,8 +587,6 @@ export {
       MriSegmentOutputs,
       MriSegmentParameters,
       mri_segment,
-      mri_segment_cargs,
       mri_segment_execute,
-      mri_segment_outputs,
       mri_segment_params,
 };

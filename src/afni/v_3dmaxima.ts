@@ -291,14 +291,16 @@ function v_3dmaxima_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dmaximaOutputs`).
  */
 function v_3dmaxima_execute(
     params: V3dmaximaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dmaximaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DMAXIMA_METADATA);
     params = execution.params(params)
     const cargs = v_3dmaxima_cargs(params, execution)
     const ret = v_3dmaxima_outputs(params, execution)
@@ -361,10 +363,8 @@ function v_3dmaxima(
     ver_flag: boolean = false,
     runner: Runner | null = null,
 ): V3dmaximaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DMAXIMA_METADATA);
     const params = v_3dmaxima_params(input_dataset, output_prefix, threshold, min_dist, out_rad, input_flag, spheres_1_flag, spheres_1to_n_flag, spheres_nto1_flag, neg_ext_flag, true_max_flag, dset_coords_flag, no_text_flag, coords_only_flag, n_style_sort_flag, n_style_weight_ave_flag, debug_level, help_flag, hist_flag, ver_flag)
-    return v_3dmaxima_execute(params, execution);
+    return v_3dmaxima_execute(params, runner);
 }
 
 
@@ -373,8 +373,6 @@ export {
       V3dmaximaParameters,
       V_3DMAXIMA_METADATA,
       v_3dmaxima,
-      v_3dmaxima_cargs,
       v_3dmaxima_execute,
-      v_3dmaxima_outputs,
       v_3dmaxima_params,
 };

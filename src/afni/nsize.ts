@@ -138,14 +138,16 @@ function nsize_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `NsizeOutputs`).
  */
 function nsize_execute(
     params: NsizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): NsizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(NSIZE_METADATA);
     params = execution.params(params)
     const cargs = nsize_cargs(params, execution)
     const ret = nsize_outputs(params, execution)
@@ -172,10 +174,8 @@ function nsize(
     image_out: string,
     runner: Runner | null = null,
 ): NsizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(NSIZE_METADATA);
     const params = nsize_params(image_in, image_out)
-    return nsize_execute(params, execution);
+    return nsize_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       NsizeOutputs,
       NsizeParameters,
       nsize,
-      nsize_cargs,
       nsize_execute,
-      nsize_outputs,
       nsize_params,
 };

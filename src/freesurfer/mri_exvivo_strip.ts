@@ -260,14 +260,16 @@ function mri_exvivo_strip_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriExvivoStripOutputs`).
  */
 function mri_exvivo_strip_execute(
     params: MriExvivoStripParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriExvivoStripOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_EXVIVO_STRIP_METADATA);
     params = execution.params(params)
     const cargs = mri_exvivo_strip_cargs(params, execution)
     const ret = mri_exvivo_strip_outputs(params, execution)
@@ -314,10 +316,8 @@ function mri_exvivo_strip(
     gpu: number | null = null,
     runner: Runner | null = null,
 ): MriExvivoStripOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_EXVIVO_STRIP_METADATA);
     const params = mri_exvivo_strip_params(invol, outvol, hemi, pred, norm, fv, uthresh, border, multichannel, model, wts, gpu)
-    return mri_exvivo_strip_execute(params, execution);
+    return mri_exvivo_strip_execute(params, runner);
 }
 
 
@@ -326,8 +326,6 @@ export {
       MriExvivoStripOutputs,
       MriExvivoStripParameters,
       mri_exvivo_strip,
-      mri_exvivo_strip_cargs,
       mri_exvivo_strip_execute,
-      mri_exvivo_strip_outputs,
       mri_exvivo_strip_params,
 };

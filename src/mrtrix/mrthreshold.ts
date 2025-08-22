@@ -380,14 +380,16 @@ function mrthreshold_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrthresholdOutputs`).
  */
 function mrthreshold_execute(
     params: MrthresholdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrthresholdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRTHRESHOLD_METADATA);
     params = execution.params(params)
     const cargs = mrthreshold_cargs(params, execution)
     const ret = mrthreshold_outputs(params, execution)
@@ -471,10 +473,8 @@ function mrthreshold(
     output: string | null = null,
     runner: Runner | null = null,
 ): MrthresholdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRTHRESHOLD_METADATA);
     const params = mrthreshold_params(input, abs, percentile, top, bottom, allvolumes, ignorezero, mask, comparison, invert, out_masked, nan, info, quiet, debug, force, nthreads, config, help, version, output)
-    return mrthreshold_execute(params, execution);
+    return mrthreshold_execute(params, runner);
 }
 
 
@@ -484,10 +484,7 @@ export {
       MrthresholdOutputs,
       MrthresholdParameters,
       mrthreshold,
-      mrthreshold_cargs,
-      mrthreshold_config_cargs,
       mrthreshold_config_params,
       mrthreshold_execute,
-      mrthreshold_outputs,
       mrthreshold_params,
 };

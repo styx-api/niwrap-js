@@ -357,14 +357,16 @@ function v_3d_seg_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dSegOutputs`).
  */
 function v_3d_seg_execute(
     params: V3dSegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dSegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_SEG_METADATA);
     params = execution.params(params)
     const cargs = v_3d_seg_cargs(params, execution)
     const ret = v_3d_seg_outputs(params, execution)
@@ -425,10 +427,8 @@ function v_3d_seg(
     vox_debug_file: string | null = null,
     runner: Runner | null = null,
 ): V3dSegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_SEG_METADATA);
     const params = v_3d_seg_params(anat, mask, blur_meth, bias_fwhm, classes, bmrf, bias_classes, prefix, overwrite, debug, mixfrac, mixfloor, gold, gold_bias, main_n, cset, labeltable, vox_debug, vox_debug_file)
-    return v_3d_seg_execute(params, execution);
+    return v_3d_seg_execute(params, runner);
 }
 
 
@@ -437,8 +437,6 @@ export {
       V3dSegParameters,
       V_3D_SEG_METADATA,
       v_3d_seg,
-      v_3d_seg_cargs,
       v_3d_seg_execute,
-      v_3d_seg_outputs,
       v_3d_seg_params,
 };

@@ -157,14 +157,16 @@ function antsuse_deformation_field_to_get_affine_transform_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsuseDeformationFieldToGetAffineTransformOutputs`).
  */
 function antsuse_deformation_field_to_get_affine_transform_execute(
     params: AntsuseDeformationFieldToGetAffineTransformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsuseDeformationFieldToGetAffineTransformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTSUSE_DEFORMATION_FIELD_TO_GET_AFFINE_TRANSFORM_METADATA);
     params = execution.params(params)
     const cargs = antsuse_deformation_field_to_get_affine_transform_cargs(params, execution)
     const ret = antsuse_deformation_field_to_get_affine_transform_outputs(params, execution)
@@ -197,10 +199,8 @@ function antsuse_deformation_field_to_get_affine_transform(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): AntsuseDeformationFieldToGetAffineTransformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTSUSE_DEFORMATION_FIELD_TO_GET_AFFINE_TRANSFORM_METADATA);
     const params = antsuse_deformation_field_to_get_affine_transform_params(deformation_field, load_ratio, transform_type, output_affine, mask)
-    return antsuse_deformation_field_to_get_affine_transform_execute(params, execution);
+    return antsuse_deformation_field_to_get_affine_transform_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       AntsuseDeformationFieldToGetAffineTransformOutputs,
       AntsuseDeformationFieldToGetAffineTransformParameters,
       antsuse_deformation_field_to_get_affine_transform,
-      antsuse_deformation_field_to_get_affine_transform_cargs,
       antsuse_deformation_field_to_get_affine_transform_execute,
-      antsuse_deformation_field_to_get_affine_transform_outputs,
       antsuse_deformation_field_to_get_affine_transform_params,
 };

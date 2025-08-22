@@ -160,14 +160,16 @@ function v_3d_tsplit4_d_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTsplit4DOutputs`).
  */
 function v_3d_tsplit4_d_execute(
     params: V3dTsplit4DParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTsplit4DOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TSPLIT4_D_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tsplit4_d_cargs(params, execution)
     const ret = v_3d_tsplit4_d_outputs(params, execution)
@@ -198,10 +200,8 @@ function v_3d_tsplit4_d(
     digits: number | null = null,
     runner: Runner | null = null,
 ): V3dTsplit4DOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TSPLIT4_D_METADATA);
     const params = v_3d_tsplit4_d_params(prefix, infile, keep_datum, digits)
-    return v_3d_tsplit4_d_execute(params, execution);
+    return v_3d_tsplit4_d_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       V3dTsplit4DParameters,
       V_3D_TSPLIT4_D_METADATA,
       v_3d_tsplit4_d,
-      v_3d_tsplit4_d_cargs,
       v_3d_tsplit4_d_execute,
-      v_3d_tsplit4_d_outputs,
       v_3d_tsplit4_d_params,
 };

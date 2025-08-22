@@ -153,14 +153,16 @@ function cifti_transpose_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiTransposeOutputs`).
  */
 function cifti_transpose_execute(
     params: CiftiTransposeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiTransposeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_TRANSPOSE_METADATA);
     params = execution.params(params)
     const cargs = cifti_transpose_cargs(params, execution)
     const ret = cifti_transpose_outputs(params, execution)
@@ -191,10 +193,8 @@ function cifti_transpose(
     opt_mem_limit_limit_gb: number | null = null,
     runner: Runner | null = null,
 ): CiftiTransposeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_TRANSPOSE_METADATA);
     const params = cifti_transpose_params(cifti_in, cifti_out, opt_mem_limit_limit_gb)
-    return cifti_transpose_execute(params, execution);
+    return cifti_transpose_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       CiftiTransposeOutputs,
       CiftiTransposeParameters,
       cifti_transpose,
-      cifti_transpose_cargs,
       cifti_transpose_execute,
-      cifti_transpose_outputs,
       cifti_transpose_params,
 };

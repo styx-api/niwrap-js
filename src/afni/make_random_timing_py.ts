@@ -393,14 +393,16 @@ function make_random_timing_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeRandomTimingPyOutputs`).
  */
 function make_random_timing_py_execute(
     params: MakeRandomTimingPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeRandomTimingPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_RANDOM_TIMING_PY_METADATA);
     params = execution.params(params)
     const cargs = make_random_timing_py_cargs(params, execution)
     const ret = make_random_timing_py_outputs(params, execution)
@@ -473,10 +475,8 @@ function make_random_timing_py(
     show_timing_stats: boolean = false,
     runner: Runner | null = null,
 ): MakeRandomTimingPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_RANDOM_TIMING_PY_METADATA);
     const params = make_random_timing_py_params(num_runs, run_time, num_stim, num_reps, prefix, stim_dur, across_runs, max_consec, max_rest, min_rest, not_first, not_last, offset, ordered_stimuli, pre_stim_rest, post_stim_rest, save_3dd_cmd, seed, stim_labels, t_digits, t_gran, tr, tr_locked, verb, show_timing_stats)
-    return make_random_timing_py_execute(params, execution);
+    return make_random_timing_py_execute(params, runner);
 }
 
 
@@ -485,8 +485,6 @@ export {
       MakeRandomTimingPyOutputs,
       MakeRandomTimingPyParameters,
       make_random_timing_py,
-      make_random_timing_py_cargs,
       make_random_timing_py_execute,
-      make_random_timing_py_outputs,
       make_random_timing_py_params,
 };

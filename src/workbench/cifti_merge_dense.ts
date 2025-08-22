@@ -206,14 +206,16 @@ function cifti_merge_dense_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiMergeDenseOutputs`).
  */
 function cifti_merge_dense_execute(
     params: CiftiMergeDenseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiMergeDenseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_MERGE_DENSE_METADATA);
     params = execution.params(params)
     const cargs = cifti_merge_dense_cargs(params, execution)
     const ret = cifti_merge_dense_outputs(params, execution)
@@ -246,10 +248,8 @@ function cifti_merge_dense(
     cifti: Array<CiftiMergeDenseCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiMergeDenseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_MERGE_DENSE_METADATA);
     const params = cifti_merge_dense_params(direction, cifti_out, opt_label_collision_action, cifti)
-    return cifti_merge_dense_execute(params, execution);
+    return cifti_merge_dense_execute(params, runner);
 }
 
 
@@ -259,10 +259,7 @@ export {
       CiftiMergeDenseOutputs,
       CiftiMergeDenseParameters,
       cifti_merge_dense,
-      cifti_merge_dense_cargs,
-      cifti_merge_dense_cifti_cargs,
       cifti_merge_dense_cifti_params,
       cifti_merge_dense_execute,
-      cifti_merge_dense_outputs,
       cifti_merge_dense_params,
 };

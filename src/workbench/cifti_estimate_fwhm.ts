@@ -298,14 +298,16 @@ function cifti_estimate_fwhm_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiEstimateFwhmOutputs`).
  */
 function cifti_estimate_fwhm_execute(
     params: CiftiEstimateFwhmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiEstimateFwhmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_ESTIMATE_FWHM_METADATA);
     params = execution.params(params)
     const cargs = cifti_estimate_fwhm_cargs(params, execution)
     const ret = cifti_estimate_fwhm_outputs(params, execution)
@@ -376,10 +378,8 @@ function cifti_estimate_fwhm(
     surface: Array<CiftiEstimateFwhmSurfaceParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiEstimateFwhmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_ESTIMATE_FWHM_METADATA);
     const params = cifti_estimate_fwhm_params(cifti, opt_merged_volume, opt_column_column, whole_file, surface)
-    return cifti_estimate_fwhm_execute(params, execution);
+    return cifti_estimate_fwhm_execute(params, runner);
 }
 
 
@@ -390,12 +390,8 @@ export {
       CiftiEstimateFwhmSurfaceParameters,
       CiftiEstimateFwhmWholeFileParameters,
       cifti_estimate_fwhm,
-      cifti_estimate_fwhm_cargs,
       cifti_estimate_fwhm_execute,
-      cifti_estimate_fwhm_outputs,
       cifti_estimate_fwhm_params,
-      cifti_estimate_fwhm_surface_cargs,
       cifti_estimate_fwhm_surface_params,
-      cifti_estimate_fwhm_whole_file_cargs,
       cifti_estimate_fwhm_whole_file_params,
 };

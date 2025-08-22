@@ -354,14 +354,16 @@ function v_3ddelay_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3ddelayOutputs`).
  */
 function v_3ddelay_execute(
     params: V3ddelayParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3ddelayOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DDELAY_METADATA);
     params = execution.params(params)
     const cargs = v_3ddelay_cargs(params, execution)
     const ret = v_3ddelay_outputs(params, execution)
@@ -432,10 +434,8 @@ function v_3ddelay(
     ascts: string | null = null,
     runner: Runner | null = null,
 ): V3ddelayOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DDELAY_METADATA);
     const params = v_3ddelay_params(input_file, reference_file, sampling_freq, stim_period, prefix, polort, nodtrnd, units_seconds, units_degrees, units_radians, phzwrp, nophzwrp, phzreverse, phzscale, bias, nobias, dsamp, nodsamp, mask, nfirst, nlast, co, asc, ascts)
-    return v_3ddelay_execute(params, execution);
+    return v_3ddelay_execute(params, runner);
 }
 
 
@@ -444,8 +444,6 @@ export {
       V3ddelayParameters,
       V_3DDELAY_METADATA,
       v_3ddelay,
-      v_3ddelay_cargs,
       v_3ddelay_execute,
-      v_3ddelay_outputs,
       v_3ddelay_params,
 };

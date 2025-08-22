@@ -362,14 +362,16 @@ function mris_info_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisInfoOutputs`).
  */
 function mris_info_execute(
     params: MrisInfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisInfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_INFO_METADATA);
     params = execution.params(params)
     const cargs = mris_info_cargs(params, execution)
     const ret = mris_info_outputs(params, execution)
@@ -438,10 +440,8 @@ function mris_info(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisInfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_INFO_METADATA);
     const params = mris_info_params(surfacefile, outfile, subject_hemi_surfname, talairach_xfm_flag, rescale_flag, patchfile, vertex_number, extended_vertex_number, curvfile, annotfile, area_stats_flag, edge_stats_id, edge_number, vtxno, matrix_format, quality_stats_flag, intersections_flag, mask_file, label_file, edge_file, nogifti_flag, version_flag, help_flag)
-    return mris_info_execute(params, execution);
+    return mris_info_execute(params, runner);
 }
 
 
@@ -450,8 +450,6 @@ export {
       MrisInfoOutputs,
       MrisInfoParameters,
       mris_info,
-      mris_info_cargs,
       mris_info_execute,
-      mris_info_outputs,
       mris_info_params,
 };

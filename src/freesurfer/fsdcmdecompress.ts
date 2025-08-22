@@ -172,14 +172,16 @@ function fsdcmdecompress_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsdcmdecompressOutputs`).
  */
 function fsdcmdecompress_execute(
     params: FsdcmdecompressParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsdcmdecompressOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSDCMDECOMPRESS_METADATA);
     params = execution.params(params)
     const cargs = fsdcmdecompress_cargs(params, execution)
     const ret = fsdcmdecompress_outputs(params, execution)
@@ -214,10 +216,8 @@ function fsdcmdecompress(
     gdcm: boolean = false,
     runner: Runner | null = null,
 ): FsdcmdecompressOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSDCMDECOMPRESS_METADATA);
     const params = fsdcmdecompress_params(indcmfile, outdcmfile, dcmtk, jpeg, rle, gdcm)
-    return fsdcmdecompress_execute(params, execution);
+    return fsdcmdecompress_execute(params, runner);
 }
 
 
@@ -226,8 +226,6 @@ export {
       FsdcmdecompressOutputs,
       FsdcmdecompressParameters,
       fsdcmdecompress,
-      fsdcmdecompress_cargs,
       fsdcmdecompress_execute,
-      fsdcmdecompress_outputs,
       fsdcmdecompress_params,
 };

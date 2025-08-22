@@ -148,14 +148,16 @@ function fsl_5_0_2_xyztrans_sch_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fsl502XyztransSchOutputs`).
  */
 function fsl_5_0_2_xyztrans_sch_execute(
     params: Fsl502XyztransSchParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fsl502XyztransSchOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_5_0_2_XYZTRANS_SCH_METADATA);
     params = execution.params(params)
     const cargs = fsl_5_0_2_xyztrans_sch_cargs(params, execution)
     const ret = fsl_5_0_2_xyztrans_sch_outputs(params, execution)
@@ -184,10 +186,8 @@ function fsl_5_0_2_xyztrans_sch(
     no_scrollback_flag: boolean = false,
     runner: Runner | null = null,
 ): Fsl502XyztransSchOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_5_0_2_XYZTRANS_SCH_METADATA);
     const params = fsl_5_0_2_xyztrans_sch_params(term_option, version_flag, no_scrollback_flag)
-    return fsl_5_0_2_xyztrans_sch_execute(params, execution);
+    return fsl_5_0_2_xyztrans_sch_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       Fsl502XyztransSchOutputs,
       Fsl502XyztransSchParameters,
       fsl_5_0_2_xyztrans_sch,
-      fsl_5_0_2_xyztrans_sch_cargs,
       fsl_5_0_2_xyztrans_sch_execute,
-      fsl_5_0_2_xyztrans_sch_outputs,
       fsl_5_0_2_xyztrans_sch_params,
 };

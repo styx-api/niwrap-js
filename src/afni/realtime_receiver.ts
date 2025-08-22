@@ -251,14 +251,16 @@ function realtime_receiver_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RealtimeReceiverOutputs`).
  */
 function realtime_receiver_execute(
     params: RealtimeReceiverParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RealtimeReceiverOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REALTIME_RECEIVER_METADATA);
     params = execution.params(params)
     const cargs = realtime_receiver_cargs(params, execution)
     const ret = realtime_receiver_outputs(params, execution)
@@ -305,10 +307,8 @@ function realtime_receiver(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): RealtimeReceiverOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REALTIME_RECEIVER_METADATA);
     const params = realtime_receiver_params(show_data, write_text_data, data_choice, serial_port, show_demo_gui, dc_params, extras_on_one_line, show_comm_times, show_demo_data, swap, tcp_port, verbosity)
-    return realtime_receiver_execute(params, execution);
+    return realtime_receiver_execute(params, runner);
 }
 
 
@@ -317,8 +317,6 @@ export {
       RealtimeReceiverOutputs,
       RealtimeReceiverParameters,
       realtime_receiver,
-      realtime_receiver_cargs,
       realtime_receiver_execute,
-      realtime_receiver_outputs,
       realtime_receiver_params,
 };

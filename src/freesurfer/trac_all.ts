@@ -416,14 +416,16 @@ function trac_all_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TracAllOutputs`).
  */
 function trac_all_execute(
     params: TracAllParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TracAllOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TRAC_ALL_METADATA);
     params = execution.params(params)
     const cargs = trac_all_cargs(params, execution)
     const ret = trac_all_outputs(params, execution)
@@ -514,10 +516,8 @@ function trac_all(
     help: boolean = false,
     runner: Runner | null = null,
 ): TracAllOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TRAC_ALL_METADATA);
     const params = trac_all_params(config_file, subject_name, dicom_file, pre_processing, bedpost, pathway_reconstruction, assemble_measures, image_corrections, no_image_corrections, image_quality_assessment, no_image_quality_assessment, intra_registration, no_intra_registration, tensor_fit, no_tensor_fit, inter_registration, no_inter_registration, pathway_priors, no_pathway_priors, infant_options, job_file, log_file, no_append_log, cmd_file, no_is_running, subjects_directory, umask, group_id, allow_core_dump, debug_mode, dont_run, only_versions, version_info, help)
-    return trac_all_execute(params, execution);
+    return trac_all_execute(params, runner);
 }
 
 
@@ -526,8 +526,6 @@ export {
       TracAllOutputs,
       TracAllParameters,
       trac_all,
-      trac_all_cargs,
       trac_all_execute,
-      trac_all_outputs,
       trac_all_params,
 };

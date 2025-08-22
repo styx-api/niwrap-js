@@ -141,14 +141,16 @@ function surface_flip_normals_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceFlipNormalsOutputs`).
  */
 function surface_flip_normals_execute(
     params: SurfaceFlipNormalsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceFlipNormalsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_FLIP_NORMALS_METADATA);
     params = execution.params(params)
     const cargs = surface_flip_normals_cargs(params, execution)
     const ret = surface_flip_normals_outputs(params, execution)
@@ -177,10 +179,8 @@ function surface_flip_normals(
     surface_out: string,
     runner: Runner | null = null,
 ): SurfaceFlipNormalsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_FLIP_NORMALS_METADATA);
     const params = surface_flip_normals_params(surface, surface_out)
-    return surface_flip_normals_execute(params, execution);
+    return surface_flip_normals_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       SurfaceFlipNormalsOutputs,
       SurfaceFlipNormalsParameters,
       surface_flip_normals,
-      surface_flip_normals_cargs,
       surface_flip_normals_execute,
-      surface_flip_normals_outputs,
       surface_flip_normals_params,
 };

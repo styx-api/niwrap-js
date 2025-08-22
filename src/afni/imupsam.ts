@@ -150,14 +150,16 @@ function imupsam_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImupsamOutputs`).
  */
 function imupsam_execute(
     params: ImupsamParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImupsamOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMUPSAM_METADATA);
     params = execution.params(params)
     const cargs = imupsam_cargs(params, execution)
     const ret = imupsam_outputs(params, execution)
@@ -188,10 +190,8 @@ function imupsam(
     ascii_flag: boolean = false,
     runner: Runner | null = null,
 ): ImupsamOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMUPSAM_METADATA);
     const params = imupsam_params(factor, input_image, output_image, ascii_flag)
-    return imupsam_execute(params, execution);
+    return imupsam_execute(params, runner);
 }
 
 
@@ -200,8 +200,6 @@ export {
       ImupsamOutputs,
       ImupsamParameters,
       imupsam,
-      imupsam_cargs,
       imupsam_execute,
-      imupsam_outputs,
       imupsam_params,
 };

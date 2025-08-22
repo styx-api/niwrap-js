@@ -146,14 +146,16 @@ function v_3dto_xdataset_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dtoXdatasetOutputs`).
  */
 function v_3dto_xdataset_execute(
     params: V3dtoXdatasetParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dtoXdatasetOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DTO_XDATASET_METADATA);
     params = execution.params(params)
     const cargs = v_3dto_xdataset_cargs(params, execution)
     const ret = v_3dto_xdataset_outputs(params, execution)
@@ -182,10 +184,8 @@ function v_3dto_xdataset(
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): V3dtoXdatasetOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DTO_XDATASET_METADATA);
     const params = v_3dto_xdataset_params(prefix, mask, input_files)
-    return v_3dto_xdataset_execute(params, execution);
+    return v_3dto_xdataset_execute(params, runner);
 }
 
 
@@ -194,8 +194,6 @@ export {
       V3dtoXdatasetParameters,
       V_3DTO_XDATASET_METADATA,
       v_3dto_xdataset,
-      v_3dto_xdataset_cargs,
       v_3dto_xdataset_execute,
-      v_3dto_xdataset_outputs,
       v_3dto_xdataset_params,
 };

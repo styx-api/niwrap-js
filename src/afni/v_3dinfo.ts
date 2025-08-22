@@ -946,14 +946,16 @@ function v_3dinfo_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dinfoOutputs`).
  */
 function v_3dinfo_execute(
     params: V3dinfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dinfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DINFO_METADATA);
     params = execution.params(params)
     const cargs = v_3dinfo_cargs(params, execution)
     const ret = v_3dinfo_outputs(params, execution)
@@ -1202,10 +1204,8 @@ function v_3dinfo(
     monog_pairs: boolean = false,
     runner: Runner | null = null,
 ): V3dinfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DINFO_METADATA);
     const params = v_3dinfo_params(dataset, orient, lextent, rextent, aextent, pextent, iextent, sextent, all_names, verb, very_verbose, short, no_hist, h, help, extreme_help, h_view, h_web, h_find, h_raw, h_spx, h_aspx, all_opts, label2index, niml_hdr, subbrick_info, exists, id, is_atlas, is_atlas_or_labeltable, is_nifti, dset_extension, storage_mode, space, gen_space, av_space, nifti_code, is_oblique, handedness, obliquity, prefix, prefix_noext, ni, nj, nk, nijk, nv, nt, n4, nvi, nti, ntimes, max_node, di, dj, dk, d3, adi, adj, adk, ad3, voxvol, oi, oj, ok, o3, dcx, dcy, dcz, dc3, tr, dmin, dmax, dminus, dmaxus, smode, header_name, brick_name, iname, extent, fac, label, datum, min, max, minus, maxus, labeltable, labeltable_as_atlas_points, atlas_points, history, slice_timing, header_line, hdr, sb_delim, na_flag, atr_delim, aform_real, aform_real_oneline, aform_real_refit_ori, is_aform_real_orth, aform_orth, perm_to_orient, same_grid, same_dim, same_delta, same_orient, same_center, same_obl, same_all_grid, val_diff, sval_diff, monog_pairs)
-    return v_3dinfo_execute(params, execution);
+    return v_3dinfo_execute(params, runner);
 }
 
 
@@ -1214,8 +1214,6 @@ export {
       V3dinfoParameters,
       V_3DINFO_METADATA,
       v_3dinfo,
-      v_3dinfo_cargs,
       v_3dinfo_execute,
-      v_3dinfo_outputs,
       v_3dinfo_params,
 };

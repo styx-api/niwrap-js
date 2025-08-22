@@ -387,14 +387,16 @@ function v__sswarper_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSswarperOutputs`).
  */
 function v__sswarper_execute(
     params: VSswarperParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSswarperOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SSWARPER_METADATA);
     params = execution.params(params)
     const cargs = v__sswarper_cargs(params, execution)
     const ret = v__sswarper_outputs(params, execution)
@@ -463,10 +465,8 @@ function v__sswarper(
     noclean: boolean = false,
     runner: Runner | null = null,
 ): VSswarperOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SSWARPER_METADATA);
     const params = v__sswarper_params(input_file, base_template, subject_id, output_dir, min_patch_size, no_lite, skip_warp, unifize_off, init_skullstr_off, extra_qc_off, jump_to_extra_qc, cost_nl_init, cost_nl_final, deoblique, deoblique_refitly, warp_scale, ssopt_flag, aniso_off, ceil_off, tmp_name_nice, echo, verbose, noclean)
-    return v__sswarper_execute(params, execution);
+    return v__sswarper_execute(params, runner);
 }
 
 
@@ -475,8 +475,6 @@ export {
       VSswarperParameters,
       V__SSWARPER_METADATA,
       v__sswarper,
-      v__sswarper_cargs,
       v__sswarper_execute,
-      v__sswarper_outputs,
       v__sswarper_params,
 };

@@ -214,14 +214,16 @@ function mris_register_label_map_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRegisterLabelMapOutputs`).
  */
 function mris_register_label_map_execute(
     params: MrisRegisterLabelMapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRegisterLabelMapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_REGISTER_LABEL_MAP_METADATA);
     params = execution.params(params)
     const cargs = mris_register_label_map_cargs(params, execution)
     const ret = mris_register_label_map_outputs(params, execution)
@@ -266,10 +268,8 @@ function mris_register_label_map(
     vno: number | null = null,
     runner: Runner | null = null,
 ): MrisRegisterLabelMapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_REGISTER_LABEL_MAP_METADATA);
     const params = mris_register_label_map_params(subjects_list, target_subject, prior, label, template_volume, debug, check_opts, help, subjects_dir, version, vno)
-    return mris_register_label_map_execute(params, execution);
+    return mris_register_label_map_execute(params, runner);
 }
 
 
@@ -278,8 +278,6 @@ export {
       MrisRegisterLabelMapOutputs,
       MrisRegisterLabelMapParameters,
       mris_register_label_map,
-      mris_register_label_map_cargs,
       mris_register_label_map_execute,
-      mris_register_label_map_outputs,
       mris_register_label_map_params,
 };

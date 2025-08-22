@@ -178,14 +178,16 @@ function fslascii2img_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fslascii2imgOutputs`).
  */
 function fslascii2img_execute(
     params: Fslascii2imgParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fslascii2imgOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLASCII2IMG_METADATA);
     params = execution.params(params)
     const cargs = fslascii2img_cargs(params, execution)
     const ret = fslascii2img_outputs(params, execution)
@@ -228,10 +230,8 @@ function fslascii2img(
     outfile: string = "output",
     runner: Runner | null = null,
 ): Fslascii2imgOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLASCII2IMG_METADATA);
     const params = fslascii2img_params(infile, xsize, ysize, zsize, tsize, xdim, ydim, zdim, tr, outfile)
-    return fslascii2img_execute(params, execution);
+    return fslascii2img_execute(params, runner);
 }
 
 
@@ -240,8 +240,6 @@ export {
       Fslascii2imgOutputs,
       Fslascii2imgParameters,
       fslascii2img,
-      fslascii2img_cargs,
       fslascii2img_execute,
-      fslascii2img_outputs,
       fslascii2img_params,
 };

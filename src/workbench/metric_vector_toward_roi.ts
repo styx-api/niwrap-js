@@ -158,14 +158,16 @@ function metric_vector_toward_roi_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricVectorTowardRoiOutputs`).
  */
 function metric_vector_toward_roi_execute(
     params: MetricVectorTowardRoiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricVectorTowardRoiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_VECTOR_TOWARD_ROI_METADATA);
     params = execution.params(params)
     const cargs = metric_vector_toward_roi_cargs(params, execution)
     const ret = metric_vector_toward_roi_outputs(params, execution)
@@ -198,10 +200,8 @@ function metric_vector_toward_roi(
     opt_roi_roi_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricVectorTowardRoiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_VECTOR_TOWARD_ROI_METADATA);
     const params = metric_vector_toward_roi_params(surface, target_roi, metric_out, opt_roi_roi_metric)
-    return metric_vector_toward_roi_execute(params, execution);
+    return metric_vector_toward_roi_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       MetricVectorTowardRoiOutputs,
       MetricVectorTowardRoiParameters,
       metric_vector_toward_roi,
-      metric_vector_toward_roi_cargs,
       metric_vector_toward_roi_execute,
-      metric_vector_toward_roi_outputs,
       metric_vector_toward_roi_params,
 };

@@ -203,14 +203,16 @@ function meica_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MeicaPyOutputs`).
  */
 function meica_py_execute(
     params: MeicaPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MeicaPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MEICA_PY_METADATA);
     params = execution.params(params)
     const cargs = meica_py_cargs(params, execution)
     const ret = meica_py_outputs(params, execution)
@@ -249,10 +251,8 @@ function meica_py(
     debug: boolean = false,
     runner: Runner | null = null,
 ): MeicaPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MEICA_PY_METADATA);
     const params = meica_py_params(infile, echo_times, affine, output_directory, components, talairach, threshold, debug)
-    return meica_py_execute(params, execution);
+    return meica_py_execute(params, runner);
 }
 
 
@@ -261,8 +261,6 @@ export {
       MeicaPyOutputs,
       MeicaPyParameters,
       meica_py,
-      meica_py_cargs,
       meica_py_execute,
-      meica_py_outputs,
       meica_py_params,
 };

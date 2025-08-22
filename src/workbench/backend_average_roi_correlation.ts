@@ -135,14 +135,16 @@ function backend_average_roi_correlation_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BackendAverageRoiCorrelationOutputs`).
  */
 function backend_average_roi_correlation_execute(
     params: BackendAverageRoiCorrelationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BackendAverageRoiCorrelationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BACKEND_AVERAGE_ROI_CORRELATION_METADATA);
     params = execution.params(params)
     const cargs = backend_average_roi_correlation_cargs(params, execution)
     const ret = backend_average_roi_correlation_outputs(params, execution)
@@ -171,10 +173,8 @@ function backend_average_roi_correlation(
     out_file: string,
     runner: Runner | null = null,
 ): BackendAverageRoiCorrelationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BACKEND_AVERAGE_ROI_CORRELATION_METADATA);
     const params = backend_average_roi_correlation_params(index_list, out_file)
-    return backend_average_roi_correlation_execute(params, execution);
+    return backend_average_roi_correlation_execute(params, runner);
 }
 
 
@@ -183,8 +183,6 @@ export {
       BackendAverageRoiCorrelationOutputs,
       BackendAverageRoiCorrelationParameters,
       backend_average_roi_correlation,
-      backend_average_roi_correlation_cargs,
       backend_average_roi_correlation_execute,
-      backend_average_roi_correlation_outputs,
       backend_average_roi_correlation_params,
 };

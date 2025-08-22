@@ -241,14 +241,16 @@ function mri_normalize_tp2_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriNormalizeTp2Outputs`).
  */
 function mri_normalize_tp2_execute(
     params: MriNormalizeTp2Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriNormalizeTp2Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_NORMALIZE_TP2_METADATA);
     params = execution.params(params)
     const cargs = mri_normalize_tp2_cargs(params, execution)
     const ret = mri_normalize_tp2_outputs(params, execution)
@@ -293,10 +295,8 @@ function mri_normalize_tp2(
     lta_dst: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriNormalizeTp2Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_NORMALIZE_TP2_METADATA);
     const params = mri_normalize_tp2_params(input_vol, normalized_vol, t1_volume, mask1, mask2, threshold, ctrl, xform, invert_flag, lta_src, lta_dst)
-    return mri_normalize_tp2_execute(params, execution);
+    return mri_normalize_tp2_execute(params, runner);
 }
 
 
@@ -305,8 +305,6 @@ export {
       MriNormalizeTp2Outputs,
       MriNormalizeTp2Parameters,
       mri_normalize_tp2,
-      mri_normalize_tp2_cargs,
       mri_normalize_tp2_execute,
-      mri_normalize_tp2_outputs,
       mri_normalize_tp2_params,
 };

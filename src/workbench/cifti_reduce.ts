@@ -241,14 +241,16 @@ function cifti_reduce_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiReduceOutputs`).
  */
 function cifti_reduce_execute(
     params: CiftiReduceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiReduceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_REDUCE_METADATA);
     params = execution.params(params)
     const cargs = cifti_reduce_cargs(params, execution)
     const ret = cifti_reduce_outputs(params, execution)
@@ -303,10 +305,8 @@ function cifti_reduce(
     opt_only_numeric: boolean = false,
     runner: Runner | null = null,
 ): CiftiReduceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_REDUCE_METADATA);
     const params = cifti_reduce_params(cifti_in, operation, cifti_out, opt_direction_direction, exclude_outliers, opt_only_numeric)
-    return cifti_reduce_execute(params, execution);
+    return cifti_reduce_execute(params, runner);
 }
 
 
@@ -316,10 +316,7 @@ export {
       CiftiReduceOutputs,
       CiftiReduceParameters,
       cifti_reduce,
-      cifti_reduce_cargs,
-      cifti_reduce_exclude_outliers_cargs,
       cifti_reduce_exclude_outliers_params,
       cifti_reduce_execute,
-      cifti_reduce_outputs,
       cifti_reduce_params,
 };

@@ -160,14 +160,16 @@ function mris_shrinkwrap_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisShrinkwrapOutputs`).
  */
 function mris_shrinkwrap_execute(
     params: MrisShrinkwrapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisShrinkwrapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_SHRINKWRAP_METADATA);
     params = execution.params(params)
     const cargs = mris_shrinkwrap_cargs(params, execution)
     const ret = mris_shrinkwrap_outputs(params, execution)
@@ -196,10 +198,8 @@ function mris_shrinkwrap(
     threshold: number | null = null,
     runner: Runner | null = null,
 ): MrisShrinkwrapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_SHRINKWRAP_METADATA);
     const params = mris_shrinkwrap_params(volume, output_name, threshold)
-    return mris_shrinkwrap_execute(params, execution);
+    return mris_shrinkwrap_execute(params, runner);
 }
 
 
@@ -208,8 +208,6 @@ export {
       MrisShrinkwrapOutputs,
       MrisShrinkwrapParameters,
       mris_shrinkwrap,
-      mris_shrinkwrap_cargs,
       mris_shrinkwrap_execute,
-      mris_shrinkwrap_outputs,
       mris_shrinkwrap_params,
 };

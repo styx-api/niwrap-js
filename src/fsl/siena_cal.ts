@@ -152,14 +152,16 @@ function siena_cal_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SienaCalOutputs`).
  */
 function siena_cal_execute(
     params: SienaCalParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SienaCalOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SIENA_CAL_METADATA);
     params = execution.params(params)
     const cargs = siena_cal_cargs(params, execution)
     const ret = siena_cal_outputs(params, execution)
@@ -190,10 +192,8 @@ function siena_cal(
     siena_diff_options: string | null = null,
     runner: Runner | null = null,
 ): SienaCalOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SIENA_CAL_METADATA);
     const params = siena_cal_params(input1_file, input2_file, scale, siena_diff_options)
-    return siena_cal_execute(params, execution);
+    return siena_cal_execute(params, runner);
 }
 
 
@@ -202,8 +202,6 @@ export {
       SienaCalOutputs,
       SienaCalParameters,
       siena_cal,
-      siena_cal_cargs,
       siena_cal_execute,
-      siena_cal_outputs,
       siena_cal_params,
 };

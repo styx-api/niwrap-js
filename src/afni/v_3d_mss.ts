@@ -308,14 +308,16 @@ function v_3d_mss_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dMssOutputs`).
  */
 function v_3d_mss_execute(
     params: V3dMssParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dMssOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_MSS_METADATA);
     params = execution.params(params)
     const cargs = v_3d_mss_cargs(params, execution)
     const ret = v_3d_mss_outputs(params, execution)
@@ -374,10 +376,8 @@ function v_3d_mss(
     vt_formula: string | null = null,
     runner: Runner | null = null,
 ): V3dMssOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_MSS_METADATA);
     const params = v_3d_mss_params(prefix, data_table, jobs, mrr_formula, lme_formula, random_effect, qvars, mask, bounds, prediction_table, cio_flag, rio_flag, help_flag, dbg_args_flag, if_name, show_allowed_options_flag, sdiff_vars, vt_formula)
-    return v_3d_mss_execute(params, execution);
+    return v_3d_mss_execute(params, runner);
 }
 
 
@@ -386,8 +386,6 @@ export {
       V3dMssParameters,
       V_3D_MSS_METADATA,
       v_3d_mss,
-      v_3d_mss_cargs,
       v_3d_mss_execute,
-      v_3d_mss_outputs,
       v_3d_mss_params,
 };

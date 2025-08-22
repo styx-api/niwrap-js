@@ -281,14 +281,16 @@ function v__add_edge_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAddEdgeOutputs`).
  */
 function v__add_edge_execute(
     params: VAddEdgeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAddEdgeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__ADD_EDGE_METADATA);
     params = execution.params(params)
     const cargs = v__add_edge_cargs(params, execution)
     const ret = v__add_edge_outputs(params, execution)
@@ -341,10 +343,8 @@ function v__add_edge(
     no_auto: boolean = false,
     runner: Runner | null = null,
 ): VAddEdgeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__ADD_EDGE_METADATA);
     const params = v__add_edge_params(input_files, examine_list, ax_mont, ax_geom, sag_geom, layout_file, no_layout, edge_percentile, single_edge, opacity, keep_temp, no_deoblique, auto_record, auto, no_auto)
-    return v__add_edge_execute(params, execution);
+    return v__add_edge_execute(params, runner);
 }
 
 
@@ -353,8 +353,6 @@ export {
       VAddEdgeParameters,
       V__ADD_EDGE_METADATA,
       v__add_edge,
-      v__add_edge_cargs,
       v__add_edge_execute,
-      v__add_edge_outputs,
       v__add_edge_params,
 };

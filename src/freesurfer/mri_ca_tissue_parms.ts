@@ -152,14 +152,16 @@ function mri_ca_tissue_parms_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCaTissueParmsOutputs`).
  */
 function mri_ca_tissue_parms_execute(
     params: MriCaTissueParmsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCaTissueParmsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CA_TISSUE_PARMS_METADATA);
     params = execution.params(params)
     const cargs = mri_ca_tissue_parms_cargs(params, execution)
     const ret = mri_ca_tissue_parms_outputs(params, execution)
@@ -190,10 +192,8 @@ function mri_ca_tissue_parms(
     gradient_flag: boolean = false,
     runner: Runner | null = null,
 ): MriCaTissueParmsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CA_TISSUE_PARMS_METADATA);
     const params = mri_ca_tissue_parms_params(subjects, output_file, spacing_flag, gradient_flag)
-    return mri_ca_tissue_parms_execute(params, execution);
+    return mri_ca_tissue_parms_execute(params, runner);
 }
 
 
@@ -202,8 +202,6 @@ export {
       MriCaTissueParmsOutputs,
       MriCaTissueParmsParameters,
       mri_ca_tissue_parms,
-      mri_ca_tissue_parms_cargs,
       mri_ca_tissue_parms_execute,
-      mri_ca_tissue_parms_outputs,
       mri_ca_tissue_parms_params,
 };

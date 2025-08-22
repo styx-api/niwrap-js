@@ -316,14 +316,16 @@ function surf2vol_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Surf2volOutputs`).
  */
 function surf2vol_execute(
     params: Surf2volParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Surf2volOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF2VOL_METADATA);
     params = execution.params(params)
     const cargs = surf2vol_cargs(params, execution)
     const ret = surf2vol_outputs(params, execution)
@@ -380,10 +382,8 @@ function surf2vol(
     cache_transform: string | null = null,
     runner: Runner | null = null,
 ): Surf2volOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF2VOL_METADATA);
     const params = surf2vol_params(fixed_surface, moving_surface, fixed_mri, moving_mri, output_file, output_field, output_affine, output_surf, output_surf_affine, output_mesh, spacing_x, spacing_y, spacing_z, poisson_ratio, dirty_factor, debug_output, cache_transform)
-    return surf2vol_execute(params, execution);
+    return surf2vol_execute(params, runner);
 }
 
 
@@ -392,8 +392,6 @@ export {
       Surf2volOutputs,
       Surf2volParameters,
       surf2vol,
-      surf2vol_cargs,
       surf2vol_execute,
-      surf2vol_outputs,
       surf2vol_params,
 };

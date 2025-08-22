@@ -279,14 +279,16 @@ function v_3d_polyfit_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dPolyfitOutputs`).
  */
 function v_3d_polyfit_execute(
     params: V3dPolyfitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dPolyfitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_POLYFIT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_polyfit_cargs(params, execution)
     const ret = v_3d_polyfit_outputs(params, execution)
@@ -337,10 +339,8 @@ function v_3d_polyfit(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dPolyfitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_POLYFIT_METADATA);
     const params = v_3d_polyfit_params(input_dataset, poly_order, blur, median_radius, output_prefix, resid_prefix, coeff_output, automask, mask_dataset, mean_scale, clip_box, fit_method, base_dataset, verbose)
-    return v_3d_polyfit_execute(params, execution);
+    return v_3d_polyfit_execute(params, runner);
 }
 
 
@@ -349,8 +349,6 @@ export {
       V3dPolyfitParameters,
       V_3D_POLYFIT_METADATA,
       v_3d_polyfit,
-      v_3d_polyfit_cargs,
       v_3d_polyfit_execute,
-      v_3d_polyfit_outputs,
       v_3d_polyfit_params,
 };

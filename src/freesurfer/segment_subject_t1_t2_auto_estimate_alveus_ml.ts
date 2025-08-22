@@ -152,14 +152,16 @@ function segment_subject_t1_t2_auto_estimate_alveus_ml_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegmentSubjectT1T2AutoEstimateAlveusMlOutputs`).
  */
 function segment_subject_t1_t2_auto_estimate_alveus_ml_execute(
     params: SegmentSubjectT1T2AutoEstimateAlveusMlParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegmentSubjectT1T2AutoEstimateAlveusMlOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGMENT_SUBJECT_T1_T2_AUTO_ESTIMATE_ALVEUS_ML_METADATA);
     params = execution.params(params)
     const cargs = segment_subject_t1_t2_auto_estimate_alveus_ml_cargs(params, execution)
     const ret = segment_subject_t1_t2_auto_estimate_alveus_ml_outputs(params, execution)
@@ -190,10 +192,8 @@ function segment_subject_t1_t2_auto_estimate_alveus_ml(
     other_options: string | null = null,
     runner: Runner | null = null,
 ): SegmentSubjectT1T2AutoEstimateAlveusMlOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGMENT_SUBJECT_T1_T2_AUTO_ESTIMATE_ALVEUS_ML_METADATA);
     const params = segment_subject_t1_t2_auto_estimate_alveus_ml_params(input_t1, input_t2, output_directory, other_options)
-    return segment_subject_t1_t2_auto_estimate_alveus_ml_execute(params, execution);
+    return segment_subject_t1_t2_auto_estimate_alveus_ml_execute(params, runner);
 }
 
 
@@ -202,8 +202,6 @@ export {
       SegmentSubjectT1T2AutoEstimateAlveusMlOutputs,
       SegmentSubjectT1T2AutoEstimateAlveusMlParameters,
       segment_subject_t1_t2_auto_estimate_alveus_ml,
-      segment_subject_t1_t2_auto_estimate_alveus_ml_cargs,
       segment_subject_t1_t2_auto_estimate_alveus_ml_execute,
-      segment_subject_t1_t2_auto_estimate_alveus_ml_outputs,
       segment_subject_t1_t2_auto_estimate_alveus_ml_params,
 };

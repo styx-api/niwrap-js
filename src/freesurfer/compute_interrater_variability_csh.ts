@@ -176,14 +176,16 @@ function compute_interrater_variability_csh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ComputeInterraterVariabilityCshOutputs`).
  */
 function compute_interrater_variability_csh_execute(
     params: ComputeInterraterVariabilityCshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ComputeInterraterVariabilityCshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(COMPUTE_INTERRATER_VARIABILITY_CSH_METADATA);
     params = execution.params(params)
     const cargs = compute_interrater_variability_csh_cargs(params, execution)
     const ret = compute_interrater_variability_csh_outputs(params, execution)
@@ -216,10 +218,8 @@ function compute_interrater_variability_csh(
     help: boolean = false,
     runner: Runner | null = null,
 ): ComputeInterraterVariabilityCshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(COMPUTE_INTERRATER_VARIABILITY_CSH_METADATA);
     const params = compute_interrater_variability_csh_params(label_vol1, label_vol2, output_prefix, version, help)
-    return compute_interrater_variability_csh_execute(params, execution);
+    return compute_interrater_variability_csh_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       ComputeInterraterVariabilityCshOutputs,
       ComputeInterraterVariabilityCshParameters,
       compute_interrater_variability_csh,
-      compute_interrater_variability_csh_cargs,
       compute_interrater_variability_csh_execute,
-      compute_interrater_variability_csh_outputs,
       compute_interrater_variability_csh_params,
 };

@@ -252,14 +252,16 @@ function spmregister_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SpmregisterOutputs`).
  */
 function spmregister_execute(
     params: SpmregisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SpmregisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SPMREGISTER_METADATA);
     params = execution.params(params)
     const cargs = spmregister_cargs(params, execution)
     const ret = spmregister_outputs(params, execution)
@@ -308,10 +310,8 @@ function spmregister(
     help: boolean = false,
     runner: Runner | null = null,
 ): SpmregisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SPMREGISTER_METADATA);
     const params = spmregister_params(subjid, mov, reg, frame, mid_frame, template_out, fsvol, force_ras, outvol, tmpdir, nocleanup, version, help)
-    return spmregister_execute(params, execution);
+    return spmregister_execute(params, runner);
 }
 
 
@@ -320,8 +320,6 @@ export {
       SpmregisterOutputs,
       SpmregisterParameters,
       spmregister,
-      spmregister_cargs,
       spmregister_execute,
-      spmregister_outputs,
       spmregister_params,
 };

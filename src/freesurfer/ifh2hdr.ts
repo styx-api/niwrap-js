@@ -139,14 +139,16 @@ function ifh2hdr_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Ifh2hdrOutputs`).
  */
 function ifh2hdr_execute(
     params: Ifh2hdrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Ifh2hdrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IFH2HDR_METADATA);
     params = execution.params(params)
     const cargs = ifh2hdr_cargs(params, execution)
     const ret = ifh2hdr_outputs(params, execution)
@@ -173,10 +175,8 @@ function ifh2hdr(
     range: string | null = null,
     runner: Runner | null = null,
 ): Ifh2hdrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IFH2HDR_METADATA);
     const params = ifh2hdr_params(input_file, range)
-    return ifh2hdr_execute(params, execution);
+    return ifh2hdr_execute(params, runner);
 }
 
 
@@ -185,8 +185,6 @@ export {
       Ifh2hdrOutputs,
       Ifh2hdrParameters,
       ifh2hdr,
-      ifh2hdr_cargs,
       ifh2hdr_execute,
-      ifh2hdr_outputs,
       ifh2hdr_params,
 };

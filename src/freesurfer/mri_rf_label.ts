@@ -537,14 +537,16 @@ function mri_rf_label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriRfLabelOutputs`).
  */
 function mri_rf_label_execute(
     params: MriRfLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriRfLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_RF_LABEL_METADATA);
     params = execution.params(params)
     const cargs = mri_rf_label_cargs(params, execution)
     const ret = mri_rf_label_outputs(params, execution)
@@ -647,10 +649,8 @@ function mri_rf_label(
     relabel_unlikely_flag: Array<number> | null = null,
     runner: Runner | null = null,
 ): MriRfLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_RF_LABEL_METADATA);
     const params = mri_rf_label_params(input_volumes, transform_file, gcafile, output_volume, cross_sequence_flag, nogibbs_flag, wm_path, conform_flag, normpd_flag, gca_tl, debug_voxel, debug_node, debug_label, tr, te, alpha, example, pthresh, niter, novar_flag, regularize, nohippo_flag, fwm, mri_vol, heq, renorm, flash_flag, flash_params, renormalize, set_input, histogram_flag, cond_density_mean, snapshots, mask, expand, max_iter, filter_mode, longitudinal_vol, longitudinal_lta, relabel_unlikely_flag)
-    return mri_rf_label_execute(params, execution);
+    return mri_rf_label_execute(params, runner);
 }
 
 
@@ -659,8 +659,6 @@ export {
       MriRfLabelOutputs,
       MriRfLabelParameters,
       mri_rf_label,
-      mri_rf_label_cargs,
       mri_rf_label_execute,
-      mri_rf_label_outputs,
       mri_rf_label_params,
 };

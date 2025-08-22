@@ -138,14 +138,16 @@ function mri_gca_ambiguous_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriGcaAmbiguousOutputs`).
  */
 function mri_gca_ambiguous_execute(
     params: MriGcaAmbiguousParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriGcaAmbiguousOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_GCA_AMBIGUOUS_METADATA);
     params = execution.params(params)
     const cargs = mri_gca_ambiguous_cargs(params, execution)
     const ret = mri_gca_ambiguous_outputs(params, execution)
@@ -172,10 +174,8 @@ function mri_gca_ambiguous(
     output_volume: string,
     runner: Runner | null = null,
 ): MriGcaAmbiguousOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_GCA_AMBIGUOUS_METADATA);
     const params = mri_gca_ambiguous_params(gca_file, output_volume)
-    return mri_gca_ambiguous_execute(params, execution);
+    return mri_gca_ambiguous_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MriGcaAmbiguousOutputs,
       MriGcaAmbiguousParameters,
       mri_gca_ambiguous,
-      mri_gca_ambiguous_cargs,
       mri_gca_ambiguous_execute,
-      mri_gca_ambiguous_outputs,
       mri_gca_ambiguous_params,
 };

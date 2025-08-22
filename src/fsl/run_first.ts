@@ -206,14 +206,16 @@ function run_first_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RunFirstOutputs`).
  */
 function run_first_execute(
     params: RunFirstParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RunFirstOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RUN_FIRST_METADATA);
     params = execution.params(params)
     const cargs = run_first_cargs(params, execution)
     const ret = run_first_outputs(params, execution)
@@ -254,10 +256,8 @@ function run_first(
     multiple_images_flag: boolean = false,
     runner: Runner | null = null,
 ): RunFirstOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RUN_FIRST_METADATA);
     const params = run_first_params(input_image, transformation_matrix, n_modes, output_basename, model_name, verbose_flag, intref_model_name, load_bvars, multiple_images_flag)
-    return run_first_execute(params, execution);
+    return run_first_execute(params, runner);
 }
 
 
@@ -266,8 +266,6 @@ export {
       RunFirstOutputs,
       RunFirstParameters,
       run_first,
-      run_first_cargs,
       run_first_execute,
-      run_first_outputs,
       run_first_params,
 };

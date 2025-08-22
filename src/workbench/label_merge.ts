@@ -306,14 +306,16 @@ function label_merge_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelMergeOutputs`).
  */
 function label_merge_execute(
     params: LabelMergeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelMergeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_MERGE_METADATA);
     params = execution.params(params)
     const cargs = label_merge_cargs(params, execution)
     const ret = label_merge_outputs(params, execution)
@@ -346,10 +348,8 @@ function label_merge(
     label: Array<LabelMergeLabelParameters> | null = null,
     runner: Runner | null = null,
 ): LabelMergeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_MERGE_METADATA);
     const params = label_merge_params(label_out, label)
-    return label_merge_execute(params, execution);
+    return label_merge_execute(params, runner);
 }
 
 
@@ -361,14 +361,9 @@ export {
       LabelMergeParameters,
       LabelMergeUpToParameters,
       label_merge,
-      label_merge_cargs,
-      label_merge_column_cargs,
       label_merge_column_params,
       label_merge_execute,
-      label_merge_label_cargs,
       label_merge_label_params,
-      label_merge_outputs,
       label_merge_params,
-      label_merge_up_to_cargs,
       label_merge_up_to_params,
 };

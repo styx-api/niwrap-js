@@ -146,14 +146,16 @@ function mris_annot_diff_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisAnnotDiffOutputs`).
  */
 function mris_annot_diff_execute(
     params: MrisAnnotDiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisAnnotDiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_ANNOT_DIFF_METADATA);
     params = execution.params(params)
     const cargs = mris_annot_diff_cargs(params, execution)
     const ret = mris_annot_diff_outputs(params, execution)
@@ -184,10 +186,8 @@ function mris_annot_diff(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): MrisAnnotDiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_ANNOT_DIFF_METADATA);
     const params = mris_annot_diff_params(annot1, annot2, diff_ctab, verbose)
-    return mris_annot_diff_execute(params, execution);
+    return mris_annot_diff_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       MrisAnnotDiffOutputs,
       MrisAnnotDiffParameters,
       mris_annot_diff,
-      mris_annot_diff_cargs,
       mris_annot_diff_execute,
-      mris_annot_diff_outputs,
       mris_annot_diff_params,
 };

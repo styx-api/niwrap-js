@@ -180,14 +180,16 @@ function v__djunct_montage_coordinator_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDjunctMontageCoordinatorOutputs`).
  */
 function v__djunct_montage_coordinator_execute(
     params: VDjunctMontageCoordinatorParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDjunctMontageCoordinatorOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DJUNCT_MONTAGE_COORDINATOR_METADATA);
     params = execution.params(params)
     const cargs = v__djunct_montage_coordinator_cargs(params, execution)
     const ret = v__djunct_montage_coordinator_outputs(params, execution)
@@ -224,10 +226,8 @@ function v__djunct_montage_coordinator(
     version: boolean = false,
     runner: Runner | null = null,
 ): VDjunctMontageCoordinatorOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DJUNCT_MONTAGE_COORDINATOR_METADATA);
     const params = v__djunct_montage_coordinator_params(input_file, montx, monty, out_ijk, out_xyz, help, version)
-    return v__djunct_montage_coordinator_execute(params, execution);
+    return v__djunct_montage_coordinator_execute(params, runner);
 }
 
 
@@ -236,8 +236,6 @@ export {
       VDjunctMontageCoordinatorParameters,
       V__DJUNCT_MONTAGE_COORDINATOR_METADATA,
       v__djunct_montage_coordinator,
-      v__djunct_montage_coordinator_cargs,
       v__djunct_montage_coordinator_execute,
-      v__djunct_montage_coordinator_outputs,
       v__djunct_montage_coordinator_params,
 };

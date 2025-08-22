@@ -437,14 +437,16 @@ function tensor2metric_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Tensor2metricOutputs`).
  */
 function tensor2metric_execute(
     params: Tensor2metricParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Tensor2metricOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TENSOR2METRIC_METADATA);
     params = execution.params(params)
     const cargs = tensor2metric_cargs(params, execution)
     const ret = tensor2metric_outputs(params, execution)
@@ -517,10 +519,8 @@ function tensor2metric(
     version: boolean = false,
     runner: Runner | null = null,
 ): Tensor2metricOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TENSOR2METRIC_METADATA);
     const params = tensor2metric_params(tensor, adc, fa, ad, rd, cl, cp, cs, value, vector, num, modulate, mask, info, quiet, debug, force, nthreads, config, help, version)
-    return tensor2metric_execute(params, execution);
+    return tensor2metric_execute(params, runner);
 }
 
 
@@ -530,10 +530,7 @@ export {
       Tensor2metricOutputs,
       Tensor2metricParameters,
       tensor2metric,
-      tensor2metric_cargs,
-      tensor2metric_config_cargs,
       tensor2metric_config_params,
       tensor2metric_execute,
-      tensor2metric_outputs,
       tensor2metric_params,
 };

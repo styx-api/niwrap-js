@@ -202,14 +202,16 @@ function ants_motion_corr_stats_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsMotionCorrStatsOutputs`).
  */
 function ants_motion_corr_stats_execute(
     params: AntsMotionCorrStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsMotionCorrStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_MOTION_CORR_STATS_METADATA);
     params = execution.params(params)
     const cargs = ants_motion_corr_stats_cargs(params, execution)
     const ret = ants_motion_corr_stats_outputs(params, execution)
@@ -248,10 +250,8 @@ function ants_motion_corr_stats(
     help: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsMotionCorrStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_MOTION_CORR_STATS_METADATA);
     const params = ants_motion_corr_stats_params(mask, moco_params, output, transform_index, framewise, spatial_map, timeseries_displacement, help)
-    return ants_motion_corr_stats_execute(params, execution);
+    return ants_motion_corr_stats_execute(params, runner);
 }
 
 
@@ -260,8 +260,6 @@ export {
       AntsMotionCorrStatsOutputs,
       AntsMotionCorrStatsParameters,
       ants_motion_corr_stats,
-      ants_motion_corr_stats_cargs,
       ants_motion_corr_stats_execute,
-      ants_motion_corr_stats_outputs,
       ants_motion_corr_stats_params,
 };

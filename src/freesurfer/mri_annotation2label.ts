@@ -332,14 +332,16 @@ function mri_annotation2label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriAnnotation2labelOutputs`).
  */
 function mri_annotation2label_execute(
     params: MriAnnotation2labelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriAnnotation2labelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_ANNOTATION2LABEL_METADATA);
     params = execution.params(params)
     const cargs = mri_annotation2label_cargs(params, execution)
     const ret = mri_annotation2label_outputs(params, execution)
@@ -400,10 +402,8 @@ function mri_annotation2label(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriAnnotation2labelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_ANNOTATION2LABEL_METADATA);
     const params = mri_annotation2label_params(subject, hemi, lobes, lobes_strict, lobes_strict_phcg, label, labelbase, outdir, seg, segbase, ctab, border, border_annot, annotation, subjects_dir, surface, stat, help, version)
-    return mri_annotation2label_execute(params, execution);
+    return mri_annotation2label_execute(params, runner);
 }
 
 
@@ -412,8 +412,6 @@ export {
       MriAnnotation2labelOutputs,
       MriAnnotation2labelParameters,
       mri_annotation2label,
-      mri_annotation2label_cargs,
       mri_annotation2label_execute,
-      mri_annotation2label_outputs,
       mri_annotation2label_params,
 };

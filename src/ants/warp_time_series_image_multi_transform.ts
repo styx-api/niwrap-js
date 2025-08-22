@@ -165,14 +165,16 @@ function warp_time_series_image_multi_transform_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WarpTimeSeriesImageMultiTransformOutputs`).
  */
 function warp_time_series_image_multi_transform_execute(
     params: WarpTimeSeriesImageMultiTransformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WarpTimeSeriesImageMultiTransformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WARP_TIME_SERIES_IMAGE_MULTI_TRANSFORM_METADATA);
     params = execution.params(params)
     const cargs = warp_time_series_image_multi_transform_cargs(params, execution)
     const ret = warp_time_series_image_multi_transform_outputs(params, execution)
@@ -207,10 +209,8 @@ function warp_time_series_image_multi_transform(
     interpolation: "NearestNeighbor" | "BSpline" | null = null,
     runner: Runner | null = null,
 ): WarpTimeSeriesImageMultiTransformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WARP_TIME_SERIES_IMAGE_MULTI_TRANSFORM_METADATA);
     const params = warp_time_series_image_multi_transform_params(image_dimension, moving_image, output_image, reference_image, transforms, interpolation)
-    return warp_time_series_image_multi_transform_execute(params, execution);
+    return warp_time_series_image_multi_transform_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       WarpTimeSeriesImageMultiTransformOutputs,
       WarpTimeSeriesImageMultiTransformParameters,
       warp_time_series_image_multi_transform,
-      warp_time_series_image_multi_transform_cargs,
       warp_time_series_image_multi_transform_execute,
-      warp_time_series_image_multi_transform_outputs,
       warp_time_series_image_multi_transform_params,
 };

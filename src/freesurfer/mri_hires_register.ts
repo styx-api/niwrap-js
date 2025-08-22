@@ -148,14 +148,16 @@ function mri_hires_register_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriHiresRegisterOutputs`).
  */
 function mri_hires_register_execute(
     params: MriHiresRegisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriHiresRegisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_HIRES_REGISTER_METADATA);
     params = execution.params(params)
     const cargs = mri_hires_register_cargs(params, execution)
     const ret = mri_hires_register_outputs(params, execution)
@@ -186,10 +188,8 @@ function mri_hires_register(
     output_xform: string,
     runner: Runner | null = null,
 ): MriHiresRegisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_HIRES_REGISTER_METADATA);
     const params = mri_hires_register_params(hires_labeling, input_intensity, input_aseg, output_xform)
-    return mri_hires_register_execute(params, execution);
+    return mri_hires_register_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MriHiresRegisterOutputs,
       MriHiresRegisterParameters,
       mri_hires_register,
-      mri_hires_register_cargs,
       mri_hires_register_execute,
-      mri_hires_register_outputs,
       mri_hires_register_params,
 };

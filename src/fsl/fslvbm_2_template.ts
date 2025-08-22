@@ -410,14 +410,16 @@ function fslvbm_2_template_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fslvbm2TemplateOutputs`).
  */
 function fslvbm_2_template_execute(
     params: Fslvbm2TemplateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fslvbm2TemplateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLVBM_2_TEMPLATE_METADATA);
     params = execution.params(params)
     const cargs = fslvbm_2_template_cargs(params, execution)
     const ret = fslvbm_2_template_outputs(params, execution)
@@ -488,10 +490,8 @@ function fslvbm_2_template(
     job_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): Fslvbm2TemplateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLVBM_2_TEMPLATE_METADATA);
     const params = fslvbm_2_template_params(arch, coprocessor, coprocessor_multi, coprocessor_class, coprocessor_toolkit, jobhold, array_hold, logdir, mailoptions, mailto, name, priority, queue, resource, delete_job, memory_gb, parallel_env, array_task, array_native, num_tasks, coprocessor_name, project, runtime_limit, job_file)
-    return fslvbm_2_template_execute(params, execution);
+    return fslvbm_2_template_execute(params, runner);
 }
 
 
@@ -500,8 +500,6 @@ export {
       Fslvbm2TemplateOutputs,
       Fslvbm2TemplateParameters,
       fslvbm_2_template,
-      fslvbm_2_template_cargs,
       fslvbm_2_template_execute,
-      fslvbm_2_template_outputs,
       fslvbm_2_template_params,
 };

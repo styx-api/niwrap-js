@@ -403,14 +403,16 @@ function denoise_image_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DenoiseImageOutputs`).
  */
 function denoise_image_execute(
     params: DenoiseImageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DenoiseImageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DENOISE_IMAGE_METADATA);
     params = execution.params(params)
     const cargs = denoise_image_cargs(params, execution)
     const ret = denoise_image_outputs(params, execution)
@@ -451,10 +453,8 @@ function denoise_image(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): DenoiseImageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DENOISE_IMAGE_METADATA);
     const params = denoise_image_params(input_image, output, image_dimensionality, noise_model, shrink_factor, mask_image, patch_radius, search_radius, verbose)
-    return denoise_image_execute(params, execution);
+    return denoise_image_execute(params, runner);
 }
 
 
@@ -467,14 +467,8 @@ export {
       DenoiseImageOutputs,
       DenoiseImageParameters,
       denoise_image,
-      denoise_image_cargs,
-      denoise_image_corrected_output_cargs,
-      denoise_image_corrected_output_noise_cargs,
-      denoise_image_corrected_output_noise_outputs,
       denoise_image_corrected_output_noise_params,
-      denoise_image_corrected_output_outputs,
       denoise_image_corrected_output_params,
       denoise_image_execute,
-      denoise_image_outputs,
       denoise_image_params,
 };

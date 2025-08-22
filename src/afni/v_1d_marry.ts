@@ -162,14 +162,16 @@ function v_1d_marry_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dMarryOutputs`).
  */
 function v_1d_marry_execute(
     params: V1dMarryParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dMarryOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_MARRY_METADATA);
     params = execution.params(params)
     const cargs = v_1d_marry_cargs(params, execution)
     const ret = v_1d_marry_outputs(params, execution)
@@ -198,10 +200,8 @@ function v_1d_marry(
     divorce: boolean = false,
     runner: Runner | null = null,
 ): V1dMarryOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_MARRY_METADATA);
     const params = v_1d_marry_params(files, sep, divorce)
-    return v_1d_marry_execute(params, execution);
+    return v_1d_marry_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       V1dMarryParameters,
       V_1D_MARRY_METADATA,
       v_1d_marry,
-      v_1d_marry_cargs,
       v_1d_marry_execute,
-      v_1d_marry_outputs,
       v_1d_marry_params,
 };

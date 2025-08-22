@@ -241,14 +241,16 @@ function make_stim_times_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeStimTimesPyOutputs`).
  */
 function make_stim_times_py_execute(
     params: MakeStimTimesPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeStimTimesPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_STIM_TIMES_PY_METADATA);
     params = execution.params(params)
     const cargs = make_stim_times_py_cargs(params, execution)
     const ret = make_stim_times_py_outputs(params, execution)
@@ -295,10 +297,8 @@ function make_stim_times_py(
     verbose: number | null = null,
     runner: Runner | null = null,
 ): MakeStimTimesPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_STIM_TIMES_PY_METADATA);
     const params = make_stim_times_py_params(files, prefix, tr, nruns, nt, run_trs, offset, labels, no_consec_events, amplitudes, show_valid_opts, verbose)
-    return make_stim_times_py_execute(params, execution);
+    return make_stim_times_py_execute(params, runner);
 }
 
 
@@ -307,8 +307,6 @@ export {
       MakeStimTimesPyOutputs,
       MakeStimTimesPyParameters,
       make_stim_times_py,
-      make_stim_times_py_cargs,
       make_stim_times_py_execute,
-      make_stim_times_py_outputs,
       make_stim_times_py_params,
 };

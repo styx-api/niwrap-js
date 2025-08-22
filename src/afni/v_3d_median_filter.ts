@@ -188,14 +188,16 @@ function v_3d_median_filter_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dMedianFilterOutputs`).
  */
 function v_3d_median_filter_execute(
     params: V3dMedianFilterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dMedianFilterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_MEDIAN_FILTER_METADATA);
     params = execution.params(params)
     const cargs = v_3d_median_filter_cargs(params, execution)
     const ret = v_3d_median_filter_outputs(params, execution)
@@ -230,10 +232,8 @@ function v_3d_median_filter(
     automask: boolean = false,
     runner: Runner | null = null,
 ): V3dMedianFilterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_MEDIAN_FILTER_METADATA);
     const params = v_3d_median_filter_params(dataset, irad, iter, verbose, prefix, automask)
-    return v_3d_median_filter_execute(params, execution);
+    return v_3d_median_filter_execute(params, runner);
 }
 
 
@@ -242,8 +242,6 @@ export {
       V3dMedianFilterParameters,
       V_3D_MEDIAN_FILTER_METADATA,
       v_3d_median_filter,
-      v_3d_median_filter_cargs,
       v_3d_median_filter_execute,
-      v_3d_median_filter_outputs,
       v_3d_median_filter_params,
 };

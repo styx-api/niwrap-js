@@ -138,14 +138,16 @@ function mri_motion_correct_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMotionCorrectOutputs`).
  */
 function mri_motion_correct_execute(
     params: MriMotionCorrectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMotionCorrectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MOTION_CORRECT_METADATA);
     params = execution.params(params)
     const cargs = mri_motion_correct_cargs(params, execution)
     const ret = mri_motion_correct_outputs(params, execution)
@@ -172,10 +174,8 @@ function mri_motion_correct(
     infiles: Array<InputPathType>,
     runner: Runner | null = null,
 ): MriMotionCorrectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MOTION_CORRECT_METADATA);
     const params = mri_motion_correct_params(outfile, infiles)
-    return mri_motion_correct_execute(params, execution);
+    return mri_motion_correct_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MriMotionCorrectOutputs,
       MriMotionCorrectParameters,
       mri_motion_correct,
-      mri_motion_correct_cargs,
       mri_motion_correct_execute,
-      mri_motion_correct_outputs,
       mri_motion_correct_params,
 };

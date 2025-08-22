@@ -177,14 +177,16 @@ function mri_relabel_nonwm_hypos_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriRelabelNonwmHyposOutputs`).
  */
 function mri_relabel_nonwm_hypos_execute(
     params: MriRelabelNonwmHyposParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriRelabelNonwmHyposOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_RELABEL_NONWM_HYPOS_METADATA);
     params = execution.params(params)
     const cargs = mri_relabel_nonwm_hypos_cargs(params, execution)
     const ret = mri_relabel_nonwm_hypos_outputs(params, execution)
@@ -219,10 +221,8 @@ function mri_relabel_nonwm_hypos(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MriRelabelNonwmHyposOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_RELABEL_NONWM_HYPOS_METADATA);
     const params = mri_relabel_nonwm_hypos_params(inputseg, outputseg, segments, seg_default, debug, checkopts)
-    return mri_relabel_nonwm_hypos_execute(params, execution);
+    return mri_relabel_nonwm_hypos_execute(params, runner);
 }
 
 
@@ -231,8 +231,6 @@ export {
       MriRelabelNonwmHyposOutputs,
       MriRelabelNonwmHyposParameters,
       mri_relabel_nonwm_hypos,
-      mri_relabel_nonwm_hypos_cargs,
       mri_relabel_nonwm_hypos_execute,
-      mri_relabel_nonwm_hypos_outputs,
       mri_relabel_nonwm_hypos_params,
 };

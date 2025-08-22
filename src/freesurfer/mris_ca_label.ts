@@ -301,14 +301,16 @@ function mris_ca_label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisCaLabelOutputs`).
  */
 function mris_ca_label_execute(
     params: MrisCaLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisCaLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_CA_LABEL_METADATA);
     params = execution.params(params)
     const cargs = mris_ca_label_cargs(params, execution)
     const ret = mris_ca_label_outputs(params, execution)
@@ -369,10 +371,8 @@ function mris_ca_label(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisCaLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_CA_LABEL_METADATA);
     const params = mris_ca_label_params(subject, hemi, canonsurf, classifier, outputfile, seed, sdir, orig, long_flag, r, novar_flag, nbrs, f, t, p, v, w, help_flag, version_flag)
-    return mris_ca_label_execute(params, execution);
+    return mris_ca_label_execute(params, runner);
 }
 
 
@@ -381,8 +381,6 @@ export {
       MrisCaLabelOutputs,
       MrisCaLabelParameters,
       mris_ca_label,
-      mris_ca_label_cargs,
       mris_ca_label_execute,
-      mris_ca_label_outputs,
       mris_ca_label_params,
 };

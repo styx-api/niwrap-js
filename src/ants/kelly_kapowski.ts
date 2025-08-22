@@ -340,14 +340,16 @@ function kelly_kapowski_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `KellyKapowskiOutputs`).
  */
 function kelly_kapowski_execute(
     params: KellyKapowskiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): KellyKapowskiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(KELLY_KAPOWSKI_METADATA);
     params = execution.params(params)
     const cargs = kelly_kapowski_cargs(params, execution)
     const ret = kelly_kapowski_outputs(params, execution)
@@ -406,10 +408,8 @@ function kelly_kapowski(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): KellyKapowskiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(KELLY_KAPOWSKI_METADATA);
     const params = kelly_kapowski_params(output, image_dimensionality, segmentation_image, gray_matter_probability_image, white_matter_probability_image, convergence, thickness_prior_estimate, thickness_prior_image, gradient_step, smoothing_variance, smoothing_velocity_field_parameter, use_bspline_smoothing, use_masked_smoothing, time_points, restrict_deformation, number_of_integration_points, maximum_number_of_invert_displacement_field_iterations, verbose)
-    return kelly_kapowski_execute(params, execution);
+    return kelly_kapowski_execute(params, runner);
 }
 
 
@@ -418,8 +418,6 @@ export {
       KellyKapowskiOutputs,
       KellyKapowskiParameters,
       kelly_kapowski,
-      kelly_kapowski_cargs,
       kelly_kapowski_execute,
-      kelly_kapowski_outputs,
       kelly_kapowski_params,
 };

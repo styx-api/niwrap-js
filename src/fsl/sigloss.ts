@@ -188,14 +188,16 @@ function sigloss_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SiglossOutputs`).
  */
 function sigloss_execute(
     params: SiglossParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SiglossOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SIGLOSS_METADATA);
     params = execution.params(params)
     const cargs = sigloss_cargs(params, execution)
     const ret = sigloss_outputs(params, execution)
@@ -232,10 +234,8 @@ function sigloss(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): SiglossOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SIGLOSS_METADATA);
     const params = sigloss_params(input_b0map, output_sigloss, input_mask, echo_time, slice_direction, verbose_flag, help_flag)
-    return sigloss_execute(params, execution);
+    return sigloss_execute(params, runner);
 }
 
 
@@ -244,8 +244,6 @@ export {
       SiglossOutputs,
       SiglossParameters,
       sigloss,
-      sigloss_cargs,
       sigloss_execute,
-      sigloss_outputs,
       sigloss_params,
 };

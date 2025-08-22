@@ -263,14 +263,16 @@ function reg_tools_outputs(
  * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegToolsOutputs`).
  */
 function reg_tools_execute(
     params: RegToolsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegToolsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REG_TOOLS_METADATA);
     params = execution.params(params)
     const cargs = reg_tools_cargs(params, execution)
     const ret = reg_tools_outputs(params, execution)
@@ -317,10 +319,8 @@ function reg_tools(
     nan_mask_image: InputPathType | null = null,
     runner: Runner | null = null,
 ): RegToolsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REG_TOOLS_METADATA);
     const params = reg_tools_params(input_image, output_image, add_value_or_image, sub_value_or_image, mul_value_or_image, div_value_or_image, smooth_value, smooth_gaussian, rms_image, binarize, threshold_value, nan_mask_image)
-    return reg_tools_execute(params, execution);
+    return reg_tools_execute(params, runner);
 }
 
 
@@ -329,8 +329,6 @@ export {
       RegToolsOutputs,
       RegToolsParameters,
       reg_tools,
-      reg_tools_cargs,
       reg_tools_execute,
-      reg_tools_outputs,
       reg_tools_params,
 };

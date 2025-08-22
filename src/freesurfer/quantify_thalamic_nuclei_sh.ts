@@ -147,14 +147,16 @@ function quantify_thalamic_nuclei_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `QuantifyThalamicNucleiShOutputs`).
  */
 function quantify_thalamic_nuclei_sh_execute(
     params: QuantifyThalamicNucleiShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): QuantifyThalamicNucleiShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(QUANTIFY_THALAMIC_NUCLEI_SH_METADATA);
     params = execution.params(params)
     const cargs = quantify_thalamic_nuclei_sh_cargs(params, execution)
     const ret = quantify_thalamic_nuclei_sh_outputs(params, execution)
@@ -183,10 +185,8 @@ function quantify_thalamic_nuclei_sh(
     subjects_directory: string | null = null,
     runner: Runner | null = null,
 ): QuantifyThalamicNucleiShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(QUANTIFY_THALAMIC_NUCLEI_SH_METADATA);
     const params = quantify_thalamic_nuclei_sh_params(output_file, analysis_id, subjects_directory)
-    return quantify_thalamic_nuclei_sh_execute(params, execution);
+    return quantify_thalamic_nuclei_sh_execute(params, runner);
 }
 
 
@@ -195,8 +195,6 @@ export {
       QuantifyThalamicNucleiShOutputs,
       QuantifyThalamicNucleiShParameters,
       quantify_thalamic_nuclei_sh,
-      quantify_thalamic_nuclei_sh_cargs,
       quantify_thalamic_nuclei_sh_execute,
-      quantify_thalamic_nuclei_sh_outputs,
       quantify_thalamic_nuclei_sh_params,
 };

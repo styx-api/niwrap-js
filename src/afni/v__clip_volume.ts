@@ -312,14 +312,16 @@ function v__clip_volume_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VClipVolumeOutputs`).
  */
 function v__clip_volume_execute(
     params: VClipVolumeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VClipVolumeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__CLIP_VOLUME_METADATA);
     params = execution.params(params)
     const cargs = v__clip_volume_cargs(params, execution)
     const ret = v__clip_volume_outputs(params, execution)
@@ -378,10 +380,8 @@ function v__clip_volume(
     followers: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): VClipVolumeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__CLIP_VOLUME_METADATA);
     const params = v__clip_volume_params(input_volume, below_zmm, above_zmm, left_xmm, right_xmm, anterior_ymm, posterior_ymm, box, mask_box, and_logic, or_logic, verbosity, crop_allzero, crop_greedy, crop, crop_npad, output_prefix, followers)
-    return v__clip_volume_execute(params, execution);
+    return v__clip_volume_execute(params, runner);
 }
 
 
@@ -390,8 +390,6 @@ export {
       VClipVolumeParameters,
       V__CLIP_VOLUME_METADATA,
       v__clip_volume,
-      v__clip_volume_cargs,
       v__clip_volume_execute,
-      v__clip_volume_outputs,
       v__clip_volume_params,
 };

@@ -151,14 +151,16 @@ function border_resample_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BorderResampleOutputs`).
  */
 function border_resample_execute(
     params: BorderResampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BorderResampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BORDER_RESAMPLE_METADATA);
     params = execution.params(params)
     const cargs = border_resample_cargs(params, execution)
     const ret = border_resample_outputs(params, execution)
@@ -191,10 +193,8 @@ function border_resample(
     border_out: string,
     runner: Runner | null = null,
 ): BorderResampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BORDER_RESAMPLE_METADATA);
     const params = border_resample_params(border_in, current_sphere, new_sphere, border_out)
-    return border_resample_execute(params, execution);
+    return border_resample_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       BorderResampleOutputs,
       BorderResampleParameters,
       border_resample,
-      border_resample_cargs,
       border_resample_execute,
-      border_resample_outputs,
       border_resample_params,
 };

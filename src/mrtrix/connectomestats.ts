@@ -529,14 +529,16 @@ function connectomestats_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConnectomestatsOutputs`).
  */
 function connectomestats_execute(
     params: ConnectomestatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConnectomestatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONNECTOMESTATS_METADATA);
     params = execution.params(params)
     const cargs = connectomestats_cargs(params, execution)
     const ret = connectomestats_outputs(params, execution)
@@ -644,10 +646,8 @@ function connectomestats(
     version: boolean = false,
     runner: Runner | null = null,
 ): ConnectomestatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONNECTOMESTATS_METADATA);
     const params = connectomestats_params(input, algorithm, design, contrast, output, notest, errors, exchange_within, exchange_whole, strong, nshuffles, permutations, nonstationarity, skew_nonstationarity, nshuffles_nonstationarity, permutations_nonstationarity, tfce_dh, tfce_e, tfce_h, variance, ftests, fonly, column, threshold, info, quiet, debug, force, nthreads, config, help, version)
-    return connectomestats_execute(params, execution);
+    return connectomestats_execute(params, runner);
 }
 
 
@@ -658,12 +658,8 @@ export {
       ConnectomestatsOutputs,
       ConnectomestatsParameters,
       connectomestats,
-      connectomestats_cargs,
-      connectomestats_column_cargs,
       connectomestats_column_params,
-      connectomestats_config_cargs,
       connectomestats_config_params,
       connectomestats_execute,
-      connectomestats_outputs,
       connectomestats_params,
 };

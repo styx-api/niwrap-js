@@ -169,14 +169,16 @@ function r_pkgs_install_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RPkgsInstallOutputs`).
  */
 function r_pkgs_install_execute(
     params: RPkgsInstallParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RPkgsInstallOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(R_PKGS_INSTALL_METADATA);
     params = execution.params(params)
     const cargs = r_pkgs_install_cargs(params, execution)
     const ret = r_pkgs_install_outputs(params, execution)
@@ -209,10 +211,8 @@ function r_pkgs_install(
     remove: boolean = false,
     runner: Runner | null = null,
 ): RPkgsInstallOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(R_PKGS_INSTALL_METADATA);
     const params = r_pkgs_install_params(packages, download_site, check, update, remove)
-    return r_pkgs_install_execute(params, execution);
+    return r_pkgs_install_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       RPkgsInstallParameters,
       R_PKGS_INSTALL_METADATA,
       r_pkgs_install,
-      r_pkgs_install_cargs,
       r_pkgs_install_execute,
-      r_pkgs_install_outputs,
       r_pkgs_install_params,
 };

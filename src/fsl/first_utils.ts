@@ -398,14 +398,16 @@ function first_utils_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FirstUtilsOutputs`).
  */
 function first_utils_execute(
     params: FirstUtilsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FirstUtilsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIRST_UTILS_METADATA);
     params = execution.params(params)
     const cargs = first_utils_cargs(params, execution)
     const ret = first_utils_outputs(params, execution)
@@ -492,10 +494,8 @@ function first_utils(
     help: boolean = false,
     runner: Runner | null = null,
 ): FirstUtilsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIRST_UTILS_METADATA);
     const params = first_utils_params(input_file, output_name, norm_factors, reference_image, extra_path, flirt_matrices, use_scale, dice_overlap, input_mesh, use_norm, surface_out, threshold, mesh_label, use_bvars, use_recon_mni, vertex_analysis, use_recon_native, use_rigid_align, design_matrix, recon_mesh_from_bvars, read_bvars, mesh_to_vol, centre_origin, save_vertices, verbose, use_pca_filter, num_modes, single_boundary_corr, do_mvglm, concat_bvars, debug_mode, help)
-    return first_utils_execute(params, execution);
+    return first_utils_execute(params, runner);
 }
 
 
@@ -504,8 +504,6 @@ export {
       FirstUtilsOutputs,
       FirstUtilsParameters,
       first_utils,
-      first_utils_cargs,
       first_utils_execute,
-      first_utils_outputs,
       first_utils_params,
 };

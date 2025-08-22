@@ -143,14 +143,16 @@ function slicesmask_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SlicesmaskOutputs`).
  */
 function slicesmask_execute(
     params: SlicesmaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SlicesmaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SLICESMASK_METADATA);
     params = execution.params(params)
     const cargs = slicesmask_cargs(params, execution)
     const ret = slicesmask_outputs(params, execution)
@@ -179,10 +181,8 @@ function slicesmask(
     output: string,
     runner: Runner | null = null,
 ): SlicesmaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SLICESMASK_METADATA);
     const params = slicesmask_params(image, mask, output)
-    return slicesmask_execute(params, execution);
+    return slicesmask_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       SlicesmaskOutputs,
       SlicesmaskParameters,
       slicesmask,
-      slicesmask_cargs,
       slicesmask_execute,
-      slicesmask_outputs,
       slicesmask_params,
 };

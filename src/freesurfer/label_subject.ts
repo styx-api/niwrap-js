@@ -146,14 +146,16 @@ function label_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelSubjectOutputs`).
  */
 function label_subject_execute(
     params: LabelSubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelSubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = label_subject_cargs(params, execution)
     const ret = label_subject_outputs(params, execution)
@@ -180,10 +182,8 @@ function label_subject(
     orig_dir: string | null = "/usr/local/freesurfer/subjects",
     runner: Runner | null = null,
 ): LabelSubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_SUBJECT_METADATA);
     const params = label_subject_params(nu_file, orig_dir)
-    return label_subject_execute(params, execution);
+    return label_subject_execute(params, runner);
 }
 
 
@@ -192,8 +192,6 @@ export {
       LabelSubjectOutputs,
       LabelSubjectParameters,
       label_subject,
-      label_subject_cargs,
       label_subject_execute,
-      label_subject_outputs,
       label_subject_params,
 };

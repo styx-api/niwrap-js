@@ -224,14 +224,16 @@ function mri_concatenate_lta_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriConcatenateLtaOutputs`).
  */
 function mri_concatenate_lta_execute(
     params: MriConcatenateLtaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriConcatenateLtaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CONCATENATE_LTA_METADATA);
     params = execution.params(params)
     const cargs = mri_concatenate_lta_cargs(params, execution)
     const ret = mri_concatenate_lta_outputs(params, execution)
@@ -278,10 +280,8 @@ function mri_concatenate_lta(
     rmsdiff_outputfile: string | null = null,
     runner: Runner | null = null,
 ): MriConcatenateLtaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CONCATENATE_LTA_METADATA);
     const params = mri_concatenate_lta_params(lta_1, lta_2, lta_final, tal_src, tal_template, invert1, invert2, invertout, out_type, subject, rmsdiff_radius, rmsdiff_outputfile)
-    return mri_concatenate_lta_execute(params, execution);
+    return mri_concatenate_lta_execute(params, runner);
 }
 
 
@@ -290,8 +290,6 @@ export {
       MriConcatenateLtaOutputs,
       MriConcatenateLtaParameters,
       mri_concatenate_lta,
-      mri_concatenate_lta_cargs,
       mri_concatenate_lta_execute,
-      mri_concatenate_lta_outputs,
       mri_concatenate_lta_params,
 };

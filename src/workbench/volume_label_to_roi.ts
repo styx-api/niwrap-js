@@ -177,14 +177,16 @@ function volume_label_to_roi_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelToRoiOutputs`).
  */
 function volume_label_to_roi_execute(
     params: VolumeLabelToRoiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeLabelToRoiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_LABEL_TO_ROI_METADATA);
     params = execution.params(params)
     const cargs = volume_label_to_roi_cargs(params, execution)
     const ret = volume_label_to_roi_outputs(params, execution)
@@ -219,10 +221,8 @@ function volume_label_to_roi(
     opt_map_map: string | null = null,
     runner: Runner | null = null,
 ): VolumeLabelToRoiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_LABEL_TO_ROI_METADATA);
     const params = volume_label_to_roi_params(label_in, volume_out, opt_name_label_name, opt_key_label_key, opt_map_map)
-    return volume_label_to_roi_execute(params, execution);
+    return volume_label_to_roi_execute(params, runner);
 }
 
 
@@ -231,8 +231,6 @@ export {
       VolumeLabelToRoiOutputs,
       VolumeLabelToRoiParameters,
       volume_label_to_roi,
-      volume_label_to_roi_cargs,
       volume_label_to_roi_execute,
-      volume_label_to_roi_outputs,
       volume_label_to_roi_params,
 };

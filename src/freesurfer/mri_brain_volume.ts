@@ -161,14 +161,16 @@ function mri_brain_volume_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriBrainVolumeOutputs`).
  */
 function mri_brain_volume_execute(
     params: MriBrainVolumeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriBrainVolumeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_BRAIN_VOLUME_METADATA);
     params = execution.params(params)
     const cargs = mri_brain_volume_cargs(params, execution)
     const ret = mri_brain_volume_outputs(params, execution)
@@ -199,10 +201,8 @@ function mri_brain_volume(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriBrainVolumeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_BRAIN_VOLUME_METADATA);
     const params = mri_brain_volume_params(input_file, output_file, force_param, version)
-    return mri_brain_volume_execute(params, execution);
+    return mri_brain_volume_execute(params, runner);
 }
 
 
@@ -211,8 +211,6 @@ export {
       MriBrainVolumeOutputs,
       MriBrainVolumeParameters,
       mri_brain_volume,
-      mri_brain_volume_cargs,
       mri_brain_volume_execute,
-      mri_brain_volume_outputs,
       mri_brain_volume_params,
 };

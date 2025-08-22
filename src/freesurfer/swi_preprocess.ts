@@ -205,14 +205,16 @@ function swi_preprocess_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SwiPreprocessOutputs`).
  */
 function swi_preprocess_execute(
     params: SwiPreprocessParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SwiPreprocessOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SWI_PREPROCESS_METADATA);
     params = execution.params(params)
     const cargs = swi_preprocess_cargs(params, execution)
     const ret = swi_preprocess_outputs(params, execution)
@@ -249,10 +251,8 @@ function swi_preprocess(
     siemens_phase: InputPathType | null = null,
     runner: Runner | null = null,
 ): SwiPreprocessOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SWI_PREPROCESS_METADATA);
     const params = swi_preprocess_params(scanner, out_magnitude, out_phase, ge_file, philips_file, siemens_magnitude, siemens_phase)
-    return swi_preprocess_execute(params, execution);
+    return swi_preprocess_execute(params, runner);
 }
 
 
@@ -261,8 +261,6 @@ export {
       SwiPreprocessOutputs,
       SwiPreprocessParameters,
       swi_preprocess,
-      swi_preprocess_cargs,
       swi_preprocess_execute,
-      swi_preprocess_outputs,
       swi_preprocess_params,
 };

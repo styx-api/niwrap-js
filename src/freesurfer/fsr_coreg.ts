@@ -192,14 +192,16 @@ function fsr_coreg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsrCoregOutputs`).
  */
 function fsr_coreg_execute(
     params: FsrCoregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsrCoregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSR_COREG_METADATA);
     params = execution.params(params)
     const cargs = fsr_coreg_cargs(params, execution)
     const ret = fsr_coreg_outputs(params, execution)
@@ -234,10 +236,8 @@ function fsr_coreg(
     expert_options: InputPathType | null = null,
     runner: Runner | null = null,
 ): FsrCoregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSR_COREG_METADATA);
     const params = fsr_coreg_params(import_dir, reference_mode, num_threads, force_update, output_dir, expert_options)
-    return fsr_coreg_execute(params, execution);
+    return fsr_coreg_execute(params, runner);
 }
 
 
@@ -246,8 +246,6 @@ export {
       FsrCoregOutputs,
       FsrCoregParameters,
       fsr_coreg,
-      fsr_coreg_cargs,
       fsr_coreg_execute,
-      fsr_coreg_outputs,
       fsr_coreg_params,
 };

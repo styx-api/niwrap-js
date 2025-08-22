@@ -304,14 +304,16 @@ function v_3d_ecm_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dEcmOutputs`).
  */
 function v_3d_ecm_execute(
     params: V3dEcmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dEcmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ECM_METADATA);
     params = execution.params(params)
     const cargs = v_3d_ecm_cargs(params, execution)
     const ret = v_3d_ecm_outputs(params, execution)
@@ -368,10 +370,8 @@ function v_3d_ecm(
     thresh: number | null = null,
     runner: Runner | null = null,
 ): V3dEcmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ECM_METADATA);
     const params = v_3d_ecm_params(in_file, autoclip, automask, eps, fecm, full, mask, max_iter, memory, num_threads, outputtype, out_file, polort, scale, shift, sparsity, thresh)
-    return v_3d_ecm_execute(params, execution);
+    return v_3d_ecm_execute(params, runner);
 }
 
 
@@ -380,8 +380,6 @@ export {
       V3dEcmParameters,
       V_3D_ECM_METADATA,
       v_3d_ecm,
-      v_3d_ecm_cargs,
       v_3d_ecm_execute,
-      v_3d_ecm_outputs,
       v_3d_ecm_params,
 };

@@ -165,14 +165,16 @@ function mris_mef_surfaces_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisMefSurfacesOutputs`).
  */
 function mris_mef_surfaces_execute(
     params: MrisMefSurfacesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisMefSurfacesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_MEF_SURFACES_METADATA);
     params = execution.params(params)
     const cargs = mris_mef_surfaces_cargs(params, execution)
     const ret = mris_mef_surfaces_outputs(params, execution)
@@ -207,10 +209,8 @@ function mris_mef_surfaces(
     white_only: boolean = false,
     runner: Runner | null = null,
 ): MrisMefSurfacesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_MEF_SURFACES_METADATA);
     const params = mris_mef_surfaces_params(subject_name, hemisphere, omit_self_intersection, curvature, average_curvature, white_only)
-    return mris_mef_surfaces_execute(params, execution);
+    return mris_mef_surfaces_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       MrisMefSurfacesOutputs,
       MrisMefSurfacesParameters,
       mris_mef_surfaces,
-      mris_mef_surfaces_cargs,
       mris_mef_surfaces_execute,
-      mris_mef_surfaces_outputs,
       mris_mef_surfaces_params,
 };

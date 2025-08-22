@@ -176,14 +176,16 @@ function v_3dmatmult_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dmatmultOutputs`).
  */
 function v_3dmatmult_execute(
     params: V3dmatmultParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dmatmultOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DMATMULT_METADATA);
     params = execution.params(params)
     const cargs = v_3dmatmult_cargs(params, execution)
     const ret = v_3dmatmult_outputs(params, execution)
@@ -216,10 +218,8 @@ function v_3dmatmult(
     verb: number | null = null,
     runner: Runner | null = null,
 ): V3dmatmultOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DMATMULT_METADATA);
     const params = v_3dmatmult_params(input_a, input_b, prefix, datum, verb)
-    return v_3dmatmult_execute(params, execution);
+    return v_3dmatmult_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       V3dmatmultParameters,
       V_3DMATMULT_METADATA,
       v_3dmatmult,
-      v_3dmatmult_cargs,
       v_3dmatmult_execute,
-      v_3dmatmult_outputs,
       v_3dmatmult_params,
 };

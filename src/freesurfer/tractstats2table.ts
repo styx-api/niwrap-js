@@ -212,14 +212,16 @@ function tractstats2table_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Tractstats2tableOutputs`).
  */
 function tractstats2table_execute(
     params: Tractstats2tableParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Tractstats2tableOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TRACTSTATS2TABLE_METADATA);
     params = execution.params(params)
     const cargs = tractstats2table_cargs(params, execution)
     const ret = tractstats2table_outputs(params, execution)
@@ -260,10 +262,8 @@ function tractstats2table(
     debug: boolean = false,
     runner: Runner | null = null,
 ): Tractstats2tableOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TRACTSTATS2TABLE_METADATA);
     const params = tractstats2table_params(tablefile, inputs, load_pathstats_from_file, overall, byvoxel, byvoxel_measure, delimiter, transpose, debug)
-    return tractstats2table_execute(params, execution);
+    return tractstats2table_execute(params, runner);
 }
 
 
@@ -272,8 +272,6 @@ export {
       Tractstats2tableOutputs,
       Tractstats2tableParameters,
       tractstats2table,
-      tractstats2table_cargs,
       tractstats2table_execute,
-      tractstats2table_outputs,
       tractstats2table_params,
 };

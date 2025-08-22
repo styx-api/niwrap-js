@@ -275,14 +275,16 @@ function merge_stats_tables_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MergeStatsTablesOutputs`).
  */
 function merge_stats_tables_execute(
     params: MergeStatsTablesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MergeStatsTablesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MERGE_STATS_TABLES_METADATA);
     params = execution.params(params)
     const cargs = merge_stats_tables_cargs(params, execution)
     const ret = merge_stats_tables_outputs(params, execution)
@@ -335,10 +337,8 @@ function merge_stats_tables(
     debug: boolean = false,
     runner: Runner | null = null,
 ): MergeStatsTablesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MERGE_STATS_TABLES_METADATA);
     const params = merge_stats_tables_params(outputfile, meas, subjects, subject, subjectsfile, inputs, input, common_segs, all_segs, intable, subdir, delimiter, transpose, skip, debug)
-    return merge_stats_tables_execute(params, execution);
+    return merge_stats_tables_execute(params, runner);
 }
 
 
@@ -347,8 +347,6 @@ export {
       MergeStatsTablesOutputs,
       MergeStatsTablesParameters,
       merge_stats_tables,
-      merge_stats_tables_cargs,
       merge_stats_tables_execute,
-      merge_stats_tables_outputs,
       merge_stats_tables_params,
 };

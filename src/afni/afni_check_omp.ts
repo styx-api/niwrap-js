@@ -131,14 +131,16 @@ function afni_check_omp_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AfniCheckOmpOutputs`).
  */
 function afni_check_omp_execute(
     params: AfniCheckOmpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AfniCheckOmpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AFNI_CHECK_OMP_METADATA);
     params = execution.params(params)
     const cargs = afni_check_omp_cargs(params, execution)
     const ret = afni_check_omp_outputs(params, execution)
@@ -163,10 +165,8 @@ function afni_check_omp(
     iterations: number | null = null,
     runner: Runner | null = null,
 ): AfniCheckOmpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AFNI_CHECK_OMP_METADATA);
     const params = afni_check_omp_params(iterations)
-    return afni_check_omp_execute(params, execution);
+    return afni_check_omp_execute(params, runner);
 }
 
 
@@ -175,8 +175,6 @@ export {
       AfniCheckOmpOutputs,
       AfniCheckOmpParameters,
       afni_check_omp,
-      afni_check_omp_cargs,
       afni_check_omp_execute,
-      afni_check_omp_outputs,
       afni_check_omp_params,
 };

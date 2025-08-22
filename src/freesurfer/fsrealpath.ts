@@ -134,14 +134,16 @@ function fsrealpath_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsrealpathOutputs`).
  */
 function fsrealpath_execute(
     params: FsrealpathParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsrealpathOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSREALPATH_METADATA);
     params = execution.params(params)
     const cargs = fsrealpath_cargs(params, execution)
     const ret = fsrealpath_outputs(params, execution)
@@ -168,10 +170,8 @@ function fsrealpath(
     help: boolean = false,
     runner: Runner | null = null,
 ): FsrealpathOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSREALPATH_METADATA);
     const params = fsrealpath_params(path, help)
-    return fsrealpath_execute(params, execution);
+    return fsrealpath_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       FsrealpathOutputs,
       FsrealpathParameters,
       fsrealpath,
-      fsrealpath_cargs,
       fsrealpath_execute,
-      fsrealpath_outputs,
       fsrealpath_params,
 };

@@ -153,14 +153,16 @@ function cifti_parcel_mapping_to_label_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiParcelMappingToLabelOutputs`).
  */
 function cifti_parcel_mapping_to_label_execute(
     params: CiftiParcelMappingToLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiParcelMappingToLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_PARCEL_MAPPING_TO_LABEL_METADATA);
     params = execution.params(params)
     const cargs = cifti_parcel_mapping_to_label_cargs(params, execution)
     const ret = cifti_parcel_mapping_to_label_outputs(params, execution)
@@ -195,10 +197,8 @@ function cifti_parcel_mapping_to_label(
     dlabel_out: string,
     runner: Runner | null = null,
 ): CiftiParcelMappingToLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_PARCEL_MAPPING_TO_LABEL_METADATA);
     const params = cifti_parcel_mapping_to_label_params(cifti_in, direction, template_cifti, dlabel_out)
-    return cifti_parcel_mapping_to_label_execute(params, execution);
+    return cifti_parcel_mapping_to_label_execute(params, runner);
 }
 
 
@@ -207,8 +207,6 @@ export {
       CiftiParcelMappingToLabelOutputs,
       CiftiParcelMappingToLabelParameters,
       cifti_parcel_mapping_to_label,
-      cifti_parcel_mapping_to_label_cargs,
       cifti_parcel_mapping_to_label_execute,
-      cifti_parcel_mapping_to_label_outputs,
       cifti_parcel_mapping_to_label_params,
 };

@@ -266,14 +266,16 @@ function fsl_mvlm_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslMvlmOutputs`).
  */
 function fsl_mvlm_execute(
     params: FslMvlmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslMvlmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_MVLM_METADATA);
     params = execution.params(params)
     const cargs = fsl_mvlm_cargs(params, execution)
     const ret = fsl_mvlm_outputs(params, execution)
@@ -322,10 +324,8 @@ function fsl_mvlm(
     out_vnscales: string | null = null,
     runner: Runner | null = null,
 ): FslMvlmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_MVLM_METADATA);
     const params = fsl_mvlm_params(input_file, basename_output_files, algorithm, design_matrix, mask_image, design_normalization, variance_normalisation, demean, nmf_dim, nmf_iterations, verbose, out_data, out_vnscales)
-    return fsl_mvlm_execute(params, execution);
+    return fsl_mvlm_execute(params, runner);
 }
 
 
@@ -334,8 +334,6 @@ export {
       FslMvlmOutputs,
       FslMvlmParameters,
       fsl_mvlm,
-      fsl_mvlm_cargs,
       fsl_mvlm_execute,
-      fsl_mvlm_outputs,
       fsl_mvlm_params,
 };

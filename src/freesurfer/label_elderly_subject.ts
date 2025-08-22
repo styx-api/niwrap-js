@@ -152,14 +152,16 @@ function label_elderly_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelElderlySubjectOutputs`).
  */
 function label_elderly_subject_execute(
     params: LabelElderlySubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelElderlySubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_ELDERLY_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = label_elderly_subject_cargs(params, execution)
     const ret = label_elderly_subject_outputs(params, execution)
@@ -190,10 +192,8 @@ function label_elderly_subject(
     classifier_array: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelElderlySubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_ELDERLY_SUBJECT_METADATA);
     const params = label_elderly_subject_params(norm_volume, transform_lta, aseg_volume, classifier_array)
-    return label_elderly_subject_execute(params, execution);
+    return label_elderly_subject_execute(params, runner);
 }
 
 
@@ -202,8 +202,6 @@ export {
       LabelElderlySubjectOutputs,
       LabelElderlySubjectParameters,
       label_elderly_subject,
-      label_elderly_subject_cargs,
       label_elderly_subject_execute,
-      label_elderly_subject_outputs,
       label_elderly_subject_params,
 };

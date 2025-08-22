@@ -179,14 +179,16 @@ function mri_reorient_lr_csh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriReorientLrCshOutputs`).
  */
 function mri_reorient_lr_csh_execute(
     params: MriReorientLrCshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriReorientLrCshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_REORIENT_LR_CSH_METADATA);
     params = execution.params(params)
     const cargs = mri_reorient_lr_csh_cargs(params, execution)
     const ret = mri_reorient_lr_csh_outputs(params, execution)
@@ -223,10 +225,8 @@ function mri_reorient_lr_csh(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriReorientLrCshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_REORIENT_LR_CSH_METADATA);
     const params = mri_reorient_lr_csh_params(input_vol, output_vol, display_result, clean_files, output_registration, version, help)
-    return mri_reorient_lr_csh_execute(params, execution);
+    return mri_reorient_lr_csh_execute(params, runner);
 }
 
 
@@ -235,8 +235,6 @@ export {
       MriReorientLrCshOutputs,
       MriReorientLrCshParameters,
       mri_reorient_lr_csh,
-      mri_reorient_lr_csh_cargs,
       mri_reorient_lr_csh_execute,
-      mri_reorient_lr_csh_outputs,
       mri_reorient_lr_csh_params,
 };

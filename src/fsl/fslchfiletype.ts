@@ -147,14 +147,16 @@ function fslchfiletype_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslchfiletypeOutputs`).
  */
 function fslchfiletype_execute(
     params: FslchfiletypeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslchfiletypeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLCHFILETYPE_METADATA);
     params = execution.params(params)
     const cargs = fslchfiletype_cargs(params, execution)
     const ret = fslchfiletype_outputs(params, execution)
@@ -183,10 +185,8 @@ function fslchfiletype(
     filename2: string | null = null,
     runner: Runner | null = null,
 ): FslchfiletypeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLCHFILETYPE_METADATA);
     const params = fslchfiletype_params(filetype, filename, filename2)
-    return fslchfiletype_execute(params, execution);
+    return fslchfiletype_execute(params, runner);
 }
 
 
@@ -195,8 +195,6 @@ export {
       FslchfiletypeOutputs,
       FslchfiletypeParameters,
       fslchfiletype,
-      fslchfiletype_cargs,
       fslchfiletype_execute,
-      fslchfiletype_outputs,
       fslchfiletype_params,
 };

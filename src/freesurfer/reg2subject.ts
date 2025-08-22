@@ -130,14 +130,16 @@ function reg2subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Reg2subjectOutputs`).
  */
 function reg2subject_execute(
     params: Reg2subjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Reg2subjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REG2SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = reg2subject_cargs(params, execution)
     const ret = reg2subject_outputs(params, execution)
@@ -162,10 +164,8 @@ function reg2subject(
     regfile: InputPathType,
     runner: Runner | null = null,
 ): Reg2subjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REG2SUBJECT_METADATA);
     const params = reg2subject_params(regfile)
-    return reg2subject_execute(params, execution);
+    return reg2subject_execute(params, runner);
 }
 
 
@@ -174,8 +174,6 @@ export {
       Reg2subjectOutputs,
       Reg2subjectParameters,
       reg2subject,
-      reg2subject_cargs,
       reg2subject_execute,
-      reg2subject_outputs,
       reg2subject_params,
 };

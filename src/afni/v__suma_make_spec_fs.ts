@@ -281,14 +281,16 @@ function v__suma_make_spec_fs_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSumaMakeSpecFsOutputs`).
  */
 function v__suma_make_spec_fs_execute(
     params: VSumaMakeSpecFsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSumaMakeSpecFsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SUMA_MAKE_SPEC_FS_METADATA);
     params = execution.params(params)
     const cargs = v__suma_make_spec_fs_cargs(params, execution)
     const ret = v__suma_make_spec_fs_outputs(params, execution)
@@ -343,10 +345,8 @@ function v__suma_make_spec_fs(
     no_ld: boolean = false,
     runner: Runner | null = null,
 ): VSumaMakeSpecFsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SUMA_MAKE_SPEC_FS_METADATA);
     const params = v__suma_make_spec_fs_params(subject_id, debug, fs_setup, filesystem_path, extra_annot_labels, extra_fs_dsets, make_rank_dsets, use_mgz, neuro, gnifti, nifti, inflate, set_space, ld, ldpref, no_ld)
-    return v__suma_make_spec_fs_execute(params, execution);
+    return v__suma_make_spec_fs_execute(params, runner);
 }
 
 
@@ -355,8 +355,6 @@ export {
       VSumaMakeSpecFsParameters,
       V__SUMA_MAKE_SPEC_FS_METADATA,
       v__suma_make_spec_fs,
-      v__suma_make_spec_fs_cargs,
       v__suma_make_spec_fs_execute,
-      v__suma_make_spec_fs_outputs,
       v__suma_make_spec_fs_params,
 };

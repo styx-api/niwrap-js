@@ -182,14 +182,16 @@ function segment_subject_old_skull_strip_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegmentSubjectOldSkullStripOutputs`).
  */
 function segment_subject_old_skull_strip_execute(
     params: SegmentSubjectOldSkullStripParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegmentSubjectOldSkullStripOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGMENT_SUBJECT_OLD_SKULL_STRIP_METADATA);
     params = execution.params(params)
     const cargs = segment_subject_old_skull_strip_cargs(params, execution)
     const ret = segment_subject_old_skull_strip_outputs(params, execution)
@@ -224,10 +226,8 @@ function segment_subject_old_skull_strip(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): SegmentSubjectOldSkullStripOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGMENT_SUBJECT_OLD_SKULL_STRIP_METADATA);
     const params = segment_subject_old_skull_strip_params(input_volume, output_xfm, log_file, help_flag, debug_flag, version_flag)
-    return segment_subject_old_skull_strip_execute(params, execution);
+    return segment_subject_old_skull_strip_execute(params, runner);
 }
 
 
@@ -236,8 +236,6 @@ export {
       SegmentSubjectOldSkullStripOutputs,
       SegmentSubjectOldSkullStripParameters,
       segment_subject_old_skull_strip,
-      segment_subject_old_skull_strip_cargs,
       segment_subject_old_skull_strip_execute,
-      segment_subject_old_skull_strip_outputs,
       segment_subject_old_skull_strip_params,
 };

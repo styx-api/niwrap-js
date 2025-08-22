@@ -134,14 +134,16 @@ function mri_or_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriOrOutputs`).
  */
 function mri_or_execute(
     params: MriOrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriOrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_OR_METADATA);
     params = execution.params(params)
     const cargs = mri_or_cargs(params, execution)
     const ret = mri_or_outputs(params, execution)
@@ -168,10 +170,8 @@ function mri_or(
     original_labels: boolean = false,
     runner: Runner | null = null,
 ): MriOrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_OR_METADATA);
     const params = mri_or_params(input_files, original_labels)
-    return mri_or_execute(params, execution);
+    return mri_or_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       MriOrOutputs,
       MriOrParameters,
       mri_or,
-      mri_or_cargs,
       mri_or_execute,
-      mri_or_outputs,
       mri_or_params,
 };

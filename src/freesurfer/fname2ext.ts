@@ -133,14 +133,16 @@ function fname2ext_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fname2extOutputs`).
  */
 function fname2ext_execute(
     params: Fname2extParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fname2extOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FNAME2EXT_METADATA);
     params = execution.params(params)
     const cargs = fname2ext_cargs(params, execution)
     const ret = fname2ext_outputs(params, execution)
@@ -165,10 +167,8 @@ function fname2ext(
     filename: string,
     runner: Runner | null = null,
 ): Fname2extOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FNAME2EXT_METADATA);
     const params = fname2ext_params(filename)
-    return fname2ext_execute(params, execution);
+    return fname2ext_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       Fname2extOutputs,
       Fname2extParameters,
       fname2ext,
-      fname2ext_cargs,
       fname2ext_execute,
-      fname2ext_outputs,
       fname2ext_params,
 };

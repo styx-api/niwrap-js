@@ -153,14 +153,16 @@ function v_3d_aboverlap_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dAboverlapOutputs`).
  */
 function v_3d_aboverlap_execute(
     params: V3dAboverlapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dAboverlapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ABOVERLAP_METADATA);
     params = execution.params(params)
     const cargs = v_3d_aboverlap_cargs(params, execution)
     const ret = v_3d_aboverlap_outputs(params, execution)
@@ -193,10 +195,8 @@ function v_3d_aboverlap(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dAboverlapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ABOVERLAP_METADATA);
     const params = v_3d_aboverlap_params(dataset_a, dataset_b, no_automask, quiet, verbose)
-    return v_3d_aboverlap_execute(params, execution);
+    return v_3d_aboverlap_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       V3dAboverlapParameters,
       V_3D_ABOVERLAP_METADATA,
       v_3d_aboverlap,
-      v_3d_aboverlap_cargs,
       v_3d_aboverlap_execute,
-      v_3d_aboverlap_outputs,
       v_3d_aboverlap_params,
 };

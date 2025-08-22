@@ -148,14 +148,16 @@ function mri_strip_nonwhite_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriStripNonwhiteOutputs`).
  */
 function mri_strip_nonwhite_execute(
     params: MriStripNonwhiteParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriStripNonwhiteOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_STRIP_NONWHITE_METADATA);
     params = execution.params(params)
     const cargs = mri_strip_nonwhite_cargs(params, execution)
     const ret = mri_strip_nonwhite_outputs(params, execution)
@@ -186,10 +188,8 @@ function mri_strip_nonwhite(
     output_volume: string,
     runner: Runner | null = null,
 ): MriStripNonwhiteOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_STRIP_NONWHITE_METADATA);
     const params = mri_strip_nonwhite_params(input_volume, transform, template_volume, output_volume)
-    return mri_strip_nonwhite_execute(params, execution);
+    return mri_strip_nonwhite_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MriStripNonwhiteOutputs,
       MriStripNonwhiteParameters,
       mri_strip_nonwhite,
-      mri_strip_nonwhite_cargs,
       mri_strip_nonwhite_execute,
-      mri_strip_nonwhite_outputs,
       mri_strip_nonwhite_params,
 };

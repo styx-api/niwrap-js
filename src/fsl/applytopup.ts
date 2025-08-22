@@ -187,14 +187,16 @@ function applytopup_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ApplytopupOutputs`).
  */
 function applytopup_execute(
     params: ApplytopupParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ApplytopupOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(APPLYTOPUP_METADATA);
     params = execution.params(params)
     const cargs = applytopup_cargs(params, execution)
     const ret = applytopup_outputs(params, execution)
@@ -235,10 +237,8 @@ function applytopup(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): ApplytopupOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(APPLYTOPUP_METADATA);
     const params = applytopup_params(imain, datain, inindex, topup, out, method, interp, datatype, verbose)
-    return applytopup_execute(params, execution);
+    return applytopup_execute(params, runner);
 }
 
 
@@ -247,8 +247,6 @@ export {
       ApplytopupOutputs,
       ApplytopupParameters,
       applytopup,
-      applytopup_cargs,
       applytopup_execute,
-      applytopup_outputs,
       applytopup_params,
 };

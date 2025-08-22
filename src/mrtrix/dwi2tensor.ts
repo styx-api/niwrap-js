@@ -427,14 +427,16 @@ function dwi2tensor_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Dwi2tensorOutputs`).
  */
 function dwi2tensor_execute(
     params: Dwi2tensorParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Dwi2tensorOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DWI2TENSOR_METADATA);
     params = execution.params(params)
     const cargs = dwi2tensor_cargs(params, execution)
     const ret = dwi2tensor_outputs(params, execution)
@@ -518,10 +520,8 @@ function dwi2tensor(
     version: boolean = false,
     runner: Runner | null = null,
 ): Dwi2tensorOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DWI2TENSOR_METADATA);
     const params = dwi2tensor_params(dwi, dt, ols, mask, b0, dkt, iter, predicted_signal, grad, fslgrad, info, quiet, debug, force, nthreads, config, help, version)
-    return dwi2tensor_execute(params, execution);
+    return dwi2tensor_execute(params, runner);
 }
 
 
@@ -532,12 +532,8 @@ export {
       Dwi2tensorOutputs,
       Dwi2tensorParameters,
       dwi2tensor,
-      dwi2tensor_cargs,
-      dwi2tensor_config_cargs,
       dwi2tensor_config_params,
       dwi2tensor_execute,
-      dwi2tensor_fslgrad_cargs,
       dwi2tensor_fslgrad_params,
-      dwi2tensor_outputs,
       dwi2tensor_params,
 };

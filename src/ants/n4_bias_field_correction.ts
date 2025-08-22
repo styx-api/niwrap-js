@@ -581,14 +581,16 @@ function n4_bias_field_correction_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `N4BiasFieldCorrectionOutputs`).
  */
 function n4_bias_field_correction_execute(
     params: N4BiasFieldCorrectionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): N4BiasFieldCorrectionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(N4_BIAS_FIELD_CORRECTION_METADATA);
     params = execution.params(params)
     const cargs = n4_bias_field_correction_cargs(params, execution)
     const ret = n4_bias_field_correction_outputs(params, execution)
@@ -633,10 +635,8 @@ function n4_bias_field_correction(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): N4BiasFieldCorrectionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(N4_BIAS_FIELD_CORRECTION_METADATA);
     const params = n4_bias_field_correction_params(input_image, output, image_dimensionality, shrink_factor, mask_image, rescale_intensities, weight_image, convergence, bspline_fitting, histogram_sharpening, verbose)
-    return n4_bias_field_correction_execute(params, execution);
+    return n4_bias_field_correction_execute(params, runner);
 }
 
 
@@ -652,20 +652,11 @@ export {
       N4BiasFieldCorrectionParameters,
       N4_BIAS_FIELD_CORRECTION_METADATA,
       n4_bias_field_correction,
-      n4_bias_field_correction_bspline_fitting_cargs,
       n4_bias_field_correction_bspline_fitting_params,
-      n4_bias_field_correction_cargs,
-      n4_bias_field_correction_convergence_cargs,
       n4_bias_field_correction_convergence_params,
-      n4_bias_field_correction_corrected_output_cargs,
-      n4_bias_field_correction_corrected_output_noise_cargs,
-      n4_bias_field_correction_corrected_output_noise_outputs,
       n4_bias_field_correction_corrected_output_noise_params,
-      n4_bias_field_correction_corrected_output_outputs,
       n4_bias_field_correction_corrected_output_params,
       n4_bias_field_correction_execute,
-      n4_bias_field_correction_histogram_sharpening_cargs,
       n4_bias_field_correction_histogram_sharpening_params,
-      n4_bias_field_correction_outputs,
       n4_bias_field_correction_params,
 };

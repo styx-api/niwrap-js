@@ -318,14 +318,16 @@ function v_1d_dw_grad_o_mat___outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dDwGradOMatOutputs`).
  */
 function v_1d_dw_grad_o_mat___execute(
     params: V1dDwGradOMatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dDwGradOMatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_DW_GRAD_O_MAT___METADATA);
     params = execution.params(params)
     const cargs = v_1d_dw_grad_o_mat___cargs(params, execution)
     const ret = v_1d_dw_grad_o_mat___outputs(params, execution)
@@ -390,10 +392,8 @@ function v_1d_dw_grad_o_mat__(
     bmax_ref: number | null = null,
     runner: Runner | null = null,
 ): V1dDwGradOMatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_DW_GRAD_O_MAT___METADATA);
     const params = v_1d_dw_grad_o_mat___params(in_row_vec, in_col_vec, in_col_mat_a, in_col_mat_t, out_row_vec, out_col_vec, out_col_mat_a, out_col_mat_t, flip_x, flip_y, flip_z, no_flip, in_bvals, out_col_bval, out_row_bval_sep, out_col_bval_sep, unit_mag_out, check_abs_min, bref_mean_top, put_zeros_top, bmax_ref)
-    return v_1d_dw_grad_o_mat___execute(params, execution);
+    return v_1d_dw_grad_o_mat___execute(params, runner);
 }
 
 
@@ -402,8 +402,6 @@ export {
       V1dDwGradOMatParameters,
       V_1D_DW_GRAD_O_MAT___METADATA,
       v_1d_dw_grad_o_mat__,
-      v_1d_dw_grad_o_mat___cargs,
       v_1d_dw_grad_o_mat___execute,
-      v_1d_dw_grad_o_mat___outputs,
       v_1d_dw_grad_o_mat___params,
 };

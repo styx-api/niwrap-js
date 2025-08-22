@@ -594,14 +594,16 @@ function v_3d_tstat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTstatOutputs`).
  */
 function v_3d_tstat_execute(
     params: V3dTstatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTstatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TSTAT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tstat_cargs(params, execution)
     const ret = v_3d_tstat_outputs(params, execution)
@@ -746,10 +748,8 @@ function v_3d_tstat(
     cmask: string | null = null,
     runner: Runner | null = null,
 ): V3dTstatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TSTAT_METADATA);
     const params = v_3d_tstat_params(in_file, mask, num_threads, options, outputtype, sum, abssum, sos, l2norm, mean, slope, stdev, stdev_nod, cvar, cvar_nod, cvarinv, cvarinv_nod, tsnr, mad, dw, median, nzmedian, nzstdev, bmv, mssd, mssdsqrt, masdx, min, max, absmax, signed_absmax, percentile, argmin, argmin1, argmax, argmax1, argabsmax, argabsmax1, duration, onset, offset, centroid, centduration, nzmean, zcount, nzcount, autocorr, autoreg, accumulate, centromean, skewness, kurtosis, firstvalue, tdiff, prefix, datum, nscale, basepercent, mask_mset, mrange, cmask)
-    return v_3d_tstat_execute(params, execution);
+    return v_3d_tstat_execute(params, runner);
 }
 
 
@@ -758,8 +758,6 @@ export {
       V3dTstatParameters,
       V_3D_TSTAT_METADATA,
       v_3d_tstat,
-      v_3d_tstat_cargs,
       v_3d_tstat_execute,
-      v_3d_tstat_outputs,
       v_3d_tstat_params,
 };

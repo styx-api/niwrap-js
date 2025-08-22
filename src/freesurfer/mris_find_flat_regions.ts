@@ -150,14 +150,16 @@ function mris_find_flat_regions_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisFindFlatRegionsOutputs`).
  */
 function mris_find_flat_regions_execute(
     params: MrisFindFlatRegionsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisFindFlatRegionsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_FIND_FLAT_REGIONS_METADATA);
     params = execution.params(params)
     const cargs = mris_find_flat_regions_cargs(params, execution)
     const ret = mris_find_flat_regions_outputs(params, execution)
@@ -186,10 +188,8 @@ function mris_find_flat_regions(
     threshold: number | null = 0.99,
     runner: Runner | null = null,
 ): MrisFindFlatRegionsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_FIND_FLAT_REGIONS_METADATA);
     const params = mris_find_flat_regions_params(surface, wfile, threshold)
-    return mris_find_flat_regions_execute(params, execution);
+    return mris_find_flat_regions_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MrisFindFlatRegionsOutputs,
       MrisFindFlatRegionsParameters,
       mris_find_flat_regions,
-      mris_find_flat_regions_cargs,
       mris_find_flat_regions_execute,
-      mris_find_flat_regions_outputs,
       mris_find_flat_regions_params,
 };

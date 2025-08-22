@@ -144,14 +144,16 @@ function mri_polv_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriPolvOutputs`).
  */
 function mri_polv_execute(
     params: MriPolvParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriPolvOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_POLV_METADATA);
     params = execution.params(params)
     const cargs = mri_polv_cargs(params, execution)
     const ret = mri_polv_outputs(params, execution)
@@ -180,10 +182,8 @@ function mri_polv(
     window_size: number | null = null,
     runner: Runner | null = null,
 ): MriPolvOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_POLV_METADATA);
     const params = mri_polv_params(input_image, output_image, window_size)
-    return mri_polv_execute(params, execution);
+    return mri_polv_execute(params, runner);
 }
 
 
@@ -192,8 +192,6 @@ export {
       MriPolvOutputs,
       MriPolvParameters,
       mri_polv,
-      mri_polv_cargs,
       mri_polv_execute,
-      mri_polv_outputs,
       mri_polv_params,
 };

@@ -328,14 +328,16 @@ function v_5ttedit_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V5tteditOutputs`).
  */
 function v_5ttedit_execute(
     params: V5tteditParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V5tteditOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_5TTEDIT_METADATA);
     params = execution.params(params)
     const cargs = v_5ttedit_cargs(params, execution)
     const ret = v_5ttedit_outputs(params, execution)
@@ -396,10 +398,8 @@ function v_5ttedit(
     version: boolean = false,
     runner: Runner | null = null,
 ): V5tteditOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_5TTEDIT_METADATA);
     const params = v_5ttedit_params(input, output, cgm, sgm, wm, csf, path, none, info, quiet, debug, force, nthreads, config, help, version)
-    return v_5ttedit_execute(params, execution);
+    return v_5ttedit_execute(params, runner);
 }
 
 
@@ -409,10 +409,7 @@ export {
       V5tteditParameters,
       V_5TTEDIT_METADATA,
       v_5ttedit,
-      v_5ttedit_cargs,
-      v_5ttedit_config_cargs,
       v_5ttedit_config_params,
       v_5ttedit_execute,
-      v_5ttedit_outputs,
       v_5ttedit_params,
 };

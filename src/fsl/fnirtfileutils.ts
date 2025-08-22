@@ -251,14 +251,16 @@ function fnirtfileutils_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FnirtfileutilsOutputs`).
  */
 function fnirtfileutils_execute(
     params: FnirtfileutilsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FnirtfileutilsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FNIRTFILEUTILS_METADATA);
     params = execution.params(params)
     const cargs = fnirtfileutils_cargs(params, execution)
     const ret = fnirtfileutils_outputs(params, execution)
@@ -303,10 +305,8 @@ function fnirtfileutils(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FnirtfileutilsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FNIRTFILEUTILS_METADATA);
     const params = fnirtfileutils_params(input_coefs, ref_volume, out_field, output_format, warp_res, knot_space, jacobian_output, jacobian_matrix_output, with_aff, verbose_flag, help_flag)
-    return fnirtfileutils_execute(params, execution);
+    return fnirtfileutils_execute(params, runner);
 }
 
 
@@ -315,8 +315,6 @@ export {
       FnirtfileutilsOutputs,
       FnirtfileutilsParameters,
       fnirtfileutils,
-      fnirtfileutils_cargs,
       fnirtfileutils_execute,
-      fnirtfileutils_outputs,
       fnirtfileutils_params,
 };

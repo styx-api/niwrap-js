@@ -269,14 +269,16 @@ function bet2_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Bet2Outputs`).
  */
 function bet2_execute(
     params: Bet2Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Bet2Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BET2_METADATA);
     params = execution.params(params)
     const cargs = bet2_cargs(params, execution)
     const ret = bet2_outputs(params, execution)
@@ -329,10 +331,8 @@ function bet2(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): Bet2Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BET2_METADATA);
     const params = bet2_params(input_fileroot, output_fileroot, fractional_intensity, vertical_gradient, center_of_gravity, outline_flag, mask_flag, skull_flag, no_output_flag, mesh_flag, head_radius, smooth_factor, threshold_flag, verbose_flag, help_flag)
-    return bet2_execute(params, execution);
+    return bet2_execute(params, runner);
 }
 
 
@@ -341,8 +341,6 @@ export {
       Bet2Outputs,
       Bet2Parameters,
       bet2,
-      bet2_cargs,
       bet2_execute,
-      bet2_outputs,
       bet2_params,
 };

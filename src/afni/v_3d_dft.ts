@@ -191,14 +191,16 @@ function v_3d_dft_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dDftOutputs`).
  */
 function v_3d_dft_execute(
     params: V3dDftParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dDftOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_DFT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_dft_cargs(params, execution)
     const ret = v_3d_dft_outputs(params, execution)
@@ -235,10 +237,8 @@ function v_3d_dft(
     inverse: boolean = false,
     runner: Runner | null = null,
 ): V3dDftOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_DFT_METADATA);
     const params = v_3d_dft_params(infile, prefix, abs_output, nfft, detrend, taper, inverse)
-    return v_3d_dft_execute(params, execution);
+    return v_3d_dft_execute(params, runner);
 }
 
 
@@ -247,8 +247,6 @@ export {
       V3dDftParameters,
       V_3D_DFT_METADATA,
       v_3d_dft,
-      v_3d_dft_cargs,
       v_3d_dft_execute,
-      v_3d_dft_outputs,
       v_3d_dft_params,
 };

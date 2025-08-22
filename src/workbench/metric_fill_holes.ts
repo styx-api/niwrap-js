@@ -158,14 +158,16 @@ function metric_fill_holes_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricFillHolesOutputs`).
  */
 function metric_fill_holes_execute(
     params: MetricFillHolesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricFillHolesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_FILL_HOLES_METADATA);
     params = execution.params(params)
     const cargs = metric_fill_holes_cargs(params, execution)
     const ret = metric_fill_holes_outputs(params, execution)
@@ -198,10 +200,8 @@ function metric_fill_holes(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricFillHolesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_FILL_HOLES_METADATA);
     const params = metric_fill_holes_params(surface, metric_in, metric_out, opt_corrected_areas_area_metric)
-    return metric_fill_holes_execute(params, execution);
+    return metric_fill_holes_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       MetricFillHolesOutputs,
       MetricFillHolesParameters,
       metric_fill_holes,
-      metric_fill_holes_cargs,
       metric_fill_holes_execute,
-      metric_fill_holes_outputs,
       metric_fill_holes_params,
 };

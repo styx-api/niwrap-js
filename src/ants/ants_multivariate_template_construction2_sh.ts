@@ -133,14 +133,16 @@ function ants_multivariate_template_construction2_sh_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsMultivariateTemplateConstruction2ShOutputs`).
  */
 function ants_multivariate_template_construction2_sh_execute(
     params: AntsMultivariateTemplateConstruction2ShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsMultivariateTemplateConstruction2ShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_MULTIVARIATE_TEMPLATE_CONSTRUCTION2_SH_METADATA);
     params = execution.params(params)
     const cargs = ants_multivariate_template_construction2_sh_cargs(params, execution)
     const ret = ants_multivariate_template_construction2_sh_outputs(params, execution)
@@ -165,10 +167,8 @@ function ants_multivariate_template_construction2_sh(
     input: string,
     runner: Runner | null = null,
 ): AntsMultivariateTemplateConstruction2ShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_MULTIVARIATE_TEMPLATE_CONSTRUCTION2_SH_METADATA);
     const params = ants_multivariate_template_construction2_sh_params(input)
-    return ants_multivariate_template_construction2_sh_execute(params, execution);
+    return ants_multivariate_template_construction2_sh_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       AntsMultivariateTemplateConstruction2ShOutputs,
       AntsMultivariateTemplateConstruction2ShParameters,
       ants_multivariate_template_construction2_sh,
-      ants_multivariate_template_construction2_sh_cargs,
       ants_multivariate_template_construction2_sh_execute,
-      ants_multivariate_template_construction2_sh_outputs,
       ants_multivariate_template_construction2_sh_params,
 };

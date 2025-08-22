@@ -142,14 +142,16 @@ function ccalc_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CcalcOutputs`).
  */
 function ccalc_execute(
     params: CcalcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CcalcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CCALC_METADATA);
     params = execution.params(params)
     const cargs = ccalc_cargs(params, execution)
     const ret = ccalc_outputs(params, execution)
@@ -176,10 +178,8 @@ function ccalc(
     format: string | null = null,
     runner: Runner | null = null,
 ): CcalcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CCALC_METADATA);
     const params = ccalc_params(expr, format)
-    return ccalc_execute(params, execution);
+    return ccalc_execute(params, runner);
 }
 
 
@@ -188,8 +188,6 @@ export {
       CcalcOutputs,
       CcalcParameters,
       ccalc,
-      ccalc_cargs,
       ccalc_execute,
-      ccalc_outputs,
       ccalc_params,
 };

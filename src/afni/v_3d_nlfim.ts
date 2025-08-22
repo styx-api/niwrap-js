@@ -595,14 +595,16 @@ function v_3d_nlfim_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dNlfimOutputs`).
  */
 function v_3d_nlfim_execute(
     params: V3dNlfimParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dNlfimOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_NLFIM_METADATA);
     params = execution.params(params)
     const cargs = v_3d_nlfim_cargs(params, execution)
     const ret = v_3d_nlfim_outputs(params, execution)
@@ -699,10 +701,8 @@ function v_3d_nlfim(
     jobs: number | null = null,
     runner: Runner | null = null,
 ): V3dNlfimOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_NLFIM_METADATA);
     const params = v_3d_nlfim_params(input_file, signal_model, noise_model, mask, ignore, intr, tr, time_file, sconstr, nconstr, nabs, nrand, nbest, rmsmin, fdisp, progress, voxel_count, simplex, powell, both, freg, frsqr, fsmax, ftmax, fpsmax, farea, fparea, fscoef, fncoef, tscoef, tncoef, bucket, brick, nofdr, sfit, snfit, jobs)
-    return v_3d_nlfim_execute(params, execution);
+    return v_3d_nlfim_execute(params, runner);
 }
 
 
@@ -711,8 +711,6 @@ export {
       V3dNlfimParameters,
       V_3D_NLFIM_METADATA,
       v_3d_nlfim,
-      v_3d_nlfim_cargs,
       v_3d_nlfim_execute,
-      v_3d_nlfim_outputs,
       v_3d_nlfim_params,
 };

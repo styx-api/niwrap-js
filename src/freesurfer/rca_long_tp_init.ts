@@ -178,14 +178,16 @@ function rca_long_tp_init_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RcaLongTpInitOutputs`).
  */
 function rca_long_tp_init_execute(
     params: RcaLongTpInitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RcaLongTpInitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RCA_LONG_TP_INIT_METADATA);
     params = execution.params(params)
     const cargs = rca_long_tp_init_cargs(params, execution)
     const ret = rca_long_tp_init_outputs(params, execution)
@@ -220,10 +222,8 @@ function rca_long_tp_init(
     subject: string | null = null,
     runner: Runner | null = null,
 ): RcaLongTpInitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RCA_LONG_TP_INIT_METADATA);
     const params = rca_long_tp_init_params(timepoint, base, use_long_base_ctrl_vol, hemisphere, expert_opts, subject)
-    return rca_long_tp_init_execute(params, execution);
+    return rca_long_tp_init_execute(params, runner);
 }
 
 
@@ -232,8 +232,6 @@ export {
       RcaLongTpInitOutputs,
       RcaLongTpInitParameters,
       rca_long_tp_init,
-      rca_long_tp_init_cargs,
       rca_long_tp_init_execute,
-      rca_long_tp_init_outputs,
       rca_long_tp_init_params,
 };

@@ -138,14 +138,16 @@ function mris_topo_fixer_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisTopoFixerOutputs`).
  */
 function mris_topo_fixer_execute(
     params: MrisTopoFixerParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisTopoFixerOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_TOPO_FIXER_METADATA);
     params = execution.params(params)
     const cargs = mris_topo_fixer_cargs(params, execution)
     const ret = mris_topo_fixer_outputs(params, execution)
@@ -172,10 +174,8 @@ function mris_topo_fixer(
     output_surface: string,
     runner: Runner | null = null,
 ): MrisTopoFixerOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_TOPO_FIXER_METADATA);
     const params = mris_topo_fixer_params(input_surface, output_surface)
-    return mris_topo_fixer_execute(params, execution);
+    return mris_topo_fixer_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MrisTopoFixerOutputs,
       MrisTopoFixerParameters,
       mris_topo_fixer,
-      mris_topo_fixer_cargs,
       mris_topo_fixer_execute,
-      mris_topo_fixer_outputs,
       mris_topo_fixer_params,
 };

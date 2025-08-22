@@ -253,14 +253,16 @@ function cifti_stats_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiStatsOutputs`).
  */
 function cifti_stats_execute(
     params: CiftiStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_STATS_METADATA);
     params = execution.params(params)
     const cargs = cifti_stats_cargs(params, execution)
     const ret = cifti_stats_outputs(params, execution)
@@ -317,10 +319,8 @@ function cifti_stats(
     opt_show_map_name: boolean = false,
     runner: Runner | null = null,
 ): CiftiStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_STATS_METADATA);
     const params = cifti_stats_params(cifti_in, opt_reduce_operation, opt_percentile_percent, opt_column_column, roi, opt_show_map_name)
-    return cifti_stats_execute(params, execution);
+    return cifti_stats_execute(params, runner);
 }
 
 
@@ -330,10 +330,7 @@ export {
       CiftiStatsParameters,
       CiftiStatsRoiParameters,
       cifti_stats,
-      cifti_stats_cargs,
       cifti_stats_execute,
-      cifti_stats_outputs,
       cifti_stats_params,
-      cifti_stats_roi_cargs,
       cifti_stats_roi_params,
 };

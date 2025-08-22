@@ -135,14 +135,16 @@ function metadata_remove_provenance_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetadataRemoveProvenanceOutputs`).
  */
 function metadata_remove_provenance_execute(
     params: MetadataRemoveProvenanceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetadataRemoveProvenanceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METADATA_REMOVE_PROVENANCE_METADATA);
     params = execution.params(params)
     const cargs = metadata_remove_provenance_cargs(params, execution)
     const ret = metadata_remove_provenance_outputs(params, execution)
@@ -171,10 +173,8 @@ function metadata_remove_provenance(
     output_file: string,
     runner: Runner | null = null,
 ): MetadataRemoveProvenanceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METADATA_REMOVE_PROVENANCE_METADATA);
     const params = metadata_remove_provenance_params(input_file, output_file)
-    return metadata_remove_provenance_execute(params, execution);
+    return metadata_remove_provenance_execute(params, runner);
 }
 
 
@@ -183,8 +183,6 @@ export {
       MetadataRemoveProvenanceOutputs,
       MetadataRemoveProvenanceParameters,
       metadata_remove_provenance,
-      metadata_remove_provenance_cargs,
       metadata_remove_provenance_execute,
-      metadata_remove_provenance_outputs,
       metadata_remove_provenance_params,
 };

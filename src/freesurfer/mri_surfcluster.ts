@@ -606,14 +606,16 @@ function mri_surfcluster_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSurfclusterOutputs`).
  */
 function mri_surfcluster_execute(
     params: MriSurfclusterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSurfclusterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SURFCLUSTER_METADATA);
     params = execution.params(params)
     const cargs = mri_surfcluster_cargs(params, execution)
     const ret = mri_surfcluster_outputs(params, execution)
@@ -718,10 +720,8 @@ function mri_surfcluster(
     thmax: number | null = null,
     runner: Runner | null = null,
 ): MriSurfclusterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SURFCLUSTER_METADATA);
     const params = mri_surfcluster_params(infile, thmin, sign, no_adjust_flag, fdr, subject, hemi, surf, surfpath, annot, frame, csd, vwsig, cwsig, maxcwpval, bonferroni, sig2p_max_flag, bonferroni_max, csdpdf, csdpdf_only_flag, csd_out, cwpvalthresh, fwhm, fwhmdat, clabel, cortex_flag, mask, mask_inv_flag, centroid_flag, sum, pointset, maxareafile, o, ocn, olab, oannot, minarea, xfm, no_fixmni_flag, sd, thmax)
-    return mri_surfcluster_execute(params, execution);
+    return mri_surfcluster_execute(params, runner);
 }
 
 
@@ -730,8 +730,6 @@ export {
       MriSurfclusterOutputs,
       MriSurfclusterParameters,
       mri_surfcluster,
-      mri_surfcluster_cargs,
       mri_surfcluster_execute,
-      mri_surfcluster_outputs,
       mri_surfcluster_params,
 };

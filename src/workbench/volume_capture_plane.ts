@@ -216,14 +216,16 @@ function volume_capture_plane_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeCapturePlaneOutputs`).
  */
 function volume_capture_plane_execute(
     params: VolumeCapturePlaneParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeCapturePlaneOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_CAPTURE_PLANE_METADATA);
     params = execution.params(params)
     const cargs = volume_capture_plane_cargs(params, execution)
     const ret = volume_capture_plane_outputs(params, execution)
@@ -288,10 +290,8 @@ function volume_capture_plane(
     image: string,
     runner: Runner | null = null,
 ): VolumeCapturePlaneOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_CAPTURE_PLANE_METADATA);
     const params = volume_capture_plane_params(volume, subvolume, interp, h_dim, v_dim, scale_min, scale_max, bottom_left_x, bottom_left_y, bottom_left_z, bottom_right_x, bottom_right_y, bottom_right_z, top_left_x, top_left_y, top_left_z, image)
-    return volume_capture_plane_execute(params, execution);
+    return volume_capture_plane_execute(params, runner);
 }
 
 
@@ -300,8 +300,6 @@ export {
       VolumeCapturePlaneOutputs,
       VolumeCapturePlaneParameters,
       volume_capture_plane,
-      volume_capture_plane_cargs,
       volume_capture_plane_execute,
-      volume_capture_plane_outputs,
       volume_capture_plane_params,
 };

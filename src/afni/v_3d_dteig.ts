@@ -191,14 +191,16 @@ function v_3d_dteig_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dDteigOutputs`).
  */
 function v_3d_dteig_execute(
     params: V3dDteigParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dDteigOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_DTEIG_METADATA);
     params = execution.params(params)
     const cargs = v_3d_dteig_cargs(params, execution)
     const ret = v_3d_dteig_outputs(params, execution)
@@ -231,10 +233,8 @@ function v_3d_dteig(
     uddata: boolean = false,
     runner: Runner | null = null,
 ): V3dDteigOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_DTEIG_METADATA);
     const params = v_3d_dteig_params(input_dataset, prefix, datum, sep_dsets, uddata)
-    return v_3d_dteig_execute(params, execution);
+    return v_3d_dteig_execute(params, runner);
 }
 
 
@@ -243,8 +243,6 @@ export {
       V3dDteigParameters,
       V_3D_DTEIG_METADATA,
       v_3d_dteig,
-      v_3d_dteig_cargs,
       v_3d_dteig_execute,
-      v_3d_dteig_outputs,
       v_3d_dteig_params,
 };

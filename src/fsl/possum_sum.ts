@@ -163,14 +163,16 @@ function possum_sum_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PossumSumOutputs`).
  */
 function possum_sum_execute(
     params: PossumSumParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PossumSumOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(POSSUM_SUM_METADATA);
     params = execution.params(params)
     const cargs = possum_sum_cargs(params, execution)
     const ret = possum_sum_outputs(params, execution)
@@ -201,10 +203,8 @@ function possum_sum(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): PossumSumOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(POSSUM_SUM_METADATA);
     const params = possum_sum_params(input_signal, output_signal, num_processors, verbose_flag)
-    return possum_sum_execute(params, execution);
+    return possum_sum_execute(params, runner);
 }
 
 
@@ -213,8 +213,6 @@ export {
       PossumSumOutputs,
       PossumSumParameters,
       possum_sum,
-      possum_sum_cargs,
       possum_sum_execute,
-      possum_sum_outputs,
       possum_sum_params,
 };

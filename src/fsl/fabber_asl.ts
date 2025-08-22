@@ -413,14 +413,16 @@ function fabber_asl_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FabberAslOutputs`).
  */
 function fabber_asl_execute(
     params: FabberAslParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FabberAslOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FABBER_ASL_METADATA);
     params = execution.params(params)
     const cargs = fabber_asl_cargs(params, execution)
     const ret = fabber_asl_outputs(params, execution)
@@ -507,10 +509,8 @@ function fabber_asl(
     debug: boolean = false,
     runner: Runner | null = null,
 ): FabberAslOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FABBER_ASL_METADATA);
     const params = fabber_asl_params(output, method, model, data, listmethods, listmodels, listparams, descparams, listoutputs, evaluate, evaluate_params, evaluate_nt, simple_output, overwrite, link_to_latest, loadmodels, mask, suppdata, dump_param_names, save_model_fit, save_residuals, save_model_extras, save_mvn, save_mean, save_std, save_var, save_zstat, save_noise_mean, save_noise_std, save_free_energy, optfile, debug)
-    return fabber_asl_execute(params, execution);
+    return fabber_asl_execute(params, runner);
 }
 
 
@@ -519,8 +519,6 @@ export {
       FabberAslOutputs,
       FabberAslParameters,
       fabber_asl,
-      fabber_asl_cargs,
       fabber_asl_execute,
-      fabber_asl_outputs,
       fabber_asl_params,
 };

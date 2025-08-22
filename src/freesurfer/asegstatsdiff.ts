@@ -146,14 +146,16 @@ function asegstatsdiff_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AsegstatsdiffOutputs`).
  */
 function asegstatsdiff_execute(
     params: AsegstatsdiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AsegstatsdiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ASEGSTATSDIFF_METADATA);
     params = execution.params(params)
     const cargs = asegstatsdiff_cargs(params, execution)
     const ret = asegstatsdiff_outputs(params, execution)
@@ -182,10 +184,8 @@ function asegstatsdiff(
     outdir: string | null = null,
     runner: Runner | null = null,
 ): AsegstatsdiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ASEGSTATSDIFF_METADATA);
     const params = asegstatsdiff_params(subject1, subject2, outdir)
-    return asegstatsdiff_execute(params, execution);
+    return asegstatsdiff_execute(params, runner);
 }
 
 
@@ -194,8 +194,6 @@ export {
       AsegstatsdiffOutputs,
       AsegstatsdiffParameters,
       asegstatsdiff,
-      asegstatsdiff_cargs,
       asegstatsdiff_execute,
-      asegstatsdiff_outputs,
       asegstatsdiff_params,
 };

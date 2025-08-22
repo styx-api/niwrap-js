@@ -127,14 +127,16 @@ function fslnvols_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslnvolsOutputs`).
  */
 function fslnvols_execute(
     params: FslnvolsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslnvolsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLNVOLS_METADATA);
     params = execution.params(params)
     const cargs = fslnvols_cargs(params, execution)
     const ret = fslnvols_outputs(params, execution)
@@ -159,10 +161,8 @@ function fslnvols(
     infile: InputPathType,
     runner: Runner | null = null,
 ): FslnvolsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLNVOLS_METADATA);
     const params = fslnvols_params(infile)
-    return fslnvols_execute(params, execution);
+    return fslnvols_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       FslnvolsOutputs,
       FslnvolsParameters,
       fslnvols,
-      fslnvols_cargs,
       fslnvols_execute,
-      fslnvols_outputs,
       fslnvols_params,
 };

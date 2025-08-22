@@ -179,14 +179,16 @@ function v_3d_rankizer_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dRankizerOutputs`).
  */
 function v_3d_rankizer_execute(
     params: V3dRankizerParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dRankizerOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_RANKIZER_METADATA);
     params = execution.params(params)
     const cargs = v_3d_rankizer_cargs(params, execution)
     const ret = v_3d_rankizer_outputs(params, execution)
@@ -221,10 +223,8 @@ function v_3d_rankizer(
     percentize_mask: boolean = false,
     runner: Runner | null = null,
 ): V3dRankizerOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_RANKIZER_METADATA);
     const params = v_3d_rankizer_params(dataset, prefix, base_rank, mask, percentize, percentize_mask)
-    return v_3d_rankizer_execute(params, execution);
+    return v_3d_rankizer_execute(params, runner);
 }
 
 
@@ -233,8 +233,6 @@ export {
       V3dRankizerParameters,
       V_3D_RANKIZER_METADATA,
       v_3d_rankizer,
-      v_3d_rankizer_cargs,
       v_3d_rankizer_execute,
-      v_3d_rankizer_outputs,
       v_3d_rankizer_params,
 };

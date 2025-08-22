@@ -167,14 +167,16 @@ function v_1d_tsort_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dTsortOutputs`).
  */
 function v_1d_tsort_execute(
     params: V1dTsortParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dTsortOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_TSORT_METADATA);
     params = execution.params(params)
     const cargs = v_1d_tsort_cargs(params, execution)
     const ret = v_1d_tsort_outputs(params, execution)
@@ -209,10 +211,8 @@ function v_1d_tsort(
     imode: boolean = false,
     runner: Runner | null = null,
 ): V1dTsortOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_TSORT_METADATA);
     const params = v_1d_tsort_params(infile, inc_order, dec_order, transpose, column, imode)
-    return v_1d_tsort_execute(params, execution);
+    return v_1d_tsort_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       V1dTsortParameters,
       V_1D_TSORT_METADATA,
       v_1d_tsort,
-      v_1d_tsort_cargs,
       v_1d_tsort_execute,
-      v_1d_tsort_outputs,
       v_1d_tsort_params,
 };

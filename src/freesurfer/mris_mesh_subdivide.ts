@@ -168,14 +168,16 @@ function mris_mesh_subdivide_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisMeshSubdivideOutputs`).
  */
 function mris_mesh_subdivide_execute(
     params: MrisMeshSubdivideParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisMeshSubdivideOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_MESH_SUBDIVIDE_METADATA);
     params = execution.params(params)
     const cargs = mris_mesh_subdivide_cargs(params, execution)
     const ret = mris_mesh_subdivide_outputs(params, execution)
@@ -206,10 +208,8 @@ function mris_mesh_subdivide(
     iterations: number | null = null,
     runner: Runner | null = null,
 ): MrisMeshSubdivideOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_MESH_SUBDIVIDE_METADATA);
     const params = mris_mesh_subdivide_params(input_surface, output_surface, subdivision_method, iterations)
-    return mris_mesh_subdivide_execute(params, execution);
+    return mris_mesh_subdivide_execute(params, runner);
 }
 
 
@@ -218,8 +218,6 @@ export {
       MrisMeshSubdivideOutputs,
       MrisMeshSubdivideParameters,
       mris_mesh_subdivide,
-      mris_mesh_subdivide_cargs,
       mris_mesh_subdivide_execute,
-      mris_mesh_subdivide_outputs,
       mris_mesh_subdivide_params,
 };

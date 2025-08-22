@@ -220,14 +220,16 @@ function eddy_quad_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `EddyQuadOutputs`).
  */
 function eddy_quad_execute(
     params: EddyQuadParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): EddyQuadOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EDDY_QUAD_METADATA);
     params = execution.params(params)
     const cargs = eddy_quad_cargs(params, execution)
     const ret = eddy_quad_outputs(params, execution)
@@ -270,10 +272,8 @@ function eddy_quad(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): EddyQuadOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EDDY_QUAD_METADATA);
     const params = eddy_quad_params(eddy_base, eddy_index, eddy_params, mask, bvals, bvecs, output_dir, field, slspec, verbose)
-    return eddy_quad_execute(params, execution);
+    return eddy_quad_execute(params, runner);
 }
 
 
@@ -282,8 +282,6 @@ export {
       EddyQuadOutputs,
       EddyQuadParameters,
       eddy_quad,
-      eddy_quad_cargs,
       eddy_quad_execute,
-      eddy_quad_outputs,
       eddy_quad_params,
 };

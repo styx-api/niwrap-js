@@ -130,14 +130,16 @@ function is_surface_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `IsSurfaceOutputs`).
  */
 function is_surface_execute(
     params: IsSurfaceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): IsSurfaceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IS_SURFACE_METADATA);
     params = execution.params(params)
     const cargs = is_surface_cargs(params, execution)
     const ret = is_surface_outputs(params, execution)
@@ -162,10 +164,8 @@ function is_surface(
     infile: InputPathType,
     runner: Runner | null = null,
 ): IsSurfaceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IS_SURFACE_METADATA);
     const params = is_surface_params(infile)
-    return is_surface_execute(params, execution);
+    return is_surface_execute(params, runner);
 }
 
 
@@ -174,8 +174,6 @@ export {
       IsSurfaceOutputs,
       IsSurfaceParameters,
       is_surface,
-      is_surface_cargs,
       is_surface_execute,
-      is_surface_outputs,
       is_surface_params,
 };

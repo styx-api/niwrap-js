@@ -220,14 +220,16 @@ function fat_mat_tableize_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatMatTableizeOutputs`).
  */
 function fat_mat_tableize_execute(
     params: FatMatTableizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatMatTableizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_MAT_TABLEIZE_METADATA);
     params = execution.params(params)
     const cargs = fat_mat_tableize_cargs(params, execution)
     const ret = fat_mat_tableize_outputs(params, execution)
@@ -270,10 +272,8 @@ function fat_mat_tableize(
     help_view: boolean = false,
     runner: Runner | null = null,
 ): FatMatTableizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_MAT_TABLEIZE_METADATA);
     const params = fat_mat_tableize_params(input_matrices, output_prefix, input_csv, input_list, parameters, version, date, help, help_short, help_view)
-    return fat_mat_tableize_execute(params, execution);
+    return fat_mat_tableize_execute(params, runner);
 }
 
 
@@ -282,8 +282,6 @@ export {
       FatMatTableizeOutputs,
       FatMatTableizeParameters,
       fat_mat_tableize,
-      fat_mat_tableize_cargs,
       fat_mat_tableize_execute,
-      fat_mat_tableize_outputs,
       fat_mat_tableize_params,
 };

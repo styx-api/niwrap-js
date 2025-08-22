@@ -307,14 +307,16 @@ function v_3d_net_corr_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dNetCorrOutputs`).
  */
 function v_3d_net_corr_execute(
     params: V3dNetCorrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dNetCorrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_NET_CORR_METADATA);
     params = execution.params(params)
     const cargs = v_3d_net_corr_cargs(params, execution)
     const ret = v_3d_net_corr_outputs(params, execution)
@@ -377,10 +379,8 @@ function v_3d_net_corr(
     ignore_lt: boolean = false,
     runner: Runner | null = null,
 ): V3dNetCorrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_NET_CORR_METADATA);
     const params = v_3d_net_corr_params(prefix, inset, in_rois, mask, fish_z, part_corr, ts_out, ts_label, ts_indiv, ts_wb_corr, ts_wb_z, weight_ts, weight_corr, ts_wb_strlabel, nifti, output_mask_nonnull, push_thru_many_zeros, allow_roi_zeros, automask_off, ignore_lt)
-    return v_3d_net_corr_execute(params, execution);
+    return v_3d_net_corr_execute(params, runner);
 }
 
 
@@ -389,8 +389,6 @@ export {
       V3dNetCorrParameters,
       V_3D_NET_CORR_METADATA,
       v_3d_net_corr,
-      v_3d_net_corr_cargs,
       v_3d_net_corr_execute,
-      v_3d_net_corr_outputs,
       v_3d_net_corr_params,
 };

@@ -139,14 +139,16 @@ function fslcpgeom_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslcpgeomOutputs`).
  */
 function fslcpgeom_execute(
     params: FslcpgeomParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslcpgeomOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLCPGEOM_METADATA);
     params = execution.params(params)
     const cargs = fslcpgeom_cargs(params, execution)
     const ret = fslcpgeom_outputs(params, execution)
@@ -175,10 +177,8 @@ function fslcpgeom(
     dimensions_flag: boolean = false,
     runner: Runner | null = null,
 ): FslcpgeomOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLCPGEOM_METADATA);
     const params = fslcpgeom_params(source_file, destination_file, dimensions_flag)
-    return fslcpgeom_execute(params, execution);
+    return fslcpgeom_execute(params, runner);
 }
 
 
@@ -187,8 +187,6 @@ export {
       FslcpgeomOutputs,
       FslcpgeomParameters,
       fslcpgeom,
-      fslcpgeom_cargs,
       fslcpgeom_execute,
-      fslcpgeom_outputs,
       fslcpgeom_params,
 };

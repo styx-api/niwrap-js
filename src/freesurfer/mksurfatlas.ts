@@ -205,14 +205,16 @@ function mksurfatlas_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MksurfatlasOutputs`).
  */
 function mksurfatlas_execute(
     params: MksurfatlasParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MksurfatlasOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MKSURFATLAS_METADATA);
     params = execution.params(params)
     const cargs = mksurfatlas_cargs(params, execution)
     const ret = mksurfatlas_outputs(params, execution)
@@ -253,10 +255,8 @@ function mksurfatlas(
     help: boolean = false,
     runner: Runner | null = null,
 ): MksurfatlasOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MKSURFATLAS_METADATA);
     const params = mksurfatlas_params(atlas, hemi, subjects, surfval, surfvaldir, regsurf, debug, version, help)
-    return mksurfatlas_execute(params, execution);
+    return mksurfatlas_execute(params, runner);
 }
 
 
@@ -265,8 +265,6 @@ export {
       MksurfatlasOutputs,
       MksurfatlasParameters,
       mksurfatlas,
-      mksurfatlas_cargs,
       mksurfatlas_execute,
-      mksurfatlas_outputs,
       mksurfatlas_params,
 };

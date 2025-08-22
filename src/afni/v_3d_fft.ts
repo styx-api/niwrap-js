@@ -235,14 +235,16 @@ function v_3d_fft_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dFftOutputs`).
  */
 function v_3d_fft_execute(
     params: V3dFftParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dFftOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_FFT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_fft_cargs(params, execution)
     const ret = v_3d_fft_outputs(params, execution)
@@ -289,10 +291,8 @@ function v_3d_fft(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dFftOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_FFT_METADATA);
     const params = v_3d_fft_params(dataset, abs, phase, complex, inverse, lx, ly, lz, alt_in, alt_out, input, prefix)
-    return v_3d_fft_execute(params, execution);
+    return v_3d_fft_execute(params, runner);
 }
 
 
@@ -301,8 +301,6 @@ export {
       V3dFftParameters,
       V_3D_FFT_METADATA,
       v_3d_fft,
-      v_3d_fft_cargs,
       v_3d_fft_execute,
-      v_3d_fft_outputs,
       v_3d_fft_params,
 };

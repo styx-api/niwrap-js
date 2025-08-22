@@ -15,3 +15,39 @@ export * from './niftyreg/reg_jacobian'
 export * from './niftyreg/reg_resample'
 export * from './niftyreg/reg_tools'
 export * from './niftyreg/reg_transform'
+import { Runner } from 'styxdefs';
+import { reg_aladin_execute } from './niftyreg/reg_aladin'
+import { reg_average_execute } from './niftyreg/reg_average'
+import { reg_f3d_execute } from './niftyreg/reg_f3d'
+import { reg_jacobian_execute } from './niftyreg/reg_jacobian'
+import { reg_resample_execute } from './niftyreg/reg_resample'
+import { reg_tools_execute } from './niftyreg/reg_tools'
+import { reg_transform_execute } from './niftyreg/reg_transform'
+
+
+/**
+ * Run a command in this package dynamically from a params object.
+ *
+ * @param params The parameters.
+ * @param runner Command runner
+ *
+ */
+function execute(
+    params: any,
+    runner: Runner | null = null,
+) {
+    return {
+        "niftyreg.reg_aladin": reg_aladin_execute,
+        "niftyreg.reg_average": reg_average_execute,
+        "niftyreg.reg_f3d": reg_f3d_execute,
+        "niftyreg.reg_jacobian": reg_jacobian_execute,
+        "niftyreg.reg_resample": reg_resample_execute,
+        "niftyreg.reg_tools": reg_tools_execute,
+        "niftyreg.reg_transform": reg_transform_execute,
+    }[params["@type"]](params, runner)
+}
+
+
+export {
+      execute,
+};

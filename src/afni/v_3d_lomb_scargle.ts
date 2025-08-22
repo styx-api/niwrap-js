@@ -221,14 +221,16 @@ function v_3d_lomb_scargle_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dLombScargleOutputs`).
  */
 function v_3d_lomb_scargle_execute(
     params: V3dLombScargleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dLombScargleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_LOMB_SCARGLE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_lomb_scargle_cargs(params, execution)
     const ret = v_3d_lomb_scargle_outputs(params, execution)
@@ -267,10 +269,8 @@ function v_3d_lomb_scargle(
     nifti: boolean = false,
     runner: Runner | null = null,
 ): V3dLombScargleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_LOMB_SCARGLE_METADATA);
     const params = v_3d_lomb_scargle_params(prefix, inset, censor_1d, censor_string, mask_file, out_pow_spec, nyquist_multiplier, nifti)
-    return v_3d_lomb_scargle_execute(params, execution);
+    return v_3d_lomb_scargle_execute(params, runner);
 }
 
 
@@ -279,8 +279,6 @@ export {
       V3dLombScargleParameters,
       V_3D_LOMB_SCARGLE_METADATA,
       v_3d_lomb_scargle,
-      v_3d_lomb_scargle_cargs,
       v_3d_lomb_scargle_execute,
-      v_3d_lomb_scargle_outputs,
       v_3d_lomb_scargle_params,
 };

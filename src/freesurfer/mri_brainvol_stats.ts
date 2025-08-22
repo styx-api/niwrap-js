@@ -174,14 +174,16 @@ function mri_brainvol_stats_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriBrainvolStatsOutputs`).
  */
 function mri_brainvol_stats_execute(
     params: MriBrainvolStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriBrainvolStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_BRAINVOL_STATS_METADATA);
     params = execution.params(params)
     const cargs = mri_brainvol_stats_cargs(params, execution)
     const ret = mri_brainvol_stats_outputs(params, execution)
@@ -214,10 +216,8 @@ function mri_brainvol_stats(
     output_file: string | null = null,
     runner: Runner | null = null,
 ): MriBrainvolStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_BRAINVOL_STATS_METADATA);
     const params = mri_brainvol_stats_params(subject_id, xml_string, no_surface, include_segmentation, output_file)
-    return mri_brainvol_stats_execute(params, execution);
+    return mri_brainvol_stats_execute(params, runner);
 }
 
 
@@ -226,8 +226,6 @@ export {
       MriBrainvolStatsOutputs,
       MriBrainvolStatsParameters,
       mri_brainvol_stats,
-      mri_brainvol_stats_cargs,
       mri_brainvol_stats_execute,
-      mri_brainvol_stats_outputs,
       mri_brainvol_stats_params,
 };

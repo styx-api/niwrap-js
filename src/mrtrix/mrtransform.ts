@@ -759,14 +759,16 @@ function mrtransform_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrtransformOutputs`).
  */
 function mrtransform_execute(
     params: MrtransformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrtransformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRTRANSFORM_METADATA);
     params = execution.params(params)
     const cargs = mrtransform_cargs(params, execution)
     const ret = mrtransform_outputs(params, execution)
@@ -877,10 +879,8 @@ function mrtransform(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrtransformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRTRANSFORM_METADATA);
     const params = mrtransform_params(input, output, linear, flip, inverse, half, replace, identity, template, midway_space, interp, oversample, warp, warp_full, from_, modulate, directions, reorient_fod, grad, fslgrad, export_grad_mrtrix, export_grad_fsl, datatype, strides, nan, no_reorientation, info, quiet, debug, force, nthreads, config, help, version)
-    return mrtransform_execute(params, execution);
+    return mrtransform_execute(params, runner);
 }
 
 
@@ -895,19 +895,11 @@ export {
       MrtransformVariousFileParameters,
       MrtransformVariousStringParameters,
       mrtransform,
-      mrtransform_cargs,
-      mrtransform_config_cargs,
       mrtransform_config_params,
       mrtransform_execute,
-      mrtransform_export_grad_fsl_cargs,
-      mrtransform_export_grad_fsl_outputs,
       mrtransform_export_grad_fsl_params,
-      mrtransform_fslgrad_cargs,
       mrtransform_fslgrad_params,
-      mrtransform_outputs,
       mrtransform_params,
-      mrtransform_various_file_cargs,
       mrtransform_various_file_params,
-      mrtransform_various_string_cargs,
       mrtransform_various_string_params,
 };

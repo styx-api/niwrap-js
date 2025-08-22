@@ -246,14 +246,16 @@ function mris_register_to_label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRegisterToLabelOutputs`).
  */
 function mris_register_to_label_execute(
     params: MrisRegisterToLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRegisterToLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_REGISTER_TO_LABEL_METADATA);
     params = execution.params(params)
     const cargs = mris_register_to_label_cargs(params, execution)
     const ret = mris_register_to_label_outputs(params, execution)
@@ -300,10 +302,8 @@ function mris_register_to_label(
     cost_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): MrisRegisterToLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_REGISTER_TO_LABEL_METADATA);
     const params = mris_register_to_label_params(surface, regfile, mri_reg, mov_volume, resolution, max_rot, max_trans, subject, label, out_reg, downsample, cost_file)
-    return mris_register_to_label_execute(params, execution);
+    return mris_register_to_label_execute(params, runner);
 }
 
 
@@ -312,8 +312,6 @@ export {
       MrisRegisterToLabelOutputs,
       MrisRegisterToLabelParameters,
       mris_register_to_label,
-      mris_register_to_label_cargs,
       mris_register_to_label_execute,
-      mris_register_to_label_outputs,
       mris_register_to_label_params,
 };

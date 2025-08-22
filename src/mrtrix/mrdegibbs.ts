@@ -320,14 +320,16 @@ function mrdegibbs_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrdegibbsOutputs`).
  */
 function mrdegibbs_execute(
     params: MrdegibbsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrdegibbsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRDEGIBBS_METADATA);
     params = execution.params(params)
     const cargs = mrdegibbs_cargs(params, execution)
     const ret = mrdegibbs_outputs(params, execution)
@@ -390,10 +392,8 @@ function mrdegibbs(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrdegibbsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRDEGIBBS_METADATA);
     const params = mrdegibbs_params(in_, out, axes, nshifts, min_w, max_w, datatype, info, quiet, debug, force, nthreads, config, help, version)
-    return mrdegibbs_execute(params, execution);
+    return mrdegibbs_execute(params, runner);
 }
 
 
@@ -403,10 +403,7 @@ export {
       MrdegibbsOutputs,
       MrdegibbsParameters,
       mrdegibbs,
-      mrdegibbs_cargs,
-      mrdegibbs_config_cargs,
       mrdegibbs_config_params,
       mrdegibbs_execute,
-      mrdegibbs_outputs,
       mrdegibbs_params,
 };

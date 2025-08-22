@@ -306,14 +306,16 @@ function volume_merge_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeMergeOutputs`).
  */
 function volume_merge_execute(
     params: VolumeMergeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeMergeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_MERGE_METADATA);
     params = execution.params(params)
     const cargs = volume_merge_cargs(params, execution)
     const ret = volume_merge_outputs(params, execution)
@@ -346,10 +348,8 @@ function volume_merge(
     volume: Array<VolumeMergeVolumeParameters> | null = null,
     runner: Runner | null = null,
 ): VolumeMergeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_MERGE_METADATA);
     const params = volume_merge_params(volume_out, volume)
-    return volume_merge_execute(params, execution);
+    return volume_merge_execute(params, runner);
 }
 
 
@@ -361,14 +361,9 @@ export {
       VolumeMergeUpToParameters,
       VolumeMergeVolumeParameters,
       volume_merge,
-      volume_merge_cargs,
       volume_merge_execute,
-      volume_merge_outputs,
       volume_merge_params,
-      volume_merge_subvolume_cargs,
       volume_merge_subvolume_params,
-      volume_merge_up_to_cargs,
       volume_merge_up_to_params,
-      volume_merge_volume_cargs,
       volume_merge_volume_params,
 };

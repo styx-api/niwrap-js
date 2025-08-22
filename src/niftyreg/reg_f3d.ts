@@ -560,14 +560,16 @@ function reg_f3d_outputs(
  * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegF3dOutputs`).
  */
 function reg_f3d_execute(
     params: RegF3dParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegF3dOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REG_F3D_METADATA);
     params = execution.params(params)
     const cargs = reg_f3d_cargs(params, execution)
     const ret = reg_f3d_outputs(params, execution)
@@ -670,10 +672,8 @@ function reg_f3d(
     verbose_off: boolean = false,
     runner: Runner | null = null,
 ): RegF3dOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REG_F3D_METADATA);
     const params = reg_f3d_params(reference_image, floating_image, affine_transform, flirt_affine_transform, control_point_grid_input, output_cpp, output_resampled_image, reference_mask, smooth_reference, smooth_floating, num_bins_joint_histogram, num_bins_floating_joint_histogram, lower_threshold_reference, upper_threshold_reference, lower_threshold_floating, upper_threshold_floating, spacing_x, spacing_y, spacing_z, bending_energy, linear_elasticity, l2_norm_displacement, jacobian_determinant, no_approx_jl, no_conj, ssd, kld, amc, max_iterations, num_levels, first_levels, no_pyramid, symmetric, floating_mask, inverse_consistency, velocity_field, composition_steps, smooth_gradient, padding_value, verbose_off)
-    return reg_f3d_execute(params, execution);
+    return reg_f3d_execute(params, runner);
 }
 
 
@@ -682,8 +682,6 @@ export {
       RegF3dOutputs,
       RegF3dParameters,
       reg_f3d,
-      reg_f3d_cargs,
       reg_f3d_execute,
-      reg_f3d_outputs,
       reg_f3d_params,
 };

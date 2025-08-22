@@ -173,14 +173,16 @@ function firdesign_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FirdesignOutputs`).
  */
 function firdesign_execute(
     params: FirdesignParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FirdesignOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIRDESIGN_METADATA);
     params = execution.params(params)
     const cargs = firdesign_cargs(params, execution)
     const ret = firdesign_outputs(params, execution)
@@ -215,10 +217,8 @@ function firdesign(
     alternative_ntap: number | null = null,
     runner: Runner | null = null,
 ): FirdesignOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIRDESIGN_METADATA);
     const params = firdesign_params(fbot, ftop, ntap, tr, alternative_band, alternative_ntap)
-    return firdesign_execute(params, execution);
+    return firdesign_execute(params, runner);
 }
 
 
@@ -227,8 +227,6 @@ export {
       FirdesignOutputs,
       FirdesignParameters,
       firdesign,
-      firdesign_cargs,
       firdesign_execute,
-      firdesign_outputs,
       firdesign_params,
 };

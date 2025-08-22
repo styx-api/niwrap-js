@@ -204,14 +204,16 @@ function surface_apply_affine_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceApplyAffineOutputs`).
  */
 function surface_apply_affine_execute(
     params: SurfaceApplyAffineParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceApplyAffineOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_APPLY_AFFINE_METADATA);
     params = execution.params(params)
     const cargs = surface_apply_affine_cargs(params, execution)
     const ret = surface_apply_affine_outputs(params, execution)
@@ -244,10 +246,8 @@ function surface_apply_affine(
     flirt: SurfaceApplyAffineFlirtParameters | null = null,
     runner: Runner | null = null,
 ): SurfaceApplyAffineOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_APPLY_AFFINE_METADATA);
     const params = surface_apply_affine_params(in_surf, affine, out_surf, flirt)
-    return surface_apply_affine_execute(params, execution);
+    return surface_apply_affine_execute(params, runner);
 }
 
 
@@ -257,10 +257,7 @@ export {
       SurfaceApplyAffineOutputs,
       SurfaceApplyAffineParameters,
       surface_apply_affine,
-      surface_apply_affine_cargs,
       surface_apply_affine_execute,
-      surface_apply_affine_flirt_cargs,
       surface_apply_affine_flirt_params,
-      surface_apply_affine_outputs,
       surface_apply_affine_params,
 };

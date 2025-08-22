@@ -132,14 +132,16 @@ function pngappend_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PngappendOutputs`).
  */
 function pngappend_execute(
     params: PngappendParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PngappendOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PNGAPPEND_METADATA);
     params = execution.params(params)
     const cargs = pngappend_cargs(params, execution)
     const ret = pngappend_outputs(params, execution)
@@ -166,10 +168,8 @@ function pngappend(
     output_file: InputPathType,
     runner: Runner | null = null,
 ): PngappendOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PNGAPPEND_METADATA);
     const params = pngappend_params(input_files_and_options, output_file)
-    return pngappend_execute(params, execution);
+    return pngappend_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       PngappendOutputs,
       PngappendParameters,
       pngappend,
-      pngappend_cargs,
       pngappend_execute,
-      pngappend_outputs,
       pngappend_params,
 };

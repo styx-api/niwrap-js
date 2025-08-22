@@ -186,14 +186,16 @@ function mris_thickness_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisThicknessOutputs`).
  */
 function mris_thickness_execute(
     params: MrisThicknessParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisThicknessOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_THICKNESS_METADATA);
     params = execution.params(params)
     const cargs = mris_thickness_cargs(params, execution)
     const ret = mris_thickness_outputs(params, execution)
@@ -230,10 +232,8 @@ function mris_thickness(
     vector: boolean = false,
     runner: Runner | null = null,
 ): MrisThicknessOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_THICKNESS_METADATA);
     const params = mris_thickness_params(subject_name, hemi, thickness_file, max_threshold, fill_holes, thickness_from_seg, vector)
-    return mris_thickness_execute(params, execution);
+    return mris_thickness_execute(params, runner);
 }
 
 
@@ -242,8 +242,6 @@ export {
       MrisThicknessOutputs,
       MrisThicknessParameters,
       mris_thickness,
-      mris_thickness_cargs,
       mris_thickness_execute,
-      mris_thickness_outputs,
       mris_thickness_params,
 };

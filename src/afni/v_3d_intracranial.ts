@@ -213,14 +213,16 @@ function v_3d_intracranial_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dIntracranialOutputs`).
  */
 function v_3d_intracranial_execute(
     params: V3dIntracranialParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dIntracranialOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_INTRACRANIAL_METADATA);
     params = execution.params(params)
     const cargs = v_3d_intracranial_cargs(params, execution)
     const ret = v_3d_intracranial_outputs(params, execution)
@@ -261,10 +263,8 @@ function v_3d_intracranial(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dIntracranialOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_INTRACRANIAL_METADATA);
     const params = v_3d_intracranial_params(infile, prefix, min_val, max_val, min_conn, max_conn, no_smooth, mask, quiet)
-    return v_3d_intracranial_execute(params, execution);
+    return v_3d_intracranial_execute(params, runner);
 }
 
 
@@ -273,8 +273,6 @@ export {
       V3dIntracranialParameters,
       V_3D_INTRACRANIAL_METADATA,
       v_3d_intracranial,
-      v_3d_intracranial_cargs,
       v_3d_intracranial_execute,
-      v_3d_intracranial_outputs,
       v_3d_intracranial_params,
 };

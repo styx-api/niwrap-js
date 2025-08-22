@@ -234,14 +234,16 @@ function examine_xmat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ExamineXmatOutputs`).
  */
 function examine_xmat_execute(
     params: ExamineXmatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ExamineXmatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EXAMINE_XMAT_METADATA);
     params = execution.params(params)
     const cargs = examine_xmat_cargs(params, execution)
     const ret = examine_xmat_outputs(params, execution)
@@ -280,10 +282,8 @@ function examine_xmat(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): ExamineXmatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EXAMINE_XMAT_METADATA);
     const params = examine_xmat_params(input_file, interactive, prefix, cprefix, pprefix, select, msg_trace, verbosity)
-    return examine_xmat_execute(params, execution);
+    return examine_xmat_execute(params, runner);
 }
 
 
@@ -292,8 +292,6 @@ export {
       ExamineXmatOutputs,
       ExamineXmatParameters,
       examine_xmat,
-      examine_xmat_cargs,
       examine_xmat_execute,
-      examine_xmat_outputs,
       examine_xmat_params,
 };

@@ -170,14 +170,16 @@ function multiply_images_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MultiplyImagesOutputs`).
  */
 function multiply_images_execute(
     params: MultiplyImagesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MultiplyImagesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MULTIPLY_IMAGES_METADATA);
     params = execution.params(params)
     const cargs = multiply_images_cargs(params, execution)
     const ret = multiply_images_outputs(params, execution)
@@ -212,10 +214,8 @@ function multiply_images(
     num_threads: number | null = 1,
     runner: Runner | null = null,
 ): MultiplyImagesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MULTIPLY_IMAGES_METADATA);
     const params = multiply_images_params(dimension, first_input, output_product_image, second_input, second_input_2, num_threads)
-    return multiply_images_execute(params, execution);
+    return multiply_images_execute(params, runner);
 }
 
 
@@ -224,8 +224,6 @@ export {
       MultiplyImagesOutputs,
       MultiplyImagesParameters,
       multiply_images,
-      multiply_images_cargs,
       multiply_images_execute,
-      multiply_images_outputs,
       multiply_images_params,
 };

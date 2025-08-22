@@ -291,14 +291,16 @@ function surface_resample_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceResampleOutputs`).
  */
 function surface_resample_execute(
     params: SurfaceResampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceResampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_RESAMPLE_METADATA);
     params = execution.params(params)
     const cargs = surface_resample_cargs(params, execution)
     const ret = surface_resample_outputs(params, execution)
@@ -351,10 +353,8 @@ function surface_resample(
     opt_bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
 ): SurfaceResampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_RESAMPLE_METADATA);
     const params = surface_resample_params(surface_in, current_sphere, new_sphere, method, surface_out, area_surfs, area_metrics, opt_bypass_sphere_check)
-    return surface_resample_execute(params, execution);
+    return surface_resample_execute(params, runner);
 }
 
 
@@ -365,12 +365,8 @@ export {
       SurfaceResampleOutputs,
       SurfaceResampleParameters,
       surface_resample,
-      surface_resample_area_metrics_cargs,
       surface_resample_area_metrics_params,
-      surface_resample_area_surfs_cargs,
       surface_resample_area_surfs_params,
-      surface_resample_cargs,
       surface_resample_execute,
-      surface_resample_outputs,
       surface_resample_params,
 };

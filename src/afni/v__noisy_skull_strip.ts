@@ -170,14 +170,16 @@ function v__noisy_skull_strip_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VNoisySkullStripOutputs`).
  */
 function v__noisy_skull_strip_execute(
     params: VNoisySkullStripParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VNoisySkullStripOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__NOISY_SKULL_STRIP_METADATA);
     params = execution.params(params)
     const cargs = v__noisy_skull_strip_cargs(params, execution)
     const ret = v__noisy_skull_strip_outputs(params, execution)
@@ -206,10 +208,8 @@ function v__noisy_skull_strip(
     v_3dskullstrip_opts: string | null = null,
     runner: Runner | null = null,
 ): VNoisySkullStripOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__NOISY_SKULL_STRIP_METADATA);
     const params = v__noisy_skull_strip_params(input_file, keep_tmp, v_3dskullstrip_opts)
-    return v__noisy_skull_strip_execute(params, execution);
+    return v__noisy_skull_strip_execute(params, runner);
 }
 
 
@@ -218,8 +218,6 @@ export {
       VNoisySkullStripParameters,
       V__NOISY_SKULL_STRIP_METADATA,
       v__noisy_skull_strip,
-      v__noisy_skull_strip_cargs,
       v__noisy_skull_strip_execute,
-      v__noisy_skull_strip_outputs,
       v__noisy_skull_strip_params,
 };

@@ -261,14 +261,16 @@ function fixelcrop_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FixelcropOutputs`).
  */
 function fixelcrop_execute(
     params: FixelcropParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FixelcropOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIXELCROP_METADATA);
     params = execution.params(params)
     const cargs = fixelcrop_cargs(params, execution)
     const ret = fixelcrop_outputs(params, execution)
@@ -319,10 +321,8 @@ function fixelcrop(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelcropOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIXELCROP_METADATA);
     const params = fixelcrop_params(input_fixel_directory, input_fixel_mask, output_fixel_directory, info, quiet, debug, force, nthreads, config, help, version)
-    return fixelcrop_execute(params, execution);
+    return fixelcrop_execute(params, runner);
 }
 
 
@@ -332,10 +332,7 @@ export {
       FixelcropOutputs,
       FixelcropParameters,
       fixelcrop,
-      fixelcrop_cargs,
-      fixelcrop_config_cargs,
       fixelcrop_config_params,
       fixelcrop_execute,
-      fixelcrop_outputs,
       fixelcrop_params,
 };

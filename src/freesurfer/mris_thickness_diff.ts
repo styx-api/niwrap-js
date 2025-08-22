@@ -270,14 +270,16 @@ function mris_thickness_diff_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisThicknessDiffOutputs`).
  */
 function mris_thickness_diff_execute(
     params: MrisThicknessDiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisThicknessDiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_THICKNESS_DIFF_METADATA);
     params = execution.params(params)
     const cargs = mris_thickness_diff_cargs(params, execution)
     const ret = mris_thickness_diff_outputs(params, execution)
@@ -326,10 +328,8 @@ function mris_thickness_diff(
     subject_name: string | null = null,
     runner: Runner | null = null,
 ): MrisThicknessDiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_THICKNESS_DIFF_METADATA);
     const params = mris_thickness_diff_params(out_file, src_type, trg_type, out_resampled, nsmooth, register, xform, invert, src_volume, dst_volume, abs, log_file, subject_name)
-    return mris_thickness_diff_execute(params, execution);
+    return mris_thickness_diff_execute(params, runner);
 }
 
 
@@ -338,8 +338,6 @@ export {
       MrisThicknessDiffOutputs,
       MrisThicknessDiffParameters,
       mris_thickness_diff,
-      mris_thickness_diff_cargs,
       mris_thickness_diff_execute,
-      mris_thickness_diff_outputs,
       mris_thickness_diff_params,
 };

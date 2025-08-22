@@ -412,14 +412,16 @@ function fugue_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FugueOutputs`).
  */
 function fugue_execute(
     params: FugueParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FugueOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FUGUE_METADATA);
     params = execution.params(params)
     const cargs = fugue_cargs(params, execution)
     const ret = fugue_outputs(params, execution)
@@ -508,10 +510,8 @@ function fugue(
     warped_file: string | null = null,
     runner: Runner | null = null,
 ): FugueOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FUGUE_METADATA);
     const params = fugue_params(asym_se_time, despike_2dfilter, despike_threshold, dwell_time, dwell_to_asym_ratio, fmap_in_file, fmap_out_file, forward_warping, fourier_order, icorr, icorr_only, in_file, mask_file, median_2dfilter, no_extend, no_gap_fill, nokspace, output_type, pava, phase_conjugate, phasemap_in_file, poly_order, save_fmap, save_shift, save_unmasked_fmap, save_unmasked_shift, shift_in_file, shift_out_file, smooth2d, smooth3d, unwarp_direction, unwarped_file, warped_file)
-    return fugue_execute(params, execution);
+    return fugue_execute(params, runner);
 }
 
 
@@ -520,8 +520,6 @@ export {
       FugueOutputs,
       FugueParameters,
       fugue,
-      fugue_cargs,
       fugue_execute,
-      fugue_outputs,
       fugue_params,
 };

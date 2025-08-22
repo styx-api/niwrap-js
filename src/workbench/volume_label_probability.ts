@@ -148,14 +148,16 @@ function volume_label_probability_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelProbabilityOutputs`).
  */
 function volume_label_probability_execute(
     params: VolumeLabelProbabilityParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeLabelProbabilityOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_LABEL_PROBABILITY_METADATA);
     params = execution.params(params)
     const cargs = volume_label_probability_cargs(params, execution)
     const ret = volume_label_probability_outputs(params, execution)
@@ -186,10 +188,8 @@ function volume_label_probability(
     opt_exclude_unlabeled: boolean = false,
     runner: Runner | null = null,
 ): VolumeLabelProbabilityOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_LABEL_PROBABILITY_METADATA);
     const params = volume_label_probability_params(label_maps, probability_out, opt_exclude_unlabeled)
-    return volume_label_probability_execute(params, execution);
+    return volume_label_probability_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       VolumeLabelProbabilityOutputs,
       VolumeLabelProbabilityParameters,
       volume_label_probability,
-      volume_label_probability_cargs,
       volume_label_probability_execute,
-      volume_label_probability_outputs,
       volume_label_probability_params,
 };

@@ -238,14 +238,16 @@ function gen_epi_review_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GenEpiReviewPyOutputs`).
  */
 function gen_epi_review_py_execute(
     params: GenEpiReviewPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GenEpiReviewPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GEN_EPI_REVIEW_PY_METADATA);
     params = execution.params(params)
     const cargs = gen_epi_review_py_cargs(params, execution)
     const ret = gen_epi_review_py_outputs(params, execution)
@@ -288,10 +290,8 @@ function gen_epi_review_py(
     graph_yoffset: number | null = null,
     runner: Runner | null = null,
 ): GenEpiReviewPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GEN_EPI_REVIEW_PY_METADATA);
     const params = gen_epi_review_py_params(datasets, script_name, windows, verbosity, image_size, image_xoffset, image_yoffset, graph_size, graph_xoffset, graph_yoffset)
-    return gen_epi_review_py_execute(params, execution);
+    return gen_epi_review_py_execute(params, runner);
 }
 
 
@@ -300,8 +300,6 @@ export {
       GenEpiReviewPyOutputs,
       GenEpiReviewPyParameters,
       gen_epi_review_py,
-      gen_epi_review_py_cargs,
       gen_epi_review_py_execute,
-      gen_epi_review_py_outputs,
       gen_epi_review_py_params,
 };

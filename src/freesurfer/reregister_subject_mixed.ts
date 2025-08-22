@@ -157,14 +157,16 @@ function reregister_subject_mixed_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ReregisterSubjectMixedOutputs`).
  */
 function reregister_subject_mixed_execute(
     params: ReregisterSubjectMixedParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ReregisterSubjectMixedOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REREGISTER_SUBJECT_MIXED_METADATA);
     params = execution.params(params)
     const cargs = reregister_subject_mixed_cargs(params, execution)
     const ret = reregister_subject_mixed_outputs(params, execution)
@@ -193,10 +195,8 @@ function reregister_subject_mixed(
     threads: number | null = 1,
     runner: Runner | null = null,
 ): ReregisterSubjectMixedOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REREGISTER_SUBJECT_MIXED_METADATA);
     const params = reregister_subject_mixed_params(input_volume, output_directory, threads)
-    return reregister_subject_mixed_execute(params, execution);
+    return reregister_subject_mixed_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       ReregisterSubjectMixedOutputs,
       ReregisterSubjectMixedParameters,
       reregister_subject_mixed,
-      reregister_subject_mixed_cargs,
       reregister_subject_mixed_execute,
-      reregister_subject_mixed_outputs,
       reregister_subject_mixed_params,
 };

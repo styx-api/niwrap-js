@@ -515,14 +515,16 @@ function mri_ca_register_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCaRegisterOutputs`).
  */
 function mri_ca_register_execute(
     params: MriCaRegisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCaRegisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CA_REGISTER_METADATA);
     params = execution.params(params)
     const cargs = mri_ca_register_cargs(params, execution)
     const ret = mri_ca_register_outputs(params, execution)
@@ -623,10 +625,8 @@ function mri_ca_register(
     threads: number | null = null,
     runner: Runner | null = null,
 ): MriCaRegisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CA_REGISTER_METADATA);
     const params = mri_ca_register_params(input_volume, template, output_volume, tolerance, mask, transform_lta, level, read_intensity, align, invert_save_file, distance, regularize, regularize_mean, scale_smoothness, nobright, renormalize_map, renormalize, read_lta, smoothness, samples, nsmall, fixed, optimal, noneg, wm, min_avgs, transform_limit, relabel, relabel_avgs, reset_avgs, vf_file, diag_file, tr, te, example, bigventricles, uncompress, second_pass_renorm, threads)
-    return mri_ca_register_execute(params, execution);
+    return mri_ca_register_execute(params, runner);
 }
 
 
@@ -635,8 +635,6 @@ export {
       MriCaRegisterOutputs,
       MriCaRegisterParameters,
       mri_ca_register,
-      mri_ca_register_cargs,
       mri_ca_register_execute,
-      mri_ca_register_outputs,
       mri_ca_register_params,
 };

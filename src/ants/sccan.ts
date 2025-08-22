@@ -446,14 +446,16 @@ function sccan_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SccanOutputs`).
  */
 function sccan_execute(
     params: SccanParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SccanOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SCCAN_METADATA);
     params = execution.params(params)
     const cargs = sccan_cargs(params, execution)
     const ret = sccan_outputs(params, execution)
@@ -530,10 +532,8 @@ function sccan(
     svd: string | null = null,
     runner: Runner | null = null,
 ): SccanOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SCCAN_METADATA);
     const params = sccan_params(output, n_permutations, smoother, row_sparseness, iterations, n_eigenvectors, robustify, covering, uselong, l1, pclusterthresh, qclusterthresh, ridge_cca, initialization, initialization2, mask, mask2, partial_scca_option, prior_weight, get_small, verbose, imageset_to_matrix, timeseriesimage_to_matrix, vector_to_image, imageset_to_projections, scca, svd)
-    return sccan_execute(params, execution);
+    return sccan_execute(params, runner);
 }
 
 
@@ -542,8 +542,6 @@ export {
       SccanOutputs,
       SccanParameters,
       sccan,
-      sccan_cargs,
       sccan_execute,
-      sccan_outputs,
       sccan_params,
 };

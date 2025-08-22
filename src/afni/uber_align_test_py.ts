@@ -207,14 +207,16 @@ function uber_align_test_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `UberAlignTestPyOutputs`).
  */
 function uber_align_test_py_execute(
     params: UberAlignTestPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): UberAlignTestPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(UBER_ALIGN_TEST_PY_METADATA);
     params = execution.params(params)
     const cargs = uber_align_test_py_cargs(params, execution)
     const ret = uber_align_test_py_outputs(params, execution)
@@ -257,10 +259,8 @@ function uber_align_test_py(
     version: boolean = false,
     runner: Runner | null = null,
 ): UberAlignTestPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UBER_ALIGN_TEST_PY_METADATA);
     const params = uber_align_test_py_params(no_gui, print_script, save_script, user_variable, qt_opts, help, help_gui, history, show_valid_opts, version)
-    return uber_align_test_py_execute(params, execution);
+    return uber_align_test_py_execute(params, runner);
 }
 
 
@@ -269,8 +269,6 @@ export {
       UberAlignTestPyOutputs,
       UberAlignTestPyParameters,
       uber_align_test_py,
-      uber_align_test_py_cargs,
       uber_align_test_py_execute,
-      uber_align_test_py_outputs,
       uber_align_test_py_params,
 };

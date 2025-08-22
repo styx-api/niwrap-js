@@ -736,14 +736,16 @@ function mri_gtmpvc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriGtmpvcOutputs`).
  */
 function mri_gtmpvc_execute(
     params: MriGtmpvcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriGtmpvcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_GTMPVC_METADATA);
     params = execution.params(params)
     const cargs = mri_gtmpvc_cargs(params, execution)
     const ret = mri_gtmpvc_outputs(params, execution)
@@ -890,10 +892,8 @@ function mri_gtmpvc(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriGtmpvcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_GTMPVC_METADATA);
     const params = mri_gtmpvc_params(input_volume, psf, segmentation, output_directory, frame, registration, regheader, reg_identity, mask, auto_mask, no_reduce_fov, reduce_fov_eqodd, contrast_matrix, default_seg_merge, merge_hypos, merge_cblum_wm_gyri, tt_reduce, replace_seg, replace_file, rescale, no_rescale, scale_refval, ctab, ctab_default, tt_update, lateralization, no_tfe, no_pvc, segpvfres, rbv, rbv_res, mueller_pvc, mg_ref_cerebral_wm, mg_ref_lobes_wm, glm_mg_pvc, km_ref, km_hb, steady_state, save_x, save_y, save_beta, save_x0, save_input, save_eres, save_yhat, save_yhat_noise, save_yhat_full_fov, save_yhat0, synth, synth_only, synth_save, save_text, threads, max_threads, max_threads_minus_one, subjects_dir, vg_thresh, gdiag, debug, checkopts, help, version)
-    return mri_gtmpvc_execute(params, execution);
+    return mri_gtmpvc_execute(params, runner);
 }
 
 
@@ -902,8 +902,6 @@ export {
       MriGtmpvcOutputs,
       MriGtmpvcParameters,
       mri_gtmpvc,
-      mri_gtmpvc_cargs,
       mri_gtmpvc_execute,
-      mri_gtmpvc_outputs,
       mri_gtmpvc_params,
 };

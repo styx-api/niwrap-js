@@ -268,14 +268,16 @@ function v_5tt2gmwmi_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V5tt2gmwmiOutputs`).
  */
 function v_5tt2gmwmi_execute(
     params: V5tt2gmwmiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V5tt2gmwmiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_5TT2GMWMI_METADATA);
     params = execution.params(params)
     const cargs = v_5tt2gmwmi_cargs(params, execution)
     const ret = v_5tt2gmwmi_outputs(params, execution)
@@ -326,10 +328,8 @@ function v_5tt2gmwmi(
     version: boolean = false,
     runner: Runner | null = null,
 ): V5tt2gmwmiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_5TT2GMWMI_METADATA);
     const params = v_5tt2gmwmi_params(v_5tt_in, mask_out, mask_in, info, quiet, debug, force, nthreads, config, help, version)
-    return v_5tt2gmwmi_execute(params, execution);
+    return v_5tt2gmwmi_execute(params, runner);
 }
 
 
@@ -339,10 +339,7 @@ export {
       V5tt2gmwmiParameters,
       V_5TT2GMWMI_METADATA,
       v_5tt2gmwmi,
-      v_5tt2gmwmi_cargs,
-      v_5tt2gmwmi_config_cargs,
       v_5tt2gmwmi_config_params,
       v_5tt2gmwmi_execute,
-      v_5tt2gmwmi_outputs,
       v_5tt2gmwmi_params,
 };

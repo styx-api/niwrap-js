@@ -145,14 +145,16 @@ function orient_las_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `OrientLasOutputs`).
  */
 function orient_las_execute(
     params: OrientLasParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): OrientLasOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ORIENT_LAS_METADATA);
     params = execution.params(params)
     const cargs = orient_las_cargs(params, execution)
     const ret = orient_las_outputs(params, execution)
@@ -181,10 +183,8 @@ function orient_las(
     check: boolean = false,
     runner: Runner | null = null,
 ): OrientLasOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ORIENT_LAS_METADATA);
     const params = orient_las_params(input_image, output_image, check)
-    return orient_las_execute(params, execution);
+    return orient_las_execute(params, runner);
 }
 
 
@@ -193,8 +193,6 @@ export {
       OrientLasOutputs,
       OrientLasParameters,
       orient_las,
-      orient_las_cargs,
       orient_las_execute,
-      orient_las_outputs,
       orient_las_params,
 };

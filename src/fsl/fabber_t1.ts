@@ -447,14 +447,16 @@ function fabber_t1_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FabberT1Outputs`).
  */
 function fabber_t1_execute(
     params: FabberT1Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FabberT1Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FABBER_T1_METADATA);
     params = execution.params(params)
     const cargs = fabber_t1_cargs(params, execution)
     const ret = fabber_t1_outputs(params, execution)
@@ -537,10 +539,8 @@ function fabber_t1(
     debug: boolean = false,
     runner: Runner | null = null,
 ): FabberT1Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FABBER_T1_METADATA);
     const params = fabber_t1_params(output, method, model, data, data_mult, data_order, mask, masked_time_points, supp_data, overwrite, link_to_latest, simple_output, load_models, evaluate, evaluate_params, evaluate_nt, dump_param_names, save_model_fit, save_residuals, save_model_extras, save_mvn, save_mean, save_std, save_var, save_zstat, save_noise_mean, save_noise_std, save_free_energy, optfile, debug)
-    return fabber_t1_execute(params, execution);
+    return fabber_t1_execute(params, runner);
 }
 
 
@@ -549,8 +549,6 @@ export {
       FabberT1Outputs,
       FabberT1Parameters,
       fabber_t1,
-      fabber_t1_cargs,
       fabber_t1_execute,
-      fabber_t1_outputs,
       fabber_t1_params,
 };

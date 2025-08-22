@@ -336,14 +336,16 @@ function v_3dmaskdump_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dmaskdumpOutputs`).
  */
 function v_3dmaskdump_execute(
     params: V3dmaskdumpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dmaskdumpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DMASKDUMP_METADATA);
     params = execution.params(params)
     const cargs = v_3dmaskdump_cargs(params, execution)
     const ret = v_3dmaskdump_outputs(params, execution)
@@ -406,10 +408,8 @@ function v_3dmaskdump(
     quiet_mode: boolean = false,
     runner: Runner | null = null,
 ): V3dmaskdumpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DMASKDUMP_METADATA);
     const params = v_3dmaskdump_params(input_files, mask_dataset, mask_range, output_index, output_noijk, output_xyz, output_filename, calc_mask_opts, xbox_coords, dbox_coords, nbox_coords, ibox_coords, xball_coords, dball_coords, nball_coords, nozero_output, random_voxels, random_seed, output_niml, quiet_mode)
-    return v_3dmaskdump_execute(params, execution);
+    return v_3dmaskdump_execute(params, runner);
 }
 
 
@@ -418,8 +418,6 @@ export {
       V3dmaskdumpParameters,
       V_3DMASKDUMP_METADATA,
       v_3dmaskdump,
-      v_3dmaskdump_cargs,
       v_3dmaskdump_execute,
-      v_3dmaskdump_outputs,
       v_3dmaskdump_params,
 };

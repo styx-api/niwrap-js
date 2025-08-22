@@ -130,14 +130,16 @@ function morph_rgb_rh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MorphRgbRhOutputs`).
  */
 function morph_rgb_rh_execute(
     params: MorphRgbRhParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MorphRgbRhOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MORPH_RGB_RH_METADATA);
     params = execution.params(params)
     const cargs = morph_rgb_rh_cargs(params, execution)
     const ret = morph_rgb_rh_outputs(params, execution)
@@ -162,10 +164,8 @@ function morph_rgb_rh(
     subject_id: string,
     runner: Runner | null = null,
 ): MorphRgbRhOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MORPH_RGB_RH_METADATA);
     const params = morph_rgb_rh_params(subject_id)
-    return morph_rgb_rh_execute(params, execution);
+    return morph_rgb_rh_execute(params, runner);
 }
 
 
@@ -174,8 +174,6 @@ export {
       MorphRgbRhOutputs,
       MorphRgbRhParameters,
       morph_rgb_rh,
-      morph_rgb_rh_cargs,
       morph_rgb_rh_execute,
-      morph_rgb_rh_outputs,
       morph_rgb_rh_params,
 };

@@ -306,14 +306,16 @@ function v_3d_extrema_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dExtremaOutputs`).
  */
 function v_3d_extrema_execute(
     params: V3dExtremaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dExtremaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_EXTREMA_METADATA);
     params = execution.params(params)
     const cargs = v_3d_extrema_cargs(params, execution)
     const ret = v_3d_extrema_outputs(params, execution)
@@ -376,10 +378,8 @@ function v_3d_extrema(
     weight: boolean = false,
     runner: Runner | null = null,
 ): V3dExtremaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_EXTREMA_METADATA);
     const params = v_3d_extrema_params(input_dataset, output_prefix, output_session, quiet, mask_file, mask_threshold, data_threshold, n_best, separation_distance, minima, maxima, strict, partial, interior, closure, slice, volume, remove, average, weight)
-    return v_3d_extrema_execute(params, execution);
+    return v_3d_extrema_execute(params, runner);
 }
 
 
@@ -388,8 +388,6 @@ export {
       V3dExtremaParameters,
       V_3D_EXTREMA_METADATA,
       v_3d_extrema,
-      v_3d_extrema_cargs,
       v_3d_extrema_execute,
-      v_3d_extrema_outputs,
       v_3d_extrema_params,
 };

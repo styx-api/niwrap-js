@@ -341,14 +341,16 @@ function v_3d_tfitter_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTfitterOutputs`).
  */
 function v_3d_tfitter_execute(
     params: V3dTfitterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTfitterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TFITTER_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tfitter_cargs(params, execution)
     const ret = v_3d_tfitter_outputs(params, execution)
@@ -413,10 +415,8 @@ function v_3d_tfitter(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dTfitterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TFITTER_METADATA);
     const params = v_3d_tfitter_params(rhs, lhs, polort, vthr, faltung, lsqfit, l1fit, l2lasso, lasso_centro_block, l2sqrtlasso, consign, cons_fal, prefix, label, fitts, errsum, mask, quiet)
-    return v_3d_tfitter_execute(params, execution);
+    return v_3d_tfitter_execute(params, runner);
 }
 
 
@@ -425,8 +425,6 @@ export {
       V3dTfitterParameters,
       V_3D_TFITTER_METADATA,
       v_3d_tfitter,
-      v_3d_tfitter_cargs,
       v_3d_tfitter_execute,
-      v_3d_tfitter_outputs,
       v_3d_tfitter_params,
 };

@@ -259,14 +259,16 @@ function v_3d_tsmooth_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTsmoothOutputs`).
  */
 function v_3d_tsmooth_execute(
     params: V3dTsmoothParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTsmoothOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TSMOOTH_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tsmooth_cargs(params, execution)
     const ret = v_3d_tsmooth_outputs(params, execution)
@@ -317,10 +319,8 @@ function v_3d_tsmooth(
     adaptive: number | null = null,
     runner: Runner | null = null,
 ): V3dTsmoothOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TSMOOTH_METADATA);
     const params = v_3d_tsmooth_params(input_dataset, prefix, datum_type, lin_filter, med_filter, osf_filter, lin_filter_custom, hamming, blackman, custom_filter, extend, zero, trend, adaptive)
-    return v_3d_tsmooth_execute(params, execution);
+    return v_3d_tsmooth_execute(params, runner);
 }
 
 
@@ -329,8 +329,6 @@ export {
       V3dTsmoothParameters,
       V_3D_TSMOOTH_METADATA,
       v_3d_tsmooth,
-      v_3d_tsmooth_cargs,
       v_3d_tsmooth_execute,
-      v_3d_tsmooth_outputs,
       v_3d_tsmooth_params,
 };

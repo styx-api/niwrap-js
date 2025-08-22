@@ -223,14 +223,16 @@ function tbss_skeleton_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TbssSkeletonOutputs`).
  */
 function tbss_skeleton_execute(
     params: TbssSkeletonParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TbssSkeletonOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TBSS_SKELETON_METADATA);
     params = execution.params(params)
     const cargs = tbss_skeleton_cargs(params, execution)
     const ret = tbss_skeleton_outputs(params, execution)
@@ -267,10 +269,8 @@ function tbss_skeleton(
     debug2_flag: InputPathType | null = null,
     runner: Runner | null = null,
 ): TbssSkeletonOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TBSS_SKELETON_METADATA);
     const params = tbss_skeleton_params(input_image, output_image, skeleton_params, alt_4d, alt_skeleton, debug_flag, debug2_flag)
-    return tbss_skeleton_execute(params, execution);
+    return tbss_skeleton_execute(params, runner);
 }
 
 
@@ -279,8 +279,6 @@ export {
       TbssSkeletonOutputs,
       TbssSkeletonParameters,
       tbss_skeleton,
-      tbss_skeleton_cargs,
       tbss_skeleton_execute,
-      tbss_skeleton_outputs,
       tbss_skeleton_params,
 };

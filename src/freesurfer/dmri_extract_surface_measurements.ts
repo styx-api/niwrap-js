@@ -246,14 +246,16 @@ function dmri_extract_surface_measurements_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriExtractSurfaceMeasurementsOutputs`).
  */
 function dmri_extract_surface_measurements_execute(
     params: DmriExtractSurfaceMeasurementsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriExtractSurfaceMeasurementsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_EXTRACT_SURFACE_MEASUREMENTS_METADATA);
     params = execution.params(params)
     const cargs = dmri_extract_surface_measurements_cargs(params, execution)
     const ret = dmri_extract_surface_measurements_outputs(params, execution)
@@ -302,10 +304,8 @@ function dmri_extract_surface_measurements(
     fa_options: Array<string> | null = null,
     runner: Runner | null = null,
 ): DmriExtractSurfaceMeasurementsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_EXTRACT_SURFACE_MEASUREMENTS_METADATA);
     const params = dmri_extract_surface_measurements_params(streamline_file, lh_surface_file, lh_thickness_overlay, lh_curvature_overlay, rh_surface_file, rh_thickness_overlay, rh_curvature_overlay, output_directory, reference_image, reference_image_anatomical, transformation, annotation_file, fa_options)
-    return dmri_extract_surface_measurements_execute(params, execution);
+    return dmri_extract_surface_measurements_execute(params, runner);
 }
 
 
@@ -314,8 +314,6 @@ export {
       DmriExtractSurfaceMeasurementsOutputs,
       DmriExtractSurfaceMeasurementsParameters,
       dmri_extract_surface_measurements,
-      dmri_extract_surface_measurements_cargs,
       dmri_extract_surface_measurements_execute,
-      dmri_extract_surface_measurements_outputs,
       dmri_extract_surface_measurements_params,
 };

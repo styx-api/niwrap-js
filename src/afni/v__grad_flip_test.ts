@@ -287,14 +287,16 @@ function v__grad_flip_test_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VGradFlipTestOutputs`).
  */
 function v__grad_flip_test_execute(
     params: VGradFlipTestParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VGradFlipTestOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__GRAD_FLIP_TEST_METADATA);
     params = execution.params(params)
     const cargs = v__grad_flip_test_cargs(params, execution)
     const ret = v__grad_flip_test_outputs(params, execution)
@@ -345,10 +347,8 @@ function v__grad_flip_test(
     do_clean: boolean = false,
     runner: Runner | null = null,
 ): VGradFlipTestOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__GRAD_FLIP_TEST_METADATA);
     const params = v__grad_flip_test_params(dwi, grad_row_vec, grad_col_vec, grad_col_mat_a, grad_col_mat_t, mask, bvals, thresh_fa, thresh_len, prefix, check_abs_min, scale_out_1000, wdir, do_clean)
-    return v__grad_flip_test_execute(params, execution);
+    return v__grad_flip_test_execute(params, runner);
 }
 
 
@@ -357,8 +357,6 @@ export {
       VGradFlipTestParameters,
       V__GRAD_FLIP_TEST_METADATA,
       v__grad_flip_test,
-      v__grad_flip_test_cargs,
       v__grad_flip_test_execute,
-      v__grad_flip_test_outputs,
       v__grad_flip_test_params,
 };

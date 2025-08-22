@@ -242,14 +242,16 @@ function responsemean_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ResponsemeanOutputs`).
  */
 function responsemean_execute(
     params: ResponsemeanParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ResponsemeanOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RESPONSEMEAN_METADATA);
     params = execution.params(params)
     const cargs = responsemean_cargs(params, execution)
     const ret = responsemean_outputs(params, execution)
@@ -300,10 +302,8 @@ function responsemean(
     version: boolean = false,
     runner: Runner | null = null,
 ): ResponsemeanOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RESPONSEMEAN_METADATA);
     const params = responsemean_params(input_response, output_response, legacy, nocleanup, scratch_dir, continue_scratch_dir, info, quiet, debug, force, nthreads, config, help, version)
-    return responsemean_execute(params, execution);
+    return responsemean_execute(params, runner);
 }
 
 
@@ -312,8 +312,6 @@ export {
       ResponsemeanOutputs,
       ResponsemeanParameters,
       responsemean,
-      responsemean_cargs,
       responsemean_execute,
-      responsemean_outputs,
       responsemean_params,
 };

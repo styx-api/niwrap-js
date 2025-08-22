@@ -138,14 +138,16 @@ function fs_spmreg_glnxa64_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsSpmregGlnxa64Outputs`).
  */
 function fs_spmreg_glnxa64_execute(
     params: FsSpmregGlnxa64Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsSpmregGlnxa64Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FS_SPMREG_GLNXA64_METADATA);
     params = execution.params(params)
     const cargs = fs_spmreg_glnxa64_cargs(params, execution)
     const ret = fs_spmreg_glnxa64_outputs(params, execution)
@@ -172,10 +174,8 @@ function fs_spmreg_glnxa64(
     output_matrix: string = "output.mat",
     runner: Runner | null = null,
 ): FsSpmregGlnxa64Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FS_SPMREG_GLNXA64_METADATA);
     const params = fs_spmreg_glnxa64_params(input_volume, output_matrix)
-    return fs_spmreg_glnxa64_execute(params, execution);
+    return fs_spmreg_glnxa64_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       FsSpmregGlnxa64Outputs,
       FsSpmregGlnxa64Parameters,
       fs_spmreg_glnxa64,
-      fs_spmreg_glnxa64_cargs,
       fs_spmreg_glnxa64_execute,
-      fs_spmreg_glnxa64_outputs,
       fs_spmreg_glnxa64_params,
 };

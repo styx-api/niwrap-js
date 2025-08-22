@@ -405,14 +405,16 @@ function mkheadsurf_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MkheadsurfOutputs`).
  */
 function mkheadsurf_execute(
     params: MkheadsurfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MkheadsurfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MKHEADSURF_METADATA);
     params = execution.params(params)
     const cargs = mkheadsurf_cargs(params, execution)
     const ret = mkheadsurf_outputs(params, execution)
@@ -489,10 +491,8 @@ function mkheadsurf(
     logfile: string | null = null,
     runner: Runner | null = null,
 ): MkheadsurfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MKHEADSURF_METADATA);
     const params = mkheadsurf_params(input_vol, output_vol, output_surf, subject_id, nsmooth, noseghead, thresh1, thresh2, nhitsmin, ndilate, nerode, fillval, fhi, no_rescale, no_fill_holes_islands, or_mask, tessellation_method, inflate, curv, srcvol, headvol, headsurf, smheadsurf, hemi, subjects_dir, umask, logfile)
-    return mkheadsurf_execute(params, execution);
+    return mkheadsurf_execute(params, runner);
 }
 
 
@@ -501,8 +501,6 @@ export {
       MkheadsurfOutputs,
       MkheadsurfParameters,
       mkheadsurf,
-      mkheadsurf_cargs,
       mkheadsurf_execute,
-      mkheadsurf_outputs,
       mkheadsurf_params,
 };

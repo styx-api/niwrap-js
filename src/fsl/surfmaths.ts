@@ -147,14 +147,16 @@ function surfmaths_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfmathsOutputs`).
  */
 function surfmaths_execute(
     params: SurfmathsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfmathsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFMATHS_METADATA);
     params = execution.params(params)
     const cargs = surfmaths_cargs(params, execution)
     const ret = surfmaths_outputs(params, execution)
@@ -183,10 +185,8 @@ function surfmaths(
     operations_inputs: Array<string> | null = null,
     runner: Runner | null = null,
 ): SurfmathsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFMATHS_METADATA);
     const params = surfmaths_params(first_input, output, operations_inputs)
-    return surfmaths_execute(params, execution);
+    return surfmaths_execute(params, runner);
 }
 
 
@@ -195,8 +195,6 @@ export {
       SurfmathsOutputs,
       SurfmathsParameters,
       surfmaths,
-      surfmaths_cargs,
       surfmaths_execute,
-      surfmaths_outputs,
       surfmaths_params,
 };

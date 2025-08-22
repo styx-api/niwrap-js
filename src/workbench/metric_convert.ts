@@ -333,14 +333,16 @@ function metric_convert_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricConvertOutputs`).
  */
 function metric_convert_execute(
     params: MetricConvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricConvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_CONVERT_METADATA);
     params = execution.params(params)
     const cargs = metric_convert_cargs(params, execution)
     const ret = metric_convert_outputs(params, execution)
@@ -369,10 +371,8 @@ function metric_convert(
     from_nifti: MetricConvertFromNiftiParameters | null = null,
     runner: Runner | null = null,
 ): MetricConvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_CONVERT_METADATA);
     const params = metric_convert_params(to_nifti, from_nifti)
-    return metric_convert_execute(params, execution);
+    return metric_convert_execute(params, runner);
 }
 
 
@@ -385,14 +385,8 @@ export {
       MetricConvertToNiftiOutputs,
       MetricConvertToNiftiParameters,
       metric_convert,
-      metric_convert_cargs,
       metric_convert_execute,
-      metric_convert_from_nifti_cargs,
-      metric_convert_from_nifti_outputs,
       metric_convert_from_nifti_params,
-      metric_convert_outputs,
       metric_convert_params,
-      metric_convert_to_nifti_cargs,
-      metric_convert_to_nifti_outputs,
       metric_convert_to_nifti_params,
 };

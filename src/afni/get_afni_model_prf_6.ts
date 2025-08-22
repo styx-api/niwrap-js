@@ -157,14 +157,16 @@ function get_afni_model_prf_6_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GetAfniModelPrf6Outputs`).
  */
 function get_afni_model_prf_6_execute(
     params: GetAfniModelPrf6Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GetAfniModelPrf6Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GET_AFNI_MODEL_PRF_6_METADATA);
     params = execution.params(params)
     const cargs = get_afni_model_prf_6_cargs(params, execution)
     const ret = get_afni_model_prf_6_outputs(params, execution)
@@ -201,10 +203,8 @@ function get_afni_model_prf_6(
     theta: number,
     runner: Runner | null = null,
 ): GetAfniModelPrf6Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GET_AFNI_MODEL_PRF_6_METADATA);
     const params = get_afni_model_prf_6_params(nt, amp, x, y, sigma, sigrat, theta)
-    return get_afni_model_prf_6_execute(params, execution);
+    return get_afni_model_prf_6_execute(params, runner);
 }
 
 
@@ -213,8 +213,6 @@ export {
       GetAfniModelPrf6Outputs,
       GetAfniModelPrf6Parameters,
       get_afni_model_prf_6,
-      get_afni_model_prf_6_cargs,
       get_afni_model_prf_6_execute,
-      get_afni_model_prf_6_outputs,
       get_afni_model_prf_6_params,
 };

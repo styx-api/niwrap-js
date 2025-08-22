@@ -220,14 +220,16 @@ function estimate_fiber_binghams_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `EstimateFiberBinghamsOutputs`).
  */
 function estimate_fiber_binghams_execute(
     params: EstimateFiberBinghamsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): EstimateFiberBinghamsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ESTIMATE_FIBER_BINGHAMS_METADATA);
     params = execution.params(params)
     const cargs = estimate_fiber_binghams_cargs(params, execution)
     const ret = estimate_fiber_binghams_outputs(params, execution)
@@ -308,10 +310,8 @@ function estimate_fiber_binghams(
     cifti_out: string,
     runner: Runner | null = null,
 ): EstimateFiberBinghamsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ESTIMATE_FIBER_BINGHAMS_METADATA);
     const params = estimate_fiber_binghams_params(merged_f1samples, merged_th1samples, merged_ph1samples, merged_f2samples, merged_th2samples, merged_ph2samples, merged_f3samples, merged_th3samples, merged_ph3samples, label_volume, cifti_out)
-    return estimate_fiber_binghams_execute(params, execution);
+    return estimate_fiber_binghams_execute(params, runner);
 }
 
 
@@ -320,8 +320,6 @@ export {
       EstimateFiberBinghamsOutputs,
       EstimateFiberBinghamsParameters,
       estimate_fiber_binghams,
-      estimate_fiber_binghams_cargs,
       estimate_fiber_binghams_execute,
-      estimate_fiber_binghams_outputs,
       estimate_fiber_binghams_params,
 };

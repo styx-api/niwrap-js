@@ -148,14 +148,16 @@ function cat_matvec_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CatMatvecOutputs`).
  */
 function cat_matvec_execute(
     params: CatMatvecParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CatMatvecOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CAT_MATVEC_METADATA);
     params = execution.params(params)
     const cargs = cat_matvec_cargs(params, execution)
     const ret = cat_matvec_outputs(params, execution)
@@ -186,10 +188,8 @@ function cat_matvec(
     four_by_four_format: boolean = false,
     runner: Runner | null = null,
 ): CatMatvecOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CAT_MATVEC_METADATA);
     const params = cat_matvec_params(matvec_spec, matrix_format, oneline_format, four_by_four_format)
-    return cat_matvec_execute(params, execution);
+    return cat_matvec_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       CatMatvecOutputs,
       CatMatvecParameters,
       cat_matvec,
-      cat_matvec_cargs,
       cat_matvec_execute,
-      cat_matvec_outputs,
       cat_matvec_params,
 };

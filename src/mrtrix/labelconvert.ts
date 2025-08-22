@@ -278,14 +278,16 @@ function labelconvert_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelconvertOutputs`).
  */
 function labelconvert_execute(
     params: LabelconvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelconvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABELCONVERT_METADATA);
     params = execution.params(params)
     const cargs = labelconvert_cargs(params, execution)
     const ret = labelconvert_outputs(params, execution)
@@ -340,10 +342,8 @@ function labelconvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): LabelconvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABELCONVERT_METADATA);
     const params = labelconvert_params(path_in, lut_in, lut_out, image_out, spine, info, quiet, debug, force, nthreads, config, help, version)
-    return labelconvert_execute(params, execution);
+    return labelconvert_execute(params, runner);
 }
 
 
@@ -353,10 +353,7 @@ export {
       LabelconvertOutputs,
       LabelconvertParameters,
       labelconvert,
-      labelconvert_cargs,
-      labelconvert_config_cargs,
       labelconvert_config_params,
       labelconvert_execute,
-      labelconvert_outputs,
       labelconvert_params,
 };

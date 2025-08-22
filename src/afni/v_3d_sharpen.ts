@@ -153,14 +153,16 @@ function v_3d_sharpen_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dSharpenOutputs`).
  */
 function v_3d_sharpen_execute(
     params: V3dSharpenParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dSharpenOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_SHARPEN_METADATA);
     params = execution.params(params)
     const cargs = v_3d_sharpen_cargs(params, execution)
     const ret = v_3d_sharpen_outputs(params, execution)
@@ -189,10 +191,8 @@ function v_3d_sharpen(
     sharpening_factor: number | null = null,
     runner: Runner | null = null,
 ): V3dSharpenOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_SHARPEN_METADATA);
     const params = v_3d_sharpen_params(input_dataset, output_prefix, sharpening_factor)
-    return v_3d_sharpen_execute(params, execution);
+    return v_3d_sharpen_execute(params, runner);
 }
 
 
@@ -201,8 +201,6 @@ export {
       V3dSharpenParameters,
       V_3D_SHARPEN_METADATA,
       v_3d_sharpen,
-      v_3d_sharpen_cargs,
       v_3d_sharpen_execute,
-      v_3d_sharpen_outputs,
       v_3d_sharpen_params,
 };

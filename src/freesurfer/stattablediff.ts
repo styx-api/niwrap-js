@@ -216,14 +216,16 @@ function stattablediff_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `StattablediffOutputs`).
  */
 function stattablediff_execute(
     params: StattablediffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): StattablediffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(STATTABLEDIFF_METADATA);
     params = execution.params(params)
     const cargs = stattablediff_cargs(params, execution)
     const ret = stattablediff_outputs(params, execution)
@@ -270,10 +272,8 @@ function stattablediff(
     noreplace53: boolean = false,
     runner: Runner | null = null,
 ): StattablediffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(STATTABLEDIFF_METADATA);
     const params = stattablediff_params(t1, t2, output, percent_diff, percent_diff_t1, percent_diff_t2, multiply, divide, common, remove_exvivo, diff_subjects, noreplace53)
-    return stattablediff_execute(params, execution);
+    return stattablediff_execute(params, runner);
 }
 
 
@@ -282,8 +282,6 @@ export {
       StattablediffOutputs,
       StattablediffParameters,
       stattablediff,
-      stattablediff_cargs,
       stattablediff_execute,
-      stattablediff_outputs,
       stattablediff_params,
 };

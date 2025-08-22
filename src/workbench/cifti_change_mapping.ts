@@ -341,14 +341,16 @@ function cifti_change_mapping_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiChangeMappingOutputs`).
  */
 function cifti_change_mapping_execute(
     params: CiftiChangeMappingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiChangeMappingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_CHANGE_MAPPING_METADATA);
     params = execution.params(params)
     const cargs = cifti_change_mapping_cargs(params, execution)
     const ret = cifti_change_mapping_outputs(params, execution)
@@ -392,10 +394,8 @@ function cifti_change_mapping(
     from_cifti: CiftiChangeMappingFromCiftiParameters | null = null,
     runner: Runner | null = null,
 ): CiftiChangeMappingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_CHANGE_MAPPING_METADATA);
     const params = cifti_change_mapping_params(data_cifti, direction, cifti_out, series, scalar, from_cifti)
-    return cifti_change_mapping_execute(params, execution);
+    return cifti_change_mapping_execute(params, runner);
 }
 
 
@@ -407,14 +407,9 @@ export {
       CiftiChangeMappingScalarParameters,
       CiftiChangeMappingSeriesParameters,
       cifti_change_mapping,
-      cifti_change_mapping_cargs,
       cifti_change_mapping_execute,
-      cifti_change_mapping_from_cifti_cargs,
       cifti_change_mapping_from_cifti_params,
-      cifti_change_mapping_outputs,
       cifti_change_mapping_params,
-      cifti_change_mapping_scalar_cargs,
       cifti_change_mapping_scalar_params,
-      cifti_change_mapping_series_cargs,
       cifti_change_mapping_series_params,
 };

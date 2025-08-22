@@ -290,14 +290,16 @@ function v__measure_in2out_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VMeasureIn2outOutputs`).
  */
 function v__measure_in2out_execute(
     params: VMeasureIn2outParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VMeasureIn2outOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__MEASURE_IN2OUT_METADATA);
     params = execution.params(params)
     const cargs = v__measure_in2out_cargs(params, execution)
     const ret = v__measure_in2out_outputs(params, execution)
@@ -344,10 +346,8 @@ function v__measure_in2out(
     fs_cort_dir: string | null = null,
     runner: Runner | null = null,
 ): VMeasureIn2outOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__MEASURE_IN2OUT_METADATA);
     const params = v__measure_in2out_params(maskset, surfset, outdir, resample, increment, surfsmooth, maxthick, depthsearch, maskinoutvals, keep_temp_files, surfsmooth_method, fs_cort_dir)
-    return v__measure_in2out_execute(params, execution);
+    return v__measure_in2out_execute(params, runner);
 }
 
 
@@ -356,8 +356,6 @@ export {
       VMeasureIn2outParameters,
       V__MEASURE_IN2OUT_METADATA,
       v__measure_in2out,
-      v__measure_in2out_cargs,
       v__measure_in2out_execute,
-      v__measure_in2out_outputs,
       v__measure_in2out_params,
 };

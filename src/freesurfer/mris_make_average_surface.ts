@@ -263,14 +263,16 @@ function mris_make_average_surface_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisMakeAverageSurfaceOutputs`).
  */
 function mris_make_average_surface_execute(
     params: MrisMakeAverageSurfaceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisMakeAverageSurfaceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_MAKE_AVERAGE_SURFACE_METADATA);
     params = execution.params(params)
     const cargs = mris_make_average_surface_cargs(params, execution)
     const ret = mris_make_average_surface_outputs(params, execution)
@@ -323,10 +325,8 @@ function mris_make_average_surface(
     diagno: number | null = null,
     runner: Runner | null = null,
 ): MrisMakeAverageSurfaceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_MAKE_AVERAGE_SURFACE_METADATA);
     const params = mris_make_average_surface_params(hemi, outsurfname, cansurfname, outsubject, subjects, sdir, sdir_out, nonorm_flag, icoorder, xfmname, templatename, surfname, surf2surf_flag, simple, diagno)
-    return mris_make_average_surface_execute(params, execution);
+    return mris_make_average_surface_execute(params, runner);
 }
 
 
@@ -335,8 +335,6 @@ export {
       MrisMakeAverageSurfaceOutputs,
       MrisMakeAverageSurfaceParameters,
       mris_make_average_surface,
-      mris_make_average_surface_cargs,
       mris_make_average_surface_execute,
-      mris_make_average_surface_outputs,
       mris_make_average_surface_params,
 };

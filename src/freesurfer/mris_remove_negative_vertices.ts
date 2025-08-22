@@ -143,14 +143,16 @@ function mris_remove_negative_vertices_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRemoveNegativeVerticesOutputs`).
  */
 function mris_remove_negative_vertices_execute(
     params: MrisRemoveNegativeVerticesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRemoveNegativeVerticesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_REMOVE_NEGATIVE_VERTICES_METADATA);
     params = execution.params(params)
     const cargs = mris_remove_negative_vertices_cargs(params, execution)
     const ret = mris_remove_negative_vertices_outputs(params, execution)
@@ -179,10 +181,8 @@ function mris_remove_negative_vertices(
     output_patch: string,
     runner: Runner | null = null,
 ): MrisRemoveNegativeVerticesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_REMOVE_NEGATIVE_VERTICES_METADATA);
     const params = mris_remove_negative_vertices_params(surface_file, patch_file, output_patch)
-    return mris_remove_negative_vertices_execute(params, execution);
+    return mris_remove_negative_vertices_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MrisRemoveNegativeVerticesOutputs,
       MrisRemoveNegativeVerticesParameters,
       mris_remove_negative_vertices,
-      mris_remove_negative_vertices_cargs,
       mris_remove_negative_vertices_execute,
-      mris_remove_negative_vertices_outputs,
       mris_remove_negative_vertices_params,
 };

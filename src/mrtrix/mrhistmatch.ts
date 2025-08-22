@@ -303,14 +303,16 @@ function mrhistmatch_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrhistmatchOutputs`).
  */
 function mrhistmatch_execute(
     params: MrhistmatchParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrhistmatchOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRHISTMATCH_METADATA);
     params = execution.params(params)
     const cargs = mrhistmatch_cargs(params, execution)
     const ret = mrhistmatch_outputs(params, execution)
@@ -370,10 +372,8 @@ function mrhistmatch(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrhistmatchOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRHISTMATCH_METADATA);
     const params = mrhistmatch_params(type_, input, target, output, mask_input, mask_target, bins, info, quiet, debug, force, nthreads, config, help, version)
-    return mrhistmatch_execute(params, execution);
+    return mrhistmatch_execute(params, runner);
 }
 
 
@@ -383,10 +383,7 @@ export {
       MrhistmatchOutputs,
       MrhistmatchParameters,
       mrhistmatch,
-      mrhistmatch_cargs,
-      mrhistmatch_config_cargs,
       mrhistmatch_config_params,
       mrhistmatch_execute,
-      mrhistmatch_outputs,
       mrhistmatch_params,
 };

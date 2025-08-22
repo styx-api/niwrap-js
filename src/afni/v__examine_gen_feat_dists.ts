@@ -216,14 +216,16 @@ function v__examine_gen_feat_dists_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VExamineGenFeatDistsOutputs`).
  */
 function v__examine_gen_feat_dists_execute(
     params: VExamineGenFeatDistsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VExamineGenFeatDistsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__EXAMINE_GEN_FEAT_DISTS_METADATA);
     params = execution.params(params)
     const cargs = v__examine_gen_feat_dists_cargs(params, execution)
     const ret = v__examine_gen_feat_dists_outputs(params, execution)
@@ -264,10 +266,8 @@ function v__examine_gen_feat_dists(
     help: boolean = false,
     runner: Runner | null = null,
 ): VExamineGenFeatDistsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__EXAMINE_GEN_FEAT_DISTS_METADATA);
     const params = v__examine_gen_feat_dists_params(features_dir, wildcards, output_suffix, exclude_features, exclude_classes, output_dir, panels_horizontal, echo, help)
-    return v__examine_gen_feat_dists_execute(params, execution);
+    return v__examine_gen_feat_dists_execute(params, runner);
 }
 
 
@@ -276,8 +276,6 @@ export {
       VExamineGenFeatDistsParameters,
       V__EXAMINE_GEN_FEAT_DISTS_METADATA,
       v__examine_gen_feat_dists,
-      v__examine_gen_feat_dists_cargs,
       v__examine_gen_feat_dists_execute,
-      v__examine_gen_feat_dists_outputs,
       v__examine_gen_feat_dists_params,
 };

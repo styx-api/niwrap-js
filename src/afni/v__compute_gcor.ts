@@ -197,14 +197,16 @@ function v__compute_gcor_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VComputeGcorOutputs`).
  */
 function v__compute_gcor_execute(
     params: VComputeGcorParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VComputeGcorOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__COMPUTE_GCOR_METADATA);
     params = execution.params(params)
     const cargs = v__compute_gcor_cargs(params, execution)
     const ret = v__compute_gcor_outputs(params, execution)
@@ -241,10 +243,8 @@ function v__compute_gcor(
     verbose: number | null = null,
     runner: Runner | null = null,
 ): VComputeGcorOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__COMPUTE_GCOR_METADATA);
     const params = v__compute_gcor_params(input, mask, corr_vol_prefix, initial_trs, no_demean, save_tmp, verbose)
-    return v__compute_gcor_execute(params, execution);
+    return v__compute_gcor_execute(params, runner);
 }
 
 
@@ -253,8 +253,6 @@ export {
       VComputeGcorParameters,
       V__COMPUTE_GCOR_METADATA,
       v__compute_gcor,
-      v__compute_gcor_cargs,
       v__compute_gcor_execute,
-      v__compute_gcor_outputs,
       v__compute_gcor_params,
 };

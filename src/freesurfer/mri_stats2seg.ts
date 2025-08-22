@@ -166,14 +166,16 @@ function mri_stats2seg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriStats2segOutputs`).
  */
 function mri_stats2seg_execute(
     params: MriStats2segParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriStats2segOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_STATS2SEG_METADATA);
     params = execution.params(params)
     const cargs = mri_stats2seg_cargs(params, execution)
     const ret = mri_stats2seg_outputs(params, execution)
@@ -206,10 +208,8 @@ function mri_stats2seg(
     check_opts: boolean = false,
     runner: Runner | null = null,
 ): MriStats2segOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_STATS2SEG_METADATA);
     const params = mri_stats2seg_params(stat_file, segmentation_volume, output_file, debug, check_opts)
-    return mri_stats2seg_execute(params, execution);
+    return mri_stats2seg_execute(params, runner);
 }
 
 
@@ -218,8 +218,6 @@ export {
       MriStats2segOutputs,
       MriStats2segParameters,
       mri_stats2seg,
-      mri_stats2seg_cargs,
       mri_stats2seg_execute,
-      mri_stats2seg_outputs,
       mri_stats2seg_params,
 };

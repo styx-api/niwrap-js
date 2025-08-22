@@ -163,14 +163,16 @@ function surface_generate_inflated_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceGenerateInflatedOutputs`).
  */
 function surface_generate_inflated_execute(
     params: SurfaceGenerateInflatedParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceGenerateInflatedOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_GENERATE_INFLATED_METADATA);
     params = execution.params(params)
     const cargs = surface_generate_inflated_cargs(params, execution)
     const ret = surface_generate_inflated_outputs(params, execution)
@@ -203,10 +205,8 @@ function surface_generate_inflated(
     opt_iterations_scale_iterations_scale_value: number | null = null,
     runner: Runner | null = null,
 ): SurfaceGenerateInflatedOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_GENERATE_INFLATED_METADATA);
     const params = surface_generate_inflated_params(anatomical_surface_in, inflated_surface_out, very_inflated_surface_out, opt_iterations_scale_iterations_scale_value)
-    return surface_generate_inflated_execute(params, execution);
+    return surface_generate_inflated_execute(params, runner);
 }
 
 
@@ -215,8 +215,6 @@ export {
       SurfaceGenerateInflatedOutputs,
       SurfaceGenerateInflatedParameters,
       surface_generate_inflated,
-      surface_generate_inflated_cargs,
       surface_generate_inflated_execute,
-      surface_generate_inflated_outputs,
       surface_generate_inflated_params,
 };

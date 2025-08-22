@@ -274,14 +274,16 @@ function v_1d_sem_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dSemOutputs`).
  */
 function v_1d_sem_execute(
     params: V1dSemParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dSemOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_SEM_METADATA);
     params = execution.params(params)
     const cargs = v_1d_sem_cargs(params, execution)
     const ret = v_1d_sem_outputs(params, execution)
@@ -336,10 +338,8 @@ function v_1d_sem(
     leafpicker: boolean = false,
     runner: Runner | null = null,
 ): V1dSemOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_SEM_METADATA);
     const params = v_1d_sem_params(theta, correlation_matrix, residual_variance, degrees_of_freedom, max_iterations, number_random_trials, limits, calculate_cost, verbose, tree_growth, model_search, max_paths, stop_cost, forest_growth, grow_all, leafpicker)
-    return v_1d_sem_execute(params, execution);
+    return v_1d_sem_execute(params, runner);
 }
 
 
@@ -348,8 +348,6 @@ export {
       V1dSemParameters,
       V_1D_SEM_METADATA,
       v_1d_sem,
-      v_1d_sem_cargs,
       v_1d_sem_execute,
-      v_1d_sem_outputs,
       v_1d_sem_params,
 };

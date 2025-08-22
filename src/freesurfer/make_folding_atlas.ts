@@ -318,14 +318,16 @@ function make_folding_atlas_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeFoldingAtlasOutputs`).
  */
 function make_folding_atlas_execute(
     params: MakeFoldingAtlasParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeFoldingAtlasOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_FOLDING_ATLAS_METADATA);
     params = execution.params(params)
     const cargs = make_folding_atlas_cargs(params, execution)
     const ret = make_folding_atlas_outputs(params, execution)
@@ -388,10 +390,8 @@ function make_folding_atlas(
     slurm_account: string | null = null,
     runner: Runner | null = null,
 ): MakeFoldingAtlasOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_FOLDING_ATLAS_METADATA);
     const params = make_folding_atlas_params(subjlistfile, fsgdfile, subjects, output_base, max_iterations, xhemi, init_surf_reg, init_subject, no_annot_template, left_hemisphere, right_hemisphere, lhrh, ico_order, no_vol_on_last, vol, init, short_sleep, no_template_only, threads, slurm_account)
-    return make_folding_atlas_execute(params, execution);
+    return make_folding_atlas_execute(params, runner);
 }
 
 
@@ -400,8 +400,6 @@ export {
       MakeFoldingAtlasOutputs,
       MakeFoldingAtlasParameters,
       make_folding_atlas,
-      make_folding_atlas_cargs,
       make_folding_atlas_execute,
-      make_folding_atlas_outputs,
       make_folding_atlas_params,
 };

@@ -327,14 +327,16 @@ function metric_resample_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricResampleOutputs`).
  */
 function metric_resample_execute(
     params: MetricResampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricResampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_RESAMPLE_METADATA);
     params = execution.params(params)
     const cargs = metric_resample_cargs(params, execution)
     const ret = metric_resample_outputs(params, execution)
@@ -393,10 +395,8 @@ function metric_resample(
     opt_bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
 ): MetricResampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_RESAMPLE_METADATA);
     const params = metric_resample_params(metric_in, current_sphere, new_sphere, method, metric_out, area_surfs, area_metrics, opt_current_roi_roi_metric, opt_valid_roi_out_roi_out, opt_largest, opt_bypass_sphere_check)
-    return metric_resample_execute(params, execution);
+    return metric_resample_execute(params, runner);
 }
 
 
@@ -407,12 +407,8 @@ export {
       MetricResampleOutputs,
       MetricResampleParameters,
       metric_resample,
-      metric_resample_area_metrics_cargs,
       metric_resample_area_metrics_params,
-      metric_resample_area_surfs_cargs,
       metric_resample_area_surfs_params,
-      metric_resample_cargs,
       metric_resample_execute,
-      metric_resample_outputs,
       metric_resample_params,
 };

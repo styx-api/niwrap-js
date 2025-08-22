@@ -367,14 +367,16 @@ function fslstats_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslstatsOutputs`).
  */
 function fslstats_execute(
     params: FslstatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslstatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLSTATS_METADATA);
     params = execution.params(params)
     const cargs = fslstats_cargs(params, execution)
     const ret = fslstats_outputs(params, execution)
@@ -453,10 +455,8 @@ function fslstats(
     nonzero_mean_entropy_flag: boolean = false,
     runner: Runner | null = null,
 ): FslstatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLSTATS_METADATA);
     const params = fslstats_params(input_file, index_mask, lower_threshold, upper_threshold, robust_intensity_flag, minmax_intensity_flag, voxels_volume_flag, nonzero_voxels_volume_flag, mean_flag, nonzero_mean_flag, std_dev_flag, nonzero_std_dev_flag, smallest_roi_flag, max_coords_flag, min_coords_flag, cog_mm_flag, cog_voxel_flag, percentile, nonzero_percentile, absolute_values_flag, nan_as_zero_flag, mask_image, difference_image, hist_bins, hist_bins_min_max, timeseries_flag, mean_entropy_flag, nonzero_mean_entropy_flag)
-    return fslstats_execute(params, execution);
+    return fslstats_execute(params, runner);
 }
 
 
@@ -465,8 +465,6 @@ export {
       FslstatsOutputs,
       FslstatsParameters,
       fslstats,
-      fslstats_cargs,
       fslstats_execute,
-      fslstats_outputs,
       fslstats_params,
 };

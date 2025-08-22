@@ -376,14 +376,16 @@ function v_3d_dwito_dt_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dDwitoDtOutputs`).
  */
 function v_3d_dwito_dt_execute(
     params: V3dDwitoDtParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dDwitoDtOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_DWITO_DT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_dwito_dt_cargs(params, execution)
     const ret = v_3d_dwito_dt_outputs(params, execution)
@@ -458,10 +460,8 @@ function v_3d_dwito_dt(
     mean_b0: boolean = false,
     runner: Runner | null = null,
 ): V3dDwitoDtOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_DWITO_DT_METADATA);
     const params = v_3d_dwito_dt_params(gradient_file, dataset, prefix, automask, mask, bmatrix_nz, bmatrix_z, bmatrix_full, scale_out_1000, bmax_ref, nonlinear, linear, reweight, max_iter, max_iter_rw, eigs, debug_briks, cumulative_wts, verbose, drive_afni, sep_dsets, csf_val, min_bad_md, csf_fa, opt, mean_b0)
-    return v_3d_dwito_dt_execute(params, execution);
+    return v_3d_dwito_dt_execute(params, runner);
 }
 
 
@@ -470,8 +470,6 @@ export {
       V3dDwitoDtParameters,
       V_3D_DWITO_DT_METADATA,
       v_3d_dwito_dt,
-      v_3d_dwito_dt_cargs,
       v_3d_dwito_dt_execute,
-      v_3d_dwito_dt_outputs,
       v_3d_dwito_dt_params,
 };

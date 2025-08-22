@@ -324,14 +324,16 @@ function mrmetric_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrmetricOutputs`).
  */
 function mrmetric_execute(
     params: MrmetricParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrmetricOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRMETRIC_METADATA);
     params = execution.params(params)
     const cargs = mrmetric_cargs(params, execution)
     const ret = mrmetric_outputs(params, execution)
@@ -394,10 +396,8 @@ function mrmetric(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrmetricOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRMETRIC_METADATA);
     const params = mrmetric_params(image1, image2, space, interp, metric, mask1, mask2, nonormalisation, overlap, info, quiet, debug, force, nthreads, config, help, version)
-    return mrmetric_execute(params, execution);
+    return mrmetric_execute(params, runner);
 }
 
 
@@ -407,10 +407,7 @@ export {
       MrmetricOutputs,
       MrmetricParameters,
       mrmetric,
-      mrmetric_cargs,
-      mrmetric_config_cargs,
       mrmetric_config_params,
       mrmetric_execute,
-      mrmetric_outputs,
       mrmetric_params,
 };

@@ -183,14 +183,16 @@ function v__suma_renumber_fs_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSumaRenumberFsOutputs`).
  */
 function v__suma_renumber_fs_execute(
     params: VSumaRenumberFsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSumaRenumberFsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SUMA_RENUMBER_FS_METADATA);
     params = execution.params(params)
     const cargs = v__suma_renumber_fs_cargs(params, execution)
     const ret = v__suma_renumber_fs_outputs(params, execution)
@@ -215,10 +217,8 @@ function v__suma_renumber_fs(
     sumadir: string,
     runner: Runner | null = null,
 ): VSumaRenumberFsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SUMA_RENUMBER_FS_METADATA);
     const params = v__suma_renumber_fs_params(sumadir)
-    return v__suma_renumber_fs_execute(params, execution);
+    return v__suma_renumber_fs_execute(params, runner);
 }
 
 
@@ -227,8 +227,6 @@ export {
       VSumaRenumberFsParameters,
       V__SUMA_RENUMBER_FS_METADATA,
       v__suma_renumber_fs,
-      v__suma_renumber_fs_cargs,
       v__suma_renumber_fs_execute,
-      v__suma_renumber_fs_outputs,
       v__suma_renumber_fs_params,
 };

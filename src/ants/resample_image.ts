@@ -166,14 +166,16 @@ function resample_image_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ResampleImageOutputs`).
  */
 function resample_image_execute(
     params: ResampleImageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ResampleImageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RESAMPLE_IMAGE_METADATA);
     params = execution.params(params)
     const cargs = resample_image_cargs(params, execution)
     const ret = resample_image_outputs(params, execution)
@@ -208,10 +210,8 @@ function resample_image(
     pixeltype: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | null = null,
     runner: Runner | null = null,
 ): ResampleImageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RESAMPLE_IMAGE_METADATA);
     const params = resample_image_params(image_dimension, input_image, output_image, size_spacing, interpolate_type, pixeltype)
-    return resample_image_execute(params, execution);
+    return resample_image_execute(params, runner);
 }
 
 
@@ -220,8 +220,6 @@ export {
       ResampleImageOutputs,
       ResampleImageParameters,
       resample_image,
-      resample_image_cargs,
       resample_image_execute,
-      resample_image_outputs,
       resample_image_params,
 };

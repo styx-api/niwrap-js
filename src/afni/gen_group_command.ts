@@ -264,14 +264,16 @@ function gen_group_command_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GenGroupCommandOutputs`).
  */
 function gen_group_command_execute(
     params: GenGroupCommandParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GenGroupCommandOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GEN_GROUP_COMMAND_METADATA);
     params = execution.params(params)
     const cargs = gen_group_command_cargs(params, execution)
     const ret = gen_group_command_outputs(params, execution)
@@ -318,10 +320,8 @@ function gen_group_command(
     other_options: Array<string> | null = null,
     runner: Runner | null = null,
 ): GenGroupCommandOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GEN_GROUP_COMMAND_METADATA);
     const params = gen_group_command_params(command_name, datasets, prefix, set_labels, subj_prefix, subj_suffix, subs_betas, subs_tstats, type_, verb, write_script, other_options)
-    return gen_group_command_execute(params, execution);
+    return gen_group_command_execute(params, runner);
 }
 
 
@@ -330,8 +330,6 @@ export {
       GenGroupCommandOutputs,
       GenGroupCommandParameters,
       gen_group_command,
-      gen_group_command_cargs,
       gen_group_command_execute,
-      gen_group_command_outputs,
       gen_group_command_params,
 };

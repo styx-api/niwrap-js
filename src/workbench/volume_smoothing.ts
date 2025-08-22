@@ -186,14 +186,16 @@ function volume_smoothing_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeSmoothingOutputs`).
  */
 function volume_smoothing_execute(
     params: VolumeSmoothingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeSmoothingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_SMOOTHING_METADATA);
     params = execution.params(params)
     const cargs = volume_smoothing_cargs(params, execution)
     const ret = volume_smoothing_outputs(params, execution)
@@ -234,10 +236,8 @@ function volume_smoothing(
     opt_subvolume_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeSmoothingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_SMOOTHING_METADATA);
     const params = volume_smoothing_params(volume_in, kernel, volume_out, opt_fwhm, opt_roi_roivol, opt_fix_zeros, opt_subvolume_subvol)
-    return volume_smoothing_execute(params, execution);
+    return volume_smoothing_execute(params, runner);
 }
 
 
@@ -246,8 +246,6 @@ export {
       VolumeSmoothingOutputs,
       VolumeSmoothingParameters,
       volume_smoothing,
-      volume_smoothing_cargs,
       volume_smoothing_execute,
-      volume_smoothing_outputs,
       volume_smoothing_params,
 };

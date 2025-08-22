@@ -194,14 +194,16 @@ function v_3dfractionize_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dfractionizeOutputs`).
  */
 function v_3dfractionize_execute(
     params: V3dfractionizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dfractionizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DFRACTIONIZE_METADATA);
     params = execution.params(params)
     const cargs = v_3dfractionize_cargs(params, execution)
     const ret = v_3dfractionize_outputs(params, execution)
@@ -238,10 +240,8 @@ function v_3dfractionize(
     vote: boolean = false,
     runner: Runner | null = null,
 ): V3dfractionizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DFRACTIONIZE_METADATA);
     const params = v_3dfractionize_params(template, input, prefix, clip, warp, preserve, vote)
-    return v_3dfractionize_execute(params, execution);
+    return v_3dfractionize_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       V3dfractionizeParameters,
       V_3DFRACTIONIZE_METADATA,
       v_3dfractionize,
-      v_3dfractionize_cargs,
       v_3dfractionize_execute,
-      v_3dfractionize_outputs,
       v_3dfractionize_params,
 };

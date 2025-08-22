@@ -195,14 +195,16 @@ function v__suma_acknowledge_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSumaAcknowledgeOutputs`).
  */
 function v__suma_acknowledge_execute(
     params: VSumaAcknowledgeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSumaAcknowledgeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SUMA_ACKNOWLEDGE_METADATA);
     params = execution.params(params)
     const cargs = v__suma_acknowledge_cargs(params, execution)
     const ret = v__suma_acknowledge_outputs(params, execution)
@@ -239,10 +241,8 @@ function v__suma_acknowledge(
     reduce_factor: number | null = null,
     runner: Runner | null = null,
 ): VSumaAcknowledgeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SUMA_ACKNOWLEDGE_METADATA);
     const params = v__suma_acknowledge_params(input_file, surface_file, output_prefix, center_flag, subsurface_file, scale_factor, reduce_factor)
-    return v__suma_acknowledge_execute(params, execution);
+    return v__suma_acknowledge_execute(params, runner);
 }
 
 
@@ -251,8 +251,6 @@ export {
       VSumaAcknowledgeParameters,
       V__SUMA_ACKNOWLEDGE_METADATA,
       v__suma_acknowledge,
-      v__suma_acknowledge_cargs,
       v__suma_acknowledge_execute,
-      v__suma_acknowledge_outputs,
       v__suma_acknowledge_params,
 };

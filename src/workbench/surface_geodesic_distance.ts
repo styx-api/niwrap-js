@@ -181,14 +181,16 @@ function surface_geodesic_distance_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicDistanceOutputs`).
  */
 function surface_geodesic_distance_execute(
     params: SurfaceGeodesicDistanceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceGeodesicDistanceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_GEODESIC_DISTANCE_METADATA);
     params = execution.params(params)
     const cargs = surface_geodesic_distance_cargs(params, execution)
     const ret = surface_geodesic_distance_outputs(params, execution)
@@ -229,10 +231,8 @@ function surface_geodesic_distance(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): SurfaceGeodesicDistanceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_GEODESIC_DISTANCE_METADATA);
     const params = surface_geodesic_distance_params(surface, vertex, metric_out, opt_naive, opt_limit_limit_mm, opt_corrected_areas_area_metric)
-    return surface_geodesic_distance_execute(params, execution);
+    return surface_geodesic_distance_execute(params, runner);
 }
 
 
@@ -241,8 +241,6 @@ export {
       SurfaceGeodesicDistanceOutputs,
       SurfaceGeodesicDistanceParameters,
       surface_geodesic_distance,
-      surface_geodesic_distance_cargs,
       surface_geodesic_distance_execute,
-      surface_geodesic_distance_outputs,
       surface_geodesic_distance_params,
 };

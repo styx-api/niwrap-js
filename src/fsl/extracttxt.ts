@@ -156,14 +156,16 @@ function extracttxt_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ExtracttxtOutputs`).
  */
 function extracttxt_execute(
     params: ExtracttxtParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ExtracttxtOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EXTRACTTXT_METADATA);
     params = execution.params(params)
     const cargs = extracttxt_cargs(params, execution)
     const ret = extracttxt_outputs(params, execution)
@@ -194,10 +196,8 @@ function extracttxt(
     relative_start: number | null = 0,
     runner: Runner | null = null,
 ): ExtracttxtOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EXTRACTTXT_METADATA);
     const params = extracttxt_params(search_word, file, num_trailing_lines, relative_start)
-    return extracttxt_execute(params, execution);
+    return extracttxt_execute(params, runner);
 }
 
 
@@ -206,8 +206,6 @@ export {
       ExtracttxtOutputs,
       ExtracttxtParameters,
       extracttxt,
-      extracttxt_cargs,
       extracttxt_execute,
-      extracttxt_outputs,
       extracttxt_params,
 };

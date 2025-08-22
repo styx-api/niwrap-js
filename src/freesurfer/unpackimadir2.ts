@@ -127,14 +127,16 @@ function unpackimadir2_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Unpackimadir2Outputs`).
  */
 function unpackimadir2_execute(
     params: Unpackimadir2Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Unpackimadir2Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(UNPACKIMADIR2_METADATA);
     params = execution.params(params)
     const cargs = unpackimadir2_cargs(params, execution)
     const ret = unpackimadir2_outputs(params, execution)
@@ -159,10 +161,8 @@ function unpackimadir2(
     directory: InputPathType,
     runner: Runner | null = null,
 ): Unpackimadir2Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UNPACKIMADIR2_METADATA);
     const params = unpackimadir2_params(directory)
-    return unpackimadir2_execute(params, execution);
+    return unpackimadir2_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       Unpackimadir2Outputs,
       Unpackimadir2Parameters,
       unpackimadir2,
-      unpackimadir2_cargs,
       unpackimadir2_execute,
-      unpackimadir2_outputs,
       unpackimadir2_params,
 };

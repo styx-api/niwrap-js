@@ -143,14 +143,16 @@ function mri_compute_distances_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriComputeDistancesOutputs`).
  */
 function mri_compute_distances_execute(
     params: MriComputeDistancesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriComputeDistancesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_COMPUTE_DISTANCES_METADATA);
     params = execution.params(params)
     const cargs = mri_compute_distances_cargs(params, execution)
     const ret = mri_compute_distances_outputs(params, execution)
@@ -179,10 +181,8 @@ function mri_compute_distances(
     output_xform: string,
     runner: Runner | null = null,
 ): MriComputeDistancesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_COMPUTE_DISTANCES_METADATA);
     const params = mri_compute_distances_params(source, target, output_xform)
-    return mri_compute_distances_execute(params, execution);
+    return mri_compute_distances_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MriComputeDistancesOutputs,
       MriComputeDistancesParameters,
       mri_compute_distances,
-      mri_compute_distances_cargs,
       mri_compute_distances_execute,
-      mri_compute_distances_outputs,
       mri_compute_distances_params,
 };

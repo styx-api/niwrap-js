@@ -253,14 +253,16 @@ function volume_stats_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeStatsOutputs`).
  */
 function volume_stats_execute(
     params: VolumeStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_STATS_METADATA);
     params = execution.params(params)
     const cargs = volume_stats_cargs(params, execution)
     const ret = volume_stats_outputs(params, execution)
@@ -317,10 +319,8 @@ function volume_stats(
     opt_show_map_name: boolean = false,
     runner: Runner | null = null,
 ): VolumeStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_STATS_METADATA);
     const params = volume_stats_params(volume_in, opt_reduce_operation, opt_percentile_percent, opt_subvolume_subvolume, roi, opt_show_map_name)
-    return volume_stats_execute(params, execution);
+    return volume_stats_execute(params, runner);
 }
 
 
@@ -330,10 +330,7 @@ export {
       VolumeStatsParameters,
       VolumeStatsRoiParameters,
       volume_stats,
-      volume_stats_cargs,
       volume_stats_execute,
-      volume_stats_outputs,
       volume_stats_params,
-      volume_stats_roi_cargs,
       volume_stats_roi_params,
 };

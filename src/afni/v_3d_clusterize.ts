@@ -369,14 +369,16 @@ function v_3d_clusterize_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dClusterizeOutputs`).
  */
 function v_3d_clusterize_execute(
     params: V3dClusterizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dClusterizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_CLUSTERIZE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_clusterize_cargs(params, execution)
     const ret = v_3d_clusterize_outputs(params, execution)
@@ -447,10 +449,8 @@ function v_3d_clusterize(
     binary: boolean = false,
     runner: Runner | null = null,
 ): V3dClusterizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_CLUSTERIZE_METADATA);
     const params = v_3d_clusterize_params(inset, ithr, nn, mask, mask_from_hdr, out_mask, idat, onesided, twosided, bisided, within_range, clust_nvox, clust_vol, pref_map, pref_dat, one_d_format, no_one_d_format, summarize, nosum, quiet, outvol_if_no_clust, orient, abs_table_data, binary)
-    return v_3d_clusterize_execute(params, execution);
+    return v_3d_clusterize_execute(params, runner);
 }
 
 
@@ -459,8 +459,6 @@ export {
       V3dClusterizeParameters,
       V_3D_CLUSTERIZE_METADATA,
       v_3d_clusterize,
-      v_3d_clusterize_cargs,
       v_3d_clusterize_execute,
-      v_3d_clusterize_outputs,
       v_3d_clusterize_params,
 };

@@ -127,14 +127,16 @@ function tbss_1_preproc_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Tbss1PreprocOutputs`).
  */
 function tbss_1_preproc_execute(
     params: Tbss1PreprocParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Tbss1PreprocOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TBSS_1_PREPROC_METADATA);
     params = execution.params(params)
     const cargs = tbss_1_preproc_cargs(params, execution)
     const ret = tbss_1_preproc_outputs(params, execution)
@@ -159,10 +161,8 @@ function tbss_1_preproc(
     images: Array<InputPathType>,
     runner: Runner | null = null,
 ): Tbss1PreprocOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TBSS_1_PREPROC_METADATA);
     const params = tbss_1_preproc_params(images)
-    return tbss_1_preproc_execute(params, execution);
+    return tbss_1_preproc_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       Tbss1PreprocOutputs,
       Tbss1PreprocParameters,
       tbss_1_preproc,
-      tbss_1_preproc_cargs,
       tbss_1_preproc_execute,
-      tbss_1_preproc_outputs,
       tbss_1_preproc_params,
 };

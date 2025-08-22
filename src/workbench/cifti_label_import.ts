@@ -180,14 +180,16 @@ function cifti_label_import_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelImportOutputs`).
  */
 function cifti_label_import_execute(
     params: CiftiLabelImportParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiLabelImportOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_LABEL_IMPORT_METADATA);
     params = execution.params(params)
     const cargs = cifti_label_import_cargs(params, execution)
     const ret = cifti_label_import_outputs(params, execution)
@@ -232,10 +234,8 @@ function cifti_label_import(
     opt_drop_unused_labels: boolean = false,
     runner: Runner | null = null,
 ): CiftiLabelImportOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_LABEL_IMPORT_METADATA);
     const params = cifti_label_import_params(input, label_list_file, output, opt_discard_others, opt_unlabeled_value_value, opt_drop_unused_labels)
-    return cifti_label_import_execute(params, execution);
+    return cifti_label_import_execute(params, runner);
 }
 
 
@@ -244,8 +244,6 @@ export {
       CiftiLabelImportOutputs,
       CiftiLabelImportParameters,
       cifti_label_import,
-      cifti_label_import_cargs,
       cifti_label_import_execute,
-      cifti_label_import_outputs,
       cifti_label_import_params,
 };

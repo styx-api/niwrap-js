@@ -132,14 +132,16 @@ function filmbabescript_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FilmbabescriptOutputs`).
  */
 function filmbabescript_execute(
     params: FilmbabescriptParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FilmbabescriptOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FILMBABESCRIPT_METADATA);
     params = execution.params(params)
     const cargs = filmbabescript_cargs(params, execution)
     const ret = filmbabescript_outputs(params, execution)
@@ -166,10 +168,8 @@ function filmbabescript(
     flobs_dir: string,
     runner: Runner | null = null,
 ): FilmbabescriptOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FILMBABESCRIPT_METADATA);
     const params = filmbabescript_params(feat_dir, flobs_dir)
-    return filmbabescript_execute(params, execution);
+    return filmbabescript_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       FilmbabescriptOutputs,
       FilmbabescriptParameters,
       filmbabescript,
-      filmbabescript_cargs,
       filmbabescript_execute,
-      filmbabescript_outputs,
       filmbabescript_params,
 };

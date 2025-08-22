@@ -166,14 +166,16 @@ function v__xyz_to_ijk_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VXyzToIjkOutputs`).
  */
 function v__xyz_to_ijk_execute(
     params: VXyzToIjkParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VXyzToIjkOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__XYZ_TO_IJK_METADATA);
     params = execution.params(params)
     const cargs = v__xyz_to_ijk_cargs(params, execution)
     const ret = v__xyz_to_ijk_outputs(params, execution)
@@ -206,10 +208,8 @@ function v__xyz_to_ijk(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): VXyzToIjkOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__XYZ_TO_IJK_METADATA);
     const params = v__xyz_to_ijk_params(inset, x_coord, y_coord, z_coord, prefix)
-    return v__xyz_to_ijk_execute(params, execution);
+    return v__xyz_to_ijk_execute(params, runner);
 }
 
 
@@ -218,8 +218,6 @@ export {
       VXyzToIjkParameters,
       V__XYZ_TO_IJK_METADATA,
       v__xyz_to_ijk,
-      v__xyz_to_ijk_cargs,
       v__xyz_to_ijk_execute,
-      v__xyz_to_ijk_outputs,
       v__xyz_to_ijk_params,
 };

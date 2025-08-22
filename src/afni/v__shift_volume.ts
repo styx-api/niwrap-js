@@ -177,14 +177,16 @@ function v__shift_volume_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VShiftVolumeOutputs`).
  */
 function v__shift_volume_execute(
     params: VShiftVolumeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VShiftVolumeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SHIFT_VOLUME_METADATA);
     params = execution.params(params)
     const cargs = v__shift_volume_cargs(params, execution)
     const ret = v__shift_volume_outputs(params, execution)
@@ -219,10 +221,8 @@ function v__shift_volume(
     no_cp: boolean = false,
     runner: Runner | null = null,
 ): VShiftVolumeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SHIFT_VOLUME_METADATA);
     const params = v__shift_volume_params(dset, prefix, rai_shift_vector, mni_anat_to_mni, mni_to_mni_anat, no_cp)
-    return v__shift_volume_execute(params, execution);
+    return v__shift_volume_execute(params, runner);
 }
 
 
@@ -231,8 +231,6 @@ export {
       VShiftVolumeParameters,
       V__SHIFT_VOLUME_METADATA,
       v__shift_volume,
-      v__shift_volume_cargs,
       v__shift_volume_execute,
-      v__shift_volume_outputs,
       v__shift_volume_params,
 };

@@ -138,14 +138,16 @@ function plot_structure_stats_tcl_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PlotStructureStatsTclOutputs`).
  */
 function plot_structure_stats_tcl_execute(
     params: PlotStructureStatsTclParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PlotStructureStatsTclOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PLOT_STRUCTURE_STATS_TCL_METADATA);
     params = execution.params(params)
     const cargs = plot_structure_stats_tcl_cargs(params, execution)
     const ret = plot_structure_stats_tcl_outputs(params, execution)
@@ -172,10 +174,8 @@ function plot_structure_stats_tcl(
     output_file: string,
     runner: Runner | null = null,
 ): PlotStructureStatsTclOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PLOT_STRUCTURE_STATS_TCL_METADATA);
     const params = plot_structure_stats_tcl_params(input_file, output_file)
-    return plot_structure_stats_tcl_execute(params, execution);
+    return plot_structure_stats_tcl_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       PlotStructureStatsTclOutputs,
       PlotStructureStatsTclParameters,
       plot_structure_stats_tcl,
-      plot_structure_stats_tcl_cargs,
       plot_structure_stats_tcl_execute,
-      plot_structure_stats_tcl_outputs,
       plot_structure_stats_tcl_params,
 };

@@ -251,14 +251,16 @@ function v__afni_refacer_run_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAfniRefacerRunOutputs`).
  */
 function v__afni_refacer_run_execute(
     params: VAfniRefacerRunParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAfniRefacerRunOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__AFNI_REFACER_RUN_METADATA);
     params = execution.params(params)
     const cargs = v__afni_refacer_run_cargs(params, execution)
     const ret = v__afni_refacer_run_outputs(params, execution)
@@ -307,10 +309,8 @@ function v__afni_refacer_run(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): VAfniRefacerRunOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__AFNI_REFACER_RUN_METADATA);
     const params = v__afni_refacer_run_params(input_file, prefix, mode_deface, mode_reface, mode_reface_plus, mode_all, anonymize_output, cost_function, shell_option, no_clean, no_images, overwrite, verbose)
-    return v__afni_refacer_run_execute(params, execution);
+    return v__afni_refacer_run_execute(params, runner);
 }
 
 
@@ -319,8 +319,6 @@ export {
       VAfniRefacerRunParameters,
       V__AFNI_REFACER_RUN_METADATA,
       v__afni_refacer_run,
-      v__afni_refacer_run_cargs,
       v__afni_refacer_run_execute,
-      v__afni_refacer_run_outputs,
       v__afni_refacer_run_params,
 };

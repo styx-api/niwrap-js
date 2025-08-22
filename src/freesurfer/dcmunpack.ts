@@ -474,14 +474,16 @@ function dcmunpack_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DcmunpackOutputs`).
  */
 function dcmunpack_execute(
     params: DcmunpackParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DcmunpackOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DCMUNPACK_METADATA);
     params = execution.params(params)
     const cargs = dcmunpack_cargs(params, execution)
     const ret = dcmunpack_outputs(params, execution)
@@ -580,10 +582,8 @@ function dcmunpack(
     debug: boolean = false,
     runner: Runner | null = null,
 ): DcmunpackOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DCMUNPACK_METADATA);
     const params = dcmunpack_params(src, targ, run, auto_runseq, keep_scouts, scanonly, one_per_dir, ext, pre, pat, no_infodump, generic, copy_only, no_convert, force_update, max, base, key_string, index_out, index_in, it_dicom, no_exit_on_error, run_skip, no_rescale_dicom, rescale_dicom, no_dwi, iid, ijd, ikd, extra_info, first_dicom, no_dcm2niix, phase, fips, fips_run, xml_only, log, debug)
-    return dcmunpack_execute(params, execution);
+    return dcmunpack_execute(params, runner);
 }
 
 
@@ -592,8 +592,6 @@ export {
       DcmunpackOutputs,
       DcmunpackParameters,
       dcmunpack,
-      dcmunpack_cargs,
       dcmunpack_execute,
-      dcmunpack_outputs,
       dcmunpack_params,
 };

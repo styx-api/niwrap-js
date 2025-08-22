@@ -161,14 +161,16 @@ function v__grayplot_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VGrayplotOutputs`).
  */
 function v__grayplot_execute(
     params: VGrayplotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VGrayplotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__GRAYPLOT_METADATA);
     params = execution.params(params)
     const cargs = v__grayplot_cargs(params, execution)
     const ret = v__grayplot_outputs(params, execution)
@@ -201,10 +203,8 @@ function v__grayplot(
     allorder: boolean = false,
     runner: Runner | null = null,
 ): VGrayplotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__GRAYPLOT_METADATA);
     const params = v__grayplot_params(dirname, pvorder, peelorder, ijkorder, allorder)
-    return v__grayplot_execute(params, execution);
+    return v__grayplot_execute(params, runner);
 }
 
 
@@ -213,8 +213,6 @@ export {
       VGrayplotParameters,
       V__GRAYPLOT_METADATA,
       v__grayplot,
-      v__grayplot_cargs,
       v__grayplot_execute,
-      v__grayplot_outputs,
       v__grayplot_params,
 };

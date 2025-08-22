@@ -199,14 +199,16 @@ function quickspec_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `QuickspecOutputs`).
  */
 function quickspec_execute(
     params: QuickspecParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): QuickspecOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(QUICKSPEC_METADATA);
     params = execution.params(params)
     const cargs = quickspec_cargs(params, execution)
     const ret = quickspec_outputs(params, execution)
@@ -243,10 +245,8 @@ function quickspec(
     help: boolean = false,
     runner: Runner | null = null,
 ): QuickspecOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(QUICKSPEC_METADATA);
     const params = quickspec_params(tn, tsn, tsnad, tsnadm, tsnadl, spec, help)
-    return quickspec_execute(params, execution);
+    return quickspec_execute(params, runner);
 }
 
 
@@ -255,8 +255,6 @@ export {
       QuickspecOutputs,
       QuickspecParameters,
       quickspec,
-      quickspec_cargs,
       quickspec_execute,
-      quickspec_outputs,
       quickspec_params,
 };

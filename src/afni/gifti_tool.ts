@@ -354,14 +354,16 @@ function gifti_tool_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GiftiToolOutputs`).
  */
 function gifti_tool_execute(
     params: GiftiToolParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GiftiToolOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GIFTI_TOOL_METADATA);
     params = execution.params(params)
     const cargs = gifti_tool_cargs(params, execution)
     const ret = gifti_tool_outputs(params, execution)
@@ -428,10 +430,8 @@ function gifti_tool(
     approx_gifti: boolean = false,
     runner: Runner | null = null,
 ): GiftiToolOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GIFTI_TOOL_METADATA);
     const params = gifti_tool_params(infile, write_gifti, new_numda, new_dtype, new_intent, new_ndim, new_dims, set_extern_filelist, mod_add_data, verb, show_gifti, read_das, mod_gim_atr, mod_gim_meta, mod_da_atr, mod_da_meta, mod_das, new_dset, compare_gifti, compare_data, compare_verb, approx_gifti)
-    return gifti_tool_execute(params, execution);
+    return gifti_tool_execute(params, runner);
 }
 
 
@@ -440,8 +440,6 @@ export {
       GiftiToolOutputs,
       GiftiToolParameters,
       gifti_tool,
-      gifti_tool_cargs,
       gifti_tool_execute,
-      gifti_tool_outputs,
       gifti_tool_params,
 };

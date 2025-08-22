@@ -127,14 +127,16 @@ function mris_talairach_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisTalairachOutputs`).
  */
 function mris_talairach_execute(
     params: MrisTalairachParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisTalairachOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_TALAIRACH_METADATA);
     params = execution.params(params)
     const cargs = mris_talairach_cargs(params, execution)
     const ret = mris_talairach_outputs(params, execution)
@@ -159,10 +161,8 @@ function mris_talairach(
     input_image: InputPathType,
     runner: Runner | null = null,
 ): MrisTalairachOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_TALAIRACH_METADATA);
     const params = mris_talairach_params(input_image)
-    return mris_talairach_execute(params, execution);
+    return mris_talairach_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       MrisTalairachOutputs,
       MrisTalairachParameters,
       mris_talairach,
-      mris_talairach_cargs,
       mris_talairach_execute,
-      mris_talairach_outputs,
       mris_talairach_params,
 };

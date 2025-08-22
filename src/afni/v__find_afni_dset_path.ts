@@ -148,14 +148,16 @@ function v__find_afni_dset_path_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VFindAfniDsetPathOutputs`).
  */
 function v__find_afni_dset_path_execute(
     params: VFindAfniDsetPathParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VFindAfniDsetPathOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__FIND_AFNI_DSET_PATH_METADATA);
     params = execution.params(params)
     const cargs = v__find_afni_dset_path_cargs(params, execution)
     const ret = v__find_afni_dset_path_outputs(params, execution)
@@ -186,10 +188,8 @@ function v__find_afni_dset_path(
     help: boolean = false,
     runner: Runner | null = null,
 ): VFindAfniDsetPathOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__FIND_AFNI_DSET_PATH_METADATA);
     const params = v__find_afni_dset_path_params(dsetname, append_file, full_path, help)
-    return v__find_afni_dset_path_execute(params, execution);
+    return v__find_afni_dset_path_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       VFindAfniDsetPathParameters,
       V__FIND_AFNI_DSET_PATH_METADATA,
       v__find_afni_dset_path,
-      v__find_afni_dset_path_cargs,
       v__find_afni_dset_path_execute,
-      v__find_afni_dset_path_outputs,
       v__find_afni_dset_path_params,
 };

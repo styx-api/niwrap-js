@@ -333,14 +333,16 @@ function cifti_average_roi_correlation_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiAverageRoiCorrelationOutputs`).
  */
 function cifti_average_roi_correlation_execute(
     params: CiftiAverageRoiCorrelationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiAverageRoiCorrelationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_AVERAGE_ROI_CORRELATION_METADATA);
     params = execution.params(params)
     const cargs = cifti_average_roi_correlation_cargs(params, execution)
     const ret = cifti_average_roi_correlation_outputs(params, execution)
@@ -385,10 +387,8 @@ function cifti_average_roi_correlation(
     cifti: Array<CiftiAverageRoiCorrelationCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiAverageRoiCorrelationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_AVERAGE_ROI_CORRELATION_METADATA);
     const params = cifti_average_roi_correlation_params(cifti_out, cifti_roi, opt_left_roi_roi_metric, opt_right_roi_roi_metric, opt_cerebellum_roi_roi_metric, opt_vol_roi_roi_vol, opt_left_area_surf_left_surf, opt_right_area_surf_right_surf, opt_cerebellum_area_surf_cerebellum_surf, cifti)
-    return cifti_average_roi_correlation_execute(params, execution);
+    return cifti_average_roi_correlation_execute(params, runner);
 }
 
 
@@ -399,12 +399,8 @@ export {
       CiftiAverageRoiCorrelationOutputs,
       CiftiAverageRoiCorrelationParameters,
       cifti_average_roi_correlation,
-      cifti_average_roi_correlation_cargs,
-      cifti_average_roi_correlation_cifti_cargs,
       cifti_average_roi_correlation_cifti_params,
-      cifti_average_roi_correlation_cifti_roi_cargs,
       cifti_average_roi_correlation_cifti_roi_params,
       cifti_average_roi_correlation_execute,
-      cifti_average_roi_correlation_outputs,
       cifti_average_roi_correlation_params,
 };

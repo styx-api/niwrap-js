@@ -196,14 +196,16 @@ function v_3d_diff_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dDiffOutputs`).
  */
 function v_3d_diff_execute(
     params: V3dDiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dDiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_DIFF_METADATA);
     params = execution.params(params)
     const cargs = v_3d_diff_cargs(params, execution)
     const ret = v_3d_diff_outputs(params, execution)
@@ -242,10 +244,8 @@ function v_3d_diff(
     long_report_mode: boolean = false,
     runner: Runner | null = null,
 ): V3dDiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_DIFF_METADATA);
     const params = v_3d_diff_params(dataset_a, dataset_b, tolerance, mask, quiet_mode, tabular_mode, brutalist_mode, long_report_mode)
-    return v_3d_diff_execute(params, execution);
+    return v_3d_diff_execute(params, runner);
 }
 
 
@@ -254,8 +254,6 @@ export {
       V3dDiffParameters,
       V_3D_DIFF_METADATA,
       v_3d_diff,
-      v_3d_diff_cargs,
       v_3d_diff_execute,
-      v_3d_diff_outputs,
       v_3d_diff_params,
 };

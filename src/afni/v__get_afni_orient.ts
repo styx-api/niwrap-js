@@ -140,14 +140,16 @@ function v__get_afni_orient_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VGetAfniOrientOutputs`).
  */
 function v__get_afni_orient_execute(
     params: VGetAfniOrientParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VGetAfniOrientOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__GET_AFNI_ORIENT_METADATA);
     params = execution.params(params)
     const cargs = v__get_afni_orient_cargs(params, execution)
     const ret = v__get_afni_orient_outputs(params, execution)
@@ -174,10 +176,8 @@ function v__get_afni_orient(
     exploratory: boolean = false,
     runner: Runner | null = null,
 ): VGetAfniOrientOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__GET_AFNI_ORIENT_METADATA);
     const params = v__get_afni_orient_params(infile, exploratory)
-    return v__get_afni_orient_execute(params, execution);
+    return v__get_afni_orient_execute(params, runner);
 }
 
 
@@ -186,8 +186,6 @@ export {
       VGetAfniOrientParameters,
       V__GET_AFNI_ORIENT_METADATA,
       v__get_afni_orient,
-      v__get_afni_orient_cargs,
       v__get_afni_orient_execute,
-      v__get_afni_orient_outputs,
       v__get_afni_orient_params,
 };

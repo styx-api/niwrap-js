@@ -142,14 +142,16 @@ function v__vol_center_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VVolCenterOutputs`).
  */
 function v__vol_center_execute(
     params: VVolCenterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VVolCenterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__VOL_CENTER_METADATA);
     params = execution.params(params)
     const cargs = v__vol_center_cargs(params, execution)
     const ret = v__vol_center_outputs(params, execution)
@@ -176,10 +178,8 @@ function v__vol_center(
     orient: string | null = null,
     runner: Runner | null = null,
 ): VVolCenterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__VOL_CENTER_METADATA);
     const params = v__vol_center_params(dset, orient)
-    return v__vol_center_execute(params, execution);
+    return v__vol_center_execute(params, runner);
 }
 
 
@@ -188,8 +188,6 @@ export {
       VVolCenterParameters,
       V__VOL_CENTER_METADATA,
       v__vol_center,
-      v__vol_center_cargs,
       v__vol_center_execute,
-      v__vol_center_outputs,
       v__vol_center_params,
 };

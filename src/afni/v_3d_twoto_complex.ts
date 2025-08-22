@@ -185,14 +185,16 @@ function v_3d_twoto_complex_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTwotoComplexOutputs`).
  */
 function v_3d_twoto_complex_execute(
     params: V3dTwotoComplexParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTwotoComplexOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TWOTO_COMPLEX_METADATA);
     params = execution.params(params)
     const cargs = v_3d_twoto_complex_cargs(params, execution)
     const ret = v_3d_twoto_complex_outputs(params, execution)
@@ -227,10 +229,8 @@ function v_3d_twoto_complex(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dTwotoComplexOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TWOTO_COMPLEX_METADATA);
     const params = v_3d_twoto_complex_params(dataset1, dataset2, prefix, ri, mp, mask)
-    return v_3d_twoto_complex_execute(params, execution);
+    return v_3d_twoto_complex_execute(params, runner);
 }
 
 
@@ -239,8 +239,6 @@ export {
       V3dTwotoComplexParameters,
       V_3D_TWOTO_COMPLEX_METADATA,
       v_3d_twoto_complex,
-      v_3d_twoto_complex_cargs,
       v_3d_twoto_complex_execute,
-      v_3d_twoto_complex_outputs,
       v_3d_twoto_complex_params,
 };

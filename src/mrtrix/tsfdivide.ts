@@ -261,14 +261,16 @@ function tsfdivide_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TsfdivideOutputs`).
  */
 function tsfdivide_execute(
     params: TsfdivideParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TsfdivideOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TSFDIVIDE_METADATA);
     params = execution.params(params)
     const cargs = tsfdivide_cargs(params, execution)
     const ret = tsfdivide_outputs(params, execution)
@@ -319,10 +321,8 @@ function tsfdivide(
     version: boolean = false,
     runner: Runner | null = null,
 ): TsfdivideOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TSFDIVIDE_METADATA);
     const params = tsfdivide_params(input1, input2, output, info, quiet, debug, force, nthreads, config, help, version)
-    return tsfdivide_execute(params, execution);
+    return tsfdivide_execute(params, runner);
 }
 
 
@@ -332,10 +332,7 @@ export {
       TsfdivideOutputs,
       TsfdivideParameters,
       tsfdivide,
-      tsfdivide_cargs,
-      tsfdivide_config_cargs,
       tsfdivide_config_params,
       tsfdivide_execute,
-      tsfdivide_outputs,
       tsfdivide_params,
 };

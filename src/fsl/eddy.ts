@@ -564,14 +564,16 @@ function eddy_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `EddyOutputs`).
  */
 function eddy_execute(
     params: EddyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): EddyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EDDY_METADATA);
     params = execution.params(params)
     const cargs = eddy_cargs(params, execution)
     const ret = eddy_outputs(params, execution)
@@ -682,10 +684,8 @@ function eddy(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): EddyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EDDY_METADATA);
     const params = eddy_params(imain, mask, index, acqp, bvecs, bvals, out, mb, mb_offs, slspec, json, mporder, s2v_lambda, topup, field, field_mat, flm, slm, fwhm, niter, s2v_niter, cnr_maps, residuals, fep, interp, s2v_interp, resamp, nvoxhp, initrand, ff, repol, ol_nstd, ol_nvox, ol_type, ol_pos, ol_sqr, estimate_move_by_susceptibility, mbs_niter, mbs_lambda, mbs_ksp, dont_sep_offs_move, dont_peas, data_is_shelled, verbose)
-    return eddy_execute(params, execution);
+    return eddy_execute(params, runner);
 }
 
 
@@ -694,8 +694,6 @@ export {
       EddyOutputs,
       EddyParameters,
       eddy,
-      eddy_cargs,
       eddy_execute,
-      eddy_outputs,
       eddy_params,
 };

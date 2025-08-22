@@ -177,14 +177,16 @@ function talairach_afd_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TalairachAfdOutputs`).
  */
 function talairach_afd_execute(
     params: TalairachAfdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TalairachAfdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TALAIRACH_AFD_METADATA);
     params = execution.params(params)
     const cargs = talairach_afd_cargs(params, execution)
     const ret = talairach_afd_outputs(params, execution)
@@ -217,10 +219,8 @@ function talairach_afd(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): TalairachAfdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TALAIRACH_AFD_METADATA);
     const params = talairach_afd_params(subject_name, xfm_file, p_value_threshold, afd_directory, verbose)
-    return talairach_afd_execute(params, execution);
+    return talairach_afd_execute(params, runner);
 }
 
 
@@ -229,8 +229,6 @@ export {
       TalairachAfdOutputs,
       TalairachAfdParameters,
       talairach_afd,
-      talairach_afd_cargs,
       talairach_afd_execute,
-      talairach_afd_outputs,
       talairach_afd_params,
 };

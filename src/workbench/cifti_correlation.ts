@@ -298,14 +298,16 @@ function cifti_correlation_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCorrelationOutputs`).
  */
 function cifti_correlation_execute(
     params: CiftiCorrelationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiCorrelationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_CORRELATION_METADATA);
     params = execution.params(params)
     const cargs = cifti_correlation_cargs(params, execution)
     const ret = cifti_correlation_outputs(params, execution)
@@ -350,10 +352,8 @@ function cifti_correlation(
     opt_mem_limit_limit_gb: number | null = null,
     runner: Runner | null = null,
 ): CiftiCorrelationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_CORRELATION_METADATA);
     const params = cifti_correlation_params(cifti, cifti_out, roi_override, opt_weights_weight_file, opt_fisher_z, opt_no_demean, opt_covariance, opt_mem_limit_limit_gb)
-    return cifti_correlation_execute(params, execution);
+    return cifti_correlation_execute(params, runner);
 }
 
 
@@ -363,10 +363,7 @@ export {
       CiftiCorrelationParameters,
       CiftiCorrelationRoiOverrideParameters,
       cifti_correlation,
-      cifti_correlation_cargs,
       cifti_correlation_execute,
-      cifti_correlation_outputs,
       cifti_correlation_params,
-      cifti_correlation_roi_override_cargs,
       cifti_correlation_roi_override_params,
 };

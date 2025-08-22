@@ -216,14 +216,16 @@ function v__roi_corr_mat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VRoiCorrMatOutputs`).
  */
 function v__roi_corr_mat_execute(
     params: VRoiCorrMatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VRoiCorrMatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__ROI_CORR_MAT_METADATA);
     params = execution.params(params)
     const cargs = v__roi_corr_mat_cargs(params, execution)
     const ret = v__roi_corr_mat_outputs(params, execution)
@@ -266,10 +268,8 @@ function v__roi_corr_mat(
     verb: boolean = false,
     runner: Runner | null = null,
 ): VRoiCorrMatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__ROI_CORR_MAT_METADATA);
     const params = v__roi_corr_mat_params(ts_vol, roi_vol, prefix, roisel, zval, mat_opt, dirty, keep_tmp, echo, verb)
-    return v__roi_corr_mat_execute(params, execution);
+    return v__roi_corr_mat_execute(params, runner);
 }
 
 
@@ -278,8 +278,6 @@ export {
       VRoiCorrMatParameters,
       V__ROI_CORR_MAT_METADATA,
       v__roi_corr_mat,
-      v__roi_corr_mat_cargs,
       v__roi_corr_mat_execute,
-      v__roi_corr_mat_outputs,
       v__roi_corr_mat_params,
 };

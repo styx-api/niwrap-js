@@ -387,14 +387,16 @@ function fim2_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fim2Outputs`).
  */
 function fim2_execute(
     params: Fim2Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fim2Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIM2_METADATA);
     params = execution.params(params)
     const cargs = fim2_cargs(params, execution)
     const ret = fim2_outputs(params, execution)
@@ -463,10 +465,8 @@ function fim2(
     regbase: string | null = null,
     runner: Runner | null = null,
 ): Fim2Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIM2_METADATA);
     const params = fim2_params(image_files, pcnt, pcthresh, im1, num, non, coef, ort, ideal, polref, fimfile, corr, corfile, cnrfile, sigfile, fitfile, subort, flim, clean, clip, q, dfspace, regbase)
-    return fim2_execute(params, execution);
+    return fim2_execute(params, runner);
 }
 
 
@@ -475,8 +475,6 @@ export {
       Fim2Outputs,
       Fim2Parameters,
       fim2,
-      fim2_cargs,
       fim2_execute,
-      fim2_outputs,
       fim2_params,
 };

@@ -1014,14 +1014,16 @@ function cifti_convert_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiConvertOutputs`).
  */
 function cifti_convert_execute(
     params: CiftiConvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiConvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_CONVERT_METADATA);
     params = execution.params(params)
     const cargs = cifti_convert_cargs(params, execution)
     const ret = cifti_convert_outputs(params, execution)
@@ -1073,10 +1075,8 @@ function cifti_convert(
     from_text: CiftiConvertFromTextParameters | null = null,
     runner: Runner | null = null,
 ): CiftiConvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_CONVERT_METADATA);
     const params = cifti_convert_params(to_gifti_ext, from_gifti_ext, to_nifti, from_nifti, to_text, from_text)
-    return cifti_convert_execute(params, execution);
+    return cifti_convert_execute(params, runner);
 }
 
 
@@ -1099,32 +1099,16 @@ export {
       CiftiConvertToNiftiParameters,
       CiftiConvertToTextParameters,
       cifti_convert,
-      cifti_convert_cargs,
       cifti_convert_execute,
-      cifti_convert_from_gifti_ext_cargs,
-      cifti_convert_from_gifti_ext_outputs,
       cifti_convert_from_gifti_ext_params,
-      cifti_convert_from_nifti_cargs,
-      cifti_convert_from_nifti_outputs,
       cifti_convert_from_nifti_params,
-      cifti_convert_from_text_cargs,
-      cifti_convert_from_text_outputs,
       cifti_convert_from_text_params,
-      cifti_convert_outputs,
       cifti_convert_params,
-      cifti_convert_replace_binary_cargs,
       cifti_convert_replace_binary_params,
-      cifti_convert_reset_timepoints_1_cargs,
       cifti_convert_reset_timepoints_1_params,
-      cifti_convert_reset_timepoints_2_cargs,
       cifti_convert_reset_timepoints_2_params,
-      cifti_convert_reset_timepoints_cargs,
       cifti_convert_reset_timepoints_params,
-      cifti_convert_to_gifti_ext_cargs,
       cifti_convert_to_gifti_ext_params,
-      cifti_convert_to_nifti_cargs,
-      cifti_convert_to_nifti_outputs,
       cifti_convert_to_nifti_params,
-      cifti_convert_to_text_cargs,
       cifti_convert_to_text_params,
 };

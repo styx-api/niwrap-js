@@ -167,14 +167,16 @@ function make_cortex_label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeCortexLabelOutputs`).
  */
 function make_cortex_label_execute(
     params: MakeCortexLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeCortexLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_CORTEX_LABEL_METADATA);
     params = execution.params(params)
     const cargs = make_cortex_label_cargs(params, execution)
     const ret = make_cortex_label_outputs(params, execution)
@@ -205,10 +207,8 @@ function make_cortex_label(
     output_name: string | null = "cortex",
     runner: Runner | null = null,
 ): MakeCortexLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_CORTEX_LABEL_METADATA);
     const params = make_cortex_label_params(subject, hemi, use_a2009s, output_name)
-    return make_cortex_label_execute(params, execution);
+    return make_cortex_label_execute(params, runner);
 }
 
 
@@ -217,8 +217,6 @@ export {
       MakeCortexLabelOutputs,
       MakeCortexLabelParameters,
       make_cortex_label,
-      make_cortex_label_cargs,
       make_cortex_label_execute,
-      make_cortex_label_outputs,
       make_cortex_label_params,
 };

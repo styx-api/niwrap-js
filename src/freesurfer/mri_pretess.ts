@@ -188,14 +188,16 @@ function mri_pretess_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriPretessOutputs`).
  */
 function mri_pretess_execute(
     params: MriPretessParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriPretessOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_PRETESS_METADATA);
     params = execution.params(params)
     const cargs = mri_pretess_cargs(params, execution)
     const ret = mri_pretess_outputs(params, execution)
@@ -236,10 +238,8 @@ function mri_pretess(
     test: boolean = false,
     runner: Runner | null = null,
 ): MriPretessOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_PRETESS_METADATA);
     const params = mri_pretess_params(filledvol, labelstring, normvol, newfilledvol, debug_voxel, nocorners, write, keep, test)
-    return mri_pretess_execute(params, execution);
+    return mri_pretess_execute(params, runner);
 }
 
 
@@ -248,8 +248,6 @@ export {
       MriPretessOutputs,
       MriPretessParameters,
       mri_pretess,
-      mri_pretess_cargs,
       mri_pretess_execute,
-      mri_pretess_outputs,
       mri_pretess_params,
 };

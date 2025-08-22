@@ -337,14 +337,16 @@ function atropos_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AtroposOutputs`).
  */
 function atropos_execute(
     params: AtroposParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AtroposOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ATROPOS_METADATA);
     params = execution.params(params)
     const cargs = atropos_cargs(params, execution)
     const ret = atropos_outputs(params, execution)
@@ -405,10 +407,8 @@ function atropos(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AtroposOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ATROPOS_METADATA);
     const params = atropos_params(intensity_image, initialization, mask_image, convergence, likelihood_model, output, image_dimensionality, bspline, partial_volume_label_set, use_partial_volume_likelihoods, posterior_formulation, mrf, icm, use_random_seed, minimize_memory_usage, winsorize_outliers, use_euclidean_distance, label_propagation, verbose)
-    return atropos_execute(params, execution);
+    return atropos_execute(params, runner);
 }
 
 
@@ -417,8 +417,6 @@ export {
       AtroposOutputs,
       AtroposParameters,
       atropos,
-      atropos_cargs,
       atropos_execute,
-      atropos_outputs,
       atropos_params,
 };

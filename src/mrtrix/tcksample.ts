@@ -294,14 +294,16 @@ function tcksample_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TcksampleOutputs`).
  */
 function tcksample_execute(
     params: TcksampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TcksampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCKSAMPLE_METADATA);
     params = execution.params(params)
     const cargs = tcksample_cargs(params, execution)
     const ret = tcksample_outputs(params, execution)
@@ -360,10 +362,8 @@ function tcksample(
     version: boolean = false,
     runner: Runner | null = null,
 ): TcksampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCKSAMPLE_METADATA);
     const params = tcksample_params(tracks, image, values, stat_tck, nointerp, precise, use_tdi_fraction, info, quiet, debug, force, nthreads, config, help, version)
-    return tcksample_execute(params, execution);
+    return tcksample_execute(params, runner);
 }
 
 
@@ -373,10 +373,7 @@ export {
       TcksampleOutputs,
       TcksampleParameters,
       tcksample,
-      tcksample_cargs,
-      tcksample_config_cargs,
       tcksample_config_params,
       tcksample_execute,
-      tcksample_outputs,
       tcksample_params,
 };

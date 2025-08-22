@@ -138,14 +138,16 @@ function imcp_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImcpOutputs`).
  */
 function imcp_execute(
     params: ImcpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImcpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMCP_METADATA);
     params = execution.params(params)
     const cargs = imcp_cargs(params, execution)
     const ret = imcp_outputs(params, execution)
@@ -172,10 +174,8 @@ function imcp(
     output_location: string,
     runner: Runner | null = null,
 ): ImcpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMCP_METADATA);
     const params = imcp_params(infiles, output_location)
-    return imcp_execute(params, execution);
+    return imcp_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       ImcpOutputs,
       ImcpParameters,
       imcp,
-      imcp_cargs,
       imcp_execute,
-      imcp_outputs,
       imcp_params,
 };

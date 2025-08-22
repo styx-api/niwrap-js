@@ -313,14 +313,16 @@ function v_3d_anova_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dAnovaOutputs`).
  */
 function v_3d_anova_execute(
     params: V3dAnovaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dAnovaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ANOVA_METADATA);
     params = execution.params(params)
     const cargs = v_3d_anova_cargs(params, execution)
     const ret = v_3d_anova_outputs(params, execution)
@@ -371,10 +373,8 @@ function v_3d_anova(
     bucket: string | null = null,
     runner: Runner | null = null,
 ): V3dAnovaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ANOVA_METADATA);
     const params = v_3d_anova_params(levels, datasets, voxel, diskspace, mask, debug, ftr, mean, diff, contr, old_method, ok, assume_sph, bucket)
-    return v_3d_anova_execute(params, execution);
+    return v_3d_anova_execute(params, runner);
 }
 
 
@@ -383,8 +383,6 @@ export {
       V3dAnovaParameters,
       V_3D_ANOVA_METADATA,
       v_3d_anova,
-      v_3d_anova_cargs,
       v_3d_anova_execute,
-      v_3d_anova_outputs,
       v_3d_anova_params,
 };

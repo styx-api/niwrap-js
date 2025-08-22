@@ -168,14 +168,16 @@ function mri_cvs_check_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCvsCheckOutputs`).
  */
 function mri_cvs_check_execute(
     params: MriCvsCheckParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCvsCheckOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CVS_CHECK_METADATA);
     params = execution.params(params)
     const cargs = mri_cvs_check_cargs(params, execution)
     const ret = mri_cvs_check_outputs(params, execution)
@@ -208,10 +210,8 @@ function mri_cvs_check(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriCvsCheckOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CVS_CHECK_METADATA);
     const params = mri_cvs_check_params(mov_subjid, template_subjid, hemi, help, version)
-    return mri_cvs_check_execute(params, execution);
+    return mri_cvs_check_execute(params, runner);
 }
 
 
@@ -220,8 +220,6 @@ export {
       MriCvsCheckOutputs,
       MriCvsCheckParameters,
       mri_cvs_check,
-      mri_cvs_check_cargs,
       mri_cvs_check_execute,
-      mri_cvs_check_outputs,
       mri_cvs_check_params,
 };

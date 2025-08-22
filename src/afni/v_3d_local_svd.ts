@@ -200,14 +200,16 @@ function v_3d_local_svd_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dLocalSvdOutputs`).
  */
 function v_3d_local_svd_execute(
     params: V3dLocalSvdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dLocalSvdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_LOCAL_SVD_METADATA);
     params = execution.params(params)
     const cargs = v_3d_local_svd_cargs(params, execution)
     const ret = v_3d_local_svd_outputs(params, execution)
@@ -246,10 +248,8 @@ function v_3d_local_svd(
     vproj: number | null = null,
     runner: Runner | null = null,
 ): V3dLocalSvdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_LOCAL_SVD_METADATA);
     const params = v_3d_local_svd_params(input_file, output_file, auto_mask, mask_file, nbhd, polort, vnorm, vproj)
-    return v_3d_local_svd_execute(params, execution);
+    return v_3d_local_svd_execute(params, runner);
 }
 
 
@@ -258,8 +258,6 @@ export {
       V3dLocalSvdParameters,
       V_3D_LOCAL_SVD_METADATA,
       v_3d_local_svd,
-      v_3d_local_svd_cargs,
       v_3d_local_svd_execute,
-      v_3d_local_svd_outputs,
       v_3d_local_svd_params,
 };

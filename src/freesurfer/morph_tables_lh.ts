@@ -143,14 +143,16 @@ function morph_tables_lh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MorphTablesLhOutputs`).
  */
 function morph_tables_lh_execute(
     params: MorphTablesLhParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MorphTablesLhOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MORPH_TABLES_LH_METADATA);
     params = execution.params(params)
     const cargs = morph_tables_lh_cargs(params, execution)
     const ret = morph_tables_lh_outputs(params, execution)
@@ -177,10 +179,8 @@ function morph_tables_lh(
     some_flag: boolean = false,
     runner: Runner | null = null,
 ): MorphTablesLhOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MORPH_TABLES_LH_METADATA);
     const params = morph_tables_lh_params(input_file, some_flag)
-    return morph_tables_lh_execute(params, execution);
+    return morph_tables_lh_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       MorphTablesLhOutputs,
       MorphTablesLhParameters,
       morph_tables_lh,
-      morph_tables_lh_cargs,
       morph_tables_lh_execute,
-      morph_tables_lh_outputs,
       morph_tables_lh_params,
 };

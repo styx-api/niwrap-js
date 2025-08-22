@@ -194,14 +194,16 @@ function mergeseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MergesegOutputs`).
  */
 function mergeseg_execute(
     params: MergesegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MergesegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MERGESEG_METADATA);
     params = execution.params(params)
     const cargs = mergeseg_cargs(params, execution)
     const ret = mergeseg_outputs(params, execution)
@@ -238,10 +240,8 @@ function mergeseg(
     ctab: InputPathType | null = null,
     runner: Runner | null = null,
 ): MergesegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MERGESEG_METADATA);
     const params = mergeseg_params(src_seg, merge_seg, out_seg, segid, segid_only, segid_erode, ctab)
-    return mergeseg_execute(params, execution);
+    return mergeseg_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       MergesegOutputs,
       MergesegParameters,
       mergeseg,
-      mergeseg_cargs,
       mergeseg_execute,
-      mergeseg_outputs,
       mergeseg_params,
 };

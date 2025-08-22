@@ -216,14 +216,16 @@ function bbmask_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BbmaskOutputs`).
  */
 function bbmask_execute(
     params: BbmaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BbmaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BBMASK_METADATA);
     params = execution.params(params)
     const cargs = bbmask_cargs(params, execution)
     const ret = bbmask_outputs(params, execution)
@@ -258,10 +260,8 @@ function bbmask(
     sub2src: InputPathType | null = null,
     runner: Runner | null = null,
 ): BbmaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BBMASK_METADATA);
     const params = bbmask_params(mask, src_volumes, npad, registration, regheader, sub2src)
-    return bbmask_execute(params, execution);
+    return bbmask_execute(params, runner);
 }
 
 
@@ -270,8 +270,6 @@ export {
       BbmaskOutputs,
       BbmaskParameters,
       bbmask,
-      bbmask_cargs,
       bbmask_execute,
-      bbmask_outputs,
       bbmask_params,
 };

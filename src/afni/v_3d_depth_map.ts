@@ -241,14 +241,16 @@ function v_3d_depth_map_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dDepthMapOutputs`).
  */
 function v_3d_depth_map_execute(
     params: V3dDepthMapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dDepthMapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_DEPTH_MAP_METADATA);
     params = execution.params(params)
     const cargs = v_3d_depth_map_cargs(params, execution)
     const ret = v_3d_depth_map_outputs(params, execution)
@@ -297,10 +299,8 @@ function v_3d_depth_map(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): V3dDepthMapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_DEPTH_MAP_METADATA);
     const params = v_3d_depth_map_params(input_dataset, output_prefix, mask, dist_squared, ignore_voxdims, rimify, zeros_are_zero, zeros_are_neg, nz_are_neg, bounds_are_not_zero, only2_d, binary_only, verbosity)
-    return v_3d_depth_map_execute(params, execution);
+    return v_3d_depth_map_execute(params, runner);
 }
 
 
@@ -309,8 +309,6 @@ export {
       V3dDepthMapParameters,
       V_3D_DEPTH_MAP_METADATA,
       v_3d_depth_map,
-      v_3d_depth_map_cargs,
       v_3d_depth_map_execute,
-      v_3d_depth_map_outputs,
       v_3d_depth_map_params,
 };

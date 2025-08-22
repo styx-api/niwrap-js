@@ -232,14 +232,16 @@ function v_3d_local_histog_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dLocalHistogOutputs`).
  */
 function v_3d_local_histog_execute(
     params: V3dLocalHistogParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dLocalHistogOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_LOCAL_HISTOG_METADATA);
     params = execution.params(params)
     const cargs = v_3d_local_histog_cargs(params, execution)
     const ret = v_3d_local_histog_outputs(params, execution)
@@ -282,10 +284,8 @@ function v_3d_local_histog(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dLocalHistogOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_LOCAL_HISTOG_METADATA);
     const params = v_3d_local_histog_params(prefix, input_datasets, nbhd_option, hsave, lab_file, exclude, exc_nonlab, mincount, probability, quiet)
-    return v_3d_local_histog_execute(params, execution);
+    return v_3d_local_histog_execute(params, runner);
 }
 
 
@@ -294,8 +294,6 @@ export {
       V3dLocalHistogParameters,
       V_3D_LOCAL_HISTOG_METADATA,
       v_3d_local_histog,
-      v_3d_local_histog_cargs,
       v_3d_local_histog_execute,
-      v_3d_local_histog_outputs,
       v_3d_local_histog_params,
 };

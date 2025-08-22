@@ -215,14 +215,16 @@ function grad_unwarp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GradUnwarpOutputs`).
  */
 function grad_unwarp_execute(
     params: GradUnwarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GradUnwarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GRAD_UNWARP_METADATA);
     params = execution.params(params)
     const cargs = grad_unwarp_cargs(params, execution)
     const ret = grad_unwarp_outputs(params, execution)
@@ -263,10 +265,8 @@ function grad_unwarp(
     matlab_binary: string | null = "/space/lyon/6/pubsw/common/matlab/6.5/bin/matlab",
     runner: Runner | null = null,
 ): GradUnwarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GRAD_UNWARP_METADATA);
     const params = grad_unwarp_params(infile, outfile, seriesno, unwarp_type, nojac, corfov, cor, interp, matlab_binary)
-    return grad_unwarp_execute(params, execution);
+    return grad_unwarp_execute(params, runner);
 }
 
 
@@ -275,8 +275,6 @@ export {
       GradUnwarpOutputs,
       GradUnwarpParameters,
       grad_unwarp,
-      grad_unwarp_cargs,
       grad_unwarp_execute,
-      grad_unwarp_outputs,
       grad_unwarp_params,
 };

@@ -160,14 +160,16 @@ function extract_region_from_image_by_mask_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ExtractRegionFromImageByMaskOutputs`).
  */
 function extract_region_from_image_by_mask_execute(
     params: ExtractRegionFromImageByMaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ExtractRegionFromImageByMaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EXTRACT_REGION_FROM_IMAGE_BY_MASK_METADATA);
     params = execution.params(params)
     const cargs = extract_region_from_image_by_mask_cargs(params, execution)
     const ret = extract_region_from_image_by_mask_outputs(params, execution)
@@ -202,10 +204,8 @@ function extract_region_from_image_by_mask(
     pad_radius: number | null = 0,
     runner: Runner | null = null,
 ): ExtractRegionFromImageByMaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EXTRACT_REGION_FROM_IMAGE_BY_MASK_METADATA);
     const params = extract_region_from_image_by_mask_params(image_dimension, input_image, output_image, label_mask_image, label, pad_radius)
-    return extract_region_from_image_by_mask_execute(params, execution);
+    return extract_region_from_image_by_mask_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       ExtractRegionFromImageByMaskOutputs,
       ExtractRegionFromImageByMaskParameters,
       extract_region_from_image_by_mask,
-      extract_region_from_image_by_mask_cargs,
       extract_region_from_image_by_mask_execute,
-      extract_region_from_image_by_mask_outputs,
       extract_region_from_image_by_mask_params,
 };

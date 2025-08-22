@@ -212,14 +212,16 @@ function v_3d_degree_centrality_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dDegreeCentralityOutputs`).
  */
 function v_3d_degree_centrality_execute(
     params: V3dDegreeCentralityParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dDegreeCentralityOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_DEGREE_CENTRALITY_METADATA);
     params = execution.params(params)
     const cargs = v_3d_degree_centrality_cargs(params, execution)
     const ret = v_3d_degree_centrality_outputs(params, execution)
@@ -258,10 +260,8 @@ function v_3d_degree_centrality(
     thresh: number | null = null,
     runner: Runner | null = null,
 ): V3dDegreeCentralityOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_DEGREE_CENTRALITY_METADATA);
     const params = v_3d_degree_centrality_params(in_file, autoclip, automask, mask, oned_file, polort, sparsity, thresh)
-    return v_3d_degree_centrality_execute(params, execution);
+    return v_3d_degree_centrality_execute(params, runner);
 }
 
 
@@ -270,8 +270,6 @@ export {
       V3dDegreeCentralityParameters,
       V_3D_DEGREE_CENTRALITY_METADATA,
       v_3d_degree_centrality,
-      v_3d_degree_centrality_cargs,
       v_3d_degree_centrality_execute,
-      v_3d_degree_centrality_outputs,
       v_3d_degree_centrality_params,
 };

@@ -179,14 +179,16 @@ function analyzeto4dfp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Analyzeto4dfpOutputs`).
  */
 function analyzeto4dfp_execute(
     params: Analyzeto4dfpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Analyzeto4dfpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANALYZETO4DFP_METADATA);
     params = execution.params(params)
     const cargs = analyzeto4dfp_cargs(params, execution)
     const ret = analyzeto4dfp_outputs(params, execution)
@@ -223,10 +225,8 @@ function analyzeto4dfp(
     orientation: number | null = null,
     runner: Runner | null = null,
 ): Analyzeto4dfpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANALYZETO4DFP_METADATA);
     const params = analyzeto4dfp_params(analyze_image, rois_scale, flip_x, flip_y, flip_z, endian, orientation)
-    return analyzeto4dfp_execute(params, execution);
+    return analyzeto4dfp_execute(params, runner);
 }
 
 
@@ -235,8 +235,6 @@ export {
       Analyzeto4dfpOutputs,
       Analyzeto4dfpParameters,
       analyzeto4dfp,
-      analyzeto4dfp_cargs,
       analyzeto4dfp_execute,
-      analyzeto4dfp_outputs,
       analyzeto4dfp_params,
 };

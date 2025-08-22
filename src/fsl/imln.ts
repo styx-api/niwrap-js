@@ -138,14 +138,16 @@ function imln_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImlnOutputs`).
  */
 function imln_execute(
     params: ImlnParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImlnOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMLN_METADATA);
     params = execution.params(params)
     const cargs = imln_cargs(params, execution)
     const ret = imln_outputs(params, execution)
@@ -172,10 +174,8 @@ function imln(
     link_name: string,
     runner: Runner | null = null,
 ): ImlnOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMLN_METADATA);
     const params = imln_params(input_file, link_name)
-    return imln_execute(params, execution);
+    return imln_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       ImlnOutputs,
       ImlnParameters,
       imln,
-      imln_cargs,
       imln_execute,
-      imln_outputs,
       imln_params,
 };

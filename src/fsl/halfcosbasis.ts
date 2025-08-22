@@ -298,14 +298,16 @@ function halfcosbasis_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `HalfcosbasisOutputs`).
  */
 function halfcosbasis_execute(
     params: HalfcosbasisParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): HalfcosbasisOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(HALFCOSBASIS_METADATA);
     params = execution.params(params)
     const cargs = halfcosbasis_cargs(params, execution)
     const ret = halfcosbasis_outputs(params, execution)
@@ -362,10 +364,8 @@ function halfcosbasis(
     help_flag_long: boolean = false,
     runner: Runner | null = null,
 ): HalfcosbasisOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(HALFCOSBASIS_METADATA);
     const params = halfcosbasis_params(hrf_param_file, hrf_param_file_hf, verbose_flag, debug_level, debug_level_debug, debug_level_debuglevel, timing_on_flag, log_dir, log_dir_ld, log_dir_logdir, num_hrf_samples, num_hrf_basis_funcs, num_secs, num_secs_nsecs, temp_res, help_flag, help_flag_long)
-    return halfcosbasis_execute(params, execution);
+    return halfcosbasis_execute(params, runner);
 }
 
 
@@ -374,8 +374,6 @@ export {
       HalfcosbasisOutputs,
       HalfcosbasisParameters,
       halfcosbasis,
-      halfcosbasis_cargs,
       halfcosbasis_execute,
-      halfcosbasis_outputs,
       halfcosbasis_params,
 };

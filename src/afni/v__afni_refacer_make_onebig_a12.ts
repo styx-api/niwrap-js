@@ -133,14 +133,16 @@ function v__afni_refacer_make_onebig_a12_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAfniRefacerMakeOnebigA12Outputs`).
  */
 function v__afni_refacer_make_onebig_a12_execute(
     params: VAfniRefacerMakeOnebigA12Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAfniRefacerMakeOnebigA12Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__AFNI_REFACER_MAKE_ONEBIG_A12_METADATA);
     params = execution.params(params)
     const cargs = v__afni_refacer_make_onebig_a12_cargs(params, execution)
     const ret = v__afni_refacer_make_onebig_a12_outputs(params, execution)
@@ -165,10 +167,8 @@ function v__afni_refacer_make_onebig_a12(
     t1w_dataset: InputPathType,
     runner: Runner | null = null,
 ): VAfniRefacerMakeOnebigA12Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__AFNI_REFACER_MAKE_ONEBIG_A12_METADATA);
     const params = v__afni_refacer_make_onebig_a12_params(t1w_dataset)
-    return v__afni_refacer_make_onebig_a12_execute(params, execution);
+    return v__afni_refacer_make_onebig_a12_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       VAfniRefacerMakeOnebigA12Parameters,
       V__AFNI_REFACER_MAKE_ONEBIG_A12_METADATA,
       v__afni_refacer_make_onebig_a12,
-      v__afni_refacer_make_onebig_a12_cargs,
       v__afni_refacer_make_onebig_a12_execute,
-      v__afni_refacer_make_onebig_a12_outputs,
       v__afni_refacer_make_onebig_a12_params,
 };

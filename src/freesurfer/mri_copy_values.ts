@@ -143,14 +143,16 @@ function mri_copy_values_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCopyValuesOutputs`).
  */
 function mri_copy_values_execute(
     params: MriCopyValuesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCopyValuesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_COPY_VALUES_METADATA);
     params = execution.params(params)
     const cargs = mri_copy_values_cargs(params, execution)
     const ret = mri_copy_values_outputs(params, execution)
@@ -179,10 +181,8 @@ function mri_copy_values(
     output_volume: string,
     runner: Runner | null = null,
 ): MriCopyValuesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_COPY_VALUES_METADATA);
     const params = mri_copy_values_params(source_volume, target_volume, output_volume)
-    return mri_copy_values_execute(params, execution);
+    return mri_copy_values_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MriCopyValuesOutputs,
       MriCopyValuesParameters,
       mri_copy_values,
-      mri_copy_values_cargs,
       mri_copy_values_execute,
-      mri_copy_values_outputs,
       mri_copy_values_params,
 };

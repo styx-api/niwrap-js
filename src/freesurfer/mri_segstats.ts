@@ -739,14 +739,16 @@ function mri_segstats_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSegstatsOutputs`).
  */
 function mri_segstats_execute(
     params: MriSegstatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSegstatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SEGSTATS_METADATA);
     params = execution.params(params)
     const cargs = mri_segstats_cargs(params, execution)
     const ret = mri_segstats_outputs(params, execution)
@@ -885,10 +887,8 @@ function mri_segstats(
     random_seed: number | null = null,
     runner: Runner | null = null,
 ): MriSegstatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SEGSTATS_METADATA);
     const params = mri_segstats_params(segvol, output_file, annot_subject, annot_hemisphere, annot_parcellation, slabel_subject, slabel_hemisphere, slabel_label, partial_vol_comp, input_volume, seg_erode, frame, robust, square_input, sqrt_input, multiply_input, divide_input, snr_column, absolute_value, accumulate_mean, color_table, default_color_table, gca_color_table, ids, exclude_ids, exclude_gm_wm, surf_wm_vol, surf_ctx_vol, no_global_stats, empty_segments, ctab_output, mask_volume, mask_threshold, mask_sign, mask_frame, invert_mask, mask_erode, brain_vol_seg, brain_mask_vol, subcortical_gray, total_gray, intracranial_volume, intracranial_volume_only, old_intracranial_volume_only, talairach_transform, xfm_to_etiv, euler_hole_count, avg_waveform, sum_waveform, avg_waveform_vol, remove_avgwf_mean, spatial_frame_avg, voxel_crs, replace_ids, replace_ids_file, gtm_default_seg_merge, gtm_default_seg_merge_choroid, qa_stats_file, subjects_dir, random_seed)
-    return mri_segstats_execute(params, execution);
+    return mri_segstats_execute(params, runner);
 }
 
 
@@ -897,8 +897,6 @@ export {
       MriSegstatsOutputs,
       MriSegstatsParameters,
       mri_segstats,
-      mri_segstats_cargs,
       mri_segstats_execute,
-      mri_segstats_outputs,
       mri_segstats_params,
 };

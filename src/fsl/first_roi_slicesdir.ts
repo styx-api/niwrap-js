@@ -143,14 +143,16 @@ function first_roi_slicesdir_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FirstRoiSlicesdirOutputs`).
  */
 function first_roi_slicesdir_execute(
     params: FirstRoiSlicesdirParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FirstRoiSlicesdirOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIRST_ROI_SLICESDIR_METADATA);
     params = execution.params(params)
     const cargs = first_roi_slicesdir_cargs(params, execution)
     const ret = first_roi_slicesdir_outputs(params, execution)
@@ -177,10 +179,8 @@ function first_roi_slicesdir(
     input_label_images: string,
     runner: Runner | null = null,
 ): FirstRoiSlicesdirOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIRST_ROI_SLICESDIR_METADATA);
     const params = first_roi_slicesdir_params(input_t1_images, input_label_images)
-    return first_roi_slicesdir_execute(params, execution);
+    return first_roi_slicesdir_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       FirstRoiSlicesdirOutputs,
       FirstRoiSlicesdirParameters,
       first_roi_slicesdir,
-      first_roi_slicesdir_cargs,
       first_roi_slicesdir_execute,
-      first_roi_slicesdir_outputs,
       first_roi_slicesdir_params,
 };

@@ -276,14 +276,16 @@ function mri_exvivo_norm_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriExvivoNormOutputs`).
  */
 function mri_exvivo_norm_execute(
     params: MriExvivoNormParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriExvivoNormOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_EXVIVO_NORM_METADATA);
     params = execution.params(params)
     const cargs = mri_exvivo_norm_cargs(params, execution)
     const ret = mri_exvivo_norm_outputs(params, execution)
@@ -336,10 +338,8 @@ function mri_exvivo_norm(
     gpu_number: number | null = null,
     runner: Runner | null = null,
 ): MriExvivoNormOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_EXVIVO_NORM_METADATA);
     const params = mri_exvivo_norm_params(input_volume, output_volume, hemi, prediction_volume, normalized_volume, freeview, normalize_output_mean, write_normalization_rounds, upper_threshold, bias_field_sigma, normalization_rounds, multichannel, model_file, weights_file, gpu_number)
-    return mri_exvivo_norm_execute(params, execution);
+    return mri_exvivo_norm_execute(params, runner);
 }
 
 
@@ -348,8 +348,6 @@ export {
       MriExvivoNormOutputs,
       MriExvivoNormParameters,
       mri_exvivo_norm,
-      mri_exvivo_norm_cargs,
       mri_exvivo_norm_execute,
-      mri_exvivo_norm_outputs,
       mri_exvivo_norm_params,
 };

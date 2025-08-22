@@ -137,14 +137,16 @@ function mris_interpolate_warp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisInterpolateWarpOutputs`).
  */
 function mris_interpolate_warp_execute(
     params: MrisInterpolateWarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisInterpolateWarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_INTERPOLATE_WARP_METADATA);
     params = execution.params(params)
     const cargs = mris_interpolate_warp_cargs(params, execution)
     const ret = mris_interpolate_warp_outputs(params, execution)
@@ -173,10 +175,8 @@ function mris_interpolate_warp(
     warp_field: InputPathType,
     runner: Runner | null = null,
 ): MrisInterpolateWarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_INTERPOLATE_WARP_METADATA);
     const params = mris_interpolate_warp_params(start_surface, end_surface, warp_field)
-    return mris_interpolate_warp_execute(params, execution);
+    return mris_interpolate_warp_execute(params, runner);
 }
 
 
@@ -185,8 +185,6 @@ export {
       MrisInterpolateWarpOutputs,
       MrisInterpolateWarpParameters,
       mris_interpolate_warp,
-      mris_interpolate_warp_cargs,
       mris_interpolate_warp_execute,
-      mris_interpolate_warp_outputs,
       mris_interpolate_warp_params,
 };

@@ -217,14 +217,16 @@ function cifti_tool_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiToolOutputs`).
  */
 function cifti_tool_execute(
     params: CiftiToolParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiToolOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_TOOL_METADATA);
     params = execution.params(params)
     const cargs = cifti_tool_cargs(params, execution)
     const ret = cifti_tool_outputs(params, execution)
@@ -265,10 +267,8 @@ function cifti_tool(
     both_verbose_levels: number | null = null,
     runner: Runner | null = null,
 ): CiftiToolOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_TOOL_METADATA);
     const params = cifti_tool_params(input_file, as_cext, disp_cext, eval_cext, eval_type, output_file, verbose_level, verbose_read_level, both_verbose_levels)
-    return cifti_tool_execute(params, execution);
+    return cifti_tool_execute(params, runner);
 }
 
 
@@ -277,8 +277,6 @@ export {
       CiftiToolOutputs,
       CiftiToolParameters,
       cifti_tool,
-      cifti_tool_cargs,
       cifti_tool_execute,
-      cifti_tool_outputs,
       cifti_tool_params,
 };

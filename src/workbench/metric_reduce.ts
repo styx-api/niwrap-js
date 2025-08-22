@@ -229,14 +229,16 @@ function metric_reduce_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricReduceOutputs`).
  */
 function metric_reduce_execute(
     params: MetricReduceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricReduceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_REDUCE_METADATA);
     params = execution.params(params)
     const cargs = metric_reduce_cargs(params, execution)
     const ret = metric_reduce_outputs(params, execution)
@@ -289,10 +291,8 @@ function metric_reduce(
     opt_only_numeric: boolean = false,
     runner: Runner | null = null,
 ): MetricReduceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_REDUCE_METADATA);
     const params = metric_reduce_params(metric_in, operation, metric_out, exclude_outliers, opt_only_numeric)
-    return metric_reduce_execute(params, execution);
+    return metric_reduce_execute(params, runner);
 }
 
 
@@ -302,10 +302,7 @@ export {
       MetricReduceOutputs,
       MetricReduceParameters,
       metric_reduce,
-      metric_reduce_cargs,
-      metric_reduce_exclude_outliers_cargs,
       metric_reduce_exclude_outliers_params,
       metric_reduce_execute,
-      metric_reduce_outputs,
       metric_reduce_params,
 };

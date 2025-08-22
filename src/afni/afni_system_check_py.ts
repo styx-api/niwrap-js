@@ -217,14 +217,16 @@ function afni_system_check_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AfniSystemCheckPyOutputs`).
  */
 function afni_system_check_py_execute(
     params: AfniSystemCheckPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AfniSystemCheckPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AFNI_SYSTEM_CHECK_PY_METADATA);
     params = execution.params(params)
     const cargs = afni_system_check_py_cargs(params, execution)
     const ret = afni_system_check_py_outputs(params, execution)
@@ -267,10 +269,8 @@ function afni_system_check_py(
     data_root: string | null = null,
     runner: Runner | null = null,
 ): AfniSystemCheckPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AFNI_SYSTEM_CHECK_PY_METADATA);
     const params = afni_system_check_py_params(check_all, find_prog, exact, disp_num_cpu, disp_ver_matplotlib, dot_file_list, dot_file_show, dot_file_pack, casematch, data_root)
-    return afni_system_check_py_execute(params, execution);
+    return afni_system_check_py_execute(params, runner);
 }
 
 
@@ -279,8 +279,6 @@ export {
       AfniSystemCheckPyOutputs,
       AfniSystemCheckPyParameters,
       afni_system_check_py,
-      afni_system_check_py_cargs,
       afni_system_check_py_execute,
-      afni_system_check_py_outputs,
       afni_system_check_py_params,
 };

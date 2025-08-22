@@ -206,14 +206,16 @@ function mri_probe_ima_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriProbeImaOutputs`).
  */
 function mri_probe_ima_execute(
     params: MriProbeImaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriProbeImaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_PROBE_IMA_METADATA);
     params = execution.params(params)
     const cargs = mri_probe_ima_cargs(params, execution)
     const ret = mri_probe_ima_outputs(params, execution)
@@ -254,10 +256,8 @@ function mri_probe_ima(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriProbeImaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_PROBE_IMA_METADATA);
     const params = mri_probe_ima_params(ima_file, key_string, offset_type_len, attribute_name, fileinfo, dictionary, ob_stem, help, version)
-    return mri_probe_ima_execute(params, execution);
+    return mri_probe_ima_execute(params, runner);
 }
 
 
@@ -266,8 +266,6 @@ export {
       MriProbeImaOutputs,
       MriProbeImaParameters,
       mri_probe_ima,
-      mri_probe_ima_cargs,
       mri_probe_ima_execute,
-      mri_probe_ima_outputs,
       mri_probe_ima_params,
 };

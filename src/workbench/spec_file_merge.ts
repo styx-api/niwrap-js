@@ -140,14 +140,16 @@ function spec_file_merge_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SpecFileMergeOutputs`).
  */
 function spec_file_merge_execute(
     params: SpecFileMergeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SpecFileMergeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SPEC_FILE_MERGE_METADATA);
     params = execution.params(params)
     const cargs = spec_file_merge_cargs(params, execution)
     const ret = spec_file_merge_outputs(params, execution)
@@ -178,10 +180,8 @@ function spec_file_merge(
     out_spec: string,
     runner: Runner | null = null,
 ): SpecFileMergeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SPEC_FILE_MERGE_METADATA);
     const params = spec_file_merge_params(spec_1, spec_2, out_spec)
-    return spec_file_merge_execute(params, execution);
+    return spec_file_merge_execute(params, runner);
 }
 
 
@@ -190,8 +190,6 @@ export {
       SpecFileMergeOutputs,
       SpecFileMergeParameters,
       spec_file_merge,
-      spec_file_merge_cargs,
       spec_file_merge_execute,
-      spec_file_merge_outputs,
       spec_file_merge_params,
 };

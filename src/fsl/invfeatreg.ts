@@ -127,14 +127,16 @@ function invfeatreg_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `InvfeatregOutputs`).
  */
 function invfeatreg_execute(
     params: InvfeatregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): InvfeatregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(INVFEATREG_METADATA);
     params = execution.params(params)
     const cargs = invfeatreg_cargs(params, execution)
     const ret = invfeatreg_outputs(params, execution)
@@ -159,10 +161,8 @@ function invfeatreg(
     feat_directory: string,
     runner: Runner | null = null,
 ): InvfeatregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(INVFEATREG_METADATA);
     const params = invfeatreg_params(feat_directory)
-    return invfeatreg_execute(params, execution);
+    return invfeatreg_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       InvfeatregOutputs,
       InvfeatregParameters,
       invfeatreg,
-      invfeatreg_cargs,
       invfeatreg_execute,
-      invfeatreg_outputs,
       invfeatreg_params,
 };

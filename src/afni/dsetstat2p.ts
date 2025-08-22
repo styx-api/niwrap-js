@@ -166,14 +166,16 @@ function dsetstat2p_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Dsetstat2pOutputs`).
  */
 function dsetstat2p_execute(
     params: Dsetstat2pParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Dsetstat2pOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DSETSTAT2P_METADATA);
     params = execution.params(params)
     const cargs = dsetstat2p_cargs(params, execution)
     const ret = dsetstat2p_outputs(params, execution)
@@ -208,10 +210,8 @@ function dsetstat2p(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): Dsetstat2pOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DSETSTAT2P_METADATA);
     const params = dsetstat2p_params(dataset, statval, bisided, two_sided, one_sided, quiet)
-    return dsetstat2p_execute(params, execution);
+    return dsetstat2p_execute(params, runner);
 }
 
 
@@ -220,8 +220,6 @@ export {
       Dsetstat2pOutputs,
       Dsetstat2pParameters,
       dsetstat2p,
-      dsetstat2p_cargs,
       dsetstat2p_execute,
-      dsetstat2p_outputs,
       dsetstat2p_params,
 };

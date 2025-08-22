@@ -166,14 +166,16 @@ function surface_inflation_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceInflationOutputs`).
  */
 function surface_inflation_execute(
     params: SurfaceInflationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceInflationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_INFLATION_METADATA);
     params = execution.params(params)
     const cargs = surface_inflation_cargs(params, execution)
     const ret = surface_inflation_outputs(params, execution)
@@ -212,10 +214,8 @@ function surface_inflation(
     surface_out: string,
     runner: Runner | null = null,
 ): SurfaceInflationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_INFLATION_METADATA);
     const params = surface_inflation_params(anatomical_surface_in, surface_in, number_of_smoothing_cycles, smoothing_strength, smoothing_iterations, inflation_factor, surface_out)
-    return surface_inflation_execute(params, execution);
+    return surface_inflation_execute(params, runner);
 }
 
 
@@ -224,8 +224,6 @@ export {
       SurfaceInflationOutputs,
       SurfaceInflationParameters,
       surface_inflation,
-      surface_inflation_cargs,
       surface_inflation_execute,
-      surface_inflation_outputs,
       surface_inflation_params,
 };

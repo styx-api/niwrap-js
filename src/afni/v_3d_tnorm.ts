@@ -192,14 +192,16 @@ function v_3d_tnorm_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTnormOutputs`).
  */
 function v_3d_tnorm_execute(
     params: V3dTnormParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTnormOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TNORM_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tnorm_cargs(params, execution)
     const ret = v_3d_tnorm_outputs(params, execution)
@@ -238,10 +240,8 @@ function v_3d_tnorm(
     l1fit: boolean = false,
     runner: Runner | null = null,
 ): V3dTnormOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TNORM_METADATA);
     const params = v_3d_tnorm_params(input_dataset, prefix, norm2, norm_r, norm1, normx, polort, l1fit)
-    return v_3d_tnorm_execute(params, execution);
+    return v_3d_tnorm_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       V3dTnormParameters,
       V_3D_TNORM_METADATA,
       v_3d_tnorm,
-      v_3d_tnorm_cargs,
       v_3d_tnorm_execute,
-      v_3d_tnorm_outputs,
       v_3d_tnorm_params,
 };

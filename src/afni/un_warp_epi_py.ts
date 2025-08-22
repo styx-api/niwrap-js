@@ -169,14 +169,16 @@ function un_warp_epi_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `UnWarpEpiPyOutputs`).
  */
 function un_warp_epi_py_execute(
     params: UnWarpEpiPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): UnWarpEpiPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(UN_WARP_EPI_PY_METADATA);
     params = execution.params(params)
     const cargs = un_warp_epi_py_cargs(params, execution)
     const ret = un_warp_epi_py_outputs(params, execution)
@@ -211,10 +213,8 @@ function un_warp_epi_py(
     giant_move: boolean = false,
     runner: Runner | null = null,
 ): UnWarpEpiPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UN_WARP_EPI_PY_METADATA);
     const params = un_warp_epi_py_params(forward, reverse, anat4warp, data, subj_id, giant_move)
-    return un_warp_epi_py_execute(params, execution);
+    return un_warp_epi_py_execute(params, runner);
 }
 
 
@@ -223,8 +223,6 @@ export {
       UnWarpEpiPyOutputs,
       UnWarpEpiPyParameters,
       un_warp_epi_py,
-      un_warp_epi_py_cargs,
       un_warp_epi_py_execute,
-      un_warp_epi_py_outputs,
       un_warp_epi_py_params,
 };

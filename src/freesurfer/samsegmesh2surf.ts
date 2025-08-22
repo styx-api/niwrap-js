@@ -196,14 +196,16 @@ function samsegmesh2surf_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Samsegmesh2surfOutputs`).
  */
 function samsegmesh2surf_execute(
     params: Samsegmesh2surfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Samsegmesh2surfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SAMSEGMESH2SURF_METADATA);
     params = execution.params(params)
     const cargs = samsegmesh2surf_cargs(params, execution)
     const ret = samsegmesh2surf_outputs(params, execution)
@@ -238,10 +240,8 @@ function samsegmesh2surf(
     invert_flag: boolean = false,
     runner: Runner | null = null,
 ): Samsegmesh2surfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SAMSEGMESH2SURF_METADATA);
     const params = samsegmesh2surf_params(atlas_mesh, template, lta_transform, output_surface, output_priors, invert_flag)
-    return samsegmesh2surf_execute(params, execution);
+    return samsegmesh2surf_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       Samsegmesh2surfOutputs,
       Samsegmesh2surfParameters,
       samsegmesh2surf,
-      samsegmesh2surf_cargs,
       samsegmesh2surf_execute,
-      samsegmesh2surf_outputs,
       samsegmesh2surf_params,
 };

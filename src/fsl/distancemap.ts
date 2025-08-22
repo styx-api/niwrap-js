@@ -235,14 +235,16 @@ function distancemap_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DistancemapOutputs`).
  */
 function distancemap_execute(
     params: DistancemapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DistancemapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DISTANCEMAP_METADATA);
     params = execution.params(params)
     const cargs = distancemap_cargs(params, execution)
     const ret = distancemap_outputs(params, execution)
@@ -285,10 +287,8 @@ function distancemap(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): DistancemapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DISTANCEMAP_METADATA);
     const params = distancemap_params(input_image, output_image, mask_image, second_image, local_maxima_image, segmented_image, invert_flag, interpolate_values, verbose_flag, help_flag)
-    return distancemap_execute(params, execution);
+    return distancemap_execute(params, runner);
 }
 
 
@@ -297,8 +297,6 @@ export {
       DistancemapOutputs,
       DistancemapParameters,
       distancemap,
-      distancemap_cargs,
       distancemap_execute,
-      distancemap_outputs,
       distancemap_params,
 };

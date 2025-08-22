@@ -272,14 +272,16 @@ function bayesian_group_ana_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BayesianGroupAnaPyOutputs`).
  */
 function bayesian_group_ana_py_execute(
     params: BayesianGroupAnaPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BayesianGroupAnaPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BAYESIAN_GROUP_ANA_PY_METADATA);
     params = execution.params(params)
     const cargs = bayesian_group_ana_py_cargs(params, execution)
     const ret = bayesian_group_ana_py_outputs(params, execution)
@@ -330,10 +332,8 @@ function bayesian_group_ana_py(
     help: boolean = false,
     runner: Runner | null = null,
 ): BayesianGroupAnaPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BAYESIAN_GROUP_ANA_PY_METADATA);
     const params = bayesian_group_ana_py_params(data_table, y_variable, prefix, x_variables, no_center, iterations, chains, control_list, plot, more_plots, rdata, seed, overwrite, help)
-    return bayesian_group_ana_py_execute(params, execution);
+    return bayesian_group_ana_py_execute(params, runner);
 }
 
 
@@ -342,8 +342,6 @@ export {
       BayesianGroupAnaPyOutputs,
       BayesianGroupAnaPyParameters,
       bayesian_group_ana_py,
-      bayesian_group_ana_py_cargs,
       bayesian_group_ana_py_execute,
-      bayesian_group_ana_py_outputs,
       bayesian_group_ana_py_params,
 };

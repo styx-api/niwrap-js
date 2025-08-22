@@ -165,14 +165,16 @@ function v_3d_nwarp_adjust_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dNwarpAdjustOutputs`).
  */
 function v_3d_nwarp_adjust_execute(
     params: V3dNwarpAdjustParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dNwarpAdjustOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_NWARP_ADJUST_METADATA);
     params = execution.params(params)
     const cargs = v_3d_nwarp_adjust_cargs(params, execution)
     const ret = v_3d_nwarp_adjust_outputs(params, execution)
@@ -201,10 +203,8 @@ function v_3d_nwarp_adjust(
     output_prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dNwarpAdjustOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_NWARP_ADJUST_METADATA);
     const params = v_3d_nwarp_adjust_params(input_warps, source_datasets, output_prefix)
-    return v_3d_nwarp_adjust_execute(params, execution);
+    return v_3d_nwarp_adjust_execute(params, runner);
 }
 
 
@@ -213,8 +213,6 @@ export {
       V3dNwarpAdjustParameters,
       V_3D_NWARP_ADJUST_METADATA,
       v_3d_nwarp_adjust,
-      v_3d_nwarp_adjust_cargs,
       v_3d_nwarp_adjust_execute,
-      v_3d_nwarp_adjust_outputs,
       v_3d_nwarp_adjust_params,
 };

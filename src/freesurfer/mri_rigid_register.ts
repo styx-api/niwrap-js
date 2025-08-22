@@ -143,14 +143,16 @@ function mri_rigid_register_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriRigidRegisterOutputs`).
  */
 function mri_rigid_register_execute(
     params: MriRigidRegisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriRigidRegisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_RIGID_REGISTER_METADATA);
     params = execution.params(params)
     const cargs = mri_rigid_register_cargs(params, execution)
     const ret = mri_rigid_register_outputs(params, execution)
@@ -179,10 +181,8 @@ function mri_rigid_register(
     transform_output: string,
     runner: Runner | null = null,
 ): MriRigidRegisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_RIGID_REGISTER_METADATA);
     const params = mri_rigid_register_params(source_volume, target_volume, transform_output)
-    return mri_rigid_register_execute(params, execution);
+    return mri_rigid_register_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MriRigidRegisterOutputs,
       MriRigidRegisterParameters,
       mri_rigid_register,
-      mri_rigid_register_cargs,
       mri_rigid_register_execute,
-      mri_rigid_register_outputs,
       mri_rigid_register_params,
 };

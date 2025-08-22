@@ -271,14 +271,16 @@ function surf_dset_info_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfDsetInfoOutputs`).
  */
 function surf_dset_info_execute(
     params: SurfDsetInfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfDsetInfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_DSET_INFO_METADATA);
     params = execution.params(params)
     const cargs = surf_dset_info_cargs(params, execution)
     const ret = surf_dset_info_outputs(params, execution)
@@ -339,10 +341,8 @@ function surf_dset_info(
     all_opts: boolean = false,
     runner: Runner | null = null,
 ): SurfDsetInfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_DSET_INFO_METADATA);
     const params = surf_dset_info_params(input_dsets, debug_level, novolreg, noxform, setenv, trace, extreme_trace, nomall, yesmall, mini_help, help, extreme_help, help_view, help_web, help_find, help_raw, help_spx, help_aspx, all_opts)
-    return surf_dset_info_execute(params, execution);
+    return surf_dset_info_execute(params, runner);
 }
 
 
@@ -351,8 +351,6 @@ export {
       SurfDsetInfoOutputs,
       SurfDsetInfoParameters,
       surf_dset_info,
-      surf_dset_info_cargs,
       surf_dset_info_execute,
-      surf_dset_info_outputs,
       surf_dset_info_params,
 };

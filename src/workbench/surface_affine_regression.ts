@@ -140,14 +140,16 @@ function surface_affine_regression_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceAffineRegressionOutputs`).
  */
 function surface_affine_regression_execute(
     params: SurfaceAffineRegressionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceAffineRegressionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_AFFINE_REGRESSION_METADATA);
     params = execution.params(params)
     const cargs = surface_affine_regression_cargs(params, execution)
     const ret = surface_affine_regression_outputs(params, execution)
@@ -178,10 +180,8 @@ function surface_affine_regression(
     affine_out: string,
     runner: Runner | null = null,
 ): SurfaceAffineRegressionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_AFFINE_REGRESSION_METADATA);
     const params = surface_affine_regression_params(source, target, affine_out)
-    return surface_affine_regression_execute(params, execution);
+    return surface_affine_regression_execute(params, runner);
 }
 
 
@@ -190,8 +190,6 @@ export {
       SurfaceAffineRegressionOutputs,
       SurfaceAffineRegressionParameters,
       surface_affine_regression,
-      surface_affine_regression_cargs,
       surface_affine_regression_execute,
-      surface_affine_regression_outputs,
       surface_affine_regression_params,
 };

@@ -167,14 +167,16 @@ function antsjacobian_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsjacobianOutputs`).
  */
 function antsjacobian_execute(
     params: AntsjacobianParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsjacobianOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTSJACOBIAN_METADATA);
     params = execution.params(params)
     const cargs = antsjacobian_cargs(params, execution)
     const ret = antsjacobian_outputs(params, execution)
@@ -211,10 +213,8 @@ function antsjacobian(
     projectionvector: string | null = null,
     runner: Runner | null = null,
 ): AntsjacobianOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTSJACOBIAN_METADATA);
     const params = antsjacobian_params(imagedim, gwarp, outfile, uselog, maskfn, normbytotalbool, projectionvector)
-    return antsjacobian_execute(params, execution);
+    return antsjacobian_execute(params, runner);
 }
 
 
@@ -223,8 +223,6 @@ export {
       AntsjacobianOutputs,
       AntsjacobianParameters,
       antsjacobian,
-      antsjacobian_cargs,
       antsjacobian_execute,
-      antsjacobian_outputs,
       antsjacobian_params,
 };

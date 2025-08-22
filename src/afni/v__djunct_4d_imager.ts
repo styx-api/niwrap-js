@@ -182,14 +182,16 @@ function v__djunct_4d_imager_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDjunct4dImagerOutputs`).
  */
 function v__djunct_4d_imager_execute(
     params: VDjunct4dImagerParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDjunct4dImagerOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DJUNCT_4D_IMAGER_METADATA);
     params = execution.params(params)
     const cargs = v__djunct_4d_imager_cargs(params, execution)
     const ret = v__djunct_4d_imager_outputs(params, execution)
@@ -220,10 +222,8 @@ function v__djunct_4d_imager(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): VDjunct4dImagerOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DJUNCT_4D_IMAGER_METADATA);
     const params = v__djunct_4d_imager_params(inset, prefix, do_movie, no_clean)
-    return v__djunct_4d_imager_execute(params, execution);
+    return v__djunct_4d_imager_execute(params, runner);
 }
 
 
@@ -232,8 +232,6 @@ export {
       VDjunct4dImagerParameters,
       V__DJUNCT_4D_IMAGER_METADATA,
       v__djunct_4d_imager,
-      v__djunct_4d_imager_cargs,
       v__djunct_4d_imager_execute,
-      v__djunct_4d_imager_outputs,
       v__djunct_4d_imager_params,
 };

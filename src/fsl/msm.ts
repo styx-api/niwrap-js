@@ -291,14 +291,16 @@ function msm_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MsmOutputs`).
  */
 function msm_execute(
     params: MsmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MsmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MSM_METADATA);
     params = execution.params(params)
     const cargs = msm_cargs(params, execution)
     const ret = msm_outputs(params, execution)
@@ -353,10 +355,8 @@ function msm(
     printoptions: boolean = false,
     runner: Runner | null = null,
 ): MsmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MSM_METADATA);
     const params = msm_params(inmesh, out, refmesh, indata, refdata, trans, in_register, inweight, refweight, format, conf, levels, smoothout, help, verbose, printoptions)
-    return msm_execute(params, execution);
+    return msm_execute(params, runner);
 }
 
 
@@ -365,8 +365,6 @@ export {
       MsmOutputs,
       MsmParameters,
       msm,
-      msm_cargs,
       msm_execute,
-      msm_outputs,
       msm_params,
 };

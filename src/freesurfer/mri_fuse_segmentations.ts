@@ -186,14 +186,16 @@ function mri_fuse_segmentations_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriFuseSegmentationsOutputs`).
  */
 function mri_fuse_segmentations_execute(
     params: MriFuseSegmentationsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriFuseSegmentationsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_FUSE_SEGMENTATIONS_METADATA);
     params = execution.params(params)
     const cargs = mri_fuse_segmentations_cargs(params, execution)
     const ret = mri_fuse_segmentations_outputs(params, execution)
@@ -230,10 +232,8 @@ function mri_fuse_segmentations(
     sigma: number | null = 3.0,
     runner: Runner | null = null,
 ): MriFuseSegmentationsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_FUSE_SEGMENTATIONS_METADATA);
     const params = mri_fuse_segmentations_params(asegs, nocc_asegs, norm_volumes, input_file, output_file, transforms, sigma)
-    return mri_fuse_segmentations_execute(params, execution);
+    return mri_fuse_segmentations_execute(params, runner);
 }
 
 
@@ -242,8 +242,6 @@ export {
       MriFuseSegmentationsOutputs,
       MriFuseSegmentationsParameters,
       mri_fuse_segmentations,
-      mri_fuse_segmentations_cargs,
       mri_fuse_segmentations_execute,
-      mri_fuse_segmentations_outputs,
       mri_fuse_segmentations_params,
 };

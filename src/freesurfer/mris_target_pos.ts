@@ -237,14 +237,16 @@ function mris_target_pos_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisTargetPosOutputs`).
  */
 function mris_target_pos_execute(
     params: MrisTargetPosParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisTargetPosOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_TARGET_POS_METADATA);
     params = execution.params(params)
     const cargs = mris_target_pos_cargs(params, execution)
     const ret = mris_target_pos_outputs(params, execution)
@@ -293,10 +295,8 @@ function mris_target_pos(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisTargetPosOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_TARGET_POS_METADATA);
     const params = mris_target_pos_params(input_volume, input_surface, output_surface, adgws_file, threshold_values, label, interpolation_method, debug_vertex, cbv_flag, debug_flag, check_options, help_flag, version_flag)
-    return mris_target_pos_execute(params, execution);
+    return mris_target_pos_execute(params, runner);
 }
 
 
@@ -305,8 +305,6 @@ export {
       MrisTargetPosOutputs,
       MrisTargetPosParameters,
       mris_target_pos,
-      mris_target_pos_cargs,
       mris_target_pos_execute,
-      mris_target_pos_outputs,
       mris_target_pos_params,
 };

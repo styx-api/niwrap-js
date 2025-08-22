@@ -146,14 +146,16 @@ function gifti_label_add_prefix_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GiftiLabelAddPrefixOutputs`).
  */
 function gifti_label_add_prefix_execute(
     params: GiftiLabelAddPrefixParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GiftiLabelAddPrefixOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GIFTI_LABEL_ADD_PREFIX_METADATA);
     params = execution.params(params)
     const cargs = gifti_label_add_prefix_cargs(params, execution)
     const ret = gifti_label_add_prefix_outputs(params, execution)
@@ -184,10 +186,8 @@ function gifti_label_add_prefix(
     label_out: string,
     runner: Runner | null = null,
 ): GiftiLabelAddPrefixOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GIFTI_LABEL_ADD_PREFIX_METADATA);
     const params = gifti_label_add_prefix_params(label_in, prefix, label_out)
-    return gifti_label_add_prefix_execute(params, execution);
+    return gifti_label_add_prefix_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       GiftiLabelAddPrefixOutputs,
       GiftiLabelAddPrefixParameters,
       gifti_label_add_prefix,
-      gifti_label_add_prefix_cargs,
       gifti_label_add_prefix_execute,
-      gifti_label_add_prefix_outputs,
       gifti_label_add_prefix_params,
 };

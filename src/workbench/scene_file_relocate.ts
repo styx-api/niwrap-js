@@ -135,14 +135,16 @@ function scene_file_relocate_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SceneFileRelocateOutputs`).
  */
 function scene_file_relocate_execute(
     params: SceneFileRelocateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SceneFileRelocateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SCENE_FILE_RELOCATE_METADATA);
     params = execution.params(params)
     const cargs = scene_file_relocate_cargs(params, execution)
     const ret = scene_file_relocate_outputs(params, execution)
@@ -171,10 +173,8 @@ function scene_file_relocate(
     output_scene: string,
     runner: Runner | null = null,
 ): SceneFileRelocateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SCENE_FILE_RELOCATE_METADATA);
     const params = scene_file_relocate_params(input_scene, output_scene)
-    return scene_file_relocate_execute(params, execution);
+    return scene_file_relocate_execute(params, runner);
 }
 
 
@@ -183,8 +183,6 @@ export {
       SceneFileRelocateOutputs,
       SceneFileRelocateParameters,
       scene_file_relocate,
-      scene_file_relocate_cargs,
       scene_file_relocate_execute,
-      scene_file_relocate_outputs,
       scene_file_relocate_params,
 };

@@ -563,14 +563,16 @@ function samseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SamsegOutputs`).
  */
 function samseg_execute(
     params: SamsegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SamsegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SAMSEG_METADATA);
     params = execution.params(params)
     const cargs = samseg_cargs(params, execution)
     const ret = samseg_outputs(params, execution)
@@ -681,10 +683,8 @@ function samseg(
     profile_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): SamsegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SAMSEG_METADATA);
     const params = samseg_params(input_files, output_directory, t1w_files, t2w_files, flair_files, other_modality_files, options_file, dissection_photo_mode, save_history, subject, save_posteriors, save_probabilities, no_save_warp, mrf, no_mrf, threads, atlas_directory, gmm_file, no_block_coordinate_descent, logdomain_costandgradient_calculator, no_logdomain_costandgradient_calculator, recon, fill, normalization2, use_t2w, use_flair, hires, subjects_directory, pallidum_separate, stiffness, lesion, lesion_mask_pattern, bias_field_smoothing_kernel, registration_file, regmat_file, init_lta, reg_only, ssdd_directory, save_mesh, max_iters, dice_file, ignore_unknown, smooth_wm_cortex, profile_file)
-    return samseg_execute(params, execution);
+    return samseg_execute(params, runner);
 }
 
 
@@ -693,8 +693,6 @@ export {
       SamsegOutputs,
       SamsegParameters,
       samseg,
-      samseg_cargs,
       samseg_execute,
-      samseg_outputs,
       samseg_params,
 };

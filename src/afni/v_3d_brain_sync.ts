@@ -214,14 +214,16 @@ function v_3d_brain_sync_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dBrainSyncOutputs`).
  */
 function v_3d_brain_sync_execute(
     params: V3dBrainSyncParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dBrainSyncOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_BRAIN_SYNC_METADATA);
     params = execution.params(params)
     const cargs = v_3d_brain_sync_cargs(params, execution)
     const ret = v_3d_brain_sync_outputs(params, execution)
@@ -258,10 +260,8 @@ function v_3d_brain_sync(
     verb: boolean = false,
     runner: Runner | null = null,
 ): V3dBrainSyncOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_BRAIN_SYNC_METADATA);
     const params = v_3d_brain_sync_params(inset1, inset2, qprefix, pprefix, normalize, mask, verb)
-    return v_3d_brain_sync_execute(params, execution);
+    return v_3d_brain_sync_execute(params, runner);
 }
 
 
@@ -270,8 +270,6 @@ export {
       V3dBrainSyncParameters,
       V_3D_BRAIN_SYNC_METADATA,
       v_3d_brain_sync,
-      v_3d_brain_sync_cargs,
       v_3d_brain_sync_execute,
-      v_3d_brain_sync_outputs,
       v_3d_brain_sync_params,
 };

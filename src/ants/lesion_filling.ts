@@ -148,14 +148,16 @@ function lesion_filling_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LesionFillingOutputs`).
  */
 function lesion_filling_execute(
     params: LesionFillingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LesionFillingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LESION_FILLING_METADATA);
     params = execution.params(params)
     const cargs = lesion_filling_cargs(params, execution)
     const ret = lesion_filling_outputs(params, execution)
@@ -186,10 +188,8 @@ function lesion_filling(
     output_lesion_filled: string,
     runner: Runner | null = null,
 ): LesionFillingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LESION_FILLING_METADATA);
     const params = lesion_filling_params(image_dimension, t1_image, lesion_mask, output_lesion_filled)
-    return lesion_filling_execute(params, execution);
+    return lesion_filling_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       LesionFillingOutputs,
       LesionFillingParameters,
       lesion_filling,
-      lesion_filling_cargs,
       lesion_filling_execute,
-      lesion_filling_outputs,
       lesion_filling_params,
 };

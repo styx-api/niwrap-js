@@ -648,14 +648,16 @@ function mri_nl_align_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriNlAlignOutputs`).
  */
 function mri_nl_align_execute(
     params: MriNlAlignParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriNlAlignOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_NL_ALIGN_METADATA);
     params = execution.params(params)
     const cargs = mri_nl_align_cargs(params, execution)
     const ret = mri_nl_align_outputs(params, execution)
@@ -774,10 +776,8 @@ function mri_nl_align(
     diagnostics: number | null = null,
     runner: Runner | null = null,
 ): MriNlAlignOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_NL_ALIGN_METADATA);
     const params = mri_nl_align_params(source, target, warp, debug_voxel, debug_node, no_neg, renormalize, aseg_flag, diag_volume, optimal_flag, momentum_flag, fixed_flag, distance, dtrans, match_peak_flag, erode, match_mean, intensity, ll, noregrid_flag, regrid_flag, view, levels, area_smoothness, asmooth, area, tolerance, sigma, min_sigma, ribbon, rthresh, scale, dt, passes, skip, apply, distance_log, momentum, iterations, smoothness, transform, inverse_transform, binary, jacobian, disable_zero_locations, smooth_averages, exp_k, diagnostics)
-    return mri_nl_align_execute(params, execution);
+    return mri_nl_align_execute(params, runner);
 }
 
 
@@ -786,8 +786,6 @@ export {
       MriNlAlignOutputs,
       MriNlAlignParameters,
       mri_nl_align,
-      mri_nl_align_cargs,
       mri_nl_align_execute,
-      mri_nl_align_outputs,
       mri_nl_align_params,
 };

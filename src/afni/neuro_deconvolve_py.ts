@@ -232,14 +232,16 @@ function neuro_deconvolve_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `NeuroDeconvolvePyOutputs`).
  */
 function neuro_deconvolve_py_execute(
     params: NeuroDeconvolvePyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): NeuroDeconvolvePyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(NEURO_DECONVOLVE_PY_METADATA);
     params = execution.params(params)
     const cargs = neuro_deconvolve_py_cargs(params, execution)
     const ret = neuro_deconvolve_py_outputs(params, execution)
@@ -282,10 +284,8 @@ function neuro_deconvolve_py(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): NeuroDeconvolvePyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(NEURO_DECONVOLVE_PY_METADATA);
     const params = neuro_deconvolve_py_params(input_file, prefix, script, kernel, kernel_file, mask_dset, old_style, tr, tr_nup, verbosity)
-    return neuro_deconvolve_py_execute(params, execution);
+    return neuro_deconvolve_py_execute(params, runner);
 }
 
 
@@ -294,8 +294,6 @@ export {
       NeuroDeconvolvePyOutputs,
       NeuroDeconvolvePyParameters,
       neuro_deconvolve_py,
-      neuro_deconvolve_py_cargs,
       neuro_deconvolve_py_execute,
-      neuro_deconvolve_py_outputs,
       neuro_deconvolve_py_params,
 };

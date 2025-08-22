@@ -338,14 +338,16 @@ function dtifit_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DtifitOutputs`).
  */
 function dtifit_execute(
     params: DtifitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DtifitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DTIFIT_METADATA);
     params = execution.params(params)
     const cargs = dtifit_cargs(params, execution)
     const ret = dtifit_outputs(params, execution)
@@ -408,10 +410,8 @@ function dtifit(
     confound_regressors: InputPathType | null = null,
     runner: Runner | null = null,
 ): DtifitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DTIFIT_METADATA);
     const params = dtifit_params(data_file, output_basename, mask_file, bvec_file, bval_file, verbose_flag, sse_flag, wls_flag, kurt_flag, kurtdir_flag, littlebit_flag, save_tensor_flag, zmin, zmax, ymin, ymax, xmin, xmax, gradnonlin_file, confound_regressors)
-    return dtifit_execute(params, execution);
+    return dtifit_execute(params, runner);
 }
 
 
@@ -420,8 +420,6 @@ export {
       DtifitOutputs,
       DtifitParameters,
       dtifit,
-      dtifit_cargs,
       dtifit_execute,
-      dtifit_outputs,
       dtifit_params,
 };

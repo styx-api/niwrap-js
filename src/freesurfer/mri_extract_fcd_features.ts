@@ -149,14 +149,16 @@ function mri_extract_fcd_features_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriExtractFcdFeaturesOutputs`).
  */
 function mri_extract_fcd_features_execute(
     params: MriExtractFcdFeaturesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriExtractFcdFeaturesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_EXTRACT_FCD_FEATURES_METADATA);
     params = execution.params(params)
     const cargs = mri_extract_fcd_features_cargs(params, execution)
     const ret = mri_extract_fcd_features_outputs(params, execution)
@@ -187,10 +189,8 @@ function mri_extract_fcd_features(
     subjects_dir: string | null = null,
     runner: Runner | null = null,
 ): MriExtractFcdFeaturesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_EXTRACT_FCD_FEATURES_METADATA);
     const params = mri_extract_fcd_features_params(subject, hemi, output_file, subjects_dir)
-    return mri_extract_fcd_features_execute(params, execution);
+    return mri_extract_fcd_features_execute(params, runner);
 }
 
 
@@ -199,8 +199,6 @@ export {
       MriExtractFcdFeaturesOutputs,
       MriExtractFcdFeaturesParameters,
       mri_extract_fcd_features,
-      mri_extract_fcd_features_cargs,
       mri_extract_fcd_features_execute,
-      mri_extract_fcd_features_outputs,
       mri_extract_fcd_features_params,
 };

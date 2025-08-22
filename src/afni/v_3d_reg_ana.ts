@@ -307,14 +307,16 @@ function v_3d_reg_ana_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dRegAnaOutputs`).
  */
 function v_3d_reg_ana_execute(
     params: V3dRegAnaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dRegAnaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_REG_ANA_METADATA);
     params = execution.params(params)
     const cargs = v_3d_reg_ana_cargs(params, execution)
     const ret = v_3d_reg_ana_outputs(params, execution)
@@ -367,10 +369,8 @@ function v_3d_reg_ana(
     datum: string | null = null,
     runner: Runner | null = null,
 ): V3dRegAnaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_REG_ANA_METADATA);
     const params = v_3d_reg_ana_params(rows, cols, xydata, model, diskspace, workmem, rmsmin, fdisp, flof, fcoef, rcoef, tcoef, bucket, brick, datum)
-    return v_3d_reg_ana_execute(params, execution);
+    return v_3d_reg_ana_execute(params, runner);
 }
 
 
@@ -379,8 +379,6 @@ export {
       V3dRegAnaParameters,
       V_3D_REG_ANA_METADATA,
       v_3d_reg_ana,
-      v_3d_reg_ana_cargs,
       v_3d_reg_ana_execute,
-      v_3d_reg_ana_outputs,
       v_3d_reg_ana_params,
 };

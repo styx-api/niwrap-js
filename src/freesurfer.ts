@@ -706,3 +706,1417 @@ export * from './freesurfer/xhemi_tal'
 export * from './freesurfer/xhemireg'
 export * from './freesurfer/xsanatreg'
 export * from './freesurfer/zero_lt_4dfp'
+import { Runner } from 'styxdefs';
+import { analyzeto4dfp_execute } from './freesurfer/analyzeto4dfp'
+import { anatomi_cuts_utils_execute } from './freesurfer/anatomi_cuts_utils'
+import { annot2std_execute } from './freesurfer/annot2std'
+import { ants_denoise_image_fs_execute } from './freesurfer/ants_denoise_image_fs'
+import { ants_n4_bias_field_correction_fs_execute } from './freesurfer/ants_n4_bias_field_correction_fs'
+import { aparc2feat_execute } from './freesurfer/aparc2feat'
+import { aparc_stats_aseg_execute } from './freesurfer/aparc_stats_aseg'
+import { aparcstats2table_execute } from './freesurfer/aparcstats2table'
+import { aparcstatsdiff_execute } from './freesurfer/aparcstatsdiff'
+import { apas2aseg_execute } from './freesurfer/apas2aseg'
+import { apply_morph_execute } from './freesurfer/apply_morph'
+import { aseg2feat_execute } from './freesurfer/aseg2feat'
+import { asegstats2table_execute } from './freesurfer/asegstats2table'
+import { asegstatsdiff_execute } from './freesurfer/asegstatsdiff'
+import { avi2talxfm_execute } from './freesurfer/avi2talxfm'
+import { bblabel_execute } from './freesurfer/bblabel'
+import { bbmask_execute } from './freesurfer/bbmask'
+import { bbregister_execute } from './freesurfer/bbregister'
+import { bedpostx_mgh_execute } from './freesurfer/bedpostx_mgh'
+import { beta2sxa_execute } from './freesurfer/beta2sxa'
+import { biasfield_execute } from './freesurfer/biasfield'
+import { bmedits2surf_execute } from './freesurfer/bmedits2surf'
+import { brec_execute } from './freesurfer/brec'
+import { browse_minc_header_tcl_execute } from './freesurfer/browse_minc_header_tcl'
+import { bugr_execute } from './freesurfer/bugr'
+import { build_desikan_killiany_gcs_csh_execute } from './freesurfer/build_desikan_killiany_gcs_csh'
+import { cblumwmgyri_execute } from './freesurfer/cblumwmgyri'
+import { check_mcr_sh_execute } from './freesurfer/check_mcr_sh'
+import { check_recons_sh_execute } from './freesurfer/check_recons_sh'
+import { check_subject_execute } from './freesurfer/check_subject'
+import { compute_interrater_variability_csh_execute } from './freesurfer/compute_interrater_variability_csh'
+import { compute_label_volumes_csh_execute } from './freesurfer/compute_label_volumes_csh'
+import { compute_vox2vox_execute } from './freesurfer/compute_vox2vox'
+import { conf2hires_execute } from './freesurfer/conf2hires'
+import { connected_components_execute } from './freesurfer/connected_components'
+import { cor_to_minc_execute } from './freesurfer/cor_to_minc'
+import { cp_dicom_execute } from './freesurfer/cp_dicom'
+import { create_morph_execute } from './freesurfer/create_morph'
+import { csvprint_execute } from './freesurfer/csvprint'
+import { dcmdir_info_mgh_execute } from './freesurfer/dcmdir_info_mgh'
+import { dcmdjpeg_fs_execute } from './freesurfer/dcmdjpeg_fs'
+import { dcmdrle_fs_execute } from './freesurfer/dcmdrle_fs'
+import { dcmsplit_execute } from './freesurfer/dcmsplit'
+import { dcmunpack_execute } from './freesurfer/dcmunpack'
+import { deface_subject_execute } from './freesurfer/deface_subject'
+import { defect2seg_execute } from './freesurfer/defect2seg'
+import { defect_seg_execute } from './freesurfer/defect_seg'
+import { dicom_rename_execute } from './freesurfer/dicom_rename'
+import { diffusion_utils_execute } from './freesurfer/diffusion_utils'
+import { dmri_ac_sh_execute } from './freesurfer/dmri_ac_sh'
+import { dmri_anatomi_cuts_execute } from './freesurfer/dmri_anatomi_cuts'
+import { dmri_bset_execute } from './freesurfer/dmri_bset'
+import { dmri_colored_fa_execute } from './freesurfer/dmri_colored_fa'
+import { dmri_extract_surface_measurements_execute } from './freesurfer/dmri_extract_surface_measurements'
+import { dmri_forrest_execute } from './freesurfer/dmri_forrest'
+import { dmri_group_by_endpoints_execute } from './freesurfer/dmri_group_by_endpoints'
+import { dmri_group_execute } from './freesurfer/dmri_group'
+import { dmri_match_execute } from './freesurfer/dmri_match'
+import { dmri_mergepaths_execute } from './freesurfer/dmri_mergepaths'
+import { dmri_motion_execute } from './freesurfer/dmri_motion'
+import { dmri_neighboring_regions_execute } from './freesurfer/dmri_neighboring_regions'
+import { dmri_paths_execute } from './freesurfer/dmri_paths'
+import { dmri_pathstats_execute } from './freesurfer/dmri_pathstats'
+import { dmri_project_end_points_execute } from './freesurfer/dmri_project_end_points'
+import { dmri_save_histograms_execute } from './freesurfer/dmri_save_histograms'
+import { dmri_spline_execute } from './freesurfer/dmri_spline'
+import { dmri_stats_ac_execute } from './freesurfer/dmri_stats_ac'
+import { dmri_train_execute } from './freesurfer/dmri_train'
+import { dmri_trk2trk_execute } from './freesurfer/dmri_trk2trk'
+import { dmri_violin_plots_execute } from './freesurfer/dmri_violin_plots'
+import { dmri_vox2vox_execute } from './freesurfer/dmri_vox2vox'
+import { dt_recon_execute } from './freesurfer/dt_recon'
+import { export_gcam_execute } from './freesurfer/export_gcam'
+import { extract_seg_waveform_execute } from './freesurfer/extract_seg_waveform'
+import { exvivo_hemi_proc_execute } from './freesurfer/exvivo_hemi_proc'
+import { feat2segstats_execute } from './freesurfer/feat2segstats'
+import { feat2surf_execute } from './freesurfer/feat2surf'
+import { fiducials_calibration_execute } from './freesurfer/fiducials_calibration'
+import { fiducials_correction_execute } from './freesurfer/fiducials_correction'
+import { fix_subject_corrected_execute } from './freesurfer/fix_subject_corrected'
+import { fix_subject_corrected_rh_execute } from './freesurfer/fix_subject_corrected_rh'
+import { fix_subject_execute } from './freesurfer/fix_subject'
+import { fix_subject_rh_execute } from './freesurfer/fix_subject_rh'
+import { fixup_mni_paths_execute } from './freesurfer/fixup_mni_paths'
+import { flip_4dfp_execute } from './freesurfer/flip_4dfp'
+import { flirt_newdefault_20080811_sch_execute } from './freesurfer/flirt_newdefault_20080811_sch'
+import { fname2ext_execute } from './freesurfer/fname2ext'
+import { fname2stem_execute } from './freesurfer/fname2stem'
+import { freeview_execute } from './freesurfer/freeview'
+import { fs_check_version_execute } from './freesurfer/fs_check_version'
+import { fs_install_mcr_execute } from './freesurfer/fs_install_mcr'
+import { fs_lib_check_execute } from './freesurfer/fs_lib_check'
+import { fs_print_help_execute } from './freesurfer/fs_print_help'
+import { fs_run_from_mcr_execute } from './freesurfer/fs_run_from_mcr'
+import { fs_spmreg_glnxa64_execute } from './freesurfer/fs_spmreg_glnxa64'
+import { fs_temp_dir_execute } from './freesurfer/fs_temp_dir'
+import { fs_temp_file_execute } from './freesurfer/fs_temp_file'
+import { fs_time_execute } from './freesurfer/fs_time'
+import { fs_tutorial_data_execute } from './freesurfer/fs_tutorial_data'
+import { fs_update_execute } from './freesurfer/fs_update'
+import { fscalc_execute } from './freesurfer/fscalc'
+import { fsdcmdecompress_execute } from './freesurfer/fsdcmdecompress'
+import { fsl_5_0_2_xyztrans_sch_execute } from './freesurfer/fsl_5_0_2_xyztrans_sch'
+import { fsl_label2voxel_execute } from './freesurfer/fsl_label2voxel'
+import { fsl_rigid_register_execute } from './freesurfer/fsl_rigid_register'
+import { fsl_sub_mgh_execute } from './freesurfer/fsl_sub_mgh'
+import { fslregister_execute } from './freesurfer/fslregister'
+import { fspalm_execute } from './freesurfer/fspalm'
+import { fsr_coreg_execute } from './freesurfer/fsr_coreg'
+import { fsr_getxopts_execute } from './freesurfer/fsr_getxopts'
+import { fsr_import_execute } from './freesurfer/fsr_import'
+import { fsrealpath_execute } from './freesurfer/fsrealpath'
+import { fsvglrun_execute } from './freesurfer/fsvglrun'
+import { fvcompare_execute } from './freesurfer/fvcompare'
+import { gauss_4dfp_execute } from './freesurfer/gauss_4dfp'
+import { gca_apply_execute } from './freesurfer/gca_apply'
+import { gcainit_execute } from './freesurfer/gcainit'
+import { gcaprepone_execute } from './freesurfer/gcaprepone'
+import { gcatrain_execute } from './freesurfer/gcatrain'
+import { gcatrainskull_execute } from './freesurfer/gcatrainskull'
+import { gdcmconv_fs_execute } from './freesurfer/gdcmconv_fs'
+import { gems_compute_atlas_probs_execute } from './freesurfer/gems_compute_atlas_probs'
+import { get_label_thickness_execute } from './freesurfer/get_label_thickness'
+import { getfullpath_execute } from './freesurfer/getfullpath'
+import { grad_unwarp_execute } from './freesurfer/grad_unwarp'
+import { groupstats_execute } from './freesurfer/groupstats'
+import { groupstatsdiff_execute } from './freesurfer/groupstatsdiff'
+import { gtmseg_execute } from './freesurfer/gtmseg'
+import { hiam_make_surfaces_execute } from './freesurfer/hiam_make_surfaces'
+import { hiam_make_template_execute } from './freesurfer/hiam_make_template'
+import { hiam_register_execute } from './freesurfer/hiam_register'
+import { histo_compute_joint_density_execute } from './freesurfer/histo_compute_joint_density'
+import { histo_register_block_execute } from './freesurfer/histo_register_block'
+import { histo_synthesize_execute } from './freesurfer/histo_synthesize'
+import { ico_supersample_execute } from './freesurfer/ico_supersample'
+import { ifh2hdr_execute } from './freesurfer/ifh2hdr'
+import { imgreg_4dfp_execute } from './freesurfer/imgreg_4dfp'
+import { inflate_subject3_execute } from './freesurfer/inflate_subject3'
+import { inflate_subject_execute } from './freesurfer/inflate_subject'
+import { inflate_subject_lh_execute } from './freesurfer/inflate_subject_lh'
+import { inflate_subject_new_execute } from './freesurfer/inflate_subject_new'
+import { inflate_subject_new_lh_execute } from './freesurfer/inflate_subject_new_lh'
+import { inflate_subject_new_rh_execute } from './freesurfer/inflate_subject_new_rh'
+import { inflate_subject_rh_execute } from './freesurfer/inflate_subject_rh'
+import { inflate_subject_sc_execute } from './freesurfer/inflate_subject_sc'
+import { irepifitvol_execute } from './freesurfer/irepifitvol'
+import { irepifitvol_glnx64_execute } from './freesurfer/irepifitvol_glnx64'
+import { is_lta_execute } from './freesurfer/is_lta'
+import { is_surface_execute } from './freesurfer/is_surface'
+import { isanalyze_execute } from './freesurfer/isanalyze'
+import { isnifti_execute } from './freesurfer/isnifti'
+import { isolate_labels_csh_execute } from './freesurfer/isolate_labels_csh'
+import { isolate_labels_keeporigval_csh_execute } from './freesurfer/isolate_labels_keeporigval_csh'
+import { jkgcatrain_execute } from './freesurfer/jkgcatrain'
+import { label2flat_execute } from './freesurfer/label2flat'
+import { label2patch_execute } from './freesurfer/label2patch'
+import { label_elderly_subject_execute } from './freesurfer/label_elderly_subject'
+import { label_subject_execute } from './freesurfer/label_subject'
+import { label_subject_flash_execute } from './freesurfer/label_subject_flash'
+import { label_subject_mixed_execute } from './freesurfer/label_subject_mixed'
+import { labels_disjoint_execute } from './freesurfer/labels_disjoint'
+import { labels_intersect_execute } from './freesurfer/labels_intersect'
+import { labels_union_execute } from './freesurfer/labels_union'
+import { list_otl_labels_execute } from './freesurfer/list_otl_labels'
+import { listsubj_execute } from './freesurfer/listsubj'
+import { long_create_base_sigma_execute } from './freesurfer/long_create_base_sigma'
+import { long_create_orig_execute } from './freesurfer/long_create_orig'
+import { long_mris_slopes_execute } from './freesurfer/long_mris_slopes'
+import { long_qdec_table_execute } from './freesurfer/long_qdec_table'
+import { long_stats_combine_execute } from './freesurfer/long_stats_combine'
+import { long_stats_slopes_execute } from './freesurfer/long_stats_slopes'
+import { long_stats_tps_execute } from './freesurfer/long_stats_tps'
+import { long_submit_jobs_execute } from './freesurfer/long_submit_jobs'
+import { long_submit_postproc_execute } from './freesurfer/long_submit_postproc'
+import { longmc_execute } from './freesurfer/longmc'
+import { lpcregister_execute } from './freesurfer/lpcregister'
+import { lta_convert_execute } from './freesurfer/lta_convert'
+import { lta_diff_execute } from './freesurfer/lta_diff'
+import { make_average_subcort_execute } from './freesurfer/make_average_subcort'
+import { make_average_subject_execute } from './freesurfer/make_average_subject'
+import { make_average_surface_execute } from './freesurfer/make_average_surface'
+import { make_average_volume_execute } from './freesurfer/make_average_volume'
+import { make_cortex_label_execute } from './freesurfer/make_cortex_label'
+import { make_exvivo_filled_execute } from './freesurfer/make_exvivo_filled'
+import { make_folding_atlas_execute } from './freesurfer/make_folding_atlas'
+import { make_hemi_mask_execute } from './freesurfer/make_hemi_mask'
+import { make_segvol_table_execute } from './freesurfer/make_segvol_table'
+import { make_symmetric_execute } from './freesurfer/make_symmetric'
+import { make_upright_execute } from './freesurfer/make_upright'
+import { makevol_execute } from './freesurfer/makevol'
+import { map_all_labels_execute } from './freesurfer/map_all_labels'
+import { map_all_labels_lh_execute } from './freesurfer/map_all_labels_lh'
+import { map_central_sulcus_execute } from './freesurfer/map_central_sulcus'
+import { map_to_base_execute } from './freesurfer/map_to_base'
+import { meanval_execute } from './freesurfer/meanval'
+import { merge_stats_tables_execute } from './freesurfer/merge_stats_tables'
+import { mergeseg_execute } from './freesurfer/mergeseg'
+import { mideface_execute } from './freesurfer/mideface'
+import { minc2seqinfo_execute } from './freesurfer/minc2seqinfo'
+import { mkheadsurf_execute } from './freesurfer/mkheadsurf'
+import { mkima_index_tcl_execute } from './freesurfer/mkima_index_tcl'
+import { mkmnc_index_tcl_execute } from './freesurfer/mkmnc_index_tcl'
+import { mksubjdirs_execute } from './freesurfer/mksubjdirs'
+import { mksurfatlas_execute } from './freesurfer/mksurfatlas'
+import { mkxsubjreg_execute } from './freesurfer/mkxsubjreg'
+import { mmppsp_execute } from './freesurfer/mmppsp'
+import { mni152reg_execute } from './freesurfer/mni152reg'
+import { morph_only_subject_execute } from './freesurfer/morph_only_subject'
+import { morph_only_subject_lh_execute } from './freesurfer/morph_only_subject_lh'
+import { morph_only_subject_rh_execute } from './freesurfer/morph_only_subject_rh'
+import { morph_rgb_lh_execute } from './freesurfer/morph_rgb_lh'
+import { morph_rgb_rh_execute } from './freesurfer/morph_rgb_rh'
+import { morph_subject_execute } from './freesurfer/morph_subject'
+import { morph_subject_lh_execute } from './freesurfer/morph_subject_lh'
+import { morph_subject_rh_execute } from './freesurfer/morph_subject_rh'
+import { morph_tables_lh_execute } from './freesurfer/morph_tables_lh'
+import { morph_tables_rh_execute } from './freesurfer/morph_tables_rh'
+import { mpr2mni305_execute } from './freesurfer/mpr2mni305'
+import { mri_3d_photo_recon_execute } from './freesurfer/mri_3d_photo_recon'
+import { mri_add_new_tp_execute } from './freesurfer/mri_add_new_tp'
+import { mri_add_xform_to_header_execute } from './freesurfer/mri_add_xform_to_header'
+import { mri_align_long_csh_execute } from './freesurfer/mri_align_long_csh'
+import { mri_and_execute } from './freesurfer/mri_and'
+import { mri_annotation2label_execute } from './freesurfer/mri_annotation2label'
+import { mri_aparc2aseg_execute } from './freesurfer/mri_aparc2aseg'
+import { mri_aparc2wmseg_execute } from './freesurfer/mri_aparc2wmseg'
+import { mri_apply_bias_execute } from './freesurfer/mri_apply_bias'
+import { mri_average_execute } from './freesurfer/mri_average'
+import { mri_binarize_execute } from './freesurfer/mri_binarize'
+import { mri_brain_volume_execute } from './freesurfer/mri_brain_volume'
+import { mri_brainvol_stats_execute } from './freesurfer/mri_brainvol_stats'
+import { mri_ca_label_execute } from './freesurfer/mri_ca_label'
+import { mri_ca_normalize_execute } from './freesurfer/mri_ca_normalize'
+import { mri_ca_register_execute } from './freesurfer/mri_ca_register'
+import { mri_ca_tissue_parms_execute } from './freesurfer/mri_ca_tissue_parms'
+import { mri_ca_train_execute } from './freesurfer/mri_ca_train'
+import { mri_cal_renormalize_gca_execute } from './freesurfer/mri_cal_renormalize_gca'
+import { mri_cc_execute } from './freesurfer/mri_cc'
+import { mri_cnr_execute } from './freesurfer/mri_cnr'
+import { mri_compile_edits_execute } from './freesurfer/mri_compile_edits'
+import { mri_compute_bias_execute } from './freesurfer/mri_compute_bias'
+import { mri_compute_change_map_execute } from './freesurfer/mri_compute_change_map'
+import { mri_compute_distances_execute } from './freesurfer/mri_compute_distances'
+import { mri_compute_layer_fractions_execute } from './freesurfer/mri_compute_layer_fractions'
+import { mri_compute_overlap_execute } from './freesurfer/mri_compute_overlap'
+import { mri_compute_seg_overlap_execute } from './freesurfer/mri_compute_seg_overlap'
+import { mri_compute_volume_fractions_execute } from './freesurfer/mri_compute_volume_fractions'
+import { mri_compute_volume_intensities_execute } from './freesurfer/mri_compute_volume_intensities'
+import { mri_concat_execute } from './freesurfer/mri_concat'
+import { mri_concatenate_gcam_execute } from './freesurfer/mri_concatenate_gcam'
+import { mri_concatenate_lta_execute } from './freesurfer/mri_concatenate_lta'
+import { mri_convert_execute } from './freesurfer/mri_convert'
+import { mri_copy_params_execute } from './freesurfer/mri_copy_params'
+import { mri_copy_values_execute } from './freesurfer/mri_copy_values'
+import { mri_cor2label_execute } from './freesurfer/mri_cor2label'
+import { mri_coreg_execute } from './freesurfer/mri_coreg'
+import { mri_correct_segmentations_execute } from './freesurfer/mri_correct_segmentations'
+import { mri_create_t2combined_execute } from './freesurfer/mri_create_t2combined'
+import { mri_create_tests_execute } from './freesurfer/mri_create_tests'
+import { mri_cvs_check_execute } from './freesurfer/mri_cvs_check'
+import { mri_cvs_data_copy_execute } from './freesurfer/mri_cvs_data_copy'
+import { mri_cvs_register_execute } from './freesurfer/mri_cvs_register'
+import { mri_dct_align_binary_execute } from './freesurfer/mri_dct_align_binary'
+import { mri_dct_align_execute } from './freesurfer/mri_dct_align'
+import { mri_deface_execute } from './freesurfer/mri_deface'
+import { mri_defacer_execute } from './freesurfer/mri_defacer'
+import { mri_diff_execute } from './freesurfer/mri_diff'
+import { mri_dist_surf_label_execute } from './freesurfer/mri_dist_surf_label'
+import { mri_distance_transform_execute } from './freesurfer/mri_distance_transform'
+import { mri_easyreg_execute } from './freesurfer/mri_easyreg'
+import { mri_easywarp_execute } from './freesurfer/mri_easywarp'
+import { mri_edit_segmentation_execute } from './freesurfer/mri_edit_segmentation'
+import { mri_edit_segmentation_with_surfaces_execute } from './freesurfer/mri_edit_segmentation_with_surfaces'
+import { mri_edit_wm_with_aseg_execute } from './freesurfer/mri_edit_wm_with_aseg'
+import { mri_em_register_execute } from './freesurfer/mri_em_register'
+import { mri_entowm_seg_execute } from './freesurfer/mri_entowm_seg'
+import { mri_evaluate_morph_execute } from './freesurfer/mri_evaluate_morph'
+import { mri_extract_execute } from './freesurfer/mri_extract'
+import { mri_extract_fcd_features_execute } from './freesurfer/mri_extract_fcd_features'
+import { mri_extract_label_execute } from './freesurfer/mri_extract_label'
+import { mri_extract_largest_cc_execute } from './freesurfer/mri_extract_largest_cc'
+import { mri_exvivo_norm_execute } from './freesurfer/mri_exvivo_norm'
+import { mri_exvivo_strip_execute } from './freesurfer/mri_exvivo_strip'
+import { mri_fdr_execute } from './freesurfer/mri_fdr'
+import { mri_fieldsign_execute } from './freesurfer/mri_fieldsign'
+import { mri_fill_execute } from './freesurfer/mri_fill'
+import { mri_fit_bias_execute } from './freesurfer/mri_fit_bias'
+import { mri_fslmat_to_lta_execute } from './freesurfer/mri_fslmat_to_lta'
+import { mri_func2sph_execute } from './freesurfer/mri_func2sph'
+import { mri_funcvits_execute } from './freesurfer/mri_funcvits'
+import { mri_fuse_intensity_images_execute } from './freesurfer/mri_fuse_intensity_images'
+import { mri_fuse_segmentations_execute } from './freesurfer/mri_fuse_segmentations'
+import { mri_fwhm_execute } from './freesurfer/mri_fwhm'
+import { mri_gca_ambiguous_execute } from './freesurfer/mri_gca_ambiguous'
+import { mri_gcab_train_execute } from './freesurfer/mri_gcab_train'
+import { mri_gcut_execute } from './freesurfer/mri_gcut'
+import { mri_gdfglm_execute } from './freesurfer/mri_gdfglm'
+import { mri_glmfit_execute } from './freesurfer/mri_glmfit'
+import { mri_glmfit_sim_execute } from './freesurfer/mri_glmfit_sim'
+import { mri_gradient_info_execute } from './freesurfer/mri_gradient_info'
+import { mri_gradunwarp_execute } from './freesurfer/mri_gradunwarp'
+import { mri_gtmpvc_execute } from './freesurfer/mri_gtmpvc'
+import { mri_gtmseg_execute } from './freesurfer/mri_gtmseg'
+import { mri_hausdorff_dist_execute } from './freesurfer/mri_hausdorff_dist'
+import { mri_head_execute } from './freesurfer/mri_head'
+import { mri_hires_register_execute } from './freesurfer/mri_hires_register'
+import { mri_histo_eq_execute } from './freesurfer/mri_histo_eq'
+import { mri_info_execute } from './freesurfer/mri_info'
+import { mri_jacobian_execute } from './freesurfer/mri_jacobian'
+import { mri_joint_density_execute } from './freesurfer/mri_joint_density'
+import { mri_label2label_execute } from './freesurfer/mri_label2label'
+import { mri_label2vol_execute } from './freesurfer/mri_label2vol'
+import { mri_label_histo_execute } from './freesurfer/mri_label_histo'
+import { mri_label_vals_execute } from './freesurfer/mri_label_vals'
+import { mri_label_volume_execute } from './freesurfer/mri_label_volume'
+import { mri_linear_align_binary_execute } from './freesurfer/mri_linear_align_binary'
+import { mri_linear_align_execute } from './freesurfer/mri_linear_align'
+import { mri_linear_register_execute } from './freesurfer/mri_linear_register'
+import { mri_log_likelihood_execute } from './freesurfer/mri_log_likelihood'
+import { mri_long_normalize_execute } from './freesurfer/mri_long_normalize'
+import { mri_make_bem_surfaces_execute } from './freesurfer/mri_make_bem_surfaces'
+import { mri_make_uchar_execute } from './freesurfer/mri_make_uchar'
+import { mri_map_cpdat_execute } from './freesurfer/mri_map_cpdat'
+import { mri_maps2csd_execute } from './freesurfer/mri_maps2csd'
+import { mri_mark_temporal_lobe_execute } from './freesurfer/mri_mark_temporal_lobe'
+import { mri_mask_execute } from './freesurfer/mri_mask'
+import { mri_matrix_multiply_execute } from './freesurfer/mri_matrix_multiply'
+import { mri_mc_execute } from './freesurfer/mri_mc'
+import { mri_mcsim_execute } from './freesurfer/mri_mcsim'
+import { mri_mergelabels_execute } from './freesurfer/mri_mergelabels'
+import { mri_mi_execute } from './freesurfer/mri_mi'
+import { mri_modify_execute } from './freesurfer/mri_modify'
+import { mri_morphology_execute } from './freesurfer/mri_morphology'
+import { mri_motion_correct2_execute } from './freesurfer/mri_motion_correct2'
+import { mri_motion_correct_execute } from './freesurfer/mri_motion_correct'
+import { mri_ms_fitparms_execute } from './freesurfer/mri_ms_fitparms'
+import { mri_nl_align_binary_execute } from './freesurfer/mri_nl_align_binary'
+import { mri_nl_align_execute } from './freesurfer/mri_nl_align'
+import { mri_nlfilter_execute } from './freesurfer/mri_nlfilter'
+import { mri_normalize_execute } from './freesurfer/mri_normalize'
+import { mri_normalize_tp2_execute } from './freesurfer/mri_normalize_tp2'
+import { mri_nu_correct_mni_execute } from './freesurfer/mri_nu_correct_mni'
+import { mri_or_execute } from './freesurfer/mri_or'
+import { mri_paint_execute } from './freesurfer/mri_paint'
+import { mri_parse_sdcmdir_execute } from './freesurfer/mri_parse_sdcmdir'
+import { mri_path2label_execute } from './freesurfer/mri_path2label'
+import { mri_polv_execute } from './freesurfer/mri_polv'
+import { mri_pretess_execute } from './freesurfer/mri_pretess'
+import { mri_probe_ima_execute } from './freesurfer/mri_probe_ima'
+import { mri_probedicom_execute } from './freesurfer/mri_probedicom'
+import { mri_reduce_execute } from './freesurfer/mri_reduce'
+import { mri_refine_seg_execute } from './freesurfer/mri_refine_seg'
+import { mri_relabel_hypointensities_execute } from './freesurfer/mri_relabel_hypointensities'
+import { mri_relabel_nonwm_hypos_execute } from './freesurfer/mri_relabel_nonwm_hypos'
+import { mri_remove_neck_execute } from './freesurfer/mri_remove_neck'
+import { mri_reorient_lr_csh_execute } from './freesurfer/mri_reorient_lr_csh'
+import { mri_rf_label_execute } from './freesurfer/mri_rf_label'
+import { mri_rf_long_label_execute } from './freesurfer/mri_rf_long_label'
+import { mri_rf_long_train_execute } from './freesurfer/mri_rf_long_train'
+import { mri_rf_train_execute } from './freesurfer/mri_rf_train'
+import { mri_ribbon_execute } from './freesurfer/mri_ribbon'
+import { mri_rigid_register_execute } from './freesurfer/mri_rigid_register'
+import { mri_robust_register_execute } from './freesurfer/mri_robust_register'
+import { mri_robust_template_execute } from './freesurfer/mri_robust_template'
+import { mri_sbbr_execute } from './freesurfer/mri_sbbr'
+import { mri_sclimbic_seg_execute } from './freesurfer/mri_sclimbic_seg'
+import { mri_seg_diff_execute } from './freesurfer/mri_seg_diff'
+import { mri_seg_overlap_execute } from './freesurfer/mri_seg_overlap'
+import { mri_segcentroids_execute } from './freesurfer/mri_segcentroids'
+import { mri_seghead_execute } from './freesurfer/mri_seghead'
+import { mri_segment_execute } from './freesurfer/mri_segment'
+import { mri_segment_hypothalamic_subunits_execute } from './freesurfer/mri_segment_hypothalamic_subunits'
+import { mri_segment_thalamic_nuclei_dti_cnn_execute } from './freesurfer/mri_segment_thalamic_nuclei_dti_cnn'
+import { mri_segreg_execute } from './freesurfer/mri_segreg'
+import { mri_segstats_execute } from './freesurfer/mri_segstats'
+import { mri_sph2surf_execute } from './freesurfer/mri_sph2surf'
+import { mri_stats2seg_execute } from './freesurfer/mri_stats2seg'
+import { mri_stopmask_execute } from './freesurfer/mri_stopmask'
+import { mri_strip_nonwhite_execute } from './freesurfer/mri_strip_nonwhite'
+import { mri_strip_subject_info_execute } from './freesurfer/mri_strip_subject_info'
+import { mri_surf2surf_execute } from './freesurfer/mri_surf2surf'
+import { mri_surf2vol_execute } from './freesurfer/mri_surf2vol'
+import { mri_surf2volseg_execute } from './freesurfer/mri_surf2volseg'
+import { mri_surfacemask_execute } from './freesurfer/mri_surfacemask'
+import { mri_surfcluster_execute } from './freesurfer/mri_surfcluster'
+import { mri_synthesize_execute } from './freesurfer/mri_synthesize'
+import { mri_synthmorph_execute } from './freesurfer/mri_synthmorph'
+import { mri_synthseg_execute } from './freesurfer/mri_synthseg'
+import { mri_synthsr_execute } from './freesurfer/mri_synthsr'
+import { mri_synthsr_hyperfine_execute } from './freesurfer/mri_synthsr_hyperfine'
+import { mri_synthstrip_execute } from './freesurfer/mri_synthstrip'
+import { mri_tessellate_execute } from './freesurfer/mri_tessellate'
+import { mri_threshold_execute } from './freesurfer/mri_threshold'
+import { mri_topologycorrection_execute } from './freesurfer/mri_topologycorrection'
+import { mri_train_execute } from './freesurfer/mri_train'
+import { mri_transform_execute } from './freesurfer/mri_transform'
+import { mri_twoclass_execute } from './freesurfer/mri_twoclass'
+import { mri_validate_skull_stripped_execute } from './freesurfer/mri_validate_skull_stripped'
+import { mri_vessel_segment_execute } from './freesurfer/mri_vessel_segment'
+import { mri_vol2label_execute } from './freesurfer/mri_vol2label'
+import { mri_vol2surf_execute } from './freesurfer/mri_vol2surf'
+import { mri_vol2vol_execute } from './freesurfer/mri_vol2vol'
+import { mri_volcluster_execute } from './freesurfer/mri_volcluster'
+import { mri_voldiff_execute } from './freesurfer/mri_voldiff'
+import { mri_volsynth_execute } from './freesurfer/mri_volsynth'
+import { mri_warp_convert_execute } from './freesurfer/mri_warp_convert'
+import { mri_watershed_execute } from './freesurfer/mri_watershed'
+import { mri_wbc_execute } from './freesurfer/mri_wbc'
+import { mri_xvolavg_execute } from './freesurfer/mri_xvolavg'
+import { mri_z2p_execute } from './freesurfer/mri_z2p'
+import { mris2rgb_execute } from './freesurfer/mris2rgb'
+import { mris_aa_shrinkwrap_execute } from './freesurfer/mris_aa_shrinkwrap'
+import { mris_add_template_execute } from './freesurfer/mris_add_template'
+import { mris_anatomical_stats_execute } from './freesurfer/mris_anatomical_stats'
+import { mris_annot_diff_execute } from './freesurfer/mris_annot_diff'
+import { mris_annot_to_segmentation_execute } from './freesurfer/mris_annot_to_segmentation'
+import { mris_apply_reg_execute } from './freesurfer/mris_apply_reg'
+import { mris_autodet_gwstats_execute } from './freesurfer/mris_autodet_gwstats'
+import { mris_average_curvature_execute } from './freesurfer/mris_average_curvature'
+import { mris_ba_segment_execute } from './freesurfer/mris_ba_segment'
+import { mris_ca_deform_execute } from './freesurfer/mris_ca_deform'
+import { mris_ca_label_execute } from './freesurfer/mris_ca_label'
+import { mris_ca_train_execute } from './freesurfer/mris_ca_train'
+import { mris_calc_execute } from './freesurfer/mris_calc'
+import { mris_compute_acorr_execute } from './freesurfer/mris_compute_acorr'
+import { mris_compute_layer_intensities_execute } from './freesurfer/mris_compute_layer_intensities'
+import { mris_compute_lgi_execute } from './freesurfer/mris_compute_lgi'
+import { mris_compute_overlap_execute } from './freesurfer/mris_compute_overlap'
+import { mris_compute_parc_overlap_execute } from './freesurfer/mris_compute_parc_overlap'
+import { mris_compute_volume_fractions_execute } from './freesurfer/mris_compute_volume_fractions'
+import { mris_congeal_execute } from './freesurfer/mris_congeal'
+import { mris_convert_execute } from './freesurfer/mris_convert'
+import { mris_copy_header_execute } from './freesurfer/mris_copy_header'
+import { mris_curvature2image_execute } from './freesurfer/mris_curvature2image'
+import { mris_curvature_execute } from './freesurfer/mris_curvature'
+import { mris_curvature_stats_execute } from './freesurfer/mris_curvature_stats'
+import { mris_defects_pointset_execute } from './freesurfer/mris_defects_pointset'
+import { mris_deform_execute } from './freesurfer/mris_deform'
+import { mris_diff_execute } from './freesurfer/mris_diff'
+import { mris_distance_map_execute } from './freesurfer/mris_distance_map'
+import { mris_distance_to_label_execute } from './freesurfer/mris_distance_to_label'
+import { mris_distance_transform_execute } from './freesurfer/mris_distance_transform'
+import { mris_divide_parcellation_execute } from './freesurfer/mris_divide_parcellation'
+import { mris_entropy_execute } from './freesurfer/mris_entropy'
+import { mris_errors_execute } from './freesurfer/mris_errors'
+import { mris_estimate_wm_execute } from './freesurfer/mris_estimate_wm'
+import { mris_euler_number_execute } from './freesurfer/mris_euler_number'
+import { mris_expand_execute } from './freesurfer/mris_expand'
+import { mris_extract_main_component_execute } from './freesurfer/mris_extract_main_component'
+import { mris_extract_patches_execute } from './freesurfer/mris_extract_patches'
+import { mris_extract_values_execute } from './freesurfer/mris_extract_values'
+import { mris_exvivo_surfaces_execute } from './freesurfer/mris_exvivo_surfaces'
+import { mris_fill_execute } from './freesurfer/mris_fill'
+import { mris_find_flat_regions_execute } from './freesurfer/mris_find_flat_regions'
+import { mris_fix_topology_execute } from './freesurfer/mris_fix_topology'
+import { mris_flatten_execute } from './freesurfer/mris_flatten'
+import { mris_fwhm_execute } from './freesurfer/mris_fwhm'
+import { mris_gradient_execute } from './freesurfer/mris_gradient'
+import { mris_hausdorff_dist_execute } from './freesurfer/mris_hausdorff_dist'
+import { mris_image2vtk_execute } from './freesurfer/mris_image2vtk'
+import { mris_inflate_execute } from './freesurfer/mris_inflate'
+import { mris_info_execute } from './freesurfer/mris_info'
+import { mris_init_global_tractography_execute } from './freesurfer/mris_init_global_tractography'
+import { mris_intensity_profile_execute } from './freesurfer/mris_intensity_profile'
+import { mris_interpolate_warp_execute } from './freesurfer/mris_interpolate_warp'
+import { mris_jacobian_execute } from './freesurfer/mris_jacobian'
+import { mris_label2annot_execute } from './freesurfer/mris_label2annot'
+import { mris_label_area_execute } from './freesurfer/mris_label_area'
+import { mris_label_calc_execute } from './freesurfer/mris_label_calc'
+import { mris_label_mode_execute } from './freesurfer/mris_label_mode'
+import { mris_left_right_register_execute } from './freesurfer/mris_left_right_register'
+import { mris_make_average_surface_execute } from './freesurfer/mris_make_average_surface'
+import { mris_make_face_parcellation_execute } from './freesurfer/mris_make_face_parcellation'
+import { mris_make_surfaces_execute } from './freesurfer/mris_make_surfaces'
+import { mris_make_template_execute } from './freesurfer/mris_make_template'
+import { mris_map_cuts_execute } from './freesurfer/mris_map_cuts'
+import { mris_mef_surfaces_execute } from './freesurfer/mris_mef_surfaces'
+import { mris_merge_parcellations_execute } from './freesurfer/mris_merge_parcellations'
+import { mris_mesh_subdivide_execute } from './freesurfer/mris_mesh_subdivide'
+import { mris_morph_stats_execute } from './freesurfer/mris_morph_stats'
+import { mris_ms_refine_execute } from './freesurfer/mris_ms_refine'
+import { mris_multimodal_execute } from './freesurfer/mris_multimodal'
+import { mris_multimodal_surface_placement_execute } from './freesurfer/mris_multimodal_surface_placement'
+import { mris_multiscale_stats_execute } from './freesurfer/mris_multiscale_stats'
+import { mris_niters2fwhm_execute } from './freesurfer/mris_niters2fwhm'
+import { mris_nudge_execute } from './freesurfer/mris_nudge'
+import { mris_parcellate_connectivity_execute } from './freesurfer/mris_parcellate_connectivity'
+import { mris_place_surface_execute } from './freesurfer/mris_place_surface'
+import { mris_pmake_execute } from './freesurfer/mris_pmake'
+import { mris_preproc_execute } from './freesurfer/mris_preproc'
+import { mris_profile_clustering_execute } from './freesurfer/mris_profile_clustering'
+import { mris_refine_surfaces_execute } from './freesurfer/mris_refine_surfaces'
+import { mris_register_execute } from './freesurfer/mris_register'
+import { mris_register_label_map_execute } from './freesurfer/mris_register_label_map'
+import { mris_register_to_label_execute } from './freesurfer/mris_register_to_label'
+import { mris_register_to_volume_execute } from './freesurfer/mris_register_to_volume'
+import { mris_remesh_execute } from './freesurfer/mris_remesh'
+import { mris_remove_intersection_execute } from './freesurfer/mris_remove_intersection'
+import { mris_remove_negative_vertices_execute } from './freesurfer/mris_remove_negative_vertices'
+import { mris_remove_variance_execute } from './freesurfer/mris_remove_variance'
+import { mris_reposition_surface_execute } from './freesurfer/mris_reposition_surface'
+import { mris_resample_execute } from './freesurfer/mris_resample'
+import { mris_rescale_execute } from './freesurfer/mris_rescale'
+import { mris_reverse_execute } from './freesurfer/mris_reverse'
+import { mris_rf_label_execute } from './freesurfer/mris_rf_label'
+import { mris_rf_train_execute } from './freesurfer/mris_rf_train'
+import { mris_rotate_execute } from './freesurfer/mris_rotate'
+import { mris_sample_label_execute } from './freesurfer/mris_sample_label'
+import { mris_sample_parc_execute } from './freesurfer/mris_sample_parc'
+import { mris_seg2annot_execute } from './freesurfer/mris_seg2annot'
+import { mris_segment_execute } from './freesurfer/mris_segment'
+import { mris_segment_vals_execute } from './freesurfer/mris_segment_vals'
+import { mris_segmentation_stats_execute } from './freesurfer/mris_segmentation_stats'
+import { mris_shrinkwrap_execute } from './freesurfer/mris_shrinkwrap'
+import { mris_simulate_atrophy_execute } from './freesurfer/mris_simulate_atrophy'
+import { mris_skeletonize_execute } from './freesurfer/mris_skeletonize'
+import { mris_smooth_execute } from './freesurfer/mris_smooth'
+import { mris_smooth_intracortical_execute } from './freesurfer/mris_smooth_intracortical'
+import { mris_sphere_execute } from './freesurfer/mris_sphere'
+import { mris_spherical_average_execute } from './freesurfer/mris_spherical_average'
+import { mris_surf2vtk_execute } from './freesurfer/mris_surf2vtk'
+import { mris_surface_stats_execute } from './freesurfer/mris_surface_stats'
+import { mris_surface_to_vol_distances_execute } from './freesurfer/mris_surface_to_vol_distances'
+import { mris_talairach_execute } from './freesurfer/mris_talairach'
+import { mris_target_pos_execute } from './freesurfer/mris_target_pos'
+import { mris_thickness_comparison_execute } from './freesurfer/mris_thickness_comparison'
+import { mris_thickness_diff_execute } from './freesurfer/mris_thickness_diff'
+import { mris_thickness_execute } from './freesurfer/mris_thickness'
+import { mris_topo_fixer_execute } from './freesurfer/mris_topo_fixer'
+import { mris_transform_execute } from './freesurfer/mris_transform'
+import { mris_translate_annotation_execute } from './freesurfer/mris_translate_annotation'
+import { mris_transmantle_dysplasia_paths_execute } from './freesurfer/mris_transmantle_dysplasia_paths'
+import { mris_volmask_execute } from './freesurfer/mris_volmask'
+import { mris_volmask_novtk_execute } from './freesurfer/mris_volmask_novtk'
+import { mris_volmask_vtk_execute } from './freesurfer/mris_volmask_vtk'
+import { mris_volsmooth_execute } from './freesurfer/mris_volsmooth'
+import { mris_volume_execute } from './freesurfer/mris_volume'
+import { mris_warp_execute } from './freesurfer/mris_warp'
+import { mris_watershed_execute } from './freesurfer/mris_watershed'
+import { mris_wm_volume_execute } from './freesurfer/mris_wm_volume'
+import { mrisp_paint_execute } from './freesurfer/mrisp_paint'
+import { mrisp_write_execute } from './freesurfer/mrisp_write'
+import { ms_refine_subject_execute } from './freesurfer/ms_refine_subject'
+import { nmovie_qt_execute } from './freesurfer/nmovie_qt'
+import { oct_register_mosaic_execute } from './freesurfer/oct_register_mosaic'
+import { optseq2_execute } from './freesurfer/optseq2'
+import { orient_las_execute } from './freesurfer/orient_las'
+import { parc_atlas_jackknife_test_execute } from './freesurfer/parc_atlas_jackknife_test'
+import { pctsurfcon_execute } from './freesurfer/pctsurfcon'
+import { plot_structure_stats_tcl_execute } from './freesurfer/plot_structure_stats_tcl'
+import { pointset2label_execute } from './freesurfer/pointset2label'
+import { polyorder_execute } from './freesurfer/polyorder'
+import { post_recon_all_execute } from './freesurfer/post_recon_all'
+import { predict_v1_sh_execute } from './freesurfer/predict_v1_sh'
+import { print_unique_labels_csh_execute } from './freesurfer/print_unique_labels_csh'
+import { qatools_py_execute } from './freesurfer/qatools_py'
+import { quantify_brainstem_structures_sh_execute } from './freesurfer/quantify_brainstem_structures_sh'
+import { quantify_hasubregions_sh_execute } from './freesurfer/quantify_hasubregions_sh'
+import { quantify_thalamic_nuclei_sh_execute } from './freesurfer/quantify_thalamic_nuclei_sh'
+import { rbbr_execute } from './freesurfer/rbbr'
+import { rca_base_init_execute } from './freesurfer/rca_base_init'
+import { rca_config2csh_execute } from './freesurfer/rca_config2csh'
+import { rca_config_execute } from './freesurfer/rca_config'
+import { rca_fix_ento_execute } from './freesurfer/rca_fix_ento'
+import { rca_long_tp_init_execute } from './freesurfer/rca_long_tp_init'
+import { rcbf_prep_execute } from './freesurfer/rcbf_prep'
+import { recon_all_clinical_sh_execute } from './freesurfer/recon_all_clinical_sh'
+import { recon_all_execute } from './freesurfer/recon_all'
+import { recon_all_exvivo_execute } from './freesurfer/recon_all_exvivo'
+import { reconbatchjobs_execute } from './freesurfer/reconbatchjobs'
+import { reg2subject_execute } from './freesurfer/reg2subject'
+import { reg_feat2anat_execute } from './freesurfer/reg_feat2anat'
+import { reg_mni305_2mm_execute } from './freesurfer/reg_mni305_2mm'
+import { regdat2xfm_execute } from './freesurfer/regdat2xfm'
+import { register_child_execute } from './freesurfer/register_child'
+import { register_csh_execute } from './freesurfer/register_csh'
+import { register_elderly_subject_execute } from './freesurfer/register_elderly_subject'
+import { register_subject_execute } from './freesurfer/register_subject'
+import { register_subject_flash_execute } from './freesurfer/register_subject_flash'
+import { reinflate_subject_execute } from './freesurfer/reinflate_subject'
+import { reinflate_subject_lh_execute } from './freesurfer/reinflate_subject_lh'
+import { reinflate_subject_rh_execute } from './freesurfer/reinflate_subject_rh'
+import { remove_talairach_execute } from './freesurfer/remove_talairach'
+import { renormalize_subject_keep_editting_execute } from './freesurfer/renormalize_subject_keep_editting'
+import { renormalize_t1_subject_execute } from './freesurfer/renormalize_t1_subject'
+import { reregister_subject_mixed_execute } from './freesurfer/reregister_subject_mixed'
+import { rtview_execute } from './freesurfer/rtview'
+import { run_mris_preproc_execute } from './freesurfer/run_mris_preproc'
+import { run_qdec_glm_execute } from './freesurfer/run_qdec_glm'
+import { run_samseg_execute } from './freesurfer/run_samseg'
+import { run_samseg_long_execute } from './freesurfer/run_samseg_long'
+import { run_segment_subfields_t1_longitudinal_sh_execute } from './freesurfer/run_segment_subfields_t1_longitudinal_sh'
+import { run_segment_subject_sh_execute } from './freesurfer/run_segment_subject_sh'
+import { run_segment_subject_t1_auto_estimate_alveus_ml_sh_execute } from './freesurfer/run_segment_subject_t1_auto_estimate_alveus_ml_sh'
+import { run_segment_subject_t1_t2_auto_estimate_alveus_ml_sh_execute } from './freesurfer/run_segment_subject_t1_t2_auto_estimate_alveus_ml_sh'
+import { run_segment_subject_t2_auto_estimate_alveus_ml_sh_execute } from './freesurfer/run_segment_subject_t2_auto_estimate_alveus_ml_sh'
+import { run_segment_thalamic_nuclei_sh_execute } from './freesurfer/run_segment_thalamic_nuclei_sh'
+import { samseg2recon_execute } from './freesurfer/samseg2recon'
+import { samseg_execute } from './freesurfer/samseg'
+import { samseg_long_execute } from './freesurfer/samseg_long'
+import { samsegmesh2surf_execute } from './freesurfer/samsegmesh2surf'
+import { sbtiv_execute } from './freesurfer/sbtiv'
+import { seg2filled_execute } from './freesurfer/seg2filled'
+import { seg2recon_execute } from './freesurfer/seg2recon'
+import { segment_bs_sh_execute } from './freesurfer/segment_bs_sh'
+import { segment_ha_t1_long_sh_execute } from './freesurfer/segment_ha_t1_long_sh'
+import { segment_ha_t1_sh_execute } from './freesurfer/segment_ha_t1_sh'
+import { segment_ha_t2_sh_execute } from './freesurfer/segment_ha_t2_sh'
+import { segment_monkey_execute } from './freesurfer/segment_monkey'
+import { segment_subfields_t1_longitudinal_execute } from './freesurfer/segment_subfields_t1_longitudinal'
+import { segment_subject_execute } from './freesurfer/segment_subject'
+import { segment_subject_notal2_execute } from './freesurfer/segment_subject_notal2'
+import { segment_subject_notal_execute } from './freesurfer/segment_subject_notal'
+import { segment_subject_old_skull_strip_execute } from './freesurfer/segment_subject_old_skull_strip'
+import { segment_subject_sc_execute } from './freesurfer/segment_subject_sc'
+import { segment_subject_t1_auto_estimate_alveus_ml_execute } from './freesurfer/segment_subject_t1_auto_estimate_alveus_ml'
+import { segment_subject_t1_t2_auto_estimate_alveus_ml_execute } from './freesurfer/segment_subject_t1_t2_auto_estimate_alveus_ml'
+import { segment_subject_t2_auto_estimate_alveus_ml_execute } from './freesurfer/segment_subject_t2_auto_estimate_alveus_ml'
+import { segment_subregions_execute } from './freesurfer/segment_subregions'
+import { segment_thalamic_nuclei_execute } from './freesurfer/segment_thalamic_nuclei'
+import { segment_thalamic_nuclei_sh_execute } from './freesurfer/segment_thalamic_nuclei_sh'
+import { segpons_execute } from './freesurfer/segpons'
+import { setlabelstat_execute } from './freesurfer/setlabelstat'
+import { sfa2fieldsign_execute } from './freesurfer/sfa2fieldsign'
+import { slicedelay_execute } from './freesurfer/slicedelay'
+import { sphere_subject_execute } from './freesurfer/sphere_subject'
+import { sphere_subject_lh_execute } from './freesurfer/sphere_subject_lh'
+import { sphere_subject_rh_execute } from './freesurfer/sphere_subject_rh'
+import { spline3_test_execute } from './freesurfer/spline3_test'
+import { spm_t_to_b_execute } from './freesurfer/spm_t_to_b'
+import { spmregister_execute } from './freesurfer/spmregister'
+import { sratio_execute } from './freesurfer/sratio'
+import { stat_normalize_execute } from './freesurfer/stat_normalize'
+import { stattablediff_execute } from './freesurfer/stattablediff'
+import { stem2fname_execute } from './freesurfer/stem2fname'
+import { surf2vol_execute } from './freesurfer/surf2vol'
+import { surfreg_execute } from './freesurfer/surfreg'
+import { swi_preprocess_execute } from './freesurfer/swi_preprocess'
+import { swi_process_execute } from './freesurfer/swi_process'
+import { t4img_4dfp_execute } from './freesurfer/t4img_4dfp'
+import { t4imgs_4dfp_execute } from './freesurfer/t4imgs_4dfp'
+import { table2map_execute } from './freesurfer/table2map'
+import { tal_compare_execute } from './freesurfer/tal_compare'
+import { tal_qc_azs_execute } from './freesurfer/tal_qc_azs'
+import { talairach2_execute } from './freesurfer/talairach2'
+import { talairach_afd_execute } from './freesurfer/talairach_afd'
+import { talairach_avi_execute } from './freesurfer/talairach_avi'
+import { talairach_execute } from './freesurfer/talairach'
+import { talairach_mgh_execute } from './freesurfer/talairach_mgh'
+import { talsegprob_execute } from './freesurfer/talsegprob'
+import { test_orientation_planes_from_parcellation_execute } from './freesurfer/test_orientation_planes_from_parcellation'
+import { test_recon_all_csh_execute } from './freesurfer/test_recon_all_csh'
+import { test_tutorials_sh_execute } from './freesurfer/test_tutorials_sh'
+import { thickdiffmap_execute } from './freesurfer/thickdiffmap'
+import { tkmedit_execute } from './freesurfer/tkmedit'
+import { tkmeditfv_execute } from './freesurfer/tkmeditfv'
+import { tkregister2_cmdl_execute } from './freesurfer/tkregister2_cmdl'
+import { tkregister2_execute } from './freesurfer/tkregister2'
+import { tkregisterfv_execute } from './freesurfer/tkregisterfv'
+import { tksurfer_execute } from './freesurfer/tksurfer'
+import { tksurferfv_execute } from './freesurfer/tksurferfv'
+import { trac_all_execute } from './freesurfer/trac_all'
+import { trac_paths_execute } from './freesurfer/trac_paths'
+import { trac_preproc_execute } from './freesurfer/trac_preproc'
+import { tractstats2table_execute } from './freesurfer/tractstats2table'
+import { train_gcs_atlas_execute } from './freesurfer/train_gcs_atlas'
+import { tridec_execute } from './freesurfer/tridec'
+import { trk_tools_execute } from './freesurfer/trk_tools'
+import { unpack_ima1_tcl_execute } from './freesurfer/unpack_ima1_tcl'
+import { unpack_ima_tcl_execute } from './freesurfer/unpack_ima_tcl'
+import { unpack_mnc_tcl_execute } from './freesurfer/unpack_mnc_tcl'
+import { unpackimadir2_execute } from './freesurfer/unpackimadir2'
+import { unpackimadir_execute } from './freesurfer/unpackimadir'
+import { unpackmincdir_execute } from './freesurfer/unpackmincdir'
+import { unpacksdcmdir_execute } from './freesurfer/unpacksdcmdir'
+import { update_needed_execute } from './freesurfer/update_needed'
+import { v_3dvolreg_afni_execute } from './freesurfer/v_3dvolreg_afni'
+import { v_4dfptoanalyze_execute } from './freesurfer/v_4dfptoanalyze'
+import { ventfix_execute } from './freesurfer/ventfix'
+import { vertexvol_execute } from './freesurfer/vertexvol'
+import { vno_match_check_execute } from './freesurfer/vno_match_check'
+import { vol2segavg_execute } from './freesurfer/vol2segavg'
+import { vol2subfield_execute } from './freesurfer/vol2subfield'
+import { vol2symsurf_execute } from './freesurfer/vol2symsurf'
+import { vsm_smooth_execute } from './freesurfer/vsm_smooth'
+import { wfilemask_execute } from './freesurfer/wfilemask'
+import { wm_anat_snr_execute } from './freesurfer/wm_anat_snr'
+import { wmedits2surf_execute } from './freesurfer/wmedits2surf'
+import { wmsaseg_execute } from './freesurfer/wmsaseg'
+import { xcerebralseg_execute } from './freesurfer/xcerebralseg'
+import { xcorr_execute } from './freesurfer/xcorr'
+import { xfmrot_execute } from './freesurfer/xfmrot'
+import { xhemi_tal_execute } from './freesurfer/xhemi_tal'
+import { xhemireg_execute } from './freesurfer/xhemireg'
+import { xsanatreg_execute } from './freesurfer/xsanatreg'
+import { zero_lt_4dfp_execute } from './freesurfer/zero_lt_4dfp'
+
+
+/**
+ * Run a command in this package dynamically from a params object.
+ *
+ * @param params The parameters.
+ * @param runner Command runner
+ *
+ */
+function execute(
+    params: any,
+    runner: Runner | null = null,
+) {
+    return {
+        "freesurfer.3dvolreg.afni": v_3dvolreg_afni_execute,
+        "freesurfer.4dfptoanalyze": v_4dfptoanalyze_execute,
+        "freesurfer.AntsDenoiseImageFs": ants_denoise_image_fs_execute,
+        "freesurfer.AntsN4BiasFieldCorrectionFs": ants_n4_bias_field_correction_fs_execute,
+        "freesurfer.IsLTA": is_lta_execute,
+        "freesurfer.SegmentSubfieldsT1Longitudinal": segment_subfields_t1_longitudinal_execute,
+        "freesurfer.SegmentThalamicNuclei": segment_thalamic_nuclei_execute,
+        "freesurfer.Spline3_test": spline3_test_execute,
+        "freesurfer.UpdateNeeded": update_needed_execute,
+        "freesurfer.analyzeto4dfp": analyzeto4dfp_execute,
+        "freesurfer.anatomiCutsUtils": anatomi_cuts_utils_execute,
+        "freesurfer.annot2std": annot2std_execute,
+        "freesurfer.aparc2feat": aparc2feat_execute,
+        "freesurfer.aparc_stats_aseg": aparc_stats_aseg_execute,
+        "freesurfer.aparcstats2table": aparcstats2table_execute,
+        "freesurfer.aparcstatsdiff": aparcstatsdiff_execute,
+        "freesurfer.apas2aseg": apas2aseg_execute,
+        "freesurfer.applyMorph": apply_morph_execute,
+        "freesurfer.aseg2feat": aseg2feat_execute,
+        "freesurfer.asegstats2table": asegstats2table_execute,
+        "freesurfer.asegstatsdiff": asegstatsdiff_execute,
+        "freesurfer.avi2talxfm": avi2talxfm_execute,
+        "freesurfer.bblabel": bblabel_execute,
+        "freesurfer.bbmask": bbmask_execute,
+        "freesurfer.bbregister": bbregister_execute,
+        "freesurfer.bedpostx_mgh": bedpostx_mgh_execute,
+        "freesurfer.beta2sxa": beta2sxa_execute,
+        "freesurfer.biasfield": biasfield_execute,
+        "freesurfer.bmedits2surf": bmedits2surf_execute,
+        "freesurfer.brec": brec_execute,
+        "freesurfer.browse-minc-header.tcl": browse_minc_header_tcl_execute,
+        "freesurfer.bugr": bugr_execute,
+        "freesurfer.build_desikan_killiany_gcs.csh": build_desikan_killiany_gcs_csh_execute,
+        "freesurfer.cblumwmgyri": cblumwmgyri_execute,
+        "freesurfer.checkMCR.sh": check_mcr_sh_execute,
+        "freesurfer.check_recons.sh": check_recons_sh_execute,
+        "freesurfer.check_subject": check_subject_execute,
+        "freesurfer.compute_interrater_variability.csh": compute_interrater_variability_csh_execute,
+        "freesurfer.compute_label_volumes.csh": compute_label_volumes_csh_execute,
+        "freesurfer.compute_vox2vox": compute_vox2vox_execute,
+        "freesurfer.conf2hires": conf2hires_execute,
+        "freesurfer.connected_components": connected_components_execute,
+        "freesurfer.cor_to_minc": cor_to_minc_execute,
+        "freesurfer.cp-dicom": cp_dicom_execute,
+        "freesurfer.createMorph": create_morph_execute,
+        "freesurfer.csvprint": csvprint_execute,
+        "freesurfer.dcmdir-info-mgh": dcmdir_info_mgh_execute,
+        "freesurfer.dcmdjpeg.fs": dcmdjpeg_fs_execute,
+        "freesurfer.dcmdrle.fs": dcmdrle_fs_execute,
+        "freesurfer.dcmsplit": dcmsplit_execute,
+        "freesurfer.dcmunpack": dcmunpack_execute,
+        "freesurfer.deface_subject": deface_subject_execute,
+        "freesurfer.defect-seg": defect_seg_execute,
+        "freesurfer.defect2seg": defect2seg_execute,
+        "freesurfer.dicom-rename": dicom_rename_execute,
+        "freesurfer.diffusionUtils": diffusion_utils_execute,
+        "freesurfer.dmri_AnatomiCuts": dmri_anatomi_cuts_execute,
+        "freesurfer.dmri_ac.sh": dmri_ac_sh_execute,
+        "freesurfer.dmri_bset": dmri_bset_execute,
+        "freesurfer.dmri_coloredFA": dmri_colored_fa_execute,
+        "freesurfer.dmri_extractSurfaceMeasurements": dmri_extract_surface_measurements_execute,
+        "freesurfer.dmri_forrest": dmri_forrest_execute,
+        "freesurfer.dmri_group": dmri_group_execute,
+        "freesurfer.dmri_groupByEndpoints": dmri_group_by_endpoints_execute,
+        "freesurfer.dmri_match": dmri_match_execute,
+        "freesurfer.dmri_mergepaths": dmri_mergepaths_execute,
+        "freesurfer.dmri_motion": dmri_motion_execute,
+        "freesurfer.dmri_neighboringRegions": dmri_neighboring_regions_execute,
+        "freesurfer.dmri_paths": dmri_paths_execute,
+        "freesurfer.dmri_pathstats": dmri_pathstats_execute,
+        "freesurfer.dmri_projectEndPoints": dmri_project_end_points_execute,
+        "freesurfer.dmri_saveHistograms": dmri_save_histograms_execute,
+        "freesurfer.dmri_spline": dmri_spline_execute,
+        "freesurfer.dmri_stats_ac": dmri_stats_ac_execute,
+        "freesurfer.dmri_train": dmri_train_execute,
+        "freesurfer.dmri_trk2trk": dmri_trk2trk_execute,
+        "freesurfer.dmri_violinPlots": dmri_violin_plots_execute,
+        "freesurfer.dmri_vox2vox": dmri_vox2vox_execute,
+        "freesurfer.dt_recon": dt_recon_execute,
+        "freesurfer.exportGcam": export_gcam_execute,
+        "freesurfer.extract_seg_waveform": extract_seg_waveform_execute,
+        "freesurfer.exvivo-hemi-proc": exvivo_hemi_proc_execute,
+        "freesurfer.feat2segstats": feat2segstats_execute,
+        "freesurfer.feat2surf": feat2surf_execute,
+        "freesurfer.fiducials_calibration": fiducials_calibration_execute,
+        "freesurfer.fiducials_correction": fiducials_correction_execute,
+        "freesurfer.fix_subject-rh": fix_subject_rh_execute,
+        "freesurfer.fix_subject": fix_subject_execute,
+        "freesurfer.fix_subject_corrected-rh": fix_subject_corrected_rh_execute,
+        "freesurfer.fix_subject_corrected": fix_subject_corrected_execute,
+        "freesurfer.fixup_mni_paths": fixup_mni_paths_execute,
+        "freesurfer.flip_4dfp": flip_4dfp_execute,
+        "freesurfer.flirt.newdefault.20080811.sch": flirt_newdefault_20080811_sch_execute,
+        "freesurfer.fname2ext": fname2ext_execute,
+        "freesurfer.fname2stem": fname2stem_execute,
+        "freesurfer.freeview": freeview_execute,
+        "freesurfer.fs-check-version": fs_check_version_execute,
+        "freesurfer.fsPrintHelp": fs_print_help_execute,
+        "freesurfer.fs_install_mcr": fs_install_mcr_execute,
+        "freesurfer.fs_lib_check": fs_lib_check_execute,
+        "freesurfer.fs_run_from_mcr": fs_run_from_mcr_execute,
+        "freesurfer.fs_spmreg.glnxa64": fs_spmreg_glnxa64_execute,
+        "freesurfer.fs_temp_dir": fs_temp_dir_execute,
+        "freesurfer.fs_temp_file": fs_temp_file_execute,
+        "freesurfer.fs_time": fs_time_execute,
+        "freesurfer.fs_tutorial_data": fs_tutorial_data_execute,
+        "freesurfer.fs_update": fs_update_execute,
+        "freesurfer.fscalc": fscalc_execute,
+        "freesurfer.fsdcmdecompress": fsdcmdecompress_execute,
+        "freesurfer.fsl.5.0.2.xyztrans.sch": fsl_5_0_2_xyztrans_sch_execute,
+        "freesurfer.fsl_label2voxel": fsl_label2voxel_execute,
+        "freesurfer.fsl_rigid_register": fsl_rigid_register_execute,
+        "freesurfer.fsl_sub_mgh": fsl_sub_mgh_execute,
+        "freesurfer.fslregister": fslregister_execute,
+        "freesurfer.fspalm": fspalm_execute,
+        "freesurfer.fsr-coreg": fsr_coreg_execute,
+        "freesurfer.fsr-getxopts": fsr_getxopts_execute,
+        "freesurfer.fsr-import": fsr_import_execute,
+        "freesurfer.fsrealpath": fsrealpath_execute,
+        "freesurfer.fsvglrun": fsvglrun_execute,
+        "freesurfer.fvcompare": fvcompare_execute,
+        "freesurfer.gauss_4dfp": gauss_4dfp_execute,
+        "freesurfer.gca-apply": gca_apply_execute,
+        "freesurfer.gcainit": gcainit_execute,
+        "freesurfer.gcaprepone": gcaprepone_execute,
+        "freesurfer.gcatrain": gcatrain_execute,
+        "freesurfer.gcatrainskull": gcatrainskull_execute,
+        "freesurfer.gdcmconv.fs": gdcmconv_fs_execute,
+        "freesurfer.gems_compute_atlas_probs": gems_compute_atlas_probs_execute,
+        "freesurfer.get_label_thickness": get_label_thickness_execute,
+        "freesurfer.getfullpath": getfullpath_execute,
+        "freesurfer.grad_unwarp": grad_unwarp_execute,
+        "freesurfer.groupstats": groupstats_execute,
+        "freesurfer.groupstatsdiff": groupstatsdiff_execute,
+        "freesurfer.gtmseg": gtmseg_execute,
+        "freesurfer.hiam_make_surfaces": hiam_make_surfaces_execute,
+        "freesurfer.hiam_make_template": hiam_make_template_execute,
+        "freesurfer.hiam_register": hiam_register_execute,
+        "freesurfer.histo_compute_joint_density": histo_compute_joint_density_execute,
+        "freesurfer.histo_register_block": histo_register_block_execute,
+        "freesurfer.histo_synthesize": histo_synthesize_execute,
+        "freesurfer.ico_supersample": ico_supersample_execute,
+        "freesurfer.ifh2hdr": ifh2hdr_execute,
+        "freesurfer.imgreg_4dfp": imgreg_4dfp_execute,
+        "freesurfer.inflate_subject-lh": inflate_subject_lh_execute,
+        "freesurfer.inflate_subject-rh": inflate_subject_rh_execute,
+        "freesurfer.inflate_subject": inflate_subject_execute,
+        "freesurfer.inflate_subject3": inflate_subject3_execute,
+        "freesurfer.inflate_subject_new-lh": inflate_subject_new_lh_execute,
+        "freesurfer.inflate_subject_new-rh": inflate_subject_new_rh_execute,
+        "freesurfer.inflate_subject_new": inflate_subject_new_execute,
+        "freesurfer.inflate_subject_sc": inflate_subject_sc_execute,
+        "freesurfer.irepifitvol.glnx64": irepifitvol_glnx64_execute,
+        "freesurfer.irepifitvol": irepifitvol_execute,
+        "freesurfer.is-surface": is_surface_execute,
+        "freesurfer.isanalyze": isanalyze_execute,
+        "freesurfer.isnifti": isnifti_execute,
+        "freesurfer.isolate_labels.csh": isolate_labels_csh_execute,
+        "freesurfer.isolate_labels_keeporigval.csh": isolate_labels_keeporigval_csh_execute,
+        "freesurfer.jkgcatrain": jkgcatrain_execute,
+        "freesurfer.label2flat": label2flat_execute,
+        "freesurfer.label2patch": label2patch_execute,
+        "freesurfer.label_elderly_subject": label_elderly_subject_execute,
+        "freesurfer.label_subject": label_subject_execute,
+        "freesurfer.label_subject_flash": label_subject_flash_execute,
+        "freesurfer.label_subject_mixed": label_subject_mixed_execute,
+        "freesurfer.labels_disjoint": labels_disjoint_execute,
+        "freesurfer.labels_intersect": labels_intersect_execute,
+        "freesurfer.labels_union": labels_union_execute,
+        "freesurfer.list_otl_labels": list_otl_labels_execute,
+        "freesurfer.listsubj": listsubj_execute,
+        "freesurfer.long_create_base_sigma": long_create_base_sigma_execute,
+        "freesurfer.long_create_orig": long_create_orig_execute,
+        "freesurfer.long_mris_slopes": long_mris_slopes_execute,
+        "freesurfer.long_qdec_table": long_qdec_table_execute,
+        "freesurfer.long_stats_combine": long_stats_combine_execute,
+        "freesurfer.long_stats_slopes": long_stats_slopes_execute,
+        "freesurfer.long_stats_tps": long_stats_tps_execute,
+        "freesurfer.long_submit_jobs": long_submit_jobs_execute,
+        "freesurfer.long_submit_postproc": long_submit_postproc_execute,
+        "freesurfer.longmc": longmc_execute,
+        "freesurfer.lpcregister": lpcregister_execute,
+        "freesurfer.lta_convert": lta_convert_execute,
+        "freesurfer.lta_diff": lta_diff_execute,
+        "freesurfer.make-segvol-table": make_segvol_table_execute,
+        "freesurfer.make_average_subcort": make_average_subcort_execute,
+        "freesurfer.make_average_subject": make_average_subject_execute,
+        "freesurfer.make_average_surface": make_average_surface_execute,
+        "freesurfer.make_average_volume": make_average_volume_execute,
+        "freesurfer.make_cortex_label": make_cortex_label_execute,
+        "freesurfer.make_exvivo_filled": make_exvivo_filled_execute,
+        "freesurfer.make_folding_atlas": make_folding_atlas_execute,
+        "freesurfer.make_hemi_mask": make_hemi_mask_execute,
+        "freesurfer.make_symmetric": make_symmetric_execute,
+        "freesurfer.make_upright": make_upright_execute,
+        "freesurfer.makevol": makevol_execute,
+        "freesurfer.map_all_labels-lh": map_all_labels_lh_execute,
+        "freesurfer.map_all_labels": map_all_labels_execute,
+        "freesurfer.map_central_sulcus": map_central_sulcus_execute,
+        "freesurfer.map_to_base": map_to_base_execute,
+        "freesurfer.meanval": meanval_execute,
+        "freesurfer.merge_stats_tables": merge_stats_tables_execute,
+        "freesurfer.mergeseg": mergeseg_execute,
+        "freesurfer.mideface": mideface_execute,
+        "freesurfer.minc2seqinfo": minc2seqinfo_execute,
+        "freesurfer.mkheadsurf": mkheadsurf_execute,
+        "freesurfer.mkima_index.tcl": mkima_index_tcl_execute,
+        "freesurfer.mkmnc_index.tcl": mkmnc_index_tcl_execute,
+        "freesurfer.mksubjdirs": mksubjdirs_execute,
+        "freesurfer.mksurfatlas": mksurfatlas_execute,
+        "freesurfer.mkxsubjreg": mkxsubjreg_execute,
+        "freesurfer.mmppsp": mmppsp_execute,
+        "freesurfer.mni152reg": mni152reg_execute,
+        "freesurfer.morph_only_subject-lh": morph_only_subject_lh_execute,
+        "freesurfer.morph_only_subject-rh": morph_only_subject_rh_execute,
+        "freesurfer.morph_only_subject": morph_only_subject_execute,
+        "freesurfer.morph_rgb-lh": morph_rgb_lh_execute,
+        "freesurfer.morph_rgb-rh": morph_rgb_rh_execute,
+        "freesurfer.morph_subject-lh": morph_subject_lh_execute,
+        "freesurfer.morph_subject-rh": morph_subject_rh_execute,
+        "freesurfer.morph_subject": morph_subject_execute,
+        "freesurfer.morph_tables-lh": morph_tables_lh_execute,
+        "freesurfer.morph_tables-rh": morph_tables_rh_execute,
+        "freesurfer.mpr2mni305": mpr2mni305_execute,
+        "freesurfer.mri-func2sph": mri_func2sph_execute,
+        "freesurfer.mri-funcvits": mri_funcvits_execute,
+        "freesurfer.mri-sph2surf": mri_sph2surf_execute,
+        "freesurfer.mri_3d_photo_recon": mri_3d_photo_recon_execute,
+        "freesurfer.mri_add_new_tp": mri_add_new_tp_execute,
+        "freesurfer.mri_add_xform_to_header": mri_add_xform_to_header_execute,
+        "freesurfer.mri_align_long.csh": mri_align_long_csh_execute,
+        "freesurfer.mri_and": mri_and_execute,
+        "freesurfer.mri_annotation2label": mri_annotation2label_execute,
+        "freesurfer.mri_aparc2aseg": mri_aparc2aseg_execute,
+        "freesurfer.mri_aparc2wmseg": mri_aparc2wmseg_execute,
+        "freesurfer.mri_apply_bias": mri_apply_bias_execute,
+        "freesurfer.mri_average": mri_average_execute,
+        "freesurfer.mri_binarize": mri_binarize_execute,
+        "freesurfer.mri_brain_volume": mri_brain_volume_execute,
+        "freesurfer.mri_brainvol_stats": mri_brainvol_stats_execute,
+        "freesurfer.mri_ca_label": mri_ca_label_execute,
+        "freesurfer.mri_ca_normalize": mri_ca_normalize_execute,
+        "freesurfer.mri_ca_register": mri_ca_register_execute,
+        "freesurfer.mri_ca_tissue_parms": mri_ca_tissue_parms_execute,
+        "freesurfer.mri_ca_train": mri_ca_train_execute,
+        "freesurfer.mri_cal_renormalize_gca": mri_cal_renormalize_gca_execute,
+        "freesurfer.mri_cc": mri_cc_execute,
+        "freesurfer.mri_cnr": mri_cnr_execute,
+        "freesurfer.mri_compile_edits": mri_compile_edits_execute,
+        "freesurfer.mri_compute_bias": mri_compute_bias_execute,
+        "freesurfer.mri_compute_change_map": mri_compute_change_map_execute,
+        "freesurfer.mri_compute_distances": mri_compute_distances_execute,
+        "freesurfer.mri_compute_layer_fractions": mri_compute_layer_fractions_execute,
+        "freesurfer.mri_compute_overlap": mri_compute_overlap_execute,
+        "freesurfer.mri_compute_seg_overlap": mri_compute_seg_overlap_execute,
+        "freesurfer.mri_compute_volume_fractions": mri_compute_volume_fractions_execute,
+        "freesurfer.mri_compute_volume_intensities": mri_compute_volume_intensities_execute,
+        "freesurfer.mri_concat": mri_concat_execute,
+        "freesurfer.mri_concatenate_gcam": mri_concatenate_gcam_execute,
+        "freesurfer.mri_concatenate_lta": mri_concatenate_lta_execute,
+        "freesurfer.mri_convert": mri_convert_execute,
+        "freesurfer.mri_copy_params": mri_copy_params_execute,
+        "freesurfer.mri_copy_values": mri_copy_values_execute,
+        "freesurfer.mri_cor2label": mri_cor2label_execute,
+        "freesurfer.mri_coreg": mri_coreg_execute,
+        "freesurfer.mri_correct_segmentations": mri_correct_segmentations_execute,
+        "freesurfer.mri_create_t2combined": mri_create_t2combined_execute,
+        "freesurfer.mri_create_tests": mri_create_tests_execute,
+        "freesurfer.mri_cvs_check": mri_cvs_check_execute,
+        "freesurfer.mri_cvs_data_copy": mri_cvs_data_copy_execute,
+        "freesurfer.mri_cvs_register": mri_cvs_register_execute,
+        "freesurfer.mri_dct_align": mri_dct_align_execute,
+        "freesurfer.mri_dct_align_binary": mri_dct_align_binary_execute,
+        "freesurfer.mri_deface": mri_deface_execute,
+        "freesurfer.mri_defacer": mri_defacer_execute,
+        "freesurfer.mri_diff": mri_diff_execute,
+        "freesurfer.mri_dist_surf_label": mri_dist_surf_label_execute,
+        "freesurfer.mri_distance_transform": mri_distance_transform_execute,
+        "freesurfer.mri_easyreg": mri_easyreg_execute,
+        "freesurfer.mri_easywarp": mri_easywarp_execute,
+        "freesurfer.mri_edit_segmentation": mri_edit_segmentation_execute,
+        "freesurfer.mri_edit_segmentation_with_surfaces": mri_edit_segmentation_with_surfaces_execute,
+        "freesurfer.mri_edit_wm_with_aseg": mri_edit_wm_with_aseg_execute,
+        "freesurfer.mri_em_register": mri_em_register_execute,
+        "freesurfer.mri_entowm_seg": mri_entowm_seg_execute,
+        "freesurfer.mri_evaluate_morph": mri_evaluate_morph_execute,
+        "freesurfer.mri_extract": mri_extract_execute,
+        "freesurfer.mri_extract_fcd_features": mri_extract_fcd_features_execute,
+        "freesurfer.mri_extract_label": mri_extract_label_execute,
+        "freesurfer.mri_extract_largest_CC": mri_extract_largest_cc_execute,
+        "freesurfer.mri_exvivo_norm": mri_exvivo_norm_execute,
+        "freesurfer.mri_exvivo_strip": mri_exvivo_strip_execute,
+        "freesurfer.mri_fdr": mri_fdr_execute,
+        "freesurfer.mri_fieldsign": mri_fieldsign_execute,
+        "freesurfer.mri_fill": mri_fill_execute,
+        "freesurfer.mri_fit_bias": mri_fit_bias_execute,
+        "freesurfer.mri_fslmat_to_lta": mri_fslmat_to_lta_execute,
+        "freesurfer.mri_fuse_intensity_images": mri_fuse_intensity_images_execute,
+        "freesurfer.mri_fuse_segmentations": mri_fuse_segmentations_execute,
+        "freesurfer.mri_fwhm": mri_fwhm_execute,
+        "freesurfer.mri_gca_ambiguous": mri_gca_ambiguous_execute,
+        "freesurfer.mri_gcab_train": mri_gcab_train_execute,
+        "freesurfer.mri_gcut": mri_gcut_execute,
+        "freesurfer.mri_gdfglm": mri_gdfglm_execute,
+        "freesurfer.mri_glmfit-sim": mri_glmfit_sim_execute,
+        "freesurfer.mri_glmfit": mri_glmfit_execute,
+        "freesurfer.mri_gradient_info": mri_gradient_info_execute,
+        "freesurfer.mri_gradunwarp": mri_gradunwarp_execute,
+        "freesurfer.mri_gtmpvc": mri_gtmpvc_execute,
+        "freesurfer.mri_gtmseg": mri_gtmseg_execute,
+        "freesurfer.mri_hausdorff_dist": mri_hausdorff_dist_execute,
+        "freesurfer.mri_head": mri_head_execute,
+        "freesurfer.mri_hires_register": mri_hires_register_execute,
+        "freesurfer.mri_histo_eq": mri_histo_eq_execute,
+        "freesurfer.mri_info": mri_info_execute,
+        "freesurfer.mri_jacobian": mri_jacobian_execute,
+        "freesurfer.mri_joint_density": mri_joint_density_execute,
+        "freesurfer.mri_label2label": mri_label2label_execute,
+        "freesurfer.mri_label2vol": mri_label2vol_execute,
+        "freesurfer.mri_label_histo": mri_label_histo_execute,
+        "freesurfer.mri_label_vals": mri_label_vals_execute,
+        "freesurfer.mri_label_volume": mri_label_volume_execute,
+        "freesurfer.mri_linear_align": mri_linear_align_execute,
+        "freesurfer.mri_linear_align_binary": mri_linear_align_binary_execute,
+        "freesurfer.mri_linear_register": mri_linear_register_execute,
+        "freesurfer.mri_log_likelihood": mri_log_likelihood_execute,
+        "freesurfer.mri_long_normalize": mri_long_normalize_execute,
+        "freesurfer.mri_make_bem_surfaces": mri_make_bem_surfaces_execute,
+        "freesurfer.mri_make_uchar": mri_make_uchar_execute,
+        "freesurfer.mri_map_cpdat": mri_map_cpdat_execute,
+        "freesurfer.mri_maps2csd": mri_maps2csd_execute,
+        "freesurfer.mri_mark_temporal_lobe": mri_mark_temporal_lobe_execute,
+        "freesurfer.mri_mask": mri_mask_execute,
+        "freesurfer.mri_matrix_multiply": mri_matrix_multiply_execute,
+        "freesurfer.mri_mc": mri_mc_execute,
+        "freesurfer.mri_mcsim": mri_mcsim_execute,
+        "freesurfer.mri_mergelabels": mri_mergelabels_execute,
+        "freesurfer.mri_mi": mri_mi_execute,
+        "freesurfer.mri_modify": mri_modify_execute,
+        "freesurfer.mri_morphology": mri_morphology_execute,
+        "freesurfer.mri_motion_correct": mri_motion_correct_execute,
+        "freesurfer.mri_motion_correct2": mri_motion_correct2_execute,
+        "freesurfer.mri_ms_fitparms": mri_ms_fitparms_execute,
+        "freesurfer.mri_nl_align": mri_nl_align_execute,
+        "freesurfer.mri_nl_align_binary": mri_nl_align_binary_execute,
+        "freesurfer.mri_nlfilter": mri_nlfilter_execute,
+        "freesurfer.mri_normalize": mri_normalize_execute,
+        "freesurfer.mri_normalize_tp2": mri_normalize_tp2_execute,
+        "freesurfer.mri_nu_correct.mni": mri_nu_correct_mni_execute,
+        "freesurfer.mri_or": mri_or_execute,
+        "freesurfer.mri_paint": mri_paint_execute,
+        "freesurfer.mri_parse_sdcmdir": mri_parse_sdcmdir_execute,
+        "freesurfer.mri_path2label": mri_path2label_execute,
+        "freesurfer.mri_polv": mri_polv_execute,
+        "freesurfer.mri_pretess": mri_pretess_execute,
+        "freesurfer.mri_probe_ima": mri_probe_ima_execute,
+        "freesurfer.mri_probedicom": mri_probedicom_execute,
+        "freesurfer.mri_reduce": mri_reduce_execute,
+        "freesurfer.mri_refine_seg": mri_refine_seg_execute,
+        "freesurfer.mri_relabel_hypointensities": mri_relabel_hypointensities_execute,
+        "freesurfer.mri_relabel_nonwm_hypos": mri_relabel_nonwm_hypos_execute,
+        "freesurfer.mri_remove_neck": mri_remove_neck_execute,
+        "freesurfer.mri_reorient_LR.csh": mri_reorient_lr_csh_execute,
+        "freesurfer.mri_rf_label": mri_rf_label_execute,
+        "freesurfer.mri_rf_long_label": mri_rf_long_label_execute,
+        "freesurfer.mri_rf_long_train": mri_rf_long_train_execute,
+        "freesurfer.mri_rf_train": mri_rf_train_execute,
+        "freesurfer.mri_ribbon": mri_ribbon_execute,
+        "freesurfer.mri_rigid_register": mri_rigid_register_execute,
+        "freesurfer.mri_robust_register": mri_robust_register_execute,
+        "freesurfer.mri_robust_template": mri_robust_template_execute,
+        "freesurfer.mri_sbbr": mri_sbbr_execute,
+        "freesurfer.mri_sclimbic_seg": mri_sclimbic_seg_execute,
+        "freesurfer.mri_seg_diff": mri_seg_diff_execute,
+        "freesurfer.mri_seg_overlap": mri_seg_overlap_execute,
+        "freesurfer.mri_segcentroids": mri_segcentroids_execute,
+        "freesurfer.mri_seghead": mri_seghead_execute,
+        "freesurfer.mri_segment": mri_segment_execute,
+        "freesurfer.mri_segment_hypothalamic_subunits": mri_segment_hypothalamic_subunits_execute,
+        "freesurfer.mri_segment_thalamic_nuclei_dti_cnn": mri_segment_thalamic_nuclei_dti_cnn_execute,
+        "freesurfer.mri_segreg": mri_segreg_execute,
+        "freesurfer.mri_segstats": mri_segstats_execute,
+        "freesurfer.mri_stats2seg": mri_stats2seg_execute,
+        "freesurfer.mri_stopmask": mri_stopmask_execute,
+        "freesurfer.mri_strip_nonwhite": mri_strip_nonwhite_execute,
+        "freesurfer.mri_strip_subject_info": mri_strip_subject_info_execute,
+        "freesurfer.mri_surf2surf": mri_surf2surf_execute,
+        "freesurfer.mri_surf2vol": mri_surf2vol_execute,
+        "freesurfer.mri_surf2volseg": mri_surf2volseg_execute,
+        "freesurfer.mri_surfacemask": mri_surfacemask_execute,
+        "freesurfer.mri_surfcluster": mri_surfcluster_execute,
+        "freesurfer.mri_synthesize": mri_synthesize_execute,
+        "freesurfer.mri_synthmorph": mri_synthmorph_execute,
+        "freesurfer.mri_synthseg": mri_synthseg_execute,
+        "freesurfer.mri_synthsr": mri_synthsr_execute,
+        "freesurfer.mri_synthsr_hyperfine": mri_synthsr_hyperfine_execute,
+        "freesurfer.mri_synthstrip": mri_synthstrip_execute,
+        "freesurfer.mri_tessellate": mri_tessellate_execute,
+        "freesurfer.mri_threshold": mri_threshold_execute,
+        "freesurfer.mri_topologycorrection": mri_topologycorrection_execute,
+        "freesurfer.mri_train": mri_train_execute,
+        "freesurfer.mri_transform": mri_transform_execute,
+        "freesurfer.mri_twoclass": mri_twoclass_execute,
+        "freesurfer.mri_validate_skull_stripped": mri_validate_skull_stripped_execute,
+        "freesurfer.mri_vessel_segment": mri_vessel_segment_execute,
+        "freesurfer.mri_vol2label": mri_vol2label_execute,
+        "freesurfer.mri_vol2surf": mri_vol2surf_execute,
+        "freesurfer.mri_vol2vol": mri_vol2vol_execute,
+        "freesurfer.mri_volcluster": mri_volcluster_execute,
+        "freesurfer.mri_voldiff": mri_voldiff_execute,
+        "freesurfer.mri_volsynth": mri_volsynth_execute,
+        "freesurfer.mri_warp_convert": mri_warp_convert_execute,
+        "freesurfer.mri_watershed": mri_watershed_execute,
+        "freesurfer.mri_wbc": mri_wbc_execute,
+        "freesurfer.mri_xvolavg": mri_xvolavg_execute,
+        "freesurfer.mri_z2p": mri_z2p_execute,
+        "freesurfer.mris2rgb": mris2rgb_execute,
+        "freesurfer.mris_AA_shrinkwrap": mris_aa_shrinkwrap_execute,
+        "freesurfer.mris_BA_segment": mris_ba_segment_execute,
+        "freesurfer.mris_add_template": mris_add_template_execute,
+        "freesurfer.mris_anatomical_stats": mris_anatomical_stats_execute,
+        "freesurfer.mris_annot_diff": mris_annot_diff_execute,
+        "freesurfer.mris_annot_to_segmentation": mris_annot_to_segmentation_execute,
+        "freesurfer.mris_apply_reg": mris_apply_reg_execute,
+        "freesurfer.mris_autodet_gwstats": mris_autodet_gwstats_execute,
+        "freesurfer.mris_average_curvature": mris_average_curvature_execute,
+        "freesurfer.mris_ca_deform": mris_ca_deform_execute,
+        "freesurfer.mris_ca_label": mris_ca_label_execute,
+        "freesurfer.mris_ca_train": mris_ca_train_execute,
+        "freesurfer.mris_calc": mris_calc_execute,
+        "freesurfer.mris_compute_acorr": mris_compute_acorr_execute,
+        "freesurfer.mris_compute_layer_intensities": mris_compute_layer_intensities_execute,
+        "freesurfer.mris_compute_lgi": mris_compute_lgi_execute,
+        "freesurfer.mris_compute_overlap": mris_compute_overlap_execute,
+        "freesurfer.mris_compute_parc_overlap": mris_compute_parc_overlap_execute,
+        "freesurfer.mris_compute_volume_fractions": mris_compute_volume_fractions_execute,
+        "freesurfer.mris_congeal": mris_congeal_execute,
+        "freesurfer.mris_convert": mris_convert_execute,
+        "freesurfer.mris_copy_header": mris_copy_header_execute,
+        "freesurfer.mris_curvature": mris_curvature_execute,
+        "freesurfer.mris_curvature2image": mris_curvature2image_execute,
+        "freesurfer.mris_curvature_stats": mris_curvature_stats_execute,
+        "freesurfer.mris_defects_pointset": mris_defects_pointset_execute,
+        "freesurfer.mris_deform": mris_deform_execute,
+        "freesurfer.mris_diff": mris_diff_execute,
+        "freesurfer.mris_distance_map": mris_distance_map_execute,
+        "freesurfer.mris_distance_to_label": mris_distance_to_label_execute,
+        "freesurfer.mris_distance_transform": mris_distance_transform_execute,
+        "freesurfer.mris_divide_parcellation": mris_divide_parcellation_execute,
+        "freesurfer.mris_entropy": mris_entropy_execute,
+        "freesurfer.mris_errors": mris_errors_execute,
+        "freesurfer.mris_estimate_wm": mris_estimate_wm_execute,
+        "freesurfer.mris_euler_number": mris_euler_number_execute,
+        "freesurfer.mris_expand": mris_expand_execute,
+        "freesurfer.mris_extract_main_component": mris_extract_main_component_execute,
+        "freesurfer.mris_extract_patches": mris_extract_patches_execute,
+        "freesurfer.mris_extract_values": mris_extract_values_execute,
+        "freesurfer.mris_exvivo_surfaces": mris_exvivo_surfaces_execute,
+        "freesurfer.mris_fill": mris_fill_execute,
+        "freesurfer.mris_find_flat_regions": mris_find_flat_regions_execute,
+        "freesurfer.mris_fix_topology": mris_fix_topology_execute,
+        "freesurfer.mris_flatten": mris_flatten_execute,
+        "freesurfer.mris_fwhm": mris_fwhm_execute,
+        "freesurfer.mris_gradient": mris_gradient_execute,
+        "freesurfer.mris_hausdorff_dist": mris_hausdorff_dist_execute,
+        "freesurfer.mris_image2vtk": mris_image2vtk_execute,
+        "freesurfer.mris_inflate": mris_inflate_execute,
+        "freesurfer.mris_info": mris_info_execute,
+        "freesurfer.mris_init_global_tractography": mris_init_global_tractography_execute,
+        "freesurfer.mris_intensity_profile": mris_intensity_profile_execute,
+        "freesurfer.mris_interpolate_warp": mris_interpolate_warp_execute,
+        "freesurfer.mris_jacobian": mris_jacobian_execute,
+        "freesurfer.mris_label2annot": mris_label2annot_execute,
+        "freesurfer.mris_label_area": mris_label_area_execute,
+        "freesurfer.mris_label_calc": mris_label_calc_execute,
+        "freesurfer.mris_label_mode": mris_label_mode_execute,
+        "freesurfer.mris_left_right_register": mris_left_right_register_execute,
+        "freesurfer.mris_make_average_surface": mris_make_average_surface_execute,
+        "freesurfer.mris_make_face_parcellation": mris_make_face_parcellation_execute,
+        "freesurfer.mris_make_surfaces": mris_make_surfaces_execute,
+        "freesurfer.mris_make_template": mris_make_template_execute,
+        "freesurfer.mris_map_cuts": mris_map_cuts_execute,
+        "freesurfer.mris_mef_surfaces": mris_mef_surfaces_execute,
+        "freesurfer.mris_merge_parcellations": mris_merge_parcellations_execute,
+        "freesurfer.mris_mesh_subdivide": mris_mesh_subdivide_execute,
+        "freesurfer.mris_morph_stats": mris_morph_stats_execute,
+        "freesurfer.mris_ms_refine": mris_ms_refine_execute,
+        "freesurfer.mris_multimodal": mris_multimodal_execute,
+        "freesurfer.mris_multimodal_surface_placement": mris_multimodal_surface_placement_execute,
+        "freesurfer.mris_multiscale_stats": mris_multiscale_stats_execute,
+        "freesurfer.mris_niters2fwhm": mris_niters2fwhm_execute,
+        "freesurfer.mris_nudge": mris_nudge_execute,
+        "freesurfer.mris_parcellate_connectivity": mris_parcellate_connectivity_execute,
+        "freesurfer.mris_place_surface": mris_place_surface_execute,
+        "freesurfer.mris_pmake": mris_pmake_execute,
+        "freesurfer.mris_preproc": mris_preproc_execute,
+        "freesurfer.mris_profileClustering": mris_profile_clustering_execute,
+        "freesurfer.mris_refine_surfaces": mris_refine_surfaces_execute,
+        "freesurfer.mris_register": mris_register_execute,
+        "freesurfer.mris_register_label_map": mris_register_label_map_execute,
+        "freesurfer.mris_register_to_label": mris_register_to_label_execute,
+        "freesurfer.mris_register_to_volume": mris_register_to_volume_execute,
+        "freesurfer.mris_remesh": mris_remesh_execute,
+        "freesurfer.mris_remove_intersection": mris_remove_intersection_execute,
+        "freesurfer.mris_remove_negative_vertices": mris_remove_negative_vertices_execute,
+        "freesurfer.mris_remove_variance": mris_remove_variance_execute,
+        "freesurfer.mris_reposition_surface": mris_reposition_surface_execute,
+        "freesurfer.mris_resample": mris_resample_execute,
+        "freesurfer.mris_rescale": mris_rescale_execute,
+        "freesurfer.mris_reverse": mris_reverse_execute,
+        "freesurfer.mris_rf_label": mris_rf_label_execute,
+        "freesurfer.mris_rf_train": mris_rf_train_execute,
+        "freesurfer.mris_rotate": mris_rotate_execute,
+        "freesurfer.mris_sample_label": mris_sample_label_execute,
+        "freesurfer.mris_sample_parc": mris_sample_parc_execute,
+        "freesurfer.mris_seg2annot": mris_seg2annot_execute,
+        "freesurfer.mris_segment": mris_segment_execute,
+        "freesurfer.mris_segment_vals": mris_segment_vals_execute,
+        "freesurfer.mris_segmentation_stats": mris_segmentation_stats_execute,
+        "freesurfer.mris_shrinkwrap": mris_shrinkwrap_execute,
+        "freesurfer.mris_simulate_atrophy": mris_simulate_atrophy_execute,
+        "freesurfer.mris_skeletonize": mris_skeletonize_execute,
+        "freesurfer.mris_smooth": mris_smooth_execute,
+        "freesurfer.mris_smooth_intracortical": mris_smooth_intracortical_execute,
+        "freesurfer.mris_sphere": mris_sphere_execute,
+        "freesurfer.mris_spherical_average": mris_spherical_average_execute,
+        "freesurfer.mris_surf2vtk": mris_surf2vtk_execute,
+        "freesurfer.mris_surface_stats": mris_surface_stats_execute,
+        "freesurfer.mris_surface_to_vol_distances": mris_surface_to_vol_distances_execute,
+        "freesurfer.mris_talairach": mris_talairach_execute,
+        "freesurfer.mris_target_pos": mris_target_pos_execute,
+        "freesurfer.mris_thickness": mris_thickness_execute,
+        "freesurfer.mris_thickness_comparison": mris_thickness_comparison_execute,
+        "freesurfer.mris_thickness_diff": mris_thickness_diff_execute,
+        "freesurfer.mris_topo_fixer": mris_topo_fixer_execute,
+        "freesurfer.mris_transform": mris_transform_execute,
+        "freesurfer.mris_translate_annotation": mris_translate_annotation_execute,
+        "freesurfer.mris_transmantle_dysplasia_paths": mris_transmantle_dysplasia_paths_execute,
+        "freesurfer.mris_volmask": mris_volmask_execute,
+        "freesurfer.mris_volmask_novtk": mris_volmask_novtk_execute,
+        "freesurfer.mris_volmask_vtk": mris_volmask_vtk_execute,
+        "freesurfer.mris_volsmooth": mris_volsmooth_execute,
+        "freesurfer.mris_volume": mris_volume_execute,
+        "freesurfer.mris_warp": mris_warp_execute,
+        "freesurfer.mris_watershed": mris_watershed_execute,
+        "freesurfer.mris_wm_volume": mris_wm_volume_execute,
+        "freesurfer.mrisp_paint": mrisp_paint_execute,
+        "freesurfer.mrisp_write": mrisp_write_execute,
+        "freesurfer.ms_refine_subject": ms_refine_subject_execute,
+        "freesurfer.nmovie_qt": nmovie_qt_execute,
+        "freesurfer.oct_register_mosaic": oct_register_mosaic_execute,
+        "freesurfer.optseq2": optseq2_execute,
+        "freesurfer.orientLAS": orient_las_execute,
+        "freesurfer.parc_atlas_jackknife_test": parc_atlas_jackknife_test_execute,
+        "freesurfer.pctsurfcon": pctsurfcon_execute,
+        "freesurfer.plot_structure_stats.tcl": plot_structure_stats_tcl_execute,
+        "freesurfer.pointset2label": pointset2label_execute,
+        "freesurfer.polyorder": polyorder_execute,
+        "freesurfer.post-recon-all": post_recon_all_execute,
+        "freesurfer.predict_v1.sh": predict_v1_sh_execute,
+        "freesurfer.print_unique_labels.csh": print_unique_labels_csh_execute,
+        "freesurfer.qatools.py": qatools_py_execute,
+        "freesurfer.quantifyBrainstemStructures.sh": quantify_brainstem_structures_sh_execute,
+        "freesurfer.quantifyHAsubregions.sh": quantify_hasubregions_sh_execute,
+        "freesurfer.quantifyThalamicNuclei.sh": quantify_thalamic_nuclei_sh_execute,
+        "freesurfer.rbbr": rbbr_execute,
+        "freesurfer.rca-base-init": rca_base_init_execute,
+        "freesurfer.rca-config": rca_config_execute,
+        "freesurfer.rca-config2csh": rca_config2csh_execute,
+        "freesurfer.rca-fix-ento": rca_fix_ento_execute,
+        "freesurfer.rca-long-tp-init": rca_long_tp_init_execute,
+        "freesurfer.rcbf-prep": rcbf_prep_execute,
+        "freesurfer.recon-all-clinical.sh": recon_all_clinical_sh_execute,
+        "freesurfer.recon-all-exvivo": recon_all_exvivo_execute,
+        "freesurfer.recon-all": recon_all_execute,
+        "freesurfer.reconbatchjobs": reconbatchjobs_execute,
+        "freesurfer.reg-feat2anat": reg_feat2anat_execute,
+        "freesurfer.reg-mni305.2mm": reg_mni305_2mm_execute,
+        "freesurfer.reg2subject": reg2subject_execute,
+        "freesurfer.regdat2xfm": regdat2xfm_execute,
+        "freesurfer.register.csh": register_csh_execute,
+        "freesurfer.register_child": register_child_execute,
+        "freesurfer.register_elderly_subject": register_elderly_subject_execute,
+        "freesurfer.register_subject": register_subject_execute,
+        "freesurfer.register_subject_flash": register_subject_flash_execute,
+        "freesurfer.reinflate_subject-lh": reinflate_subject_lh_execute,
+        "freesurfer.reinflate_subject-rh": reinflate_subject_rh_execute,
+        "freesurfer.reinflate_subject": reinflate_subject_execute,
+        "freesurfer.remove_talairach": remove_talairach_execute,
+        "freesurfer.renormalize_T1_subject": renormalize_t1_subject_execute,
+        "freesurfer.renormalize_subject_keep_editting": renormalize_subject_keep_editting_execute,
+        "freesurfer.reregister_subject_mixed": reregister_subject_mixed_execute,
+        "freesurfer.rtview": rtview_execute,
+        "freesurfer.run-qdec-glm": run_qdec_glm_execute,
+        "freesurfer.run_SegmentSubfieldsT1Longitudinal.sh": run_segment_subfields_t1_longitudinal_sh_execute,
+        "freesurfer.run_SegmentSubject.sh": run_segment_subject_sh_execute,
+        "freesurfer.run_SegmentThalamicNuclei.sh": run_segment_thalamic_nuclei_sh_execute,
+        "freesurfer.run_mris_preproc": run_mris_preproc_execute,
+        "freesurfer.run_samseg": run_samseg_execute,
+        "freesurfer.run_samseg_long": run_samseg_long_execute,
+        "freesurfer.run_segmentSubjectT1T2_autoEstimateAlveusML.sh": run_segment_subject_t1_t2_auto_estimate_alveus_ml_sh_execute,
+        "freesurfer.run_segmentSubjectT1_autoEstimateAlveusML.sh": run_segment_subject_t1_auto_estimate_alveus_ml_sh_execute,
+        "freesurfer.run_segmentSubjectT2_autoEstimateAlveusML.sh": run_segment_subject_t2_auto_estimate_alveus_ml_sh_execute,
+        "freesurfer.samseg-long": samseg_long_execute,
+        "freesurfer.samseg": samseg_execute,
+        "freesurfer.samseg2recon": samseg2recon_execute,
+        "freesurfer.samsegmesh2surf": samsegmesh2surf_execute,
+        "freesurfer.sbtiv": sbtiv_execute,
+        "freesurfer.seg2filled": seg2filled_execute,
+        "freesurfer.seg2recon": seg2recon_execute,
+        "freesurfer.segmentBS.sh": segment_bs_sh_execute,
+        "freesurfer.segmentHA_T1.sh": segment_ha_t1_sh_execute,
+        "freesurfer.segmentHA_T1_long.sh": segment_ha_t1_long_sh_execute,
+        "freesurfer.segmentHA_T2.sh": segment_ha_t2_sh_execute,
+        "freesurfer.segmentSubjectT1T2_autoEstimateAlveusML": segment_subject_t1_t2_auto_estimate_alveus_ml_execute,
+        "freesurfer.segmentSubjectT1_autoEstimateAlveusML": segment_subject_t1_auto_estimate_alveus_ml_execute,
+        "freesurfer.segmentSubjectT2_autoEstimateAlveusML": segment_subject_t2_auto_estimate_alveus_ml_execute,
+        "freesurfer.segmentThalamicNuclei.sh": segment_thalamic_nuclei_sh_execute,
+        "freesurfer.segment_monkey": segment_monkey_execute,
+        "freesurfer.segment_subject": segment_subject_execute,
+        "freesurfer.segment_subject_notal": segment_subject_notal_execute,
+        "freesurfer.segment_subject_notal2": segment_subject_notal2_execute,
+        "freesurfer.segment_subject_old_skull_strip": segment_subject_old_skull_strip_execute,
+        "freesurfer.segment_subject_sc": segment_subject_sc_execute,
+        "freesurfer.segment_subregions": segment_subregions_execute,
+        "freesurfer.segpons": segpons_execute,
+        "freesurfer.setlabelstat": setlabelstat_execute,
+        "freesurfer.sfa2fieldsign": sfa2fieldsign_execute,
+        "freesurfer.slicedelay": slicedelay_execute,
+        "freesurfer.sphere_subject-lh": sphere_subject_lh_execute,
+        "freesurfer.sphere_subject-rh": sphere_subject_rh_execute,
+        "freesurfer.sphere_subject": sphere_subject_execute,
+        "freesurfer.spm_t_to_b": spm_t_to_b_execute,
+        "freesurfer.spmregister": spmregister_execute,
+        "freesurfer.sratio": sratio_execute,
+        "freesurfer.stat_normalize": stat_normalize_execute,
+        "freesurfer.stattablediff": stattablediff_execute,
+        "freesurfer.stem2fname": stem2fname_execute,
+        "freesurfer.surf2vol": surf2vol_execute,
+        "freesurfer.surfreg": surfreg_execute,
+        "freesurfer.swi_preprocess": swi_preprocess_execute,
+        "freesurfer.swi_process": swi_process_execute,
+        "freesurfer.t4img_4dfp": t4img_4dfp_execute,
+        "freesurfer.t4imgs_4dfp": t4imgs_4dfp_execute,
+        "freesurfer.table2map": table2map_execute,
+        "freesurfer.tal_QC_AZS": tal_qc_azs_execute,
+        "freesurfer.tal_compare": tal_compare_execute,
+        "freesurfer.talairach": talairach_execute,
+        "freesurfer.talairach2": talairach2_execute,
+        "freesurfer.talairach_afd": talairach_afd_execute,
+        "freesurfer.talairach_avi": talairach_avi_execute,
+        "freesurfer.talairach_mgh": talairach_mgh_execute,
+        "freesurfer.talsegprob": talsegprob_execute,
+        "freesurfer.testOrientationPlanesFromParcellation": test_orientation_planes_from_parcellation_execute,
+        "freesurfer.test_recon-all.csh": test_recon_all_csh_execute,
+        "freesurfer.test_tutorials.sh": test_tutorials_sh_execute,
+        "freesurfer.thickdiffmap": thickdiffmap_execute,
+        "freesurfer.tkmedit": tkmedit_execute,
+        "freesurfer.tkmeditfv": tkmeditfv_execute,
+        "freesurfer.tkregister2": tkregister2_execute,
+        "freesurfer.tkregister2_cmdl": tkregister2_cmdl_execute,
+        "freesurfer.tkregisterfv": tkregisterfv_execute,
+        "freesurfer.tksurfer": tksurfer_execute,
+        "freesurfer.tksurferfv": tksurferfv_execute,
+        "freesurfer.trac-all": trac_all_execute,
+        "freesurfer.trac-paths": trac_paths_execute,
+        "freesurfer.trac-preproc": trac_preproc_execute,
+        "freesurfer.tractstats2table": tractstats2table_execute,
+        "freesurfer.train-gcs-atlas": train_gcs_atlas_execute,
+        "freesurfer.tridec": tridec_execute,
+        "freesurfer.trk_tools": trk_tools_execute,
+        "freesurfer.unpack_ima.tcl": unpack_ima_tcl_execute,
+        "freesurfer.unpack_ima1.tcl": unpack_ima1_tcl_execute,
+        "freesurfer.unpack_mnc.tcl": unpack_mnc_tcl_execute,
+        "freesurfer.unpackimadir": unpackimadir_execute,
+        "freesurfer.unpackimadir2": unpackimadir2_execute,
+        "freesurfer.unpackmincdir": unpackmincdir_execute,
+        "freesurfer.unpacksdcmdir": unpacksdcmdir_execute,
+        "freesurfer.ventfix": ventfix_execute,
+        "freesurfer.vertexvol": vertexvol_execute,
+        "freesurfer.vno_match_check": vno_match_check_execute,
+        "freesurfer.vol2segavg": vol2segavg_execute,
+        "freesurfer.vol2subfield": vol2subfield_execute,
+        "freesurfer.vol2symsurf": vol2symsurf_execute,
+        "freesurfer.vsm-smooth": vsm_smooth_execute,
+        "freesurfer.wfilemask": wfilemask_execute,
+        "freesurfer.wm-anat-snr": wm_anat_snr_execute,
+        "freesurfer.wmedits2surf": wmedits2surf_execute,
+        "freesurfer.wmsaseg": wmsaseg_execute,
+        "freesurfer.xcerebralseg": xcerebralseg_execute,
+        "freesurfer.xcorr": xcorr_execute,
+        "freesurfer.xfmrot": xfmrot_execute,
+        "freesurfer.xhemi-tal": xhemi_tal_execute,
+        "freesurfer.xhemireg": xhemireg_execute,
+        "freesurfer.xsanatreg": xsanatreg_execute,
+        "freesurfer.zero_lt_4dfp": zero_lt_4dfp_execute,
+    }[params["@type"]](params, runner)
+}
+
+
+export {
+      execute,
+};

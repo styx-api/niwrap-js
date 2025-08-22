@@ -479,14 +479,16 @@ function mris_curvature_stats_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisCurvatureStatsOutputs`).
  */
 function mris_curvature_stats_execute(
     params: MrisCurvatureStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisCurvatureStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_CURVATURE_STATS_METADATA);
     params = execution.params(params)
     const cargs = mris_curvature_stats_cargs(params, execution)
     const ret = mris_curvature_stats_outputs(params, execution)
@@ -583,10 +585,8 @@ function mris_curvature_stats(
     max_ulps: number | null = null,
     runner: Runner | null = null,
 ): MrisCurvatureStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_CURVATURE_STATS_METADATA);
     const params = mris_curvature_stats_params(subject_name, hemisphere, curvature_files, number_of_averages, principal_curvatures, discrete_method, continuous_method, signed_principals, vertex_area_weigh, vertex_area_normalize, vertex_area_weigh_frac, vertex_area_normalize_frac, post_scale, write_curvature_files, shape_index, output_file_stem, histogram_bins, percentage_histogram_bins, bin_size, bin_start_curvature, bin_end_curvature, label_file, regional_percentages, high_pass_filter, low_pass_filter, high_pass_filter_gaussian, low_pass_filter_gaussian, filter_label, min_max_info, normalize_curvature, summary_condition, min_curvature_scale, max_curvature_scale, scale_factor, version, set_zero_vertex, max_ulps)
-    return mris_curvature_stats_execute(params, execution);
+    return mris_curvature_stats_execute(params, runner);
 }
 
 
@@ -595,8 +595,6 @@ export {
       MrisCurvatureStatsOutputs,
       MrisCurvatureStatsParameters,
       mris_curvature_stats,
-      mris_curvature_stats_cargs,
       mris_curvature_stats_execute,
-      mris_curvature_stats_outputs,
       mris_curvature_stats_params,
 };

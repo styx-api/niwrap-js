@@ -243,14 +243,16 @@ function v__surf_to_vol_spackle_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSurfToVolSpackleOutputs`).
  */
 function v__surf_to_vol_spackle_execute(
     params: VSurfToVolSpackleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSurfToVolSpackleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SURF_TO_VOL_SPACKLE_METADATA);
     params = execution.params(params)
     const cargs = v__surf_to_vol_spackle_cargs(params, execution)
     const ret = v__surf_to_vol_spackle_outputs(params, execution)
@@ -301,10 +303,8 @@ function v__surf_to_vol_spackle(
     ignore_unknown_options: boolean = false,
     runner: Runner | null = null,
 ): VSurfToVolSpackleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SURF_TO_VOL_SPACKLE_METADATA);
     const params = v__surf_to_vol_spackle_params(maskset, spec, surf_a, surfset, prefix, surf_b, normal_vector_length, search_radius, num_steps, keep_temp_files, max_iters, use_mode, datum_type, ignore_unknown_options)
-    return v__surf_to_vol_spackle_execute(params, execution);
+    return v__surf_to_vol_spackle_execute(params, runner);
 }
 
 
@@ -313,8 +313,6 @@ export {
       VSurfToVolSpackleParameters,
       V__SURF_TO_VOL_SPACKLE_METADATA,
       v__surf_to_vol_spackle,
-      v__surf_to_vol_spackle_cargs,
       v__surf_to_vol_spackle_execute,
-      v__surf_to_vol_spackle_outputs,
       v__surf_to_vol_spackle_params,
 };

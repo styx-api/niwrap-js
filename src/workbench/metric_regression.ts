@@ -295,14 +295,16 @@ function metric_regression_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricRegressionOutputs`).
  */
 function metric_regression_execute(
     params: MetricRegressionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricRegressionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_REGRESSION_METADATA);
     params = execution.params(params)
     const cargs = metric_regression_cargs(params, execution)
     const ret = metric_regression_outputs(params, execution)
@@ -339,10 +341,8 @@ function metric_regression(
     keep: Array<MetricRegressionKeepParameters> | null = null,
     runner: Runner | null = null,
 ): MetricRegressionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_REGRESSION_METADATA);
     const params = metric_regression_params(metric_in, metric_out, opt_roi_roi_metric, opt_column_column, remove, keep)
-    return metric_regression_execute(params, execution);
+    return metric_regression_execute(params, runner);
 }
 
 
@@ -353,12 +353,8 @@ export {
       MetricRegressionParameters,
       MetricRegressionRemoveParameters,
       metric_regression,
-      metric_regression_cargs,
       metric_regression_execute,
-      metric_regression_keep_cargs,
       metric_regression_keep_params,
-      metric_regression_outputs,
       metric_regression_params,
-      metric_regression_remove_cargs,
       metric_regression_remove_params,
 };

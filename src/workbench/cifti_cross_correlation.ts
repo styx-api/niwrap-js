@@ -181,14 +181,16 @@ function cifti_cross_correlation_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCrossCorrelationOutputs`).
  */
 function cifti_cross_correlation_execute(
     params: CiftiCrossCorrelationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiCrossCorrelationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_CROSS_CORRELATION_METADATA);
     params = execution.params(params)
     const cargs = cifti_cross_correlation_cargs(params, execution)
     const ret = cifti_cross_correlation_outputs(params, execution)
@@ -229,10 +231,8 @@ function cifti_cross_correlation(
     opt_mem_limit_limit_gb: number | null = null,
     runner: Runner | null = null,
 ): CiftiCrossCorrelationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_CROSS_CORRELATION_METADATA);
     const params = cifti_cross_correlation_params(cifti_a, cifti_b, cifti_out, opt_weights_weight_file, opt_fisher_z, opt_mem_limit_limit_gb)
-    return cifti_cross_correlation_execute(params, execution);
+    return cifti_cross_correlation_execute(params, runner);
 }
 
 
@@ -241,8 +241,6 @@ export {
       CiftiCrossCorrelationOutputs,
       CiftiCrossCorrelationParameters,
       cifti_cross_correlation,
-      cifti_cross_correlation_cargs,
       cifti_cross_correlation_execute,
-      cifti_cross_correlation_outputs,
       cifti_cross_correlation_params,
 };

@@ -157,14 +157,16 @@ function rebase_tensor_image_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RebaseTensorImageOutputs`).
  */
 function rebase_tensor_image_execute(
     params: RebaseTensorImageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RebaseTensorImageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REBASE_TENSOR_IMAGE_METADATA);
     params = execution.params(params)
     const cargs = rebase_tensor_image_cargs(params, execution)
     const ret = rebase_tensor_image_outputs(params, execution)
@@ -197,10 +199,8 @@ function rebase_tensor_image(
     reference: InputPathType | null = null,
     runner: Runner | null = null,
 ): RebaseTensorImageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REBASE_TENSOR_IMAGE_METADATA);
     const params = rebase_tensor_image_params(dimension, infile, outfile, method, reference)
-    return rebase_tensor_image_execute(params, execution);
+    return rebase_tensor_image_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       RebaseTensorImageOutputs,
       RebaseTensorImageParameters,
       rebase_tensor_image,
-      rebase_tensor_image_cargs,
       rebase_tensor_image_execute,
-      rebase_tensor_image_outputs,
       rebase_tensor_image_params,
 };

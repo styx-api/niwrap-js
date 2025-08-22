@@ -127,14 +127,16 @@ function mris_errors_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisErrorsOutputs`).
  */
 function mris_errors_execute(
     params: MrisErrorsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisErrorsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_ERRORS_METADATA);
     params = execution.params(params)
     const cargs = mris_errors_cargs(params, execution)
     const ret = mris_errors_outputs(params, execution)
@@ -159,10 +161,8 @@ function mris_errors(
     input_image_file: InputPathType,
     runner: Runner | null = null,
 ): MrisErrorsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_ERRORS_METADATA);
     const params = mris_errors_params(input_image_file)
-    return mris_errors_execute(params, execution);
+    return mris_errors_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       MrisErrorsOutputs,
       MrisErrorsParameters,
       mris_errors,
-      mris_errors_cargs,
       mris_errors_execute,
-      mris_errors_outputs,
       mris_errors_params,
 };

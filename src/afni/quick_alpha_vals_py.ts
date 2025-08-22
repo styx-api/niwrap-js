@@ -145,14 +145,16 @@ function quick_alpha_vals_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `QuickAlphaValsPyOutputs`).
  */
 function quick_alpha_vals_py_execute(
     params: QuickAlphaValsPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): QuickAlphaValsPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(QUICK_ALPHA_VALS_PY_METADATA);
     params = execution.params(params)
     const cargs = quick_alpha_vals_py_cargs(params, execution)
     const ret = quick_alpha_vals_py_outputs(params, execution)
@@ -179,10 +181,8 @@ function quick_alpha_vals_py(
     niter: number | null = null,
     runner: Runner | null = null,
 ): QuickAlphaValsPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(QUICK_ALPHA_VALS_PY_METADATA);
     const params = quick_alpha_vals_py_params(max_file, niter)
-    return quick_alpha_vals_py_execute(params, execution);
+    return quick_alpha_vals_py_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       QuickAlphaValsPyOutputs,
       QuickAlphaValsPyParameters,
       quick_alpha_vals_py,
-      quick_alpha_vals_py_cargs,
       quick_alpha_vals_py_execute,
-      quick_alpha_vals_py_outputs,
       quick_alpha_vals_py_params,
 };

@@ -167,14 +167,16 @@ function v__suma_reprefixize_spec_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSumaReprefixizeSpecOutputs`).
  */
 function v__suma_reprefixize_spec_execute(
     params: VSumaReprefixizeSpecParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSumaReprefixizeSpecOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SUMA_REPREFIXIZE_SPEC_METADATA);
     params = execution.params(params)
     const cargs = v__suma_reprefixize_spec_cargs(params, execution)
     const ret = v__suma_reprefixize_spec_outputs(params, execution)
@@ -207,10 +209,8 @@ function v__suma_reprefixize_spec(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): VSumaReprefixizeSpecOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SUMA_REPREFIXIZE_SPEC_METADATA);
     const params = v__suma_reprefixize_spec_params(input_file, prefix, output_dir, work_dir, no_clean)
-    return v__suma_reprefixize_spec_execute(params, execution);
+    return v__suma_reprefixize_spec_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       VSumaReprefixizeSpecParameters,
       V__SUMA_REPREFIXIZE_SPEC_METADATA,
       v__suma_reprefixize_spec,
-      v__suma_reprefixize_spec_cargs,
       v__suma_reprefixize_spec_execute,
-      v__suma_reprefixize_spec_outputs,
       v__suma_reprefixize_spec_params,
 };

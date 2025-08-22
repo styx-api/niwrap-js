@@ -134,14 +134,16 @@ function mris_volume_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisVolumeOutputs`).
  */
 function mris_volume_execute(
     params: MrisVolumeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisVolumeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_VOLUME_METADATA);
     params = execution.params(params)
     const cargs = mris_volume_cargs(params, execution)
     const ret = mris_volume_outputs(params, execution)
@@ -168,10 +170,8 @@ function mris_volume(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisVolumeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_VOLUME_METADATA);
     const params = mris_volume_params(surface_file, verbose_flag)
-    return mris_volume_execute(params, execution);
+    return mris_volume_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       MrisVolumeOutputs,
       MrisVolumeParameters,
       mris_volume,
-      mris_volume_cargs,
       mris_volume_execute,
-      mris_volume_outputs,
       mris_volume_params,
 };

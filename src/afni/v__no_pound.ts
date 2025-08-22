@@ -127,14 +127,16 @@ function v__no_pound_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VNoPoundOutputs`).
  */
 function v__no_pound_execute(
     params: VNoPoundParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VNoPoundOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__NO_POUND_METADATA);
     params = execution.params(params)
     const cargs = v__no_pound_cargs(params, execution)
     const ret = v__no_pound_outputs(params, execution)
@@ -159,10 +161,8 @@ function v__no_pound(
     afni_files: Array<string>,
     runner: Runner | null = null,
 ): VNoPoundOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__NO_POUND_METADATA);
     const params = v__no_pound_params(afni_files)
-    return v__no_pound_execute(params, execution);
+    return v__no_pound_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       VNoPoundParameters,
       V__NO_POUND_METADATA,
       v__no_pound,
-      v__no_pound_cargs,
       v__no_pound_execute,
-      v__no_pound_outputs,
       v__no_pound_params,
 };

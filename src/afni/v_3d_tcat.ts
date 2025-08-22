@@ -182,14 +182,16 @@ function v_3d_tcat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTcatOutputs`).
  */
 function v_3d_tcat_execute(
     params: V3dTcatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTcatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TCAT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tcat_cargs(params, execution)
     const ret = v_3d_tcat_outputs(params, execution)
@@ -225,10 +227,8 @@ function v_3d_tcat(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dTcatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TCAT_METADATA);
     const params = v_3d_tcat_params(in_files, rlt, out_file, outputtype, num_threads, verbose)
-    return v_3d_tcat_execute(params, execution);
+    return v_3d_tcat_execute(params, runner);
 }
 
 
@@ -237,8 +237,6 @@ export {
       V3dTcatParameters,
       V_3D_TCAT_METADATA,
       v_3d_tcat,
-      v_3d_tcat_cargs,
       v_3d_tcat_execute,
-      v_3d_tcat_outputs,
       v_3d_tcat_params,
 };

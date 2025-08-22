@@ -132,14 +132,16 @@ function adjunct_is_label_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AdjunctIsLabelPyOutputs`).
  */
 function adjunct_is_label_py_execute(
     params: AdjunctIsLabelPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AdjunctIsLabelPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADJUNCT_IS_LABEL_PY_METADATA);
     params = execution.params(params)
     const cargs = adjunct_is_label_py_cargs(params, execution)
     const ret = adjunct_is_label_py_outputs(params, execution)
@@ -166,10 +168,8 @@ function adjunct_is_label_py(
     label: string,
     runner: Runner | null = null,
 ): AdjunctIsLabelPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADJUNCT_IS_LABEL_PY_METADATA);
     const params = adjunct_is_label_py_params(infile, label)
-    return adjunct_is_label_py_execute(params, execution);
+    return adjunct_is_label_py_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       AdjunctIsLabelPyOutputs,
       AdjunctIsLabelPyParameters,
       adjunct_is_label_py,
-      adjunct_is_label_py_cargs,
       adjunct_is_label_py_execute,
-      adjunct_is_label_py_outputs,
       adjunct_is_label_py_params,
 };

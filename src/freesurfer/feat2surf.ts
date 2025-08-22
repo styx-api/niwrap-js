@@ -244,14 +244,16 @@ function feat2surf_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Feat2surfOutputs`).
  */
 function feat2surf_execute(
     params: Feat2surfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Feat2surfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FEAT2SURF_METADATA);
     params = execution.params(params)
     const cargs = feat2surf_cargs(params, execution)
     const ret = feat2surf_outputs(params, execution)
@@ -294,10 +296,8 @@ function feat2surf(
     out_dir: string | null = null,
     runner: Runner | null = null,
 ): Feat2surfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FEAT2SURF_METADATA);
     const params = feat2surf_params(feat_dirs, feat_dirfile, proj_frac, hemi, target, surf, cope_only, debug_flag, nolog_flag, out_dir)
-    return feat2surf_execute(params, execution);
+    return feat2surf_execute(params, runner);
 }
 
 
@@ -306,8 +306,6 @@ export {
       Feat2surfOutputs,
       Feat2surfParameters,
       feat2surf,
-      feat2surf_cargs,
       feat2surf_execute,
-      feat2surf_outputs,
       feat2surf_params,
 };

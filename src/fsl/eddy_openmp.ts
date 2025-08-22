@@ -564,14 +564,16 @@ function eddy_openmp_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `EddyOpenmpOutputs`).
  */
 function eddy_openmp_execute(
     params: EddyOpenmpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): EddyOpenmpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EDDY_OPENMP_METADATA);
     params = execution.params(params)
     const cargs = eddy_openmp_cargs(params, execution)
     const ret = eddy_openmp_outputs(params, execution)
@@ -682,10 +684,8 @@ function eddy_openmp(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): EddyOpenmpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EDDY_OPENMP_METADATA);
     const params = eddy_openmp_params(imain, mask, index, acqp, bvecs, bvals, out, mb, mb_offs, slspec, json, mporder, s2v_lambda, topup, field, field_mat, flm, slm, fwhm, niter, s2v_niter, cnr_maps, residuals, fep, interp, s2v_interp, resamp, nvoxhp, initrand, ff, repol, ol_nstd, ol_nvox, ol_type, ol_pos, ol_sqr, estimate_move_by_susceptibility, mbs_niter, mbs_lambda, mbs_ksp, dont_sep_offs_move, dont_peas, data_is_shelled, verbose)
-    return eddy_openmp_execute(params, execution);
+    return eddy_openmp_execute(params, runner);
 }
 
 
@@ -694,8 +694,6 @@ export {
       EddyOpenmpOutputs,
       EddyOpenmpParameters,
       eddy_openmp,
-      eddy_openmp_cargs,
       eddy_openmp_execute,
-      eddy_openmp_outputs,
       eddy_openmp_params,
 };

@@ -294,14 +294,16 @@ function v__measure_bb_thick_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VMeasureBbThickOutputs`).
  */
 function v__measure_bb_thick_execute(
     params: VMeasureBbThickParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VMeasureBbThickOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__MEASURE_BB_THICK_METADATA);
     params = execution.params(params)
     const cargs = v__measure_bb_thick_cargs(params, execution)
     const ret = v__measure_bb_thick_outputs(params, execution)
@@ -348,10 +350,8 @@ function v__measure_bb_thick(
     surfsmooth_method: string | null = null,
     runner: Runner | null = null,
 ): VMeasureBbThickOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__MEASURE_BB_THICK_METADATA);
     const params = v__measure_bb_thick_params(maskset, surfset, outdir, resample, increment, surfsmooth, smoothmm, maxthick, depth_search, keep_temp_files, balls_only, surfsmooth_method)
-    return v__measure_bb_thick_execute(params, execution);
+    return v__measure_bb_thick_execute(params, runner);
 }
 
 
@@ -360,8 +360,6 @@ export {
       VMeasureBbThickParameters,
       V__MEASURE_BB_THICK_METADATA,
       v__measure_bb_thick,
-      v__measure_bb_thick_cargs,
       v__measure_bb_thick_execute,
-      v__measure_bb_thick_outputs,
       v__measure_bb_thick_params,
 };

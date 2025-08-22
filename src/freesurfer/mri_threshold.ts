@@ -174,14 +174,16 @@ function mri_threshold_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriThresholdOutputs`).
  */
 function mri_threshold_execute(
     params: MriThresholdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriThresholdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_THRESHOLD_METADATA);
     params = execution.params(params)
     const cargs = mri_threshold_cargs(params, execution)
     const ret = mri_threshold_outputs(params, execution)
@@ -216,10 +218,8 @@ function mri_threshold(
     frame_number: number | null = null,
     runner: Runner | null = null,
 ): MriThresholdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_THRESHOLD_METADATA);
     const params = mri_threshold_params(input_vol, threshold, output_vol, binarize, upper_threshold, frame_number)
-    return mri_threshold_execute(params, execution);
+    return mri_threshold_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       MriThresholdOutputs,
       MriThresholdParameters,
       mri_threshold,
-      mri_threshold_cargs,
       mri_threshold_execute,
-      mri_threshold_outputs,
       mri_threshold_params,
 };

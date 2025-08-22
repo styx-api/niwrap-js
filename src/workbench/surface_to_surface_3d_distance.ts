@@ -163,14 +163,16 @@ function surface_to_surface_3d_distance_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceToSurface3dDistanceOutputs`).
  */
 function surface_to_surface_3d_distance_execute(
     params: SurfaceToSurface3dDistanceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceToSurface3dDistanceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_TO_SURFACE_3D_DISTANCE_METADATA);
     params = execution.params(params)
     const cargs = surface_to_surface_3d_distance_cargs(params, execution)
     const ret = surface_to_surface_3d_distance_outputs(params, execution)
@@ -203,10 +205,8 @@ function surface_to_surface_3d_distance(
     opt_vectors_vectors_out: string | null = null,
     runner: Runner | null = null,
 ): SurfaceToSurface3dDistanceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_TO_SURFACE_3D_DISTANCE_METADATA);
     const params = surface_to_surface_3d_distance_params(surface_comp, surface_ref, dists_out, opt_vectors_vectors_out)
-    return surface_to_surface_3d_distance_execute(params, execution);
+    return surface_to_surface_3d_distance_execute(params, runner);
 }
 
 
@@ -215,8 +215,6 @@ export {
       SurfaceToSurface3dDistanceOutputs,
       SurfaceToSurface3dDistanceParameters,
       surface_to_surface_3d_distance,
-      surface_to_surface_3d_distance_cargs,
       surface_to_surface_3d_distance_execute,
-      surface_to_surface_3d_distance_outputs,
       surface_to_surface_3d_distance_params,
 };

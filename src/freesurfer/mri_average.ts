@@ -316,14 +316,16 @@ function mri_average_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriAverageOutputs`).
  */
 function mri_average_execute(
     params: MriAverageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriAverageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_AVERAGE_METADATA);
     params = execution.params(params)
     const cargs = mri_average_cargs(params, execution)
     const ret = mri_average_outputs(params, execution)
@@ -388,10 +390,8 @@ function mri_average(
     absolute: boolean = false,
     runner: Runner | null = null,
 ): MriAverageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_AVERAGE_METADATA);
     const params = mri_average_params(input_volumes, output_volume, rigid_alignment, read_from_file, dt, tol, conform, noconform, reduce, sinc_interpolation, trilinear, window, snapshots, translation, rotation, momentum, rms, rms_alt, percent, binarize, absolute)
-    return mri_average_execute(params, execution);
+    return mri_average_execute(params, runner);
 }
 
 
@@ -400,8 +400,6 @@ export {
       MriAverageOutputs,
       MriAverageParameters,
       mri_average,
-      mri_average_cargs,
       mri_average_execute,
-      mri_average_outputs,
       mri_average_params,
 };

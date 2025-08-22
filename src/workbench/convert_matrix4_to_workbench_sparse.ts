@@ -225,14 +225,16 @@ function convert_matrix4_to_workbench_sparse_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertMatrix4ToWorkbenchSparseOutputs`).
  */
 function convert_matrix4_to_workbench_sparse_execute(
     params: ConvertMatrix4ToWorkbenchSparseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvertMatrix4ToWorkbenchSparseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVERT_MATRIX4_TO_WORKBENCH_SPARSE_METADATA);
     params = execution.params(params)
     const cargs = convert_matrix4_to_workbench_sparse_cargs(params, execution)
     const ret = convert_matrix4_to_workbench_sparse_outputs(params, execution)
@@ -273,10 +275,8 @@ function convert_matrix4_to_workbench_sparse(
     volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters | null = null,
     runner: Runner | null = null,
 ): ConvertMatrix4ToWorkbenchSparseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVERT_MATRIX4_TO_WORKBENCH_SPARSE_METADATA);
     const params = convert_matrix4_to_workbench_sparse_params(matrix4_1, matrix4_2, matrix4_3, orientation_file, voxel_list, wb_sparse_out, opt_surface_seeds_seed_roi, volume_seeds)
-    return convert_matrix4_to_workbench_sparse_execute(params, execution);
+    return convert_matrix4_to_workbench_sparse_execute(params, runner);
 }
 
 
@@ -286,10 +286,7 @@ export {
       ConvertMatrix4ToWorkbenchSparseParameters,
       ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters,
       convert_matrix4_to_workbench_sparse,
-      convert_matrix4_to_workbench_sparse_cargs,
       convert_matrix4_to_workbench_sparse_execute,
-      convert_matrix4_to_workbench_sparse_outputs,
       convert_matrix4_to_workbench_sparse_params,
-      convert_matrix4_to_workbench_sparse_volume_seeds_cargs,
       convert_matrix4_to_workbench_sparse_volume_seeds_params,
 };

@@ -229,14 +229,16 @@ function mri_long_normalize_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriLongNormalizeOutputs`).
  */
 function mri_long_normalize_execute(
     params: MriLongNormalizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriLongNormalizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_LONG_NORMALIZE_METADATA);
     params = execution.params(params)
     const cargs = mri_long_normalize_cargs(params, execution)
     const ret = mri_long_normalize_outputs(params, execution)
@@ -281,10 +283,8 @@ function mri_long_normalize(
     print_usage: boolean = false,
     runner: Runner | null = null,
 ): MriLongNormalizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_LONG_NORMALIZE_METADATA);
     const params = mri_long_normalize_params(input_vol, base_tp_file, output_vol, normalization_iters, disable_1d, smooth_bias, aseg, debug_gvx, debug_gx, reading, print_usage)
-    return mri_long_normalize_execute(params, execution);
+    return mri_long_normalize_execute(params, runner);
 }
 
 
@@ -293,8 +293,6 @@ export {
       MriLongNormalizeOutputs,
       MriLongNormalizeParameters,
       mri_long_normalize,
-      mri_long_normalize_cargs,
       mri_long_normalize_execute,
-      mri_long_normalize_outputs,
       mri_long_normalize_params,
 };

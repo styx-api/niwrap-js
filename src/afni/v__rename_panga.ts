@@ -208,14 +208,16 @@ function v__rename_panga_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VRenamePangaOutputs`).
  */
 function v__rename_panga_execute(
     params: VRenamePangaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VRenamePangaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__RENAME_PANGA_METADATA);
     params = execution.params(params)
     const cargs = v__rename_panga_cargs(params, execution)
     const ret = v__rename_panga_outputs(params, execution)
@@ -258,10 +260,8 @@ function v__rename_panga(
     output_directory: string | null = null,
     runner: Runner | null = null,
 ): VRenamePangaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__RENAME_PANGA_METADATA);
     const params = v__rename_panga_params(dir_number, first_image_number, num_slices, num_reps, output_root, keep_prefix, interactive, outliers_check, slice_pattern, output_directory)
-    return v__rename_panga_execute(params, execution);
+    return v__rename_panga_execute(params, runner);
 }
 
 
@@ -270,8 +270,6 @@ export {
       VRenamePangaParameters,
       V__RENAME_PANGA_METADATA,
       v__rename_panga,
-      v__rename_panga_cargs,
       v__rename_panga_execute,
-      v__rename_panga_outputs,
       v__rename_panga_params,
 };

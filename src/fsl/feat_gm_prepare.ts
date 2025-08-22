@@ -132,14 +132,16 @@ function feat_gm_prepare_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FeatGmPrepareOutputs`).
  */
 function feat_gm_prepare_execute(
     params: FeatGmPrepareParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FeatGmPrepareOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FEAT_GM_PREPARE_METADATA);
     params = execution.params(params)
     const cargs = feat_gm_prepare_cargs(params, execution)
     const ret = feat_gm_prepare_outputs(params, execution)
@@ -166,10 +168,8 @@ function feat_gm_prepare(
     feat_dirs_list: Array<InputPathType>,
     runner: Runner | null = null,
 ): FeatGmPrepareOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FEAT_GM_PREPARE_METADATA);
     const params = feat_gm_prepare_params(gm_output, feat_dirs_list)
-    return feat_gm_prepare_execute(params, execution);
+    return feat_gm_prepare_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       FeatGmPrepareOutputs,
       FeatGmPrepareParameters,
       feat_gm_prepare,
-      feat_gm_prepare_cargs,
       feat_gm_prepare_execute,
-      feat_gm_prepare_outputs,
       feat_gm_prepare_params,
 };

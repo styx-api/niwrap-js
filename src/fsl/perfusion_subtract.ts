@@ -145,14 +145,16 @@ function perfusion_subtract_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PerfusionSubtractOutputs`).
  */
 function perfusion_subtract_execute(
     params: PerfusionSubtractParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PerfusionSubtractOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PERFUSION_SUBTRACT_METADATA);
     params = execution.params(params)
     const cargs = perfusion_subtract_cargs(params, execution)
     const ret = perfusion_subtract_outputs(params, execution)
@@ -181,10 +183,8 @@ function perfusion_subtract(
     control_first_flag: boolean = false,
     runner: Runner | null = null,
 ): PerfusionSubtractOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PERFUSION_SUBTRACT_METADATA);
     const params = perfusion_subtract_params(four_d_input, four_d_output, control_first_flag)
-    return perfusion_subtract_execute(params, execution);
+    return perfusion_subtract_execute(params, runner);
 }
 
 
@@ -193,8 +193,6 @@ export {
       PerfusionSubtractOutputs,
       PerfusionSubtractParameters,
       perfusion_subtract,
-      perfusion_subtract_cargs,
       perfusion_subtract_execute,
-      perfusion_subtract_outputs,
       perfusion_subtract_params,
 };

@@ -222,14 +222,16 @@ function v_3d_blur_in_mask_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dBlurInMaskOutputs`).
  */
 function v_3d_blur_in_mask_execute(
     params: V3dBlurInMaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dBlurInMaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_BLUR_IN_MASK_METADATA);
     params = execution.params(params)
     const cargs = v_3d_blur_in_mask_cargs(params, execution)
     const ret = v_3d_blur_in_mask_outputs(params, execution)
@@ -274,10 +276,8 @@ function v_3d_blur_in_mask(
     fwhm_xyz: Array<number> | null = null,
     runner: Runner | null = null,
 ): V3dBlurInMaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_BLUR_IN_MASK_METADATA);
     const params = v_3d_blur_in_mask_params(input_file, output_prefix, fwhm, fwhm_dataset, mask, multi_mask, automask, preserve, quiet, float, fwhm_xyz)
-    return v_3d_blur_in_mask_execute(params, execution);
+    return v_3d_blur_in_mask_execute(params, runner);
 }
 
 
@@ -286,8 +286,6 @@ export {
       V3dBlurInMaskParameters,
       V_3D_BLUR_IN_MASK_METADATA,
       v_3d_blur_in_mask,
-      v_3d_blur_in_mask_cargs,
       v_3d_blur_in_mask_execute,
-      v_3d_blur_in_mask_outputs,
       v_3d_blur_in_mask_params,
 };

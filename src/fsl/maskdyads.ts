@@ -144,14 +144,16 @@ function maskdyads_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MaskdyadsOutputs`).
  */
 function maskdyads_execute(
     params: MaskdyadsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MaskdyadsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MASKDYADS_METADATA);
     params = execution.params(params)
     const cargs = maskdyads_cargs(params, execution)
     const ret = maskdyads_outputs(params, execution)
@@ -180,10 +182,8 @@ function maskdyads(
     threshold: number | null = 0.05,
     runner: Runner | null = null,
 ): MaskdyadsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MASKDYADS_METADATA);
     const params = maskdyads_params(dyads, fsamples, threshold)
-    return maskdyads_execute(params, execution);
+    return maskdyads_execute(params, runner);
 }
 
 
@@ -192,8 +192,6 @@ export {
       MaskdyadsOutputs,
       MaskdyadsParameters,
       maskdyads,
-      maskdyads_cargs,
       maskdyads_execute,
-      maskdyads_outputs,
       maskdyads_params,
 };

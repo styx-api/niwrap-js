@@ -436,14 +436,16 @@ function fslregister_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslregisterOutputs`).
  */
 function fslregister_execute(
     params: FslregisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslregisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLREGISTER_METADATA);
     params = execution.params(params)
     const cargs = fslregister_cargs(params, execution)
     const ret = fslregister_outputs(params, execution)
@@ -526,10 +528,8 @@ function fslregister(
     lta_format: string | null = null,
     runner: Runner | null = null,
 ): FslregisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLREGISTER_METADATA);
     const params = fslregister_params(subjid, mov_vol, reg_file, fsl_matrix, init_fsl_matrix, no_init_xfm, niters, dof, bins, cost, max_angle, no_new_schedule, no_allow_swap, no_trans, bet_mov, bet_fvalue, bet_func, bet_ref, frame, mid_frame, freesurfer_volume, template_output, output_volume, verbose, tmp_dir, no_cleanup, no_log, version, help, lta_format)
-    return fslregister_execute(params, execution);
+    return fslregister_execute(params, runner);
 }
 
 
@@ -538,8 +538,6 @@ export {
       FslregisterOutputs,
       FslregisterParameters,
       fslregister,
-      fslregister_cargs,
       fslregister_execute,
-      fslregister_outputs,
       fslregister_params,
 };

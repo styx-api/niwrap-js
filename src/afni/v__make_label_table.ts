@@ -509,14 +509,16 @@ function v__make_label_table_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VMakeLabelTableOutputs`).
  */
 function v__make_label_table_execute(
     params: VMakeLabelTableParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VMakeLabelTableOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__MAKE_LABEL_TABLE_METADATA);
     params = execution.params(params)
     const cargs = v__make_label_table_cargs(params, execution)
     const ret = v__make_label_table_outputs(params, execution)
@@ -609,10 +611,8 @@ function v__make_label_table(
     h_find: string | null = null,
     runner: Runner | null = null,
 ): VMakeLabelTableOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__MAKE_LABEL_TABLE_METADATA);
     const params = v__make_label_table_params(labeltable, atlas_pointlist, lab_r, lab_v, lab_file_delim, lab_file, dset, longnames, last_longname_col, centers, centertype, centermask, skip_novoxels, all_labels, all_keys, lkeys, rkeys, klabel, match_label, labeltable_of_dset, word_label_match, quiet_death, lt_to_atlas_pl, dset_lt_to_atlas_pl, lt_to_csv, atlasize_labeled_dset, atlas_file, atlas_name, atlas_description, replace, add_atlas_dset, h_web, h_view, all_opts, h_find)
-    return v__make_label_table_execute(params, execution);
+    return v__make_label_table_execute(params, runner);
 }
 
 
@@ -621,8 +621,6 @@ export {
       VMakeLabelTableParameters,
       V__MAKE_LABEL_TABLE_METADATA,
       v__make_label_table,
-      v__make_label_table_cargs,
       v__make_label_table_execute,
-      v__make_label_table_outputs,
       v__make_label_table_params,
 };

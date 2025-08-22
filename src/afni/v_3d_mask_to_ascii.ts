@@ -145,14 +145,16 @@ function v_3d_mask_to_ascii_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dMaskToAsciiOutputs`).
  */
 function v_3d_mask_to_ascii_execute(
     params: V3dMaskToAsciiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dMaskToAsciiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_MASK_TO_ASCII_METADATA);
     params = execution.params(params)
     const cargs = v_3d_mask_to_ascii_cargs(params, execution)
     const ret = v_3d_mask_to_ascii_outputs(params, execution)
@@ -181,10 +183,8 @@ function v_3d_mask_to_ascii(
     tobin_flag: boolean = false,
     runner: Runner | null = null,
 ): V3dMaskToAsciiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_MASK_TO_ASCII_METADATA);
     const params = v_3d_mask_to_ascii_params(dataset, outputfile, tobin_flag)
-    return v_3d_mask_to_ascii_execute(params, execution);
+    return v_3d_mask_to_ascii_execute(params, runner);
 }
 
 
@@ -193,8 +193,6 @@ export {
       V3dMaskToAsciiParameters,
       V_3D_MASK_TO_ASCII_METADATA,
       v_3d_mask_to_ascii,
-      v_3d_mask_to_ascii_cargs,
       v_3d_mask_to_ascii_execute,
-      v_3d_mask_to_ascii_outputs,
       v_3d_mask_to_ascii_params,
 };

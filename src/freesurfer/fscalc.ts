@@ -205,14 +205,16 @@ function fscalc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FscalcOutputs`).
  */
 function fscalc_execute(
     params: FscalcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FscalcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSCALC_METADATA);
     params = execution.params(params)
     const cargs = fscalc_cargs(params, execution)
     const ret = fscalc_outputs(params, execution)
@@ -253,10 +255,8 @@ function fscalc(
     log_file: string | null = null,
     runner: Runner | null = null,
 ): FscalcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSCALC_METADATA);
     const params = fscalc_params(input1, operation, output_file, input2, output_data_type, debug, tmpdir, nocleanup, log_file)
-    return fscalc_execute(params, execution);
+    return fscalc_execute(params, runner);
 }
 
 
@@ -265,8 +265,6 @@ export {
       FscalcOutputs,
       FscalcParameters,
       fscalc,
-      fscalc_cargs,
       fscalc_execute,
-      fscalc_outputs,
       fscalc_params,
 };

@@ -159,14 +159,16 @@ function float_scan_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FloatScanOutputs`).
  */
 function float_scan_execute(
     params: FloatScanParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FloatScanOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FLOAT_SCAN_METADATA);
     params = execution.params(params)
     const cargs = float_scan_cargs(params, execution)
     const ret = float_scan_outputs(params, execution)
@@ -197,10 +199,8 @@ function float_scan(
     skip_count: number | null = null,
     runner: Runner | null = null,
 ): FloatScanOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FLOAT_SCAN_METADATA);
     const params = float_scan_params(input_file, fix_illegal_values, verbose_mode, skip_count)
-    return float_scan_execute(params, execution);
+    return float_scan_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       FloatScanOutputs,
       FloatScanParameters,
       float_scan,
-      float_scan_cargs,
       float_scan_execute,
-      float_scan_outputs,
       float_scan_params,
 };

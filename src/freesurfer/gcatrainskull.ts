@@ -130,14 +130,16 @@ function gcatrainskull_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GcatrainskullOutputs`).
  */
 function gcatrainskull_execute(
     params: GcatrainskullParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GcatrainskullOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GCATRAINSKULL_METADATA);
     params = execution.params(params)
     const cargs = gcatrainskull_cargs(params, execution)
     const ret = gcatrainskull_outputs(params, execution)
@@ -162,10 +164,8 @@ function gcatrainskull(
     gcatrain_dir: string,
     runner: Runner | null = null,
 ): GcatrainskullOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GCATRAINSKULL_METADATA);
     const params = gcatrainskull_params(gcatrain_dir)
-    return gcatrainskull_execute(params, execution);
+    return gcatrainskull_execute(params, runner);
 }
 
 
@@ -174,8 +174,6 @@ export {
       GcatrainskullOutputs,
       GcatrainskullParameters,
       gcatrainskull,
-      gcatrainskull_cargs,
       gcatrainskull_execute,
-      gcatrainskull_outputs,
       gcatrainskull_params,
 };

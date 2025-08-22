@@ -273,14 +273,16 @@ function fixel2tsf_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fixel2tsfOutputs`).
  */
 function fixel2tsf_execute(
     params: Fixel2tsfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fixel2tsfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIXEL2TSF_METADATA);
     params = execution.params(params)
     const cargs = fixel2tsf_cargs(params, execution)
     const ret = fixel2tsf_outputs(params, execution)
@@ -333,10 +335,8 @@ function fixel2tsf(
     version: boolean = false,
     runner: Runner | null = null,
 ): Fixel2tsfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIXEL2TSF_METADATA);
     const params = fixel2tsf_params(fixel_in, tracks, tsf, angle, info, quiet, debug, force, nthreads, config, help, version)
-    return fixel2tsf_execute(params, execution);
+    return fixel2tsf_execute(params, runner);
 }
 
 
@@ -346,10 +346,7 @@ export {
       Fixel2tsfOutputs,
       Fixel2tsfParameters,
       fixel2tsf,
-      fixel2tsf_cargs,
-      fixel2tsf_config_cargs,
       fixel2tsf_config_params,
       fixel2tsf_execute,
-      fixel2tsf_outputs,
       fixel2tsf_params,
 };

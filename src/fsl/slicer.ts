@@ -346,14 +346,16 @@ function slicer_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SlicerOutputs`).
  */
 function slicer_execute(
     params: SlicerParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SlicerOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SLICER_METADATA);
     params = execution.params(params)
     const cargs = slicer_cargs(params, execution)
     const ret = slicer_outputs(params, execution)
@@ -422,10 +424,8 @@ function slicer(
     output_sample_axial_slices_fname: string | null = null,
     runner: Runner | null = null,
 ): SlicerOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SLICER_METADATA);
     const params = slicer_params(in_file, overlay_file, label_slices, colour_map, scaling, intensity_range, threshold_edges, dither_edges, nearest_neighbour, show_orientation, red_dot_marker, output_single_image, output_sagittal_slice, output_sagittal_slice_fname, output_axial_slice, output_axial_slice_fname, output_coronal_slice, output_coronal_slice_fname, output_all_axial_slices, output_all_axial_slices_fname, output_sample_axial_slices, output_sample_axial_slices_width, output_sample_axial_slices_fname)
-    return slicer_execute(params, execution);
+    return slicer_execute(params, runner);
 }
 
 
@@ -434,8 +434,6 @@ export {
       SlicerOutputs,
       SlicerParameters,
       slicer,
-      slicer_cargs,
       slicer_execute,
-      slicer_outputs,
       slicer_params,
 };

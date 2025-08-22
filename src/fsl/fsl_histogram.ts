@@ -407,14 +407,16 @@ function fsl_histogram_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslHistogramOutputs`).
  */
 function fsl_histogram_execute(
     params: FslHistogramParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslHistogramOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_HISTOGRAM_METADATA);
     params = execution.params(params)
     const cargs = fsl_histogram_cargs(params, execution)
     const ret = fsl_histogram_outputs(params, execution)
@@ -487,10 +489,8 @@ function fsl_histogram(
     use_gmm_flag: boolean = false,
     runner: Runner | null = null,
 ): FslHistogramOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_HISTOGRAM_METADATA);
     const params = fsl_histogram_params(input_file, input_file_duplicate, output_file, output_file_duplicate, mask_file, mask_file_duplicate, gmmfit_file, gmmfit_file_duplicate, plot_title, plot_title_duplicate, legend_file, legend_file_duplicate, xlabel, xlabel_duplicate, ylabel, ylabel_duplicate, plot_height, plot_height_duplicate, plot_width, plot_width_duplicate, num_bins, num_bins_duplicate, zoom_factor, zoom_factor_duplicate, use_gmm_flag)
-    return fsl_histogram_execute(params, execution);
+    return fsl_histogram_execute(params, runner);
 }
 
 
@@ -499,8 +499,6 @@ export {
       FslHistogramOutputs,
       FslHistogramParameters,
       fsl_histogram,
-      fsl_histogram_cargs,
       fsl_histogram_execute,
-      fsl_histogram_outputs,
       fsl_histogram_params,
 };

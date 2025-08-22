@@ -340,14 +340,16 @@ function v_3d_hist_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dHistOutputs`).
  */
 function v_3d_hist_execute(
     params: V3dHistParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dHistOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_HIST_METADATA);
     params = execution.params(params)
     const cargs = v_3d_hist_cargs(params, execution)
     const ret = v_3d_hist_outputs(params, execution)
@@ -410,10 +412,8 @@ function v_3d_hist(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dHistOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_HIST_METADATA);
     const params = v_3d_hist_params(input, dind_subbrick, mask_dset, mask_range, cmask, hist_file, prefix, equalized, nbin, min, max, binwidth, ignore_out, range_hist, showhist, at_val, get_params, voxvol, val_at, quiet)
-    return v_3d_hist_execute(params, execution);
+    return v_3d_hist_execute(params, runner);
 }
 
 
@@ -422,8 +422,6 @@ export {
       V3dHistParameters,
       V_3D_HIST_METADATA,
       v_3d_hist,
-      v_3d_hist_cargs,
       v_3d_hist_execute,
-      v_3d_hist_outputs,
       v_3d_hist_params,
 };

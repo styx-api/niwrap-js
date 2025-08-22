@@ -202,14 +202,16 @@ function v_1dfft_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dfftOutputs`).
  */
 function v_1dfft_execute(
     params: V1dfftParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dfftOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1DFFT_METADATA);
     params = execution.params(params)
     const cargs = v_1dfft_cargs(params, execution)
     const ret = v_1dfft_outputs(params, execution)
@@ -250,10 +252,8 @@ function v_1dfft(
     nodetrend: boolean = false,
     runner: Runner | null = null,
 ): V1dfftOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1DFFT_METADATA);
     const params = v_1dfft_params(infile, outfile, ignore, use, nfft, tocx, fromcx, hilbert, nodetrend)
-    return v_1dfft_execute(params, execution);
+    return v_1dfft_execute(params, runner);
 }
 
 
@@ -262,8 +262,6 @@ export {
       V1dfftParameters,
       V_1DFFT_METADATA,
       v_1dfft,
-      v_1dfft_cargs,
       v_1dfft_execute,
-      v_1dfft_outputs,
       v_1dfft_params,
 };

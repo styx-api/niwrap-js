@@ -205,14 +205,16 @@ function long_submit_postproc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LongSubmitPostprocOutputs`).
  */
 function long_submit_postproc_execute(
     params: LongSubmitPostprocParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LongSubmitPostprocOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LONG_SUBMIT_POSTPROC_METADATA);
     params = execution.params(params)
     const cargs = long_submit_postproc_cargs(params, execution)
     const ret = long_submit_postproc_outputs(params, execution)
@@ -251,10 +253,8 @@ function long_submit_postproc(
     queue: string | null = null,
     runner: Runner | null = null,
 ): LongSubmitPostprocOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LONG_SUBMIT_POSTPROC_METADATA);
     const params = long_submit_postproc_params(qdec, prog, flags, dir, simulate, pause, max, queue)
-    return long_submit_postproc_execute(params, execution);
+    return long_submit_postproc_execute(params, runner);
 }
 
 
@@ -263,8 +263,6 @@ export {
       LongSubmitPostprocOutputs,
       LongSubmitPostprocParameters,
       long_submit_postproc,
-      long_submit_postproc_cargs,
       long_submit_postproc_execute,
-      long_submit_postproc_outputs,
       long_submit_postproc_params,
 };

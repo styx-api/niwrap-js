@@ -258,14 +258,16 @@ function fat_proc_decmap_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatProcDecmapOutputs`).
  */
 function fat_proc_decmap_execute(
     params: FatProcDecmapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatProcDecmapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_PROC_DECMAP_METADATA);
     params = execution.params(params)
     const cargs = fat_proc_decmap_cargs(params, execution)
     const ret = fat_proc_decmap_outputs(params, execution)
@@ -310,10 +312,8 @@ function fat_proc_decmap(
     no_qc_view: boolean = false,
     runner: Runner | null = null,
 ): FatProcDecmapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_PROC_DECMAP_METADATA);
     const params = fat_proc_decmap_params(in_fa, in_v1, prefix, mask, fa_thr, fa_sca, workdir, no_clean, qc_prefix, no_cmd_out, no_qc_view)
-    return fat_proc_decmap_execute(params, execution);
+    return fat_proc_decmap_execute(params, runner);
 }
 
 
@@ -322,8 +322,6 @@ export {
       FatProcDecmapOutputs,
       FatProcDecmapParameters,
       fat_proc_decmap,
-      fat_proc_decmap_cargs,
       fat_proc_decmap_execute,
-      fat_proc_decmap_outputs,
       fat_proc_decmap_params,
 };

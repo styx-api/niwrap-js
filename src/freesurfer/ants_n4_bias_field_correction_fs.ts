@@ -204,14 +204,16 @@ function ants_n4_bias_field_correction_fs_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsN4BiasFieldCorrectionFsOutputs`).
  */
 function ants_n4_bias_field_correction_fs_execute(
     params: AntsN4BiasFieldCorrectionFsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsN4BiasFieldCorrectionFsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_N4_BIAS_FIELD_CORRECTION_FS_METADATA);
     params = execution.params(params)
     const cargs = ants_n4_bias_field_correction_fs_cargs(params, execution)
     const ret = ants_n4_bias_field_correction_fs_outputs(params, execution)
@@ -248,10 +250,8 @@ function ants_n4_bias_field_correction_fs(
     replace_zeros: string | null = null,
     runner: Runner | null = null,
 ): AntsN4BiasFieldCorrectionFsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_N4_BIAS_FIELD_CORRECTION_FS_METADATA);
     const params = ants_n4_bias_field_correction_fs_params(input_file, output_file, mask_file, shrink_factor, iterations, output_dtype, replace_zeros)
-    return ants_n4_bias_field_correction_fs_execute(params, execution);
+    return ants_n4_bias_field_correction_fs_execute(params, runner);
 }
 
 
@@ -260,8 +260,6 @@ export {
       AntsN4BiasFieldCorrectionFsOutputs,
       AntsN4BiasFieldCorrectionFsParameters,
       ants_n4_bias_field_correction_fs,
-      ants_n4_bias_field_correction_fs_cargs,
       ants_n4_bias_field_correction_fs_execute,
-      ants_n4_bias_field_correction_fs_outputs,
       ants_n4_bias_field_correction_fs_params,
 };

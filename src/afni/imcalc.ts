@@ -172,14 +172,16 @@ function imcalc_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImcalcOutputs`).
  */
 function imcalc_execute(
     params: ImcalcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImcalcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMCALC_METADATA);
     params = execution.params(params)
     const cargs = imcalc_cargs(params, execution)
     const ret = imcalc_outputs(params, execution)
@@ -210,10 +212,8 @@ function imcalc(
     output_name: string | null = null,
     runner: Runner | null = null,
 ): ImcalcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMCALC_METADATA);
     const params = imcalc_params(expression, datum_type, image_inputs, output_name)
-    return imcalc_execute(params, execution);
+    return imcalc_execute(params, runner);
 }
 
 
@@ -222,8 +222,6 @@ export {
       ImcalcOutputs,
       ImcalcParameters,
       imcalc,
-      imcalc_cargs,
       imcalc_execute,
-      imcalc_outputs,
       imcalc_params,
 };

@@ -274,14 +274,16 @@ function mris_curvature_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisCurvatureOutputs`).
  */
 function mris_curvature_execute(
     params: MrisCurvatureParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisCurvatureOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_CURVATURE_METADATA);
     params = execution.params(params)
     const cargs = mris_curvature_cargs(params, execution)
     const ret = mris_curvature_outputs(params, execution)
@@ -332,10 +334,8 @@ function mris_curvature(
     k1k2_curvature: string | null = null,
     runner: Runner | null = null,
 ): MrisCurvatureOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_CURVATURE_METADATA);
     const params = mris_curvature_params(input_surface, save_curvature_files, max_principal_curvature, mgh_output_format, min_principal_curvature, iterative_averages, neighborhood_size, random_seed, curvatures, h_curvature, k_curvature, k1_curvature, k2_curvature, k1k2_curvature)
-    return mris_curvature_execute(params, execution);
+    return mris_curvature_execute(params, runner);
 }
 
 
@@ -344,8 +344,6 @@ export {
       MrisCurvatureOutputs,
       MrisCurvatureParameters,
       mris_curvature,
-      mris_curvature_cargs,
       mris_curvature_execute,
-      mris_curvature_outputs,
       mris_curvature_params,
 };

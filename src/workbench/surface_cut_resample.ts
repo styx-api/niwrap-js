@@ -151,14 +151,16 @@ function surface_cut_resample_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceCutResampleOutputs`).
  */
 function surface_cut_resample_execute(
     params: SurfaceCutResampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceCutResampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_CUT_RESAMPLE_METADATA);
     params = execution.params(params)
     const cargs = surface_cut_resample_cargs(params, execution)
     const ret = surface_cut_resample_outputs(params, execution)
@@ -191,10 +193,8 @@ function surface_cut_resample(
     surface_out: string,
     runner: Runner | null = null,
 ): SurfaceCutResampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_CUT_RESAMPLE_METADATA);
     const params = surface_cut_resample_params(surface_in, current_sphere, new_sphere, surface_out)
-    return surface_cut_resample_execute(params, execution);
+    return surface_cut_resample_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       SurfaceCutResampleOutputs,
       SurfaceCutResampleParameters,
       surface_cut_resample,
-      surface_cut_resample_cargs,
       surface_cut_resample_execute,
-      surface_cut_resample_outputs,
       surface_cut_resample_params,
 };

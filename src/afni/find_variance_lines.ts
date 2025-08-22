@@ -296,14 +296,16 @@ function find_variance_lines_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FindVarianceLinesOutputs`).
  */
 function find_variance_lines_execute(
     params: FindVarianceLinesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FindVarianceLinesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIND_VARIANCE_LINES_METADATA);
     params = execution.params(params)
     const cargs = find_variance_lines_cargs(params, execution)
     const ret = find_variance_lines_outputs(params, execution)
@@ -356,10 +358,8 @@ function find_variance_lines(
     ver: boolean = false,
     runner: Runner | null = null,
 ): FindVarianceLinesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIND_VARIANCE_LINES_METADATA);
     const params = find_variance_lines_params(input_files, mask, min_cvox, min_nt, nerode, nfirst, percentile, polort, output_dir, do_clean, do_img, echo, help, hist, ver)
-    return find_variance_lines_execute(params, execution);
+    return find_variance_lines_execute(params, runner);
 }
 
 
@@ -368,8 +368,6 @@ export {
       FindVarianceLinesOutputs,
       FindVarianceLinesParameters,
       find_variance_lines,
-      find_variance_lines_cargs,
       find_variance_lines_execute,
-      find_variance_lines_outputs,
       find_variance_lines_params,
 };

@@ -167,14 +167,16 @@ function mris_entropy_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisEntropyOutputs`).
  */
 function mris_entropy_execute(
     params: MrisEntropyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisEntropyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_ENTROPY_METADATA);
     params = execution.params(params)
     const cargs = mris_entropy_cargs(params, execution)
     const ret = mris_entropy_outputs(params, execution)
@@ -209,10 +211,8 @@ function mris_entropy(
     normalize: boolean = false,
     runner: Runner | null = null,
 ): MrisEntropyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_ENTROPY_METADATA);
     const params = mris_entropy_params(subject, hemi, wfile, curvfile, average_iterations, normalize)
-    return mris_entropy_execute(params, execution);
+    return mris_entropy_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       MrisEntropyOutputs,
       MrisEntropyParameters,
       mris_entropy,
-      mris_entropy_cargs,
       mris_entropy_execute,
-      mris_entropy_outputs,
       mris_entropy_params,
 };

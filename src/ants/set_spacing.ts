@@ -148,14 +148,16 @@ function set_spacing_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SetSpacingOutputs`).
  */
 function set_spacing_execute(
     params: SetSpacingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SetSpacingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SET_SPACING_METADATA);
     params = execution.params(params)
     const cargs = set_spacing_cargs(params, execution)
     const ret = set_spacing_outputs(params, execution)
@@ -186,10 +188,8 @@ function set_spacing(
     spacing: Array<number>,
     runner: Runner | null = null,
 ): SetSpacingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SET_SPACING_METADATA);
     const params = set_spacing_params(dimension, input_file, output_file, spacing)
-    return set_spacing_execute(params, execution);
+    return set_spacing_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       SetSpacingOutputs,
       SetSpacingParameters,
       set_spacing,
-      set_spacing_cargs,
       set_spacing_execute,
-      set_spacing_outputs,
       set_spacing_params,
 };

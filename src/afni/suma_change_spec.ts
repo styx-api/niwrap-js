@@ -175,14 +175,16 @@ function suma_change_spec_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SumaChangeSpecOutputs`).
  */
 function suma_change_spec_execute(
     params: SumaChangeSpecParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SumaChangeSpecOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SUMA_CHANGE_SPEC_METADATA);
     params = execution.params(params)
     const cargs = suma_change_spec_cargs(params, execution)
     const ret = suma_change_spec_outputs(params, execution)
@@ -217,10 +219,8 @@ function suma_change_spec(
     anatomical: boolean = false,
     runner: Runner | null = null,
 ): SumaChangeSpecOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SUMA_CHANGE_SPEC_METADATA);
     const params = suma_change_spec_params(input, state, domainparent, output, remove, anatomical)
-    return suma_change_spec_execute(params, execution);
+    return suma_change_spec_execute(params, runner);
 }
 
 
@@ -229,8 +229,6 @@ export {
       SumaChangeSpecOutputs,
       SumaChangeSpecParameters,
       suma_change_spec,
-      suma_change_spec_cargs,
       suma_change_spec_execute,
-      suma_change_spec_outputs,
       suma_change_spec_params,
 };

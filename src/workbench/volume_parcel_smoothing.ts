@@ -177,14 +177,16 @@ function volume_parcel_smoothing_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeParcelSmoothingOutputs`).
  */
 function volume_parcel_smoothing_execute(
     params: VolumeParcelSmoothingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeParcelSmoothingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_PARCEL_SMOOTHING_METADATA);
     params = execution.params(params)
     const cargs = volume_parcel_smoothing_cargs(params, execution)
     const ret = volume_parcel_smoothing_outputs(params, execution)
@@ -223,10 +225,8 @@ function volume_parcel_smoothing(
     opt_subvolume_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeParcelSmoothingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_PARCEL_SMOOTHING_METADATA);
     const params = volume_parcel_smoothing_params(data_volume, label_volume, kernel, volume_out, opt_fwhm, opt_fix_zeros, opt_subvolume_subvol)
-    return volume_parcel_smoothing_execute(params, execution);
+    return volume_parcel_smoothing_execute(params, runner);
 }
 
 
@@ -235,8 +235,6 @@ export {
       VolumeParcelSmoothingOutputs,
       VolumeParcelSmoothingParameters,
       volume_parcel_smoothing,
-      volume_parcel_smoothing_cargs,
       volume_parcel_smoothing_execute,
-      volume_parcel_smoothing_outputs,
       volume_parcel_smoothing_params,
 };

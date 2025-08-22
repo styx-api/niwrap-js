@@ -219,14 +219,16 @@ function mris_multimodal_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisMultimodalOutputs`).
  */
 function mris_multimodal_execute(
     params: MrisMultimodalParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisMultimodalOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_MULTIMODAL_METADATA);
     params = execution.params(params)
     const cargs = mris_multimodal_cargs(params, execution)
     const ret = mris_multimodal_outputs(params, execution)
@@ -269,10 +271,8 @@ function mris_multimodal(
     vtk_output: boolean = false,
     runner: Runner | null = null,
 ): MrisMultimodalOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_MULTIMODAL_METADATA);
     const params = mris_multimodal_params(input_surface, target_surface, output_surface, annotation_output, overlay_output, csv_output, fill_holes, curvature, thickness, vtk_output)
-    return mris_multimodal_execute(params, execution);
+    return mris_multimodal_execute(params, runner);
 }
 
 
@@ -281,8 +281,6 @@ export {
       MrisMultimodalOutputs,
       MrisMultimodalParameters,
       mris_multimodal,
-      mris_multimodal_cargs,
       mris_multimodal_execute,
-      mris_multimodal_outputs,
       mris_multimodal_params,
 };

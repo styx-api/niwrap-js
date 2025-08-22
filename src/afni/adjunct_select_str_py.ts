@@ -137,14 +137,16 @@ function adjunct_select_str_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AdjunctSelectStrPyOutputs`).
  */
 function adjunct_select_str_py_execute(
     params: AdjunctSelectStrPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AdjunctSelectStrPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADJUNCT_SELECT_STR_PY_METADATA);
     params = execution.params(params)
     const cargs = adjunct_select_str_py_cargs(params, execution)
     const ret = adjunct_select_str_py_outputs(params, execution)
@@ -173,10 +175,8 @@ function adjunct_select_str_py(
     output_file: string,
     runner: Runner | null = null,
 ): AdjunctSelectStrPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADJUNCT_SELECT_STR_PY_METADATA);
     const params = adjunct_select_str_py_params(input_file, num_bricks, output_file)
-    return adjunct_select_str_py_execute(params, execution);
+    return adjunct_select_str_py_execute(params, runner);
 }
 
 
@@ -185,8 +185,6 @@ export {
       AdjunctSelectStrPyOutputs,
       AdjunctSelectStrPyParameters,
       adjunct_select_str_py,
-      adjunct_select_str_py_cargs,
       adjunct_select_str_py_execute,
-      adjunct_select_str_py_outputs,
       adjunct_select_str_py_params,
 };

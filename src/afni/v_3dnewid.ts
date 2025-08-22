@@ -177,14 +177,16 @@ function v_3dnewid_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dnewidOutputs`).
  */
 function v_3dnewid_execute(
     params: V3dnewidParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dnewidOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DNEWID_METADATA);
     params = execution.params(params)
     const cargs = v_3dnewid_cargs(params, execution)
     const ret = v_3dnewid_outputs(params, execution)
@@ -219,10 +221,8 @@ function v_3dnewid(
     md5: string | null = null,
     runner: Runner | null = null,
 ): V3dnewidOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DNEWID_METADATA);
     const params = v_3dnewid_params(datasets, fun, fun11, int, hash, md5)
-    return v_3dnewid_execute(params, execution);
+    return v_3dnewid_execute(params, runner);
 }
 
 
@@ -231,8 +231,6 @@ export {
       V3dnewidParameters,
       V_3DNEWID_METADATA,
       v_3dnewid,
-      v_3dnewid_cargs,
       v_3dnewid_execute,
-      v_3dnewid_outputs,
       v_3dnewid_params,
 };

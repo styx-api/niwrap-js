@@ -177,14 +177,16 @@ function gifti_label_to_roi_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GiftiLabelToRoiOutputs`).
  */
 function gifti_label_to_roi_execute(
     params: GiftiLabelToRoiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GiftiLabelToRoiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GIFTI_LABEL_TO_ROI_METADATA);
     params = execution.params(params)
     const cargs = gifti_label_to_roi_cargs(params, execution)
     const ret = gifti_label_to_roi_outputs(params, execution)
@@ -219,10 +221,8 @@ function gifti_label_to_roi(
     opt_map_map: string | null = null,
     runner: Runner | null = null,
 ): GiftiLabelToRoiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GIFTI_LABEL_TO_ROI_METADATA);
     const params = gifti_label_to_roi_params(label_in, metric_out, opt_name_label_name, opt_key_label_key, opt_map_map)
-    return gifti_label_to_roi_execute(params, execution);
+    return gifti_label_to_roi_execute(params, runner);
 }
 
 
@@ -231,8 +231,6 @@ export {
       GiftiLabelToRoiOutputs,
       GiftiLabelToRoiParameters,
       gifti_label_to_roi,
-      gifti_label_to_roi_cargs,
       gifti_label_to_roi_execute,
-      gifti_label_to_roi_outputs,
       gifti_label_to_roi_params,
 };

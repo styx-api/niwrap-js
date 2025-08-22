@@ -264,14 +264,16 @@ function labelstats_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelstatsOutputs`).
  */
 function labelstats_execute(
     params: LabelstatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelstatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABELSTATS_METADATA);
     params = execution.params(params)
     const cargs = labelstats_cargs(params, execution)
     const ret = labelstats_outputs(params, execution)
@@ -322,10 +324,8 @@ function labelstats(
     version: boolean = false,
     runner: Runner | null = null,
 ): LabelstatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABELSTATS_METADATA);
     const params = labelstats_params(input, output, voxelspace, info, quiet, debug, force, nthreads, config, help, version)
-    return labelstats_execute(params, execution);
+    return labelstats_execute(params, runner);
 }
 
 
@@ -335,10 +335,7 @@ export {
       LabelstatsOutputs,
       LabelstatsParameters,
       labelstats,
-      labelstats_cargs,
-      labelstats_config_cargs,
       labelstats_config_params,
       labelstats_execute,
-      labelstats_outputs,
       labelstats_params,
 };

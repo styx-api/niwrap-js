@@ -259,14 +259,16 @@ function v_3dmask_tool_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dmaskToolOutputs`).
  */
 function v_3dmask_tool_execute(
     params: V3dmaskToolParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dmaskToolOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DMASK_TOOL_METADATA);
     params = execution.params(params)
     const cargs = v_3dmask_tool_cargs(params, execution)
     const ret = v_3dmask_tool_outputs(params, execution)
@@ -315,10 +317,8 @@ function v_3dmask_tool(
     verbose: number | null = null,
     runner: Runner | null = null,
 ): V3dmaskToolOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DMASK_TOOL_METADATA);
     const params = v_3dmask_tool_params(in_file, count, datum, dilate_inputs, dilate_results, fill_dirs, fill_holes, frac, inter, num_threads, outputtype, union, verbose)
-    return v_3dmask_tool_execute(params, execution);
+    return v_3dmask_tool_execute(params, runner);
 }
 
 
@@ -327,8 +327,6 @@ export {
       V3dmaskToolParameters,
       V_3DMASK_TOOL_METADATA,
       v_3dmask_tool,
-      v_3dmask_tool_cargs,
       v_3dmask_tool_execute,
-      v_3dmask_tool_outputs,
       v_3dmask_tool_params,
 };

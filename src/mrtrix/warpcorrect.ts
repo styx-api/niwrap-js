@@ -280,14 +280,16 @@ function warpcorrect_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WarpcorrectOutputs`).
  */
 function warpcorrect_execute(
     params: WarpcorrectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WarpcorrectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WARPCORRECT_METADATA);
     params = execution.params(params)
     const cargs = warpcorrect_cargs(params, execution)
     const ret = warpcorrect_outputs(params, execution)
@@ -340,10 +342,8 @@ function warpcorrect(
     version: boolean = false,
     runner: Runner | null = null,
 ): WarpcorrectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WARPCORRECT_METADATA);
     const params = warpcorrect_params(in_, out, marker, tolerance, info, quiet, debug, force, nthreads, config, help, version)
-    return warpcorrect_execute(params, execution);
+    return warpcorrect_execute(params, runner);
 }
 
 
@@ -353,10 +353,7 @@ export {
       WarpcorrectOutputs,
       WarpcorrectParameters,
       warpcorrect,
-      warpcorrect_cargs,
-      warpcorrect_config_cargs,
       warpcorrect_config_params,
       warpcorrect_execute,
-      warpcorrect_outputs,
       warpcorrect_params,
 };

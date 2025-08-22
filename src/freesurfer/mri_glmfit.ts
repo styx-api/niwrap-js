@@ -843,14 +843,16 @@ function mri_glmfit_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriGlmfitOutputs`).
  */
 function mri_glmfit_execute(
     params: MriGlmfitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriGlmfitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_GLMFIT_METADATA);
     params = execution.params(params)
     const cargs = mri_glmfit_cargs(params, execution)
     const ret = mri_glmfit_outputs(params, execution)
@@ -1017,10 +1019,8 @@ function mri_glmfit(
     no_sig_double_flag: boolean = false,
     runner: Runner | null = null,
 ): MriGlmfitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_GLMFIT_METADATA);
     const params = mri_glmfit_params(y_input, glmdir, table_input, fsgd, design_matrix, contrast_matrix, osgm_flag, no_contrasts_ok_flag, dti_params, dti_matrix, pvr, selfreg, wls, yffxvar, ffxdof, ffxdofdat, weight, weight_inv_flag, weight_sqrt_flag, fwhm, var_fwhm, no_mask_smooth_flag, no_est_fwhm_flag, mask, label, no_mask_flag, no_cortex_flag, mask_inv_flag, prune_flag, no_prune_flag, logy_flag, no_logy_flag, rm_spatial_mean_flag, yhat_save_flag, eres_save_flag, eres_scm_flag, save_fwhm_map_flag, y_out, surface, skew_flag, kurtosis_flag, sim_params, sim_sign, uniform_params, permute_input_flag, pca_flag, tar1_flag, save_yhat_flag, save_cond_flag, voxdump, seed, synth_flag, resynthtest_it, profile_it, mrtm1_params, mrtm2_params, logan_params, bp_clip_neg_flag, bp_clip_max, perm_force_flag, diag_level, diag_cluster_flag, debug_flag, checkopts_flag, help_flag, version_flag, no_fix_vertex_area_flag, allowsubjrep_flag, allow_zero_dof_flag, illcond_flag, sim_done_file, no_sig_double_flag)
-    return mri_glmfit_execute(params, execution);
+    return mri_glmfit_execute(params, runner);
 }
 
 
@@ -1029,8 +1029,6 @@ export {
       MriGlmfitOutputs,
       MriGlmfitParameters,
       mri_glmfit,
-      mri_glmfit_cargs,
       mri_glmfit_execute,
-      mri_glmfit_outputs,
       mri_glmfit_params,
 };

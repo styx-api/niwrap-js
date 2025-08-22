@@ -133,14 +133,16 @@ function v__is_oblique_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VIsObliqueOutputs`).
  */
 function v__is_oblique_execute(
     params: VIsObliqueParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VIsObliqueOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__IS_OBLIQUE_METADATA);
     params = execution.params(params)
     const cargs = v__is_oblique_cargs(params, execution)
     const ret = v__is_oblique_outputs(params, execution)
@@ -165,10 +167,8 @@ function v__is_oblique(
     infile: InputPathType,
     runner: Runner | null = null,
 ): VIsObliqueOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__IS_OBLIQUE_METADATA);
     const params = v__is_oblique_params(infile)
-    return v__is_oblique_execute(params, execution);
+    return v__is_oblique_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       VIsObliqueParameters,
       V__IS_OBLIQUE_METADATA,
       v__is_oblique,
-      v__is_oblique_cargs,
       v__is_oblique_execute,
-      v__is_oblique_outputs,
       v__is_oblique_params,
 };

@@ -161,14 +161,16 @@ function mris_average_curvature_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisAverageCurvatureOutputs`).
  */
 function mris_average_curvature_execute(
     params: MrisAverageCurvatureParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisAverageCurvatureOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_AVERAGE_CURVATURE_METADATA);
     params = execution.params(params)
     const cargs = mris_average_curvature_cargs(params, execution)
     const ret = mris_average_curvature_outputs(params, execution)
@@ -205,10 +207,8 @@ function mris_average_curvature(
     output_surface_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisAverageCurvatureOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_AVERAGE_CURVATURE_METADATA);
     const params = mris_average_curvature_params(input_curvature_file, hemi, surface, subjects, output_curvature_file, summary_stats_flag, output_surface_flag)
-    return mris_average_curvature_execute(params, execution);
+    return mris_average_curvature_execute(params, runner);
 }
 
 
@@ -217,8 +217,6 @@ export {
       MrisAverageCurvatureOutputs,
       MrisAverageCurvatureParameters,
       mris_average_curvature,
-      mris_average_curvature_cargs,
       mris_average_curvature_execute,
-      mris_average_curvature_outputs,
       mris_average_curvature_params,
 };

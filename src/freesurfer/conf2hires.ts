@@ -295,14 +295,16 @@ function conf2hires_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Conf2hiresOutputs`).
  */
 function conf2hires_execute(
     params: Conf2hiresParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Conf2hiresOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONF2HIRES_METADATA);
     params = execution.params(params)
     const cargs = conf2hires_cargs(params, execution)
     const ret = conf2hires_outputs(params, execution)
@@ -367,10 +369,8 @@ function conf2hires(
     force_update: boolean = false,
     runner: Runner | null = null,
 ): Conf2hiresOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONF2HIRES_METADATA);
     const params = conf2hires_params(subject, t2, no_t2, mm_norm_sigma, flair, no_flair, threads, copy_bias_from_conf, norm_opts_rca, cubic, trilin, dev, no_dev, bbr_con, bbr_t1, bbr_t2, first_peak_d1, first_peak_d2, stopmask, expert, force_update)
-    return conf2hires_execute(params, execution);
+    return conf2hires_execute(params, runner);
 }
 
 
@@ -379,8 +379,6 @@ export {
       Conf2hiresOutputs,
       Conf2hiresParameters,
       conf2hires,
-      conf2hires_cargs,
       conf2hires_execute,
-      conf2hires_outputs,
       conf2hires_params,
 };

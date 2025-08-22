@@ -176,14 +176,16 @@ function v_4dfptoanalyze_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V4dfptoanalyzeOutputs`).
  */
 function v_4dfptoanalyze_execute(
     params: V4dfptoanalyzeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V4dfptoanalyzeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_4DFPTOANALYZE_METADATA);
     params = execution.params(params)
     const cargs = v_4dfptoanalyze_cargs(params, execution)
     const ret = v_4dfptoanalyze_outputs(params, execution)
@@ -216,10 +218,8 @@ function v_4dfptoanalyze(
     endianness: string | null = null,
     runner: Runner | null = null,
 ): V4dfptoanalyzeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_4DFPTOANALYZE_METADATA);
     const params = v_4dfptoanalyze_params(input_file, scale_factor, output_8bit, spm99, endianness)
-    return v_4dfptoanalyze_execute(params, execution);
+    return v_4dfptoanalyze_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       V4dfptoanalyzeParameters,
       V_4DFPTOANALYZE_METADATA,
       v_4dfptoanalyze,
-      v_4dfptoanalyze_cargs,
       v_4dfptoanalyze_execute,
-      v_4dfptoanalyze_outputs,
       v_4dfptoanalyze_params,
 };

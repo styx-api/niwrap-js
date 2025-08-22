@@ -328,14 +328,16 @@ function v_5tt2vis_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V5tt2visOutputs`).
  */
 function v_5tt2vis_execute(
     params: V5tt2visParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V5tt2visOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_5TT2VIS_METADATA);
     params = execution.params(params)
     const cargs = v_5tt2vis_cargs(params, execution)
     const ret = v_5tt2vis_outputs(params, execution)
@@ -396,10 +398,8 @@ function v_5tt2vis(
     version: boolean = false,
     runner: Runner | null = null,
 ): V5tt2visOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_5TT2VIS_METADATA);
     const params = v_5tt2vis_params(input, output, bg, cgm, sgm, wm, csf, path, info, quiet, debug, force, nthreads, config, help, version)
-    return v_5tt2vis_execute(params, execution);
+    return v_5tt2vis_execute(params, runner);
 }
 
 
@@ -409,10 +409,7 @@ export {
       V5tt2visParameters,
       V_5TT2VIS_METADATA,
       v_5tt2vis,
-      v_5tt2vis_cargs,
-      v_5tt2vis_config_cargs,
       v_5tt2vis_config_params,
       v_5tt2vis_execute,
-      v_5tt2vis_outputs,
       v_5tt2vis_params,
 };

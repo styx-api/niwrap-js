@@ -127,14 +127,16 @@ function mri_and_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriAndOutputs`).
  */
 function mri_and_execute(
     params: MriAndParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriAndOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_AND_METADATA);
     params = execution.params(params)
     const cargs = mri_and_cargs(params, execution)
     const ret = mri_and_outputs(params, execution)
@@ -159,10 +161,8 @@ function mri_and(
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): MriAndOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_AND_METADATA);
     const params = mri_and_params(input_files)
-    return mri_and_execute(params, execution);
+    return mri_and_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       MriAndOutputs,
       MriAndParameters,
       mri_and,
-      mri_and_cargs,
       mri_and_execute,
-      mri_and_outputs,
       mri_and_params,
 };

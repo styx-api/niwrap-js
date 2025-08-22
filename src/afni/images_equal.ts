@@ -145,14 +145,16 @@ function images_equal_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImagesEqualOutputs`).
  */
 function images_equal_execute(
     params: ImagesEqualParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImagesEqualOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMAGES_EQUAL_METADATA);
     params = execution.params(params)
     const cargs = images_equal_cargs(params, execution)
     const ret = images_equal_outputs(params, execution)
@@ -181,10 +183,8 @@ function images_equal(
     all_flag: boolean = false,
     runner: Runner | null = null,
 ): ImagesEqualOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMAGES_EQUAL_METADATA);
     const params = images_equal_params(file_a, file_b, all_flag)
-    return images_equal_execute(params, execution);
+    return images_equal_execute(params, runner);
 }
 
 
@@ -193,8 +193,6 @@ export {
       ImagesEqualOutputs,
       ImagesEqualParameters,
       images_equal,
-      images_equal_cargs,
       images_equal_execute,
-      images_equal_outputs,
       images_equal_params,
 };

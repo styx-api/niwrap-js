@@ -143,14 +143,16 @@ function v__suma_fsvol_to_brik_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSumaFsvolToBrikOutputs`).
  */
 function v__suma_fsvol_to_brik_execute(
     params: VSumaFsvolToBrikParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSumaFsvolToBrikOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SUMA_FSVOL_TO_BRIK_METADATA);
     params = execution.params(params)
     const cargs = v__suma_fsvol_to_brik_cargs(params, execution)
     const ret = v__suma_fsvol_to_brik_outputs(params, execution)
@@ -177,10 +179,8 @@ function v__suma_fsvol_to_brik(
     prefix: string,
     runner: Runner | null = null,
 ): VSumaFsvolToBrikOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SUMA_FSVOL_TO_BRIK_METADATA);
     const params = v__suma_fsvol_to_brik_params(fs_vol_data, prefix)
-    return v__suma_fsvol_to_brik_execute(params, execution);
+    return v__suma_fsvol_to_brik_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       VSumaFsvolToBrikParameters,
       V__SUMA_FSVOL_TO_BRIK_METADATA,
       v__suma_fsvol_to_brik,
-      v__suma_fsvol_to_brik_cargs,
       v__suma_fsvol_to_brik_execute,
-      v__suma_fsvol_to_brik_outputs,
       v__suma_fsvol_to_brik_params,
 };

@@ -158,14 +158,16 @@ function v_3d_zcutup_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dZcutupOutputs`).
  */
 function v_3d_zcutup_execute(
     params: V3dZcutupParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dZcutupOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ZCUTUP_METADATA);
     params = execution.params(params)
     const cargs = v_3d_zcutup_cargs(params, execution)
     const ret = v_3d_zcutup_outputs(params, execution)
@@ -194,10 +196,8 @@ function v_3d_zcutup(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dZcutupOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ZCUTUP_METADATA);
     const params = v_3d_zcutup_params(keep_slices, dataset, prefix)
-    return v_3d_zcutup_execute(params, execution);
+    return v_3d_zcutup_execute(params, runner);
 }
 
 
@@ -206,8 +206,6 @@ export {
       V3dZcutupParameters,
       V_3D_ZCUTUP_METADATA,
       v_3d_zcutup,
-      v_3d_zcutup_cargs,
       v_3d_zcutup_execute,
-      v_3d_zcutup_outputs,
       v_3d_zcutup_params,
 };

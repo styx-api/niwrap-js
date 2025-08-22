@@ -148,14 +148,16 @@ function mri_fuse_intensity_images_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriFuseIntensityImagesOutputs`).
  */
 function mri_fuse_intensity_images_execute(
     params: MriFuseIntensityImagesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriFuseIntensityImagesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_FUSE_INTENSITY_IMAGES_METADATA);
     params = execution.params(params)
     const cargs = mri_fuse_intensity_images_cargs(params, execution)
     const ret = mri_fuse_intensity_images_outputs(params, execution)
@@ -186,10 +188,8 @@ function mri_fuse_intensity_images(
     output_volume: string,
     runner: Runner | null = null,
 ): MriFuseIntensityImagesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_FUSE_INTENSITY_IMAGES_METADATA);
     const params = mri_fuse_intensity_images_params(longitudinal_time_point_file, input_volume, transform_file, output_volume)
-    return mri_fuse_intensity_images_execute(params, execution);
+    return mri_fuse_intensity_images_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MriFuseIntensityImagesOutputs,
       MriFuseIntensityImagesParameters,
       mri_fuse_intensity_images,
-      mri_fuse_intensity_images_cargs,
       mri_fuse_intensity_images_execute,
-      mri_fuse_intensity_images_outputs,
       mri_fuse_intensity_images_params,
 };

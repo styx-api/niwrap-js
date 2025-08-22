@@ -349,14 +349,16 @@ function v_3d_lmer_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dLmerOutputs`).
  */
 function v_3d_lmer_execute(
     params: V3dLmerParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dLmerOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_LMER_METADATA);
     params = execution.params(params)
     const cargs = v_3d_lmer_cargs(params, execution)
     const ret = v_3d_lmer_outputs(params, execution)
@@ -423,10 +425,8 @@ function v_3d_lmer(
     vvars: string | null = null,
     runner: Runner | null = null,
 ): V3dLmerOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_LMER_METADATA);
     const params = v_3d_lmer_params(data_table, model, prefix, bound_lower, bound_upper, cio, debug_args, glf_code, glt_code, help, input_file_column, jobs, mask, qvar_centers, qvars, resid, rio, show_options, ss_type, trr, vvar_centers, vvars)
-    return v_3d_lmer_execute(params, execution);
+    return v_3d_lmer_execute(params, runner);
 }
 
 
@@ -435,8 +435,6 @@ export {
       V3dLmerParameters,
       V_3D_LMER_METADATA,
       v_3d_lmer,
-      v_3d_lmer_cargs,
       v_3d_lmer_execute,
-      v_3d_lmer_outputs,
       v_3d_lmer_params,
 };

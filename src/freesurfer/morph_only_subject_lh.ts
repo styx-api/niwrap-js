@@ -136,14 +136,16 @@ function morph_only_subject_lh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MorphOnlySubjectLhOutputs`).
  */
 function morph_only_subject_lh_execute(
     params: MorphOnlySubjectLhParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MorphOnlySubjectLhOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MORPH_ONLY_SUBJECT_LH_METADATA);
     params = execution.params(params)
     const cargs = morph_only_subject_lh_cargs(params, execution)
     const ret = morph_only_subject_lh_outputs(params, execution)
@@ -168,10 +170,8 @@ function morph_only_subject_lh(
     subject_dir: string,
     runner: Runner | null = null,
 ): MorphOnlySubjectLhOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MORPH_ONLY_SUBJECT_LH_METADATA);
     const params = morph_only_subject_lh_params(subject_dir)
-    return morph_only_subject_lh_execute(params, execution);
+    return morph_only_subject_lh_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       MorphOnlySubjectLhOutputs,
       MorphOnlySubjectLhParameters,
       morph_only_subject_lh,
-      morph_only_subject_lh_cargs,
       morph_only_subject_lh_execute,
-      morph_only_subject_lh_outputs,
       morph_only_subject_lh_params,
 };

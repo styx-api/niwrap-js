@@ -127,14 +127,16 @@ function segment_subject_notal_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegmentSubjectNotalOutputs`).
  */
 function segment_subject_notal_execute(
     params: SegmentSubjectNotalParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegmentSubjectNotalOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGMENT_SUBJECT_NOTAL_METADATA);
     params = execution.params(params)
     const cargs = segment_subject_notal_cargs(params, execution)
     const ret = segment_subject_notal_outputs(params, execution)
@@ -159,10 +161,8 @@ function segment_subject_notal(
     subject_path: string,
     runner: Runner | null = null,
 ): SegmentSubjectNotalOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGMENT_SUBJECT_NOTAL_METADATA);
     const params = segment_subject_notal_params(subject_path)
-    return segment_subject_notal_execute(params, execution);
+    return segment_subject_notal_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       SegmentSubjectNotalOutputs,
       SegmentSubjectNotalParameters,
       segment_subject_notal,
-      segment_subject_notal_cargs,
       segment_subject_notal_execute,
-      segment_subject_notal_outputs,
       segment_subject_notal_params,
 };

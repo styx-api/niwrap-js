@@ -399,14 +399,16 @@ function mris_diff_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisDiffOutputs`).
  */
 function mris_diff_execute(
     params: MrisDiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisDiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_DIFF_METADATA);
     params = execution.params(params)
     const cargs = mris_diff_cargs(params, execution)
     const ret = mris_diff_outputs(params, execution)
@@ -487,10 +489,8 @@ function mris_diff(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrisDiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_DIFF_METADATA);
     const params = mris_diff_params(surface1, surface2, subject1, subject2, hemisphere, subj_dir1, subj_dir2, surf, curv, aparc, aparc2, simple, simple_patch, thresh, maxerrs, renumbered, worst_bucket, grid, no_check_xyz, no_check_nxyz, xyz_rms, angle_rms, seed, min_dist, debug, gdiag_no, check_opts, help, version)
-    return mris_diff_execute(params, execution);
+    return mris_diff_execute(params, runner);
 }
 
 
@@ -499,8 +499,6 @@ export {
       MrisDiffOutputs,
       MrisDiffParameters,
       mris_diff,
-      mris_diff_cargs,
       mris_diff_execute,
-      mris_diff_outputs,
       mris_diff_params,
 };

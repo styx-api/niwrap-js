@@ -147,14 +147,16 @@ function volume_reorient_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeReorientOutputs`).
  */
 function volume_reorient_execute(
     params: VolumeReorientParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeReorientOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_REORIENT_METADATA);
     params = execution.params(params)
     const cargs = volume_reorient_cargs(params, execution)
     const ret = volume_reorient_outputs(params, execution)
@@ -192,10 +194,8 @@ function volume_reorient(
     volume_out: string,
     runner: Runner | null = null,
 ): VolumeReorientOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_REORIENT_METADATA);
     const params = volume_reorient_params(volume, orient_string, volume_out)
-    return volume_reorient_execute(params, execution);
+    return volume_reorient_execute(params, runner);
 }
 
 
@@ -204,8 +204,6 @@ export {
       VolumeReorientOutputs,
       VolumeReorientParameters,
       volume_reorient,
-      volume_reorient_cargs,
       volume_reorient_execute,
-      volume_reorient_outputs,
       volume_reorient_params,
 };

@@ -178,14 +178,16 @@ function fdrval_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FdrvalOutputs`).
  */
 function fdrval_execute(
     params: FdrvalParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FdrvalOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FDRVAL_METADATA);
     params = execution.params(params)
     const cargs = fdrval_cargs(params, execution)
     const ret = fdrval_outputs(params, execution)
@@ -224,10 +226,8 @@ function fdrval(
     inverse: boolean = false,
     runner: Runner | null = null,
 ): FdrvalOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FDRVAL_METADATA);
     const params = fdrval_params(dset, sub, val_list, pval, ponly, qonly, qinput, inverse)
-    return fdrval_execute(params, execution);
+    return fdrval_execute(params, runner);
 }
 
 
@@ -236,8 +236,6 @@ export {
       FdrvalOutputs,
       FdrvalParameters,
       fdrval,
-      fdrval_cargs,
       fdrval_execute,
-      fdrval_outputs,
       fdrval_params,
 };

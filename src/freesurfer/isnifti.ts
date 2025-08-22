@@ -127,14 +127,16 @@ function isnifti_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `IsniftiOutputs`).
  */
 function isnifti_execute(
     params: IsniftiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): IsniftiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ISNIFTI_METADATA);
     params = execution.params(params)
     const cargs = isnifti_cargs(params, execution)
     const ret = isnifti_outputs(params, execution)
@@ -159,10 +161,8 @@ function isnifti(
     infile: InputPathType,
     runner: Runner | null = null,
 ): IsniftiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ISNIFTI_METADATA);
     const params = isnifti_params(infile)
-    return isnifti_execute(params, execution);
+    return isnifti_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       IsniftiOutputs,
       IsniftiParameters,
       isnifti,
-      isnifti_cargs,
       isnifti_execute,
-      isnifti_outputs,
       isnifti_params,
 };

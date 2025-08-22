@@ -294,14 +294,16 @@ function fat_proc_convert_dcm_dwis_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatProcConvertDcmDwisOutputs`).
  */
 function fat_proc_convert_dcm_dwis_execute(
     params: FatProcConvertDcmDwisParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatProcConvertDcmDwisOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_PROC_CONVERT_DCM_DWIS_METADATA);
     params = execution.params(params)
     const cargs = fat_proc_convert_dcm_dwis_cargs(params, execution)
     const ret = fat_proc_convert_dcm_dwis_outputs(params, execution)
@@ -360,10 +362,8 @@ function fat_proc_convert_dcm_dwis(
     do_movie: string | null = null,
     runner: Runner | null = null,
 ): FatProcConvertDcmDwisOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_PROC_CONVERT_DCM_DWIS_METADATA);
     const params = fat_proc_convert_dcm_dwis_params(dicom_dir, output_prefix, nifti_files, bvec_files, bval_files, work_dir, orientation, origin_xyz, flip_x, flip_y, flip_z, no_flip, qc_prefix, reorient_off, no_clean, no_cmd_out, no_qc_view, do_movie)
-    return fat_proc_convert_dcm_dwis_execute(params, execution);
+    return fat_proc_convert_dcm_dwis_execute(params, runner);
 }
 
 
@@ -372,8 +372,6 @@ export {
       FatProcConvertDcmDwisOutputs,
       FatProcConvertDcmDwisParameters,
       fat_proc_convert_dcm_dwis,
-      fat_proc_convert_dcm_dwis_cargs,
       fat_proc_convert_dcm_dwis_execute,
-      fat_proc_convert_dcm_dwis_outputs,
       fat_proc_convert_dcm_dwis_params,
 };

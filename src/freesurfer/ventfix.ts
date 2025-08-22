@@ -145,14 +145,16 @@ function ventfix_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VentfixOutputs`).
  */
 function ventfix_execute(
     params: VentfixParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VentfixOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VENTFIX_METADATA);
     params = execution.params(params)
     const cargs = ventfix_cargs(params, execution)
     const ret = ventfix_outputs(params, execution)
@@ -179,10 +181,8 @@ function ventfix(
     option1: string | null = null,
     runner: Runner | null = null,
 ): VentfixOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VENTFIX_METADATA);
     const params = ventfix_params(subject_dir, option1)
-    return ventfix_execute(params, execution);
+    return ventfix_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       VentfixOutputs,
       VentfixParameters,
       ventfix,
-      ventfix_cargs,
       ventfix_execute,
-      ventfix_outputs,
       ventfix_params,
 };

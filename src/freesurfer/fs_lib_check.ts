@@ -150,14 +150,16 @@ function fs_lib_check_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsLibCheckOutputs`).
  */
 function fs_lib_check_execute(
     params: FsLibCheckParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsLibCheckOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FS_LIB_CHECK_METADATA);
     params = execution.params(params)
     const cargs = fs_lib_check_cargs(params, execution)
     const ret = fs_lib_check_outputs(params, execution)
@@ -188,10 +190,8 @@ function fs_lib_check(
     show_version: boolean = false,
     runner: Runner | null = null,
 ): FsLibCheckOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FS_LIB_CHECK_METADATA);
     const params = fs_lib_check_params(use_ldconfig, use_rpm, show_help, show_version)
-    return fs_lib_check_execute(params, execution);
+    return fs_lib_check_execute(params, runner);
 }
 
 
@@ -200,8 +200,6 @@ export {
       FsLibCheckOutputs,
       FsLibCheckParameters,
       fs_lib_check,
-      fs_lib_check_cargs,
       fs_lib_check_execute,
-      fs_lib_check_outputs,
       fs_lib_check_params,
 };

@@ -332,14 +332,16 @@ function mris_volmask_vtk_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisVolmaskVtkOutputs`).
  */
 function mris_volmask_vtk_execute(
     params: MrisVolmaskVtkParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisVolmaskVtkOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_VOLMASK_VTK_METADATA);
     params = execution.params(params)
     const cargs = mris_volmask_vtk_cargs(params, execution)
     const ret = mris_volmask_vtk_outputs(params, execution)
@@ -398,10 +400,8 @@ function mris_volmask_vtk(
     save_ribbon: boolean = false,
     runner: Runner | null = null,
 ): MrisVolmaskVtkOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_VOLMASK_VTK_METADATA);
     const params = mris_volmask_vtk_params(io_param, cap_distance, label_background, label_left_white, label_left_ribbon, label_right_white, label_right_ribbon, surf_white, surf_pial, aseg_name, out_root, subjects_dir, save_distance, lh_only, rh_only, parallel, edit_aseg, save_ribbon)
-    return mris_volmask_vtk_execute(params, execution);
+    return mris_volmask_vtk_execute(params, runner);
 }
 
 
@@ -410,8 +410,6 @@ export {
       MrisVolmaskVtkOutputs,
       MrisVolmaskVtkParameters,
       mris_volmask_vtk,
-      mris_volmask_vtk_cargs,
       mris_volmask_vtk_execute,
-      mris_volmask_vtk_outputs,
       mris_volmask_vtk_params,
 };

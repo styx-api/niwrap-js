@@ -195,14 +195,16 @@ function annotation_resample_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AnnotationResampleOutputs`).
  */
 function annotation_resample_execute(
     params: AnnotationResampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AnnotationResampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANNOTATION_RESAMPLE_METADATA);
     params = execution.params(params)
     const cargs = annotation_resample_cargs(params, execution)
     const ret = annotation_resample_outputs(params, execution)
@@ -235,10 +237,8 @@ function annotation_resample(
     surface_pair: Array<AnnotationResampleSurfacePairParameters> | null = null,
     runner: Runner | null = null,
 ): AnnotationResampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANNOTATION_RESAMPLE_METADATA);
     const params = annotation_resample_params(annotation_in, annotation_out, surface_pair)
-    return annotation_resample_execute(params, execution);
+    return annotation_resample_execute(params, runner);
 }
 
 
@@ -248,10 +248,7 @@ export {
       AnnotationResampleParameters,
       AnnotationResampleSurfacePairParameters,
       annotation_resample,
-      annotation_resample_cargs,
       annotation_resample_execute,
-      annotation_resample_outputs,
       annotation_resample_params,
-      annotation_resample_surface_pair_cargs,
       annotation_resample_surface_pair_params,
 };

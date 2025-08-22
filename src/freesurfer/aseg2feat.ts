@@ -207,14 +207,16 @@ function aseg2feat_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Aseg2featOutputs`).
  */
 function aseg2feat_execute(
     params: Aseg2featParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Aseg2featOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ASEG2FEAT_METADATA);
     params = execution.params(params)
     const cargs = aseg2feat_cargs(params, execution)
     const ret = aseg2feat_outputs(params, execution)
@@ -255,10 +257,8 @@ function aseg2feat(
     version: boolean = false,
     runner: Runner | null = null,
 ): Aseg2featOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ASEG2FEAT_METADATA);
     const params = aseg2feat_params(feat, featdirfile, seg, aparc_aseg, svstats, standard, debug, help, version)
-    return aseg2feat_execute(params, execution);
+    return aseg2feat_execute(params, runner);
 }
 
 
@@ -267,8 +267,6 @@ export {
       Aseg2featOutputs,
       Aseg2featParameters,
       aseg2feat,
-      aseg2feat_cargs,
       aseg2feat_execute,
-      aseg2feat_outputs,
       aseg2feat_params,
 };

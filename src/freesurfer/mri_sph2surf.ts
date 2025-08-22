@@ -210,14 +210,16 @@ function mri_sph2surf_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSph2surfOutputs`).
  */
 function mri_sph2surf_execute(
     params: MriSph2surfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSph2surfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SPH2SURF_METADATA);
     params = execution.params(params)
     const cargs = mri_sph2surf_cargs(params, execution)
     const ret = mri_sph2surf_outputs(params, execution)
@@ -258,10 +260,8 @@ function mri_sph2surf(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriSph2surfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SPH2SURF_METADATA);
     const params = mri_sph2surf_params(instem, outstem, hemi, subject, offset, svitdir, umask, verbose, version)
-    return mri_sph2surf_execute(params, execution);
+    return mri_sph2surf_execute(params, runner);
 }
 
 
@@ -270,8 +270,6 @@ export {
       MriSph2surfOutputs,
       MriSph2surfParameters,
       mri_sph2surf,
-      mri_sph2surf_cargs,
       mri_sph2surf_execute,
-      mri_sph2surf_outputs,
       mri_sph2surf_params,
 };

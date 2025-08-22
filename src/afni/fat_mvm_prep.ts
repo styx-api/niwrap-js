@@ -194,14 +194,16 @@ function fat_mvm_prep_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatMvmPrepOutputs`).
  */
 function fat_mvm_prep_execute(
     params: FatMvmPrepParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatMvmPrepOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_MVM_PREP_METADATA);
     params = execution.params(params)
     const cargs = fat_mvm_prep_cargs(params, execution)
     const ret = fat_mvm_prep_outputs(params, execution)
@@ -238,10 +240,8 @@ function fat_mvm_prep(
     extern_labels_no: boolean = false,
     runner: Runner | null = null,
 ): FatMvmPrepOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_MVM_PREP_METADATA);
     const params = fat_mvm_prep_params(prefix, csv_file, matrix_files, list_match, unionize_rois, na_warn_off, extern_labels_no)
-    return fat_mvm_prep_execute(params, execution);
+    return fat_mvm_prep_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       FatMvmPrepOutputs,
       FatMvmPrepParameters,
       fat_mvm_prep,
-      fat_mvm_prep_cargs,
       fat_mvm_prep_execute,
-      fat_mvm_prep_outputs,
       fat_mvm_prep_params,
 };

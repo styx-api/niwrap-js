@@ -206,14 +206,16 @@ function v_3d_threeto_rgb_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dThreetoRgbOutputs`).
  */
 function v_3d_threeto_rgb_execute(
     params: V3dThreetoRgbParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dThreetoRgbOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_THREETO_RGB_METADATA);
     params = execution.params(params)
     const cargs = v_3d_threeto_rgb_cargs(params, execution)
     const ret = v_3d_threeto_rgb_outputs(params, execution)
@@ -252,10 +254,8 @@ function v_3d_threeto_rgb(
     input_dataset3: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dThreetoRgbOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_THREETO_RGB_METADATA);
     const params = v_3d_threeto_rgb_params(input_dataset, output_prefix, scale_factor, mask_dataset, fim, anat, input_dataset2, input_dataset3)
-    return v_3d_threeto_rgb_execute(params, execution);
+    return v_3d_threeto_rgb_execute(params, runner);
 }
 
 
@@ -264,8 +264,6 @@ export {
       V3dThreetoRgbParameters,
       V_3D_THREETO_RGB_METADATA,
       v_3d_threeto_rgb,
-      v_3d_threeto_rgb_cargs,
       v_3d_threeto_rgb_execute,
-      v_3d_threeto_rgb_outputs,
       v_3d_threeto_rgb_params,
 };

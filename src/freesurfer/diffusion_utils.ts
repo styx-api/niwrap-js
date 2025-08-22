@@ -129,14 +129,16 @@ function diffusion_utils_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DiffusionUtilsOutputs`).
  */
 function diffusion_utils_execute(
     params: DiffusionUtilsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DiffusionUtilsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DIFFUSION_UTILS_METADATA);
     params = execution.params(params)
     const cargs = diffusion_utils_cargs(params, execution)
     const ret = diffusion_utils_outputs(params, execution)
@@ -161,10 +163,8 @@ function diffusion_utils(
     dummy_flag: boolean = false,
     runner: Runner | null = null,
 ): DiffusionUtilsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DIFFUSION_UTILS_METADATA);
     const params = diffusion_utils_params(dummy_flag)
-    return diffusion_utils_execute(params, execution);
+    return diffusion_utils_execute(params, runner);
 }
 
 
@@ -173,8 +173,6 @@ export {
       DiffusionUtilsOutputs,
       DiffusionUtilsParameters,
       diffusion_utils,
-      diffusion_utils_cargs,
       diffusion_utils_execute,
-      diffusion_utils_outputs,
       diffusion_utils_params,
 };

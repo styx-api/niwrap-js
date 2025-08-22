@@ -371,14 +371,16 @@ function v_3drotate_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3drotateOutputs`).
  */
 function v_3drotate_execute(
     params: V3drotateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3drotateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DROTATE_METADATA);
     params = execution.params(params)
     const cargs = v_3drotate_cargs(params, execution)
     const ret = v_3drotate_outputs(params, execution)
@@ -451,10 +453,8 @@ function v_3drotate(
     zpad: number | null = null,
     runner: Runner | null = null,
 ): V3drotateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DROTATE_METADATA);
     const params = v_3drotate_params(dataset, prefix, verbose, ashift, bshift, rotate, rotparent, gridparent, matvec_dicom, matvec_order, matvec_dset, dfile, v_1_dfile, points, origin, fourier, nn, linear, cubic, quintic, heptic, fourier_nopad, clipit, noclip, zpad)
-    return v_3drotate_execute(params, execution);
+    return v_3drotate_execute(params, runner);
 }
 
 
@@ -463,8 +463,6 @@ export {
       V3drotateParameters,
       V_3DROTATE_METADATA,
       v_3drotate,
-      v_3drotate_cargs,
       v_3drotate_execute,
-      v_3drotate_outputs,
       v_3drotate_params,
 };

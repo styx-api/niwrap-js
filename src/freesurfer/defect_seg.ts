@@ -180,14 +180,16 @@ function defect_seg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DefectSegOutputs`).
  */
 function defect_seg_execute(
     params: DefectSegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DefectSegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DEFECT_SEG_METADATA);
     params = execution.params(params)
     const cargs = defect_seg_cargs(params, execution)
     const ret = defect_seg_outputs(params, execution)
@@ -216,10 +218,8 @@ function defect_seg(
     rh_only: boolean = false,
     runner: Runner | null = null,
 ): DefectSegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DEFECT_SEG_METADATA);
     const params = defect_seg_params(subject, lh_only, rh_only)
-    return defect_seg_execute(params, execution);
+    return defect_seg_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       DefectSegOutputs,
       DefectSegParameters,
       defect_seg,
-      defect_seg_cargs,
       defect_seg_execute,
-      defect_seg_outputs,
       defect_seg_params,
 };

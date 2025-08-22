@@ -234,14 +234,16 @@ function v_3d_match_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dMatchOutputs`).
  */
 function v_3d_match_execute(
     params: V3dMatchParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dMatchOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_MATCH_METADATA);
     params = execution.params(params)
     const cargs = v_3d_match_cargs(params, execution)
     const ret = v_3d_match_outputs(params, execution)
@@ -282,10 +284,8 @@ function v_3d_match(
     only_dice_thr: boolean = false,
     runner: Runner | null = null,
 ): V3dMatchOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_MATCH_METADATA);
     const params = v_3d_match_params(inset, refset, prefix, mask, in_min, in_max, ref_min, ref_max, only_dice_thr)
-    return v_3d_match_execute(params, execution);
+    return v_3d_match_execute(params, runner);
 }
 
 
@@ -294,8 +294,6 @@ export {
       V3dMatchParameters,
       V_3D_MATCH_METADATA,
       v_3d_match,
-      v_3d_match_cargs,
       v_3d_match_execute,
-      v_3d_match_outputs,
       v_3d_match_params,
 };

@@ -319,14 +319,16 @@ function mri_mask_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMaskOutputs`).
  */
 function mri_mask_execute(
     params: MriMaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MASK_METADATA);
     params = execution.params(params)
     const cargs = mri_mask_cargs(params, execution)
     const ret = mri_mask_outputs(params, execution)
@@ -391,10 +393,8 @@ function mri_mask(
     samseg: boolean = false,
     runner: Runner | null = null,
 ): MriMaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MASK_METADATA);
     const params = mri_mask_params(input_volume, mask_volume, output_volume, xform, lta_src, lta_dst, threshold, npad, npad_vector, npad_multi_vector, abs, invert, no_invert, rh_labels, lh_labels, dilate, no_cerebellum, oval_value, transfer_value, keep_mask_deletion_edits, samseg)
-    return mri_mask_execute(params, execution);
+    return mri_mask_execute(params, runner);
 }
 
 
@@ -403,8 +403,6 @@ export {
       MriMaskOutputs,
       MriMaskParameters,
       mri_mask,
-      mri_mask_cargs,
       mri_mask_execute,
-      mri_mask_outputs,
       mri_mask_params,
 };

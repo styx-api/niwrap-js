@@ -233,14 +233,16 @@ function roi2dataset_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Roi2datasetOutputs`).
  */
 function roi2dataset_execute(
     params: Roi2datasetParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Roi2datasetOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ROI2DATASET_METADATA);
     params = execution.params(params)
     const cargs = roi2dataset_cargs(params, execution)
     const ret = roi2dataset_outputs(params, execution)
@@ -285,10 +287,8 @@ function roi2dataset(
     pad_label: number | null = null,
     runner: Runner | null = null,
 ): Roi2datasetOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ROI2DATASET_METADATA);
     const params = roi2dataset_params(prefix, input_rois, keep_separate, nodelist, nodelist_nodups, nodelist_with_roival, label_dset, output_format, domain_parent_id, pad_to_node, pad_label)
-    return roi2dataset_execute(params, execution);
+    return roi2dataset_execute(params, runner);
 }
 
 
@@ -297,8 +297,6 @@ export {
       Roi2datasetOutputs,
       Roi2datasetParameters,
       roi2dataset,
-      roi2dataset_cargs,
       roi2dataset_execute,
-      roi2dataset_outputs,
       roi2dataset_params,
 };

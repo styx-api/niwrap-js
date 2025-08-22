@@ -132,14 +132,16 @@ function mri_strip_subject_info_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriStripSubjectInfoOutputs`).
  */
 function mri_strip_subject_info_execute(
     params: MriStripSubjectInfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriStripSubjectInfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_STRIP_SUBJECT_INFO_METADATA);
     params = execution.params(params)
     const cargs = mri_strip_subject_info_cargs(params, execution)
     const ret = mri_strip_subject_info_outputs(params, execution)
@@ -166,10 +168,8 @@ function mri_strip_subject_info(
     output_directory: string,
     runner: Runner | null = null,
 ): MriStripSubjectInfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_STRIP_SUBJECT_INFO_METADATA);
     const params = mri_strip_subject_info_params(input_files, output_directory)
-    return mri_strip_subject_info_execute(params, execution);
+    return mri_strip_subject_info_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       MriStripSubjectInfoOutputs,
       MriStripSubjectInfoParameters,
       mri_strip_subject_info,
-      mri_strip_subject_info_cargs,
       mri_strip_subject_info_execute,
-      mri_strip_subject_info_outputs,
       mri_strip_subject_info_params,
 };

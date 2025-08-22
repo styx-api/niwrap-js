@@ -517,14 +517,16 @@ function scene_capture_image_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SceneCaptureImageOutputs`).
  */
 function scene_capture_image_execute(
     params: SceneCaptureImageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SceneCaptureImageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SCENE_CAPTURE_IMAGE_METADATA);
     params = execution.params(params)
     const cargs = scene_capture_image_cargs(params, execution)
     const ret = scene_capture_image_outputs(params, execution)
@@ -628,10 +630,8 @@ function scene_capture_image(
     opt_print_image_info: boolean = false,
     runner: Runner | null = null,
 ): SceneCaptureImageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SCENE_CAPTURE_IMAGE_METADATA);
     const params = scene_capture_image_params(scene_file, scene_name_or_number, image_file_name, opt_size_window, opt_size_capture, size_width_height, opt_size_width_width, opt_size_height_height, opt_units_units, resolution, opt_margin_size, opt_no_scene_colors, set_map_yoke, conn_db_login, opt_show_capture_settings, opt_renderer_renderer, opt_print_image_info)
-    return scene_capture_image_execute(params, execution);
+    return scene_capture_image_execute(params, runner);
 }
 
 
@@ -644,16 +644,10 @@ export {
       SceneCaptureImageSetMapYokeParameters,
       SceneCaptureImageSizeWidthHeightParameters,
       scene_capture_image,
-      scene_capture_image_cargs,
-      scene_capture_image_conn_db_login_cargs,
       scene_capture_image_conn_db_login_params,
       scene_capture_image_execute,
-      scene_capture_image_outputs,
       scene_capture_image_params,
-      scene_capture_image_resolution_cargs,
       scene_capture_image_resolution_params,
-      scene_capture_image_set_map_yoke_cargs,
       scene_capture_image_set_map_yoke_params,
-      scene_capture_image_size_width_height_cargs,
       scene_capture_image_size_width_height_params,
 };

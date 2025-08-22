@@ -169,14 +169,16 @@ function immask_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImmaskOutputs`).
  */
 function immask_execute(
     params: ImmaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImmaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMMASK_METADATA);
     params = execution.params(params)
     const cargs = immask_cargs(params, execution)
     const ret = immask_outputs(params, execution)
@@ -209,10 +211,8 @@ function immask(
     positive_only: boolean = false,
     runner: Runner | null = null,
 ): ImmaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMMASK_METADATA);
     const params = immask_params(input_image, output_image, threshold, mask_image, positive_only)
-    return immask_execute(params, execution);
+    return immask_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       ImmaskOutputs,
       ImmaskParameters,
       immask,
-      immask_cargs,
       immask_execute,
-      immask_outputs,
       immask_params,
 };

@@ -148,14 +148,16 @@ function fsl_label2voxel_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslLabel2voxelOutputs`).
  */
 function fsl_label2voxel_execute(
     params: FslLabel2voxelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslLabel2voxelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_LABEL2VOXEL_METADATA);
     params = execution.params(params)
     const cargs = fsl_label2voxel_cargs(params, execution)
     const ret = fsl_label2voxel_outputs(params, execution)
@@ -186,10 +188,8 @@ function fsl_label2voxel(
     output_filename: string,
     runner: Runner | null = null,
 ): FslLabel2voxelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_LABEL2VOXEL_METADATA);
     const params = fsl_label2voxel_params(label_value, labeled_volume, src_volume, output_filename)
-    return fsl_label2voxel_execute(params, execution);
+    return fsl_label2voxel_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       FslLabel2voxelOutputs,
       FslLabel2voxelParameters,
       fsl_label2voxel,
-      fsl_label2voxel_cargs,
       fsl_label2voxel_execute,
-      fsl_label2voxel_outputs,
       fsl_label2voxel_params,
 };

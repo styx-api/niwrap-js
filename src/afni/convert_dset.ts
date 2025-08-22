@@ -337,14 +337,16 @@ function convert_dset_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertDsetOutputs`).
  */
 function convert_dset_execute(
     params: ConvertDsetParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvertDsetOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVERT_DSET_METADATA);
     params = execution.params(params)
     const cargs = convert_dset_cargs(params, execution)
     const ret = convert_dset_outputs(params, execution)
@@ -409,10 +411,8 @@ function convert_dset(
     no_history: boolean = false,
     runner: Runner | null = null,
 ): ConvertDsetOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVERT_DSET_METADATA);
     const params = convert_dset_params(output_type, input_dataset, input_type, output_prefix, dset_labels, add_node_index, node_index_file, node_select_file, prepend_node_index, pad_to_node, labelize, graphize, graph_nodelist, graph_full_nodelist, graph_named_nodelist, graph_xyz_lpi, graph_edgelist, onegraph, multigraph, split, no_history)
-    return convert_dset_execute(params, execution);
+    return convert_dset_execute(params, runner);
 }
 
 
@@ -421,8 +421,6 @@ export {
       ConvertDsetOutputs,
       ConvertDsetParameters,
       convert_dset,
-      convert_dset_cargs,
       convert_dset_execute,
-      convert_dset_outputs,
       convert_dset_params,
 };

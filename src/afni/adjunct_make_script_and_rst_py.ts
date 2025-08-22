@@ -177,14 +177,16 @@ function adjunct_make_script_and_rst_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AdjunctMakeScriptAndRstPyOutputs`).
  */
 function adjunct_make_script_and_rst_py_execute(
     params: AdjunctMakeScriptAndRstPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AdjunctMakeScriptAndRstPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADJUNCT_MAKE_SCRIPT_AND_RST_PY_METADATA);
     params = execution.params(params)
     const cargs = adjunct_make_script_and_rst_py_cargs(params, execution)
     const ret = adjunct_make_script_and_rst_py_outputs(params, execution)
@@ -217,10 +219,8 @@ function adjunct_make_script_and_rst_py(
     execute_script: boolean = false,
     runner: Runner | null = null,
 ): AdjunctMakeScriptAndRstPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADJUNCT_MAKE_SCRIPT_AND_RST_PY_METADATA);
     const params = adjunct_make_script_and_rst_py_params(input_script, prefix_rst, prefix_script, reflink, execute_script)
-    return adjunct_make_script_and_rst_py_execute(params, execution);
+    return adjunct_make_script_and_rst_py_execute(params, runner);
 }
 
 
@@ -229,8 +229,6 @@ export {
       AdjunctMakeScriptAndRstPyOutputs,
       AdjunctMakeScriptAndRstPyParameters,
       adjunct_make_script_and_rst_py,
-      adjunct_make_script_and_rst_py_cargs,
       adjunct_make_script_and_rst_py_execute,
-      adjunct_make_script_and_rst_py_outputs,
       adjunct_make_script_and_rst_py_params,
 };

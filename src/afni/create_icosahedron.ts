@@ -222,14 +222,16 @@ function create_icosahedron_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CreateIcosahedronOutputs`).
  */
 function create_icosahedron_execute(
     params: CreateIcosahedronParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CreateIcosahedronOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CREATE_ICOSAHEDRON_METADATA);
     params = execution.params(params)
     const cargs = create_icosahedron_cargs(params, execution)
     const ret = create_icosahedron_outputs(params, execution)
@@ -272,10 +274,8 @@ function create_icosahedron(
     help: boolean = false,
     runner: Runner | null = null,
 ): CreateIcosahedronOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CREATE_ICOSAHEDRON_METADATA);
     const params = create_icosahedron_params(rad, rec_depth, lin_depth, min_nodes, nums, nums_quiet, center_coordinates, to_sphere, output_prefix, help)
-    return create_icosahedron_execute(params, execution);
+    return create_icosahedron_execute(params, runner);
 }
 
 
@@ -284,8 +284,6 @@ export {
       CreateIcosahedronOutputs,
       CreateIcosahedronParameters,
       create_icosahedron,
-      create_icosahedron_cargs,
       create_icosahedron_execute,
-      create_icosahedron_outputs,
       create_icosahedron_params,
 };

@@ -363,14 +363,16 @@ function possum_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PossumOutputs`).
  */
 function possum_execute(
     params: PossumParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PossumOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(POSSUM_METADATA);
     params = execution.params(params)
     const cargs = possum_cargs(params, execution)
     const ret = possum_outputs(params, execution)
@@ -441,10 +443,8 @@ function possum(
     rf_average: boolean = false,
     runner: Runner | null = null,
 ): PossumOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(POSSUM_METADATA);
     const params = possum_params(input_volume, mr_parameters, motion_matrix, pulse_sequence, rf_slice_profile, output_signal, event_matrix, verbose, help, kcoord, b0_inhomogeneities, extra_b0_inhomogeneities, b0_inhomogeneities_timecourse, rf_inhomogeneity_receive, rf_inhomogeneity_transmit, activation_volume, activation_timecourse, activation_4d_volume, activation_4d_timecourse, level, num_procs, proc_id, no_speedup, rf_average)
-    return possum_execute(params, execution);
+    return possum_execute(params, runner);
 }
 
 
@@ -453,8 +453,6 @@ export {
       PossumOutputs,
       PossumParameters,
       possum,
-      possum_cargs,
       possum_execute,
-      possum_outputs,
       possum_params,
 };

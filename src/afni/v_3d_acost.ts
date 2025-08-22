@@ -161,14 +161,16 @@ function v_3d_acost_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dAcostOutputs`).
  */
 function v_3d_acost_execute(
     params: V3dAcostParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dAcostOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ACOST_METADATA);
     params = execution.params(params)
     const cargs = v_3d_acost_cargs(params, execution)
     const ret = v_3d_acost_outputs(params, execution)
@@ -199,10 +201,8 @@ function v_3d_acost(
     all_cost: boolean = false,
     runner: Runner | null = null,
 ): V3dAcostOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ACOST_METADATA);
     const params = v_3d_acost_params(infile, basefile, outfile, all_cost)
-    return v_3d_acost_execute(params, execution);
+    return v_3d_acost_execute(params, runner);
 }
 
 
@@ -211,8 +211,6 @@ export {
       V3dAcostParameters,
       V_3D_ACOST_METADATA,
       v_3d_acost,
-      v_3d_acost_cargs,
       v_3d_acost_execute,
-      v_3d_acost_outputs,
       v_3d_acost_params,
 };

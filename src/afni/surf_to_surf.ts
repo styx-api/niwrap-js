@@ -265,14 +265,16 @@ function surf_to_surf_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfToSurfOutputs`).
  */
 function surf_to_surf_execute(
     params: SurfToSurfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfToSurfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_TO_SURF_METADATA);
     params = execution.params(params)
     const cargs = surf_to_surf_cargs(params, execution)
     const ret = surf_to_surf_outputs(params, execution)
@@ -321,10 +323,8 @@ function surf_to_surf(
     mapfile: InputPathType | null = null,
     runner: Runner | null = null,
 ): SurfToSurfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_TO_SURF_METADATA);
     const params = surf_to_surf_params(input_surface_1, input_surface_2, surface_volume, prefix, output_params, node_indices, proj_dir, data, node_debug, debug_level, make_consistent, dset, mapfile)
-    return surf_to_surf_execute(params, execution);
+    return surf_to_surf_execute(params, runner);
 }
 
 
@@ -333,8 +333,6 @@ export {
       SurfToSurfOutputs,
       SurfToSurfParameters,
       surf_to_surf,
-      surf_to_surf_cargs,
       surf_to_surf_execute,
-      surf_to_surf_outputs,
       surf_to_surf_params,
 };

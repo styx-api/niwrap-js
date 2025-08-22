@@ -219,14 +219,16 @@ function v_3dmask_svd_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dmaskSvdOutputs`).
  */
 function v_3dmask_svd_execute(
     params: V3dmaskSvdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dmaskSvdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DMASK_SVD_METADATA);
     params = execution.params(params)
     const cargs = v_3dmask_svd_cargs(params, execution)
     const ret = v_3dmask_svd_outputs(params, execution)
@@ -267,10 +269,8 @@ function v_3dmask_svd(
     alt_input: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dmaskSvdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DMASK_SVD_METADATA);
     const params = v_3dmask_svd_params(input_dataset, vnorm, sval, mask_file, automask, polort, bandpass, ort, alt_input)
-    return v_3dmask_svd_execute(params, execution);
+    return v_3dmask_svd_execute(params, runner);
 }
 
 
@@ -279,8 +279,6 @@ export {
       V3dmaskSvdParameters,
       V_3DMASK_SVD_METADATA,
       v_3dmask_svd,
-      v_3dmask_svd_cargs,
       v_3dmask_svd_execute,
-      v_3dmask_svd_outputs,
       v_3dmask_svd_params,
 };

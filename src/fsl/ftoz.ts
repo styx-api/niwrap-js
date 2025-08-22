@@ -162,14 +162,16 @@ function ftoz_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FtozOutputs`).
  */
 function ftoz_execute(
     params: FtozParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FtozOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FTOZ_METADATA);
     params = execution.params(params)
     const cargs = ftoz_cargs(params, execution)
     const ret = ftoz_outputs(params, execution)
@@ -202,10 +204,8 @@ function ftoz(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FtozOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FTOZ_METADATA);
     const params = ftoz_params(input_file, dof1, dof2, output_file, help_flag)
-    return ftoz_execute(params, execution);
+    return ftoz_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       FtozOutputs,
       FtozParameters,
       ftoz,
-      ftoz_cargs,
       ftoz_execute,
-      ftoz_outputs,
       ftoz_params,
 };

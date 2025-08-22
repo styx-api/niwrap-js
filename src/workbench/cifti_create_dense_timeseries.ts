@@ -468,14 +468,16 @@ function cifti_create_dense_timeseries_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCreateDenseTimeseriesOutputs`).
  */
 function cifti_create_dense_timeseries_execute(
     params: CiftiCreateDenseTimeseriesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiCreateDenseTimeseriesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_CREATE_DENSE_TIMESERIES_METADATA);
     params = execution.params(params)
     const cargs = cifti_create_dense_timeseries_cargs(params, execution)
     const ret = cifti_create_dense_timeseries_outputs(params, execution)
@@ -559,10 +561,8 @@ function cifti_create_dense_timeseries(
     opt_unit_unit: string | null = null,
     runner: Runner | null = null,
 ): CiftiCreateDenseTimeseriesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_CREATE_DENSE_TIMESERIES_METADATA);
     const params = cifti_create_dense_timeseries_params(cifti_out, volume, left_metric, right_metric, cerebellum_metric, opt_timestep_interval, opt_timestart_start, opt_unit_unit)
-    return cifti_create_dense_timeseries_execute(params, execution);
+    return cifti_create_dense_timeseries_execute(params, runner);
 }
 
 
@@ -575,16 +575,10 @@ export {
       CiftiCreateDenseTimeseriesRightMetricParameters,
       CiftiCreateDenseTimeseriesVolumeParameters,
       cifti_create_dense_timeseries,
-      cifti_create_dense_timeseries_cargs,
-      cifti_create_dense_timeseries_cerebellum_metric_cargs,
       cifti_create_dense_timeseries_cerebellum_metric_params,
       cifti_create_dense_timeseries_execute,
-      cifti_create_dense_timeseries_left_metric_cargs,
       cifti_create_dense_timeseries_left_metric_params,
-      cifti_create_dense_timeseries_outputs,
       cifti_create_dense_timeseries_params,
-      cifti_create_dense_timeseries_right_metric_cargs,
       cifti_create_dense_timeseries_right_metric_params,
-      cifti_create_dense_timeseries_volume_cargs,
       cifti_create_dense_timeseries_volume_params,
 };

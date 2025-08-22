@@ -155,14 +155,16 @@ function mri_linear_align_binary_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriLinearAlignBinaryOutputs`).
  */
 function mri_linear_align_binary_execute(
     params: MriLinearAlignBinaryParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriLinearAlignBinaryOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_LINEAR_ALIGN_BINARY_METADATA);
     params = execution.params(params)
     const cargs = mri_linear_align_binary_cargs(params, execution)
     const ret = mri_linear_align_binary_outputs(params, execution)
@@ -193,10 +195,8 @@ function mri_linear_align_binary(
     target_label: string | null = null,
     runner: Runner | null = null,
 ): MriLinearAlignBinaryOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_LINEAR_ALIGN_BINARY_METADATA);
     const params = mri_linear_align_binary_params(source, target, output_xform, target_label)
-    return mri_linear_align_binary_execute(params, execution);
+    return mri_linear_align_binary_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       MriLinearAlignBinaryOutputs,
       MriLinearAlignBinaryParameters,
       mri_linear_align_binary,
-      mri_linear_align_binary_cargs,
       mri_linear_align_binary_execute,
-      mri_linear_align_binary_outputs,
       mri_linear_align_binary_params,
 };

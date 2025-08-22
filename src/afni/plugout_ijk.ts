@@ -229,14 +229,16 @@ function plugout_ijk_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PlugoutIjkOutputs`).
  */
 function plugout_ijk_execute(
     params: PlugoutIjkParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PlugoutIjkOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PLUGOUT_IJK_METADATA);
     params = execution.params(params)
     const cargs = plugout_ijk_cargs(params, execution)
     const ret = plugout_ijk_outputs(params, execution)
@@ -281,10 +283,8 @@ function plugout_ijk(
     num_assigned_ports_quiet: boolean = false,
     runner: Runner | null = null,
 ): PlugoutIjkOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PLUGOUT_IJK_METADATA);
     const params = plugout_ijk_params(host, verbose, port, name, port_offset, port_quiet, port_bloc_offset, max_bloc, max_bloc_quiet, num_assigned_ports, num_assigned_ports_quiet)
-    return plugout_ijk_execute(params, execution);
+    return plugout_ijk_execute(params, runner);
 }
 
 
@@ -293,8 +293,6 @@ export {
       PlugoutIjkOutputs,
       PlugoutIjkParameters,
       plugout_ijk,
-      plugout_ijk_cargs,
       plugout_ijk_execute,
-      plugout_ijk_outputs,
       plugout_ijk_params,
 };

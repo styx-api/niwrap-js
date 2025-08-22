@@ -169,14 +169,16 @@ function fsl_ents_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslEntsOutputs`).
  */
 function fsl_ents_execute(
     params: FslEntsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslEntsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_ENTS_METADATA);
     params = execution.params(params)
     const cargs = fsl_ents_cargs(params, execution)
     const ret = fsl_ents_outputs(params, execution)
@@ -209,10 +211,8 @@ function fsl_ents(
     conffile: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): FslEntsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_ENTS_METADATA);
     const params = fsl_ents_params(icadir, components, outfile, overwrite, conffile)
-    return fsl_ents_execute(params, execution);
+    return fsl_ents_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       FslEntsOutputs,
       FslEntsParameters,
       fsl_ents,
-      fsl_ents_cargs,
       fsl_ents_execute,
-      fsl_ents_outputs,
       fsl_ents_params,
 };

@@ -276,14 +276,16 @@ function v_3dpc_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dpcOutputs`).
  */
 function v_3dpc_execute(
     params: V3dpcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dpcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DPC_METADATA);
     params = execution.params(params)
     const cargs = v_3dpc_cargs(params, execution)
     const ret = v_3dpc_outputs(params, execution)
@@ -336,10 +338,8 @@ function v_3dpc(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dpcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DPC_METADATA);
     const params = v_3dpc_params(datasets, dmean, vmean, vnorm, normalize, nscale, pcsave, reduce, prefix, dummy_lines, verbose, quiet, eigonly, float, mask)
-    return v_3dpc_execute(params, execution);
+    return v_3dpc_execute(params, runner);
 }
 
 
@@ -348,8 +348,6 @@ export {
       V3dpcParameters,
       V_3DPC_METADATA,
       v_3dpc,
-      v_3dpc_cargs,
       v_3dpc_execute,
-      v_3dpc_outputs,
       v_3dpc_params,
 };

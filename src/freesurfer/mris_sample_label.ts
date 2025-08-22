@@ -143,14 +143,16 @@ function mris_sample_label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisSampleLabelOutputs`).
  */
 function mris_sample_label_execute(
     params: MrisSampleLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisSampleLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_SAMPLE_LABEL_METADATA);
     params = execution.params(params)
     const cargs = mris_sample_label_cargs(params, execution)
     const ret = mris_sample_label_outputs(params, execution)
@@ -179,10 +181,8 @@ function mris_sample_label(
     output_label_file: string,
     runner: Runner | null = null,
 ): MrisSampleLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_SAMPLE_LABEL_METADATA);
     const params = mris_sample_label_params(input_label_file, input_surface_file, output_label_file)
-    return mris_sample_label_execute(params, execution);
+    return mris_sample_label_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MrisSampleLabelOutputs,
       MrisSampleLabelParameters,
       mris_sample_label,
-      mris_sample_label_cargs,
       mris_sample_label_execute,
-      mris_sample_label_outputs,
       mris_sample_label_params,
 };

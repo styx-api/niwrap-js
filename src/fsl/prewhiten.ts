@@ -145,14 +145,16 @@ function prewhiten_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PrewhitenOutputs`).
  */
 function prewhiten_execute(
     params: PrewhitenParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PrewhitenOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PREWHITEN_METADATA);
     params = execution.params(params)
     const cargs = prewhiten_cargs(params, execution)
     const ret = prewhiten_outputs(params, execution)
@@ -179,10 +181,8 @@ function prewhiten(
     output_directory: string | null = null,
     runner: Runner | null = null,
 ): PrewhitenOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PREWHITEN_METADATA);
     const params = prewhiten_params(feat_directory, output_directory)
-    return prewhiten_execute(params, execution);
+    return prewhiten_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       PrewhitenOutputs,
       PrewhitenParameters,
       prewhiten,
-      prewhiten_cargs,
       prewhiten_execute,
-      prewhiten_outputs,
       prewhiten_params,
 };

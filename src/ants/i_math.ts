@@ -157,14 +157,16 @@ function i_math_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `IMathOutputs`).
  */
 function i_math_execute(
     params: IMathParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): IMathOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(I_MATH_METADATA);
     params = execution.params(params)
     const cargs = i_math_cargs(params, execution)
     const ret = i_math_outputs(params, execution)
@@ -197,10 +199,8 @@ function i_math(
     image2: InputPathType | null = null,
     runner: Runner | null = null,
 ): IMathOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(I_MATH_METADATA);
     const params = i_math_params(image_dimension, output_image, operations, image1, image2)
-    return i_math_execute(params, execution);
+    return i_math_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       IMathParameters,
       I_MATH_METADATA,
       i_math,
-      i_math_cargs,
       i_math_execute,
-      i_math_outputs,
       i_math_params,
 };

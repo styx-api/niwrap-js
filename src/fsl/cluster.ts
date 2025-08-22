@@ -419,14 +419,16 @@ function cluster_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ClusterOutputs`).
  */
 function cluster_execute(
     params: ClusterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ClusterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CLUSTER_METADATA);
     params = execution.params(params)
     const cargs = cluster_cargs(params, execution)
     const ret = cluster_outputs(params, execution)
@@ -517,10 +519,8 @@ function cluster(
     xfm_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): ClusterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CLUSTER_METADATA);
     const params = cluster_params(in_file, out_index_file, out_localmax_txt_file, out_localmax_vol_file, out_max_file, out_mean_file, out_pval_file, out_size_file, out_threshold_file, threshold, connectivity, cope_file, dlh, find_min, fractional, minclustersize, no_table, num_maxima, out_index_file_2, out_localmax_txt_file_2, out_localmax_vol_file_2, out_max_file_2, out_mean_file_2, out_pval_file_2, out_size_file_2, out_threshold_file_2, output_type, peak_distance, pthreshold, std_space_file, use_mm, volume, warpfield_file, xfm_file)
-    return cluster_execute(params, execution);
+    return cluster_execute(params, runner);
 }
 
 
@@ -529,8 +529,6 @@ export {
       ClusterOutputs,
       ClusterParameters,
       cluster,
-      cluster_cargs,
       cluster_execute,
-      cluster_outputs,
       cluster_params,
 };

@@ -148,14 +148,16 @@ function mris_compute_layer_intensities_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisComputeLayerIntensitiesOutputs`).
  */
 function mris_compute_layer_intensities_execute(
     params: MrisComputeLayerIntensitiesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisComputeLayerIntensitiesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_COMPUTE_LAYER_INTENSITIES_METADATA);
     params = execution.params(params)
     const cargs = mris_compute_layer_intensities_cargs(params, execution)
     const ret = mris_compute_layer_intensities_outputs(params, execution)
@@ -186,10 +188,8 @@ function mris_compute_layer_intensities(
     output_overlay: string,
     runner: Runner | null = null,
 ): MrisComputeLayerIntensitiesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_COMPUTE_LAYER_INTENSITIES_METADATA);
     const params = mris_compute_layer_intensities_params(input_intensity_volume, layer_volume_fractions_file, input_surface, output_overlay)
-    return mris_compute_layer_intensities_execute(params, execution);
+    return mris_compute_layer_intensities_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MrisComputeLayerIntensitiesOutputs,
       MrisComputeLayerIntensitiesParameters,
       mris_compute_layer_intensities,
-      mris_compute_layer_intensities_cargs,
       mris_compute_layer_intensities_execute,
-      mris_compute_layer_intensities_outputs,
       mris_compute_layer_intensities_params,
 };

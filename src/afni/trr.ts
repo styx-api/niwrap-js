@@ -333,14 +333,16 @@ function trr_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TrrOutputs`).
  */
 function trr_execute(
     params: TrrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TrrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TRR_METADATA);
     params = execution.params(params)
     const cargs = trr_cargs(params, execution)
     const ret = trr_outputs(params, execution)
@@ -399,10 +401,8 @@ function trr(
     verbose: number | null = null,
     runner: Runner | null = null,
 ): TrrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TRR_METADATA);
     const params = trr_params(prefix, response_var, subject_var, data_table, chains, iterations, repetition_var, condition_var, categorical_vars, quantitative_vars, response_dist, model, plot_size, standard_error, t_stat, within_chain_parallelization, debug, verbose)
-    return trr_execute(params, execution);
+    return trr_execute(params, runner);
 }
 
 
@@ -411,8 +411,6 @@ export {
       TrrOutputs,
       TrrParameters,
       trr,
-      trr_cargs,
       trr_execute,
-      trr_outputs,
       trr_params,
 };

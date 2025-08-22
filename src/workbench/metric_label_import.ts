@@ -192,14 +192,16 @@ function metric_label_import_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricLabelImportOutputs`).
  */
 function metric_label_import_execute(
     params: MetricLabelImportParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricLabelImportOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_LABEL_IMPORT_METADATA);
     params = execution.params(params)
     const cargs = metric_label_import_cargs(params, execution)
     const ret = metric_label_import_outputs(params, execution)
@@ -246,10 +248,8 @@ function metric_label_import(
     opt_drop_unused_labels: boolean = false,
     runner: Runner | null = null,
 ): MetricLabelImportOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_LABEL_IMPORT_METADATA);
     const params = metric_label_import_params(input, label_list_file, output, opt_discard_others, opt_unlabeled_value_value, opt_column_column, opt_drop_unused_labels)
-    return metric_label_import_execute(params, execution);
+    return metric_label_import_execute(params, runner);
 }
 
 
@@ -258,8 +258,6 @@ export {
       MetricLabelImportOutputs,
       MetricLabelImportParameters,
       metric_label_import,
-      metric_label_import_cargs,
       metric_label_import_execute,
-      metric_label_import_outputs,
       metric_label_import_params,
 };

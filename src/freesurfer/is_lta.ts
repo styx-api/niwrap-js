@@ -144,14 +144,16 @@ function is_lta_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `IsLtaOutputs`).
  */
 function is_lta_execute(
     params: IsLtaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): IsLtaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IS_LTA_METADATA);
     params = execution.params(params)
     const cargs = is_lta_cargs(params, execution)
     const ret = is_lta_outputs(params, execution)
@@ -178,10 +180,8 @@ function is_lta(
     outfile: string,
     runner: Runner | null = null,
 ): IsLtaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IS_LTA_METADATA);
     const params = is_lta_params(candidate_file, outfile)
-    return is_lta_execute(params, execution);
+    return is_lta_execute(params, runner);
 }
 
 
@@ -190,8 +190,6 @@ export {
       IsLtaOutputs,
       IsLtaParameters,
       is_lta,
-      is_lta_cargs,
       is_lta_execute,
-      is_lta_outputs,
       is_lta_params,
 };

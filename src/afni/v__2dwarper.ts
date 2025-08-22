@@ -133,14 +133,16 @@ function v__2dwarper_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V2dwarperOutputs`).
  */
 function v__2dwarper_execute(
     params: V2dwarperParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V2dwarperOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__2DWARPER_METADATA);
     params = execution.params(params)
     const cargs = v__2dwarper_cargs(params, execution)
     const ret = v__2dwarper_outputs(params, execution)
@@ -165,10 +167,8 @@ function v__2dwarper(
     input_dataset: InputPathType,
     runner: Runner | null = null,
 ): V2dwarperOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__2DWARPER_METADATA);
     const params = v__2dwarper_params(input_dataset)
-    return v__2dwarper_execute(params, execution);
+    return v__2dwarper_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       V2dwarperParameters,
       V__2DWARPER_METADATA,
       v__2dwarper,
-      v__2dwarper_cargs,
       v__2dwarper_execute,
-      v__2dwarper_outputs,
       v__2dwarper_params,
 };

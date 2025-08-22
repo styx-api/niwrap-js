@@ -143,14 +143,16 @@ function mri_dist_surf_label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriDistSurfLabelOutputs`).
  */
 function mri_dist_surf_label_execute(
     params: MriDistSurfLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriDistSurfLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_DIST_SURF_LABEL_METADATA);
     params = execution.params(params)
     const cargs = mri_dist_surf_label_cargs(params, execution)
     const ret = mri_dist_surf_label_outputs(params, execution)
@@ -179,10 +181,8 @@ function mri_dist_surf_label(
     output: string,
     runner: Runner | null = null,
 ): MriDistSurfLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_DIST_SURF_LABEL_METADATA);
     const params = mri_dist_surf_label_params(surface, label_file, output)
-    return mri_dist_surf_label_execute(params, execution);
+    return mri_dist_surf_label_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MriDistSurfLabelOutputs,
       MriDistSurfLabelParameters,
       mri_dist_surf_label,
-      mri_dist_surf_label_cargs,
       mri_dist_surf_label_execute,
-      mri_dist_surf_label_outputs,
       mri_dist_surf_label_params,
 };

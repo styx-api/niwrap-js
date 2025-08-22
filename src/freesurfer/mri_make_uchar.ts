@@ -203,14 +203,16 @@ function mri_make_uchar_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMakeUcharOutputs`).
  */
 function mri_make_uchar_execute(
     params: MriMakeUcharParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMakeUcharOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MAKE_UCHAR_METADATA);
     params = execution.params(params)
     const cargs = mri_make_uchar_cargs(params, execution)
     const ret = mri_make_uchar_outputs(params, execution)
@@ -249,10 +251,8 @@ function mri_make_uchar(
     vradvol: string | null = null,
     runner: Runner | null = null,
 ): MriMakeUcharOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MAKE_UCHAR_METADATA);
     const params = mri_make_uchar_params(input_volume, talairach_xform, output_volume, first_percentile, wm_percentile, max_radius, cumulative_histo, vradvol)
-    return mri_make_uchar_execute(params, execution);
+    return mri_make_uchar_execute(params, runner);
 }
 
 
@@ -261,8 +261,6 @@ export {
       MriMakeUcharOutputs,
       MriMakeUcharParameters,
       mri_make_uchar,
-      mri_make_uchar_cargs,
       mri_make_uchar_execute,
-      mri_make_uchar_outputs,
       mri_make_uchar_params,
 };

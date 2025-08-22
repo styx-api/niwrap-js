@@ -146,14 +146,16 @@ function surface_wedge_volume_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceWedgeVolumeOutputs`).
  */
 function surface_wedge_volume_execute(
     params: SurfaceWedgeVolumeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceWedgeVolumeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_WEDGE_VOLUME_METADATA);
     params = execution.params(params)
     const cargs = surface_wedge_volume_cargs(params, execution)
     const ret = surface_wedge_volume_outputs(params, execution)
@@ -184,10 +186,8 @@ function surface_wedge_volume(
     metric: string,
     runner: Runner | null = null,
 ): SurfaceWedgeVolumeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_WEDGE_VOLUME_METADATA);
     const params = surface_wedge_volume_params(inner_surface, outer_surface, metric)
-    return surface_wedge_volume_execute(params, execution);
+    return surface_wedge_volume_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       SurfaceWedgeVolumeOutputs,
       SurfaceWedgeVolumeParameters,
       surface_wedge_volume,
-      surface_wedge_volume_cargs,
       surface_wedge_volume_execute,
-      surface_wedge_volume_outputs,
       surface_wedge_volume_params,
 };

@@ -198,14 +198,16 @@ function border_file_export_to_caret5_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BorderFileExportToCaret5Outputs`).
  */
 function border_file_export_to_caret5_execute(
     params: BorderFileExportToCaret5Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BorderFileExportToCaret5Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BORDER_FILE_EXPORT_TO_CARET5_METADATA);
     params = execution.params(params)
     const cargs = border_file_export_to_caret5_cargs(params, execution)
     const ret = border_file_export_to_caret5_outputs(params, execution)
@@ -246,10 +248,8 @@ function border_file_export_to_caret5(
     surface: Array<BorderFileExportToCaret5SurfaceParameters> | null = null,
     runner: Runner | null = null,
 ): BorderFileExportToCaret5Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BORDER_FILE_EXPORT_TO_CARET5_METADATA);
     const params = border_file_export_to_caret5_params(border_file, output_file_prefix, surface)
-    return border_file_export_to_caret5_execute(params, execution);
+    return border_file_export_to_caret5_execute(params, runner);
 }
 
 
@@ -259,10 +259,7 @@ export {
       BorderFileExportToCaret5Parameters,
       BorderFileExportToCaret5SurfaceParameters,
       border_file_export_to_caret5,
-      border_file_export_to_caret5_cargs,
       border_file_export_to_caret5_execute,
-      border_file_export_to_caret5_outputs,
       border_file_export_to_caret5_params,
-      border_file_export_to_caret5_surface_cargs,
       border_file_export_to_caret5_surface_params,
 };

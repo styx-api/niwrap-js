@@ -370,14 +370,16 @@ function fast_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FastOutputs`).
  */
 function fast_execute(
     params: FastParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FastOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAST_METADATA);
     params = execution.params(params)
     const cargs = fast_cargs(params, execution)
     const ret = fast_outputs(params, execution)
@@ -444,10 +446,8 @@ function fast(
     iters_afterbias: number | null = null,
     runner: Runner | null = null,
 ): FastOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAST_METADATA);
     const params = fast_params(in_files, number_classes, bias_iters, bias_lowpass, img_type, init_seg_smooth, segments, init_transform, other_priors, output_biasfield, output_biascorrected, no_bias, channels, out_basename, use_priors, no_pve, segment_iters, mixel_smooth, hyper, verbose, manual_seg, iters_afterbias)
-    return fast_execute(params, execution);
+    return fast_execute(params, runner);
 }
 
 
@@ -456,8 +456,6 @@ export {
       FastOutputs,
       FastParameters,
       fast,
-      fast_cargs,
       fast_execute,
-      fast_outputs,
       fast_params,
 };

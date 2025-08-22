@@ -220,14 +220,16 @@ function fsr_import_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsrImportOutputs`).
  */
 function fsr_import_execute(
     params: FsrImportParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsrImportOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSR_IMPORT_METADATA);
     params = execution.params(params)
     const cargs = fsr_import_cargs(params, execution)
     const ret = fsr_import_outputs(params, execution)
@@ -266,10 +268,8 @@ function fsr_import(
     hires: boolean = false,
     runner: Runner | null = null,
 ): FsrImportOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSR_IMPORT_METADATA);
     const params = fsr_import_params(outdir, t1w_input, t2w_input, flair_input, custom_mode_input, force_update, no_conform, hires)
-    return fsr_import_execute(params, execution);
+    return fsr_import_execute(params, runner);
 }
 
 
@@ -278,8 +278,6 @@ export {
       FsrImportOutputs,
       FsrImportParameters,
       fsr_import,
-      fsr_import_cargs,
       fsr_import_execute,
-      fsr_import_outputs,
       fsr_import_params,
 };

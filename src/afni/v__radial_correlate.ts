@@ -341,14 +341,16 @@ function v__radial_correlate_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VRadialCorrelateOutputs`).
  */
 function v__radial_correlate_execute(
     params: VRadialCorrelateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VRadialCorrelateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__RADIAL_CORRELATE_METADATA);
     params = execution.params(params)
     const cargs = v__radial_correlate_cargs(params, execution)
     const ret = v__radial_correlate_outputs(params, execution)
@@ -411,10 +413,8 @@ function v__radial_correlate(
     merge_frad: number | null = null,
     runner: Runner | null = null,
 ): VRadialCorrelateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__RADIAL_CORRELATE_METADATA);
     const params = v__radial_correlate_params(input_files, results_dir, do_corr, do_clust, mask_dset, cthresh, frac_limit, sphere_rad, use_3dmerge, percentile, min_thr, nfirst, ver, verbose, help, hist, corr_mask, do_clean, polort, merge_frad)
-    return v__radial_correlate_execute(params, execution);
+    return v__radial_correlate_execute(params, runner);
 }
 
 
@@ -423,8 +423,6 @@ export {
       VRadialCorrelateParameters,
       V__RADIAL_CORRELATE_METADATA,
       v__radial_correlate,
-      v__radial_correlate_cargs,
       v__radial_correlate_execute,
-      v__radial_correlate_outputs,
       v__radial_correlate_params,
 };

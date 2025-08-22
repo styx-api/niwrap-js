@@ -210,14 +210,16 @@ function anatomical_average_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AnatomicalAverageOutputs`).
  */
 function anatomical_average_execute(
     params: AnatomicalAverageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AnatomicalAverageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANATOMICAL_AVERAGE_METADATA);
     params = execution.params(params)
     const cargs = anatomical_average_cargs(params, execution)
     const ret = anatomical_average_outputs(params, execution)
@@ -258,10 +260,8 @@ function anatomical_average(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): AnatomicalAverageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANATOMICAL_AVERAGE_METADATA);
     const params = anatomical_average_params(output_basename, input_images, standard_image, standard_brain_mask, no_crop_flag, work_dir, brainsize, noclean_flag, verbose_flag)
-    return anatomical_average_execute(params, execution);
+    return anatomical_average_execute(params, runner);
 }
 
 
@@ -270,8 +270,6 @@ export {
       AnatomicalAverageOutputs,
       AnatomicalAverageParameters,
       anatomical_average,
-      anatomical_average_cargs,
       anatomical_average_execute,
-      anatomical_average_outputs,
       anatomical_average_params,
 };

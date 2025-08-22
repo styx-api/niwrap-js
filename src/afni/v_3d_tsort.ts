@@ -213,14 +213,16 @@ function v_3d_tsort_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTsortOutputs`).
  */
 function v_3d_tsort_execute(
     params: V3dTsortParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTsortOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TSORT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tsort_cargs(params, execution)
     const ret = v_3d_tsort_outputs(params, execution)
@@ -265,10 +267,8 @@ function v_3d_tsort(
     datum: string | null = null,
     runner: Runner | null = null,
 ): V3dTsortOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TSORT_METADATA);
     const params = v_3d_tsort_params(input_file, prefix, inc, dec, rank, ind, val, random, ranfft, randft, datum)
-    return v_3d_tsort_execute(params, execution);
+    return v_3d_tsort_execute(params, runner);
 }
 
 
@@ -277,8 +277,6 @@ export {
       V3dTsortParameters,
       V_3D_TSORT_METADATA,
       v_3d_tsort,
-      v_3d_tsort_cargs,
       v_3d_tsort_execute,
-      v_3d_tsort_outputs,
       v_3d_tsort_params,
 };

@@ -366,14 +366,16 @@ function mris_sample_parc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisSampleParcOutputs`).
  */
 function mris_sample_parc_execute(
     params: MrisSampleParcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisSampleParcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_SAMPLE_PARC_METADATA);
     params = execution.params(params)
     const cargs = mris_sample_parc_cargs(params, execution)
     const ret = mris_sample_parc_outputs(params, execution)
@@ -442,10 +444,8 @@ function mris_sample_parc(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrisSampleParcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_SAMPLE_PARC_METADATA);
     const params = mris_sample_parc_params(subject_name, hemisphere, parc_name, output_annot, sdir, surf, fix, replace, trans, cortex, projmm, proj, projfrac, file, ct, v_level, filter, smooth, w_size, thickness, change_unknown, help, version)
-    return mris_sample_parc_execute(params, execution);
+    return mris_sample_parc_execute(params, runner);
 }
 
 
@@ -454,8 +454,6 @@ export {
       MrisSampleParcOutputs,
       MrisSampleParcParameters,
       mris_sample_parc,
-      mris_sample_parc_cargs,
       mris_sample_parc_execute,
-      mris_sample_parc_outputs,
       mris_sample_parc_params,
 };

@@ -300,14 +300,16 @@ function gtmseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GtmsegOutputs`).
  */
 function gtmseg_execute(
     params: GtmsegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GtmsegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GTMSEG_METADATA);
     params = execution.params(params)
     const cargs = gtmseg_cargs(params, execution)
     const ret = gtmseg_outputs(params, execution)
@@ -366,10 +368,8 @@ function gtmseg(
     debug: boolean = false,
     runner: Runner | null = null,
 ): GtmsegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GTMSEG_METADATA);
     const params = gtmseg_params(subject, outvol, usf, subsegwm, keep_hypo, keep_cc, dmax, ctx_annot, wm_annot, output_usf, head, subseg_cbwm, no_pons, no_vermis, ctab, no_seg_stats, xcerseg, debug)
-    return gtmseg_execute(params, execution);
+    return gtmseg_execute(params, runner);
 }
 
 
@@ -378,8 +378,6 @@ export {
       GtmsegOutputs,
       GtmsegParameters,
       gtmseg,
-      gtmseg_cargs,
       gtmseg_execute,
-      gtmseg_outputs,
       gtmseg_params,
 };

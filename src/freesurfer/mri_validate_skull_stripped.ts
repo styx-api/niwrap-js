@@ -137,14 +137,16 @@ function mri_validate_skull_stripped_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriValidateSkullStrippedOutputs`).
  */
 function mri_validate_skull_stripped_execute(
     params: MriValidateSkullStrippedParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriValidateSkullStrippedOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_VALIDATE_SKULL_STRIPPED_METADATA);
     params = execution.params(params)
     const cargs = mri_validate_skull_stripped_cargs(params, execution)
     const ret = mri_validate_skull_stripped_outputs(params, execution)
@@ -173,10 +175,8 @@ function mri_validate_skull_stripped(
     weight: number,
     runner: Runner | null = null,
 ): MriValidateSkullStrippedOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_VALIDATE_SKULL_STRIPPED_METADATA);
     const params = mri_validate_skull_stripped_params(mri_reference, mri_test, weight)
-    return mri_validate_skull_stripped_execute(params, execution);
+    return mri_validate_skull_stripped_execute(params, runner);
 }
 
 
@@ -185,8 +185,6 @@ export {
       MriValidateSkullStrippedOutputs,
       MriValidateSkullStrippedParameters,
       mri_validate_skull_stripped,
-      mri_validate_skull_stripped_cargs,
       mri_validate_skull_stripped_execute,
-      mri_validate_skull_stripped_outputs,
       mri_validate_skull_stripped_params,
 };

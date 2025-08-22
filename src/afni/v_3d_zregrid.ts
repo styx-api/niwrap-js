@@ -193,14 +193,16 @@ function v_3d_zregrid_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dZregridOutputs`).
  */
 function v_3d_zregrid_execute(
     params: V3dZregridParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dZregridOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ZREGRID_METADATA);
     params = execution.params(params)
     const cargs = v_3d_zregrid_cargs(params, execution)
     const ret = v_3d_zregrid_outputs(params, execution)
@@ -235,10 +237,8 @@ function v_3d_zregrid(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dZregridOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ZREGRID_METADATA);
     const params = v_3d_zregrid_params(infile, z_thickness, slice_count, z_size, prefix, verbose)
-    return v_3d_zregrid_execute(params, execution);
+    return v_3d_zregrid_execute(params, runner);
 }
 
 
@@ -247,8 +247,6 @@ export {
       V3dZregridParameters,
       V_3D_ZREGRID_METADATA,
       v_3d_zregrid,
-      v_3d_zregrid_cargs,
       v_3d_zregrid_execute,
-      v_3d_zregrid_outputs,
       v_3d_zregrid_params,
 };

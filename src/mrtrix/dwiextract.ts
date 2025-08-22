@@ -663,14 +663,16 @@ function dwiextract_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DwiextractOutputs`).
  */
 function dwiextract_execute(
     params: DwiextractParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DwiextractOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DWIEXTRACT_METADATA);
     params = execution.params(params)
     const cargs = dwiextract_cargs(params, execution)
     const ret = dwiextract_outputs(params, execution)
@@ -744,10 +746,8 @@ function dwiextract(
     version: boolean = false,
     runner: Runner | null = null,
 ): DwiextractOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DWIEXTRACT_METADATA);
     const params = dwiextract_params(input, output, bzero, no_bzero, singleshell, grad, fslgrad, shells, export_grad_mrtrix, export_grad_fsl, import_pe_table, import_pe_eddy, pe, strides, info, quiet, debug, force, nthreads, config, help, version)
-    return dwiextract_execute(params, execution);
+    return dwiextract_execute(params, runner);
 }
 
 
@@ -763,21 +763,12 @@ export {
       DwiextractVariousFileParameters,
       DwiextractVariousStringParameters,
       dwiextract,
-      dwiextract_cargs,
-      dwiextract_config_cargs,
       dwiextract_config_params,
       dwiextract_execute,
-      dwiextract_export_grad_fsl_cargs,
-      dwiextract_export_grad_fsl_outputs,
       dwiextract_export_grad_fsl_params,
-      dwiextract_fslgrad_cargs,
       dwiextract_fslgrad_params,
-      dwiextract_import_pe_eddy_cargs,
       dwiextract_import_pe_eddy_params,
-      dwiextract_outputs,
       dwiextract_params,
-      dwiextract_various_file_cargs,
       dwiextract_various_file_params,
-      dwiextract_various_string_cargs,
       dwiextract_various_string_params,
 };

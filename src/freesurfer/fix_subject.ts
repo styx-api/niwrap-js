@@ -131,14 +131,16 @@ function fix_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FixSubjectOutputs`).
  */
 function fix_subject_execute(
     params: FixSubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FixSubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIX_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = fix_subject_cargs(params, execution)
     const ret = fix_subject_outputs(params, execution)
@@ -163,10 +165,8 @@ function fix_subject(
     arguments_: string | null = null,
     runner: Runner | null = null,
 ): FixSubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIX_SUBJECT_METADATA);
     const params = fix_subject_params(arguments_)
-    return fix_subject_execute(params, execution);
+    return fix_subject_execute(params, runner);
 }
 
 
@@ -175,8 +175,6 @@ export {
       FixSubjectOutputs,
       FixSubjectParameters,
       fix_subject,
-      fix_subject_cargs,
       fix_subject_execute,
-      fix_subject_outputs,
       fix_subject_params,
 };

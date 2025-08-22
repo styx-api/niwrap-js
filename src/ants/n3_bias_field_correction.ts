@@ -257,14 +257,16 @@ function n3_bias_field_correction_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `N3BiasFieldCorrectionOutputs`).
  */
 function n3_bias_field_correction_execute(
     params: N3BiasFieldCorrectionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): N3BiasFieldCorrectionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(N3_BIAS_FIELD_CORRECTION_METADATA);
     params = execution.params(params)
     const cargs = n3_bias_field_correction_cargs(params, execution)
     const ret = n3_bias_field_correction_outputs(params, execution)
@@ -309,10 +311,8 @@ function n3_bias_field_correction(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): N3BiasFieldCorrectionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(N3_BIAS_FIELD_CORRECTION_METADATA);
     const params = n3_bias_field_correction_params(input_image, output, image_dimensionality, mask_image, rescale_intensities, weight_image, shrink_factor, convergence, bspline_fitting, histogram_sharpening, verbose)
-    return n3_bias_field_correction_execute(params, execution);
+    return n3_bias_field_correction_execute(params, runner);
 }
 
 
@@ -321,8 +321,6 @@ export {
       N3BiasFieldCorrectionParameters,
       N3_BIAS_FIELD_CORRECTION_METADATA,
       n3_bias_field_correction,
-      n3_bias_field_correction_cargs,
       n3_bias_field_correction_execute,
-      n3_bias_field_correction_outputs,
       n3_bias_field_correction_params,
 };

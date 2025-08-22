@@ -172,14 +172,16 @@ function p2dsetstat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `P2dsetstatOutputs`).
  */
 function p2dsetstat_execute(
     params: P2dsetstatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): P2dsetstatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(P2DSETSTAT_METADATA);
     params = execution.params(params)
     const cargs = p2dsetstat_cargs(params, execution)
     const ret = p2dsetstat_outputs(params, execution)
@@ -214,10 +216,8 @@ function p2dsetstat(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): P2dsetstatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(P2DSETSTAT_METADATA);
     const params = p2dsetstat_params(dataset, pvalue, bisided, twosided, onesided, quiet)
-    return p2dsetstat_execute(params, execution);
+    return p2dsetstat_execute(params, runner);
 }
 
 
@@ -226,8 +226,6 @@ export {
       P2dsetstatOutputs,
       P2dsetstatParameters,
       p2dsetstat,
-      p2dsetstat_cargs,
       p2dsetstat_execute,
-      p2dsetstat_outputs,
       p2dsetstat_params,
 };

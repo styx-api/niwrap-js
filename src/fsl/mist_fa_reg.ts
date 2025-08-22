@@ -148,14 +148,16 @@ function mist_fa_reg_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MistFaRegOutputs`).
  */
 function mist_fa_reg_execute(
     params: MistFaRegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MistFaRegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MIST_FA_REG_METADATA);
     params = execution.params(params)
     const cargs = mist_fa_reg_cargs(params, execution)
     const ret = mist_fa_reg_outputs(params, execution)
@@ -186,10 +188,8 @@ function mist_fa_reg(
     output_filename: string,
     runner: Runner | null = null,
 ): MistFaRegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MIST_FA_REG_METADATA);
     const params = mist_fa_reg_params(fa_volume, s0_volume, reference_t1_volume, output_filename)
-    return mist_fa_reg_execute(params, execution);
+    return mist_fa_reg_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MistFaRegOutputs,
       MistFaRegParameters,
       mist_fa_reg,
-      mist_fa_reg_cargs,
       mist_fa_reg_execute,
-      mist_fa_reg_outputs,
       mist_fa_reg_params,
 };

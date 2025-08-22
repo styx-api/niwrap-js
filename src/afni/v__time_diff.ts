@@ -132,14 +132,16 @@ function v__time_diff_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VTimeDiffOutputs`).
  */
 function v__time_diff_execute(
     params: VTimeDiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VTimeDiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__TIME_DIFF_METADATA);
     params = execution.params(params)
     const cargs = v__time_diff_cargs(params, execution)
     const ret = v__time_diff_outputs(params, execution)
@@ -166,10 +168,8 @@ function v__time_diff(
     file2: InputPathType,
     runner: Runner | null = null,
 ): VTimeDiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__TIME_DIFF_METADATA);
     const params = v__time_diff_params(file1, file2)
-    return v__time_diff_execute(params, execution);
+    return v__time_diff_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       VTimeDiffParameters,
       V__TIME_DIFF_METADATA,
       v__time_diff,
-      v__time_diff_cargs,
       v__time_diff_execute,
-      v__time_diff_outputs,
       v__time_diff_params,
 };

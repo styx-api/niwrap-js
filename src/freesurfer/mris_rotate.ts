@@ -172,14 +172,16 @@ function mris_rotate_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRotateOutputs`).
  */
 function mris_rotate_execute(
     params: MrisRotateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRotateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_ROTATE_METADATA);
     params = execution.params(params)
     const cargs = mris_rotate_cargs(params, execution)
     const ret = mris_rotate_outputs(params, execution)
@@ -216,10 +218,8 @@ function mris_rotate(
     invalidate_geometry: boolean = false,
     runner: Runner | null = null,
 ): MrisRotateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_ROTATE_METADATA);
     const params = mris_rotate_params(input_surface, alpha_deg, beta_deg, gamma_deg, output_surface, regfile, invalidate_geometry)
-    return mris_rotate_execute(params, execution);
+    return mris_rotate_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       MrisRotateOutputs,
       MrisRotateParameters,
       mris_rotate,
-      mris_rotate_cargs,
       mris_rotate_execute,
-      mris_rotate_outputs,
       mris_rotate_params,
 };

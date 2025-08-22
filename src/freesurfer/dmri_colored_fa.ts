@@ -138,14 +138,16 @@ function dmri_colored_fa_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriColoredFaOutputs`).
  */
 function dmri_colored_fa_execute(
     params: DmriColoredFaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriColoredFaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_COLORED_FA_METADATA);
     params = execution.params(params)
     const cargs = dmri_colored_fa_cargs(params, execution)
     const ret = dmri_colored_fa_outputs(params, execution)
@@ -172,10 +174,8 @@ function dmri_colored_fa(
     output_volume: string = "colored_FA",
     runner: Runner | null = null,
 ): DmriColoredFaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_COLORED_FA_METADATA);
     const params = dmri_colored_fa_params(input_volume, output_volume)
-    return dmri_colored_fa_execute(params, execution);
+    return dmri_colored_fa_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       DmriColoredFaOutputs,
       DmriColoredFaParameters,
       dmri_colored_fa,
-      dmri_colored_fa_cargs,
       dmri_colored_fa_execute,
-      dmri_colored_fa_outputs,
       dmri_colored_fa_params,
 };

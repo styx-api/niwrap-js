@@ -366,14 +366,16 @@ function bet_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BetOutputs`).
  */
 function bet_execute(
     params: BetParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BetOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BET_METADATA);
     params = execution.params(params)
     const cargs = bet_cargs(params, execution)
     const ret = bet_outputs(params, execution)
@@ -438,10 +440,8 @@ function bet(
     debug: boolean = false,
     runner: Runner | null = null,
 ): BetOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BET_METADATA);
     const params = bet_params(infile, maskfile, fractional_intensity, vg_fractional_intensity, center_of_gravity, overlay, binary_mask, approx_skull, no_seg_output, vtk_mesh, head_radius, thresholding, robust_iters, residual_optic_cleanup, reduce_bias, slice_padding, whole_set_mask, additional_surfaces, additional_surfaces_t2, verbose, debug)
-    return bet_execute(params, execution);
+    return bet_execute(params, runner);
 }
 
 
@@ -450,8 +450,6 @@ export {
       BetOutputs,
       BetParameters,
       bet,
-      bet_cargs,
       bet_execute,
-      bet_outputs,
       bet_params,
 };

@@ -143,14 +143,16 @@ function segment_subfields_t1_longitudinal_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegmentSubfieldsT1LongitudinalOutputs`).
  */
 function segment_subfields_t1_longitudinal_execute(
     params: SegmentSubfieldsT1LongitudinalParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegmentSubfieldsT1LongitudinalOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGMENT_SUBFIELDS_T1_LONGITUDINAL_METADATA);
     params = execution.params(params)
     const cargs = segment_subfields_t1_longitudinal_cargs(params, execution)
     const ret = segment_subfields_t1_longitudinal_outputs(params, execution)
@@ -179,10 +181,8 @@ function segment_subfields_t1_longitudinal(
     output_dir: string,
     runner: Runner | null = null,
 ): SegmentSubfieldsT1LongitudinalOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGMENT_SUBFIELDS_T1_LONGITUDINAL_METADATA);
     const params = segment_subfields_t1_longitudinal_params(subject_id, input_image, output_dir)
-    return segment_subfields_t1_longitudinal_execute(params, execution);
+    return segment_subfields_t1_longitudinal_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       SegmentSubfieldsT1LongitudinalOutputs,
       SegmentSubfieldsT1LongitudinalParameters,
       segment_subfields_t1_longitudinal,
-      segment_subfields_t1_longitudinal_cargs,
       segment_subfields_t1_longitudinal_execute,
-      segment_subfields_t1_longitudinal_outputs,
       segment_subfields_t1_longitudinal_params,
 };

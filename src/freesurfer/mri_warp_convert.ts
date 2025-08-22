@@ -291,14 +291,16 @@ function mri_warp_convert_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriWarpConvertOutputs`).
  */
 function mri_warp_convert_execute(
     params: MriWarpConvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriWarpConvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_WARP_CONVERT_METADATA);
     params = execution.params(params)
     const cargs = mri_warp_convert_cargs(params, execution)
     const ret = mri_warp_convert_outputs(params, execution)
@@ -349,10 +351,8 @@ function mri_warp_convert(
     downsample: boolean = false,
     runner: Runner | null = null,
 ): MriWarpConvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_WARP_CONVERT_METADATA);
     const params = mri_warp_convert_params(inm3z, infsl, inlps, initk, inras, invox, outm3z, outfsl, outlps, outitk, outras, outvox, insrcgeom, downsample)
-    return mri_warp_convert_execute(params, execution);
+    return mri_warp_convert_execute(params, runner);
 }
 
 
@@ -361,8 +361,6 @@ export {
       MriWarpConvertOutputs,
       MriWarpConvertParameters,
       mri_warp_convert,
-      mri_warp_convert_cargs,
       mri_warp_convert_execute,
-      mri_warp_convert_outputs,
       mri_warp_convert_params,
 };

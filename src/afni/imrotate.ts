@@ -167,14 +167,16 @@ function imrotate_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImrotateOutputs`).
  */
 function imrotate_execute(
     params: ImrotateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImrotateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMROTATE_METADATA);
     params = execution.params(params)
     const cargs = imrotate_cargs(params, execution)
     const ret = imrotate_outputs(params, execution)
@@ -211,10 +213,8 @@ function imrotate(
     fourier_interpolation: boolean = false,
     runner: Runner | null = null,
 ): ImrotateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMROTATE_METADATA);
     const params = imrotate_params(dx, dy, phi, input_image, output_image, linear_interpolation, fourier_interpolation)
-    return imrotate_execute(params, execution);
+    return imrotate_execute(params, runner);
 }
 
 
@@ -223,8 +223,6 @@ export {
       ImrotateOutputs,
       ImrotateParameters,
       imrotate,
-      imrotate_cargs,
       imrotate_execute,
-      imrotate_outputs,
       imrotate_params,
 };

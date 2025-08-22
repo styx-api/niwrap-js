@@ -197,14 +197,16 @@ function tbss_non_fa_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TbssNonFaOutputs`).
  */
 function tbss_non_fa_execute(
     params: TbssNonFaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TbssNonFaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TBSS_NON_FA_METADATA);
     params = execution.params(params)
     const cargs = tbss_non_fa_cargs(params, execution)
     const ret = tbss_non_fa_outputs(params, execution)
@@ -245,10 +247,8 @@ function tbss_non_fa(
     volume_number: number | null = null,
     runner: Runner | null = null,
 ): TbssNonFaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TBSS_NON_FA_METADATA);
     const params = tbss_non_fa_params(output_file, input_files, concat_auto, concat_x, concat_y, concat_z, concat_t, concat_tr, volume_number)
-    return tbss_non_fa_execute(params, execution);
+    return tbss_non_fa_execute(params, runner);
 }
 
 
@@ -257,8 +257,6 @@ export {
       TbssNonFaOutputs,
       TbssNonFaParameters,
       tbss_non_fa,
-      tbss_non_fa_cargs,
       tbss_non_fa_execute,
-      tbss_non_fa_outputs,
       tbss_non_fa_params,
 };

@@ -317,14 +317,16 @@ function dt_recon_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DtReconOutputs`).
  */
 function dt_recon_execute(
     params: DtReconParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DtReconOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DT_RECON_METADATA);
     params = execution.params(params)
     const cargs = dt_recon_cargs(params, execution)
     const ret = dt_recon_outputs(params, execution)
@@ -383,10 +385,8 @@ function dt_recon(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): DtReconOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DT_RECON_METADATA);
     const params = dt_recon_params(input_volume, subject_id, output_dir, bvals_bvecs, info_dump, ec_reference, no_ec_flag, no_reg_flag, register_file, no_tal_flag, subjects_dir, save_ec_residuals_flag, pca_analysis_flag, mask_prune_threshold, init_spm_flag, init_fsl_flag, debug_flag, version_flag)
-    return dt_recon_execute(params, execution);
+    return dt_recon_execute(params, runner);
 }
 
 
@@ -395,8 +395,6 @@ export {
       DtReconOutputs,
       DtReconParameters,
       dt_recon,
-      dt_recon_cargs,
       dt_recon_execute,
-      dt_recon_outputs,
       dt_recon_params,
 };

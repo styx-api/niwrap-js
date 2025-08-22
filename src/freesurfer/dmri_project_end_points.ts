@@ -181,14 +181,16 @@ function dmri_project_end_points_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriProjectEndPointsOutputs`).
  */
 function dmri_project_end_points_execute(
     params: DmriProjectEndPointsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriProjectEndPointsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_PROJECT_END_POINTS_METADATA);
     params = execution.params(params)
     const cargs = dmri_project_end_points_cargs(params, execution)
     const ret = dmri_project_end_points_outputs(params, execution)
@@ -223,10 +225,8 @@ function dmri_project_end_points(
     reference_image: InputPathType,
     runner: Runner | null = null,
 ): DmriProjectEndPointsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_PROJECT_END_POINTS_METADATA);
     const params = dmri_project_end_points_params(streamline_file, left_surface_file, right_surface_file, left_overlay_file, right_overlay_file, reference_image)
-    return dmri_project_end_points_execute(params, execution);
+    return dmri_project_end_points_execute(params, runner);
 }
 
 
@@ -235,8 +235,6 @@ export {
       DmriProjectEndPointsOutputs,
       DmriProjectEndPointsParameters,
       dmri_project_end_points,
-      dmri_project_end_points_cargs,
       dmri_project_end_points_execute,
-      dmri_project_end_points_outputs,
       dmri_project_end_points_params,
 };

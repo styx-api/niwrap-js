@@ -229,14 +229,16 @@ function volume_reduce_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeReduceOutputs`).
  */
 function volume_reduce_execute(
     params: VolumeReduceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeReduceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_REDUCE_METADATA);
     params = execution.params(params)
     const cargs = volume_reduce_cargs(params, execution)
     const ret = volume_reduce_outputs(params, execution)
@@ -289,10 +291,8 @@ function volume_reduce(
     opt_only_numeric: boolean = false,
     runner: Runner | null = null,
 ): VolumeReduceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_REDUCE_METADATA);
     const params = volume_reduce_params(volume_in, operation, volume_out, exclude_outliers, opt_only_numeric)
-    return volume_reduce_execute(params, execution);
+    return volume_reduce_execute(params, runner);
 }
 
 
@@ -302,10 +302,7 @@ export {
       VolumeReduceOutputs,
       VolumeReduceParameters,
       volume_reduce,
-      volume_reduce_cargs,
-      volume_reduce_exclude_outliers_cargs,
       volume_reduce_exclude_outliers_params,
       volume_reduce_execute,
-      volume_reduce_outputs,
       volume_reduce_params,
 };

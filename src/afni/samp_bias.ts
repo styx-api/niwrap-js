@@ -205,14 +205,16 @@ function samp_bias_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SampBiasOutputs`).
  */
 function samp_bias_execute(
     params: SampBiasParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SampBiasOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SAMP_BIAS_METADATA);
     params = execution.params(params)
     const cargs = samp_bias_cargs(params, execution)
     const ret = samp_bias_outputs(params, execution)
@@ -249,10 +251,8 @@ function samp_bias(
     segdo: string | null = null,
     runner: Runner | null = null,
 ): SampBiasOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SAMP_BIAS_METADATA);
     const params = samp_bias_params(specfile, surfname, outfile, plimit, dlimit, prefix, segdo)
-    return samp_bias_execute(params, execution);
+    return samp_bias_execute(params, runner);
 }
 
 
@@ -261,8 +261,6 @@ export {
       SampBiasOutputs,
       SampBiasParameters,
       samp_bias,
-      samp_bias_cargs,
       samp_bias_execute,
-      samp_bias_outputs,
       samp_bias_params,
 };

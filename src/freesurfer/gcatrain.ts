@@ -285,14 +285,16 @@ function gcatrain_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GcatrainOutputs`).
  */
 function gcatrain_execute(
     params: GcatrainParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GcatrainOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GCATRAIN_METADATA);
     params = execution.params(params)
     const cargs = gcatrain_cargs(params, execution)
     const ret = gcatrain_outputs(params, execution)
@@ -353,10 +355,8 @@ function gcatrain(
     no_emreg: boolean = false,
     runner: Runner | null = null,
 ): GcatrainOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GCATRAIN_METADATA);
     const params = gcatrain_params(gcadir, subjectlistfile, init_subject_transform, seg_file, source_subjects_dir, num_iters, num_threads, exclude_file, exclude_subject, symmetric_atlas, color_table, no_submit, mail_flag, no_strict, gcareg_iters, prep_only, nu10_flag, nu12_flag, no_emreg)
-    return gcatrain_execute(params, execution);
+    return gcatrain_execute(params, runner);
 }
 
 
@@ -365,8 +365,6 @@ export {
       GcatrainOutputs,
       GcatrainParameters,
       gcatrain,
-      gcatrain_cargs,
       gcatrain_execute,
-      gcatrain_outputs,
       gcatrain_params,
 };

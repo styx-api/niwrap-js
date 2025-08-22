@@ -289,14 +289,16 @@ function tcalc_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TcalcOutputs`).
  */
 function tcalc_execute(
     params: TcalcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TcalcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCALC_METADATA);
     params = execution.params(params)
     const cargs = tcalc_cargs(params, execution)
     const ret = tcalc_outputs(params, execution)
@@ -349,10 +351,8 @@ function tcalc(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): TcalcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCALC_METADATA);
     const params = tcalc_params(input_image, output_image, echo_time, repetition_time, mrpar_file, num_voxel_x, num_voxel_y, num_voxel_z, voxel_size_x, voxel_size_y, voxel_size_z, start_position, noise_sigma, save_flag, verbose_flag)
-    return tcalc_execute(params, execution);
+    return tcalc_execute(params, runner);
 }
 
 
@@ -361,8 +361,6 @@ export {
       TcalcOutputs,
       TcalcParameters,
       tcalc,
-      tcalc_cargs,
       tcalc_execute,
-      tcalc_outputs,
       tcalc_params,
 };

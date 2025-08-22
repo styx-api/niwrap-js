@@ -132,14 +132,16 @@ function afni_run_r_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AfniRunROutputs`).
  */
 function afni_run_r_execute(
     params: AfniRunRParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AfniRunROutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AFNI_RUN_R_METADATA);
     params = execution.params(params)
     const cargs = afni_run_r_cargs(params, execution)
     const ret = afni_run_r_outputs(params, execution)
@@ -166,10 +168,8 @@ function afni_run_r(
     r_args: Array<string>,
     runner: Runner | null = null,
 ): AfniRunROutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AFNI_RUN_R_METADATA);
     const params = afni_run_r_params(r_script, r_args)
-    return afni_run_r_execute(params, execution);
+    return afni_run_r_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       AfniRunROutputs,
       AfniRunRParameters,
       afni_run_r,
-      afni_run_r_cargs,
       afni_run_r_execute,
-      afni_run_r_outputs,
       afni_run_r_params,
 };

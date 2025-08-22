@@ -209,14 +209,16 @@ function label2patch_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Label2patchOutputs`).
  */
 function label2patch_execute(
     params: Label2patchParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Label2patchOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL2PATCH_METADATA);
     params = execution.params(params)
     const cargs = label2patch_cargs(params, execution)
     const ret = label2patch_outputs(params, execution)
@@ -259,10 +261,8 @@ function label2patch(
     write_surface: boolean = false,
     runner: Runner | null = null,
 ): Label2patchOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL2PATCH_METADATA);
     const params = label2patch_params(subject_name, hemisphere, label_file, output_patch, dilate, erode, close, subjects_dir, surface_name, write_surface)
-    return label2patch_execute(params, execution);
+    return label2patch_execute(params, runner);
 }
 
 
@@ -271,8 +271,6 @@ export {
       Label2patchOutputs,
       Label2patchParameters,
       label2patch,
-      label2patch_cargs,
       label2patch_execute,
-      label2patch_outputs,
       label2patch_params,
 };

@@ -426,14 +426,16 @@ function cifti_parcellate_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiParcellateOutputs`).
  */
 function cifti_parcellate_execute(
     params: CiftiParcellateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiParcellateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_PARCELLATE_METADATA);
     params = execution.params(params)
     const cargs = cifti_parcellate_cargs(params, execution)
     const ret = cifti_parcellate_outputs(params, execution)
@@ -507,10 +509,8 @@ function cifti_parcellate(
     opt_include_empty: boolean = false,
     runner: Runner | null = null,
 ): CiftiParcellateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_PARCELLATE_METADATA);
     const params = cifti_parcellate_params(cifti_in, cifti_label, direction, cifti_out, spatial_weights, opt_cifti_weights_weight_cifti, opt_method_method, exclude_outliers, opt_only_numeric, opt_fill_value_value, opt_nonempty_mask_out_mask_out, opt_legacy_mode, opt_include_empty)
-    return cifti_parcellate_execute(params, execution);
+    return cifti_parcellate_execute(params, runner);
 }
 
 
@@ -521,12 +521,8 @@ export {
       CiftiParcellateParameters,
       CiftiParcellateSpatialWeightsParameters,
       cifti_parcellate,
-      cifti_parcellate_cargs,
-      cifti_parcellate_exclude_outliers_cargs,
       cifti_parcellate_exclude_outliers_params,
       cifti_parcellate_execute,
-      cifti_parcellate_outputs,
       cifti_parcellate_params,
-      cifti_parcellate_spatial_weights_cargs,
       cifti_parcellate_spatial_weights_params,
 };

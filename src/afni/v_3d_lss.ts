@@ -210,14 +210,16 @@ function v_3d_lss_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dLssOutputs`).
  */
 function v_3d_lss_execute(
     params: V3dLssParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dLssOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_LSS_METADATA);
     params = execution.params(params)
     const cargs = v_3d_lss_cargs(params, execution)
     const ret = v_3d_lss_outputs(params, execution)
@@ -256,10 +258,8 @@ function v_3d_lss(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dLssOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_LSS_METADATA);
     const params = v_3d_lss_params(matrix, input, nodata, mask, automask, prefix, save1_d, verbose)
-    return v_3d_lss_execute(params, execution);
+    return v_3d_lss_execute(params, runner);
 }
 
 
@@ -268,8 +268,6 @@ export {
       V3dLssParameters,
       V_3D_LSS_METADATA,
       v_3d_lss,
-      v_3d_lss_cargs,
       v_3d_lss_execute,
-      v_3d_lss_outputs,
       v_3d_lss_params,
 };

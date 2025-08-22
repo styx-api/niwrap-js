@@ -162,14 +162,16 @@ function imstack_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImstackOutputs`).
  */
 function imstack_execute(
     params: ImstackParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImstackOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMSTACK_METADATA);
     params = execution.params(params)
     const cargs = imstack_cargs(params, execution)
     const ret = imstack_outputs(params, execution)
@@ -198,10 +200,8 @@ function imstack(
     output_prefix: string | null = null,
     runner: Runner | null = null,
 ): ImstackOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMSTACK_METADATA);
     const params = imstack_params(image_files, data_type, output_prefix)
-    return imstack_execute(params, execution);
+    return imstack_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       ImstackOutputs,
       ImstackParameters,
       imstack,
-      imstack_cargs,
       imstack_execute,
-      imstack_outputs,
       imstack_params,
 };

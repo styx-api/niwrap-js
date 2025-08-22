@@ -172,14 +172,16 @@ function v_1d_nlfit_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dNlfitOutputs`).
  */
 function v_1d_nlfit_execute(
     params: V1dNlfitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dNlfitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_NLFIT_METADATA);
     params = execution.params(params)
     const cargs = v_1d_nlfit_cargs(params, execution)
     const ret = v_1d_nlfit_outputs(params, execution)
@@ -212,10 +214,8 @@ function v_1d_nlfit(
     method: number | null = null,
     runner: Runner | null = null,
 ): V1dNlfitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_NLFIT_METADATA);
     const params = v_1d_nlfit_params(expression, independent_variable, parameters, dependent_data, method)
-    return v_1d_nlfit_execute(params, execution);
+    return v_1d_nlfit_execute(params, runner);
 }
 
 
@@ -224,8 +224,6 @@ export {
       V1dNlfitParameters,
       V_1D_NLFIT_METADATA,
       v_1d_nlfit,
-      v_1d_nlfit_cargs,
       v_1d_nlfit_execute,
-      v_1d_nlfit_outputs,
       v_1d_nlfit_params,
 };

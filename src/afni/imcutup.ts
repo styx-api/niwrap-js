@@ -183,14 +183,16 @@ function imcutup_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImcutupOutputs`).
  */
 function imcutup_execute(
     params: ImcutupParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImcutupOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMCUTUP_METADATA);
     params = execution.params(params)
     const cargs = imcutup_cargs(params, execution)
     const ret = imcutup_outputs(params, execution)
@@ -229,10 +231,8 @@ function imcutup(
     yxnum_format: boolean = false,
     runner: Runner | null = null,
 ): ImcutupOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMCUTUP_METADATA);
     const params = imcutup_params(nx, ny, input_file, prefix, xynum, yxnum, xynum_format, yxnum_format)
-    return imcutup_execute(params, execution);
+    return imcutup_execute(params, runner);
 }
 
 
@@ -241,8 +241,6 @@ export {
       ImcutupOutputs,
       ImcutupParameters,
       imcutup,
-      imcutup_cargs,
       imcutup_execute,
-      imcutup_outputs,
       imcutup_params,
 };

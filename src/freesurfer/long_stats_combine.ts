@@ -204,14 +204,16 @@ function long_stats_combine_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LongStatsCombineOutputs`).
  */
 function long_stats_combine_execute(
     params: LongStatsCombineParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LongStatsCombineOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LONG_STATS_COMBINE_METADATA);
     params = execution.params(params)
     const cargs = long_stats_combine_cargs(params, execution)
     const ret = long_stats_combine_outputs(params, execution)
@@ -250,10 +252,8 @@ function long_stats_combine(
     cross_sectional: boolean = false,
     runner: Runner | null = null,
 ): LongStatsCombineOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LONG_STATS_COMBINE_METADATA);
     const params = long_stats_combine_params(qdec, stats, measure, subject_dir, output_qdec, output_stats, input_stats, cross_sectional)
-    return long_stats_combine_execute(params, execution);
+    return long_stats_combine_execute(params, runner);
 }
 
 
@@ -262,8 +262,6 @@ export {
       LongStatsCombineOutputs,
       LongStatsCombineParameters,
       long_stats_combine,
-      long_stats_combine_cargs,
       long_stats_combine_execute,
-      long_stats_combine_outputs,
       long_stats_combine_params,
 };

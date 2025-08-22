@@ -130,14 +130,16 @@ function mris2rgb_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Mris2rgbOutputs`).
  */
 function mris2rgb_execute(
     params: Mris2rgbParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Mris2rgbOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS2RGB_METADATA);
     params = execution.params(params)
     const cargs = mris2rgb_cargs(params, execution)
     const ret = mris2rgb_outputs(params, execution)
@@ -162,10 +164,8 @@ function mris2rgb(
     library_path: string,
     runner: Runner | null = null,
 ): Mris2rgbOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS2RGB_METADATA);
     const params = mris2rgb_params(library_path)
-    return mris2rgb_execute(params, execution);
+    return mris2rgb_execute(params, runner);
 }
 
 
@@ -174,8 +174,6 @@ export {
       Mris2rgbOutputs,
       Mris2rgbParameters,
       mris2rgb,
-      mris2rgb_cargs,
       mris2rgb_execute,
-      mris2rgb_outputs,
       mris2rgb_params,
 };

@@ -481,14 +481,16 @@ function popp_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PoppOutputs`).
  */
 function popp_execute(
     params: PoppParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PoppOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(POPP_METADATA);
     params = execution.params(params)
     const cargs = popp_cargs(params, execution)
     const ret = popp_outputs(params, execution)
@@ -577,10 +579,8 @@ function popp(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): PoppOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(POPP_METADATA);
     const params = popp_params(input_file, output_basename, sampling_rate, tr_value, resp_column, cardiac_column, trigger_column, rvt_flag, heart_rate_flag, pulseox_trigger_flag, smooth_card, smooth_resp, high_freq_cutoff, low_freq_cutoff, init_thresh_c, n_thresh_c, init_thresh_r, n_thresh_r, invert_resp_flag, invert_cardiac_flag, noclean1_flag, noclean2_flag, load_card_phase, load_resp_phase, vol_file, start_sample, resp_add, resp_del, card_add, card_del, verbose_flag, debug_flag, help_flag)
-    return popp_execute(params, execution);
+    return popp_execute(params, runner);
 }
 
 
@@ -589,8 +589,6 @@ export {
       PoppOutputs,
       PoppParameters,
       popp,
-      popp_cargs,
       popp_execute,
-      popp_outputs,
       popp_params,
 };

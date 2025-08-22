@@ -476,14 +476,16 @@ function swe_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SweOutputs`).
  */
 function swe_execute(
     params: SweParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SweOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SWE_METADATA);
     params = execution.params(params)
     const cargs = swe_cargs(params, execution)
     const ret = swe_outputs(params, execution)
@@ -574,10 +576,8 @@ function swe(
     glm_output: boolean = false,
     runner: Runner | null = null,
 ): SweOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SWE_METADATA);
     const params = swe_params(input_file, output_root, design_mat, design_con, design_sub, mask, fcon, modified, wild_bootstrap, logp, nboot, corrp, fonly, tfce, tfce_2d, cluster_t, cluster_t_mass, cluster_f, cluster_f_mass, quiet, raw, equiv, dof, uncorr_p, null_dist, no_rc_mask, seed, tfce_h, tfce_d, tfce_e, tfce_c, voxelwise_ev, voxelwise_evs, glm_output)
-    return swe_execute(params, execution);
+    return swe_execute(params, runner);
 }
 
 
@@ -586,8 +586,6 @@ export {
       SweOutputs,
       SweParameters,
       swe,
-      swe_cargs,
       swe_execute,
-      swe_outputs,
       swe_params,
 };

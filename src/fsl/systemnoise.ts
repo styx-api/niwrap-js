@@ -178,14 +178,16 @@ function systemnoise_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SystemnoiseOutputs`).
  */
 function systemnoise_execute(
     params: SystemnoiseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SystemnoiseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SYSTEMNOISE_METADATA);
     params = execution.params(params)
     const cargs = systemnoise_cargs(params, execution)
     const ret = systemnoise_outputs(params, execution)
@@ -220,10 +222,8 @@ function systemnoise(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): SystemnoiseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SYSTEMNOISE_METADATA);
     const params = systemnoise_params(input_signal, output_signal, noise_standard_deviation, seed, verbose_flag, help_flag)
-    return systemnoise_execute(params, execution);
+    return systemnoise_execute(params, runner);
 }
 
 
@@ -232,8 +232,6 @@ export {
       SystemnoiseOutputs,
       SystemnoiseParameters,
       systemnoise,
-      systemnoise_cargs,
       systemnoise_execute,
-      systemnoise_outputs,
       systemnoise_params,
 };

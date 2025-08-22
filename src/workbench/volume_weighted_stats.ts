@@ -352,14 +352,16 @@ function volume_weighted_stats_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeWeightedStatsOutputs`).
  */
 function volume_weighted_stats_execute(
     params: VolumeWeightedStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeWeightedStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_WEIGHTED_STATS_METADATA);
     params = execution.params(params)
     const cargs = volume_weighted_stats_cargs(params, execution)
     const ret = volume_weighted_stats_outputs(params, execution)
@@ -404,10 +406,8 @@ function volume_weighted_stats(
     opt_show_map_name: boolean = false,
     runner: Runner | null = null,
 ): VolumeWeightedStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_WEIGHTED_STATS_METADATA);
     const params = volume_weighted_stats_params(volume_in, weight_volume, opt_subvolume_subvolume, roi, opt_mean, stdev, opt_percentile_percent, opt_sum, opt_show_map_name)
-    return volume_weighted_stats_execute(params, execution);
+    return volume_weighted_stats_execute(params, runner);
 }
 
 
@@ -419,14 +419,9 @@ export {
       VolumeWeightedStatsStdevParameters,
       VolumeWeightedStatsWeightVolumeParameters,
       volume_weighted_stats,
-      volume_weighted_stats_cargs,
       volume_weighted_stats_execute,
-      volume_weighted_stats_outputs,
       volume_weighted_stats_params,
-      volume_weighted_stats_roi_cargs,
       volume_weighted_stats_roi_params,
-      volume_weighted_stats_stdev_cargs,
       volume_weighted_stats_stdev_params,
-      volume_weighted_stats_weight_volume_cargs,
       volume_weighted_stats_weight_volume_params,
 };

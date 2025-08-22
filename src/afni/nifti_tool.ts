@@ -255,14 +255,16 @@ function nifti_tool_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `NiftiToolOutputs`).
  */
 function nifti_tool_execute(
     params: NiftiToolParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): NiftiToolOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(NIFTI_TOOL_METADATA);
     params = execution.params(params)
     const cargs = nifti_tool_cargs(params, execution)
     const ret = nifti_tool_outputs(params, execution)
@@ -309,10 +311,8 @@ function nifti_tool(
     rm_ext: string | null = null,
     runner: Runner | null = null,
 ): NiftiToolOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(NIFTI_TOOL_METADATA);
     const params = nifti_tool_params(action, input_files, field, mod_field, prefix, debug, overwrite, convert2dtype, convert_fail_choice, convert_verify, add_comment_ext, rm_ext)
-    return nifti_tool_execute(params, execution);
+    return nifti_tool_execute(params, runner);
 }
 
 
@@ -321,8 +321,6 @@ export {
       NiftiToolOutputs,
       NiftiToolParameters,
       nifti_tool,
-      nifti_tool_cargs,
       nifti_tool_execute,
-      nifti_tool_outputs,
       nifti_tool_params,
 };

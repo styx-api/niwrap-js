@@ -153,14 +153,16 @@ function rmz_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RmzOutputs`).
  */
 function rmz_execute(
     params: RmzParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RmzOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RMZ_METADATA);
     params = execution.params(params)
     const cargs = rmz_cargs(params, execution)
     const ret = rmz_outputs(params, execution)
@@ -191,10 +193,8 @@ function rmz(
     keep_flag: boolean = false,
     runner: Runner | null = null,
 ): RmzOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RMZ_METADATA);
     const params = rmz_params(filenames, quiet, hash_flag, keep_flag)
-    return rmz_execute(params, execution);
+    return rmz_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       RmzOutputs,
       RmzParameters,
       rmz,
-      rmz_cargs,
       rmz_execute,
-      rmz_outputs,
       rmz_params,
 };

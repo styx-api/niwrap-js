@@ -333,14 +333,16 @@ function cifti_average_dense_roi_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiAverageDenseRoiOutputs`).
  */
 function cifti_average_dense_roi_execute(
     params: CiftiAverageDenseRoiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiAverageDenseRoiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_AVERAGE_DENSE_ROI_METADATA);
     params = execution.params(params)
     const cargs = cifti_average_dense_roi_cargs(params, execution)
     const ret = cifti_average_dense_roi_outputs(params, execution)
@@ -385,10 +387,8 @@ function cifti_average_dense_roi(
     cifti: Array<CiftiAverageDenseRoiCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiAverageDenseRoiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_AVERAGE_DENSE_ROI_METADATA);
     const params = cifti_average_dense_roi_params(cifti_out, cifti_roi, opt_left_roi_roi_metric, opt_right_roi_roi_metric, opt_cerebellum_roi_roi_metric, opt_vol_roi_roi_vol, opt_left_area_surf_left_surf, opt_right_area_surf_right_surf, opt_cerebellum_area_surf_cerebellum_surf, cifti)
-    return cifti_average_dense_roi_execute(params, execution);
+    return cifti_average_dense_roi_execute(params, runner);
 }
 
 
@@ -399,12 +399,8 @@ export {
       CiftiAverageDenseRoiOutputs,
       CiftiAverageDenseRoiParameters,
       cifti_average_dense_roi,
-      cifti_average_dense_roi_cargs,
-      cifti_average_dense_roi_cifti_cargs,
       cifti_average_dense_roi_cifti_params,
-      cifti_average_dense_roi_cifti_roi_cargs,
       cifti_average_dense_roi_cifti_roi_params,
       cifti_average_dense_roi_execute,
-      cifti_average_dense_roi_outputs,
       cifti_average_dense_roi_params,
 };

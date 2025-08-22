@@ -186,14 +186,16 @@ function mris_expand_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisExpandOutputs`).
  */
 function mris_expand_execute(
     params: MrisExpandParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisExpandOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_EXPAND_METADATA);
     params = execution.params(params)
     const cargs = mris_expand_cargs(params, execution)
     const ret = mris_expand_outputs(params, execution)
@@ -230,10 +232,8 @@ function mris_expand(
     tmap_random: string | null = null,
     runner: Runner | null = null,
 ): MrisExpandOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_EXPAND_METADATA);
     const params = mris_expand_params(input_surface, expansion_distance, output_surface, thickness, label, tmap, tmap_random)
-    return mris_expand_execute(params, execution);
+    return mris_expand_execute(params, runner);
 }
 
 
@@ -242,8 +242,6 @@ export {
       MrisExpandOutputs,
       MrisExpandParameters,
       mris_expand,
-      mris_expand_cargs,
       mris_expand_execute,
-      mris_expand_outputs,
       mris_expand_params,
 };

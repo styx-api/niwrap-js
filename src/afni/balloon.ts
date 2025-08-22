@@ -164,14 +164,16 @@ function balloon_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BalloonOutputs`).
  */
 function balloon_execute(
     params: BalloonParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BalloonOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BALLOON_METADATA);
     params = execution.params(params)
     const cargs = balloon_cargs(params, execution)
     const ret = balloon_outputs(params, execution)
@@ -206,10 +208,8 @@ function balloon(
     t_sustain: Array<number> | null = null,
     runner: Runner | null = null,
 ): BalloonOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BALLOON_METADATA);
     const params = balloon_params(tr, num_scans, event_times, t_rise, t_fall, t_sustain)
-    return balloon_execute(params, execution);
+    return balloon_execute(params, runner);
 }
 
 
@@ -218,8 +218,6 @@ export {
       BalloonOutputs,
       BalloonParameters,
       balloon,
-      balloon_cargs,
       balloon_execute,
-      balloon_outputs,
       balloon_params,
 };

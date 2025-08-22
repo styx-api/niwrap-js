@@ -132,14 +132,16 @@ function mris_map_cuts_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisMapCutsOutputs`).
  */
 function mris_map_cuts_execute(
     params: MrisMapCutsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisMapCutsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_MAP_CUTS_METADATA);
     params = execution.params(params)
     const cargs = mris_map_cuts_cargs(params, execution)
     const ret = mris_map_cuts_outputs(params, execution)
@@ -166,10 +168,8 @@ function mris_map_cuts(
     output_patch: string,
     runner: Runner | null = null,
 ): MrisMapCutsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_MAP_CUTS_METADATA);
     const params = mris_map_cuts_params(input_patch, output_patch)
-    return mris_map_cuts_execute(params, execution);
+    return mris_map_cuts_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       MrisMapCutsOutputs,
       MrisMapCutsParameters,
       mris_map_cuts,
-      mris_map_cuts_cargs,
       mris_map_cuts_execute,
-      mris_map_cuts_outputs,
       mris_map_cuts_params,
 };

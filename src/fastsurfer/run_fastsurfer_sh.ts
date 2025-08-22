@@ -467,14 +467,16 @@ function run_fastsurfer_sh_outputs(
  * run_fastsurfer.sh takes a T1 full head image and creates segmentation using FastSurferVINN and surfaces using recon-surf.
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RunFastsurferShOutputs`).
  */
 function run_fastsurfer_sh_execute(
     params: RunFastsurferShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RunFastsurferShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RUN_FASTSURFER_SH_METADATA);
     params = execution.params(params)
     const cargs = run_fastsurfer_sh_cargs(params, execution)
     const ret = run_fastsurfer_sh_outputs(params, execution)
@@ -563,10 +565,8 @@ function run_fastsurfer_sh(
     version: string | null = null,
     runner: Runner | null = null,
 ): RunFastsurferShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RUN_FASTSURFER_SH_METADATA);
     const params = run_fastsurfer_sh_params(sid, subjects_dir, t1_input, fs_license, asegdkt_segfile, vox_size, seg_only, seg_log, conformed_name, norm_name, t2_input, reg_mode, threads, device, viewagg_device, batch_size, python_cmd, surf_only, no_biasfield, tal_reg, no_asegdkt, no_cereb, cereb_segfile, no_hypothal, qc_snap, three_t, parallel, ignore_fs_version, fstess, fsqsphere, fsaparc, no_fs_t1, no_surfreg, allow_root, version)
-    return run_fastsurfer_sh_execute(params, execution);
+    return run_fastsurfer_sh_execute(params, runner);
 }
 
 
@@ -575,8 +575,6 @@ export {
       RunFastsurferShOutputs,
       RunFastsurferShParameters,
       run_fastsurfer_sh,
-      run_fastsurfer_sh_cargs,
       run_fastsurfer_sh_execute,
-      run_fastsurfer_sh_outputs,
       run_fastsurfer_sh_params,
 };

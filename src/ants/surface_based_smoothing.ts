@@ -157,14 +157,16 @@ function surface_based_smoothing_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceBasedSmoothingOutputs`).
  */
 function surface_based_smoothing_execute(
     params: SurfaceBasedSmoothingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceBasedSmoothingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_BASED_SMOOTHING_METADATA);
     params = execution.params(params)
     const cargs = surface_based_smoothing_cargs(params, execution)
     const ret = surface_based_smoothing_outputs(params, execution)
@@ -197,10 +199,8 @@ function surface_based_smoothing(
     num_repeats: number | null = null,
     runner: Runner | null = null,
 ): SurfaceBasedSmoothingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_BASED_SMOOTHING_METADATA);
     const params = surface_based_smoothing_params(image_to_smooth, sigma, surface_image, outname, num_repeats)
-    return surface_based_smoothing_execute(params, execution);
+    return surface_based_smoothing_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       SurfaceBasedSmoothingOutputs,
       SurfaceBasedSmoothingParameters,
       surface_based_smoothing,
-      surface_based_smoothing_cargs,
       surface_based_smoothing_execute,
-      surface_based_smoothing_outputs,
       surface_based_smoothing_params,
 };

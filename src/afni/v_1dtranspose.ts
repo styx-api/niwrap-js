@@ -142,14 +142,16 @@ function v_1dtranspose_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dtransposeOutputs`).
  */
 function v_1dtranspose_execute(
     params: V1dtransposeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dtransposeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1DTRANSPOSE_METADATA);
     params = execution.params(params)
     const cargs = v_1dtranspose_cargs(params, execution)
     const ret = v_1dtranspose_outputs(params, execution)
@@ -176,10 +178,8 @@ function v_1dtranspose(
     outfile: string | null = null,
     runner: Runner | null = null,
 ): V1dtransposeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1DTRANSPOSE_METADATA);
     const params = v_1dtranspose_params(infile, outfile)
-    return v_1dtranspose_execute(params, execution);
+    return v_1dtranspose_execute(params, runner);
 }
 
 
@@ -188,8 +188,6 @@ export {
       V1dtransposeParameters,
       V_1DTRANSPOSE_METADATA,
       v_1dtranspose,
-      v_1dtranspose_cargs,
       v_1dtranspose_execute,
-      v_1dtranspose_outputs,
       v_1dtranspose_params,
 };

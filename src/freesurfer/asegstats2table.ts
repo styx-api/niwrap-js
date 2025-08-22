@@ -372,14 +372,16 @@ function asegstats2table_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Asegstats2tableOutputs`).
  */
 function asegstats2table_execute(
     params: Asegstats2tableParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Asegstats2tableOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ASEGSTATS2TABLE_METADATA);
     params = execution.params(params)
     const cargs = asegstats2table_cargs(params, execution)
     const ret = asegstats2table_outputs(params, execution)
@@ -450,10 +452,8 @@ function asegstats2table(
     replace53_flag: boolean = false,
     runner: Runner | null = null,
 ): Asegstats2tableOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ASEGSTATS2TABLE_METADATA);
     const params = asegstats2table_params(tablefile, subjects, inputs, subjectsfile, qdec, qdec_long, fsgd, maxsegno, segids_from_file, segno_include, segno_exclude, measure, delimiter, statsfile, subdir, scale, write_etiv, debug, transpose_flag, common_segs_flag, all_segs_flag, no_vol_extras_flag, skip_missing_flag, replace53_flag)
-    return asegstats2table_execute(params, execution);
+    return asegstats2table_execute(params, runner);
 }
 
 
@@ -462,8 +462,6 @@ export {
       Asegstats2tableOutputs,
       Asegstats2tableParameters,
       asegstats2table,
-      asegstats2table_cargs,
       asegstats2table_execute,
-      asegstats2table_outputs,
       asegstats2table_params,
 };

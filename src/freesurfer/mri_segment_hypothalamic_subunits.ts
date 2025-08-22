@@ -265,14 +265,16 @@ function mri_segment_hypothalamic_subunits_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSegmentHypothalamicSubunitsOutputs`).
  */
 function mri_segment_hypothalamic_subunits_execute(
     params: MriSegmentHypothalamicSubunitsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSegmentHypothalamicSubunitsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SEGMENT_HYPOTHALAMIC_SUBUNITS_METADATA);
     params = execution.params(params)
     const cargs = mri_segment_hypothalamic_subunits_cargs(params, execution)
     const ret = mri_segment_hypothalamic_subunits_outputs(params, execution)
@@ -317,10 +319,8 @@ function mri_segment_hypothalamic_subunits(
     cpu: boolean = false,
     runner: Runner | null = null,
 ): MriSegmentHypothalamicSubunitsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SEGMENT_HYPOTHALAMIC_SUBUNITS_METADATA);
     const params = mri_segment_hypothalamic_subunits_params(subjects, subjects_dir, write_posteriors, image_input, output, posteriors, resample, volume_output, crop_size, threads, cpu)
-    return mri_segment_hypothalamic_subunits_execute(params, execution);
+    return mri_segment_hypothalamic_subunits_execute(params, runner);
 }
 
 
@@ -329,8 +329,6 @@ export {
       MriSegmentHypothalamicSubunitsOutputs,
       MriSegmentHypothalamicSubunitsParameters,
       mri_segment_hypothalamic_subunits,
-      mri_segment_hypothalamic_subunits_cargs,
       mri_segment_hypothalamic_subunits_execute,
-      mri_segment_hypothalamic_subunits_outputs,
       mri_segment_hypothalamic_subunits_params,
 };

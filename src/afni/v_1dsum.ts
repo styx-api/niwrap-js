@@ -178,14 +178,16 @@ function v_1dsum_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dsumOutputs`).
  */
 function v_1dsum_execute(
     params: V1dsumParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dsumOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1DSUM_METADATA);
     params = execution.params(params)
     const cargs = v_1dsum_cargs(params, execution)
     const ret = v_1dsum_outputs(params, execution)
@@ -220,10 +222,8 @@ function v_1dsum(
     okempty_flag: boolean = false,
     runner: Runner | null = null,
 ): V1dsumOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1DSUM_METADATA);
     const params = v_1dsum_params(input_files, ignore_rows, use_rows, mean_flag, nocomment_flag, okempty_flag)
-    return v_1dsum_execute(params, execution);
+    return v_1dsum_execute(params, runner);
 }
 
 
@@ -232,8 +232,6 @@ export {
       V1dsumParameters,
       V_1DSUM_METADATA,
       v_1dsum,
-      v_1dsum_cargs,
       v_1dsum_execute,
-      v_1dsum_outputs,
       v_1dsum_params,
 };

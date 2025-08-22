@@ -151,14 +151,16 @@ function surface_smoothing_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceSmoothingOutputs`).
  */
 function surface_smoothing_execute(
     params: SurfaceSmoothingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceSmoothingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_SMOOTHING_METADATA);
     params = execution.params(params)
     const cargs = surface_smoothing_cargs(params, execution)
     const ret = surface_smoothing_outputs(params, execution)
@@ -191,10 +193,8 @@ function surface_smoothing(
     surface_out: string,
     runner: Runner | null = null,
 ): SurfaceSmoothingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_SMOOTHING_METADATA);
     const params = surface_smoothing_params(surface_in, smoothing_strength, smoothing_iterations, surface_out)
-    return surface_smoothing_execute(params, execution);
+    return surface_smoothing_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       SurfaceSmoothingOutputs,
       SurfaceSmoothingParameters,
       surface_smoothing,
-      surface_smoothing_cargs,
       surface_smoothing_execute,
-      surface_smoothing_outputs,
       surface_smoothing_params,
 };

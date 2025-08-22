@@ -131,14 +131,16 @@ function fiducials_calibration_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FiducialsCalibrationOutputs`).
  */
 function fiducials_calibration_execute(
     params: FiducialsCalibrationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FiducialsCalibrationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIDUCIALS_CALIBRATION_METADATA);
     params = execution.params(params)
     const cargs = fiducials_calibration_cargs(params, execution)
     const ret = fiducials_calibration_outputs(params, execution)
@@ -163,10 +165,8 @@ function fiducials_calibration(
     qt_plugin_installation: string | null = "Check Qt installation and platform plugin availability",
     runner: Runner | null = null,
 ): FiducialsCalibrationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIDUCIALS_CALIBRATION_METADATA);
     const params = fiducials_calibration_params(qt_plugin_installation)
-    return fiducials_calibration_execute(params, execution);
+    return fiducials_calibration_execute(params, runner);
 }
 
 
@@ -175,8 +175,6 @@ export {
       FiducialsCalibrationOutputs,
       FiducialsCalibrationParameters,
       fiducials_calibration,
-      fiducials_calibration_cargs,
       fiducials_calibration_execute,
-      fiducials_calibration_outputs,
       fiducials_calibration_params,
 };

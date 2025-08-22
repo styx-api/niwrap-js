@@ -275,14 +275,16 @@ function dirflip_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DirflipOutputs`).
  */
 function dirflip_execute(
     params: DirflipParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DirflipOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DIRFLIP_METADATA);
     params = execution.params(params)
     const cargs = dirflip_cargs(params, execution)
     const ret = dirflip_outputs(params, execution)
@@ -335,10 +337,8 @@ function dirflip(
     version: boolean = false,
     runner: Runner | null = null,
 ): DirflipOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DIRFLIP_METADATA);
     const params = dirflip_params(in_, out, permutations, cartesian, info, quiet, debug, force, nthreads, config, help, version)
-    return dirflip_execute(params, execution);
+    return dirflip_execute(params, runner);
 }
 
 
@@ -348,10 +348,7 @@ export {
       DirflipOutputs,
       DirflipParameters,
       dirflip,
-      dirflip_cargs,
-      dirflip_config_cargs,
       dirflip_config_params,
       dirflip_execute,
-      dirflip_outputs,
       dirflip_params,
 };

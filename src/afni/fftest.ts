@@ -144,14 +144,16 @@ function fftest_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FftestOutputs`).
  */
 function fftest_execute(
     params: FftestParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FftestOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FFTEST_METADATA);
     params = execution.params(params)
     const cargs = fftest_cargs(params, execution)
     const ret = fftest_outputs(params, execution)
@@ -182,10 +184,8 @@ function fftest(
     quiet_mode: boolean = false,
     runner: Runner | null = null,
 ): FftestOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FFTEST_METADATA);
     const params = fftest_params(length, num_tests, vector_size, quiet_mode)
-    return fftest_execute(params, execution);
+    return fftest_execute(params, runner);
 }
 
 
@@ -194,8 +194,6 @@ export {
       FftestOutputs,
       FftestParameters,
       fftest,
-      fftest_cargs,
       fftest_execute,
-      fftest_outputs,
       fftest_params,
 };

@@ -148,14 +148,16 @@ function hist2prob_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Hist2probOutputs`).
  */
 function hist2prob_execute(
     params: Hist2probParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Hist2probOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(HIST2PROB_METADATA);
     params = execution.params(params)
     const cargs = hist2prob_cargs(params, execution)
     const ret = hist2prob_outputs(params, execution)
@@ -186,10 +188,8 @@ function hist2prob(
     high_threshold: number,
     runner: Runner | null = null,
 ): Hist2probOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(HIST2PROB_METADATA);
     const params = hist2prob_params(image, size, low_threshold, high_threshold)
-    return hist2prob_execute(params, execution);
+    return hist2prob_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       Hist2probOutputs,
       Hist2probParameters,
       hist2prob,
-      hist2prob_cargs,
       hist2prob_execute,
-      hist2prob_outputs,
       hist2prob_params,
 };

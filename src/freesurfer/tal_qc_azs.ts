@@ -127,14 +127,16 @@ function tal_qc_azs_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TalQcAzsOutputs`).
  */
 function tal_qc_azs_execute(
     params: TalQcAzsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TalQcAzsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TAL_QC_AZS_METADATA);
     params = execution.params(params)
     const cargs = tal_qc_azs_cargs(params, execution)
     const ret = tal_qc_azs_outputs(params, execution)
@@ -159,10 +161,8 @@ function tal_qc_azs(
     logfile: InputPathType,
     runner: Runner | null = null,
 ): TalQcAzsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TAL_QC_AZS_METADATA);
     const params = tal_qc_azs_params(logfile)
-    return tal_qc_azs_execute(params, execution);
+    return tal_qc_azs_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       TalQcAzsOutputs,
       TalQcAzsParameters,
       tal_qc_azs,
-      tal_qc_azs_cargs,
       tal_qc_azs_execute,
-      tal_qc_azs_outputs,
       tal_qc_azs_params,
 };

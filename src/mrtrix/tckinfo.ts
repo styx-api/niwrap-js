@@ -252,14 +252,16 @@ function tckinfo_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TckinfoOutputs`).
  */
 function tckinfo_execute(
     params: TckinfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TckinfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCKINFO_METADATA);
     params = execution.params(params)
     const cargs = tckinfo_cargs(params, execution)
     const ret = tckinfo_outputs(params, execution)
@@ -308,10 +310,8 @@ function tckinfo(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckinfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCKINFO_METADATA);
     const params = tckinfo_params(tracks, count, info, quiet, debug, force, nthreads, config, help, version)
-    return tckinfo_execute(params, execution);
+    return tckinfo_execute(params, runner);
 }
 
 
@@ -321,10 +321,7 @@ export {
       TckinfoOutputs,
       TckinfoParameters,
       tckinfo,
-      tckinfo_cargs,
-      tckinfo_config_cargs,
       tckinfo_config_params,
       tckinfo_execute,
-      tckinfo_outputs,
       tckinfo_params,
 };

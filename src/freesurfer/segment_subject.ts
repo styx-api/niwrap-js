@@ -177,14 +177,16 @@ function segment_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegmentSubjectOutputs`).
  */
 function segment_subject_execute(
     params: SegmentSubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegmentSubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGMENT_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = segment_subject_cargs(params, execution)
     const ret = segment_subject_outputs(params, execution)
@@ -219,10 +221,8 @@ function segment_subject(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): SegmentSubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGMENT_SUBJECT_METADATA);
     const params = segment_subject_params(input_volume, output_xfm, log_file, help_flag, debug_flag, version_flag)
-    return segment_subject_execute(params, execution);
+    return segment_subject_execute(params, runner);
 }
 
 
@@ -231,8 +231,6 @@ export {
       SegmentSubjectOutputs,
       SegmentSubjectParameters,
       segment_subject,
-      segment_subject_cargs,
       segment_subject_execute,
-      segment_subject_outputs,
       segment_subject_params,
 };

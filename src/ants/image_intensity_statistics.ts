@@ -147,14 +147,16 @@ function image_intensity_statistics_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImageIntensityStatisticsOutputs`).
  */
 function image_intensity_statistics_execute(
     params: ImageIntensityStatisticsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImageIntensityStatisticsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMAGE_INTENSITY_STATISTICS_METADATA);
     params = execution.params(params)
     const cargs = image_intensity_statistics_cargs(params, execution)
     const ret = image_intensity_statistics_outputs(params, execution)
@@ -183,10 +185,8 @@ function image_intensity_statistics(
     label_image: InputPathType | null = null,
     runner: Runner | null = null,
 ): ImageIntensityStatisticsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMAGE_INTENSITY_STATISTICS_METADATA);
     const params = image_intensity_statistics_params(image_dimension, input_image, label_image)
-    return image_intensity_statistics_execute(params, execution);
+    return image_intensity_statistics_execute(params, runner);
 }
 
 
@@ -195,8 +195,6 @@ export {
       ImageIntensityStatisticsOutputs,
       ImageIntensityStatisticsParameters,
       image_intensity_statistics,
-      image_intensity_statistics_cargs,
       image_intensity_statistics_execute,
-      image_intensity_statistics_outputs,
       image_intensity_statistics_params,
 };

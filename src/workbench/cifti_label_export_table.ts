@@ -140,14 +140,16 @@ function cifti_label_export_table_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelExportTableOutputs`).
  */
 function cifti_label_export_table_execute(
     params: CiftiLabelExportTableParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiLabelExportTableOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_LABEL_EXPORT_TABLE_METADATA);
     params = execution.params(params)
     const cargs = cifti_label_export_table_cargs(params, execution)
     const ret = cifti_label_export_table_outputs(params, execution)
@@ -178,10 +180,8 @@ function cifti_label_export_table(
     table_out: string,
     runner: Runner | null = null,
 ): CiftiLabelExportTableOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_LABEL_EXPORT_TABLE_METADATA);
     const params = cifti_label_export_table_params(label_in, map, table_out)
-    return cifti_label_export_table_execute(params, execution);
+    return cifti_label_export_table_execute(params, runner);
 }
 
 
@@ -190,8 +190,6 @@ export {
       CiftiLabelExportTableOutputs,
       CiftiLabelExportTableParameters,
       cifti_label_export_table,
-      cifti_label_export_table_cargs,
       cifti_label_export_table_execute,
-      cifti_label_export_table_outputs,
       cifti_label_export_table_params,
 };

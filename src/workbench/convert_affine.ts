@@ -399,14 +399,16 @@ function convert_affine_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertAffineOutputs`).
  */
 function convert_affine_execute(
     params: ConvertAffineParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvertAffineOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVERT_AFFINE_METADATA);
     params = execution.params(params)
     const cargs = convert_affine_cargs(params, execution)
     const ret = convert_affine_outputs(params, execution)
@@ -447,10 +449,8 @@ function convert_affine(
     to_flirt: Array<ConvertAffineToFlirtParameters> | null = null,
     runner: Runner | null = null,
 ): ConvertAffineOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVERT_AFFINE_METADATA);
     const params = convert_affine_params(from_world, opt_from_itk_input, from_flirt, to_world, opt_to_itk_output, to_flirt)
-    return convert_affine_execute(params, execution);
+    return convert_affine_execute(params, runner);
 }
 
 
@@ -463,16 +463,10 @@ export {
       ConvertAffineToFlirtParameters,
       ConvertAffineToWorldParameters,
       convert_affine,
-      convert_affine_cargs,
       convert_affine_execute,
-      convert_affine_from_flirt_cargs,
       convert_affine_from_flirt_params,
-      convert_affine_from_world_cargs,
       convert_affine_from_world_params,
-      convert_affine_outputs,
       convert_affine_params,
-      convert_affine_to_flirt_cargs,
       convert_affine_to_flirt_params,
-      convert_affine_to_world_cargs,
       convert_affine_to_world_params,
 };

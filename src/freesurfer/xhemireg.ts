@@ -229,14 +229,16 @@ function xhemireg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `XhemiregOutputs`).
  */
 function xhemireg_execute(
     params: XhemiregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): XhemiregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(XHEMIREG_METADATA);
     params = execution.params(params)
     const cargs = xhemireg_cargs(params, execution)
     const ret = xhemireg_outputs(params, execution)
@@ -285,10 +287,8 @@ function xhemireg(
     help: boolean = false,
     runner: Runner | null = null,
 ): XhemiregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(XHEMIREG_METADATA);
     const params = xhemireg_params(subject, output_dir, map_lh, map_rh, perform_reg, tal_compute, no_tal_compute, tal_estimate, no_tal_estimate, gcaprep, threads, version, help)
-    return xhemireg_execute(params, execution);
+    return xhemireg_execute(params, runner);
 }
 
 
@@ -297,8 +297,6 @@ export {
       XhemiregOutputs,
       XhemiregParameters,
       xhemireg,
-      xhemireg_cargs,
       xhemireg_execute,
-      xhemireg_outputs,
       xhemireg_params,
 };

@@ -634,14 +634,16 @@ function fixelcfestats_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FixelcfestatsOutputs`).
  */
 function fixelcfestats_execute(
     params: FixelcfestatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FixelcfestatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIXELCFESTATS_METADATA);
     params = execution.params(params)
     const cargs = fixelcfestats_cargs(params, execution)
     const ret = fixelcfestats_outputs(params, execution)
@@ -750,10 +752,8 @@ function fixelcfestats(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelcfestatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIXELCFESTATS_METADATA);
     const params = fixelcfestats_params(in_fixel_directory, subjects, design, contrast, connectivity, out_fixel_directory, mask, notest, errors, exchange_within, exchange_whole, strong, nshuffles, permutations, nonstationarity, skew_nonstationarity, nshuffles_nonstationarity, permutations_nonstationarity, cfe_dh, cfe_e, cfe_h, cfe_c, cfe_legacy, variance, ftests, fonly, column, info, quiet, debug, force, nthreads, config, help, version)
-    return fixelcfestats_execute(params, execution);
+    return fixelcfestats_execute(params, runner);
 }
 
 
@@ -766,16 +766,10 @@ export {
       FixelcfestatsVariousFileParameters,
       FixelcfestatsVariousStringParameters,
       fixelcfestats,
-      fixelcfestats_cargs,
-      fixelcfestats_column_cargs,
       fixelcfestats_column_params,
-      fixelcfestats_config_cargs,
       fixelcfestats_config_params,
       fixelcfestats_execute,
-      fixelcfestats_outputs,
       fixelcfestats_params,
-      fixelcfestats_various_file_cargs,
       fixelcfestats_various_file_params,
-      fixelcfestats_various_string_cargs,
       fixelcfestats_various_string_params,
 };

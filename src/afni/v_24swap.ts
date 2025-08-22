@@ -146,14 +146,16 @@ function v_24swap_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V24swapOutputs`).
  */
 function v_24swap_execute(
     params: V24swapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V24swapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_24SWAP_METADATA);
     params = execution.params(params)
     const cargs = v_24swap_cargs(params, execution)
     const ret = v_24swap_outputs(params, execution)
@@ -182,10 +184,8 @@ function v_24swap(
     pattern: string | null = null,
     runner: Runner | null = null,
 ): V24swapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_24SWAP_METADATA);
     const params = v_24swap_params(input_files, quiet, pattern)
-    return v_24swap_execute(params, execution);
+    return v_24swap_execute(params, runner);
 }
 
 
@@ -194,8 +194,6 @@ export {
       V24swapParameters,
       V_24SWAP_METADATA,
       v_24swap,
-      v_24swap_cargs,
       v_24swap_execute,
-      v_24swap_outputs,
       v_24swap_params,
 };

@@ -189,14 +189,16 @@ function mri_cnr_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCnrOutputs`).
  */
 function mri_cnr_execute(
     params: MriCnrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCnrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CNR_METADATA);
     params = execution.params(params)
     const cargs = mri_cnr_cargs(params, execution)
     const ret = mri_cnr_outputs(params, execution)
@@ -235,10 +237,8 @@ function mri_cnr(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MriCnrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CNR_METADATA);
     const params = mri_cnr_params(surf_dir, volume_files, slope, logfile, labels, print_total_cnr, version_flag, help_flag)
-    return mri_cnr_execute(params, execution);
+    return mri_cnr_execute(params, runner);
 }
 
 
@@ -247,8 +247,6 @@ export {
       MriCnrOutputs,
       MriCnrParameters,
       mri_cnr,
-      mri_cnr_cargs,
       mri_cnr_execute,
-      mri_cnr_outputs,
       mri_cnr_params,
 };

@@ -247,14 +247,16 @@ function v_3d_fwhmx_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dFwhmxOutputs`).
  */
 function v_3d_fwhmx_execute(
     params: V3dFwhmxParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dFwhmxOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_FWHMX_METADATA);
     params = execution.params(params)
     const cargs = v_3d_fwhmx_cargs(params, execution)
     const ret = v_3d_fwhmx_outputs(params, execution)
@@ -303,10 +305,8 @@ function v_3d_fwhmx(
     acf: string | null = null,
     runner: Runner | null = null,
 ): V3dFwhmxOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_FWHMX_METADATA);
     const params = v_3d_fwhmx_params(infile, mask, automask, demed, unif, detrend, detprefix, geom, arith, combine, out, compat, acf)
-    return v_3d_fwhmx_execute(params, execution);
+    return v_3d_fwhmx_execute(params, runner);
 }
 
 
@@ -315,8 +315,6 @@ export {
       V3dFwhmxParameters,
       V_3D_FWHMX_METADATA,
       v_3d_fwhmx,
-      v_3d_fwhmx_cargs,
       v_3d_fwhmx_execute,
-      v_3d_fwhmx_outputs,
       v_3d_fwhmx_params,
 };

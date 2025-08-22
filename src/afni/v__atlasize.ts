@@ -314,14 +314,16 @@ function v__atlasize_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAtlasizeOutputs`).
  */
 function v__atlasize_execute(
     params: VAtlasizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAtlasizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__ATLASIZE_METADATA);
     params = execution.params(params)
     const cargs = v__atlasize_cargs(params, execution)
     const ret = v__atlasize_outputs(params, execution)
@@ -380,10 +382,8 @@ function v__atlasize(
     h_find: string | null = null,
     runner: Runner | null = null,
 ): VAtlasizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__ATLASIZE_METADATA);
     const params = v__atlasize_params(dset, space, lab_file, lab_file_delim, longnames, last_longname_col, atlas_type, atlas_description, atlas_name, auto_backup, centers, centertype, centermask, skip_novoxels, h_web, h_view, all_opts, h_find)
-    return v__atlasize_execute(params, execution);
+    return v__atlasize_execute(params, runner);
 }
 
 
@@ -392,8 +392,6 @@ export {
       VAtlasizeParameters,
       V__ATLASIZE_METADATA,
       v__atlasize,
-      v__atlasize_cargs,
       v__atlasize_execute,
-      v__atlasize_outputs,
       v__atlasize_params,
 };

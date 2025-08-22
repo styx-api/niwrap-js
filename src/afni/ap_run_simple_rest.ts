@@ -244,14 +244,16 @@ function ap_run_simple_rest_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ApRunSimpleRestOutputs`).
  */
 function ap_run_simple_rest_execute(
     params: ApRunSimpleRestParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ApRunSimpleRestOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AP_RUN_SIMPLE_REST_METADATA);
     params = execution.params(params)
     const cargs = ap_run_simple_rest_cargs(params, execution)
     const ret = ap_run_simple_rest_outputs(params, execution)
@@ -294,10 +296,8 @@ function ap_run_simple_rest(
     echo: boolean = false,
     runner: Runner | null = null,
 ): ApRunSimpleRestOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AP_RUN_SIMPLE_REST_METADATA);
     const params = ap_run_simple_rest_params(epi, anat, nt_rm, run_ap, run_proc, subjid, template, compressor, verb, echo)
-    return ap_run_simple_rest_execute(params, execution);
+    return ap_run_simple_rest_execute(params, runner);
 }
 
 
@@ -306,8 +306,6 @@ export {
       ApRunSimpleRestOutputs,
       ApRunSimpleRestParameters,
       ap_run_simple_rest,
-      ap_run_simple_rest_cargs,
       ap_run_simple_rest_execute,
-      ap_run_simple_rest_outputs,
       ap_run_simple_rest_params,
 };

@@ -225,14 +225,16 @@ function t4imgs_4dfp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `T4imgs4dfpOutputs`).
  */
 function t4imgs_4dfp_execute(
     params: T4imgs4dfpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): T4imgs4dfpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(T4IMGS_4DFP_METADATA);
     params = execution.params(params)
     const cargs = t4imgs_4dfp_cargs(params, execution)
     const ret = t4imgs_4dfp_outputs(params, execution)
@@ -281,10 +283,8 @@ function t4imgs_4dfp(
     little_endian: boolean = false,
     runner: Runner | null = null,
 ): T4imgs4dfpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(T4IMGS_4DFP_METADATA);
     const params = t4imgs_4dfp_params(input_images, output_image, sqrt_normalize, cubic_spline, output_nan, convert_t4, nearest_neighbor, output_111_space, output_222_space, output_333n_space, duplicate_dimensions, big_endian, little_endian)
-    return t4imgs_4dfp_execute(params, execution);
+    return t4imgs_4dfp_execute(params, runner);
 }
 
 
@@ -293,8 +293,6 @@ export {
       T4imgs4dfpOutputs,
       T4imgs4dfpParameters,
       t4imgs_4dfp,
-      t4imgs_4dfp_cargs,
       t4imgs_4dfp_execute,
-      t4imgs_4dfp_outputs,
       t4imgs_4dfp_params,
 };

@@ -195,14 +195,16 @@ function v_3d_space_time_corr_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dSpaceTimeCorrOutputs`).
  */
 function v_3d_space_time_corr_execute(
     params: V3dSpaceTimeCorrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dSpaceTimeCorrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_SPACE_TIME_CORR_METADATA);
     params = execution.params(params)
     const cargs = v_3d_space_time_corr_cargs(params, execution)
     const ret = v_3d_space_time_corr_outputs(params, execution)
@@ -239,10 +241,8 @@ function v_3d_space_time_corr(
     freeze_inset_a_xyz: Array<number> | null = null,
     runner: Runner | null = null,
 ): V3dSpaceTimeCorrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_SPACE_TIME_CORR_METADATA);
     const params = v_3d_space_time_corr_params(inset_a, inset_b, prefix, mask, out_zcorr, freeze_inset_a_ijk, freeze_inset_a_xyz)
-    return v_3d_space_time_corr_execute(params, execution);
+    return v_3d_space_time_corr_execute(params, runner);
 }
 
 
@@ -251,8 +251,6 @@ export {
       V3dSpaceTimeCorrParameters,
       V_3D_SPACE_TIME_CORR_METADATA,
       v_3d_space_time_corr,
-      v_3d_space_time_corr_cargs,
       v_3d_space_time_corr_execute,
-      v_3d_space_time_corr_outputs,
       v_3d_space_time_corr_params,
 };

@@ -146,14 +146,16 @@ function tksurfer_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TksurferOutputs`).
  */
 function tksurfer_execute(
     params: TksurferParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TksurferOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TKSURFER_METADATA);
     params = execution.params(params)
     const cargs = tksurfer_cargs(params, execution)
     const ret = tksurfer_outputs(params, execution)
@@ -184,10 +186,8 @@ function tksurfer(
     options: string | null = null,
     runner: Runner | null = null,
 ): TksurferOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TKSURFER_METADATA);
     const params = tksurfer_params(subject_id, hemisphere, surface_name, options)
-    return tksurfer_execute(params, execution);
+    return tksurfer_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       TksurferOutputs,
       TksurferParameters,
       tksurfer,
-      tksurfer_cargs,
       tksurfer_execute,
-      tksurfer_outputs,
       tksurfer_params,
 };

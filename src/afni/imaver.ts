@@ -156,14 +156,16 @@ function imaver_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImaverOutputs`).
  */
 function imaver_execute(
     params: ImaverParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImaverOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMAVER_METADATA);
     params = execution.params(params)
     const cargs = imaver_cargs(params, execution)
     const ret = imaver_outputs(params, execution)
@@ -192,10 +194,8 @@ function imaver(
     out_sig: string | null = null,
     runner: Runner | null = null,
 ): ImaverOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMAVER_METADATA);
     const params = imaver_params(input_images, out_ave, out_sig)
-    return imaver_execute(params, execution);
+    return imaver_execute(params, runner);
 }
 
 
@@ -204,8 +204,6 @@ export {
       ImaverOutputs,
       ImaverParameters,
       imaver,
-      imaver_cargs,
       imaver_execute,
-      imaver_outputs,
       imaver_params,
 };

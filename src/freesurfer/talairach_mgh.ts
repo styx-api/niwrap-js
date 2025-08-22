@@ -138,14 +138,16 @@ function talairach_mgh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TalairachMghOutputs`).
  */
 function talairach_mgh_execute(
     params: TalairachMghParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TalairachMghOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TALAIRACH_MGH_METADATA);
     params = execution.params(params)
     const cargs = talairach_mgh_cargs(params, execution)
     const ret = talairach_mgh_outputs(params, execution)
@@ -172,10 +174,8 @@ function talairach_mgh(
     output_volume: string,
     runner: Runner | null = null,
 ): TalairachMghOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TALAIRACH_MGH_METADATA);
     const params = talairach_mgh_params(input_volume, output_volume)
-    return talairach_mgh_execute(params, execution);
+    return talairach_mgh_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       TalairachMghOutputs,
       TalairachMghParameters,
       talairach_mgh,
-      talairach_mgh_cargs,
       talairach_mgh_execute,
-      talairach_mgh_outputs,
       talairach_mgh_params,
 };

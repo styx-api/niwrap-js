@@ -438,14 +438,16 @@ function oxford_asl_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `OxfordAslOutputs`).
  */
 function oxford_asl_execute(
     params: OxfordAslParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): OxfordAslOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(OXFORD_ASL_METADATA);
     params = execution.params(params)
     const cargs = oxford_asl_cargs(params, execution)
     const ret = oxford_asl_outputs(params, execution)
@@ -526,10 +528,8 @@ function oxford_asl(
     calibration_method: string | null = null,
     runner: Runner | null = null,
 ): OxfordAslOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(OXFORD_ASL_METADATA);
     const params = oxford_asl_params(asl_data, output_dir_name, mask, spatial_smoothing, white_paper_analysis, motion_correction, input_asl_format, input_block_format, inversion_times, ti_image, casl, arterial_suppression, bolus_duration, bat, tissue_t1, blood_t1, slice_timing_difference, slice_band, flip_angle, fsl_anat_dir, structural_image, bet_structural_image, fast_segmentation_images, sensitivity_correction, precomputed_m0_value, inversion_efficiency, tr_calibration_data, calibration_image, calibration_method)
-    return oxford_asl_execute(params, execution);
+    return oxford_asl_execute(params, runner);
 }
 
 
@@ -538,8 +538,6 @@ export {
       OxfordAslOutputs,
       OxfordAslParameters,
       oxford_asl,
-      oxford_asl_cargs,
       oxford_asl_execute,
-      oxford_asl_outputs,
       oxford_asl_params,
 };

@@ -464,14 +464,16 @@ function long_mris_slopes_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LongMrisSlopesOutputs`).
  */
 function long_mris_slopes_execute(
     params: LongMrisSlopesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LongMrisSlopesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LONG_MRIS_SLOPES_METADATA);
     params = execution.params(params)
     const cargs = long_mris_slopes_cargs(params, execution)
     const ret = long_mris_slopes_outputs(params, execution)
@@ -562,10 +564,8 @@ function long_mris_slopes(
     stack_resid: string | null = null,
     runner: Runner | null = null,
 ): LongMrisSlopesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LONG_MRIS_SLOPES_METADATA);
     const params = long_mris_slopes_params(qdec, meas, hemi, sd, do_avg, do_rate, do_pc1fit, do_pc1, do_spc, do_stack, do_label, qcache, resid, fwhm, nosmooth, time, generic_time, in_label, jac, name_avg, name_rate, name_pc1fit, name_pc1, name_spc, name_resid, out_stack, out_label, isec_labels, stack_avg, stack_rate, stack_pc1fit, stack_pc1, stack_spc, stack_resid)
-    return long_mris_slopes_execute(params, execution);
+    return long_mris_slopes_execute(params, runner);
 }
 
 
@@ -574,8 +574,6 @@ export {
       LongMrisSlopesOutputs,
       LongMrisSlopesParameters,
       long_mris_slopes,
-      long_mris_slopes_cargs,
       long_mris_slopes_execute,
-      long_mris_slopes_outputs,
       long_mris_slopes_params,
 };

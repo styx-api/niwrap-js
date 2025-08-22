@@ -249,14 +249,16 @@ function applywarp_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ApplywarpOutputs`).
  */
 function applywarp_execute(
     params: ApplywarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ApplywarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(APPLYWARP_METADATA);
     params = execution.params(params)
     const cargs = applywarp_cargs(params, execution)
     const ret = applywarp_outputs(params, execution)
@@ -309,10 +311,8 @@ function applywarp(
     supersample: boolean = false,
     runner: Runner | null = null,
 ): ApplywarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(APPLYWARP_METADATA);
     const params = applywarp_params(in_file, ref_file, interp, out_file, relwarp, abswarp, datatype, field_file, mask_file, output_type, postmat, premat, superlevel, superlevel_2, supersample)
-    return applywarp_execute(params, execution);
+    return applywarp_execute(params, runner);
 }
 
 
@@ -321,8 +321,6 @@ export {
       ApplywarpOutputs,
       ApplywarpParameters,
       applywarp,
-      applywarp_cargs,
       applywarp_execute,
-      applywarp_outputs,
       applywarp_params,
 };

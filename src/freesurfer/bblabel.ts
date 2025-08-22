@@ -235,14 +235,16 @@ function bblabel_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BblabelOutputs`).
  */
 function bblabel_execute(
     params: BblabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BblabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BBLABEL_METADATA);
     params = execution.params(params)
     const cargs = bblabel_cargs(params, execution)
     const ret = bblabel_outputs(params, execution)
@@ -285,10 +287,8 @@ function bblabel(
     umask: string | null = null,
     runner: Runner | null = null,
 ): BblabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BBLABEL_METADATA);
     const params = bblabel_params(labelfile, outlabelfile, xmin, xmax, ymin, ymax, zmin, zmax, debug, umask)
-    return bblabel_execute(params, execution);
+    return bblabel_execute(params, runner);
 }
 
 
@@ -297,8 +297,6 @@ export {
       BblabelOutputs,
       BblabelParameters,
       bblabel,
-      bblabel_cargs,
       bblabel_execute,
-      bblabel_outputs,
       bblabel_params,
 };

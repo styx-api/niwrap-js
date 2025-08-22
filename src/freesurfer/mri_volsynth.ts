@@ -609,14 +609,16 @@ function mri_volsynth_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriVolsynthOutputs`).
  */
 function mri_volsynth_execute(
     params: MriVolsynthParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriVolsynthOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_VOLSYNTH_METADATA);
     params = execution.params(params)
     const cargs = mri_volsynth_cargs(params, execution)
     const ret = mri_volsynth_outputs(params, execution)
@@ -725,10 +727,8 @@ function mri_volsynth(
     ctab: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriVolsynthOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_VOLSYNTH_METADATA);
     const params = mri_volsynth_params(output_volid, template, nframes, offset_flag, offset_mid_flag, curv, dim, res, vox_size, tr, cdircos, rdircos, sdircos, c_ras, p0, precision, seed, seedfile, pdf, bb, gmean, gstd, delta_crsf, delta_val, delta_val_off, grid, dof, dof_num, dof_den, rescale_flag, val_a, val_b, vox_radius, mm_radius, sphere_center, hsc, abs_flag, cp, spike, fwhm, sum2, dim_surf_flag, ctab)
-    return mri_volsynth_execute(params, execution);
+    return mri_volsynth_execute(params, runner);
 }
 
 
@@ -737,8 +737,6 @@ export {
       MriVolsynthOutputs,
       MriVolsynthParameters,
       mri_volsynth,
-      mri_volsynth_cargs,
       mri_volsynth_execute,
-      mri_volsynth_outputs,
       mri_volsynth_params,
 };

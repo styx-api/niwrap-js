@@ -137,14 +137,16 @@ function v_1dmatcalc_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dmatcalcOutputs`).
  */
 function v_1dmatcalc_execute(
     params: V1dmatcalcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dmatcalcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1DMATCALC_METADATA);
     params = execution.params(params)
     const cargs = v_1dmatcalc_cargs(params, execution)
     const ret = v_1dmatcalc_outputs(params, execution)
@@ -169,10 +171,8 @@ function v_1dmatcalc(
     expression: string | null = null,
     runner: Runner | null = null,
 ): V1dmatcalcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1DMATCALC_METADATA);
     const params = v_1dmatcalc_params(expression)
-    return v_1dmatcalc_execute(params, execution);
+    return v_1dmatcalc_execute(params, runner);
 }
 
 
@@ -181,8 +181,6 @@ export {
       V1dmatcalcParameters,
       V_1DMATCALC_METADATA,
       v_1dmatcalc,
-      v_1dmatcalc_cargs,
       v_1dmatcalc_execute,
-      v_1dmatcalc_outputs,
       v_1dmatcalc_params,
 };

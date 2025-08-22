@@ -133,14 +133,16 @@ function imdump_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImdumpOutputs`).
  */
 function imdump_execute(
     params: ImdumpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImdumpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMDUMP_METADATA);
     params = execution.params(params)
     const cargs = imdump_cargs(params, execution)
     const ret = imdump_outputs(params, execution)
@@ -165,10 +167,8 @@ function imdump(
     input_image: InputPathType,
     runner: Runner | null = null,
 ): ImdumpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMDUMP_METADATA);
     const params = imdump_params(input_image)
-    return imdump_execute(params, execution);
+    return imdump_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       ImdumpOutputs,
       ImdumpParameters,
       imdump,
-      imdump_cargs,
       imdump_execute,
-      imdump_outputs,
       imdump_params,
 };

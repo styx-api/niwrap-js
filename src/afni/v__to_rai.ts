@@ -138,14 +138,16 @@ function v__to_rai_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VToRaiOutputs`).
  */
 function v__to_rai_execute(
     params: VToRaiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VToRaiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__TO_RAI_METADATA);
     params = execution.params(params)
     const cargs = v__to_rai_cargs(params, execution)
     const ret = v__to_rai_outputs(params, execution)
@@ -172,10 +174,8 @@ function v__to_rai(
     orientation: string,
     runner: Runner | null = null,
 ): VToRaiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__TO_RAI_METADATA);
     const params = v__to_rai_params(coordinates, orientation)
-    return v__to_rai_execute(params, execution);
+    return v__to_rai_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       VToRaiParameters,
       V__TO_RAI_METADATA,
       v__to_rai,
-      v__to_rai_cargs,
       v__to_rai_execute,
-      v__to_rai_outputs,
       v__to_rai_params,
 };

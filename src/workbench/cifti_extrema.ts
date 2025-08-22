@@ -316,14 +316,16 @@ function cifti_extrema_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiExtremaOutputs`).
  */
 function cifti_extrema_execute(
     params: CiftiExtremaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiExtremaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_EXTREMA_METADATA);
     params = execution.params(params)
     const cargs = cifti_extrema_cargs(params, execution)
     const ret = cifti_extrema_outputs(params, execution)
@@ -382,10 +384,8 @@ function cifti_extrema(
     opt_only_minima: boolean = false,
     runner: Runner | null = null,
 ): CiftiExtremaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_EXTREMA_METADATA);
     const params = cifti_extrema_params(cifti, surface_distance, volume_distance, direction, cifti_out, opt_left_surface_surface, opt_right_surface_surface, opt_cerebellum_surface_surface, opt_surface_presmooth_surface_kernel, opt_volume_presmooth_volume_kernel, opt_presmooth_fwhm, threshold, opt_merged_volume, opt_sum_maps, opt_consolidate_mode, opt_only_maxima, opt_only_minima)
-    return cifti_extrema_execute(params, execution);
+    return cifti_extrema_execute(params, runner);
 }
 
 
@@ -395,10 +395,7 @@ export {
       CiftiExtremaParameters,
       CiftiExtremaThresholdParameters,
       cifti_extrema,
-      cifti_extrema_cargs,
       cifti_extrema_execute,
-      cifti_extrema_outputs,
       cifti_extrema_params,
-      cifti_extrema_threshold_cargs,
       cifti_extrema_threshold_params,
 };

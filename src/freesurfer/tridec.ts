@@ -148,14 +148,16 @@ function tridec_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TridecOutputs`).
  */
 function tridec_execute(
     params: TridecParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TridecOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TRIDEC_METADATA);
     params = execution.params(params)
     const cargs = tridec_cargs(params, execution)
     const ret = tridec_outputs(params, execution)
@@ -186,10 +188,8 @@ function tridec(
     out_file: string,
     runner: Runner | null = null,
 ): TridecOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TRIDEC_METADATA);
     const params = tridec_params(subject_name, fine_file, ico_file, out_file)
-    return tridec_execute(params, execution);
+    return tridec_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       TridecOutputs,
       TridecParameters,
       tridec,
-      tridec_cargs,
       tridec_execute,
-      tridec_outputs,
       tridec_params,
 };

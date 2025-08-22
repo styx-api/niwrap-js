@@ -841,14 +841,16 @@ function tckedit_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TckeditOutputs`).
  */
 function tckedit_execute(
     params: TckeditParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TckeditOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCKEDIT_METADATA);
     params = execution.params(params)
     const cargs = tckedit_cargs(params, execution)
     const ret = tckedit_outputs(params, execution)
@@ -925,10 +927,8 @@ function tckedit(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckeditOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCKEDIT_METADATA);
     const params = tckedit_params(tracks_in, tracks_out, include, include_ordered, exclude, mask, maxlength, minlength, number_, skip, maxweight, minweight, inverse, ends_only, tck_weights_in, tck_weights_out, info, quiet, debug, force, nthreads, config, help, version)
-    return tckedit_execute(params, execution);
+    return tckedit_execute(params, runner);
 }
 
 
@@ -948,30 +948,17 @@ export {
       TckeditVariousString2Parameters,
       TckeditVariousStringParameters,
       tckedit,
-      tckedit_cargs,
-      tckedit_config_cargs,
       tckedit_config_params,
-      tckedit_exclude_cargs,
       tckedit_exclude_params,
       tckedit_execute,
-      tckedit_include_cargs,
-      tckedit_include_ordered_cargs,
       tckedit_include_ordered_params,
       tckedit_include_params,
-      tckedit_mask_cargs,
       tckedit_mask_params,
-      tckedit_outputs,
       tckedit_params,
-      tckedit_various_file_1_cargs,
       tckedit_various_file_1_params,
-      tckedit_various_file_2_cargs,
       tckedit_various_file_2_params,
-      tckedit_various_file_cargs,
       tckedit_various_file_params,
-      tckedit_various_string_1_cargs,
       tckedit_various_string_1_params,
-      tckedit_various_string_2_cargs,
       tckedit_various_string_2_params,
-      tckedit_various_string_cargs,
       tckedit_various_string_params,
 };

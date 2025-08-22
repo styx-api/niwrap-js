@@ -131,14 +131,16 @@ function anatomi_cuts_utils_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AnatomiCutsUtilsOutputs`).
  */
 function anatomi_cuts_utils_execute(
     params: AnatomiCutsUtilsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AnatomiCutsUtilsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANATOMI_CUTS_UTILS_METADATA);
     params = execution.params(params)
     const cargs = anatomi_cuts_utils_cargs(params, execution)
     const ret = anatomi_cuts_utils_outputs(params, execution)
@@ -163,10 +165,8 @@ function anatomi_cuts_utils(
     modules: Array<string> | null = null,
     runner: Runner | null = null,
 ): AnatomiCutsUtilsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANATOMI_CUTS_UTILS_METADATA);
     const params = anatomi_cuts_utils_params(modules)
-    return anatomi_cuts_utils_execute(params, execution);
+    return anatomi_cuts_utils_execute(params, runner);
 }
 
 
@@ -175,8 +175,6 @@ export {
       AnatomiCutsUtilsOutputs,
       AnatomiCutsUtilsParameters,
       anatomi_cuts_utils,
-      anatomi_cuts_utils_cargs,
       anatomi_cuts_utils_execute,
-      anatomi_cuts_utils_outputs,
       anatomi_cuts_utils_params,
 };

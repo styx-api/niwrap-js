@@ -143,14 +143,16 @@ function mri_dct_align_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriDctAlignOutputs`).
  */
 function mri_dct_align_execute(
     params: MriDctAlignParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriDctAlignOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_DCT_ALIGN_METADATA);
     params = execution.params(params)
     const cargs = mri_dct_align_cargs(params, execution)
     const ret = mri_dct_align_outputs(params, execution)
@@ -179,10 +181,8 @@ function mri_dct_align(
     output_xform: string,
     runner: Runner | null = null,
 ): MriDctAlignOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_DCT_ALIGN_METADATA);
     const params = mri_dct_align_params(source, destination, output_xform)
-    return mri_dct_align_execute(params, execution);
+    return mri_dct_align_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MriDctAlignOutputs,
       MriDctAlignParameters,
       mri_dct_align,
-      mri_dct_align_cargs,
       mri_dct_align_execute,
-      mri_dct_align_outputs,
       mri_dct_align_params,
 };

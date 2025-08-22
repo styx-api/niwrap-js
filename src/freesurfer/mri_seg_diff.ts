@@ -229,14 +229,16 @@ function mri_seg_diff_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSegDiffOutputs`).
  */
 function mri_seg_diff_execute(
     params: MriSegDiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSegDiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SEG_DIFF_METADATA);
     params = execution.params(params)
     const cargs = mri_seg_diff_cargs(params, execution)
     const ret = mri_seg_diff_outputs(params, execution)
@@ -279,10 +281,8 @@ function mri_seg_diff(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriSegDiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SEG_DIFF_METADATA);
     const params = mri_seg_diff_params(diff, seg1, seg2, seg, diff_in, merged, diff_force, debug, checkopts, version)
-    return mri_seg_diff_execute(params, execution);
+    return mri_seg_diff_execute(params, runner);
 }
 
 
@@ -291,8 +291,6 @@ export {
       MriSegDiffOutputs,
       MriSegDiffParameters,
       mri_seg_diff,
-      mri_seg_diff_cargs,
       mri_seg_diff_execute,
-      mri_seg_diff_outputs,
       mri_seg_diff_params,
 };

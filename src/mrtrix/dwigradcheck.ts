@@ -447,14 +447,16 @@ function dwigradcheck_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DwigradcheckOutputs`).
  */
 function dwigradcheck_execute(
     params: DwigradcheckParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DwigradcheckOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DWIGRADCHECK_METADATA);
     params = execution.params(params)
     const cargs = dwigradcheck_cargs(params, execution)
     const ret = dwigradcheck_outputs(params, execution)
@@ -513,10 +515,8 @@ function dwigradcheck(
     version: boolean = false,
     runner: Runner | null = null,
 ): DwigradcheckOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DWIGRADCHECK_METADATA);
     const params = dwigradcheck_params(input_image, grad, fslgrad, mask_image, number_, export_grad_mrtrix, export_grad_fsl, nocleanup, scratch_dir, continue_scratch_dir, info, quiet, debug, force, nthreads, config, help, version)
-    return dwigradcheck_execute(params, execution);
+    return dwigradcheck_execute(params, runner);
 }
 
 
@@ -528,13 +528,8 @@ export {
       DwigradcheckOutputs,
       DwigradcheckParameters,
       dwigradcheck,
-      dwigradcheck_cargs,
       dwigradcheck_execute,
-      dwigradcheck_export_grad_fsl_cargs,
-      dwigradcheck_export_grad_fsl_outputs,
       dwigradcheck_export_grad_fsl_params,
-      dwigradcheck_fslgrad_cargs,
       dwigradcheck_fslgrad_params,
-      dwigradcheck_outputs,
       dwigradcheck_params,
 };

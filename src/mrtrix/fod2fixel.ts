@@ -392,14 +392,16 @@ function fod2fixel_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fod2fixelOutputs`).
  */
 function fod2fixel_execute(
     params: Fod2fixelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fod2fixelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FOD2FIXEL_METADATA);
     params = execution.params(params)
     const cargs = fod2fixel_cargs(params, execution)
     const ret = fod2fixel_outputs(params, execution)
@@ -474,10 +476,8 @@ function fod2fixel(
     version: boolean = false,
     runner: Runner | null = null,
 ): Fod2fixelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FOD2FIXEL_METADATA);
     const params = fod2fixel_params(fod, fixel_directory, afd, peak_amp, disp, fmls_integral, fmls_peak_value, fmls_no_thresholds, fmls_lobe_merge_ratio, mask, maxnum, nii, dirpeak, info, quiet, debug, force, nthreads, config, help, version)
-    return fod2fixel_execute(params, execution);
+    return fod2fixel_execute(params, runner);
 }
 
 
@@ -487,10 +487,7 @@ export {
       Fod2fixelOutputs,
       Fod2fixelParameters,
       fod2fixel,
-      fod2fixel_cargs,
-      fod2fixel_config_cargs,
       fod2fixel_config_params,
       fod2fixel_execute,
-      fod2fixel_outputs,
       fod2fixel_params,
 };

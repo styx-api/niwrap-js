@@ -484,14 +484,16 @@ function fixelconvert_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FixelconvertOutputs`).
  */
 function fixelconvert_execute(
     params: FixelconvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FixelconvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIXELCONVERT_METADATA);
     params = execution.params(params)
     const cargs = fixelconvert_cargs(params, execution)
     const ret = fixelconvert_outputs(params, execution)
@@ -552,10 +554,8 @@ function fixelconvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelconvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIXELCONVERT_METADATA);
     const params = fixelconvert_params(fixel_in, fixel_out, name, nii, out_size, template, value, in_size, info, quiet, debug, force, nthreads, config, help, version)
-    return fixelconvert_execute(params, execution);
+    return fixelconvert_execute(params, runner);
 }
 
 
@@ -569,18 +569,11 @@ export {
       FixelconvertVariousString1Parameters,
       FixelconvertVariousStringParameters,
       fixelconvert,
-      fixelconvert_cargs,
-      fixelconvert_config_cargs,
       fixelconvert_config_params,
       fixelconvert_execute,
-      fixelconvert_outputs,
       fixelconvert_params,
-      fixelconvert_various_file_1_cargs,
       fixelconvert_various_file_1_params,
-      fixelconvert_various_file_cargs,
       fixelconvert_various_file_params,
-      fixelconvert_various_string_1_cargs,
       fixelconvert_various_string_1_params,
-      fixelconvert_various_string_cargs,
       fixelconvert_various_string_params,
 };

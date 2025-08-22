@@ -305,14 +305,16 @@ function convex_hull_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvexHullOutputs`).
  */
 function convex_hull_execute(
     params: ConvexHullParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvexHullOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVEX_HULL_METADATA);
     params = execution.params(params)
     const cargs = convex_hull_cargs(params, execution)
     const ret = convex_hull_outputs(params, execution)
@@ -367,10 +369,8 @@ function convex_hull(
     setenv: string | null = null,
     runner: Runner | null = null,
 ): ConvexHullOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVEX_HULL_METADATA);
     const params = convex_hull_params(vol, isoval, isorange, isocmask, xform, surface_input, surf_vol, input_1d, q_opt, proj_xy, orig_coord, these_coords, output_prefix, debug, novolreg, setenv)
-    return convex_hull_execute(params, execution);
+    return convex_hull_execute(params, runner);
 }
 
 
@@ -379,8 +379,6 @@ export {
       ConvexHullOutputs,
       ConvexHullParameters,
       convex_hull,
-      convex_hull_cargs,
       convex_hull_execute,
-      convex_hull_outputs,
       convex_hull_params,
 };

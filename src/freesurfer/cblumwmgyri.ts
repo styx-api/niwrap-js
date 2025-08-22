@@ -191,14 +191,16 @@ function cblumwmgyri_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CblumwmgyriOutputs`).
  */
 function cblumwmgyri_execute(
     params: CblumwmgyriParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CblumwmgyriOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CBLUMWMGYRI_METADATA);
     params = execution.params(params)
     const cargs = cblumwmgyri_cargs(params, execution)
     const ret = cblumwmgyri_outputs(params, execution)
@@ -233,10 +235,8 @@ function cblumwmgyri(
     subjects_dir: string | null = null,
     runner: Runner | null = null,
 ): CblumwmgyriOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CBLUMWMGYRI_METADATA);
     const params = cblumwmgyri_params(subject, source_seg, n_erodes_dilates, out_seg, no_segstats, subjects_dir)
-    return cblumwmgyri_execute(params, execution);
+    return cblumwmgyri_execute(params, runner);
 }
 
 
@@ -245,8 +245,6 @@ export {
       CblumwmgyriOutputs,
       CblumwmgyriParameters,
       cblumwmgyri,
-      cblumwmgyri_cargs,
       cblumwmgyri_execute,
-      cblumwmgyri_outputs,
       cblumwmgyri_params,
 };

@@ -138,14 +138,16 @@ function basil_var_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BasilVarOutputs`).
  */
 function basil_var_execute(
     params: BasilVarParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BasilVarOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BASIL_VAR_METADATA);
     params = execution.params(params)
     const cargs = basil_var_cargs(params, execution)
     const ret = basil_var_outputs(params, execution)
@@ -172,10 +174,8 @@ function basil_var(
     mask_image: InputPathType,
     runner: Runner | null = null,
 ): BasilVarOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BASIL_VAR_METADATA);
     const params = basil_var_params(results_dir, mask_image)
-    return basil_var_execute(params, execution);
+    return basil_var_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       BasilVarOutputs,
       BasilVarParameters,
       basil_var,
-      basil_var_cargs,
       basil_var_execute,
-      basil_var_outputs,
       basil_var_params,
 };

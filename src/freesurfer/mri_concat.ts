@@ -517,14 +517,16 @@ function mri_concat_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriConcatOutputs`).
  */
 function mri_concat_execute(
     params: MriConcatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriConcatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CONCAT_METADATA);
     params = execution.params(params)
     const cargs = mri_concat_cargs(params, execution)
     const ret = mri_concat_outputs(params, execution)
@@ -643,10 +645,8 @@ function mri_concat(
     no_check: boolean = false,
     runner: Runner | null = null,
 ): MriConcatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CONCAT_METADATA);
     const params = mri_concat_params(input_files, output_file, file_list, paired_sum, paired_avg, paired_diff, paired_diff_norm, paired_diff_norm1, paired_diff_norm2, norm_mean, norm1, matrix, frame_weight, norm_weight, group_mean, combine, keep_datatype, abs, pos, neg, mean, median, mean_div_n, sum, var_, std, max, max_index, max_index_prune, max_index_add, min, replicate_times, fnorm, conjunction, vote, sort, temporal_ar1, prune, pca, pca_mask, scm, zconcat, max_bonfcor, multiply, add, mask_file, rms, no_check)
-    return mri_concat_execute(params, execution);
+    return mri_concat_execute(params, runner);
 }
 
 
@@ -655,8 +655,6 @@ export {
       MriConcatOutputs,
       MriConcatParameters,
       mri_concat,
-      mri_concat_cargs,
       mri_concat_execute,
-      mri_concat_outputs,
       mri_concat_params,
 };

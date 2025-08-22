@@ -132,14 +132,16 @@ function long_create_base_sigma_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LongCreateBaseSigmaOutputs`).
  */
 function long_create_base_sigma_execute(
     params: LongCreateBaseSigmaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LongCreateBaseSigmaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LONG_CREATE_BASE_SIGMA_METADATA);
     params = execution.params(params)
     const cargs = long_create_base_sigma_cargs(params, execution)
     const ret = long_create_base_sigma_outputs(params, execution)
@@ -166,10 +168,8 @@ function long_create_base_sigma(
     sigma: number,
     runner: Runner | null = null,
 ): LongCreateBaseSigmaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LONG_CREATE_BASE_SIGMA_METADATA);
     const params = long_create_base_sigma_params(base_id, sigma)
-    return long_create_base_sigma_execute(params, execution);
+    return long_create_base_sigma_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       LongCreateBaseSigmaOutputs,
       LongCreateBaseSigmaParameters,
       long_create_base_sigma,
-      long_create_base_sigma_cargs,
       long_create_base_sigma_execute,
-      long_create_base_sigma_outputs,
       long_create_base_sigma_params,
 };

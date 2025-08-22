@@ -295,14 +295,16 @@ function ants_joint_fusion_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsJointFusionOutputs`).
  */
 function ants_joint_fusion_execute(
     params: AntsJointFusionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsJointFusionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_JOINT_FUSION_METADATA);
     params = execution.params(params)
     const cargs = ants_joint_fusion_cargs(params, execution)
     const ret = ants_joint_fusion_outputs(params, execution)
@@ -353,10 +355,8 @@ function ants_joint_fusion(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsJointFusionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_JOINT_FUSION_METADATA);
     const params = ants_joint_fusion_params(target_image, atlas_image, atlas_segmentation, output, image_dimensionality, alpha, beta, constrain_nonnegative, patch_radius, patch_metric, search_radius, exclusion_image, mask_image, verbose)
-    return ants_joint_fusion_execute(params, execution);
+    return ants_joint_fusion_execute(params, runner);
 }
 
 
@@ -365,8 +365,6 @@ export {
       AntsJointFusionOutputs,
       AntsJointFusionParameters,
       ants_joint_fusion,
-      ants_joint_fusion_cargs,
       ants_joint_fusion_execute,
-      ants_joint_fusion_outputs,
       ants_joint_fusion_params,
 };

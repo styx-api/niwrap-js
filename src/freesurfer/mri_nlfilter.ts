@@ -223,14 +223,16 @@ function mri_nlfilter_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriNlfilterOutputs`).
  */
 function mri_nlfilter_execute(
     params: MriNlfilterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriNlfilterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_NLFILTER_METADATA);
     params = execution.params(params)
     const cargs = mri_nlfilter_cargs(params, execution)
     const ret = mri_nlfilter_outputs(params, execution)
@@ -277,10 +279,8 @@ function mri_nlfilter(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MriNlfilterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_NLFILTER_METADATA);
     const params = mri_nlfilter_params(input_image, output_image, blur_sigma, gaussian_sigma, mean_flag, window_size, cplov_flag, minmax_flag, no_offsets_flag, no_crop_flag, version_flag, help_flag)
-    return mri_nlfilter_execute(params, execution);
+    return mri_nlfilter_execute(params, runner);
 }
 
 
@@ -289,8 +289,6 @@ export {
       MriNlfilterOutputs,
       MriNlfilterParameters,
       mri_nlfilter,
-      mri_nlfilter_cargs,
       mri_nlfilter_execute,
-      mri_nlfilter_outputs,
       mri_nlfilter_params,
 };

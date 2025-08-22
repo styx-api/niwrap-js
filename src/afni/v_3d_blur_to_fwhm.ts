@@ -212,14 +212,16 @@ function v_3d_blur_to_fwhm_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dBlurToFwhmOutputs`).
  */
 function v_3d_blur_to_fwhm_execute(
     params: V3dBlurToFwhmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dBlurToFwhmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_BLUR_TO_FWHM_METADATA);
     params = execution.params(params)
     const cargs = v_3d_blur_to_fwhm_cargs(params, execution)
     const ret = v_3d_blur_to_fwhm_outputs(params, execution)
@@ -258,10 +260,8 @@ function v_3d_blur_to_fwhm(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dBlurToFwhmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_BLUR_TO_FWHM_METADATA);
     const params = v_3d_blur_to_fwhm_params(in_file, automask, blurmaster, fwhm, fwhmxy, mask, outputtype, prefix)
-    return v_3d_blur_to_fwhm_execute(params, execution);
+    return v_3d_blur_to_fwhm_execute(params, runner);
 }
 
 
@@ -270,8 +270,6 @@ export {
       V3dBlurToFwhmParameters,
       V_3D_BLUR_TO_FWHM_METADATA,
       v_3d_blur_to_fwhm,
-      v_3d_blur_to_fwhm_cargs,
       v_3d_blur_to_fwhm_execute,
-      v_3d_blur_to_fwhm_outputs,
       v_3d_blur_to_fwhm_params,
 };

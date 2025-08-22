@@ -187,14 +187,16 @@ function v_3d_upsample_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dUpsampleOutputs`).
  */
 function v_3d_upsample_execute(
     params: V3dUpsampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dUpsampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_UPSAMPLE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_upsample_cargs(params, execution)
     const ret = v_3d_upsample_outputs(params, execution)
@@ -229,10 +231,8 @@ function v_3d_upsample(
     datatype: string | null = null,
     runner: Runner | null = null,
 ): V3dUpsampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_UPSAMPLE_METADATA);
     const params = v_3d_upsample_params(upsample_factor, input_dataset, linear_interpolation, output_prefix, verbose_flag, datatype)
-    return v_3d_upsample_execute(params, execution);
+    return v_3d_upsample_execute(params, runner);
 }
 
 
@@ -241,8 +241,6 @@ export {
       V3dUpsampleParameters,
       V_3D_UPSAMPLE_METADATA,
       v_3d_upsample,
-      v_3d_upsample_cargs,
       v_3d_upsample_execute,
-      v_3d_upsample_outputs,
       v_3d_upsample_params,
 };

@@ -137,14 +137,16 @@ function fslmodhd_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslmodhdOutputs`).
  */
 function fslmodhd_execute(
     params: FslmodhdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslmodhdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLMODHD_METADATA);
     params = execution.params(params)
     const cargs = fslmodhd_cargs(params, execution)
     const ret = fslmodhd_outputs(params, execution)
@@ -173,10 +175,8 @@ function fslmodhd(
     value: string,
     runner: Runner | null = null,
 ): FslmodhdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLMODHD_METADATA);
     const params = fslmodhd_params(image, keyword, value)
-    return fslmodhd_execute(params, execution);
+    return fslmodhd_execute(params, runner);
 }
 
 
@@ -185,8 +185,6 @@ export {
       FslmodhdOutputs,
       FslmodhdParameters,
       fslmodhd,
-      fslmodhd_cargs,
       fslmodhd_execute,
-      fslmodhd_outputs,
       fslmodhd_params,
 };

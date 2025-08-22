@@ -454,14 +454,16 @@ function reg_transform_outputs(
  * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegTransformOutputs`).
  */
 function reg_transform_execute(
     params: RegTransformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegTransformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REG_TRANSFORM_METADATA);
     params = execution.params(params)
     const cargs = reg_transform_cargs(params, execution)
     const ret = reg_transform_outputs(params, execution)
@@ -540,10 +542,8 @@ function reg_transform(
     comp_aff_output: string | null = null,
     runner: Runner | null = null,
 ): RegTransformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REG_TRANSFORM_METADATA);
     const params = reg_transform_params(reference_image, cpp2def_input, cpp2def_output, comp1_cpp2, comp1_cpp1, comp1_output, comp2_cpp, comp2_def, comp2_output, comp3_def2, comp3_def1, comp3_output, def2disp_input, def2disp_output, disp2def_input, disp2def_output, upd_sform_image, upd_sform_affine, upd_sform_output, aff2def_affine, aff2def_target, aff2def_cpp_or_def, aff2def_output, inv_affine_input, inv_affine_output, comp_aff_1st, comp_aff_2nd, comp_aff_output)
-    return reg_transform_execute(params, execution);
+    return reg_transform_execute(params, runner);
 }
 
 
@@ -552,8 +552,6 @@ export {
       RegTransformOutputs,
       RegTransformParameters,
       reg_transform,
-      reg_transform_cargs,
       reg_transform_execute,
-      reg_transform_outputs,
       reg_transform_params,
 };

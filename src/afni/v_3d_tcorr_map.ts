@@ -309,14 +309,16 @@ function v_3d_tcorr_map_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTcorrMapOutputs`).
  */
 function v_3d_tcorr_map_execute(
     params: V3dTcorrMapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTcorrMapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TCORR_MAP_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tcorr_map_cargs(params, execution)
     const ret = v_3d_tcorr_map_outputs(params, execution)
@@ -373,10 +375,8 @@ function v_3d_tcorr_map(
     hist: string | null = null,
     runner: Runner | null = null,
 ): V3dTcorrMapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TCORR_MAP_METADATA);
     const params = v_3d_tcorr_map_params(input, seed, mask, automask, mean, zmean, qmean, pmean, thresh, varthresh, norm_varthresh, corrmap, corrmask, aexpr, cexpr, sexpr, hist)
-    return v_3d_tcorr_map_execute(params, execution);
+    return v_3d_tcorr_map_execute(params, runner);
 }
 
 
@@ -385,8 +385,6 @@ export {
       V3dTcorrMapParameters,
       V_3D_TCORR_MAP_METADATA,
       v_3d_tcorr_map,
-      v_3d_tcorr_map_cargs,
       v_3d_tcorr_map_execute,
-      v_3d_tcorr_map_outputs,
       v_3d_tcorr_map_params,
 };

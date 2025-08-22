@@ -242,14 +242,16 @@ function volume_gradient_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeGradientOutputs`).
  */
 function volume_gradient_execute(
     params: VolumeGradientParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeGradientOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_GRADIENT_METADATA);
     params = execution.params(params)
     const cargs = volume_gradient_cargs(params, execution)
     const ret = volume_gradient_outputs(params, execution)
@@ -286,10 +288,8 @@ function volume_gradient(
     opt_subvolume_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeGradientOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_GRADIENT_METADATA);
     const params = volume_gradient_params(volume_in, volume_out, presmooth, opt_roi_roi_volume, opt_vectors_vector_volume_out, opt_subvolume_subvol)
-    return volume_gradient_execute(params, execution);
+    return volume_gradient_execute(params, runner);
 }
 
 
@@ -299,10 +299,7 @@ export {
       VolumeGradientParameters,
       VolumeGradientPresmoothParameters,
       volume_gradient,
-      volume_gradient_cargs,
       volume_gradient_execute,
-      volume_gradient_outputs,
       volume_gradient_params,
-      volume_gradient_presmooth_cargs,
       volume_gradient_presmooth_params,
 };

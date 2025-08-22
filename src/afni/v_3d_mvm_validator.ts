@@ -145,14 +145,16 @@ function v_3d_mvm_validator_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dMvmValidatorOutputs`).
  */
 function v_3d_mvm_validator_execute(
     params: V3dMvmValidatorParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dMvmValidatorOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_MVM_VALIDATOR_METADATA);
     params = execution.params(params)
     const cargs = v_3d_mvm_validator_cargs(params, execution)
     const ret = v_3d_mvm_validator_outputs(params, execution)
@@ -179,10 +181,8 @@ function v_3d_mvm_validator(
     shinyfolder: string | null = null,
     runner: Runner | null = null,
 ): V3dMvmValidatorOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_MVM_VALIDATOR_METADATA);
     const params = v_3d_mvm_validator_params(datatable, shinyfolder)
-    return v_3d_mvm_validator_execute(params, execution);
+    return v_3d_mvm_validator_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       V3dMvmValidatorParameters,
       V_3D_MVM_VALIDATOR_METADATA,
       v_3d_mvm_validator,
-      v_3d_mvm_validator_cargs,
       v_3d_mvm_validator_execute,
-      v_3d_mvm_validator_outputs,
       v_3d_mvm_validator_params,
 };

@@ -163,14 +163,16 @@ function v_3ddot_beta_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3ddotBetaOutputs`).
  */
 function v_3ddot_beta_execute(
     params: V3ddotBetaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3ddotBetaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DDOT_BETA_METADATA);
     params = execution.params(params)
     const cargs = v_3ddot_beta_cargs(params, execution)
     const ret = v_3ddot_beta_outputs(params, execution)
@@ -201,10 +203,8 @@ function v_3ddot_beta(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3ddotBetaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DDOT_BETA_METADATA);
     const params = v_3ddot_beta_params(input_file, prefix, doeta2, mask)
-    return v_3ddot_beta_execute(params, execution);
+    return v_3ddot_beta_execute(params, runner);
 }
 
 
@@ -213,8 +213,6 @@ export {
       V3ddotBetaParameters,
       V_3DDOT_BETA_METADATA,
       v_3ddot_beta,
-      v_3ddot_beta_cargs,
       v_3ddot_beta_execute,
-      v_3ddot_beta_outputs,
       v_3ddot_beta_params,
 };

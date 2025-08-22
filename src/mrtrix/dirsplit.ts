@@ -275,14 +275,16 @@ function dirsplit_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DirsplitOutputs`).
  */
 function dirsplit_execute(
     params: DirsplitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DirsplitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DIRSPLIT_METADATA);
     params = execution.params(params)
     const cargs = dirsplit_cargs(params, execution)
     const ret = dirsplit_outputs(params, execution)
@@ -335,10 +337,8 @@ function dirsplit(
     version: boolean = false,
     runner: Runner | null = null,
 ): DirsplitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DIRSPLIT_METADATA);
     const params = dirsplit_params(dirs, out, permutations, cartesian, info, quiet, debug, force, nthreads, config, help, version)
-    return dirsplit_execute(params, execution);
+    return dirsplit_execute(params, runner);
 }
 
 
@@ -348,10 +348,7 @@ export {
       DirsplitOutputs,
       DirsplitParameters,
       dirsplit,
-      dirsplit_cargs,
-      dirsplit_config_cargs,
       dirsplit_config_params,
       dirsplit_execute,
-      dirsplit_outputs,
       dirsplit_params,
 };

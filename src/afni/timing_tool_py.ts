@@ -336,14 +336,16 @@ function timing_tool_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TimingToolPyOutputs`).
  */
 function timing_tool_py_execute(
     params: TimingToolPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TimingToolPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TIMING_TOOL_PY_METADATA);
     params = execution.params(params)
     const cargs = timing_tool_py_cargs(params, execution)
     const ret = timing_tool_py_outputs(params, execution)
@@ -404,10 +406,8 @@ function timing_tool_py(
     multi_timing_event_list: string | null = null,
     runner: Runner | null = null,
 ): TimingToolPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TIMING_TOOL_PY_METADATA);
     const params = timing_tool_py_params(timing_file, output_file, run_length, tr, offset, extend_file, sort, scale_data, shift_to_run_offset, timing_to_1_d_file, stim_duration, multi_timing_files, multi_show_isi_stats, multi_show_timing, show_timing, multi_stim_duration, round_times_frac, truncate_times, multi_timing_event_list)
-    return timing_tool_py_execute(params, execution);
+    return timing_tool_py_execute(params, runner);
 }
 
 
@@ -416,8 +416,6 @@ export {
       TimingToolPyOutputs,
       TimingToolPyParameters,
       timing_tool_py,
-      timing_tool_py_cargs,
       timing_tool_py_execute,
-      timing_tool_py_outputs,
       timing_tool_py_params,
 };

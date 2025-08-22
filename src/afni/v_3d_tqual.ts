@@ -192,14 +192,16 @@ function v_3d_tqual_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTqualOutputs`).
  */
 function v_3d_tqual_execute(
     params: V3dTqualParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTqualOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TQUAL_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tqual_cargs(params, execution)
     const ret = v_3d_tqual_outputs(params, execution)
@@ -238,10 +240,8 @@ function v_3d_tqual(
     range: boolean = false,
     runner: Runner | null = null,
 ): V3dTqualOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TQUAL_METADATA);
     const params = v_3d_tqual_params(dataset, spearman, quadrant, autoclip, automask, clip, mask, range)
-    return v_3d_tqual_execute(params, execution);
+    return v_3d_tqual_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       V3dTqualParameters,
       V_3D_TQUAL_METADATA,
       v_3d_tqual,
-      v_3d_tqual_cargs,
       v_3d_tqual_execute,
-      v_3d_tqual_outputs,
       v_3d_tqual_params,
 };

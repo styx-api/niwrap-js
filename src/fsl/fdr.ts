@@ -238,14 +238,16 @@ function fdr_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FdrOutputs`).
  */
 function fdr_execute(
     params: FdrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FdrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FDR_METADATA);
     params = execution.params(params)
     const cargs = fdr_cargs(params, execution)
     const ret = fdr_outputs(params, execution)
@@ -292,10 +294,8 @@ function fdr(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): FdrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FDR_METADATA);
     const params = fdr_params(infile, maskfile, qvalue, adjustedimage, othresh_flag, order_flag, oneminusp_flag, positive_corr_flag, independent_flag, conservative_flag, debug_flag, verbose_flag)
-    return fdr_execute(params, execution);
+    return fdr_execute(params, runner);
 }
 
 
@@ -304,8 +304,6 @@ export {
       FdrOutputs,
       FdrParameters,
       fdr,
-      fdr_cargs,
       fdr_execute,
-      fdr_outputs,
       fdr_params,
 };

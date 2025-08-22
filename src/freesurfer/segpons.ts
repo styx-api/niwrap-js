@@ -181,14 +181,16 @@ function segpons_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegponsOutputs`).
  */
 function segpons_execute(
     params: SegponsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegponsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGPONS_METADATA);
     params = execution.params(params)
     const cargs = segpons_cargs(params, execution)
     const ret = segpons_outputs(params, execution)
@@ -223,10 +225,8 @@ function segpons(
     pons152_mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): SegponsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGPONS_METADATA);
     const params = segpons_params(subject, aseg, apas, seg, no_refine, pons152_mask)
-    return segpons_execute(params, execution);
+    return segpons_execute(params, runner);
 }
 
 
@@ -235,8 +235,6 @@ export {
       SegponsOutputs,
       SegponsParameters,
       segpons,
-      segpons_cargs,
       segpons_execute,
-      segpons_outputs,
       segpons_params,
 };

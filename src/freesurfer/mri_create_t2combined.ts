@@ -174,14 +174,16 @@ function mri_create_t2combined_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCreateT2combinedOutputs`).
  */
 function mri_create_t2combined_execute(
     params: MriCreateT2combinedParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCreateT2combinedOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CREATE_T2COMBINED_METADATA);
     params = execution.params(params)
     const cargs = mri_create_t2combined_cargs(params, execution)
     const ret = mri_create_t2combined_outputs(params, execution)
@@ -218,10 +220,8 @@ function mri_create_t2combined(
     show: boolean = false,
     runner: Runner | null = null,
 ): MriCreateT2combinedOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CREATE_T2COMBINED_METADATA);
     const params = mri_create_t2combined_params(subjid, t1wb, t2upper, t2lower, t2combined, t2middle, show)
-    return mri_create_t2combined_execute(params, execution);
+    return mri_create_t2combined_execute(params, runner);
 }
 
 
@@ -230,8 +230,6 @@ export {
       MriCreateT2combinedOutputs,
       MriCreateT2combinedParameters,
       mri_create_t2combined,
-      mri_create_t2combined_cargs,
       mri_create_t2combined_execute,
-      mri_create_t2combined_outputs,
       mri_create_t2combined_params,
 };

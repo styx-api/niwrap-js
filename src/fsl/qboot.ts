@@ -334,14 +334,16 @@ function qboot_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `QbootOutputs`).
  */
 function qboot_execute(
     params: QbootParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): QbootOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(QBOOT_METADATA);
     params = execution.params(params)
     const cargs = qboot_cargs(params, execution)
     const ret = qboot_outputs(params, execution)
@@ -406,10 +408,8 @@ function qboot(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): QbootOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(QBOOT_METADATA);
     const params = qboot_params(data_file, mask_file, bvecs_file, bvals_file, log_dir, forcedir_flag, q_file, model_type, lmax_order, npeaks, threshold, num_samples, lambda_param, delta_param, alpha_param, seed_param, gfa_flag, savecoeff_flag, savemeancoeff_flag, verbose_flag, help_flag)
-    return qboot_execute(params, execution);
+    return qboot_execute(params, runner);
 }
 
 
@@ -418,8 +418,6 @@ export {
       QbootOutputs,
       QbootParameters,
       qboot,
-      qboot_cargs,
       qboot_execute,
-      qboot_outputs,
       qboot_params,
 };

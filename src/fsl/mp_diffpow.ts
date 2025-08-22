@@ -138,14 +138,16 @@ function mp_diffpow_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MpDiffpowOutputs`).
  */
 function mp_diffpow_execute(
     params: MpDiffpowParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MpDiffpowOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MP_DIFFPOW_METADATA);
     params = execution.params(params)
     const cargs = mp_diffpow_cargs(params, execution)
     const ret = mp_diffpow_outputs(params, execution)
@@ -172,10 +174,8 @@ function mp_diffpow(
     diff_reg_file: string,
     runner: Runner | null = null,
 ): MpDiffpowOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MP_DIFFPOW_METADATA);
     const params = mp_diffpow_params(reg_file, diff_reg_file)
-    return mp_diffpow_execute(params, execution);
+    return mp_diffpow_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MpDiffpowOutputs,
       MpDiffpowParameters,
       mp_diffpow,
-      mp_diffpow_cargs,
       mp_diffpow_execute,
-      mp_diffpow_outputs,
       mp_diffpow_params,
 };

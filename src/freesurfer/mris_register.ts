@@ -783,14 +783,16 @@ function mris_register_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRegisterOutputs`).
  */
 function mris_register_execute(
     params: MrisRegisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRegisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_REGISTER_METADATA);
     params = execution.params(params)
     const cargs = mris_register_cargs(params, execution)
     const ret = mris_register_outputs(params, execution)
@@ -939,10 +941,8 @@ function mris_register(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): MrisRegisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_REGISTER_METADATA);
     const params = mris_register_params(surf_fname, target, out_fname, one_flag, addframe, annot_name, curvature_fname, canonical_name, inflated, inflated_name, label_file, orig_name, overlay_values, overlay_dir, starting_reg_fname, jacobian_fname, n_averages, adaptive, l_area, l_corr, curvature_flag, l_dist, dt_value, dt_decrease, dt_increase, l_external, error_ratio, initial_flag, l_laplacian, line_min, momentum, max_degrees, median, min_degrees, multi_scale, n_iterations, n_angles, neighborhood_size, l_nlarea, no_curv, no_normalization, no_rotation, no_sulc, num_surfaces, overlay_corr, max_passes, l_parea, remove_negative, reverse, rotate_values, registration_file, scale, search_flag, spring_value, tolerance, topology_flag, vnum, vsmooth, write_iterations, gdiag_no, vector_flag, threads, version_flag)
-    return mris_register_execute(params, execution);
+    return mris_register_execute(params, runner);
 }
 
 
@@ -951,8 +951,6 @@ export {
       MrisRegisterOutputs,
       MrisRegisterParameters,
       mris_register,
-      mris_register_cargs,
       mris_register_execute,
-      mris_register_outputs,
       mris_register_params,
 };

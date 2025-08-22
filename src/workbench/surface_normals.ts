@@ -141,14 +141,16 @@ function surface_normals_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceNormalsOutputs`).
  */
 function surface_normals_execute(
     params: SurfaceNormalsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceNormalsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_NORMALS_METADATA);
     params = execution.params(params)
     const cargs = surface_normals_cargs(params, execution)
     const ret = surface_normals_outputs(params, execution)
@@ -177,10 +179,8 @@ function surface_normals(
     metric_out: string,
     runner: Runner | null = null,
 ): SurfaceNormalsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_NORMALS_METADATA);
     const params = surface_normals_params(surface, metric_out)
-    return surface_normals_execute(params, execution);
+    return surface_normals_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       SurfaceNormalsOutputs,
       SurfaceNormalsParameters,
       surface_normals,
-      surface_normals_cargs,
       surface_normals_execute,
-      surface_normals_outputs,
       surface_normals_params,
 };

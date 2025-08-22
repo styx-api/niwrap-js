@@ -274,14 +274,16 @@ function mris_anatomical_stats_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisAnatomicalStatsOutputs`).
  */
 function mris_anatomical_stats_execute(
     params: MrisAnatomicalStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisAnatomicalStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_ANATOMICAL_STATS_METADATA);
     params = execution.params(params)
     const cargs = mris_anatomical_stats_cargs(params, execution)
     const ret = mris_anatomical_stats_outputs(params, execution)
@@ -332,10 +334,8 @@ function mris_anatomical_stats(
     th3_computation: boolean = false,
     runner: Runner | null = null,
 ): MrisAnatomicalStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_ANATOMICAL_STATS_METADATA);
     const params = mris_anatomical_stats_params(subjectname, hemisphere, surfacename, thickness_range, label_file, thickness_file, annotation_file, tabular_output, tablefile, logfile, nsmooth, color_table, noglobal, th3_computation)
-    return mris_anatomical_stats_execute(params, execution);
+    return mris_anatomical_stats_execute(params, runner);
 }
 
 
@@ -344,8 +344,6 @@ export {
       MrisAnatomicalStatsOutputs,
       MrisAnatomicalStatsParameters,
       mris_anatomical_stats,
-      mris_anatomical_stats_cargs,
       mris_anatomical_stats_execute,
-      mris_anatomical_stats_outputs,
       mris_anatomical_stats_params,
 };

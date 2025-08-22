@@ -252,14 +252,16 @@ function nifti_information_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `NiftiInformationOutputs`).
  */
 function nifti_information_execute(
     params: NiftiInformationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): NiftiInformationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(NIFTI_INFORMATION_METADATA);
     params = execution.params(params)
     const cargs = nifti_information_cargs(params, execution)
     const ret = nifti_information_outputs(params, execution)
@@ -292,10 +294,8 @@ function nifti_information(
     print_xml: NiftiInformationPrintXmlParameters | null = null,
     runner: Runner | null = null,
 ): NiftiInformationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(NIFTI_INFORMATION_METADATA);
     const params = nifti_information_params(nifti_file, print_header, opt_print_matrix, print_xml)
-    return nifti_information_execute(params, execution);
+    return nifti_information_execute(params, runner);
 }
 
 
@@ -306,12 +306,8 @@ export {
       NiftiInformationPrintHeaderParameters,
       NiftiInformationPrintXmlParameters,
       nifti_information,
-      nifti_information_cargs,
       nifti_information_execute,
-      nifti_information_outputs,
       nifti_information_params,
-      nifti_information_print_header_cargs,
       nifti_information_print_header_params,
-      nifti_information_print_xml_cargs,
       nifti_information_print_xml_params,
 };

@@ -191,14 +191,16 @@ function robustfov_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RobustfovOutputs`).
  */
 function robustfov_execute(
     params: RobustfovParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RobustfovOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ROBUSTFOV_METADATA);
     params = execution.params(params)
     const cargs = robustfov_cargs(params, execution)
     const ret = robustfov_outputs(params, execution)
@@ -233,10 +235,8 @@ function robustfov(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): RobustfovOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ROBUSTFOV_METADATA);
     const params = robustfov_params(input_file, output_image, brain_size, matrix_output, debug_flag, verbose_flag)
-    return robustfov_execute(params, execution);
+    return robustfov_execute(params, runner);
 }
 
 
@@ -245,8 +245,6 @@ export {
       RobustfovOutputs,
       RobustfovParameters,
       robustfov,
-      robustfov_cargs,
       robustfov_execute,
-      robustfov_outputs,
       robustfov_params,
 };

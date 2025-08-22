@@ -206,14 +206,16 @@ function v_3d_stat_clust_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dStatClustOutputs`).
  */
 function v_3d_stat_clust_execute(
     params: V3dStatClustParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dStatClustOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_STAT_CLUST_METADATA);
     params = execution.params(params)
     const cargs = v_3d_stat_clust_cargs(params, execution)
     const ret = v_3d_stat_clust_outputs(params, execution)
@@ -254,10 +256,8 @@ function v_3d_stat_clust(
     dist_cor: boolean = false,
     runner: Runner | null = null,
 ): V3dStatClustOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_STAT_CLUST_METADATA);
     const params = v_3d_stat_clust_params(thresh, nclust, datasets, prefix, session_dir, verbose, dist_euc, dist_ind, dist_cor)
-    return v_3d_stat_clust_execute(params, execution);
+    return v_3d_stat_clust_execute(params, runner);
 }
 
 
@@ -266,8 +266,6 @@ export {
       V3dStatClustParameters,
       V_3D_STAT_CLUST_METADATA,
       v_3d_stat_clust,
-      v_3d_stat_clust_cargs,
       v_3d_stat_clust_execute,
-      v_3d_stat_clust_outputs,
       v_3d_stat_clust_params,
 };

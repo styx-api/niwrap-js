@@ -267,14 +267,16 @@ function volume_math_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeMathOutputs`).
  */
 function volume_math_execute(
     params: VolumeMathParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeMathOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_MATH_METADATA);
     params = execution.params(params)
     const cargs = volume_math_cargs(params, execution)
     const ret = volume_math_outputs(params, execution)
@@ -344,10 +346,8 @@ function volume_math(
     var_: Array<VolumeMathVarParameters> | null = null,
     runner: Runner | null = null,
 ): VolumeMathOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_MATH_METADATA);
     const params = volume_math_params(expression, volume_out, opt_fixnan_replace, var_)
-    return volume_math_execute(params, execution);
+    return volume_math_execute(params, runner);
 }
 
 
@@ -357,10 +357,7 @@ export {
       VolumeMathParameters,
       VolumeMathVarParameters,
       volume_math,
-      volume_math_cargs,
       volume_math_execute,
-      volume_math_outputs,
       volume_math_params,
-      volume_math_var_cargs,
       volume_math_var_params,
 };

@@ -238,14 +238,16 @@ function fspalm_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FspalmOutputs`).
  */
 function fspalm_execute(
     params: FspalmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FspalmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSPALM_METADATA);
     params = execution.params(params)
     const cargs = fspalm_cargs(params, execution)
     const ret = fspalm_outputs(params, execution)
@@ -296,10 +298,8 @@ function fspalm(
     pargs: string | null = null,
     runner: Runner | null = null,
 ): FspalmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSPALM_METADATA);
     const params = fspalm_params(glmdir, cft, cwp, onetail, twotail, name, iters, monly, pponly, octave, centroid, v_2spaces, v_3spaces, pargs)
-    return fspalm_execute(params, execution);
+    return fspalm_execute(params, runner);
 }
 
 
@@ -308,8 +308,6 @@ export {
       FspalmOutputs,
       FspalmParameters,
       fspalm,
-      fspalm_cargs,
       fspalm_execute,
-      fspalm_outputs,
       fspalm_params,
 };

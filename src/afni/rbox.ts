@@ -304,14 +304,16 @@ function rbox_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RboxOutputs`).
  */
 function rbox_execute(
     params: RboxParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RboxOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RBOX_METADATA);
     params = execution.params(params)
     const cargs = rbox_cargs(params, execution)
     const ret = rbox_outputs(params, execution)
@@ -376,10 +378,8 @@ function rbox(
     mesh_lattice: Array<string> | null = null,
     runner: Runner | null = null,
 ): RboxOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RBOX_METADATA);
     const params = rbox_params(number_points, dimension, unit_cube, unit_diamond, spiral, regular_polygon, cospherical_points, simplex_points, simplex_plus_points, add_point, lens_distribution, random_within, random_disk, bounding_box, homogeneous_coordinates, remove_command_line, time_seed, integer_coordinates, offset, user_seed, mesh_lattice)
-    return rbox_execute(params, execution);
+    return rbox_execute(params, runner);
 }
 
 
@@ -388,8 +388,6 @@ export {
       RboxOutputs,
       RboxParameters,
       rbox,
-      rbox_cargs,
       rbox_execute,
-      rbox_outputs,
       rbox_params,
 };

@@ -134,14 +134,16 @@ function fslhd_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslhdOutputs`).
  */
 function fslhd_execute(
     params: FslhdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslhdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLHD_METADATA);
     params = execution.params(params)
     const cargs = fslhd_cargs(params, execution)
     const ret = fslhd_outputs(params, execution)
@@ -168,10 +170,8 @@ function fslhd(
     xml_flag: boolean = false,
     runner: Runner | null = null,
 ): FslhdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLHD_METADATA);
     const params = fslhd_params(input_file, xml_flag)
-    return fslhd_execute(params, execution);
+    return fslhd_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       FslhdOutputs,
       FslhdParameters,
       fslhd,
-      fslhd_cargs,
       fslhd_execute,
-      fslhd_outputs,
       fslhd_params,
 };

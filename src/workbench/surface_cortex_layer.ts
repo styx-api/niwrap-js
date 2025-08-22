@@ -168,14 +168,16 @@ function surface_cortex_layer_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceCortexLayerOutputs`).
  */
 function surface_cortex_layer_execute(
     params: SurfaceCortexLayerParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceCortexLayerOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_CORTEX_LAYER_METADATA);
     params = execution.params(params)
     const cargs = surface_cortex_layer_cargs(params, execution)
     const ret = surface_cortex_layer_outputs(params, execution)
@@ -210,10 +212,8 @@ function surface_cortex_layer(
     opt_placement_out_placement_metric: string | null = null,
     runner: Runner | null = null,
 ): SurfaceCortexLayerOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_CORTEX_LAYER_METADATA);
     const params = surface_cortex_layer_params(white_surface, pial_surface, location, out_surface, opt_placement_out_placement_metric)
-    return surface_cortex_layer_execute(params, execution);
+    return surface_cortex_layer_execute(params, runner);
 }
 
 
@@ -222,8 +222,6 @@ export {
       SurfaceCortexLayerOutputs,
       SurfaceCortexLayerParameters,
       surface_cortex_layer,
-      surface_cortex_layer_cargs,
       surface_cortex_layer_execute,
-      surface_cortex_layer_outputs,
       surface_cortex_layer_params,
 };

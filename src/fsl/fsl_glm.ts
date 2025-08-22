@@ -438,14 +438,16 @@ function fsl_glm_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslGlmOutputs`).
  */
 function fsl_glm_execute(
     params: FslGlmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslGlmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_GLM_METADATA);
     params = execution.params(params)
     const cargs = fsl_glm_cargs(params, execution)
     const ret = fsl_glm_outputs(params, execution)
@@ -516,10 +518,8 @@ function fsl_glm(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FslGlmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_GLM_METADATA);
     const params = fsl_glm_params(input_file, design_matrix, output_file, contrasts, mask_file, dof, design_norm_flag, data_norm_flag, vn_flag, demean_flag, output_copes, output_zstats, output_tstats, output_pvals, output_fvals, output_pfvals, output_residuals, output_varcb, output_sigsq, output_data, output_vnscales, vx_text, vx_images, help_flag)
-    return fsl_glm_execute(params, execution);
+    return fsl_glm_execute(params, runner);
 }
 
 
@@ -528,8 +528,6 @@ export {
       FslGlmOutputs,
       FslGlmParameters,
       fsl_glm,
-      fsl_glm_cargs,
       fsl_glm_execute,
-      fsl_glm_outputs,
       fsl_glm_params,
 };

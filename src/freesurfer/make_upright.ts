@@ -143,14 +143,16 @@ function make_upright_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeUprightOutputs`).
  */
 function make_upright_execute(
     params: MakeUprightParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeUprightOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_UPRIGHT_METADATA);
     params = execution.params(params)
     const cargs = make_upright_cargs(params, execution)
     const ret = make_upright_outputs(params, execution)
@@ -179,10 +181,8 @@ function make_upright(
     transformation_map: InputPathType,
     runner: Runner | null = null,
 ): MakeUprightOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_UPRIGHT_METADATA);
     const params = make_upright_params(input_image, output_image, transformation_map)
-    return make_upright_execute(params, execution);
+    return make_upright_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MakeUprightOutputs,
       MakeUprightParameters,
       make_upright,
-      make_upright_cargs,
       make_upright_execute,
-      make_upright_outputs,
       make_upright_params,
 };

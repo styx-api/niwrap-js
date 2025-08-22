@@ -163,14 +163,16 @@ function surface_sphere_project_unproject_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceSphereProjectUnprojectOutputs`).
  */
 function surface_sphere_project_unproject_execute(
     params: SurfaceSphereProjectUnprojectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceSphereProjectUnprojectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_SPHERE_PROJECT_UNPROJECT_METADATA);
     params = execution.params(params)
     const cargs = surface_sphere_project_unproject_cargs(params, execution)
     const ret = surface_sphere_project_unproject_outputs(params, execution)
@@ -215,10 +217,8 @@ function surface_sphere_project_unproject(
     sphere_out: string,
     runner: Runner | null = null,
 ): SurfaceSphereProjectUnprojectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_SPHERE_PROJECT_UNPROJECT_METADATA);
     const params = surface_sphere_project_unproject_params(sphere_in, sphere_project_to, sphere_unproject_from, sphere_out)
-    return surface_sphere_project_unproject_execute(params, execution);
+    return surface_sphere_project_unproject_execute(params, runner);
 }
 
 
@@ -227,8 +227,6 @@ export {
       SurfaceSphereProjectUnprojectOutputs,
       SurfaceSphereProjectUnprojectParameters,
       surface_sphere_project_unproject,
-      surface_sphere_project_unproject_cargs,
       surface_sphere_project_unproject_execute,
-      surface_sphere_project_unproject_outputs,
       surface_sphere_project_unproject_params,
 };

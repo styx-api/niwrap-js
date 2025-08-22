@@ -138,14 +138,16 @@ function sliceanimate_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SliceanimateOutputs`).
  */
 function sliceanimate_execute(
     params: SliceanimateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SliceanimateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SLICEANIMATE_METADATA);
     params = execution.params(params)
     const cargs = sliceanimate_cargs(params, execution)
     const ret = sliceanimate_outputs(params, execution)
@@ -172,10 +174,8 @@ function sliceanimate(
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): SliceanimateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SLICEANIMATE_METADATA);
     const params = sliceanimate_params(output_file, input_files)
-    return sliceanimate_execute(params, execution);
+    return sliceanimate_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       SliceanimateOutputs,
       SliceanimateParameters,
       sliceanimate,
-      sliceanimate_cargs,
       sliceanimate_execute,
-      sliceanimate_outputs,
       sliceanimate_params,
 };

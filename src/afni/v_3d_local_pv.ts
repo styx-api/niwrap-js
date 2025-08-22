@@ -248,14 +248,16 @@ function v_3d_local_pv_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dLocalPvOutputs`).
  */
 function v_3d_local_pv_execute(
     params: V3dLocalPvParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dLocalPvOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_LOCAL_PV_METADATA);
     params = execution.params(params)
     const cargs = v_3d_local_pv_cargs(params, execution)
     const ret = v_3d_local_pv_outputs(params, execution)
@@ -300,10 +302,8 @@ function v_3d_local_pv(
     vproj: string | null = null,
     runner: Runner | null = null,
 ): V3dLocalPvOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_LOCAL_PV_METADATA);
     const params = v_3d_local_pv_params(input_dataset, mask, automask, prefix, prefix2, evprefix, neighborhood, despike, polort, vnorm, vproj)
-    return v_3d_local_pv_execute(params, execution);
+    return v_3d_local_pv_execute(params, runner);
 }
 
 
@@ -312,8 +312,6 @@ export {
       V3dLocalPvParameters,
       V_3D_LOCAL_PV_METADATA,
       v_3d_local_pv,
-      v_3d_local_pv_cargs,
       v_3d_local_pv_execute,
-      v_3d_local_pv_outputs,
       v_3d_local_pv_params,
 };

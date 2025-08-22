@@ -227,14 +227,16 @@ function v__fs_roi_label_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VFsRoiLabelOutputs`).
  */
 function v__fs_roi_label_execute(
     params: VFsRoiLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VFsRoiLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__FS_ROI_LABEL_METADATA);
     params = execution.params(params)
     const cargs = v__fs_roi_label_cargs(params, execution)
     const ret = v__fs_roi_label_outputs(params, execution)
@@ -275,10 +277,8 @@ function v__fs_roi_label(
     sname_name: string | null = null,
     runner: Runner | null = null,
 ): VFsRoiLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__FS_ROI_LABEL_METADATA);
     const params = v__fs_roi_label_params(label_int, lab_flag, rank_int, rankmap_file, name, labeltable_file, surf_annot_cmap, slab_int, sname_name)
-    return v__fs_roi_label_execute(params, execution);
+    return v__fs_roi_label_execute(params, runner);
 }
 
 
@@ -287,8 +287,6 @@ export {
       VFsRoiLabelParameters,
       V__FS_ROI_LABEL_METADATA,
       v__fs_roi_label,
-      v__fs_roi_label_cargs,
       v__fs_roi_label_execute,
-      v__fs_roi_label_outputs,
       v__fs_roi_label_params,
 };

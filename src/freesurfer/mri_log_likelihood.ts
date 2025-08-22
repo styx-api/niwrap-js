@@ -137,14 +137,16 @@ function mri_log_likelihood_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriLogLikelihoodOutputs`).
  */
 function mri_log_likelihood_execute(
     params: MriLogLikelihoodParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriLogLikelihoodOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_LOG_LIKELIHOOD_METADATA);
     params = execution.params(params)
     const cargs = mri_log_likelihood_cargs(params, execution)
     const ret = mri_log_likelihood_outputs(params, execution)
@@ -173,10 +175,8 @@ function mri_log_likelihood(
     transform_file: InputPathType,
     runner: Runner | null = null,
 ): MriLogLikelihoodOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_LOG_LIKELIHOOD_METADATA);
     const params = mri_log_likelihood_params(input_brain_images, atlas_file, transform_file)
-    return mri_log_likelihood_execute(params, execution);
+    return mri_log_likelihood_execute(params, runner);
 }
 
 
@@ -185,8 +185,6 @@ export {
       MriLogLikelihoodOutputs,
       MriLogLikelihoodParameters,
       mri_log_likelihood,
-      mri_log_likelihood_cargs,
       mri_log_likelihood_execute,
-      mri_log_likelihood_outputs,
       mri_log_likelihood_params,
 };

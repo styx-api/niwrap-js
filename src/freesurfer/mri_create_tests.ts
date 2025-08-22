@@ -323,14 +323,16 @@ function mri_create_tests_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCreateTestsOutputs`).
  */
 function mri_create_tests_execute(
     params: MriCreateTestsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCreateTestsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CREATE_TESTS_METADATA);
     params = execution.params(params)
     const cargs = mri_create_tests_cargs(params, execution)
     const ret = mri_create_tests_outputs(params, execution)
@@ -391,10 +393,8 @@ function mri_create_tests(
     iscale_out: string | null = null,
     runner: Runner | null = null,
 ): MriCreateTestsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CREATE_TESTS_METADATA);
     const params = mri_create_tests_params(input_file, out_src, out_target, input_target, lta_in, mask, noise, outlier, outlier_box, translation_flag, transdist, rotation_flag, maxdeg, intensity_flag, iscale, lta_out, lta_outs, lta_outt, iscale_out)
-    return mri_create_tests_execute(params, execution);
+    return mri_create_tests_execute(params, runner);
 }
 
 
@@ -403,8 +403,6 @@ export {
       MriCreateTestsOutputs,
       MriCreateTestsParameters,
       mri_create_tests,
-      mri_create_tests_cargs,
       mri_create_tests_execute,
-      mri_create_tests_outputs,
       mri_create_tests_params,
 };

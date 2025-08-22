@@ -618,14 +618,16 @@ function uber_subject_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `UberSubjectPyOutputs`).
  */
 function uber_subject_py_execute(
     params: UberSubjectPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): UberSubjectPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(UBER_SUBJECT_PY_METADATA);
     params = execution.params(params)
     const cargs = uber_subject_py_cargs(params, execution)
     const ret = uber_subject_py_outputs(params, execution)
@@ -734,10 +736,8 @@ function uber_subject_py(
     verb: string | null = null,
     runner: Runner | null = null,
 ): UberSubjectPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UBER_SUBJECT_PY_METADATA);
     const params = uber_subject_py_params(qt_opts, svar, cvar, no_gui, print_ap_command, save_ap_command, exec_ap_command, exec_proc_script, align_cost, align_giant_move, align_opts_aea, anal_domain, anal_type, anat, anat_has_skull, blocks, blur_size, epi, epi_wildcard, gid, gltsym, gltsym_label, motion_limit, outlier_limit, regress_goforit, regress_bandpass, regress_jobs, regress_mot_deriv, regress_opts_3d_d, reml_exec, run_clustsim, sid, stim, stim_basis, stim_label, stim_type, stim_wildcard, tcat_nfirst, tlrc_base, tlrc_ok_maxite, tlrc_opts_at, volreg_base, verb)
-    return uber_subject_py_execute(params, execution);
+    return uber_subject_py_execute(params, runner);
 }
 
 
@@ -746,8 +746,6 @@ export {
       UberSubjectPyOutputs,
       UberSubjectPyParameters,
       uber_subject_py,
-      uber_subject_py_cargs,
       uber_subject_py_execute,
-      uber_subject_py_outputs,
       uber_subject_py_params,
 };

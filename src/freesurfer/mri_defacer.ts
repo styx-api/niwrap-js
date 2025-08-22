@@ -379,14 +379,16 @@ function mri_defacer_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriDefacerOutputs`).
  */
 function mri_defacer_execute(
     params: MriDefacerParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriDefacerOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_DEFACER_METADATA);
     params = execution.params(params)
     const cargs = mri_defacer_cargs(params, execution)
     const ret = mri_defacer_outputs(params, execution)
@@ -457,10 +459,8 @@ function mri_defacer(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriDefacerOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_DEFACER_METADATA);
     const params = mri_defacer_params(input_volume, headmask, tempsurf, defaced_volume, templabel, watermark, facemask, fill_constants, exclude_mask, tempreg, minsurfpath, maxsurfpath, distbounds, distoverlay, distdat, statspath, output_tempsurf, apply_to_volume, ripple_center, apply_ripple, diagnostic_level, debug, checkopts, version)
-    return mri_defacer_execute(params, execution);
+    return mri_defacer_execute(params, runner);
 }
 
 
@@ -469,8 +469,6 @@ export {
       MriDefacerOutputs,
       MriDefacerParameters,
       mri_defacer,
-      mri_defacer_cargs,
       mri_defacer_execute,
-      mri_defacer_outputs,
       mri_defacer_params,
 };

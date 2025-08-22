@@ -217,14 +217,16 @@ function bedpostx_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BedpostxOutputs`).
  */
 function bedpostx_execute(
     params: BedpostxParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BedpostxOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BEDPOSTX_METADATA);
     params = execution.params(params)
     const cargs = bedpostx_cargs(params, execution)
     const ret = bedpostx_outputs(params, execution)
@@ -263,10 +265,8 @@ function bedpostx(
     grad_nonlinear: boolean = false,
     runner: Runner | null = null,
 ): BedpostxOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BEDPOSTX_METADATA);
     const params = bedpostx_params(subject_dir, num_fibres, ard_weight, burnin, num_jumps, sample_every, model_type, grad_nonlinear)
-    return bedpostx_execute(params, execution);
+    return bedpostx_execute(params, runner);
 }
 
 
@@ -275,8 +275,6 @@ export {
       BedpostxOutputs,
       BedpostxParameters,
       bedpostx,
-      bedpostx_cargs,
       bedpostx_execute,
-      bedpostx_outputs,
       bedpostx_params,
 };

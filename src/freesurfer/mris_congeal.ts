@@ -260,14 +260,16 @@ function mris_congeal_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisCongealOutputs`).
  */
 function mris_congeal_execute(
     params: MrisCongealParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisCongealOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_CONGEAL_METADATA);
     params = execution.params(params)
     const cargs = mris_congeal_cargs(params, execution)
     const ret = mris_congeal_outputs(params, execution)
@@ -320,10 +322,8 @@ function mris_congeal(
     target_subject: boolean = false,
     runner: Runner | null = null,
 ): MrisCongealOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_CONGEAL_METADATA);
     const params = mris_congeal_params(input_surface_name, hemi, subjects, output_surface_name, subjects_dir, disable_rigid_alignment, disable_sulc_alignment, smoothwm_curv, jacobian_output, distance_term, manual_label, addframe, overlay, overlay_dir, target_subject)
-    return mris_congeal_execute(params, execution);
+    return mris_congeal_execute(params, runner);
 }
 
 
@@ -332,8 +332,6 @@ export {
       MrisCongealOutputs,
       MrisCongealParameters,
       mris_congeal,
-      mris_congeal_cargs,
       mris_congeal_execute,
-      mris_congeal_outputs,
       mris_congeal_params,
 };

@@ -368,14 +368,16 @@ function mri_cvs_register_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCvsRegisterOutputs`).
  */
 function mri_cvs_register_execute(
     params: MriCvsRegisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCvsRegisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CVS_REGISTER_METADATA);
     params = execution.params(params)
     const cargs = mri_cvs_register_cargs(params, execution)
     const ret = mri_cvs_register_outputs(params, execution)
@@ -452,10 +454,8 @@ function mri_cvs_register(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MriCvsRegisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CVS_REGISTER_METADATA);
     const params = mri_cvs_register_params(mov_subjid, template_subjid, templatedir, mni_flag, outdir, asegfname, voltype, step1_flag, step2_flag, step3_flag, noaseg_flag, nointensity_flag, hemi_flag, masktargethemi_flag, maskmovinghemi_flag, nocleanup_flag, keepelreg_flag, keepallm3z_flag, cleanall_flag, cleansurfreg_flag, cleanelreg_flag, cleanvolreg_flag, m3d_flag, openmp, nolog_flag, version_flag, help_flag)
-    return mri_cvs_register_execute(params, execution);
+    return mri_cvs_register_execute(params, runner);
 }
 
 
@@ -464,8 +464,6 @@ export {
       MriCvsRegisterOutputs,
       MriCvsRegisterParameters,
       mri_cvs_register,
-      mri_cvs_register_cargs,
       mri_cvs_register_execute,
-      mri_cvs_register_outputs,
       mri_cvs_register_params,
 };

@@ -127,14 +127,16 @@ function renormalize_t1_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RenormalizeT1SubjectOutputs`).
  */
 function renormalize_t1_subject_execute(
     params: RenormalizeT1SubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RenormalizeT1SubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RENORMALIZE_T1_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = renormalize_t1_subject_cargs(params, execution)
     const ret = renormalize_t1_subject_outputs(params, execution)
@@ -159,10 +161,8 @@ function renormalize_t1_subject(
     subject_dir: string,
     runner: Runner | null = null,
 ): RenormalizeT1SubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RENORMALIZE_T1_SUBJECT_METADATA);
     const params = renormalize_t1_subject_params(subject_dir)
-    return renormalize_t1_subject_execute(params, execution);
+    return renormalize_t1_subject_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       RenormalizeT1SubjectOutputs,
       RenormalizeT1SubjectParameters,
       renormalize_t1_subject,
-      renormalize_t1_subject_cargs,
       renormalize_t1_subject_execute,
-      renormalize_t1_subject_outputs,
       renormalize_t1_subject_params,
 };

@@ -127,14 +127,16 @@ function fs_install_mcr_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsInstallMcrOutputs`).
  */
 function fs_install_mcr_execute(
     params: FsInstallMcrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsInstallMcrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FS_INSTALL_MCR_METADATA);
     params = execution.params(params)
     const cargs = fs_install_mcr_cargs(params, execution)
     const ret = fs_install_mcr_outputs(params, execution)
@@ -159,10 +161,8 @@ function fs_install_mcr(
     mcr_version: string,
     runner: Runner | null = null,
 ): FsInstallMcrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FS_INSTALL_MCR_METADATA);
     const params = fs_install_mcr_params(mcr_version)
-    return fs_install_mcr_execute(params, execution);
+    return fs_install_mcr_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       FsInstallMcrOutputs,
       FsInstallMcrParameters,
       fs_install_mcr,
-      fs_install_mcr_cargs,
       fs_install_mcr_execute,
-      fs_install_mcr_outputs,
       fs_install_mcr_params,
 };

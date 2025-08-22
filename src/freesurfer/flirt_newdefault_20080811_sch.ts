@@ -148,14 +148,16 @@ function flirt_newdefault_20080811_sch_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FlirtNewdefault20080811SchOutputs`).
  */
 function flirt_newdefault_20080811_sch_execute(
     params: FlirtNewdefault20080811SchParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FlirtNewdefault20080811SchOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FLIRT_NEWDEFAULT_20080811_SCH_METADATA);
     params = execution.params(params)
     const cargs = flirt_newdefault_20080811_sch_cargs(params, execution)
     const ret = flirt_newdefault_20080811_sch_outputs(params, execution)
@@ -184,10 +186,8 @@ function flirt_newdefault_20080811_sch(
     scrollback_flag: boolean = false,
     runner: Runner | null = null,
 ): FlirtNewdefault20080811SchOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FLIRT_NEWDEFAULT_20080811_SCH_METADATA);
     const params = flirt_newdefault_20080811_sch_params(term_option, curses_flag, scrollback_flag)
-    return flirt_newdefault_20080811_sch_execute(params, execution);
+    return flirt_newdefault_20080811_sch_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       FlirtNewdefault20080811SchOutputs,
       FlirtNewdefault20080811SchParameters,
       flirt_newdefault_20080811_sch,
-      flirt_newdefault_20080811_sch_cargs,
       flirt_newdefault_20080811_sch_execute,
-      flirt_newdefault_20080811_sch_outputs,
       flirt_newdefault_20080811_sch_params,
 };

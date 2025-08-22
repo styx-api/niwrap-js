@@ -550,14 +550,16 @@ function mris_place_surface_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisPlaceSurfaceOutputs`).
  */
 function mris_place_surface_execute(
     params: MrisPlaceSurfaceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisPlaceSurfaceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_PLACE_SURFACE_METADATA);
     params = execution.params(params)
     const cargs = mris_place_surface_cargs(params, execution)
     const ret = mris_place_surface_outputs(params, execution)
@@ -668,10 +670,8 @@ function mris_place_surface(
     fill_lateral_ventricles: Array<number> | null = null,
     runner: Runner | null = null,
 ): MrisPlaceSurfaceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_PLACE_SURFACE_METADATA);
     const params = mris_place_surface_params(output_surface, input_surface, autodetect_gray_white_stats, input_volume, surface_type_group, hemi_group, wm_segment, out_volume, out_volume_only, restore_255, segmentation, cortical_parcellation, nsmooth, smooth_after_rip, max_cbv_dist, rip_label, rip_midline, rip_bg, rip_bg_no_annot, no_rip_freeze, rip_wmsa, rip_lesion, no_rip, rip_overlay, rip_surface, rip_projection, repulse_surface, white_surface, blend_surface, multimodal_input, mm_refine, pin_medial_wall, no_intensity_proc, debug_vertex, ripflag_out, local_max, target_surf, stop_mask, mm_intensity_limits, cover_seg, first_peak_d1, first_peak_d2, white_border_low_factor, fill_lateral_ventricles)
-    return mris_place_surface_execute(params, execution);
+    return mris_place_surface_execute(params, runner);
 }
 
 
@@ -680,8 +680,6 @@ export {
       MrisPlaceSurfaceOutputs,
       MrisPlaceSurfaceParameters,
       mris_place_surface,
-      mris_place_surface_cargs,
       mris_place_surface_execute,
-      mris_place_surface_outputs,
       mris_place_surface_params,
 };

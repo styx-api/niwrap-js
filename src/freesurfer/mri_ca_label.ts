@@ -679,14 +679,16 @@ function mri_ca_label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCaLabelOutputs`).
  */
 function mri_ca_label_execute(
     params: MriCaLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCaLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CA_LABEL_METADATA);
     params = execution.params(params)
     const cargs = mri_ca_label_cargs(params, execution)
     const ret = mri_ca_label_outputs(params, execution)
@@ -813,10 +815,8 @@ function mri_ca_label(
     threads: number | null = null,
     runner: Runner | null = null,
 ): MriCaLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CA_LABEL_METADATA);
     const params = mri_ca_label_params(input_volumes, transform_file, gca_file, output_volume, cross_sequence, no_gibbs, wm_segmentation, conform, topo_dist_thresh, topo_volume_thresh1, topo_volume_thresh2, norm_pd, thin_temporal_lobe, debug_voxel, debug_node, debug_label, tr, te, alpha, example, pthresh, niter, write_probs, novar, regularize, nohippo, fixed_white_matter, mri, histogram_equalization, renorm, flash, flash_params, renormalize, set_input_volume, histogram_normalize, mean_filter, write_snapshots, mask_final_labeling, expand, max_iterations, filter_labeled_volume, longitudinal_processing, relabel_unlikely, disables_wmsa, fix_ventricle, insert_wm_bet_putctx, sa_insert_wm_bet_putctx, insert_from_seg, sa_insert_from_seg, cblum_from_seg, sa_cblum_from_seg, threads)
-    return mri_ca_label_execute(params, execution);
+    return mri_ca_label_execute(params, runner);
 }
 
 
@@ -825,8 +825,6 @@ export {
       MriCaLabelOutputs,
       MriCaLabelParameters,
       mri_ca_label,
-      mri_ca_label_cargs,
       mri_ca_label_execute,
-      mri_ca_label_outputs,
       mri_ca_label_params,
 };

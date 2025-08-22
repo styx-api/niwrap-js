@@ -242,14 +242,16 @@ function parc_atlas_jackknife_test_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ParcAtlasJackknifeTestOutputs`).
  */
 function parc_atlas_jackknife_test_execute(
     params: ParcAtlasJackknifeTestParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ParcAtlasJackknifeTestOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PARC_ATLAS_JACKKNIFE_TEST_METADATA);
     params = execution.params(params)
     const cargs = parc_atlas_jackknife_test_cargs(params, execution)
     const ret = parc_atlas_jackknife_test_outputs(params, execution)
@@ -296,10 +298,8 @@ function parc_atlas_jackknife_test(
     dontrun: boolean = false,
     runner: Runner | null = null,
 ): ParcAtlasJackknifeTestOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PARC_ATLAS_JACKKNIFE_TEST_METADATA);
     const params = parc_atlas_jackknife_test_params(register, reg_dist, reg_append, reg_copy, train, classify, test, all, subjects_dir, freesurfer_home, binaries_path, dontrun)
-    return parc_atlas_jackknife_test_execute(params, execution);
+    return parc_atlas_jackknife_test_execute(params, runner);
 }
 
 
@@ -308,8 +308,6 @@ export {
       ParcAtlasJackknifeTestOutputs,
       ParcAtlasJackknifeTestParameters,
       parc_atlas_jackknife_test,
-      parc_atlas_jackknife_test_cargs,
       parc_atlas_jackknife_test_execute,
-      parc_atlas_jackknife_test_outputs,
       parc_atlas_jackknife_test_params,
 };

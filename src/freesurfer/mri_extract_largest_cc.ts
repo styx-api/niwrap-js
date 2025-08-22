@@ -193,14 +193,16 @@ function mri_extract_largest_cc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriExtractLargestCcOutputs`).
  */
 function mri_extract_largest_cc_execute(
     params: MriExtractLargestCcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriExtractLargestCcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_EXTRACT_LARGEST_CC_METADATA);
     params = execution.params(params)
     const cargs = mri_extract_largest_cc_cargs(params, execution)
     const ret = mri_extract_largest_cc_outputs(params, execution)
@@ -237,10 +239,8 @@ function mri_extract_largest_cc(
     label_value: number | null = null,
     runner: Runner | null = null,
 ): MriExtractLargestCcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_EXTRACT_LARGEST_CC_METADATA);
     const params = mri_extract_largest_cc_params(input_volume, output_volume, threshold, hemisphere, largest_cc_in_bg, original_volume, label_value)
-    return mri_extract_largest_cc_execute(params, execution);
+    return mri_extract_largest_cc_execute(params, runner);
 }
 
 
@@ -249,8 +249,6 @@ export {
       MriExtractLargestCcOutputs,
       MriExtractLargestCcParameters,
       mri_extract_largest_cc,
-      mri_extract_largest_cc_cargs,
       mri_extract_largest_cc_execute,
-      mri_extract_largest_cc_outputs,
       mri_extract_largest_cc_params,
 };

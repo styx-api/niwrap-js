@@ -180,14 +180,16 @@ function v_2perm_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V2permOutputs`).
  */
 function v_2perm_execute(
     params: V2permParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V2permOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_2PERM_METADATA);
     params = execution.params(params)
     const cargs = v_2perm_cargs(params, execution)
     const ret = v_2perm_outputs(params, execution)
@@ -222,10 +224,8 @@ function v_2perm(
     subset2_size: number | null = null,
     runner: Runner | null = null,
 ): V2permOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_2PERM_METADATA);
     const params = v_2perm_params(bottom_int, top_int, prefix, comma, subset1_size, subset2_size)
-    return v_2perm_execute(params, execution);
+    return v_2perm_execute(params, runner);
 }
 
 
@@ -234,8 +234,6 @@ export {
       V2permParameters,
       V_2PERM_METADATA,
       v_2perm,
-      v_2perm_cargs,
       v_2perm_execute,
-      v_2perm_outputs,
       v_2perm_params,
 };

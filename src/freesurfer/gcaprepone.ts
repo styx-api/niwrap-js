@@ -168,14 +168,16 @@ function gcaprepone_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GcapreponeOutputs`).
  */
 function gcaprepone_execute(
     params: GcapreponeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GcapreponeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GCAPREPONE_METADATA);
     params = execution.params(params)
     const cargs = gcaprepone_cargs(params, execution)
     const ret = gcaprepone_outputs(params, execution)
@@ -210,10 +212,8 @@ function gcaprepone(
     no_emreg: boolean = false,
     runner: Runner | null = null,
 ): GcapreponeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GCAPREPONE_METADATA);
     const params = gcaprepone_params(gcadir, subject, source_subjects_dir, done_file, init_subject, no_emreg)
-    return gcaprepone_execute(params, execution);
+    return gcaprepone_execute(params, runner);
 }
 
 
@@ -222,8 +222,6 @@ export {
       GcapreponeOutputs,
       GcapreponeParameters,
       gcaprepone,
-      gcaprepone_cargs,
       gcaprepone_execute,
-      gcaprepone_outputs,
       gcaprepone_params,
 };

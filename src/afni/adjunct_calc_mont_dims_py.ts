@@ -129,14 +129,16 @@ function adjunct_calc_mont_dims_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AdjunctCalcMontDimsPyOutputs`).
  */
 function adjunct_calc_mont_dims_py_execute(
     params: AdjunctCalcMontDimsPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AdjunctCalcMontDimsPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADJUNCT_CALC_MONT_DIMS_PY_METADATA);
     params = execution.params(params)
     const cargs = adjunct_calc_mont_dims_py_cargs(params, execution)
     const ret = adjunct_calc_mont_dims_py_outputs(params, execution)
@@ -161,10 +163,8 @@ function adjunct_calc_mont_dims_py(
     help: boolean = false,
     runner: Runner | null = null,
 ): AdjunctCalcMontDimsPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADJUNCT_CALC_MONT_DIMS_PY_METADATA);
     const params = adjunct_calc_mont_dims_py_params(help)
-    return adjunct_calc_mont_dims_py_execute(params, execution);
+    return adjunct_calc_mont_dims_py_execute(params, runner);
 }
 
 
@@ -173,8 +173,6 @@ export {
       AdjunctCalcMontDimsPyOutputs,
       AdjunctCalcMontDimsPyParameters,
       adjunct_calc_mont_dims_py,
-      adjunct_calc_mont_dims_py_cargs,
       adjunct_calc_mont_dims_py_execute,
-      adjunct_calc_mont_dims_py_outputs,
       adjunct_calc_mont_dims_py_params,
 };

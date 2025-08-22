@@ -148,14 +148,16 @@ function mris_ba_segment_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisBaSegmentOutputs`).
  */
 function mris_ba_segment_execute(
     params: MrisBaSegmentParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisBaSegmentOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_BA_SEGMENT_METADATA);
     params = execution.params(params)
     const cargs = mris_ba_segment_cargs(params, execution)
     const ret = mris_ba_segment_outputs(params, execution)
@@ -186,10 +188,8 @@ function mris_ba_segment(
     output_label: string,
     runner: Runner | null = null,
 ): MrisBaSegmentOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_BA_SEGMENT_METADATA);
     const params = mris_ba_segment_params(surface, profiles, prior_label, output_label)
-    return mris_ba_segment_execute(params, execution);
+    return mris_ba_segment_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MrisBaSegmentOutputs,
       MrisBaSegmentParameters,
       mris_ba_segment,
-      mris_ba_segment_cargs,
       mris_ba_segment_execute,
-      mris_ba_segment_outputs,
       mris_ba_segment_params,
 };

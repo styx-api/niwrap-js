@@ -274,14 +274,16 @@ function seg2recon_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Seg2reconOutputs`).
  */
 function seg2recon_execute(
     params: Seg2reconParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Seg2reconOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEG2RECON_METADATA);
     params = execution.params(params)
     const cargs = seg2recon_cargs(params, execution)
     const ret = seg2recon_outputs(params, execution)
@@ -332,10 +334,8 @@ function seg2recon(
     no_bias_field_cor: boolean = false,
     runner: Runner | null = null,
 ): Seg2reconOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEG2RECON_METADATA);
     const params = seg2recon_params(subject, segvol, inputvol, ctab, ndilate, threads, force_update, no_cc, mask, headmask, thresh, expert, rca, no_bias_field_cor)
-    return seg2recon_execute(params, execution);
+    return seg2recon_execute(params, runner);
 }
 
 
@@ -344,8 +344,6 @@ export {
       Seg2reconOutputs,
       Seg2reconParameters,
       seg2recon,
-      seg2recon_cargs,
       seg2recon_execute,
-      seg2recon_outputs,
       seg2recon_params,
 };

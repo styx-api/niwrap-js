@@ -132,14 +132,16 @@ function mri_add_new_tp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriAddNewTpOutputs`).
  */
 function mri_add_new_tp_execute(
     params: MriAddNewTpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriAddNewTpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_ADD_NEW_TP_METADATA);
     params = execution.params(params)
     const cargs = mri_add_new_tp_cargs(params, execution)
     const ret = mri_add_new_tp_outputs(params, execution)
@@ -166,10 +168,8 @@ function mri_add_new_tp(
     newtp_id: string,
     runner: Runner | null = null,
 ): MriAddNewTpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_ADD_NEW_TP_METADATA);
     const params = mri_add_new_tp_params(base_id, newtp_id)
-    return mri_add_new_tp_execute(params, execution);
+    return mri_add_new_tp_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       MriAddNewTpOutputs,
       MriAddNewTpParameters,
       mri_add_new_tp,
-      mri_add_new_tp_cargs,
       mri_add_new_tp_execute,
-      mri_add_new_tp_outputs,
       mri_add_new_tp_params,
 };

@@ -181,14 +181,16 @@ function v_3d_row_fillin_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dRowFillinOutputs`).
  */
 function v_3d_row_fillin_execute(
     params: V3dRowFillinParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dRowFillinOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ROW_FILLIN_METADATA);
     params = execution.params(params)
     const cargs = v_3d_row_fillin_cargs(params, execution)
     const ret = v_3d_row_fillin_outputs(params, execution)
@@ -221,10 +223,8 @@ function v_3d_row_fillin(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dRowFillinOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ROW_FILLIN_METADATA);
     const params = v_3d_row_fillin_params(input_dataset, maxgap, dir, binary, prefix)
-    return v_3d_row_fillin_execute(params, execution);
+    return v_3d_row_fillin_execute(params, runner);
 }
 
 
@@ -233,8 +233,6 @@ export {
       V3dRowFillinParameters,
       V_3D_ROW_FILLIN_METADATA,
       v_3d_row_fillin,
-      v_3d_row_fillin_cargs,
       v_3d_row_fillin_execute,
-      v_3d_row_fillin_outputs,
       v_3d_row_fillin_params,
 };

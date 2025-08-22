@@ -161,14 +161,16 @@ function map_all_labels_lh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MapAllLabelsLhOutputs`).
  */
 function map_all_labels_lh_execute(
     params: MapAllLabelsLhParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MapAllLabelsLhOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAP_ALL_LABELS_LH_METADATA);
     params = execution.params(params)
     const cargs = map_all_labels_lh_cargs(params, execution)
     const ret = map_all_labels_lh_outputs(params, execution)
@@ -203,10 +205,8 @@ function map_all_labels_lh(
     output: string,
     runner: Runner | null = null,
 ): MapAllLabelsLhOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAP_ALL_LABELS_LH_METADATA);
     const params = map_all_labels_lh_params(which, fname, hemi, spherical_surf, subjects, output)
-    return map_all_labels_lh_execute(params, execution);
+    return map_all_labels_lh_execute(params, runner);
 }
 
 
@@ -215,8 +215,6 @@ export {
       MapAllLabelsLhOutputs,
       MapAllLabelsLhParameters,
       map_all_labels_lh,
-      map_all_labels_lh_cargs,
       map_all_labels_lh_execute,
-      map_all_labels_lh_outputs,
       map_all_labels_lh_params,
 };

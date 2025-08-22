@@ -262,14 +262,16 @@ function fat_mvm_scripter_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatMvmScripterPyOutputs`).
  */
 function fat_mvm_scripter_py_execute(
     params: FatMvmScripterPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatMvmScripterPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_MVM_SCRIPTER_PY_METADATA);
     params = execution.params(params)
     const cargs = fat_mvm_scripter_py_cargs(params, execution)
     const ret = fat_mvm_scripter_py_outputs(params, execution)
@@ -318,10 +320,8 @@ function fat_mvm_scripter_py(
     cat_pair_off: boolean = false,
     runner: Runner | null = null,
 ): FatMvmScripterPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_MVM_SCRIPTER_PY_METADATA);
     const params = fat_mvm_scripter_py_params(prefix, table, log, vars, file_vars, pars, file_pars, rois, file_rois, no_posthoc, na_warn_off, subnet_pref, cat_pair_off)
-    return fat_mvm_scripter_py_execute(params, execution);
+    return fat_mvm_scripter_py_execute(params, runner);
 }
 
 
@@ -330,8 +330,6 @@ export {
       FatMvmScripterPyOutputs,
       FatMvmScripterPyParameters,
       fat_mvm_scripter_py,
-      fat_mvm_scripter_py_cargs,
       fat_mvm_scripter_py_execute,
-      fat_mvm_scripter_py_outputs,
       fat_mvm_scripter_py_params,
 };

@@ -185,14 +185,16 @@ function dual_regression_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DualRegressionOutputs`).
  */
 function dual_regression_execute(
     params: DualRegressionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DualRegressionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DUAL_REGRESSION_METADATA);
     params = execution.params(params)
     const cargs = dual_regression_cargs(params, execution)
     const ret = dual_regression_outputs(params, execution)
@@ -231,10 +233,8 @@ function dual_regression(
     thr_flag: boolean = false,
     runner: Runner | null = null,
 ): DualRegressionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DUAL_REGRESSION_METADATA);
     const params = dual_regression_params(group_ic_maps, des_norm, design_mat, design_con, n_perm, output_directory, input_files, thr_flag)
-    return dual_regression_execute(params, execution);
+    return dual_regression_execute(params, runner);
 }
 
 
@@ -243,8 +243,6 @@ export {
       DualRegressionOutputs,
       DualRegressionParameters,
       dual_regression,
-      dual_regression_cargs,
       dual_regression_execute,
-      dual_regression_outputs,
       dual_regression_params,
 };

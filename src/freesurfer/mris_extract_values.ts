@@ -176,14 +176,16 @@ function mris_extract_values_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisExtractValuesOutputs`).
  */
 function mris_extract_values_execute(
     params: MrisExtractValuesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisExtractValuesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_EXTRACT_VALUES_METADATA);
     params = execution.params(params)
     const cargs = mris_extract_values_cargs(params, execution)
     const ret = mris_extract_values_outputs(params, execution)
@@ -218,10 +220,8 @@ function mris_extract_values(
     image_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): MrisExtractValuesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_EXTRACT_VALUES_METADATA);
     const params = mris_extract_values_params(surface, overlay, annotation, csvfile, num_images, image_files)
-    return mris_extract_values_execute(params, execution);
+    return mris_extract_values_execute(params, runner);
 }
 
 
@@ -230,8 +230,6 @@ export {
       MrisExtractValuesOutputs,
       MrisExtractValuesParameters,
       mris_extract_values,
-      mris_extract_values_cargs,
       mris_extract_values_execute,
-      mris_extract_values_outputs,
       mris_extract_values_params,
 };

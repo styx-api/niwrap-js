@@ -297,14 +297,16 @@ function afdconnectivity_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AfdconnectivityOutputs`).
  */
 function afdconnectivity_execute(
     params: AfdconnectivityParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AfdconnectivityOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AFDCONNECTIVITY_METADATA);
     params = execution.params(params)
     const cargs = afdconnectivity_cargs(params, execution)
     const ret = afdconnectivity_outputs(params, execution)
@@ -369,10 +371,8 @@ function afdconnectivity(
     version: boolean = false,
     runner: Runner | null = null,
 ): AfdconnectivityOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AFDCONNECTIVITY_METADATA);
     const params = afdconnectivity_params(image, tracks, wbft, afd_map, all_fixels, info, quiet, debug, force, nthreads, config, help, version)
-    return afdconnectivity_execute(params, execution);
+    return afdconnectivity_execute(params, runner);
 }
 
 
@@ -382,10 +382,7 @@ export {
       AfdconnectivityOutputs,
       AfdconnectivityParameters,
       afdconnectivity,
-      afdconnectivity_cargs,
-      afdconnectivity_config_cargs,
       afdconnectivity_config_params,
       afdconnectivity_execute,
-      afdconnectivity_outputs,
       afdconnectivity_params,
 };

@@ -129,14 +129,16 @@ function suma_glxdino_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SumaGlxdinoOutputs`).
  */
 function suma_glxdino_execute(
     params: SumaGlxdinoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SumaGlxdinoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SUMA_GLXDINO_METADATA);
     params = execution.params(params)
     const cargs = suma_glxdino_cargs(params, execution)
     const ret = suma_glxdino_outputs(params, execution)
@@ -161,10 +163,8 @@ function suma_glxdino(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): SumaGlxdinoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SUMA_GLXDINO_METADATA);
     const params = suma_glxdino_params(verbose)
-    return suma_glxdino_execute(params, execution);
+    return suma_glxdino_execute(params, runner);
 }
 
 
@@ -173,8 +173,6 @@ export {
       SumaGlxdinoOutputs,
       SumaGlxdinoParameters,
       suma_glxdino,
-      suma_glxdino_cargs,
       suma_glxdino_execute,
-      suma_glxdino_outputs,
       suma_glxdino_params,
 };

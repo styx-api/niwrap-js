@@ -229,14 +229,16 @@ function mrisp_write_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrispWriteOutputs`).
  */
 function mrisp_write_execute(
     params: MrispWriteParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrispWriteOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRISP_WRITE_METADATA);
     params = execution.params(params)
     const cargs = mrisp_write_cargs(params, execution)
     const ret = mrisp_write_outputs(params, execution)
@@ -281,10 +283,8 @@ function mrisp_write(
     write_diagnostics: boolean = false,
     runner: Runner | null = null,
 ): MrispWriteOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRISP_WRITE_METADATA);
     const params = mrisp_write_params(input_surface, overlay_filename, output_name, subjects_dir, coords, average_curvature, correlation_matrix, scale_factor, normalize_curvature, verbose_vertex, write_diagnostics)
-    return mrisp_write_execute(params, execution);
+    return mrisp_write_execute(params, runner);
 }
 
 
@@ -293,8 +293,6 @@ export {
       MrispWriteOutputs,
       MrispWriteParameters,
       mrisp_write,
-      mrisp_write_cargs,
       mrisp_write_execute,
-      mrisp_write_outputs,
       mrisp_write_params,
 };

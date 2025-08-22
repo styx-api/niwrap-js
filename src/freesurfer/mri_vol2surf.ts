@@ -219,14 +219,16 @@ function mri_vol2surf_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriVol2surfOutputs`).
  */
 function mri_vol2surf_execute(
     params: MriVol2surfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriVol2surfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_VOL2SURF_METADATA);
     params = execution.params(params)
     const cargs = mri_vol2surf_cargs(params, execution)
     const ret = mri_vol2surf_outputs(params, execution)
@@ -267,10 +269,8 @@ function mri_vol2surf(
     surface: string | null = null,
     runner: Runner | null = null,
 ): MriVol2surfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_VOL2SURF_METADATA);
     const params = mri_vol2surf_params(input_volume, registration_file, output_path, reference_volume, regheader_subject, mni152reg_flag, target_subject, hemisphere, surface)
-    return mri_vol2surf_execute(params, execution);
+    return mri_vol2surf_execute(params, runner);
 }
 
 
@@ -279,8 +279,6 @@ export {
       MriVol2surfOutputs,
       MriVol2surfParameters,
       mri_vol2surf,
-      mri_vol2surf_cargs,
       mri_vol2surf_execute,
-      mri_vol2surf_outputs,
       mri_vol2surf_params,
 };

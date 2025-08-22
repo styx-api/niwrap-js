@@ -155,14 +155,16 @@ function mris_parcellate_connectivity_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisParcellateConnectivityOutputs`).
  */
 function mris_parcellate_connectivity_execute(
     params: MrisParcellateConnectivityParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisParcellateConnectivityOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_PARCELLATE_CONNECTIVITY_METADATA);
     params = execution.params(params)
     const cargs = mris_parcellate_connectivity_cargs(params, execution)
     const ret = mris_parcellate_connectivity_outputs(params, execution)
@@ -193,10 +195,8 @@ function mris_parcellate_connectivity(
     smooth_iterations: number | null = null,
     runner: Runner | null = null,
 ): MrisParcellateConnectivityOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_PARCELLATE_CONNECTIVITY_METADATA);
     const params = mris_parcellate_connectivity_params(input_surface, input_correlations, output_parcellation, smooth_iterations)
-    return mris_parcellate_connectivity_execute(params, execution);
+    return mris_parcellate_connectivity_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       MrisParcellateConnectivityOutputs,
       MrisParcellateConnectivityParameters,
       mris_parcellate_connectivity,
-      mris_parcellate_connectivity_cargs,
       mris_parcellate_connectivity_execute,
-      mris_parcellate_connectivity_outputs,
       mris_parcellate_connectivity_params,
 };

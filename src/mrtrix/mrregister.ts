@@ -1252,14 +1252,16 @@ function mrregister_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrregisterOutputs`).
  */
 function mrregister_execute(
     params: MrregisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrregisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRREGISTER_METADATA);
     params = execution.params(params)
     const cargs = mrregister_cargs(params, execution)
     const ret = mrregister_outputs(params, execution)
@@ -1443,10 +1445,8 @@ function mrregister(
     contrast1_contrast2: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): MrregisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRREGISTER_METADATA);
     const params = mrregister_params(image1_image2, type_, transformed, transformed_midway, mask1, mask2, nan, rigid, rigid_1tomidway, rigid_2tomidway, rigid_init_translation, rigid_init_rotation, rigid_init_matrix, rigid_scale, rigid_niter, rigid_metric, rigid_metric_diff_estimator, rigid_lmax, rigid_log, affine, affine_1tomidway, affine_2tomidway, affine_init_translation, affine_init_rotation, affine_init_matrix, affine_scale, affine_niter, affine_metric, affine_metric_diff_estimator, affine_lmax, affine_log, init_translation_unmasked1, init_translation_unmasked2, init_rotation_unmasked1, init_rotation_unmasked2, init_rotation_search_angles, init_rotation_search_scale, init_rotation_search_directions, init_rotation_search_run_global, init_rotation_search_global_iterations, linstage_iterations, linstage_optimiser_first, linstage_optimiser_last, linstage_optimiser_default, linstage_diagnostics_prefix, nl_warp, nl_warp_full, nl_init, nl_scale, nl_niter, nl_update_smooth, nl_disp_smooth, nl_grad_step, nl_lmax, diagnostics_image, directions, noreorientation, mc_weights, datatype, info, quiet, debug, force, nthreads, config, help, version, contrast1_contrast2)
-    return mrregister_execute(params, execution);
+    return mrregister_execute(params, runner);
 }
 
 
@@ -1462,19 +1462,10 @@ export {
       MrregisterTransformedOutputs,
       MrregisterTransformedParameters,
       mrregister,
-      mrregister_cargs,
-      mrregister_config_cargs,
       mrregister_config_params,
       mrregister_execute,
-      mrregister_nl_warp_cargs,
-      mrregister_nl_warp_outputs,
       mrregister_nl_warp_params,
-      mrregister_outputs,
       mrregister_params,
-      mrregister_transformed_cargs,
-      mrregister_transformed_midway_cargs,
-      mrregister_transformed_midway_outputs,
       mrregister_transformed_midway_params,
-      mrregister_transformed_outputs,
       mrregister_transformed_params,
 };

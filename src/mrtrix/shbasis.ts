@@ -264,14 +264,16 @@ function shbasis_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ShbasisOutputs`).
  */
 function shbasis_execute(
     params: ShbasisParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ShbasisOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SHBASIS_METADATA);
     params = execution.params(params)
     const cargs = shbasis_cargs(params, execution)
     const ret = shbasis_outputs(params, execution)
@@ -327,10 +329,8 @@ function shbasis(
     version: boolean = false,
     runner: Runner | null = null,
 ): ShbasisOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SHBASIS_METADATA);
     const params = shbasis_params(sh, convert, info, quiet, debug, force, nthreads, config, help, version)
-    return shbasis_execute(params, execution);
+    return shbasis_execute(params, runner);
 }
 
 
@@ -340,10 +340,7 @@ export {
       ShbasisOutputs,
       ShbasisParameters,
       shbasis,
-      shbasis_cargs,
-      shbasis_config_cargs,
       shbasis_config_params,
       shbasis_execute,
-      shbasis_outputs,
       shbasis_params,
 };

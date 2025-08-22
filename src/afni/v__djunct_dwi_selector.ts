@@ -143,14 +143,16 @@ function v__djunct_dwi_selector_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDjunctDwiSelectorOutputs`).
  */
 function v__djunct_dwi_selector_execute(
     params: VDjunctDwiSelectorParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDjunctDwiSelectorOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DJUNCT_DWI_SELECTOR_METADATA);
     params = execution.params(params)
     const cargs = v__djunct_dwi_selector_cargs(params, execution)
     const ret = v__djunct_dwi_selector_outputs(params, execution)
@@ -179,10 +181,8 @@ function v__djunct_dwi_selector(
     outfile: string,
     runner: Runner | null = null,
 ): VDjunctDwiSelectorOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DJUNCT_DWI_SELECTOR_METADATA);
     const params = v__djunct_dwi_selector_params(dwi, png, outfile)
-    return v__djunct_dwi_selector_execute(params, execution);
+    return v__djunct_dwi_selector_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       VDjunctDwiSelectorParameters,
       V__DJUNCT_DWI_SELECTOR_METADATA,
       v__djunct_dwi_selector,
-      v__djunct_dwi_selector_cargs,
       v__djunct_dwi_selector_execute,
-      v__djunct_dwi_selector_outputs,
       v__djunct_dwi_selector_params,
 };

@@ -373,14 +373,16 @@ function mri_sbbr_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSbbrOutputs`).
  */
 function mri_sbbr_execute(
     params: MriSbbrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSbbrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SBBR_METADATA);
     params = execution.params(params)
     const cargs = mri_sbbr_cargs(params, execution)
     const ret = mri_sbbr_outputs(params, execution)
@@ -451,10 +453,8 @@ function mri_sbbr(
     check_options: boolean = false,
     runner: Runner | null = null,
 ): MriSbbrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SBBR_METADATA);
     const params = mri_sbbr_params(template_volume, surface_file, init_reg_file, t1, t2, optimization_type, distance_in, distance_out, slope, ftol, linmintol, niters_max, search, search1d, parameter_set, increment, slice_number, threads, output_registration, inverted_output_registration, output_surface, debug, diagnostic, check_options)
-    return mri_sbbr_execute(params, execution);
+    return mri_sbbr_execute(params, runner);
 }
 
 
@@ -463,8 +463,6 @@ export {
       MriSbbrOutputs,
       MriSbbrParameters,
       mri_sbbr,
-      mri_sbbr_cargs,
       mri_sbbr_execute,
-      mri_sbbr_outputs,
       mri_sbbr_params,
 };

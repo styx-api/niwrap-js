@@ -160,14 +160,16 @@ function vsm_smooth_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VsmSmoothOutputs`).
  */
 function vsm_smooth_execute(
     params: VsmSmoothParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VsmSmoothOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VSM_SMOOTH_METADATA);
     params = execution.params(params)
     const cargs = vsm_smooth_cargs(params, execution)
     const ret = vsm_smooth_outputs(params, execution)
@@ -198,10 +200,8 @@ function vsm_smooth(
     temp_dir: string,
     runner: Runner | null = null,
 ): VsmSmoothOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VSM_SMOOTH_METADATA);
     const params = vsm_smooth_params(input_file, output_file, fwhm_value, temp_dir)
-    return vsm_smooth_execute(params, execution);
+    return vsm_smooth_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       VsmSmoothOutputs,
       VsmSmoothParameters,
       vsm_smooth,
-      vsm_smooth_cargs,
       vsm_smooth_execute,
-      vsm_smooth_outputs,
       vsm_smooth_params,
 };

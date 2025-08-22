@@ -392,14 +392,16 @@ function avw2fsl_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Avw2fslOutputs`).
  */
 function avw2fsl_execute(
     params: Avw2fslParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Avw2fslOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AVW2FSL_METADATA);
     params = execution.params(params)
     const cargs = avw2fsl_cargs(params, execution)
     const ret = avw2fsl_outputs(params, execution)
@@ -494,10 +496,8 @@ function avw2fsl(
     version: boolean = false,
     runner: Runner | null = null,
 ): Avw2fslOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AVW2FSL_METADATA);
     const params = avw2fsl_params(source, destination, archive, attributes_only, backup, backup_noarg, copy_contents, no_dereference_preserve_links, force, interactive, follow_symlinks_cmdline, hard_link, dereference, no_clobber, no_dereference, preserve, preserve_attr, preserve_context, no_preserve, parents, recursive, reflink, remove_destination, sparse, strip_trailing_slashes, symbolic_link, suffix, target_directory, no_target_directory, update, verbose, one_file_system, selinux_context, context, help, version)
-    return avw2fsl_execute(params, execution);
+    return avw2fsl_execute(params, runner);
 }
 
 
@@ -506,8 +506,6 @@ export {
       Avw2fslOutputs,
       Avw2fslParameters,
       avw2fsl,
-      avw2fsl_cargs,
       avw2fsl_execute,
-      avw2fsl_outputs,
       avw2fsl_params,
 };

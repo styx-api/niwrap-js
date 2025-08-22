@@ -151,14 +151,16 @@ function v__purify_1_d_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VPurify1DOutputs`).
  */
 function v__purify_1_d_execute(
     params: VPurify1DParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VPurify1DOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__PURIFY_1_D_METADATA);
     params = execution.params(params)
     const cargs = v__purify_1_d_cargs(params, execution)
     const ret = v__purify_1_d_outputs(params, execution)
@@ -187,10 +189,8 @@ function v__purify_1_d(
     suffix: string | null = null,
     runner: Runner | null = null,
 ): VPurify1DOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__PURIFY_1_D_METADATA);
     const params = v__purify_1_d_params(input_files, sub_brick, suffix)
-    return v__purify_1_d_execute(params, execution);
+    return v__purify_1_d_execute(params, runner);
 }
 
 
@@ -199,8 +199,6 @@ export {
       VPurify1DParameters,
       V__PURIFY_1_D_METADATA,
       v__purify_1_d,
-      v__purify_1_d_cargs,
       v__purify_1_d_execute,
-      v__purify_1_d_outputs,
       v__purify_1_d_params,
 };

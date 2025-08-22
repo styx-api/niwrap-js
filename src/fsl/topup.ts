@@ -337,14 +337,16 @@ function topup_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TopupOutputs`).
  */
 function topup_execute(
     params: TopupParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TopupOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TOPUP_METADATA);
     params = execution.params(params)
     const cargs = topup_cargs(params, execution)
     const ret = topup_outputs(params, execution)
@@ -413,10 +415,8 @@ function topup(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): TopupOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TOPUP_METADATA);
     const params = topup_params(imain, datain, out, fout, iout, logout, warpres, subsamp, fwhm, config, miter, lambda, ssqlambda, regmod, estmov, minmet, splineorder, numprec, interp, scale, regrid, nthr, verbose)
-    return topup_execute(params, execution);
+    return topup_execute(params, runner);
 }
 
 
@@ -425,8 +425,6 @@ export {
       TopupOutputs,
       TopupParameters,
       topup,
-      topup_cargs,
       topup_execute,
-      topup_outputs,
       topup_params,
 };

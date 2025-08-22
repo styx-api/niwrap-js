@@ -131,14 +131,16 @@ function check_recons_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CheckReconsShOutputs`).
  */
 function check_recons_sh_execute(
     params: CheckReconsShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CheckReconsShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CHECK_RECONS_SH_METADATA);
     params = execution.params(params)
     const cargs = check_recons_sh_cargs(params, execution)
     const ret = check_recons_sh_outputs(params, execution)
@@ -163,10 +165,8 @@ function check_recons_sh(
     subject_directory: string | null = null,
     runner: Runner | null = null,
 ): CheckReconsShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CHECK_RECONS_SH_METADATA);
     const params = check_recons_sh_params(subject_directory)
-    return check_recons_sh_execute(params, execution);
+    return check_recons_sh_execute(params, runner);
 }
 
 
@@ -175,8 +175,6 @@ export {
       CheckReconsShOutputs,
       CheckReconsShParameters,
       check_recons_sh,
-      check_recons_sh_cargs,
       check_recons_sh_execute,
-      check_recons_sh_outputs,
       check_recons_sh_params,
 };

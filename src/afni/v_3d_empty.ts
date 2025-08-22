@@ -176,14 +176,16 @@ function v_3d_empty_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dEmptyOutputs`).
  */
 function v_3d_empty_execute(
     params: V3dEmptyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dEmptyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_EMPTY_METADATA);
     params = execution.params(params)
     const cargs = v_3d_empty_cargs(params, execution)
     const ret = v_3d_empty_outputs(params, execution)
@@ -214,10 +216,8 @@ function v_3d_empty(
     nt: number | null = null,
     runner: Runner | null = null,
 ): V3dEmptyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_EMPTY_METADATA);
     const params = v_3d_empty_params(prefix, geometry, nxyz, nt)
-    return v_3d_empty_execute(params, execution);
+    return v_3d_empty_execute(params, runner);
 }
 
 
@@ -226,8 +226,6 @@ export {
       V3dEmptyParameters,
       V_3D_EMPTY_METADATA,
       v_3d_empty,
-      v_3d_empty_cargs,
       v_3d_empty_execute,
-      v_3d_empty_outputs,
       v_3d_empty_params,
 };

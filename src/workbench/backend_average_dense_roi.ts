@@ -135,14 +135,16 @@ function backend_average_dense_roi_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BackendAverageDenseRoiOutputs`).
  */
 function backend_average_dense_roi_execute(
     params: BackendAverageDenseRoiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BackendAverageDenseRoiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BACKEND_AVERAGE_DENSE_ROI_METADATA);
     params = execution.params(params)
     const cargs = backend_average_dense_roi_cargs(params, execution)
     const ret = backend_average_dense_roi_outputs(params, execution)
@@ -171,10 +173,8 @@ function backend_average_dense_roi(
     out_file: string,
     runner: Runner | null = null,
 ): BackendAverageDenseRoiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BACKEND_AVERAGE_DENSE_ROI_METADATA);
     const params = backend_average_dense_roi_params(index_list, out_file)
-    return backend_average_dense_roi_execute(params, execution);
+    return backend_average_dense_roi_execute(params, runner);
 }
 
 
@@ -183,8 +183,6 @@ export {
       BackendAverageDenseRoiOutputs,
       BackendAverageDenseRoiParameters,
       backend_average_dense_roi,
-      backend_average_dense_roi_cargs,
       backend_average_dense_roi_execute,
-      backend_average_dense_roi_outputs,
       backend_average_dense_roi_params,
 };

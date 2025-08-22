@@ -310,14 +310,16 @@ function v_3drefit_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3drefitOutputs`).
  */
 function v_3drefit_execute(
     params: V3drefitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3drefitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DREFIT_METADATA);
     params = execution.params(params)
     const cargs = v_3drefit_cargs(params, execution)
     const ret = v_3drefit_outputs(params, execution)
@@ -374,10 +376,8 @@ function v_3drefit(
     zorigin: string | null = null,
     runner: Runner | null = null,
 ): V3drefitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DREFIT_METADATA);
     const params = v_3drefit_params(in_file, atrcopy, atrfloat, atrint, atrstring, deoblique, duporigin_file, nosaveatr, saveatr, space, xdel, xorigin, xyzscale, ydel, yorigin, zdel, zorigin)
-    return v_3drefit_execute(params, execution);
+    return v_3drefit_execute(params, runner);
 }
 
 
@@ -386,8 +386,6 @@ export {
       V3drefitParameters,
       V_3DREFIT_METADATA,
       v_3drefit,
-      v_3drefit_cargs,
       v_3drefit_execute,
-      v_3drefit_outputs,
       v_3drefit_params,
 };

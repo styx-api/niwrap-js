@@ -184,14 +184,16 @@ function metric_vector_operation_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricVectorOperationOutputs`).
  */
 function metric_vector_operation_execute(
     params: MetricVectorOperationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricVectorOperationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_VECTOR_OPERATION_METADATA);
     params = execution.params(params)
     const cargs = metric_vector_operation_cargs(params, execution)
     const ret = metric_vector_operation_outputs(params, execution)
@@ -237,10 +239,8 @@ function metric_vector_operation(
     opt_magnitude: boolean = false,
     runner: Runner | null = null,
 ): MetricVectorOperationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_VECTOR_OPERATION_METADATA);
     const params = metric_vector_operation_params(vectors_a, vectors_b, operation, metric_out, opt_normalize_a, opt_normalize_b, opt_normalize_output, opt_magnitude)
-    return metric_vector_operation_execute(params, execution);
+    return metric_vector_operation_execute(params, runner);
 }
 
 
@@ -249,8 +249,6 @@ export {
       MetricVectorOperationOutputs,
       MetricVectorOperationParameters,
       metric_vector_operation,
-      metric_vector_operation_cargs,
       metric_vector_operation_execute,
-      metric_vector_operation_outputs,
       metric_vector_operation_params,
 };

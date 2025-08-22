@@ -203,14 +203,16 @@ function mri_synthstrip_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSynthstripOutputs`).
  */
 function mri_synthstrip_execute(
     params: MriSynthstripParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSynthstripOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SYNTHSTRIP_METADATA);
     params = execution.params(params)
     const cargs = mri_synthstrip_cargs(params, execution)
     const ret = mri_synthstrip_outputs(params, execution)
@@ -247,10 +249,8 @@ function mri_synthstrip(
     model_weights: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriSynthstripOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SYNTHSTRIP_METADATA);
     const params = mri_synthstrip_params(image, output_image, mask, gpu, border, exclude_csf, model_weights)
-    return mri_synthstrip_execute(params, execution);
+    return mri_synthstrip_execute(params, runner);
 }
 
 
@@ -259,8 +259,6 @@ export {
       MriSynthstripOutputs,
       MriSynthstripParameters,
       mri_synthstrip,
-      mri_synthstrip_cargs,
       mri_synthstrip_execute,
-      mri_synthstrip_outputs,
       mri_synthstrip_params,
 };

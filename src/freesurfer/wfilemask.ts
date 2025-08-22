@@ -178,14 +178,16 @@ function wfilemask_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WfilemaskOutputs`).
  */
 function wfilemask_execute(
     params: WfilemaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WfilemaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WFILEMASK_METADATA);
     params = execution.params(params)
     const cargs = wfilemask_cargs(params, execution)
     const ret = wfilemask_outputs(params, execution)
@@ -220,10 +222,8 @@ function wfilemask(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): WfilemaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WFILEMASK_METADATA);
     const params = wfilemask_params(w_file, label_file, output_file, permission_mask, help_flag, version_flag)
-    return wfilemask_execute(params, execution);
+    return wfilemask_execute(params, runner);
 }
 
 
@@ -232,8 +232,6 @@ export {
       WfilemaskOutputs,
       WfilemaskParameters,
       wfilemask,
-      wfilemask_cargs,
       wfilemask_execute,
-      wfilemask_outputs,
       wfilemask_params,
 };

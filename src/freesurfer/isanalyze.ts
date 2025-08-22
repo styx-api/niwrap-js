@@ -127,14 +127,16 @@ function isanalyze_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `IsanalyzeOutputs`).
  */
 function isanalyze_execute(
     params: IsanalyzeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): IsanalyzeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ISANALYZE_METADATA);
     params = execution.params(params)
     const cargs = isanalyze_cargs(params, execution)
     const ret = isanalyze_outputs(params, execution)
@@ -159,10 +161,8 @@ function isanalyze(
     input_file: InputPathType,
     runner: Runner | null = null,
 ): IsanalyzeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ISANALYZE_METADATA);
     const params = isanalyze_params(input_file)
-    return isanalyze_execute(params, execution);
+    return isanalyze_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       IsanalyzeOutputs,
       IsanalyzeParameters,
       isanalyze,
-      isanalyze_cargs,
       isanalyze_execute,
-      isanalyze_outputs,
       isanalyze_params,
 };

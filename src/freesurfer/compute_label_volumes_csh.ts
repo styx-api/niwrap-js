@@ -229,14 +229,16 @@ function compute_label_volumes_csh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ComputeLabelVolumesCshOutputs`).
  */
 function compute_label_volumes_csh_execute(
     params: ComputeLabelVolumesCshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ComputeLabelVolumesCshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(COMPUTE_LABEL_VOLUMES_CSH_METADATA);
     params = execution.params(params)
     const cargs = compute_label_volumes_csh_cargs(params, execution)
     const ret = compute_label_volumes_csh_outputs(params, execution)
@@ -269,10 +271,8 @@ function compute_label_volumes_csh(
     help: boolean = false,
     runner: Runner | null = null,
 ): ComputeLabelVolumesCshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(COMPUTE_LABEL_VOLUMES_CSH_METADATA);
     const params = compute_label_volumes_csh_params(label_vol, output_file, label_l, version, help)
-    return compute_label_volumes_csh_execute(params, execution);
+    return compute_label_volumes_csh_execute(params, runner);
 }
 
 
@@ -282,10 +282,7 @@ export {
       ComputeLabelVolumesCshOutputs,
       ComputeLabelVolumesCshParameters,
       compute_label_volumes_csh,
-      compute_label_volumes_csh_cargs,
       compute_label_volumes_csh_execute,
-      compute_label_volumes_csh_label_l_cargs,
       compute_label_volumes_csh_label_l_params,
-      compute_label_volumes_csh_outputs,
       compute_label_volumes_csh_params,
 };

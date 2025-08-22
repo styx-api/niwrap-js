@@ -264,14 +264,16 @@ function tsfinfo_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TsfinfoOutputs`).
  */
 function tsfinfo_execute(
     params: TsfinfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TsfinfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TSFINFO_METADATA);
     params = execution.params(params)
     const cargs = tsfinfo_cargs(params, execution)
     const ret = tsfinfo_outputs(params, execution)
@@ -322,10 +324,8 @@ function tsfinfo(
     version: boolean = false,
     runner: Runner | null = null,
 ): TsfinfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TSFINFO_METADATA);
     const params = tsfinfo_params(tracks, count, ascii, info, quiet, debug, force, nthreads, config, help, version)
-    return tsfinfo_execute(params, execution);
+    return tsfinfo_execute(params, runner);
 }
 
 
@@ -335,10 +335,7 @@ export {
       TsfinfoOutputs,
       TsfinfoParameters,
       tsfinfo,
-      tsfinfo_cargs,
-      tsfinfo_config_cargs,
       tsfinfo_config_params,
       tsfinfo_execute,
-      tsfinfo_outputs,
       tsfinfo_params,
 };

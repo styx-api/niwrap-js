@@ -165,14 +165,16 @@ function texture_cooccurrence_features_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TextureCooccurrenceFeaturesOutputs`).
  */
 function texture_cooccurrence_features_execute(
     params: TextureCooccurrenceFeaturesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TextureCooccurrenceFeaturesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TEXTURE_COOCCURRENCE_FEATURES_METADATA);
     params = execution.params(params)
     const cargs = texture_cooccurrence_features_cargs(params, execution)
     const ret = texture_cooccurrence_features_outputs(params, execution)
@@ -205,10 +207,8 @@ function texture_cooccurrence_features(
     mask_label: number | null = 1,
     runner: Runner | null = null,
 ): TextureCooccurrenceFeaturesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TEXTURE_COOCCURRENCE_FEATURES_METADATA);
     const params = texture_cooccurrence_features_params(image_dimension, input_image, number_of_bins_per_axis, mask_image, mask_label)
-    return texture_cooccurrence_features_execute(params, execution);
+    return texture_cooccurrence_features_execute(params, runner);
 }
 
 
@@ -217,8 +217,6 @@ export {
       TextureCooccurrenceFeaturesOutputs,
       TextureCooccurrenceFeaturesParameters,
       texture_cooccurrence_features,
-      texture_cooccurrence_features_cargs,
       texture_cooccurrence_features_execute,
-      texture_cooccurrence_features_outputs,
       texture_cooccurrence_features_params,
 };

@@ -265,14 +265,16 @@ function mris_label2annot_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisLabel2annotOutputs`).
  */
 function mris_label2annot_execute(
     params: MrisLabel2annotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisLabel2annotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_LABEL2ANNOT_METADATA);
     params = execution.params(params)
     const cargs = mris_label2annot_cargs(params, execution)
     const ret = mris_label2annot_outputs(params, execution)
@@ -323,10 +325,8 @@ function mris_label2annot(
     subjects_dir: string | null = null,
     runner: Runner | null = null,
 ): MrisLabel2annotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_LABEL2ANNOT_METADATA);
     const params = mris_label2annot_params(subject, hemi, ctabfile, annotname, index_offset, label_files, annot_path, labeldir, ldir_default, no_unknown, thresh, maxstatwinner, surf, subjects_dir)
-    return mris_label2annot_execute(params, execution);
+    return mris_label2annot_execute(params, runner);
 }
 
 
@@ -335,8 +335,6 @@ export {
       MrisLabel2annotOutputs,
       MrisLabel2annotParameters,
       mris_label2annot,
-      mris_label2annot_cargs,
       mris_label2annot_execute,
-      mris_label2annot_outputs,
       mris_label2annot_params,
 };

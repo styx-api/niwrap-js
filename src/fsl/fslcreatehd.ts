@@ -202,14 +202,16 @@ function fslcreatehd_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslcreatehdOutputs`).
  */
 function fslcreatehd_execute(
     params: FslcreatehdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslcreatehdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLCREATEHD_METADATA);
     params = execution.params(params)
     const cargs = fslcreatehd_cargs(params, execution)
     const ret = fslcreatehd_outputs(params, execution)
@@ -260,10 +262,8 @@ function fslcreatehd(
     nifti_xml_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): FslcreatehdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLCREATEHD_METADATA);
     const params = fslcreatehd_params(xsize, ysize, zsize, tsize, xvoxsize, yvoxsize, zvoxsize, tr, xorigin, yorigin, zorigin, datatype, headername, nifti_xml_file)
-    return fslcreatehd_execute(params, execution);
+    return fslcreatehd_execute(params, runner);
 }
 
 
@@ -272,8 +272,6 @@ export {
       FslcreatehdOutputs,
       FslcreatehdParameters,
       fslcreatehd,
-      fslcreatehd_cargs,
       fslcreatehd_execute,
-      fslcreatehd_outputs,
       fslcreatehd_params,
 };

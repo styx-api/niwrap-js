@@ -188,14 +188,16 @@ function extract_seg_waveform_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ExtractSegWaveformOutputs`).
  */
 function extract_seg_waveform_execute(
     params: ExtractSegWaveformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ExtractSegWaveformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EXTRACT_SEG_WAVEFORM_METADATA);
     params = execution.params(params)
     const cargs = extract_seg_waveform_cargs(params, execution)
     const ret = extract_seg_waveform_outputs(params, execution)
@@ -234,10 +236,8 @@ function extract_seg_waveform(
     demean_flag: boolean = false,
     runner: Runner | null = null,
 ): ExtractSegWaveformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EXTRACT_SEG_WAVEFORM_METADATA);
     const params = extract_seg_waveform_params(seg_file, seg_indices, input_volume, reg_file, output_file, vsm_file, regheader_flag, demean_flag)
-    return extract_seg_waveform_execute(params, execution);
+    return extract_seg_waveform_execute(params, runner);
 }
 
 
@@ -246,8 +246,6 @@ export {
       ExtractSegWaveformOutputs,
       ExtractSegWaveformParameters,
       extract_seg_waveform,
-      extract_seg_waveform_cargs,
       extract_seg_waveform_execute,
-      extract_seg_waveform_outputs,
       extract_seg_waveform_params,
 };

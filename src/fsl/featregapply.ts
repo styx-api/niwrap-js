@@ -190,14 +190,16 @@ function featregapply_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FeatregapplyOutputs`).
  */
 function featregapply_execute(
     params: FeatregapplyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FeatregapplyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FEATREGAPPLY_METADATA);
     params = execution.params(params)
     const cargs = featregapply_cargs(params, execution)
     const ret = featregapply_outputs(params, execution)
@@ -234,10 +236,8 @@ function featregapply(
     exclude_filtered_func_flag: boolean = false,
     runner: Runner | null = null,
 ): FeatregapplyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FEATREGAPPLY_METADATA);
     const params = featregapply_params(feat_directory, force_flag, cleanup_flag, upsample_trilinear, upsample_spline, standard_space_res, exclude_filtered_func_flag)
-    return featregapply_execute(params, execution);
+    return featregapply_execute(params, runner);
 }
 
 
@@ -246,8 +246,6 @@ export {
       FeatregapplyOutputs,
       FeatregapplyParameters,
       featregapply,
-      featregapply_cargs,
       featregapply_execute,
-      featregapply_outputs,
       featregapply_params,
 };

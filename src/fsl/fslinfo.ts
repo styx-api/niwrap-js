@@ -127,14 +127,16 @@ function fslinfo_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslinfoOutputs`).
  */
 function fslinfo_execute(
     params: FslinfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslinfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLINFO_METADATA);
     params = execution.params(params)
     const cargs = fslinfo_cargs(params, execution)
     const ret = fslinfo_outputs(params, execution)
@@ -159,10 +161,8 @@ function fslinfo(
     filename: InputPathType,
     runner: Runner | null = null,
 ): FslinfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLINFO_METADATA);
     const params = fslinfo_params(filename)
-    return fslinfo_execute(params, execution);
+    return fslinfo_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       FslinfoOutputs,
       FslinfoParameters,
       fslinfo,
-      fslinfo_cargs,
       fslinfo_execute,
-      fslinfo_outputs,
       fslinfo_params,
 };

@@ -365,14 +365,16 @@ function mris_ca_train_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisCaTrainOutputs`).
  */
 function mris_ca_train_execute(
     params: MrisCaTrainParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisCaTrainOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_CA_TRAIN_METADATA);
     params = execution.params(params)
     const cargs = mris_ca_train_cargs(params, execution)
     const ret = mris_ca_train_outputs(params, execution)
@@ -447,10 +449,8 @@ function mris_ca_train(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrisCaTrainOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_CA_TRAIN_METADATA);
     const params = mris_ca_train_params(hemi, canonsurf, annot_file, subjects, output_file, sdir, nbrs, orig, norm1, norm2, norm3, ic, sulc, sulconly, a, parcellation_table, n, verbose, debug_vertex, gcs_means, gcs_priors, gcs_diff, nfill, no_fill, help, version)
-    return mris_ca_train_execute(params, execution);
+    return mris_ca_train_execute(params, runner);
 }
 
 
@@ -459,8 +459,6 @@ export {
       MrisCaTrainOutputs,
       MrisCaTrainParameters,
       mris_ca_train,
-      mris_ca_train_cargs,
       mris_ca_train_execute,
-      mris_ca_train_outputs,
       mris_ca_train_params,
 };

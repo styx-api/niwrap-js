@@ -166,14 +166,16 @@ function v_1dnorm_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dnormOutputs`).
  */
 function v_1dnorm_execute(
     params: V1dnormParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dnormOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1DNORM_METADATA);
     params = execution.params(params)
     const cargs = v_1dnorm_cargs(params, execution)
     const ret = v_1dnorm_outputs(params, execution)
@@ -208,10 +210,8 @@ function v_1dnorm(
     demed: boolean = false,
     runner: Runner | null = null,
 ): V1dnormOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1DNORM_METADATA);
     const params = v_1dnorm_params(infile, outfile, norm1, normx, demean, demed)
-    return v_1dnorm_execute(params, execution);
+    return v_1dnorm_execute(params, runner);
 }
 
 
@@ -220,8 +220,6 @@ export {
       V1dnormParameters,
       V_1DNORM_METADATA,
       v_1dnorm,
-      v_1dnorm_cargs,
       v_1dnorm_execute,
-      v_1dnorm_outputs,
       v_1dnorm_params,
 };

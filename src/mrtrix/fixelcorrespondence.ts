@@ -272,14 +272,16 @@ function fixelcorrespondence_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FixelcorrespondenceOutputs`).
  */
 function fixelcorrespondence_execute(
     params: FixelcorrespondenceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FixelcorrespondenceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIXELCORRESPONDENCE_METADATA);
     params = execution.params(params)
     const cargs = fixelcorrespondence_cargs(params, execution)
     const ret = fixelcorrespondence_outputs(params, execution)
@@ -334,10 +336,8 @@ function fixelcorrespondence(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelcorrespondenceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIXELCORRESPONDENCE_METADATA);
     const params = fixelcorrespondence_params(subject_data, template_directory, output_directory, output_data, angle, info, quiet, debug, force, nthreads, config, help, version)
-    return fixelcorrespondence_execute(params, execution);
+    return fixelcorrespondence_execute(params, runner);
 }
 
 
@@ -347,10 +347,7 @@ export {
       FixelcorrespondenceOutputs,
       FixelcorrespondenceParameters,
       fixelcorrespondence,
-      fixelcorrespondence_cargs,
-      fixelcorrespondence_config_cargs,
       fixelcorrespondence_config_params,
       fixelcorrespondence_execute,
-      fixelcorrespondence_outputs,
       fixelcorrespondence_params,
 };

@@ -147,14 +147,16 @@ function mri_make_bem_surfaces_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMakeBemSurfacesOutputs`).
  */
 function mri_make_bem_surfaces_execute(
     params: MriMakeBemSurfacesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMakeBemSurfacesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MAKE_BEM_SURFACES_METADATA);
     params = execution.params(params)
     const cargs = mri_make_bem_surfaces_cargs(params, execution)
     const ret = mri_make_bem_surfaces_outputs(params, execution)
@@ -181,10 +183,8 @@ function mri_make_bem_surfaces(
     mfile: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriMakeBemSurfacesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MAKE_BEM_SURFACES_METADATA);
     const params = mri_make_bem_surfaces_params(name, mfile)
-    return mri_make_bem_surfaces_execute(params, execution);
+    return mri_make_bem_surfaces_execute(params, runner);
 }
 
 
@@ -193,8 +193,6 @@ export {
       MriMakeBemSurfacesOutputs,
       MriMakeBemSurfacesParameters,
       mri_make_bem_surfaces,
-      mri_make_bem_surfaces_cargs,
       mri_make_bem_surfaces_execute,
-      mri_make_bem_surfaces_outputs,
       mri_make_bem_surfaces_params,
 };

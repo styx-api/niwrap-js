@@ -157,14 +157,16 @@ function fs_run_from_mcr_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsRunFromMcrOutputs`).
  */
 function fs_run_from_mcr_execute(
     params: FsRunFromMcrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsRunFromMcrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FS_RUN_FROM_MCR_METADATA);
     params = execution.params(params)
     const cargs = fs_run_from_mcr_cargs(params, execution)
     const ret = fs_run_from_mcr_outputs(params, execution)
@@ -195,10 +197,8 @@ function fs_run_from_mcr(
     empty_env_flag: boolean = false,
     runner: Runner | null = null,
 ): FsRunFromMcrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FS_RUN_FROM_MCR_METADATA);
     const params = fs_run_from_mcr_params(name, command, zeroth_flag, empty_env_flag)
-    return fs_run_from_mcr_execute(params, execution);
+    return fs_run_from_mcr_execute(params, runner);
 }
 
 
@@ -207,8 +207,6 @@ export {
       FsRunFromMcrOutputs,
       FsRunFromMcrParameters,
       fs_run_from_mcr,
-      fs_run_from_mcr_cargs,
       fs_run_from_mcr_execute,
-      fs_run_from_mcr_outputs,
       fs_run_from_mcr_params,
 };

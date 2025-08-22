@@ -155,14 +155,16 @@ function v_3d_overlap_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dOverlapOutputs`).
  */
 function v_3d_overlap_execute(
     params: V3dOverlapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dOverlapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_OVERLAP_METADATA);
     params = execution.params(params)
     const cargs = v_3d_overlap_cargs(params, execution)
     const ret = v_3d_overlap_outputs(params, execution)
@@ -191,10 +193,8 @@ function v_3d_overlap(
     save_prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dOverlapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_OVERLAP_METADATA);
     const params = v_3d_overlap_params(dataset1, dataset2, save_prefix)
-    return v_3d_overlap_execute(params, execution);
+    return v_3d_overlap_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       V3dOverlapParameters,
       V_3D_OVERLAP_METADATA,
       v_3d_overlap,
-      v_3d_overlap_cargs,
       v_3d_overlap_execute,
-      v_3d_overlap_outputs,
       v_3d_overlap_params,
 };

@@ -150,14 +150,16 @@ function v_3d_convolve_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dConvolveOutputs`).
  */
 function v_3d_convolve_execute(
     params: V3dConvolveParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dConvolveOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_CONVOLVE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_convolve_cargs(params, execution)
     const ret = v_3d_convolve_outputs(params, execution)
@@ -186,10 +188,8 @@ function v_3d_convolve(
     options: string | null = null,
     runner: Runner | null = null,
 ): V3dConvolveOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_CONVOLVE_METADATA);
     const params = v_3d_convolve_params(infile, outfile, options)
-    return v_3d_convolve_execute(params, execution);
+    return v_3d_convolve_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       V3dConvolveParameters,
       V_3D_CONVOLVE_METADATA,
       v_3d_convolve,
-      v_3d_convolve_cargs,
       v_3d_convolve_execute,
-      v_3d_convolve_outputs,
       v_3d_convolve_params,
 };

@@ -329,14 +329,16 @@ function foci_resample_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FociResampleOutputs`).
  */
 function foci_resample_execute(
     params: FociResampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FociResampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FOCI_RESAMPLE_METADATA);
     params = execution.params(params)
     const cargs = foci_resample_cargs(params, execution)
     const ret = foci_resample_outputs(params, execution)
@@ -375,10 +377,8 @@ function foci_resample(
     opt_restore_xyz: boolean = false,
     runner: Runner | null = null,
 ): FociResampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FOCI_RESAMPLE_METADATA);
     const params = foci_resample_params(foci_in, foci_out, left_surfaces, right_surfaces, cerebellum_surfaces, opt_discard_distance_from_surface, opt_restore_xyz)
-    return foci_resample_execute(params, execution);
+    return foci_resample_execute(params, runner);
 }
 
 
@@ -390,14 +390,9 @@ export {
       FociResampleParameters,
       FociResampleRightSurfacesParameters,
       foci_resample,
-      foci_resample_cargs,
-      foci_resample_cerebellum_surfaces_cargs,
       foci_resample_cerebellum_surfaces_params,
       foci_resample_execute,
-      foci_resample_left_surfaces_cargs,
       foci_resample_left_surfaces_params,
-      foci_resample_outputs,
       foci_resample_params,
-      foci_resample_right_surfaces_cargs,
       foci_resample_right_surfaces_params,
 };

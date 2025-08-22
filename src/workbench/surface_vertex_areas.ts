@@ -141,14 +141,16 @@ function surface_vertex_areas_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceVertexAreasOutputs`).
  */
 function surface_vertex_areas_execute(
     params: SurfaceVertexAreasParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceVertexAreasOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_VERTEX_AREAS_METADATA);
     params = execution.params(params)
     const cargs = surface_vertex_areas_cargs(params, execution)
     const ret = surface_vertex_areas_outputs(params, execution)
@@ -177,10 +179,8 @@ function surface_vertex_areas(
     metric: string,
     runner: Runner | null = null,
 ): SurfaceVertexAreasOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_VERTEX_AREAS_METADATA);
     const params = surface_vertex_areas_params(surface, metric)
-    return surface_vertex_areas_execute(params, execution);
+    return surface_vertex_areas_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       SurfaceVertexAreasOutputs,
       SurfaceVertexAreasParameters,
       surface_vertex_areas,
-      surface_vertex_areas_cargs,
       surface_vertex_areas_execute,
-      surface_vertex_areas_outputs,
       surface_vertex_areas_params,
 };

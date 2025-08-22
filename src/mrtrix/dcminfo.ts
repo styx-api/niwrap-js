@@ -324,14 +324,16 @@ function dcminfo_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DcminfoOutputs`).
  */
 function dcminfo_execute(
     params: DcminfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DcminfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DCMINFO_METADATA);
     params = execution.params(params)
     const cargs = dcminfo_cargs(params, execution)
     const ret = dcminfo_outputs(params, execution)
@@ -386,10 +388,8 @@ function dcminfo(
     version: boolean = false,
     runner: Runner | null = null,
 ): DcminfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DCMINFO_METADATA);
     const params = dcminfo_params(file, all, csa, phoenix, tag, info, quiet, debug, force, nthreads, config, help, version)
-    return dcminfo_execute(params, execution);
+    return dcminfo_execute(params, runner);
 }
 
 
@@ -400,12 +400,8 @@ export {
       DcminfoParameters,
       DcminfoTagParameters,
       dcminfo,
-      dcminfo_cargs,
-      dcminfo_config_cargs,
       dcminfo_config_params,
       dcminfo_execute,
-      dcminfo_outputs,
       dcminfo_params,
-      dcminfo_tag_cargs,
       dcminfo_tag_params,
 };

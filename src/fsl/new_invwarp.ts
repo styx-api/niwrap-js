@@ -211,14 +211,16 @@ function new_invwarp_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `NewInvwarpOutputs`).
  */
 function new_invwarp_execute(
     params: NewInvwarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): NewInvwarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(NEW_INVWARP_METADATA);
     params = execution.params(params)
     const cargs = new_invwarp_cargs(params, execution)
     const ret = new_invwarp_outputs(params, execution)
@@ -261,10 +263,8 @@ function new_invwarp(
     verboseflag: boolean = false,
     runner: Runner | null = null,
 ): NewInvwarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(NEW_INVWARP_METADATA);
     const params = new_invwarp_params(warpvol, outvol, refvol, relflag, absflag, noconstraintflag, jmin, jmax, debugflag, verboseflag)
-    return new_invwarp_execute(params, execution);
+    return new_invwarp_execute(params, runner);
 }
 
 
@@ -273,8 +273,6 @@ export {
       NewInvwarpOutputs,
       NewInvwarpParameters,
       new_invwarp,
-      new_invwarp_cargs,
       new_invwarp_execute,
-      new_invwarp_outputs,
       new_invwarp_params,
 };

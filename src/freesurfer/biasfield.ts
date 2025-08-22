@@ -181,14 +181,16 @@ function biasfield_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BiasfieldOutputs`).
  */
 function biasfield_execute(
     params: BiasfieldParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BiasfieldOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BIASFIELD_METADATA);
     params = execution.params(params)
     const cargs = biasfield_cargs(params, execution)
     const ret = biasfield_outputs(params, execution)
@@ -223,10 +225,8 @@ function biasfield(
     version: boolean = false,
     runner: Runner | null = null,
 ): BiasfieldOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BIASFIELD_METADATA);
     const params = biasfield_params(subject, tmpdir, no_cleanup, help, debug, version)
-    return biasfield_execute(params, execution);
+    return biasfield_execute(params, runner);
 }
 
 
@@ -235,8 +235,6 @@ export {
       BiasfieldOutputs,
       BiasfieldParameters,
       biasfield,
-      biasfield_cargs,
       biasfield_execute,
-      biasfield_outputs,
       biasfield_params,
 };

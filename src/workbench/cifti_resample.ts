@@ -1146,14 +1146,16 @@ function cifti_resample_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiResampleOutputs`).
  */
 function cifti_resample_execute(
     params: CiftiResampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiResampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_RESAMPLE_METADATA);
     params = execution.params(params)
     const cargs = cifti_resample_cargs(params, execution)
     const ret = cifti_resample_outputs(params, execution)
@@ -1222,10 +1224,8 @@ function cifti_resample(
     cerebellum_spheres: CiftiResampleCerebellumSpheresParameters | null = null,
     runner: Runner | null = null,
 ): CiftiResampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_RESAMPLE_METADATA);
     const params = cifti_resample_params(cifti_in, direction, cifti_template, template_direction, surface_method, volume_method, cifti_out, opt_surface_largest, volume_predilate, surface_postdilate, affine, warpfield, left_spheres, right_spheres, cerebellum_spheres)
-    return cifti_resample_execute(params, execution);
+    return cifti_resample_execute(params, runner);
 }
 
 
@@ -1250,40 +1250,22 @@ export {
       CiftiResampleWeighted1Parameters,
       CiftiResampleWeightedParameters,
       cifti_resample,
-      cifti_resample_affine_cargs,
       cifti_resample_affine_params,
-      cifti_resample_cargs,
-      cifti_resample_cerebellum_area_metrics_cargs,
       cifti_resample_cerebellum_area_metrics_params,
-      cifti_resample_cerebellum_area_surfs_cargs,
       cifti_resample_cerebellum_area_surfs_params,
-      cifti_resample_cerebellum_spheres_cargs,
       cifti_resample_cerebellum_spheres_params,
       cifti_resample_execute,
-      cifti_resample_flirt_cargs,
       cifti_resample_flirt_params,
-      cifti_resample_left_area_metrics_cargs,
       cifti_resample_left_area_metrics_params,
-      cifti_resample_left_area_surfs_cargs,
       cifti_resample_left_area_surfs_params,
-      cifti_resample_left_spheres_cargs,
       cifti_resample_left_spheres_params,
-      cifti_resample_outputs,
       cifti_resample_params,
-      cifti_resample_right_area_metrics_cargs,
       cifti_resample_right_area_metrics_params,
-      cifti_resample_right_area_surfs_cargs,
       cifti_resample_right_area_surfs_params,
-      cifti_resample_right_spheres_cargs,
       cifti_resample_right_spheres_params,
-      cifti_resample_surface_postdilate_cargs,
       cifti_resample_surface_postdilate_params,
-      cifti_resample_volume_predilate_cargs,
       cifti_resample_volume_predilate_params,
-      cifti_resample_warpfield_cargs,
       cifti_resample_warpfield_params,
-      cifti_resample_weighted_1_cargs,
       cifti_resample_weighted_1_params,
-      cifti_resample_weighted_cargs,
       cifti_resample_weighted_params,
 };

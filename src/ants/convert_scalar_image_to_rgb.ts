@@ -207,14 +207,16 @@ function convert_scalar_image_to_rgb_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertScalarImageToRgbOutputs`).
  */
 function convert_scalar_image_to_rgb_execute(
     params: ConvertScalarImageToRgbParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvertScalarImageToRgbOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVERT_SCALAR_IMAGE_TO_RGB_METADATA);
     params = execution.params(params)
     const cargs = convert_scalar_image_to_rgb_cargs(params, execution)
     const ret = convert_scalar_image_to_rgb_outputs(params, execution)
@@ -259,10 +261,8 @@ function convert_scalar_image_to_rgb(
     vtk_lookup_table: string | null = null,
     runner: Runner | null = null,
 ): ConvertScalarImageToRgbOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVERT_SCALAR_IMAGE_TO_RGB_METADATA);
     const params = convert_scalar_image_to_rgb_params(image_dimension, input_image, output_image, mask, colormap, custom_colormap_file, minimum_input, maximum_input, minimum_rgb_output, maximum_rgb_output, vtk_lookup_table)
-    return convert_scalar_image_to_rgb_execute(params, execution);
+    return convert_scalar_image_to_rgb_execute(params, runner);
 }
 
 
@@ -271,8 +271,6 @@ export {
       ConvertScalarImageToRgbOutputs,
       ConvertScalarImageToRgbParameters,
       convert_scalar_image_to_rgb,
-      convert_scalar_image_to_rgb_cargs,
       convert_scalar_image_to_rgb_execute,
-      convert_scalar_image_to_rgb_outputs,
       convert_scalar_image_to_rgb_params,
 };

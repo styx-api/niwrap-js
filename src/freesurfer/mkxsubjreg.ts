@@ -200,14 +200,16 @@ function mkxsubjreg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MkxsubjregOutputs`).
  */
 function mkxsubjreg_execute(
     params: MkxsubjregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MkxsubjregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MKXSUBJREG_METADATA);
     params = execution.params(params)
     const cargs = mkxsubjreg_cargs(params, execution)
     const ret = mkxsubjreg_outputs(params, execution)
@@ -246,10 +248,8 @@ function mkxsubjreg(
     version: boolean = false,
     runner: Runner | null = null,
 ): MkxsubjregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MKXSUBJREG_METADATA);
     const params = mkxsubjreg_params(srcreg, targreg, targsubj, xfm, sd, fvol, help, version)
-    return mkxsubjreg_execute(params, execution);
+    return mkxsubjreg_execute(params, runner);
 }
 
 
@@ -258,8 +258,6 @@ export {
       MkxsubjregOutputs,
       MkxsubjregParameters,
       mkxsubjreg,
-      mkxsubjreg_cargs,
       mkxsubjreg_execute,
-      mkxsubjreg_outputs,
       mkxsubjreg_params,
 };

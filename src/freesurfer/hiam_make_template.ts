@@ -142,14 +142,16 @@ function hiam_make_template_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `HiamMakeTemplateOutputs`).
  */
 function hiam_make_template_execute(
     params: HiamMakeTemplateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): HiamMakeTemplateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(HIAM_MAKE_TEMPLATE_METADATA);
     params = execution.params(params)
     const cargs = hiam_make_template_cargs(params, execution)
     const ret = hiam_make_template_outputs(params, execution)
@@ -180,10 +182,8 @@ function hiam_make_template(
     output_name: string,
     runner: Runner | null = null,
 ): HiamMakeTemplateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(HIAM_MAKE_TEMPLATE_METADATA);
     const params = hiam_make_template_params(hemi, surface_name, subjects, output_name)
-    return hiam_make_template_execute(params, execution);
+    return hiam_make_template_execute(params, runner);
 }
 
 
@@ -192,8 +192,6 @@ export {
       HiamMakeTemplateOutputs,
       HiamMakeTemplateParameters,
       hiam_make_template,
-      hiam_make_template_cargs,
       hiam_make_template_execute,
-      hiam_make_template_outputs,
       hiam_make_template_params,
 };

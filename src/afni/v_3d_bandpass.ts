@@ -283,14 +283,16 @@ function v_3d_bandpass_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dBandpassOutputs`).
  */
 function v_3d_bandpass_execute(
     params: V3dBandpassParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dBandpassOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_BANDPASS_METADATA);
     params = execution.params(params)
     const cargs = v_3d_bandpass_cargs(params, execution)
     const ret = v_3d_bandpass_outputs(params, execution)
@@ -347,10 +349,8 @@ function v_3d_bandpass(
     tr: number | null = null,
     runner: Runner | null = null,
 ): V3dBandpassOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_BANDPASS_METADATA);
     const params = v_3d_bandpass_params(highpass, lowpass, in_file, prefix, automask, blur, despike, local_pv, mask, nfft, no_detrend, normalize, notrans, orthogonalize_dset, orthogonalize_file, outputtype, tr)
-    return v_3d_bandpass_execute(params, execution);
+    return v_3d_bandpass_execute(params, runner);
 }
 
 
@@ -359,8 +359,6 @@ export {
       V3dBandpassParameters,
       V_3D_BANDPASS_METADATA,
       v_3d_bandpass,
-      v_3d_bandpass_cargs,
       v_3d_bandpass_execute,
-      v_3d_bandpass_outputs,
       v_3d_bandpass_params,
 };

@@ -145,14 +145,16 @@ function cp_dicom_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CpDicomOutputs`).
  */
 function cp_dicom_execute(
     params: CpDicomParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CpDicomOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CP_DICOM_METADATA);
     params = execution.params(params)
     const cargs = cp_dicom_cargs(params, execution)
     const ret = cp_dicom_outputs(params, execution)
@@ -181,10 +183,8 @@ function cp_dicom(
     debug: boolean = false,
     runner: Runner | null = null,
 ): CpDicomOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CP_DICOM_METADATA);
     const params = cp_dicom_params(dicom_dir, output_dir, debug)
-    return cp_dicom_execute(params, execution);
+    return cp_dicom_execute(params, runner);
 }
 
 
@@ -193,8 +193,6 @@ export {
       CpDicomOutputs,
       CpDicomParameters,
       cp_dicom,
-      cp_dicom_cargs,
       cp_dicom_execute,
-      cp_dicom_outputs,
       cp_dicom_params,
 };

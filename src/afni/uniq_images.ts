@@ -133,14 +133,16 @@ function uniq_images_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `UniqImagesOutputs`).
  */
 function uniq_images_execute(
     params: UniqImagesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): UniqImagesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(UNIQ_IMAGES_METADATA);
     params = execution.params(params)
     const cargs = uniq_images_cargs(params, execution)
     const ret = uniq_images_outputs(params, execution)
@@ -165,10 +167,8 @@ function uniq_images(
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): UniqImagesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UNIQ_IMAGES_METADATA);
     const params = uniq_images_params(input_files)
-    return uniq_images_execute(params, execution);
+    return uniq_images_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       UniqImagesOutputs,
       UniqImagesParameters,
       uniq_images,
-      uniq_images_cargs,
       uniq_images_execute,
-      uniq_images_outputs,
       uniq_images_params,
 };

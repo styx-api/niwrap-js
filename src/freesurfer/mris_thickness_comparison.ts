@@ -147,14 +147,16 @@ function mris_thickness_comparison_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisThicknessComparisonOutputs`).
  */
 function mris_thickness_comparison_execute(
     params: MrisThicknessComparisonParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisThicknessComparisonOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_THICKNESS_COMPARISON_METADATA);
     params = execution.params(params)
     const cargs = mris_thickness_comparison_cargs(params, execution)
     const ret = mris_thickness_comparison_outputs(params, execution)
@@ -187,10 +189,8 @@ function mris_thickness_comparison(
     labels: Array<string>,
     runner: Runner | null = null,
 ): MrisThicknessComparisonOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_THICKNESS_COMPARISON_METADATA);
     const params = mris_thickness_comparison_params(subject, hemi, thickness_file, w_file, labels)
-    return mris_thickness_comparison_execute(params, execution);
+    return mris_thickness_comparison_execute(params, runner);
 }
 
 
@@ -199,8 +199,6 @@ export {
       MrisThicknessComparisonOutputs,
       MrisThicknessComparisonParameters,
       mris_thickness_comparison,
-      mris_thickness_comparison_cargs,
       mris_thickness_comparison_execute,
-      mris_thickness_comparison_outputs,
       mris_thickness_comparison_params,
 };

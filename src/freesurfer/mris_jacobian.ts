@@ -164,14 +164,16 @@ function mris_jacobian_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisJacobianOutputs`).
  */
 function mris_jacobian_execute(
     params: MrisJacobianParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisJacobianOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_JACOBIAN_METADATA);
     params = execution.params(params)
     const cargs = mris_jacobian_cargs(params, execution)
     const ret = mris_jacobian_outputs(params, execution)
@@ -206,10 +208,8 @@ function mris_jacobian(
     invert: boolean = false,
     runner: Runner | null = null,
 ): MrisJacobianOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_JACOBIAN_METADATA);
     const params = mris_jacobian_params(original_surface, mapped_surface, jacobian_file, log, noscale, invert)
-    return mris_jacobian_execute(params, execution);
+    return mris_jacobian_execute(params, runner);
 }
 
 
@@ -218,8 +218,6 @@ export {
       MrisJacobianOutputs,
       MrisJacobianParameters,
       mris_jacobian,
-      mris_jacobian_cargs,
       mris_jacobian_execute,
-      mris_jacobian_outputs,
       mris_jacobian_params,
 };

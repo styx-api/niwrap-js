@@ -569,14 +569,16 @@ function mrgrid_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrgridOutputs`).
  */
 function mrgrid_execute(
     params: MrgridParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrgridOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRGRID_METADATA);
     params = execution.params(params)
     const cargs = mrgrid_cargs(params, execution)
     const ret = mrgrid_outputs(params, execution)
@@ -663,10 +665,8 @@ function mrgrid(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrgridOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRGRID_METADATA);
     const params = mrgrid_params(input, operation, output, template, size, voxel, scale, interp, oversample, as, uniform, mask, crop_unbound, axis, all_axes, fill, strides, datatype, info, quiet, debug, force, nthreads, config, help, version)
-    return mrgrid_execute(params, execution);
+    return mrgrid_execute(params, runner);
 }
 
 
@@ -679,16 +679,10 @@ export {
       MrgridVariousFileParameters,
       MrgridVariousStringParameters,
       mrgrid,
-      mrgrid_axis_cargs,
       mrgrid_axis_params,
-      mrgrid_cargs,
-      mrgrid_config_cargs,
       mrgrid_config_params,
       mrgrid_execute,
-      mrgrid_outputs,
       mrgrid_params,
-      mrgrid_various_file_cargs,
       mrgrid_various_file_params,
-      mrgrid_various_string_cargs,
       mrgrid_various_string_params,
 };

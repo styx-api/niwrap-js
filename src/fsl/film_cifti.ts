@@ -220,14 +220,16 @@ function film_cifti_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FilmCiftiOutputs`).
  */
 function film_cifti_execute(
     params: FilmCiftiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FilmCiftiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FILM_CIFTI_METADATA);
     params = execution.params(params)
     const cargs = film_cifti_cargs(params, execution)
     const ret = film_cifti_outputs(params, execution)
@@ -268,10 +270,8 @@ function film_cifti(
     film_options: string | null = null,
     runner: Runner | null = null,
 ): FilmCiftiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FILM_CIFTI_METADATA);
     const params = film_cifti_params(input_filename, basename, left_surface, right_surface, susan_threshold, susan_extent, surface_sigma, surface_extent, film_options)
-    return film_cifti_execute(params, execution);
+    return film_cifti_execute(params, runner);
 }
 
 
@@ -280,8 +280,6 @@ export {
       FilmCiftiOutputs,
       FilmCiftiParameters,
       film_cifti,
-      film_cifti_cargs,
       film_cifti_execute,
-      film_cifti_outputs,
       film_cifti_params,
 };

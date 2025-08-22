@@ -463,14 +463,16 @@ function file_tool_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FileToolOutputs`).
  */
 function file_tool_execute(
     params: FileToolParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FileToolOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FILE_TOOL_METADATA);
     params = execution.params(params)
     const cargs = file_tool_cargs(params, execution)
     const ret = file_tool_outputs(params, execution)
@@ -577,10 +579,8 @@ function file_tool(
     swap_bytes: boolean = false,
     runner: Runner | null = null,
 ): FileToolOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FILE_TOOL_METADATA);
     const params = file_tool_params(infiles, help, version, hist, debug, ge_all, ge_header, ge_extras, ge_uv17, ge_run, ge_off, ge4_all, ge4_image, ge4_series, ge4_study, def_ana_hdr, diff_ana_hdrs, disp_ana_hdr, hex, mod_ana_hdr, mod_field, prefix, overwrite, show_bad_all, show_bad_backslash, show_bad_char, show_file_type, fix_rich_quotes, test, length, mod_data, mod_type, offset, quiet, disp_hex, disp_hex1, disp_hex2, disp_hex4, disp_int2, disp_int4, disp_real4, swap_bytes)
-    return file_tool_execute(params, execution);
+    return file_tool_execute(params, runner);
 }
 
 
@@ -589,8 +589,6 @@ export {
       FileToolOutputs,
       FileToolParameters,
       file_tool,
-      file_tool_cargs,
       file_tool_execute,
-      file_tool_outputs,
       file_tool_params,
 };

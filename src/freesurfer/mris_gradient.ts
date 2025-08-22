@@ -143,14 +143,16 @@ function mris_gradient_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisGradientOutputs`).
  */
 function mris_gradient_execute(
     params: MrisGradientParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisGradientOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_GRADIENT_METADATA);
     params = execution.params(params)
     const cargs = mris_gradient_cargs(params, execution)
     const ret = mris_gradient_outputs(params, execution)
@@ -179,10 +181,8 @@ function mris_gradient(
     output_gradient_file: string,
     runner: Runner | null = null,
 ): MrisGradientOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_GRADIENT_METADATA);
     const params = mris_gradient_params(input_surface, input_vector_field, output_gradient_file)
-    return mris_gradient_execute(params, execution);
+    return mris_gradient_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MrisGradientOutputs,
       MrisGradientParameters,
       mris_gradient,
-      mris_gradient_cargs,
       mris_gradient_execute,
-      mris_gradient_outputs,
       mris_gradient_params,
 };

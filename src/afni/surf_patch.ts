@@ -308,14 +308,16 @@ function surf_patch_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfPatchOutputs`).
  */
 function surf_patch_execute(
     params: SurfPatchParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfPatchOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_PATCH_METADATA);
     params = execution.params(params)
     const cargs = surf_patch_cargs(params, execution)
     const ret = surf_patch_outputs(params, execution)
@@ -380,10 +382,8 @@ function surf_patch(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): SurfPatchOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_PATCH_METADATA);
     const params = surf_patch_params(spec_file, surf_a, surf_b, nodefile, inode, ilabel, prefix, hits, masklabel, vol, vol_only, patch2surf, coord_gain, check_bowtie, fix_bowtie, ok_bowtie, adjust_contour, do_not_adjust_contour, stitched_surface, flip_orientation, verbosity)
-    return surf_patch_execute(params, execution);
+    return surf_patch_execute(params, runner);
 }
 
 
@@ -392,8 +392,6 @@ export {
       SurfPatchOutputs,
       SurfPatchParameters,
       surf_patch,
-      surf_patch_cargs,
       surf_patch_execute,
-      surf_patch_outputs,
       surf_patch_params,
 };

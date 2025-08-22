@@ -155,14 +155,16 @@ function mris_compute_acorr_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisComputeAcorrOutputs`).
  */
 function mris_compute_acorr_execute(
     params: MrisComputeAcorrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisComputeAcorrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_COMPUTE_ACORR_METADATA);
     params = execution.params(params)
     const cargs = mris_compute_acorr_cargs(params, execution)
     const ret = mris_compute_acorr_outputs(params, execution)
@@ -197,10 +199,8 @@ function mris_compute_acorr(
     c2_subjects: Array<string>,
     runner: Runner | null = null,
 ): MrisComputeAcorrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_COMPUTE_ACORR_METADATA);
     const params = mris_compute_acorr_params(output_subject, hemi, surf, curv, c1_subjects, c2_subjects)
-    return mris_compute_acorr_execute(params, execution);
+    return mris_compute_acorr_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       MrisComputeAcorrOutputs,
       MrisComputeAcorrParameters,
       mris_compute_acorr,
-      mris_compute_acorr_cargs,
       mris_compute_acorr_execute,
-      mris_compute_acorr_outputs,
       mris_compute_acorr_params,
 };

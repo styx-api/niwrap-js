@@ -241,14 +241,16 @@ function mri_gradunwarp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriGradunwarpOutputs`).
  */
 function mri_gradunwarp_execute(
     params: MriGradunwarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriGradunwarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_GRADUNWARP_METADATA);
     params = execution.params(params)
     const cargs = mri_gradunwarp_cargs(params, execution)
     const ret = mri_gradunwarp_outputs(params, execution)
@@ -293,10 +295,8 @@ function mri_gradunwarp(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriGradunwarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_GRADUNWARP_METADATA);
     const params = mri_gradunwarp_params(input_file, gradient_coeff, load_transtbl, output_file, out_transtbl, save_transtbl_only, interpolation_type, nthreads, checkopts, version, help)
-    return mri_gradunwarp_execute(params, execution);
+    return mri_gradunwarp_execute(params, runner);
 }
 
 
@@ -305,8 +305,6 @@ export {
       MriGradunwarpOutputs,
       MriGradunwarpParameters,
       mri_gradunwarp,
-      mri_gradunwarp_cargs,
       mri_gradunwarp_execute,
-      mri_gradunwarp_outputs,
       mri_gradunwarp_params,
 };

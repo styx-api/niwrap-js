@@ -184,14 +184,16 @@ function dmri_anatomi_cuts_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriAnatomiCutsOutputs`).
  */
 function dmri_anatomi_cuts_execute(
     params: DmriAnatomiCutsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriAnatomiCutsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_ANATOMI_CUTS_METADATA);
     params = execution.params(params)
     const cargs = dmri_anatomi_cuts_cargs(params, execution)
     const ret = dmri_anatomi_cuts_outputs(params, execution)
@@ -228,10 +230,8 @@ function dmri_anatomi_cuts(
     direction_flag: "s" | "d" | "a" | "o",
     runner: Runner | null = null,
 ): DmriAnatomiCutsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_ANATOMI_CUTS_METADATA);
     const params = dmri_anatomi_cuts_params(segmentation_file, fiber_file, clusters, points, fibers_eigen, output_folder, direction_flag)
-    return dmri_anatomi_cuts_execute(params, execution);
+    return dmri_anatomi_cuts_execute(params, runner);
 }
 
 
@@ -240,8 +240,6 @@ export {
       DmriAnatomiCutsOutputs,
       DmriAnatomiCutsParameters,
       dmri_anatomi_cuts,
-      dmri_anatomi_cuts_cargs,
       dmri_anatomi_cuts_execute,
-      dmri_anatomi_cuts_outputs,
       dmri_anatomi_cuts_params,
 };

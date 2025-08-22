@@ -277,14 +277,16 @@ function v__simulate_motion_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSimulateMotionOutputs`).
  */
 function v__simulate_motion_execute(
     params: VSimulateMotionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSimulateMotionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SIMULATE_MOTION_METADATA);
     params = execution.params(params)
     const cargs = v__simulate_motion_cargs(params, execution)
     const ret = v__simulate_motion_outputs(params, execution)
@@ -339,10 +341,8 @@ function v__simulate_motion(
     ver: boolean = false,
     runner: Runner | null = null,
 ): VSimulateMotionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SIMULATE_MOTION_METADATA);
     const params = v__simulate_motion_params(epi, motion_file, epi_timing, prefix, save_workdir, test, verb_level, vr_base, warp_method, warp_1_d, warp_master, wsinc5, help, hist, todo, ver)
-    return v__simulate_motion_execute(params, execution);
+    return v__simulate_motion_execute(params, runner);
 }
 
 
@@ -351,8 +351,6 @@ export {
       VSimulateMotionParameters,
       V__SIMULATE_MOTION_METADATA,
       v__simulate_motion,
-      v__simulate_motion_cargs,
       v__simulate_motion_execute,
-      v__simulate_motion_outputs,
       v__simulate_motion_params,
 };

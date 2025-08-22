@@ -138,14 +138,16 @@ function mri_compute_bias_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriComputeBiasOutputs`).
  */
 function mri_compute_bias_execute(
     params: MriComputeBiasParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriComputeBiasOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_COMPUTE_BIAS_METADATA);
     params = execution.params(params)
     const cargs = mri_compute_bias_cargs(params, execution)
     const ret = mri_compute_bias_outputs(params, execution)
@@ -172,10 +174,8 @@ function mri_compute_bias(
     output_volume: string,
     runner: Runner | null = null,
 ): MriComputeBiasOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_COMPUTE_BIAS_METADATA);
     const params = mri_compute_bias_params(subjects, output_volume)
-    return mri_compute_bias_execute(params, execution);
+    return mri_compute_bias_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MriComputeBiasOutputs,
       MriComputeBiasParameters,
       mri_compute_bias,
-      mri_compute_bias_cargs,
       mri_compute_bias_execute,
-      mri_compute_bias_outputs,
       mri_compute_bias_params,
 };

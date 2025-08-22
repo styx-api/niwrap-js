@@ -204,14 +204,16 @@ function v_3d_mepfm_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dMepfmOutputs`).
  */
 function v_3d_mepfm_execute(
     params: V3dMepfmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dMepfmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_MEPFM_METADATA);
     params = execution.params(params)
     const cargs = v_3d_mepfm_cargs(params, execution)
     const ret = v_3d_mepfm_outputs(params, execution)
@@ -244,10 +246,8 @@ function v_3d_mepfm(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): V3dMepfmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_MEPFM_METADATA);
     const params = v_3d_mepfm_params(input_files, dbg_args, mask, hrf_model, verbosity)
-    return v_3d_mepfm_execute(params, execution);
+    return v_3d_mepfm_execute(params, runner);
 }
 
 
@@ -256,8 +256,6 @@ export {
       V3dMepfmParameters,
       V_3D_MEPFM_METADATA,
       v_3d_mepfm,
-      v_3d_mepfm_cargs,
       v_3d_mepfm_execute,
-      v_3d_mepfm_outputs,
       v_3d_mepfm_params,
 };

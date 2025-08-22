@@ -340,14 +340,16 @@ function dwi2mask_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Dwi2maskOutputs`).
  */
 function dwi2mask_execute(
     params: Dwi2maskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Dwi2maskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DWI2MASK_METADATA);
     params = execution.params(params)
     const cargs = dwi2mask_cargs(params, execution)
     const ret = dwi2mask_outputs(params, execution)
@@ -404,10 +406,8 @@ function dwi2mask(
     version: boolean = false,
     runner: Runner | null = null,
 ): Dwi2maskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DWI2MASK_METADATA);
     const params = dwi2mask_params(input, output, clean_scale, grad, fslgrad, info, quiet, debug, force, nthreads, config, help, version)
-    return dwi2mask_execute(params, execution);
+    return dwi2mask_execute(params, runner);
 }
 
 
@@ -418,12 +418,8 @@ export {
       Dwi2maskOutputs,
       Dwi2maskParameters,
       dwi2mask,
-      dwi2mask_cargs,
-      dwi2mask_config_cargs,
       dwi2mask_config_params,
       dwi2mask_execute,
-      dwi2mask_fslgrad_cargs,
       dwi2mask_fslgrad_params,
-      dwi2mask_outputs,
       dwi2mask_params,
 };

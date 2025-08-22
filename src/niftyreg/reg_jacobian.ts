@@ -218,14 +218,16 @@ function reg_jacobian_outputs(
  * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegJacobianOutputs`).
  */
 function reg_jacobian_execute(
     params: RegJacobianParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegJacobianOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REG_JACOBIAN_METADATA);
     params = execution.params(params)
     const cargs = reg_jacobian_cargs(params, execution)
     const ret = reg_jacobian_outputs(params, execution)
@@ -262,10 +264,8 @@ function reg_jacobian(
     affine_matrix: InputPathType | null = null,
     runner: Runner | null = null,
 ): RegJacobianOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REG_JACOBIAN_METADATA);
     const params = reg_jacobian_params(reference_image, deformation_field, control_point_lattice, output_jacobian, output_jacobian_matrix, output_log_jacobian, affine_matrix)
-    return reg_jacobian_execute(params, execution);
+    return reg_jacobian_execute(params, runner);
 }
 
 
@@ -274,8 +274,6 @@ export {
       RegJacobianOutputs,
       RegJacobianParameters,
       reg_jacobian,
-      reg_jacobian_cargs,
       reg_jacobian_execute,
-      reg_jacobian_outputs,
       reg_jacobian_params,
 };

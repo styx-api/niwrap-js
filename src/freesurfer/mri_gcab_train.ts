@@ -131,14 +131,16 @@ function mri_gcab_train_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriGcabTrainOutputs`).
  */
 function mri_gcab_train_execute(
     params: MriGcabTrainParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriGcabTrainOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_GCAB_TRAIN_METADATA);
     params = execution.params(params)
     const cargs = mri_gcab_train_cargs(params, execution)
     const ret = mri_gcab_train_outputs(params, execution)
@@ -163,10 +165,8 @@ function mri_gcab_train(
     removed_info: string | null = "mri_gcab_train has been removed from this version of freesurfer.",
     runner: Runner | null = null,
 ): MriGcabTrainOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_GCAB_TRAIN_METADATA);
     const params = mri_gcab_train_params(removed_info)
-    return mri_gcab_train_execute(params, execution);
+    return mri_gcab_train_execute(params, runner);
 }
 
 
@@ -175,8 +175,6 @@ export {
       MriGcabTrainOutputs,
       MriGcabTrainParameters,
       mri_gcab_train,
-      mri_gcab_train_cargs,
       mri_gcab_train_execute,
-      mri_gcab_train_outputs,
       mri_gcab_train_params,
 };

@@ -150,14 +150,16 @@ function v_3dsvm_linpredict_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dsvmLinpredictOutputs`).
  */
 function v_3dsvm_linpredict_execute(
     params: V3dsvmLinpredictParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dsvmLinpredictOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DSVM_LINPREDICT_METADATA);
     params = execution.params(params)
     const cargs = v_3dsvm_linpredict_cargs(params, execution)
     const ret = v_3dsvm_linpredict_outputs(params, execution)
@@ -186,10 +188,8 @@ function v_3dsvm_linpredict(
     mask_dataset: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dsvmLinpredictOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DSVM_LINPREDICT_METADATA);
     const params = v_3dsvm_linpredict_params(weight_vector, input_dataset, mask_dataset)
-    return v_3dsvm_linpredict_execute(params, execution);
+    return v_3dsvm_linpredict_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       V3dsvmLinpredictParameters,
       V_3DSVM_LINPREDICT_METADATA,
       v_3dsvm_linpredict,
-      v_3dsvm_linpredict_cargs,
       v_3dsvm_linpredict_execute,
-      v_3dsvm_linpredict_outputs,
       v_3dsvm_linpredict_params,
 };

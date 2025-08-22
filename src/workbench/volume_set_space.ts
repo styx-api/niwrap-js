@@ -386,14 +386,16 @@ function volume_set_space_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeSetSpaceOutputs`).
  */
 function volume_set_space_execute(
     params: VolumeSetSpaceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeSetSpaceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_SET_SPACE_METADATA);
     params = execution.params(params)
     const cargs = volume_set_space_cargs(params, execution)
     const ret = volume_set_space_outputs(params, execution)
@@ -428,10 +430,8 @@ function volume_set_space(
     file: VolumeSetSpaceFileParameters | null = null,
     runner: Runner | null = null,
 ): VolumeSetSpaceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_SET_SPACE_METADATA);
     const params = volume_set_space_params(volume_in, volume_out, plumb, sform, file)
-    return volume_set_space_execute(params, execution);
+    return volume_set_space_execute(params, runner);
 }
 
 
@@ -443,14 +443,9 @@ export {
       VolumeSetSpacePlumbParameters,
       VolumeSetSpaceSformParameters,
       volume_set_space,
-      volume_set_space_cargs,
       volume_set_space_execute,
-      volume_set_space_file_cargs,
       volume_set_space_file_params,
-      volume_set_space_outputs,
       volume_set_space_params,
-      volume_set_space_plumb_cargs,
       volume_set_space_plumb_params,
-      volume_set_space_sform_cargs,
       volume_set_space_sform_params,
 };

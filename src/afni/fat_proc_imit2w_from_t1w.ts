@@ -221,14 +221,16 @@ function fat_proc_imit2w_from_t1w_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatProcImit2wFromT1wOutputs`).
  */
 function fat_proc_imit2w_from_t1w_execute(
     params: FatProcImit2wFromT1wParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatProcImit2wFromT1wOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_PROC_IMIT2W_FROM_T1W_METADATA);
     params = execution.params(params)
     const cargs = fat_proc_imit2w_from_t1w_cargs(params, execution)
     const ret = fat_proc_imit2w_from_t1w_outputs(params, execution)
@@ -267,10 +269,8 @@ function fat_proc_imit2w_from_t1w(
     qc_prefix: string | null = null,
     runner: Runner | null = null,
 ): FatProcImit2wFromT1wOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_PROC_IMIT2W_FROM_T1W_METADATA);
     const params = fat_proc_imit2w_from_t1w_params(t1_file, prefix, workdir, mask, ss_blur_fwhm, no_clean, no_qc_view, qc_prefix)
-    return fat_proc_imit2w_from_t1w_execute(params, execution);
+    return fat_proc_imit2w_from_t1w_execute(params, runner);
 }
 
 
@@ -279,8 +279,6 @@ export {
       FatProcImit2wFromT1wOutputs,
       FatProcImit2wFromT1wParameters,
       fat_proc_imit2w_from_t1w,
-      fat_proc_imit2w_from_t1w_cargs,
       fat_proc_imit2w_from_t1w_execute,
-      fat_proc_imit2w_from_t1w_outputs,
       fat_proc_imit2w_from_t1w_params,
 };

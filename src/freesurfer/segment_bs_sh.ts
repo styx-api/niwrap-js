@@ -131,14 +131,16 @@ function segment_bs_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegmentBsShOutputs`).
  */
 function segment_bs_sh_execute(
     params: SegmentBsShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegmentBsShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGMENT_BS_SH_METADATA);
     params = execution.params(params)
     const cargs = segment_bs_sh_cargs(params, execution)
     const ret = segment_bs_sh_outputs(params, execution)
@@ -163,10 +165,8 @@ function segment_bs_sh(
     matlab_runtime: string | null = "/usr/local/freesurfer/MCRv97",
     runner: Runner | null = null,
 ): SegmentBsShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGMENT_BS_SH_METADATA);
     const params = segment_bs_sh_params(matlab_runtime)
-    return segment_bs_sh_execute(params, execution);
+    return segment_bs_sh_execute(params, runner);
 }
 
 
@@ -175,8 +175,6 @@ export {
       SegmentBsShOutputs,
       SegmentBsShParameters,
       segment_bs_sh,
-      segment_bs_sh_cargs,
       segment_bs_sh_execute,
-      segment_bs_sh_outputs,
       segment_bs_sh_params,
 };

@@ -689,14 +689,16 @@ function mris_make_surfaces_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisMakeSurfacesOutputs`).
  */
 function mris_make_surfaces_execute(
     params: MrisMakeSurfacesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisMakeSurfacesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_MAKE_SURFACES_METADATA);
     params = execution.params(params)
     const cargs = mris_make_surfaces_cargs(params, execution)
     const ret = mris_make_surfaces_outputs(params, execution)
@@ -825,10 +827,8 @@ function mris_make_surfaces(
     max_csf: number | null = null,
     runner: Runner | null = null,
 ): MrisMakeSurfacesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_MAKE_SURFACES_METADATA);
     const params = mris_make_surfaces_params(subject_name, hemisphere, white, pial, whiteonly, nowhite, orig_white, orig_pial, q, max_gray_scale, c, cortex, w, first_wm_peak, a_avgs, pa_avgs, wa_avgs, t1_vol, w_vol, long, dura_thresh, sdir, erase_cerebellum, wm_weight, nsigma_above, nsigma_below, t2_min_inside, t2_max_inside, t2_outside_min, t2_outside_max, min_peak_pct, border_vals_hires, no_unitize, intensity, curv, tspring, nspring, repulse, save_target, save_res, v_vertexno, diag_vertex, rip, sigma_white, sigma_pial, output, min_border_white, max_border_white, min_gray_white_border, max_gray, max_gray_csf_border, min_gray_csf_border, max_csf)
-    return mris_make_surfaces_execute(params, execution);
+    return mris_make_surfaces_execute(params, runner);
 }
 
 
@@ -837,8 +837,6 @@ export {
       MrisMakeSurfacesOutputs,
       MrisMakeSurfacesParameters,
       mris_make_surfaces,
-      mris_make_surfaces_cargs,
       mris_make_surfaces_execute,
-      mris_make_surfaces_outputs,
       mris_make_surfaces_params,
 };

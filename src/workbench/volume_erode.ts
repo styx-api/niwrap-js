@@ -170,14 +170,16 @@ function volume_erode_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeErodeOutputs`).
  */
 function volume_erode_execute(
     params: VolumeErodeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeErodeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_ERODE_METADATA);
     params = execution.params(params)
     const cargs = volume_erode_cargs(params, execution)
     const ret = volume_erode_outputs(params, execution)
@@ -212,10 +214,8 @@ function volume_erode(
     opt_subvolume_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeErodeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_ERODE_METADATA);
     const params = volume_erode_params(volume, distance, volume_out, opt_roi_roi_volume, opt_subvolume_subvol)
-    return volume_erode_execute(params, execution);
+    return volume_erode_execute(params, runner);
 }
 
 
@@ -224,8 +224,6 @@ export {
       VolumeErodeOutputs,
       VolumeErodeParameters,
       volume_erode,
-      volume_erode_cargs,
       volume_erode_execute,
-      volume_erode_outputs,
       volume_erode_params,
 };

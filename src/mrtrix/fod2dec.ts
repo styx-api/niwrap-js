@@ -335,14 +335,16 @@ function fod2dec_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fod2decOutputs`).
  */
 function fod2dec_execute(
     params: Fod2decParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fod2decOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FOD2DEC_METADATA);
     params = execution.params(params)
     const cargs = fod2dec_cargs(params, execution)
     const ret = fod2dec_outputs(params, execution)
@@ -410,10 +412,8 @@ function fod2dec(
     version: boolean = false,
     runner: Runner | null = null,
 ): Fod2decOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FOD2DEC_METADATA);
     const params = fod2dec_params(input, output, mask, contrast, lum, lum_coefs, lum_gamma, threshold, no_weight, info, quiet, debug, force, nthreads, config, help, version)
-    return fod2dec_execute(params, execution);
+    return fod2dec_execute(params, runner);
 }
 
 
@@ -423,10 +423,7 @@ export {
       Fod2decOutputs,
       Fod2decParameters,
       fod2dec,
-      fod2dec_cargs,
-      fod2dec_config_cargs,
       fod2dec_config_params,
       fod2dec_execute,
-      fod2dec_outputs,
       fod2dec_params,
 };

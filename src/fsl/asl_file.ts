@@ -395,14 +395,16 @@ function asl_file_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AslFileOutputs`).
  */
 function asl_file_execute(
     params: AslFileParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AslFileOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ASL_FILE_METADATA);
     params = execution.params(params)
     const cargs = asl_file_cargs(params, execution)
     const ret = asl_file_outputs(params, execution)
@@ -479,10 +481,8 @@ function asl_file(
     version: boolean = false,
     runner: Runner | null = null,
 ): AslFileOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ASL_FILE_METADATA);
     const params = asl_file_params(datafile, ntis, outfile, mask, inblockform, inaslform, rpts, pairs, spairs, diff, surrdiff, extrapolate, neighbour, pvgm, pvwm, kernel, outblockform, mean, split, epoch, epoch_length, epoch_overlap, epoch_unit, deconv, aif, help, version)
-    return asl_file_execute(params, execution);
+    return asl_file_execute(params, runner);
 }
 
 
@@ -491,8 +491,6 @@ export {
       AslFileOutputs,
       AslFileParameters,
       asl_file,
-      asl_file_cargs,
       asl_file_execute,
-      asl_file_outputs,
       asl_file_params,
 };

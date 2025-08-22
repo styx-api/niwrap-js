@@ -356,14 +356,16 @@ function v_3dttest___outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dttestOutputs`).
  */
 function v_3dttest___execute(
     params: V3dttestParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dttestOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DTTEST___METADATA);
     params = execution.params(params)
     const cargs = v_3dttest___cargs(params, execution)
     const ret = v_3dttest___outputs(params, execution)
@@ -428,10 +430,8 @@ function v_3dttest__(
     seed: number | null = null,
     runner: Runner | null = null,
 ): V3dttestOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DTTEST___METADATA);
     const params = v_3dttest___params(set_a, set_b, set_a_long, set_b_long, covariates, label_a, label_b, setweight_a, setweight_b, prefix, resid, paired, unpooled, mask, exblur, randomsign, permute, etac, etac_blur, etac_opt, seed)
-    return v_3dttest___execute(params, execution);
+    return v_3dttest___execute(params, runner);
 }
 
 
@@ -440,8 +440,6 @@ export {
       V3dttestParameters,
       V_3DTTEST___METADATA,
       v_3dttest__,
-      v_3dttest___cargs,
       v_3dttest___execute,
-      v_3dttest___outputs,
       v_3dttest___params,
 };

@@ -151,14 +151,16 @@ function ants_denoise_image_fs_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsDenoiseImageFsOutputs`).
  */
 function ants_denoise_image_fs_execute(
     params: AntsDenoiseImageFsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsDenoiseImageFsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_DENOISE_IMAGE_FS_METADATA);
     params = execution.params(params)
     const cargs = ants_denoise_image_fs_cargs(params, execution)
     const ret = ants_denoise_image_fs_outputs(params, execution)
@@ -187,10 +189,8 @@ function ants_denoise_image_fs(
     rician_flag: boolean = false,
     runner: Runner | null = null,
 ): AntsDenoiseImageFsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_DENOISE_IMAGE_FS_METADATA);
     const params = ants_denoise_image_fs_params(input_image, output_image, rician_flag)
-    return ants_denoise_image_fs_execute(params, execution);
+    return ants_denoise_image_fs_execute(params, runner);
 }
 
 
@@ -199,8 +199,6 @@ export {
       AntsDenoiseImageFsOutputs,
       AntsDenoiseImageFsParameters,
       ants_denoise_image_fs,
-      ants_denoise_image_fs_cargs,
       ants_denoise_image_fs_execute,
-      ants_denoise_image_fs_outputs,
       ants_denoise_image_fs_params,
 };

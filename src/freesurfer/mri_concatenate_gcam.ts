@@ -183,14 +183,16 @@ function mri_concatenate_gcam_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriConcatenateGcamOutputs`).
  */
 function mri_concatenate_gcam_execute(
     params: MriConcatenateGcamParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriConcatenateGcamOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CONCATENATE_GCAM_METADATA);
     params = execution.params(params)
     const cargs = mri_concatenate_gcam_cargs(params, execution)
     const ret = mri_concatenate_gcam_outputs(params, execution)
@@ -227,10 +229,8 @@ function mri_concatenate_gcam(
     downsample: boolean = false,
     runner: Runner | null = null,
 ): MriConcatenateGcamOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CONCATENATE_GCAM_METADATA);
     const params = mri_concatenate_gcam_params(inputs, output, source_image, target_image, reduce, invert, downsample)
-    return mri_concatenate_gcam_execute(params, execution);
+    return mri_concatenate_gcam_execute(params, runner);
 }
 
 
@@ -239,8 +239,6 @@ export {
       MriConcatenateGcamOutputs,
       MriConcatenateGcamParameters,
       mri_concatenate_gcam,
-      mri_concatenate_gcam_cargs,
       mri_concatenate_gcam_execute,
-      mri_concatenate_gcam_outputs,
       mri_concatenate_gcam_params,
 };

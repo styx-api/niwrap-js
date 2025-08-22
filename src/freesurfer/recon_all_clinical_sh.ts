@@ -146,14 +146,16 @@ function recon_all_clinical_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ReconAllClinicalShOutputs`).
  */
 function recon_all_clinical_sh_execute(
     params: ReconAllClinicalShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ReconAllClinicalShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RECON_ALL_CLINICAL_SH_METADATA);
     params = execution.params(params)
     const cargs = recon_all_clinical_sh_cargs(params, execution)
     const ret = recon_all_clinical_sh_outputs(params, execution)
@@ -184,10 +186,8 @@ function recon_all_clinical_sh(
     subject_dir: string | null = null,
     runner: Runner | null = null,
 ): ReconAllClinicalShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RECON_ALL_CLINICAL_SH_METADATA);
     const params = recon_all_clinical_sh_params(input_scan, subject_id, threads, subject_dir)
-    return recon_all_clinical_sh_execute(params, execution);
+    return recon_all_clinical_sh_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       ReconAllClinicalShOutputs,
       ReconAllClinicalShParameters,
       recon_all_clinical_sh,
-      recon_all_clinical_sh_cargs,
       recon_all_clinical_sh_execute,
-      recon_all_clinical_sh_outputs,
       recon_all_clinical_sh_params,
 };

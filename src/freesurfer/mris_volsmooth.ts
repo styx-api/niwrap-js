@@ -267,14 +267,16 @@ function mris_volsmooth_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisVolsmoothOutputs`).
  */
 function mris_volsmooth_execute(
     params: MrisVolsmoothParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisVolsmoothOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_VOLSMOOTH_METADATA);
     params = execution.params(params)
     const cargs = mris_volsmooth_cargs(params, execution)
     const ret = mris_volsmooth_outputs(params, execution)
@@ -323,10 +325,8 @@ function mris_volsmooth(
     debug: boolean = false,
     runner: Runner | null = null,
 ): MrisVolsmoothOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_VOLSMOOTH_METADATA);
     const params = mris_volsmooth_params(input_volume, output_volume, registration, projfrac, projfrac_avg, fill_ribbon, surf_out, fwhm, niters, vol_fwhm, log, nocleanup, debug)
-    return mris_volsmooth_execute(params, execution);
+    return mris_volsmooth_execute(params, runner);
 }
 
 
@@ -335,8 +335,6 @@ export {
       MrisVolsmoothOutputs,
       MrisVolsmoothParameters,
       mris_volsmooth,
-      mris_volsmooth_cargs,
       mris_volsmooth_execute,
-      mris_volsmooth_outputs,
       mris_volsmooth_params,
 };

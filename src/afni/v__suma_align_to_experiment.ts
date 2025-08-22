@@ -330,14 +330,16 @@ function v__suma_align_to_experiment_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSumaAlignToExperimentOutputs`).
  */
 function v__suma_align_to_experiment_execute(
     params: VSumaAlignToExperimentParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSumaAlignToExperimentOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SUMA_ALIGN_TO_EXPERIMENT_METADATA);
     params = execution.params(params)
     const cargs = v__suma_align_to_experiment_cargs(params, execution)
     const ret = v__suma_align_to_experiment_outputs(params, execution)
@@ -400,10 +402,8 @@ function v__suma_align_to_experiment(
     overwrite_resp: string | null = null,
     runner: Runner | null = null,
 ): VSumaAlignToExperimentOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SUMA_ALIGN_TO_EXPERIMENT_METADATA);
     const params = v__suma_align_to_experiment_params(exp_anat, surf_anat, dxyz, out_dxyz, wd, al, al_opt, ok_change_view, strip_skull, skull_strip_opt, align_centers, init_xform, ea_clip_below, prefix, surf_anat_followers, followers_interp, atlas_followers, echo, keep_tmp, overwrite_resp)
-    return v__suma_align_to_experiment_execute(params, execution);
+    return v__suma_align_to_experiment_execute(params, runner);
 }
 
 
@@ -412,8 +412,6 @@ export {
       VSumaAlignToExperimentParameters,
       V__SUMA_ALIGN_TO_EXPERIMENT_METADATA,
       v__suma_align_to_experiment,
-      v__suma_align_to_experiment_cargs,
       v__suma_align_to_experiment_execute,
-      v__suma_align_to_experiment_outputs,
       v__suma_align_to_experiment_params,
 };

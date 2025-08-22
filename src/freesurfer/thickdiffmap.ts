@@ -151,14 +151,16 @@ function thickdiffmap_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ThickdiffmapOutputs`).
  */
 function thickdiffmap_execute(
     params: ThickdiffmapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ThickdiffmapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(THICKDIFFMAP_METADATA);
     params = execution.params(params)
     const cargs = thickdiffmap_cargs(params, execution)
     const ret = thickdiffmap_outputs(params, execution)
@@ -191,10 +193,8 @@ function thickdiffmap(
     steps: Array<string> | null = null,
     runner: Runner | null = null,
 ): ThickdiffmapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(THICKDIFFMAP_METADATA);
     const params = thickdiffmap_params(subjscan1, subjscan2, commonsubj, hemi, steps)
-    return thickdiffmap_execute(params, execution);
+    return thickdiffmap_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       ThickdiffmapOutputs,
       ThickdiffmapParameters,
       thickdiffmap,
-      thickdiffmap_cargs,
       thickdiffmap_execute,
-      thickdiffmap_outputs,
       thickdiffmap_params,
 };

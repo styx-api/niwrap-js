@@ -374,14 +374,16 @@ function cifti_export_dense_mapping_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiExportDenseMappingOutputs`).
  */
 function cifti_export_dense_mapping_execute(
     params: CiftiExportDenseMappingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiExportDenseMappingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_EXPORT_DENSE_MAPPING_METADATA);
     params = execution.params(params)
     const cargs = cifti_export_dense_mapping_cargs(params, execution)
     const ret = cifti_export_dense_mapping_outputs(params, execution)
@@ -458,10 +460,8 @@ function cifti_export_dense_mapping(
     volume: Array<CiftiExportDenseMappingVolumeParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiExportDenseMappingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_EXPORT_DENSE_MAPPING_METADATA);
     const params = cifti_export_dense_mapping_params(cifti, direction, volume_all, surface, volume)
-    return cifti_export_dense_mapping_execute(params, execution);
+    return cifti_export_dense_mapping_execute(params, runner);
 }
 
 
@@ -473,14 +473,9 @@ export {
       CiftiExportDenseMappingVolumeAllParameters,
       CiftiExportDenseMappingVolumeParameters,
       cifti_export_dense_mapping,
-      cifti_export_dense_mapping_cargs,
       cifti_export_dense_mapping_execute,
-      cifti_export_dense_mapping_outputs,
       cifti_export_dense_mapping_params,
-      cifti_export_dense_mapping_surface_cargs,
       cifti_export_dense_mapping_surface_params,
-      cifti_export_dense_mapping_volume_all_cargs,
       cifti_export_dense_mapping_volume_all_params,
-      cifti_export_dense_mapping_volume_cargs,
       cifti_export_dense_mapping_volume_params,
 };

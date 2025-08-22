@@ -240,14 +240,16 @@ function v__anaticor_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAnaticorOutputs`).
  */
 function v__anaticor_execute(
     params: VAnaticorParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAnaticorOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__ANATICOR_METADATA);
     params = execution.params(params)
     const cargs = v__anaticor_cargs(params, execution)
     const ret = v__anaticor_outputs(params, execution)
@@ -298,10 +300,8 @@ function v__anaticor(
     echo: boolean = false,
     runner: Runner | null = null,
 ): VAnaticorOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__ANATICOR_METADATA);
     const params = v__anaticor_params(ts, polort, motion, aseg, prefix, radius, view, nuisance, no_ventricles, rsq_wme, coverage, verb, dirty, echo)
-    return v__anaticor_execute(params, execution);
+    return v__anaticor_execute(params, runner);
 }
 
 
@@ -310,8 +310,6 @@ export {
       VAnaticorParameters,
       V__ANATICOR_METADATA,
       v__anaticor,
-      v__anaticor_cargs,
       v__anaticor_execute,
-      v__anaticor_outputs,
       v__anaticor_params,
 };

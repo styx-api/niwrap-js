@@ -177,14 +177,16 @@ function aiv_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AivOutputs`).
  */
 function aiv_execute(
     params: AivParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AivOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AIV_METADATA);
     params = execution.params(params)
     const cargs = aiv_cargs(params, execution)
     const ret = aiv_outputs(params, execution)
@@ -219,10 +221,8 @@ function aiv(
     pad: string | null = null,
     runner: Runner | null = null,
 ): AivOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AIV_METADATA);
     const params = aiv_params(input_images, verbose, quiet, title, port, pad)
-    return aiv_execute(params, execution);
+    return aiv_execute(params, runner);
 }
 
 
@@ -231,8 +231,6 @@ export {
       AivOutputs,
       AivParameters,
       aiv,
-      aiv_cargs,
       aiv_execute,
-      aiv_outputs,
       aiv_params,
 };

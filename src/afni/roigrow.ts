@@ -202,14 +202,16 @@ function roigrow_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RoigrowOutputs`).
  */
 function roigrow_execute(
     params: RoigrowParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RoigrowOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ROIGROW_METADATA);
     params = execution.params(params)
     const cargs = roigrow_cargs(params, execution)
     const ret = roigrow_outputs(params, execution)
@@ -248,10 +250,8 @@ function roigrow(
     inbox_edges: Array<number> | null = null,
     runner: Runner | null = null,
 ): RoigrowOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ROIGROW_METADATA);
     const params = roigrow_params(input_surface, roi_labels, lim_distance, output_prefix, full_list, grow_from_edge, insphere_diameter, inbox_edges)
-    return roigrow_execute(params, execution);
+    return roigrow_execute(params, runner);
 }
 
 
@@ -260,8 +260,6 @@ export {
       RoigrowOutputs,
       RoigrowParameters,
       roigrow,
-      roigrow_cargs,
       roigrow_execute,
-      roigrow_outputs,
       roigrow_params,
 };

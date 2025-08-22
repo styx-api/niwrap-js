@@ -175,14 +175,16 @@ function add_to_spec_file_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AddToSpecFileOutputs`).
  */
 function add_to_spec_file_execute(
     params: AddToSpecFileParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AddToSpecFileOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADD_TO_SPEC_FILE_METADATA);
     params = execution.params(params)
     const cargs = add_to_spec_file_cargs(params, execution)
     const ret = add_to_spec_file_outputs(params, execution)
@@ -248,10 +250,8 @@ function add_to_spec_file(
     filename: string,
     runner: Runner | null = null,
 ): AddToSpecFileOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADD_TO_SPEC_FILE_METADATA);
     const params = add_to_spec_file_params(specfile, structure, filename)
-    return add_to_spec_file_execute(params, execution);
+    return add_to_spec_file_execute(params, runner);
 }
 
 
@@ -260,8 +260,6 @@ export {
       AddToSpecFileOutputs,
       AddToSpecFileParameters,
       add_to_spec_file,
-      add_to_spec_file_cargs,
       add_to_spec_file_execute,
-      add_to_spec_file_outputs,
       add_to_spec_file_params,
 };

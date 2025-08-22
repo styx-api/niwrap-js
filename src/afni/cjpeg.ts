@@ -178,14 +178,16 @@ function cjpeg_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CjpegOutputs`).
  */
 function cjpeg_execute(
     params: CjpegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CjpegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CJPEG_METADATA);
     params = execution.params(params)
     const cargs = cjpeg_cargs(params, execution)
     const ret = cjpeg_outputs(params, execution)
@@ -222,10 +224,8 @@ function cjpeg(
     progressive: boolean = false,
     runner: Runner | null = null,
 ): CjpegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CJPEG_METADATA);
     const params = cjpeg_params(outfile, infile, quality, grayscale, optimize, baseline, progressive)
-    return cjpeg_execute(params, execution);
+    return cjpeg_execute(params, runner);
 }
 
 
@@ -234,8 +234,6 @@ export {
       CjpegOutputs,
       CjpegParameters,
       cjpeg,
-      cjpeg_cargs,
       cjpeg_execute,
-      cjpeg_outputs,
       cjpeg_params,
 };

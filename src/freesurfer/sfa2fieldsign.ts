@@ -250,14 +250,16 @@ function sfa2fieldsign_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Sfa2fieldsignOutputs`).
  */
 function sfa2fieldsign_execute(
     params: Sfa2fieldsignParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Sfa2fieldsignOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SFA2FIELDSIGN_METADATA);
     params = execution.params(params)
     const cargs = sfa2fieldsign_cargs(params, execution)
     const ret = sfa2fieldsign_outputs(params, execution)
@@ -300,10 +302,8 @@ function sfa2fieldsign(
     rh: boolean = false,
     runner: Runner | null = null,
 ): Sfa2fieldsignOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SFA2FIELDSIGN_METADATA);
     const params = sfa2fieldsign_params(sfadir, register_dat, threshold, fwhm, proj_frac, occip, patch, osd, lh, rh)
-    return sfa2fieldsign_execute(params, execution);
+    return sfa2fieldsign_execute(params, runner);
 }
 
 
@@ -312,8 +312,6 @@ export {
       Sfa2fieldsignOutputs,
       Sfa2fieldsignParameters,
       sfa2fieldsign,
-      sfa2fieldsign_cargs,
       sfa2fieldsign_execute,
-      sfa2fieldsign_outputs,
       sfa2fieldsign_params,
 };

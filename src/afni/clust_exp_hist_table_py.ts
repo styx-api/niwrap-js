@@ -167,14 +167,16 @@ function clust_exp_hist_table_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ClustExpHistTablePyOutputs`).
  */
 function clust_exp_hist_table_py_execute(
     params: ClustExpHistTablePyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ClustExpHistTablePyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CLUST_EXP_HIST_TABLE_PY_METADATA);
     params = execution.params(params)
     const cargs = clust_exp_hist_table_py_cargs(params, execution)
     const ret = clust_exp_hist_table_py_outputs(params, execution)
@@ -205,10 +207,8 @@ function clust_exp_hist_table_py(
     overwrite: boolean = false,
     runner: Runner | null = null,
 ): ClustExpHistTablePyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CLUST_EXP_HIST_TABLE_PY_METADATA);
     const params = clust_exp_hist_table_py_params(stat_dset, prefix, session, overwrite)
-    return clust_exp_hist_table_py_execute(params, execution);
+    return clust_exp_hist_table_py_execute(params, runner);
 }
 
 
@@ -217,8 +217,6 @@ export {
       ClustExpHistTablePyOutputs,
       ClustExpHistTablePyParameters,
       clust_exp_hist_table_py,
-      clust_exp_hist_table_py_cargs,
       clust_exp_hist_table_py_execute,
-      clust_exp_hist_table_py_outputs,
       clust_exp_hist_table_py_params,
 };

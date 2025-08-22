@@ -149,14 +149,16 @@ function apsearch_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ApsearchOutputs`).
  */
 function apsearch_execute(
     params: ApsearchParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ApsearchOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(APSEARCH_METADATA);
     params = execution.params(params)
     const cargs = apsearch_cargs(params, execution)
     const ret = apsearch_outputs(params, execution)
@@ -185,10 +187,8 @@ function apsearch(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): ApsearchOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(APSEARCH_METADATA);
     const params = apsearch_params(search_term, file_output, verbose)
-    return apsearch_execute(params, execution);
+    return apsearch_execute(params, runner);
 }
 
 
@@ -197,8 +197,6 @@ export {
       ApsearchOutputs,
       ApsearchParameters,
       apsearch,
-      apsearch_cargs,
       apsearch_execute,
-      apsearch_outputs,
       apsearch_params,
 };

@@ -394,14 +394,16 @@ function mri_compute_volume_fractions_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriComputeVolumeFractionsOutputs`).
  */
 function mri_compute_volume_fractions_execute(
     params: MriComputeVolumeFractionsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriComputeVolumeFractionsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_COMPUTE_VOLUME_FRACTIONS_METADATA);
     params = execution.params(params)
     const cargs = mri_compute_volume_fractions_cargs(params, execution)
     const ret = mri_compute_volume_fractions_outputs(params, execution)
@@ -474,10 +476,8 @@ function mri_compute_volume_fractions(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MriComputeVolumeFractionsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_COMPUTE_VOLUME_FRACTIONS_METADATA);
     const params = mri_compute_volume_fractions_params(output_stem, registration_file, regheader, usf, resolution, resmm, segmentation_file, wsurf, psurf, no_aseg, stackfile, gmfile, no_fill_csf, dilation, out_seg, ttseg, ttseg_ctab, mgz_format, mgh_format, nii_format, nii_gz_format, ttype_head, vg_thresh, debug, checkopts)
-    return mri_compute_volume_fractions_execute(params, execution);
+    return mri_compute_volume_fractions_execute(params, runner);
 }
 
 
@@ -486,8 +486,6 @@ export {
       MriComputeVolumeFractionsOutputs,
       MriComputeVolumeFractionsParameters,
       mri_compute_volume_fractions,
-      mri_compute_volume_fractions_cargs,
       mri_compute_volume_fractions_execute,
-      mri_compute_volume_fractions_outputs,
       mri_compute_volume_fractions_params,
 };

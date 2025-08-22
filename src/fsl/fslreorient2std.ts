@@ -159,14 +159,16 @@ function fslreorient2std_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fslreorient2stdOutputs`).
  */
 function fslreorient2std_execute(
     params: Fslreorient2stdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fslreorient2stdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLREORIENT2STD_METADATA);
     params = execution.params(params)
     const cargs = fslreorient2std_cargs(params, execution)
     const ret = fslreorient2std_outputs(params, execution)
@@ -195,10 +197,8 @@ function fslreorient2std(
     matrix_file: string | null = null,
     runner: Runner | null = null,
 ): Fslreorient2stdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLREORIENT2STD_METADATA);
     const params = fslreorient2std_params(input_image, output_image, matrix_file)
-    return fslreorient2std_execute(params, execution);
+    return fslreorient2std_execute(params, runner);
 }
 
 
@@ -207,8 +207,6 @@ export {
       Fslreorient2stdOutputs,
       Fslreorient2stdParameters,
       fslreorient2std,
-      fslreorient2std_cargs,
       fslreorient2std_execute,
-      fslreorient2std_outputs,
       fslreorient2std_params,
 };

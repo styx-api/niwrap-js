@@ -200,14 +200,16 @@ function unpackmincdir_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `UnpackmincdirOutputs`).
  */
 function unpackmincdir_execute(
     params: UnpackmincdirParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): UnpackmincdirOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(UNPACKMINCDIR_METADATA);
     params = execution.params(params)
     const cargs = unpackmincdir_cargs(params, execution)
     const ret = unpackmincdir_outputs(params, execution)
@@ -246,10 +248,8 @@ function unpackmincdir(
     umask: string | null = null,
     runner: Runner | null = null,
 ): UnpackmincdirOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UNPACKMINCDIR_METADATA);
     const params = unpackmincdir_params(source_directory, target_directory, scan_sequence_info, functional_sequence, functional_subdirectory, minc_only, no_copy, umask)
-    return unpackmincdir_execute(params, execution);
+    return unpackmincdir_execute(params, runner);
 }
 
 
@@ -258,8 +258,6 @@ export {
       UnpackmincdirOutputs,
       UnpackmincdirParameters,
       unpackmincdir,
-      unpackmincdir_cargs,
       unpackmincdir_execute,
-      unpackmincdir_outputs,
       unpackmincdir_params,
 };

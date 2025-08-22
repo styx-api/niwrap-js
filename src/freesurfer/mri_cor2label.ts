@@ -255,14 +255,16 @@ function mri_cor2label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCor2labelOutputs`).
  */
 function mri_cor2label_execute(
     params: MriCor2labelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCor2labelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_COR2LABEL_METADATA);
     params = execution.params(params)
     const cargs = mri_cor2label_cargs(params, execution)
     const ret = mri_cor2label_outputs(params, execution)
@@ -309,10 +311,8 @@ function mri_cor2label(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriCor2labelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_COR2LABEL_METADATA);
     const params = mri_cor2label_params(input_file, label_id, label_file, threshold, volume_file, surface_overlay, surface_path, optimize, remove_holes_islands, dilate, erode, help)
-    return mri_cor2label_execute(params, execution);
+    return mri_cor2label_execute(params, runner);
 }
 
 
@@ -321,8 +321,6 @@ export {
       MriCor2labelOutputs,
       MriCor2labelParameters,
       mri_cor2label,
-      mri_cor2label_cargs,
       mri_cor2label_execute,
-      mri_cor2label_outputs,
       mri_cor2label_params,
 };

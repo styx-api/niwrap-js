@@ -156,14 +156,16 @@ function label_subject_flash_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelSubjectFlashOutputs`).
  */
 function label_subject_flash_execute(
     params: LabelSubjectFlashParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelSubjectFlashOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_SUBJECT_FLASH_METADATA);
     params = execution.params(params)
     const cargs = label_subject_flash_cargs(params, execution)
     const ret = label_subject_flash_outputs(params, execution)
@@ -196,10 +198,8 @@ function label_subject_flash(
     aseg_output: string,
     runner: Runner | null = null,
 ): LabelSubjectFlashOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_SUBJECT_FLASH_METADATA);
     const params = label_subject_flash_params(tissue_params, norm_volume, transform_file, classifier_array, aseg_output)
-    return label_subject_flash_execute(params, execution);
+    return label_subject_flash_execute(params, runner);
 }
 
 
@@ -208,8 +208,6 @@ export {
       LabelSubjectFlashOutputs,
       LabelSubjectFlashParameters,
       label_subject_flash,
-      label_subject_flash_cargs,
       label_subject_flash_execute,
-      label_subject_flash_outputs,
       label_subject_flash_params,
 };

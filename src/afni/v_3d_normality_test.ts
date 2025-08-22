@@ -155,14 +155,16 @@ function v_3d_normality_test_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dNormalityTestOutputs`).
  */
 function v_3d_normality_test_execute(
     params: V3dNormalityTestParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dNormalityTestOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_NORMALITY_TEST_METADATA);
     params = execution.params(params)
     const cargs = v_3d_normality_test_cargs(params, execution)
     const ret = v_3d_normality_test_outputs(params, execution)
@@ -193,10 +195,8 @@ function v_3d_normality_test(
     pval: boolean = false,
     runner: Runner | null = null,
 ): V3dNormalityTestOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_NORMALITY_TEST_METADATA);
     const params = v_3d_normality_test_params(input, prefix, noexp, pval)
-    return v_3d_normality_test_execute(params, execution);
+    return v_3d_normality_test_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       V3dNormalityTestParameters,
       V_3D_NORMALITY_TEST_METADATA,
       v_3d_normality_test,
-      v_3d_normality_test_cargs,
       v_3d_normality_test_execute,
-      v_3d_normality_test_outputs,
       v_3d_normality_test_params,
 };

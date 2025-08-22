@@ -370,14 +370,16 @@ function fat_mat_sel_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatMatSelPyOutputs`).
  */
 function fat_mat_sel_py_execute(
     params: FatMatSelPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatMatSelPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_MAT_SEL_PY_METADATA);
     params = execution.params(params)
     const cargs = fat_mat_sel_py_cargs(params, execution)
     const ret = fat_mat_sel_py_outputs(params, execution)
@@ -446,10 +448,8 @@ function fat_mat_sel_py(
     xtick_lab_off: boolean = false,
     runner: Runner | null = null,
 ): FatMatSelPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_MAT_SEL_PY_METADATA);
     const params = fat_mat_sel_py_params(parameters, matr_in, list_match, out_ind_matr, out_ind_1ddset, hold_image, extern_labs_no, type_file, dpi_file, xlen_file, ylen_file, tight_layout_on, fig_off, size_font, lab_size_font, a_plotmin, b_plotmax, cbar_off, map_of_colors, cbar_int_num, width_cbar_perc, specifier, xtick_lab_off)
-    return fat_mat_sel_py_execute(params, execution);
+    return fat_mat_sel_py_execute(params, runner);
 }
 
 
@@ -458,8 +458,6 @@ export {
       FatMatSelPyOutputs,
       FatMatSelPyParameters,
       fat_mat_sel_py,
-      fat_mat_sel_py_cargs,
       fat_mat_sel_py_execute,
-      fat_mat_sel_py_outputs,
       fat_mat_sel_py_params,
 };

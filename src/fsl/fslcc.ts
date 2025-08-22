@@ -182,14 +182,16 @@ function fslcc_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslccOutputs`).
  */
 function fslcc_execute(
     params: FslccParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslccOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLCC_METADATA);
     params = execution.params(params)
     const cargs = fslcc_cargs(params, execution)
     const ret = fslcc_outputs(params, execution)
@@ -226,10 +228,8 @@ function fslcc(
     decimal_places: number | null = 2,
     runner: Runner | null = null,
 ): FslccOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLCC_METADATA);
     const params = fslcc_params(first_input, second_input, mask, noabs_flag, nodemean_flag, threshold, decimal_places)
-    return fslcc_execute(params, execution);
+    return fslcc_execute(params, runner);
 }
 
 
@@ -238,8 +238,6 @@ export {
       FslccOutputs,
       FslccParameters,
       fslcc,
-      fslcc_cargs,
       fslcc_execute,
-      fslcc_outputs,
       fslcc_params,
 };

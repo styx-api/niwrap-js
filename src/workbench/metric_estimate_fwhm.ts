@@ -214,14 +214,16 @@ function metric_estimate_fwhm_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricEstimateFwhmOutputs`).
  */
 function metric_estimate_fwhm_execute(
     params: MetricEstimateFwhmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricEstimateFwhmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_ESTIMATE_FWHM_METADATA);
     params = execution.params(params)
     const cargs = metric_estimate_fwhm_cargs(params, execution)
     const ret = metric_estimate_fwhm_outputs(params, execution)
@@ -256,10 +258,8 @@ function metric_estimate_fwhm(
     whole_file: MetricEstimateFwhmWholeFileParameters | null = null,
     runner: Runner | null = null,
 ): MetricEstimateFwhmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_ESTIMATE_FWHM_METADATA);
     const params = metric_estimate_fwhm_params(surface, metric_in, opt_roi_roi_metric, opt_column_column, whole_file)
-    return metric_estimate_fwhm_execute(params, execution);
+    return metric_estimate_fwhm_execute(params, runner);
 }
 
 
@@ -269,10 +269,7 @@ export {
       MetricEstimateFwhmParameters,
       MetricEstimateFwhmWholeFileParameters,
       metric_estimate_fwhm,
-      metric_estimate_fwhm_cargs,
       metric_estimate_fwhm_execute,
-      metric_estimate_fwhm_outputs,
       metric_estimate_fwhm_params,
-      metric_estimate_fwhm_whole_file_cargs,
       metric_estimate_fwhm_whole_file_params,
 };

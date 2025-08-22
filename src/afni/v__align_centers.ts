@@ -252,14 +252,16 @@ function v__align_centers_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAlignCentersOutputs`).
  */
 function v__align_centers_execute(
     params: VAlignCentersParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAlignCentersOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__ALIGN_CENTERS_METADATA);
     params = execution.params(params)
     const cargs = v__align_centers_cargs(params, execution)
     const ret = v__align_centers_outputs(params, execution)
@@ -310,10 +312,8 @@ function v__align_centers(
     shift_xform_inv: InputPathType | null = null,
     runner: Runner | null = null,
 ): VAlignCentersOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__ALIGN_CENTERS_METADATA);
     const params = v__align_centers_params(base, dset, children, echo, overwrite, prefix, matrix_only, matrix_only_no_dset, no_cp, center_grid, center_cm, center_cm_no_amask, shift_xform, shift_xform_inv)
-    return v__align_centers_execute(params, execution);
+    return v__align_centers_execute(params, runner);
 }
 
 
@@ -322,8 +322,6 @@ export {
       VAlignCentersParameters,
       V__ALIGN_CENTERS_METADATA,
       v__align_centers,
-      v__align_centers_cargs,
       v__align_centers_execute,
-      v__align_centers_outputs,
       v__align_centers_params,
 };

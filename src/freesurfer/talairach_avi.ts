@@ -175,14 +175,16 @@ function talairach_avi_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TalairachAviOutputs`).
  */
 function talairach_avi_execute(
     params: TalairachAviParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TalairachAviOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TALAIRACH_AVI_METADATA);
     params = execution.params(params)
     const cargs = talairach_avi_cargs(params, execution)
     const ret = talairach_avi_outputs(params, execution)
@@ -215,10 +217,8 @@ function talairach_avi(
     debug: boolean = false,
     runner: Runner | null = null,
 ): TalairachAviOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TALAIRACH_AVI_METADATA);
     const params = talairach_avi_params(input_file, output_xfm, atlas, log, debug)
-    return talairach_avi_execute(params, execution);
+    return talairach_avi_execute(params, runner);
 }
 
 
@@ -227,8 +227,6 @@ export {
       TalairachAviOutputs,
       TalairachAviParameters,
       talairach_avi,
-      talairach_avi_cargs,
       talairach_avi_execute,
-      talairach_avi_outputs,
       talairach_avi_params,
 };

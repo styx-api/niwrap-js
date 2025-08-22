@@ -562,14 +562,16 @@ function cifti_create_dense_from_template_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCreateDenseFromTemplateOutputs`).
  */
 function cifti_create_dense_from_template_execute(
     params: CiftiCreateDenseFromTemplateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiCreateDenseFromTemplateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_CREATE_DENSE_FROM_TEMPLATE_METADATA);
     params = execution.params(params)
     const cargs = cifti_create_dense_from_template_cargs(params, execution)
     const ret = cifti_create_dense_from_template_outputs(params, execution)
@@ -657,10 +659,8 @@ function cifti_create_dense_from_template(
     volume: Array<CiftiCreateDenseFromTemplateVolumeParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiCreateDenseFromTemplateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_CREATE_DENSE_FROM_TEMPLATE_METADATA);
     const params = cifti_create_dense_from_template_params(template_cifti, cifti_out, series, volume_all, opt_label_collision_action, cifti, metric, label, volume)
-    return cifti_create_dense_from_template_execute(params, execution);
+    return cifti_create_dense_from_template_execute(params, runner);
 }
 
 
@@ -675,20 +675,12 @@ export {
       CiftiCreateDenseFromTemplateVolumeAllParameters,
       CiftiCreateDenseFromTemplateVolumeParameters,
       cifti_create_dense_from_template,
-      cifti_create_dense_from_template_cargs,
-      cifti_create_dense_from_template_cifti_cargs,
       cifti_create_dense_from_template_cifti_params,
       cifti_create_dense_from_template_execute,
-      cifti_create_dense_from_template_label_cargs,
       cifti_create_dense_from_template_label_params,
-      cifti_create_dense_from_template_metric_cargs,
       cifti_create_dense_from_template_metric_params,
-      cifti_create_dense_from_template_outputs,
       cifti_create_dense_from_template_params,
-      cifti_create_dense_from_template_series_cargs,
       cifti_create_dense_from_template_series_params,
-      cifti_create_dense_from_template_volume_all_cargs,
       cifti_create_dense_from_template_volume_all_params,
-      cifti_create_dense_from_template_volume_cargs,
       cifti_create_dense_from_template_volume_params,
 };

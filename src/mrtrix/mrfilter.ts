@@ -547,14 +547,16 @@ function mrfilter_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrfilterOutputs`).
  */
 function mrfilter_execute(
     params: MrfilterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrfilterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRFILTER_METADATA);
     params = execution.params(params)
     const cargs = mrfilter_cargs(params, execution)
     const ret = mrfilter_outputs(params, execution)
@@ -645,10 +647,8 @@ function mrfilter(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrfilterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRFILTER_METADATA);
     const params = mrfilter_params(input, filter, output, axes, inverse, magnitude, centre_zero, stdev, magnitude_1, scanner, extent, extent_1, stdev_1, fwhm, extent_2, zupper, zlower, bridge, maskin, maskout, strides, info, quiet, debug, force, nthreads, config, help, version)
-    return mrfilter_execute(params, execution);
+    return mrfilter_execute(params, runner);
 }
 
 
@@ -660,14 +660,9 @@ export {
       MrfilterVariousFileParameters,
       MrfilterVariousStringParameters,
       mrfilter,
-      mrfilter_cargs,
-      mrfilter_config_cargs,
       mrfilter_config_params,
       mrfilter_execute,
-      mrfilter_outputs,
       mrfilter_params,
-      mrfilter_various_file_cargs,
       mrfilter_various_file_params,
-      mrfilter_various_string_cargs,
       mrfilter_various_string_params,
 };

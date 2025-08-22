@@ -188,14 +188,16 @@ function eddy_combine_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `EddyCombineOutputs`).
  */
 function eddy_combine_execute(
     params: EddyCombineParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): EddyCombineOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EDDY_COMBINE_METADATA);
     params = execution.params(params)
     const cargs = eddy_combine_cargs(params, execution)
     const ret = eddy_combine_outputs(params, execution)
@@ -238,10 +240,8 @@ function eddy_combine(
     only_matched_flag: number,
     runner: Runner | null = null,
 ): EddyCombineOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EDDY_COMBINE_METADATA);
     const params = eddy_combine_params(pos_data, pos_bvals, pos_bvecs, pos_series_vol, neg_data, neg_bvals, neg_bvecs, neg_series_vol, output_path, only_matched_flag)
-    return eddy_combine_execute(params, execution);
+    return eddy_combine_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       EddyCombineOutputs,
       EddyCombineParameters,
       eddy_combine,
-      eddy_combine_cargs,
       eddy_combine_execute,
-      eddy_combine_outputs,
       eddy_combine_params,
 };

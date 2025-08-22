@@ -283,14 +283,16 @@ function qhull_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `QhullOutputs`).
  */
 function qhull_execute(
     params: QhullParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): QhullOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(QHULL_METADATA);
     params = execution.params(params)
     const cargs = qhull_cargs(params, execution)
     const ret = qhull_outputs(params, execution)
@@ -355,10 +357,8 @@ function qhull(
     output_file: string | null = null,
     runner: Runner | null = null,
 ): QhullOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(QHULL_METADATA);
     const params = qhull_params(input_coords, delaunay, furthest_delaunay, voronoi, furthest_voronoi, halfspace_intersection, triangulated_output, joggled_input, verify, summary, vertices_incident, normals, vertex_coordinates, halfspace_intersections, extreme_points, total_area_volume, off_format, geomview_output, mathematica_output, print_facets, output_file)
-    return qhull_execute(params, execution);
+    return qhull_execute(params, runner);
 }
 
 
@@ -367,8 +367,6 @@ export {
       QhullOutputs,
       QhullParameters,
       qhull,
-      qhull_cargs,
       qhull_execute,
-      qhull_outputs,
       qhull_params,
 };

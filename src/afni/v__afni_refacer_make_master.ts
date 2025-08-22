@@ -133,14 +133,16 @@ function v__afni_refacer_make_master_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAfniRefacerMakeMasterOutputs`).
  */
 function v__afni_refacer_make_master_execute(
     params: VAfniRefacerMakeMasterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAfniRefacerMakeMasterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__AFNI_REFACER_MAKE_MASTER_METADATA);
     params = execution.params(params)
     const cargs = v__afni_refacer_make_master_cargs(params, execution)
     const ret = v__afni_refacer_make_master_outputs(params, execution)
@@ -165,10 +167,8 @@ function v__afni_refacer_make_master(
     input_datasets: Array<InputPathType>,
     runner: Runner | null = null,
 ): VAfniRefacerMakeMasterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__AFNI_REFACER_MAKE_MASTER_METADATA);
     const params = v__afni_refacer_make_master_params(input_datasets)
-    return v__afni_refacer_make_master_execute(params, execution);
+    return v__afni_refacer_make_master_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       VAfniRefacerMakeMasterParameters,
       V__AFNI_REFACER_MAKE_MASTER_METADATA,
       v__afni_refacer_make_master,
-      v__afni_refacer_make_master_cargs,
       v__afni_refacer_make_master_execute,
-      v__afni_refacer_make_master_outputs,
       v__afni_refacer_make_master_params,
 };

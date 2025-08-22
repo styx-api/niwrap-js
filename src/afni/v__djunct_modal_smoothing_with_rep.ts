@@ -190,14 +190,16 @@ function v__djunct_modal_smoothing_with_rep_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDjunctModalSmoothingWithRepOutputs`).
  */
 function v__djunct_modal_smoothing_with_rep_execute(
     params: VDjunctModalSmoothingWithRepParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDjunctModalSmoothingWithRepOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DJUNCT_MODAL_SMOOTHING_WITH_REP_METADATA);
     params = execution.params(params)
     const cargs = v__djunct_modal_smoothing_with_rep_cargs(params, execution)
     const ret = v__djunct_modal_smoothing_with_rep_outputs(params, execution)
@@ -236,10 +238,8 @@ function v__djunct_modal_smoothing_with_rep(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): VDjunctModalSmoothingWithRepOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DJUNCT_MODAL_SMOOTHING_WITH_REP_METADATA);
     const params = v__djunct_modal_smoothing_with_rep_params(input_file, output_prefix, modesmooth, help_view, help, version, overwrite, no_clean)
-    return v__djunct_modal_smoothing_with_rep_execute(params, execution);
+    return v__djunct_modal_smoothing_with_rep_execute(params, runner);
 }
 
 
@@ -248,8 +248,6 @@ export {
       VDjunctModalSmoothingWithRepParameters,
       V__DJUNCT_MODAL_SMOOTHING_WITH_REP_METADATA,
       v__djunct_modal_smoothing_with_rep,
-      v__djunct_modal_smoothing_with_rep_cargs,
       v__djunct_modal_smoothing_with_rep_execute,
-      v__djunct_modal_smoothing_with_rep_outputs,
       v__djunct_modal_smoothing_with_rep_params,
 };

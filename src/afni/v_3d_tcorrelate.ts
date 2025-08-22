@@ -256,14 +256,16 @@ function v_3d_tcorrelate_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTcorrelateOutputs`).
  */
 function v_3d_tcorrelate_execute(
     params: V3dTcorrelateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTcorrelateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TCORRELATE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tcorrelate_cargs(params, execution)
     const ret = v_3d_tcorrelate_outputs(params, execution)
@@ -318,10 +320,8 @@ function v_3d_tcorrelate(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dTcorrelateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TCORRELATE_METADATA);
     const params = v_3d_tcorrelate_params(xset, yset, pearson, spearman, quadrant, ktaub, covariance, partial, ycoef, fisher, polort, ort, autoclip, automask, zcensor, prefix)
-    return v_3d_tcorrelate_execute(params, execution);
+    return v_3d_tcorrelate_execute(params, runner);
 }
 
 
@@ -330,8 +330,6 @@ export {
       V3dTcorrelateParameters,
       V_3D_TCORRELATE_METADATA,
       v_3d_tcorrelate,
-      v_3d_tcorrelate_cargs,
       v_3d_tcorrelate_execute,
-      v_3d_tcorrelate_outputs,
       v_3d_tcorrelate_params,
 };

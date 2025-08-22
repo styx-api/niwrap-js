@@ -137,14 +137,16 @@ function mris_add_template_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisAddTemplateOutputs`).
  */
 function mris_add_template_execute(
     params: MrisAddTemplateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisAddTemplateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_ADD_TEMPLATE_METADATA);
     params = execution.params(params)
     const cargs = mris_add_template_cargs(params, execution)
     const ret = mris_add_template_outputs(params, execution)
@@ -169,10 +171,8 @@ function mris_add_template(
     placeholder_input: string | null = null,
     runner: Runner | null = null,
 ): MrisAddTemplateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_ADD_TEMPLATE_METADATA);
     const params = mris_add_template_params(placeholder_input)
-    return mris_add_template_execute(params, execution);
+    return mris_add_template_execute(params, runner);
 }
 
 
@@ -181,8 +181,6 @@ export {
       MrisAddTemplateOutputs,
       MrisAddTemplateParameters,
       mris_add_template,
-      mris_add_template_cargs,
       mris_add_template_execute,
-      mris_add_template_outputs,
       mris_add_template_params,
 };

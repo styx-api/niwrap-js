@@ -130,14 +130,16 @@ function run_qdec_glm_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RunQdecGlmOutputs`).
  */
 function run_qdec_glm_execute(
     params: RunQdecGlmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RunQdecGlmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RUN_QDEC_GLM_METADATA);
     params = execution.params(params)
     const cargs = run_qdec_glm_cargs(params, execution)
     const ret = run_qdec_glm_outputs(params, execution)
@@ -162,10 +164,8 @@ function run_qdec_glm(
     qdec_directory: string,
     runner: Runner | null = null,
 ): RunQdecGlmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RUN_QDEC_GLM_METADATA);
     const params = run_qdec_glm_params(qdec_directory)
-    return run_qdec_glm_execute(params, execution);
+    return run_qdec_glm_execute(params, runner);
 }
 
 
@@ -174,8 +174,6 @@ export {
       RunQdecGlmOutputs,
       RunQdecGlmParameters,
       run_qdec_glm,
-      run_qdec_glm_cargs,
       run_qdec_glm_execute,
-      run_qdec_glm_outputs,
       run_qdec_glm_params,
 };

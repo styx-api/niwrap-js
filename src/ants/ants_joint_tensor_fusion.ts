@@ -331,14 +331,16 @@ function ants_joint_tensor_fusion_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsJointTensorFusionOutputs`).
  */
 function ants_joint_tensor_fusion_execute(
     params: AntsJointTensorFusionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsJointTensorFusionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_JOINT_TENSOR_FUSION_METADATA);
     params = execution.params(params)
     const cargs = ants_joint_tensor_fusion_cargs(params, execution)
     const ret = ants_joint_tensor_fusion_outputs(params, execution)
@@ -395,10 +397,8 @@ function ants_joint_tensor_fusion(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsJointTensorFusionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_JOINT_TENSOR_FUSION_METADATA);
     const params = ants_joint_tensor_fusion_params(target_image, atlas_image, atlas_segmentation, output, dimensionality, alpha, beta, retain_label_posterior_images, retain_atlas_voting_images, constrain_nonnegative, log_euclidean, patch_radius, patch_metric, search_radius, exclusion_image, mask_image, verbose)
-    return ants_joint_tensor_fusion_execute(params, execution);
+    return ants_joint_tensor_fusion_execute(params, runner);
 }
 
 
@@ -407,8 +407,6 @@ export {
       AntsJointTensorFusionOutputs,
       AntsJointTensorFusionParameters,
       ants_joint_tensor_fusion,
-      ants_joint_tensor_fusion_cargs,
       ants_joint_tensor_fusion_execute,
-      ants_joint_tensor_fusion_outputs,
       ants_joint_tensor_fusion_params,
 };

@@ -214,14 +214,16 @@ function mri_compute_overlap_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriComputeOverlapOutputs`).
  */
 function mri_compute_overlap_execute(
     params: MriComputeOverlapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriComputeOverlapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_COMPUTE_OVERLAP_METADATA);
     params = execution.params(params)
     const cargs = mri_compute_overlap_cargs(params, execution)
     const ret = mri_compute_overlap_outputs(params, execution)
@@ -266,10 +268,8 @@ function mri_compute_overlap(
     help: boolean = false,
     runner: Runner | null = null,
 ): MriComputeOverlapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_COMPUTE_OVERLAP_METADATA);
     const params = mri_compute_overlap_params(volumes, label_numbers, all_labels, show_label, total_overlap, no_summary, mask, output_file, quiet_mode, translate_label, help)
-    return mri_compute_overlap_execute(params, execution);
+    return mri_compute_overlap_execute(params, runner);
 }
 
 
@@ -278,8 +278,6 @@ export {
       MriComputeOverlapOutputs,
       MriComputeOverlapParameters,
       mri_compute_overlap,
-      mri_compute_overlap_cargs,
       mri_compute_overlap_execute,
-      mri_compute_overlap_outputs,
       mri_compute_overlap_params,
 };

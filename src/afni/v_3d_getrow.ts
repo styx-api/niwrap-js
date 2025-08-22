@@ -188,14 +188,16 @@ function v_3d_getrow_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dGetrowOutputs`).
  */
 function v_3d_getrow_execute(
     params: V3dGetrowParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dGetrowOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_GETROW_METADATA);
     params = execution.params(params)
     const cargs = v_3d_getrow_cargs(params, execution)
     const ret = v_3d_getrow_outputs(params, execution)
@@ -228,10 +230,8 @@ function v_3d_getrow(
     output_file: string | null = null,
     runner: Runner | null = null,
 ): V3dGetrowOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_GETROW_METADATA);
     const params = v_3d_getrow_params(xrow, yrow, zrow, input_file, output_file)
-    return v_3d_getrow_execute(params, execution);
+    return v_3d_getrow_execute(params, runner);
 }
 
 
@@ -240,8 +240,6 @@ export {
       V3dGetrowParameters,
       V_3D_GETROW_METADATA,
       v_3d_getrow,
-      v_3d_getrow_cargs,
       v_3d_getrow_execute,
-      v_3d_getrow_outputs,
       v_3d_getrow_params,
 };

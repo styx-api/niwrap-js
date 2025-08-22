@@ -182,14 +182,16 @@ function wpng_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WpngOutputs`).
  */
 function wpng_execute(
     params: WpngParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WpngOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WPNG_METADATA);
     params = execution.params(params)
     const cargs = wpng_cargs(params, execution)
     const ret = wpng_outputs(params, execution)
@@ -224,10 +226,8 @@ function wpng(
     interlace_flag: boolean = false,
     runner: Runner | null = null,
 ): WpngOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WPNG_METADATA);
     const params = wpng_params(input_file, gamma, bgcolor, text_flag, time_flag, interlace_flag)
-    return wpng_execute(params, execution);
+    return wpng_execute(params, runner);
 }
 
 
@@ -236,8 +236,6 @@ export {
       WpngOutputs,
       WpngParameters,
       wpng,
-      wpng_cargs,
       wpng_execute,
-      wpng_outputs,
       wpng_params,
 };

@@ -261,14 +261,16 @@ function fsread_annot_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsreadAnnotOutputs`).
  */
 function fsread_annot_execute(
     params: FsreadAnnotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsreadAnnotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSREAD_ANNOT_METADATA);
     params = execution.params(params)
     const cargs = fsread_annot_cargs(params, execution)
     const ret = fsread_annot_outputs(params, execution)
@@ -313,10 +315,8 @@ function fsread_annot(
     help: boolean = false,
     runner: Runner | null = null,
 ): FsreadAnnotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSREAD_ANNOT_METADATA);
     const params = fsread_annot_params(infile, hemi, fscmap, fscmap_range, fsversion, col_1d, roi_1d, cmap_1d, show_fscmap, dset, help)
-    return fsread_annot_execute(params, execution);
+    return fsread_annot_execute(params, runner);
 }
 
 
@@ -325,8 +325,6 @@ export {
       FsreadAnnotOutputs,
       FsreadAnnotParameters,
       fsread_annot,
-      fsread_annot_cargs,
       fsread_annot_execute,
-      fsread_annot_outputs,
       fsread_annot_params,
 };

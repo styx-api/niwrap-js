@@ -173,14 +173,16 @@ function v_3d_friedman_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dFriedmanOutputs`).
  */
 function v_3d_friedman_execute(
     params: V3dFriedmanParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dFriedmanOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_FRIEDMAN_METADATA);
     params = execution.params(params)
     const cargs = v_3d_friedman_cargs(params, execution)
     const ret = v_3d_friedman_outputs(params, execution)
@@ -213,10 +215,8 @@ function v_3d_friedman(
     voxel_num: number | null = null,
     runner: Runner | null = null,
 ): V3dFriedmanOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_FRIEDMAN_METADATA);
     const params = v_3d_friedman_params(levels, datasets, output_prefix, workmem, voxel_num)
-    return v_3d_friedman_execute(params, execution);
+    return v_3d_friedman_execute(params, runner);
 }
 
 
@@ -225,8 +225,6 @@ export {
       V3dFriedmanParameters,
       V_3D_FRIEDMAN_METADATA,
       v_3d_friedman,
-      v_3d_friedman_cargs,
       v_3d_friedman_execute,
-      v_3d_friedman_outputs,
       v_3d_friedman_params,
 };

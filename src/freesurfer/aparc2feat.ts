@@ -212,14 +212,16 @@ function aparc2feat_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Aparc2featOutputs`).
  */
 function aparc2feat_execute(
     params: Aparc2featParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Aparc2featOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(APARC2FEAT_METADATA);
     params = execution.params(params)
     const cargs = aparc2feat_cargs(params, execution)
     const ret = aparc2feat_outputs(params, execution)
@@ -260,10 +262,8 @@ function aparc2feat(
     version_flag: boolean = false,
     runner: Runner | null = null,
 ): Aparc2featOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(APARC2FEAT_METADATA);
     const params = aparc2feat_params(feat_directories, featdirfile, hemi, annot, annot_a2005s_flag, annot_a2009s_flag, debug_flag, help_flag, version_flag)
-    return aparc2feat_execute(params, execution);
+    return aparc2feat_execute(params, runner);
 }
 
 
@@ -272,8 +272,6 @@ export {
       Aparc2featOutputs,
       Aparc2featParameters,
       aparc2feat,
-      aparc2feat_cargs,
       aparc2feat_execute,
-      aparc2feat_outputs,
       aparc2feat_params,
 };

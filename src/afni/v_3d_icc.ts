@@ -266,14 +266,16 @@ function v_3d_icc_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dIccOutputs`).
  */
 function v_3d_icc_execute(
     params: V3dIccParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dIccOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ICC_METADATA);
     params = execution.params(params)
     const cargs = v_3d_icc_cargs(params, execution)
     const ret = v_3d_icc_outputs(params, execution)
@@ -324,10 +326,8 @@ function v_3d_icc(
     rio: boolean = false,
     runner: Runner | null = null,
 ): V3dIccOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ICC_METADATA);
     const params = v_3d_icc_params(model, prefix, data_table, mask, bounds, jobs, q_vars, q_var_centers, subj, input_file_column, t_stat, dbg_args, cio, rio)
-    return v_3d_icc_execute(params, execution);
+    return v_3d_icc_execute(params, runner);
 }
 
 
@@ -336,8 +336,6 @@ export {
       V3dIccParameters,
       V_3D_ICC_METADATA,
       v_3d_icc,
-      v_3d_icc_cargs,
       v_3d_icc_execute,
-      v_3d_icc_outputs,
       v_3d_icc_params,
 };

@@ -204,14 +204,16 @@ function v_3d_spat_norm_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dSpatNormOutputs`).
  */
 function v_3d_spat_norm_execute(
     params: V3dSpatNormParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dSpatNormOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_SPAT_NORM_METADATA);
     params = execution.params(params)
     const cargs = v_3d_spat_norm_cargs(params, execution)
     const ret = v_3d_spat_norm_outputs(params, execution)
@@ -252,10 +254,8 @@ function v_3d_spat_norm(
     bottom_cuts: string | null = null,
     runner: Runner | null = null,
 ): V3dSpatNormOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_SPAT_NORM_METADATA);
     const params = v_3d_spat_norm_params(dataset, prefix, orig_space, verbose, monkey, marmot, rat, human, bottom_cuts)
-    return v_3d_spat_norm_execute(params, execution);
+    return v_3d_spat_norm_execute(params, runner);
 }
 
 
@@ -264,8 +264,6 @@ export {
       V3dSpatNormParameters,
       V_3D_SPAT_NORM_METADATA,
       v_3d_spat_norm,
-      v_3d_spat_norm_cargs,
       v_3d_spat_norm_execute,
-      v_3d_spat_norm_outputs,
       v_3d_spat_norm_params,
 };

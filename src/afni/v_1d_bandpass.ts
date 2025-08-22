@@ -175,14 +175,16 @@ function v_1d_bandpass_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dBandpassOutputs`).
  */
 function v_1d_bandpass_execute(
     params: V1dBandpassParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dBandpassOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_BANDPASS_METADATA);
     params = execution.params(params)
     const cargs = v_1d_bandpass_cargs(params, execution)
     const ret = v_1d_bandpass_outputs(params, execution)
@@ -219,10 +221,8 @@ function v_1d_bandpass(
     norm: boolean = false,
     runner: Runner | null = null,
 ): V1dBandpassOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_BANDPASS_METADATA);
     const params = v_1d_bandpass_params(fbot, ftop, infile, timestep, ortfile, nodetrend, norm)
-    return v_1d_bandpass_execute(params, execution);
+    return v_1d_bandpass_execute(params, runner);
 }
 
 
@@ -231,8 +231,6 @@ export {
       V1dBandpassParameters,
       V_1D_BANDPASS_METADATA,
       v_1d_bandpass,
-      v_1d_bandpass_cargs,
       v_1d_bandpass_execute,
-      v_1d_bandpass_outputs,
       v_1d_bandpass_params,
 };

@@ -155,14 +155,16 @@ function pointset2label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Pointset2labelOutputs`).
  */
 function pointset2label_execute(
     params: Pointset2labelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Pointset2labelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(POINTSET2LABEL_METADATA);
     params = execution.params(params)
     const cargs = pointset2label_cargs(params, execution)
     const ret = pointset2label_outputs(params, execution)
@@ -195,10 +197,8 @@ function pointset2label(
     clear_option: boolean = false,
     runner: Runner | null = null,
 ): Pointset2labelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(POINTSET2LABEL_METADATA);
     const params = pointset2label_params(waypoint_file, input_volume, label_value, output_volume, clear_option)
-    return pointset2label_execute(params, execution);
+    return pointset2label_execute(params, runner);
 }
 
 
@@ -207,8 +207,6 @@ export {
       Pointset2labelOutputs,
       Pointset2labelParameters,
       pointset2label,
-      pointset2label_cargs,
       pointset2label_execute,
-      pointset2label_outputs,
       pointset2label_params,
 };

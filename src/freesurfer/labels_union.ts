@@ -143,14 +143,16 @@ function labels_union_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelsUnionOutputs`).
  */
 function labels_union_execute(
     params: LabelsUnionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelsUnionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABELS_UNION_METADATA);
     params = execution.params(params)
     const cargs = labels_union_cargs(params, execution)
     const ret = labels_union_outputs(params, execution)
@@ -179,10 +181,8 @@ function labels_union(
     outputname: string,
     runner: Runner | null = null,
 ): LabelsUnionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABELS_UNION_METADATA);
     const params = labels_union_params(label1, label2, outputname)
-    return labels_union_execute(params, execution);
+    return labels_union_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       LabelsUnionOutputs,
       LabelsUnionParameters,
       labels_union,
-      labels_union_cargs,
       labels_union_execute,
-      labels_union_outputs,
       labels_union_params,
 };

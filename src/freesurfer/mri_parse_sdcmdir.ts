@@ -163,14 +163,16 @@ function mri_parse_sdcmdir_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriParseSdcmdirOutputs`).
  */
 function mri_parse_sdcmdir_execute(
     params: MriParseSdcmdirParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriParseSdcmdirOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_PARSE_SDCMDIR_METADATA);
     params = execution.params(params)
     const cargs = mri_parse_sdcmdir_cargs(params, execution)
     const ret = mri_parse_sdcmdir_outputs(params, execution)
@@ -203,10 +205,8 @@ function mri_parse_sdcmdir(
     dwi: boolean = false,
     runner: Runner | null = null,
 ): MriParseSdcmdirOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_PARSE_SDCMDIR_METADATA);
     const params = mri_parse_sdcmdir_params(sdicomdir, outfile, sortbyrun, summarize, dwi)
-    return mri_parse_sdcmdir_execute(params, execution);
+    return mri_parse_sdcmdir_execute(params, runner);
 }
 
 
@@ -215,8 +215,6 @@ export {
       MriParseSdcmdirOutputs,
       MriParseSdcmdirParameters,
       mri_parse_sdcmdir,
-      mri_parse_sdcmdir_cargs,
       mri_parse_sdcmdir_execute,
-      mri_parse_sdcmdir_outputs,
       mri_parse_sdcmdir_params,
 };

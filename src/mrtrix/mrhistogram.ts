@@ -306,14 +306,16 @@ function mrhistogram_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrhistogramOutputs`).
  */
 function mrhistogram_execute(
     params: MrhistogramParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrhistogramOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRHISTOGRAM_METADATA);
     params = execution.params(params)
     const cargs = mrhistogram_cargs(params, execution)
     const ret = mrhistogram_outputs(params, execution)
@@ -372,10 +374,8 @@ function mrhistogram(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrhistogramOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRHISTOGRAM_METADATA);
     const params = mrhistogram_params(image, hist, bins, template, mask, ignorezero, allvolumes, info, quiet, debug, force, nthreads, config, help, version)
-    return mrhistogram_execute(params, execution);
+    return mrhistogram_execute(params, runner);
 }
 
 
@@ -385,10 +385,7 @@ export {
       MrhistogramOutputs,
       MrhistogramParameters,
       mrhistogram,
-      mrhistogram_cargs,
-      mrhistogram_config_cargs,
       mrhistogram_config_params,
       mrhistogram_execute,
-      mrhistogram_outputs,
       mrhistogram_params,
 };

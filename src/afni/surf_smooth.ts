@@ -302,14 +302,16 @@ function surf_smooth_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfSmoothOutputs`).
  */
 function surf_smooth_execute(
     params: SurfSmoothParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfSmoothOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_SMOOTH_METADATA);
     params = execution.params(params)
     const cargs = surf_smooth_cargs(params, execution)
     const ret = surf_smooth_outputs(params, execution)
@@ -364,10 +366,8 @@ function surf_smooth(
     refresh_rate: number | null = null,
     runner: Runner | null = null,
 ): SurfSmoothOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_SMOOTH_METADATA);
     const params = surf_smooth_params(surface, method, input_data, target_fwhm, fwhm, number_iterations, output_file, band_pass_frequency, lambda_mu, interp_weights, node_mask, surface_output, dbg_node, use_neighbors_outside_mask, talk_suma, refresh_rate)
-    return surf_smooth_execute(params, execution);
+    return surf_smooth_execute(params, runner);
 }
 
 
@@ -376,8 +376,6 @@ export {
       SurfSmoothOutputs,
       SurfSmoothParameters,
       surf_smooth,
-      surf_smooth_cargs,
       surf_smooth_execute,
-      surf_smooth_outputs,
       surf_smooth_params,
 };

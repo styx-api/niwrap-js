@@ -284,14 +284,16 @@ function mris_autodet_gwstats_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisAutodetGwstatsOutputs`).
  */
 function mris_autodet_gwstats_execute(
     params: MrisAutodetGwstatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisAutodetGwstatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_AUTODET_GWSTATS_METADATA);
     params = execution.params(params)
     const cargs = mris_autodet_gwstats_cargs(params, execution)
     const ret = mris_autodet_gwstats_outputs(params, execution)
@@ -344,10 +346,8 @@ function mris_autodet_gwstats(
     max_csf: number | null = null,
     runner: Runner | null = null,
 ): MrisAutodetGwstatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_AUTODET_GWSTATS_METADATA);
     const params = mris_autodet_gwstats_params(output_file, t1w_volume, wm_volume, surf, subject, subjects_dir, lhsurf, rhsurf, min_border_white, max_border_white, min_gray_at_white_border, max_gray, max_gray_at_csf_border, min_gray_at_csf_border, max_csf)
-    return mris_autodet_gwstats_execute(params, execution);
+    return mris_autodet_gwstats_execute(params, runner);
 }
 
 
@@ -356,8 +356,6 @@ export {
       MrisAutodetGwstatsOutputs,
       MrisAutodetGwstatsParameters,
       mris_autodet_gwstats,
-      mris_autodet_gwstats_cargs,
       mris_autodet_gwstats_execute,
-      mris_autodet_gwstats_outputs,
       mris_autodet_gwstats_params,
 };

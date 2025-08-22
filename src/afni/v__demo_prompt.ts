@@ -133,14 +133,16 @@ function v__demo_prompt_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDemoPromptOutputs`).
  */
 function v__demo_prompt_execute(
     params: VDemoPromptParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDemoPromptOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DEMO_PROMPT_METADATA);
     params = execution.params(params)
     const cargs = v__demo_prompt_cargs(params, execution)
     const ret = v__demo_prompt_outputs(params, execution)
@@ -165,10 +167,8 @@ function v__demo_prompt(
     message: string,
     runner: Runner | null = null,
 ): VDemoPromptOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DEMO_PROMPT_METADATA);
     const params = v__demo_prompt_params(message)
-    return v__demo_prompt_execute(params, execution);
+    return v__demo_prompt_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       VDemoPromptParameters,
       V__DEMO_PROMPT_METADATA,
       v__demo_prompt,
-      v__demo_prompt_cargs,
       v__demo_prompt_execute,
-      v__demo_prompt_outputs,
       v__demo_prompt_params,
 };

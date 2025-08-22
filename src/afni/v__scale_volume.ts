@@ -195,14 +195,16 @@ function v__scale_volume_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VScaleVolumeOutputs`).
  */
 function v__scale_volume_execute(
     params: VScaleVolumeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VScaleVolumeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SCALE_VOLUME_METADATA);
     params = execution.params(params)
     const cargs = v__scale_volume_cargs(params, execution)
     const ret = v__scale_volume_outputs(params, execution)
@@ -241,10 +243,8 @@ function v__scale_volume(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): VScaleVolumeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SCALE_VOLUME_METADATA);
     const params = v__scale_volume_params(input_dset, prefix, val_clip, perc_clip, scale_by_mean, scale_by_median, norm, mask)
-    return v__scale_volume_execute(params, execution);
+    return v__scale_volume_execute(params, runner);
 }
 
 
@@ -253,8 +253,6 @@ export {
       VScaleVolumeParameters,
       V__SCALE_VOLUME_METADATA,
       v__scale_volume,
-      v__scale_volume_cargs,
       v__scale_volume_execute,
-      v__scale_volume_outputs,
       v__scale_volume_params,
 };

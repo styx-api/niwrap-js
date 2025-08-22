@@ -158,14 +158,16 @@ function v_3d_clip_level_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dClipLevelOutputs`).
  */
 function v_3d_clip_level_execute(
     params: V3dClipLevelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dClipLevelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_CLIP_LEVEL_METADATA);
     params = execution.params(params)
     const cargs = v_3d_clip_level_cargs(params, execution)
     const ret = v_3d_clip_level_outputs(params, execution)
@@ -196,10 +198,8 @@ function v_3d_clip_level(
     grad: string | null = null,
     runner: Runner | null = null,
 ): V3dClipLevelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_CLIP_LEVEL_METADATA);
     const params = v_3d_clip_level_params(dataset, mfrac, doall, grad)
-    return v_3d_clip_level_execute(params, execution);
+    return v_3d_clip_level_execute(params, runner);
 }
 
 
@@ -208,8 +208,6 @@ export {
       V3dClipLevelParameters,
       V_3D_CLIP_LEVEL_METADATA,
       v_3d_clip_level,
-      v_3d_clip_level_cargs,
       v_3d_clip_level_execute,
-      v_3d_clip_level_outputs,
       v_3d_clip_level_params,
 };

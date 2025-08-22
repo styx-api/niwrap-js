@@ -167,14 +167,16 @@ function mris_watershed_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisWatershedOutputs`).
  */
 function mris_watershed_execute(
     params: MrisWatershedParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisWatershedOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_WATERSHED_METADATA);
     params = execution.params(params)
     const cargs = mris_watershed_cargs(params, execution)
     const ret = mris_watershed_outputs(params, execution)
@@ -207,10 +209,8 @@ function mris_watershed(
     mask_label: string | null = null,
     runner: Runner | null = null,
 ): MrisWatershedOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_WATERSHED_METADATA);
     const params = mris_watershed_params(input_surface, input_gradient_field, output_annotation, max_clusters, mask_label)
-    return mris_watershed_execute(params, execution);
+    return mris_watershed_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       MrisWatershedOutputs,
       MrisWatershedParameters,
       mris_watershed,
-      mris_watershed_cargs,
       mris_watershed_execute,
-      mris_watershed_outputs,
       mris_watershed_params,
 };

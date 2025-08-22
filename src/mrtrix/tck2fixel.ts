@@ -272,14 +272,16 @@ function tck2fixel_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Tck2fixelOutputs`).
  */
 function tck2fixel_execute(
     params: Tck2fixelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Tck2fixelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCK2FIXEL_METADATA);
     params = execution.params(params)
     const cargs = tck2fixel_cargs(params, execution)
     const ret = tck2fixel_outputs(params, execution)
@@ -334,10 +336,8 @@ function tck2fixel(
     version: boolean = false,
     runner: Runner | null = null,
 ): Tck2fixelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCK2FIXEL_METADATA);
     const params = tck2fixel_params(tracks, fixel_folder_in, fixel_folder_out, fixel_data_out, angle, info, quiet, debug, force, nthreads, config, help, version)
-    return tck2fixel_execute(params, execution);
+    return tck2fixel_execute(params, runner);
 }
 
 
@@ -347,10 +347,7 @@ export {
       Tck2fixelOutputs,
       Tck2fixelParameters,
       tck2fixel,
-      tck2fixel_cargs,
-      tck2fixel_config_cargs,
       tck2fixel_config_params,
       tck2fixel_execute,
-      tck2fixel_outputs,
       tck2fixel_params,
 };

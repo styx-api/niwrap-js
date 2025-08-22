@@ -146,14 +146,16 @@ function rmsdiff_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RmsdiffOutputs`).
  */
 function rmsdiff_execute(
     params: RmsdiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RmsdiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RMSDIFF_METADATA);
     params = execution.params(params)
     const cargs = rmsdiff_cargs(params, execution)
     const ret = rmsdiff_outputs(params, execution)
@@ -184,10 +186,8 @@ function rmsdiff(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): RmsdiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RMSDIFF_METADATA);
     const params = rmsdiff_params(matrixfile1, matrixfile2, refvol, mask)
-    return rmsdiff_execute(params, execution);
+    return rmsdiff_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       RmsdiffOutputs,
       RmsdiffParameters,
       rmsdiff,
-      rmsdiff_cargs,
       rmsdiff_execute,
-      rmsdiff_outputs,
       rmsdiff_params,
 };

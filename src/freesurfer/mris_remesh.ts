@@ -199,14 +199,16 @@ function mris_remesh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRemeshOutputs`).
  */
 function mris_remesh_execute(
     params: MrisRemeshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRemeshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_REMESH_METADATA);
     params = execution.params(params)
     const cargs = mris_remesh_cargs(params, execution)
     const ret = mris_remesh_outputs(params, execution)
@@ -243,10 +245,8 @@ function mris_remesh(
     iterations: number | null = null,
     runner: Runner | null = null,
 ): MrisRemeshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_REMESH_METADATA);
     const params = mris_remesh_params(input, output, edge_length, num_vertices, face_area, remesh, iterations)
-    return mris_remesh_execute(params, execution);
+    return mris_remesh_execute(params, runner);
 }
 
 
@@ -255,8 +255,6 @@ export {
       MrisRemeshOutputs,
       MrisRemeshParameters,
       mris_remesh,
-      mris_remesh_cargs,
       mris_remesh_execute,
-      mris_remesh_outputs,
       mris_remesh_params,
 };

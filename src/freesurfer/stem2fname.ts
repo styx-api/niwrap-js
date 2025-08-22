@@ -133,14 +133,16 @@ function stem2fname_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Stem2fnameOutputs`).
  */
 function stem2fname_execute(
     params: Stem2fnameParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Stem2fnameOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(STEM2FNAME_METADATA);
     params = execution.params(params)
     const cargs = stem2fname_cargs(params, execution)
     const ret = stem2fname_outputs(params, execution)
@@ -165,10 +167,8 @@ function stem2fname(
     stem: string,
     runner: Runner | null = null,
 ): Stem2fnameOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(STEM2FNAME_METADATA);
     const params = stem2fname_params(stem)
-    return stem2fname_execute(params, execution);
+    return stem2fname_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       Stem2fnameOutputs,
       Stem2fnameParameters,
       stem2fname,
-      stem2fname_cargs,
       stem2fname_execute,
-      stem2fname_outputs,
       stem2fname_params,
 };

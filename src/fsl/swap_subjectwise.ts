@@ -188,14 +188,16 @@ function swap_subjectwise_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SwapSubjectwiseOutputs`).
  */
 function swap_subjectwise_execute(
     params: SwapSubjectwiseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SwapSubjectwiseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SWAP_SUBJECTWISE_METADATA);
     params = execution.params(params)
     const cargs = swap_subjectwise_cargs(params, execution)
     const ret = swap_subjectwise_outputs(params, execution)
@@ -232,10 +234,8 @@ function swap_subjectwise(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): SwapSubjectwiseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SWAP_SUBJECTWISE_METADATA);
     const params = swap_subjectwise_params(dyads, fmean, mask, obasename, xthresh, averageonly_flag, verbose_flag)
-    return swap_subjectwise_execute(params, execution);
+    return swap_subjectwise_execute(params, runner);
 }
 
 
@@ -244,8 +244,6 @@ export {
       SwapSubjectwiseOutputs,
       SwapSubjectwiseParameters,
       swap_subjectwise,
-      swap_subjectwise_cargs,
       swap_subjectwise_execute,
-      swap_subjectwise_outputs,
       swap_subjectwise_params,
 };

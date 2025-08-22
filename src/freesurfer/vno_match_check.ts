@@ -148,14 +148,16 @@ function vno_match_check_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VnoMatchCheckOutputs`).
  */
 function vno_match_check_execute(
     params: VnoMatchCheckParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VnoMatchCheckOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VNO_MATCH_CHECK_METADATA);
     params = execution.params(params)
     const cargs = vno_match_check_cargs(params, execution)
     const ret = vno_match_check_outputs(params, execution)
@@ -186,10 +188,8 @@ function vno_match_check(
     left_hemi: boolean = false,
     runner: Runner | null = null,
 ): VnoMatchCheckOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VNO_MATCH_CHECK_METADATA);
     const params = vno_match_check_params(subjid, debug, right_hemi, left_hemi)
-    return vno_match_check_execute(params, execution);
+    return vno_match_check_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       VnoMatchCheckOutputs,
       VnoMatchCheckParameters,
       vno_match_check,
-      vno_match_check_cargs,
       vno_match_check_execute,
-      vno_match_check_outputs,
       vno_match_check_params,
 };

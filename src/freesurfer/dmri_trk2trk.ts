@@ -423,14 +423,16 @@ function dmri_trk2trk_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriTrk2trkOutputs`).
  */
 function dmri_trk2trk_execute(
     params: DmriTrk2trkParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriTrk2trkOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_TRK2TRK_METADATA);
     params = execution.params(params)
     const cargs = dmri_trk2trk_cargs(params, execution)
     const ret = dmri_trk2trk_outputs(params, execution)
@@ -507,10 +509,8 @@ function dmri_trk2trk(
     check_opts: boolean = false,
     runner: Runner | null = null,
 ): DmriTrk2trkOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_TRK2TRK_METADATA);
     const params = dmri_trk2trk_params(in_trk, in_asc, in_dir, out_trk, out_asc, out_vol, out_dir, in_ref, out_ref, reg_file, regnl_file, inv_flag, fill_flag, overlay, inclusion_mask, exclusion_mask, terminal_inclusion_mask, terminal_exclusion_mask, length_min, length_max, mean_flag, nearmean_flag, nth_streamline, every_nth_streamline, smooth_flag, debug_flag, check_opts)
-    return dmri_trk2trk_execute(params, execution);
+    return dmri_trk2trk_execute(params, runner);
 }
 
 
@@ -519,8 +519,6 @@ export {
       DmriTrk2trkOutputs,
       DmriTrk2trkParameters,
       dmri_trk2trk,
-      dmri_trk2trk_cargs,
       dmri_trk2trk_execute,
-      dmri_trk2trk_outputs,
       dmri_trk2trk_params,
 };

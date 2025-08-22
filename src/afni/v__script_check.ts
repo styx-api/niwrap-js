@@ -157,14 +157,16 @@ function v__script_check_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VScriptCheckOutputs`).
  */
 function v__script_check_execute(
     params: VScriptCheckParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VScriptCheckOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SCRIPT_CHECK_METADATA);
     params = execution.params(params)
     const cargs = v__script_check_cargs(params, execution)
     const ret = v__script_check_outputs(params, execution)
@@ -193,10 +195,8 @@ function v__script_check(
     suffix: string | null = null,
     runner: Runner | null = null,
 ): VScriptCheckOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SCRIPT_CHECK_METADATA);
     const params = v__script_check_params(scripts, clean, suffix)
-    return v__script_check_execute(params, execution);
+    return v__script_check_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       VScriptCheckParameters,
       V__SCRIPT_CHECK_METADATA,
       v__script_check,
-      v__script_check_cargs,
       v__script_check_execute,
-      v__script_check_outputs,
       v__script_check_params,
 };

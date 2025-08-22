@@ -286,14 +286,16 @@ function iso_surface_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `IsoSurfaceOutputs`).
  */
 function iso_surface_execute(
     params: IsoSurfaceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): IsoSurfaceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ISO_SURFACE_METADATA);
     params = execution.params(params)
     const cargs = iso_surface_cargs(params, execution)
     const ret = iso_surface_outputs(params, execution)
@@ -344,10 +346,8 @@ function iso_surface(
     noxform: boolean = false,
     runner: Runner | null = null,
 ): IsoSurfaceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ISO_SURFACE_METADATA);
     const params = iso_surface_params(input_vol, shape_spec, isorois, isoval, isorange, isocmask, output_prefix, tsmooth, debug, autocrop, remesh, xform, novolreg, noxform)
-    return iso_surface_execute(params, execution);
+    return iso_surface_execute(params, runner);
 }
 
 
@@ -356,8 +356,6 @@ export {
       IsoSurfaceOutputs,
       IsoSurfaceParameters,
       iso_surface,
-      iso_surface_cargs,
       iso_surface_execute,
-      iso_surface_outputs,
       iso_surface_params,
 };

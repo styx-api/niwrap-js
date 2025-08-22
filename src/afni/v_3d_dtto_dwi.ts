@@ -188,14 +188,16 @@ function v_3d_dtto_dwi_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dDttoDwiOutputs`).
  */
 function v_3d_dtto_dwi_execute(
     params: V3dDttoDwiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dDttoDwiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_DTTO_DWI_METADATA);
     params = execution.params(params)
     const cargs = v_3d_dtto_dwi_cargs(params, execution)
     const ret = v_3d_dtto_dwi_outputs(params, execution)
@@ -234,10 +236,8 @@ function v_3d_dtto_dwi(
     help: boolean = false,
     runner: Runner | null = null,
 ): V3dDttoDwiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_DTTO_DWI_METADATA);
     const params = v_3d_dtto_dwi_params(gradient_file, i0_dataset, dt_dataset, prefix, automask, datum_type, scale_out_1000, help)
-    return v_3d_dtto_dwi_execute(params, execution);
+    return v_3d_dtto_dwi_execute(params, runner);
 }
 
 
@@ -246,8 +246,6 @@ export {
       V3dDttoDwiParameters,
       V_3D_DTTO_DWI_METADATA,
       v_3d_dtto_dwi,
-      v_3d_dtto_dwi_cargs,
       v_3d_dtto_dwi_execute,
-      v_3d_dtto_dwi_outputs,
       v_3d_dtto_dwi_params,
 };

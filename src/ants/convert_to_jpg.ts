@@ -138,14 +138,16 @@ function convert_to_jpg_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertToJpgOutputs`).
  */
 function convert_to_jpg_execute(
     params: ConvertToJpgParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvertToJpgOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVERT_TO_JPG_METADATA);
     params = execution.params(params)
     const cargs = convert_to_jpg_cargs(params, execution)
     const ret = convert_to_jpg_outputs(params, execution)
@@ -172,10 +174,8 @@ function convert_to_jpg(
     outfile: string,
     runner: Runner | null = null,
 ): ConvertToJpgOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVERT_TO_JPG_METADATA);
     const params = convert_to_jpg_params(infile, outfile)
-    return convert_to_jpg_execute(params, execution);
+    return convert_to_jpg_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       ConvertToJpgOutputs,
       ConvertToJpgParameters,
       convert_to_jpg,
-      convert_to_jpg_cargs,
       convert_to_jpg_execute,
-      convert_to_jpg_outputs,
       convert_to_jpg_params,
 };

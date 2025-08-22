@@ -263,14 +263,16 @@ function convertwarp_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertwarpOutputs`).
  */
 function convertwarp_execute(
     params: ConvertwarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvertwarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVERTWARP_METADATA);
     params = execution.params(params)
     const cargs = convertwarp_cargs(params, execution)
     const ret = convertwarp_outputs(params, execution)
@@ -325,10 +327,8 @@ function convertwarp(
     warp2: InputPathType | null = null,
     runner: Runner | null = null,
 ): ConvertwarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVERTWARP_METADATA);
     const params = convertwarp_params(reference, abswarp, cons_jacobian, jacobian_max, jacobian_min, midmat, out_abswarp, out_relwarp, output_type, postmat, premat, relwarp, shift_direction, shift_in_file, warp1, warp2)
-    return convertwarp_execute(params, execution);
+    return convertwarp_execute(params, runner);
 }
 
 
@@ -337,8 +337,6 @@ export {
       ConvertwarpOutputs,
       ConvertwarpParameters,
       convertwarp,
-      convertwarp_cargs,
       convertwarp_execute,
-      convertwarp_outputs,
       convertwarp_params,
 };

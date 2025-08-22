@@ -203,14 +203,16 @@ function export_gcam_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ExportGcamOutputs`).
  */
 function export_gcam_execute(
     params: ExportGcamParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ExportGcamOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EXPORT_GCAM_METADATA);
     params = execution.params(params)
     const cargs = export_gcam_cargs(params, execution)
     const ret = export_gcam_outputs(params, execution)
@@ -249,10 +251,8 @@ function export_gcam(
     test: boolean = false,
     runner: Runner | null = null,
 ): ExportGcamOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EXPORT_GCAM_METADATA);
     const params = export_gcam_params(fixed, moving, morph, out_gcam, zlib_buffer, bbox_threshold, interp_method, test)
-    return export_gcam_execute(params, execution);
+    return export_gcam_execute(params, runner);
 }
 
 
@@ -261,8 +261,6 @@ export {
       ExportGcamOutputs,
       ExportGcamParameters,
       export_gcam,
-      export_gcam_cargs,
       export_gcam_execute,
-      export_gcam_outputs,
       export_gcam_params,
 };

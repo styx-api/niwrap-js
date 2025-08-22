@@ -172,14 +172,16 @@ function mri_twoclass_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriTwoclassOutputs`).
  */
 function mri_twoclass_execute(
     params: MriTwoclassParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriTwoclassOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_TWOCLASS_METADATA);
     params = execution.params(params)
     const cargs = mri_twoclass_cargs(params, execution)
     const ret = mri_twoclass_outputs(params, execution)
@@ -216,10 +218,8 @@ function mri_twoclass(
     bonferroni_correction: boolean = false,
     runner: Runner | null = null,
 ): MriTwoclassOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_TWOCLASS_METADATA);
     const params = mri_twoclass_params(segmentation_volume, output_subject, output_volume, c1_subjects, c2_subjects, f_threshold, bonferroni_correction)
-    return mri_twoclass_execute(params, execution);
+    return mri_twoclass_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       MriTwoclassOutputs,
       MriTwoclassParameters,
       mri_twoclass,
-      mri_twoclass_cargs,
       mri_twoclass_execute,
-      mri_twoclass_outputs,
       mri_twoclass_params,
 };

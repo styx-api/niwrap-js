@@ -260,14 +260,16 @@ function maskdump_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MaskdumpOutputs`).
  */
 function maskdump_execute(
     params: MaskdumpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MaskdumpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MASKDUMP_METADATA);
     params = execution.params(params)
     const cargs = maskdump_cargs(params, execution)
     const ret = maskdump_outputs(params, execution)
@@ -316,10 +318,8 @@ function maskdump(
     output: string | null = null,
     runner: Runner | null = null,
 ): MaskdumpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MASKDUMP_METADATA);
     const params = maskdump_params(input, info, quiet, debug, force, nthreads, config, help, version, output)
-    return maskdump_execute(params, execution);
+    return maskdump_execute(params, runner);
 }
 
 
@@ -329,10 +329,7 @@ export {
       MaskdumpOutputs,
       MaskdumpParameters,
       maskdump,
-      maskdump_cargs,
-      maskdump_config_cargs,
       maskdump_config_params,
       maskdump_execute,
-      maskdump_outputs,
       maskdump_params,
 };

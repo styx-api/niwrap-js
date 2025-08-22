@@ -426,14 +426,16 @@ function dcmdjpeg_fs_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DcmdjpegFsOutputs`).
  */
 function dcmdjpeg_fs_execute(
     params: DcmdjpegFsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DcmdjpegFsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DCMDJPEG_FS_METADATA);
     params = execution.params(params)
     const cargs = dcmdjpeg_fs_cargs(params, execution)
     const ret = dcmdjpeg_fs_outputs(params, execution)
@@ -538,10 +540,8 @@ function dcmdjpeg_fs(
     padding_create: Array<number> | null = null,
     runner: Runner | null = null,
 ): DcmdjpegFsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DCMDJPEG_FS_METADATA);
     const params = dcmdjpeg_fs_params(input_file, output_file, help, version, arguments_, quiet, verbose, debug, log_level, log_config, read_file, read_file_only, read_dataset, conv_photometric, conv_lossy, conv_guess, conv_guess_lossy, conv_always, conv_never, planar_auto, color_by_pixel, color_by_plane, uid_default, uid_always, workaround_pred6, workaround_incpl, write_file, write_dataset, write_xfer_little, write_xfer_big, write_xfer_implicit, enable_new_vr, disable_new_vr, group_length_recalc, group_length_create, group_length_remove, length_explicit, length_undefined, padding_retain, padding_off, padding_create)
-    return dcmdjpeg_fs_execute(params, execution);
+    return dcmdjpeg_fs_execute(params, runner);
 }
 
 
@@ -550,8 +550,6 @@ export {
       DcmdjpegFsOutputs,
       DcmdjpegFsParameters,
       dcmdjpeg_fs,
-      dcmdjpeg_fs_cargs,
       dcmdjpeg_fs_execute,
-      dcmdjpeg_fs_outputs,
       dcmdjpeg_fs_params,
 };

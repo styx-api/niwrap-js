@@ -196,14 +196,16 @@ function v__extract_meica_ortvec_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VExtractMeicaOrtvecOutputs`).
  */
 function v__extract_meica_ortvec_execute(
     params: VExtractMeicaOrtvecParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VExtractMeicaOrtvecOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__EXTRACT_MEICA_ORTVEC_METADATA);
     params = execution.params(params)
     const cargs = v__extract_meica_ortvec_cargs(params, execution)
     const ret = v__extract_meica_ortvec_outputs(params, execution)
@@ -238,10 +240,8 @@ function v__extract_meica_ortvec(
     verbosity: string | null = null,
     runner: Runner | null = null,
 ): VExtractMeicaOrtvecOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__EXTRACT_MEICA_ORTVEC_METADATA);
     const params = v__extract_meica_ortvec_params(prefix, meica_dir, reject_ignored, reject_midk, work_dir, verbosity)
-    return v__extract_meica_ortvec_execute(params, execution);
+    return v__extract_meica_ortvec_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       VExtractMeicaOrtvecParameters,
       V__EXTRACT_MEICA_ORTVEC_METADATA,
       v__extract_meica_ortvec,
-      v__extract_meica_ortvec_cargs,
       v__extract_meica_ortvec_execute,
-      v__extract_meica_ortvec_outputs,
       v__extract_meica_ortvec_params,
 };

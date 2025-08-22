@@ -202,14 +202,16 @@ function rcbf_prep_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RcbfPrepOutputs`).
  */
 function rcbf_prep_execute(
     params: RcbfPrepParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RcbfPrepOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RCBF_PREP_METADATA);
     params = execution.params(params)
     const cargs = rcbf_prep_cargs(params, execution)
     const ret = rcbf_prep_outputs(params, execution)
@@ -244,10 +246,8 @@ function rcbf_prep(
     template: InputPathType | null = null,
     runner: Runner | null = null,
 ): RcbfPrepOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RCBF_PREP_METADATA);
     const params = rcbf_prep_params(outdir, rcbfvol, subject, roitab, register, template)
-    return rcbf_prep_execute(params, execution);
+    return rcbf_prep_execute(params, runner);
 }
 
 
@@ -256,8 +256,6 @@ export {
       RcbfPrepOutputs,
       RcbfPrepParameters,
       rcbf_prep,
-      rcbf_prep_cargs,
       rcbf_prep_execute,
-      rcbf_prep_outputs,
       rcbf_prep_params,
 };

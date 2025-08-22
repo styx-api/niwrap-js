@@ -184,14 +184,16 @@ function surf_localstat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfLocalstatOutputs`).
  */
 function surf_localstat_execute(
     params: SurfLocalstatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfLocalstatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_LOCALSTAT_METADATA);
     params = execution.params(params)
     const cargs = surf_localstat_cargs(params, execution)
     const ret = surf_localstat_outputs(params, execution)
@@ -226,10 +228,8 @@ function surf_localstat(
     nbhd_rad: number | null = null,
     runner: Runner | null = null,
 ): SurfLocalstatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_LOCALSTAT_METADATA);
     const params = surf_localstat_params(prefix, stat, input_dataset, surface, hood, nbhd_rad)
-    return surf_localstat_execute(params, execution);
+    return surf_localstat_execute(params, runner);
 }
 
 
@@ -238,8 +238,6 @@ export {
       SurfLocalstatOutputs,
       SurfLocalstatParameters,
       surf_localstat,
-      surf_localstat_cargs,
       surf_localstat_execute,
-      surf_localstat_outputs,
       surf_localstat_params,
 };

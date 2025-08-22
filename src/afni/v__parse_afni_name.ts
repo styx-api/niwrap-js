@@ -148,14 +148,16 @@ function v__parse_afni_name_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VParseAfniNameOutputs`).
  */
 function v__parse_afni_name_execute(
     params: VParseAfniNameParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VParseAfniNameOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__PARSE_AFNI_NAME_METADATA);
     params = execution.params(params)
     const cargs = v__parse_afni_name_cargs(params, execution)
     const ret = v__parse_afni_name_outputs(params, execution)
@@ -180,10 +182,8 @@ function v__parse_afni_name(
     afni_name: string,
     runner: Runner | null = null,
 ): VParseAfniNameOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__PARSE_AFNI_NAME_METADATA);
     const params = v__parse_afni_name_params(afni_name)
-    return v__parse_afni_name_execute(params, execution);
+    return v__parse_afni_name_execute(params, runner);
 }
 
 
@@ -192,8 +192,6 @@ export {
       VParseAfniNameParameters,
       V__PARSE_AFNI_NAME_METADATA,
       v__parse_afni_name,
-      v__parse_afni_name_cargs,
       v__parse_afni_name_execute,
-      v__parse_afni_name_outputs,
       v__parse_afni_name_params,
 };

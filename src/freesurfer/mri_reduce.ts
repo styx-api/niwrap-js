@@ -138,14 +138,16 @@ function mri_reduce_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriReduceOutputs`).
  */
 function mri_reduce_execute(
     params: MriReduceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriReduceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_REDUCE_METADATA);
     params = execution.params(params)
     const cargs = mri_reduce_cargs(params, execution)
     const ret = mri_reduce_outputs(params, execution)
@@ -172,10 +174,8 @@ function mri_reduce(
     output_file: string,
     runner: Runner | null = null,
 ): MriReduceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_REDUCE_METADATA);
     const params = mri_reduce_params(input_file, output_file)
-    return mri_reduce_execute(params, execution);
+    return mri_reduce_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MriReduceOutputs,
       MriReduceParameters,
       mri_reduce,
-      mri_reduce_cargs,
       mri_reduce_execute,
-      mri_reduce_outputs,
       mri_reduce_params,
 };

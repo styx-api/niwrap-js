@@ -277,14 +277,16 @@ function metric_smoothing_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricSmoothingOutputs`).
  */
 function metric_smoothing_execute(
     params: MetricSmoothingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricSmoothingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_SMOOTHING_METADATA);
     params = execution.params(params)
     const cargs = metric_smoothing_cargs(params, execution)
     const ret = metric_smoothing_outputs(params, execution)
@@ -345,10 +347,8 @@ function metric_smoothing(
     opt_method_method: string | null = null,
     runner: Runner | null = null,
 ): MetricSmoothingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_SMOOTHING_METADATA);
     const params = metric_smoothing_params(surface, metric_in, smoothing_kernel, metric_out, opt_fwhm, roi, opt_fix_zeros, opt_column_column, opt_corrected_areas_area_metric, opt_method_method)
-    return metric_smoothing_execute(params, execution);
+    return metric_smoothing_execute(params, runner);
 }
 
 
@@ -358,10 +358,7 @@ export {
       MetricSmoothingParameters,
       MetricSmoothingRoiParameters,
       metric_smoothing,
-      metric_smoothing_cargs,
       metric_smoothing_execute,
-      metric_smoothing_outputs,
       metric_smoothing_params,
-      metric_smoothing_roi_cargs,
       metric_smoothing_roi_params,
 };

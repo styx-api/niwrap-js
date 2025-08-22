@@ -423,14 +423,16 @@ function v_3dsvm_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dsvmOutputs`).
  */
 function v_3dsvm_execute(
     params: V3dsvmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dsvmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DSVM_METADATA);
     params = execution.params(params)
     const cargs = v_3dsvm_cargs(params, execution)
     const ret = v_3dsvm_outputs(params, execution)
@@ -507,10 +509,8 @@ function v_3dsvm(
     version: boolean = false,
     runner: Runner | null = null,
 ): V3dsvmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DSVM_METADATA);
     const params = v_3dsvm_params(model, train_vol, train_labels, mask, no_model_mask, alpha, bucket, type_, c_value, epsilon, kernel, d_value, gamma, s_value, r_value, max_iterations, wout, test_vol, predictions, classout, nopred_censored, nodetrend, nopred_scale, test_labels, multiclass, help, version)
-    return v_3dsvm_execute(params, execution);
+    return v_3dsvm_execute(params, runner);
 }
 
 
@@ -519,8 +519,6 @@ export {
       V3dsvmParameters,
       V_3DSVM_METADATA,
       v_3dsvm,
-      v_3dsvm_cargs,
       v_3dsvm_execute,
-      v_3dsvm_outputs,
       v_3dsvm_params,
 };

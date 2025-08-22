@@ -201,14 +201,16 @@ function v_3dresample_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dresampleOutputs`).
  */
 function v_3dresample_execute(
     params: V3dresampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dresampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DRESAMPLE_METADATA);
     params = execution.params(params)
     const cargs = v_3dresample_cargs(params, execution)
     const ret = v_3dresample_outputs(params, execution)
@@ -245,10 +247,8 @@ function v_3dresample(
     voxel_size: Array<number> | null = null,
     runner: Runner | null = null,
 ): V3dresampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DRESAMPLE_METADATA);
     const params = v_3dresample_params(in_file, prefix, master, orientation, outputtype, resample_mode, voxel_size)
-    return v_3dresample_execute(params, execution);
+    return v_3dresample_execute(params, runner);
 }
 
 
@@ -257,8 +257,6 @@ export {
       V3dresampleParameters,
       V_3DRESAMPLE_METADATA,
       v_3dresample,
-      v_3dresample_cargs,
       v_3dresample_execute,
-      v_3dresample_outputs,
       v_3dresample_params,
 };

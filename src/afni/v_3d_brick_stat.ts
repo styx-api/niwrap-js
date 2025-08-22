@@ -361,14 +361,16 @@ function v_3d_brick_stat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dBrickStatOutputs`).
  */
 function v_3d_brick_stat_execute(
     params: V3dBrickStatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dBrickStatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_BRICK_STAT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_brick_stat_cargs(params, execution)
     const ret = v_3d_brick_stat_outputs(params, execution)
@@ -451,10 +453,8 @@ function v_3d_brick_stat(
     help: boolean = false,
     runner: Runner | null = null,
 ): V3dBrickStatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_BRICK_STAT_METADATA);
     const params = v_3d_brick_stat_params(dataset, quick, slow, min, max, mean, sum, var_, stdev, count, volume, positive, negative, zero, non_positive, non_negative, non_zero, absolute, nan, nonan, mask, mrange, mvalue, automask, percentile, perclist, median, perc_quiet, ver, help)
-    return v_3d_brick_stat_execute(params, execution);
+    return v_3d_brick_stat_execute(params, runner);
 }
 
 
@@ -463,8 +463,6 @@ export {
       V3dBrickStatParameters,
       V_3D_BRICK_STAT_METADATA,
       v_3d_brick_stat,
-      v_3d_brick_stat_cargs,
       v_3d_brick_stat_execute,
-      v_3d_brick_stat_outputs,
       v_3d_brick_stat_params,
 };

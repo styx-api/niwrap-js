@@ -177,14 +177,16 @@ function cifti_label_adjacency_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelAdjacencyOutputs`).
  */
 function cifti_label_adjacency_execute(
     params: CiftiLabelAdjacencyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiLabelAdjacencyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_LABEL_ADJACENCY_METADATA);
     params = execution.params(params)
     const cargs = cifti_label_adjacency_cargs(params, execution)
     const ret = cifti_label_adjacency_outputs(params, execution)
@@ -219,10 +221,8 @@ function cifti_label_adjacency(
     opt_cerebellum_surface_surface: InputPathType | null = null,
     runner: Runner | null = null,
 ): CiftiLabelAdjacencyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_LABEL_ADJACENCY_METADATA);
     const params = cifti_label_adjacency_params(label_in, adjacency_out, opt_left_surface_surface, opt_right_surface_surface, opt_cerebellum_surface_surface)
-    return cifti_label_adjacency_execute(params, execution);
+    return cifti_label_adjacency_execute(params, runner);
 }
 
 
@@ -231,8 +231,6 @@ export {
       CiftiLabelAdjacencyOutputs,
       CiftiLabelAdjacencyParameters,
       cifti_label_adjacency,
-      cifti_label_adjacency_cargs,
       cifti_label_adjacency_execute,
-      cifti_label_adjacency_outputs,
       cifti_label_adjacency_params,
 };

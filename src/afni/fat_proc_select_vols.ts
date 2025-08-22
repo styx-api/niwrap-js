@@ -202,14 +202,16 @@ function fat_proc_select_vols_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatProcSelectVolsOutputs`).
  */
 function fat_proc_select_vols_execute(
     params: FatProcSelectVolsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatProcSelectVolsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_PROC_SELECT_VOLS_METADATA);
     params = execution.params(params)
     const cargs = fat_proc_select_vols_cargs(params, execution)
     const ret = fat_proc_select_vols_outputs(params, execution)
@@ -248,10 +250,8 @@ function fat_proc_select_vols(
     no_cmd_out: boolean = false,
     runner: Runner | null = null,
 ): FatProcSelectVolsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_PROC_SELECT_VOLS_METADATA);
     const params = fat_proc_select_vols_params(dwi_input, img_input, prefix, in_bads, apply_to_vols, do_movie, workdir, no_cmd_out)
-    return fat_proc_select_vols_execute(params, execution);
+    return fat_proc_select_vols_execute(params, runner);
 }
 
 
@@ -260,8 +260,6 @@ export {
       FatProcSelectVolsOutputs,
       FatProcSelectVolsParameters,
       fat_proc_select_vols,
-      fat_proc_select_vols_cargs,
       fat_proc_select_vols_execute,
-      fat_proc_select_vols_outputs,
       fat_proc_select_vols_params,
 };

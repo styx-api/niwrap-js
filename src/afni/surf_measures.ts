@@ -302,14 +302,16 @@ function surf_measures_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfMeasuresOutputs`).
  */
 function surf_measures_execute(
     params: SurfMeasuresParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfMeasuresOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_MEASURES_METADATA);
     params = execution.params(params)
     const cargs = surf_measures_cargs(params, execution)
     const ret = surf_measures_outputs(params, execution)
@@ -368,10 +370,8 @@ function surf_measures(
     ver: boolean = false,
     runner: Runner | null = null,
 ): SurfMeasuresOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_MEASURES_METADATA);
     const params = surf_measures_params(spec_file, surf_a, out_dset, surf_b, out_1_d, func, surf_volume, cmask, debug, dnode, nodes_1_d, info_all, info_area, info_norms, info_thick, info_vol, info_volg, ver)
-    return surf_measures_execute(params, execution);
+    return surf_measures_execute(params, runner);
 }
 
 
@@ -380,8 +380,6 @@ export {
       SurfMeasuresOutputs,
       SurfMeasuresParameters,
       surf_measures,
-      surf_measures_cargs,
       surf_measures_execute,
-      surf_measures_outputs,
       surf_measures_params,
 };

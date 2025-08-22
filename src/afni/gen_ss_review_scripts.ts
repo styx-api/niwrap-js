@@ -366,14 +366,16 @@ function gen_ss_review_scripts_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GenSsReviewScriptsOutputs`).
  */
 function gen_ss_review_scripts_execute(
     params: GenSsReviewScriptsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GenSsReviewScriptsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GEN_SS_REVIEW_SCRIPTS_METADATA);
     params = execution.params(params)
     const cargs = gen_ss_review_scripts_cargs(params, execution)
     const ret = gen_ss_review_scripts_outputs(params, execution)
@@ -434,10 +436,8 @@ function gen_ss_review_scripts(
     init_uvars_json: InputPathType | null = null,
     runner: Runner | null = null,
 ): GenSsReviewScriptsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GEN_SS_REVIEW_SCRIPTS_METADATA);
     const params = gen_ss_review_scripts_params(subject_id, rm_trs, num_stim, mb_level, slice_pattern, motion_dset, outlier_dset, enorm_dset, mot_limit, out_limit, xmat_regress, xmat_uncensored, stats_dset, final_anat, final_view, prefix, verbosity, uvars_json, init_uvars_json)
-    return gen_ss_review_scripts_execute(params, execution);
+    return gen_ss_review_scripts_execute(params, runner);
 }
 
 
@@ -446,8 +446,6 @@ export {
       GenSsReviewScriptsOutputs,
       GenSsReviewScriptsParameters,
       gen_ss_review_scripts,
-      gen_ss_review_scripts_cargs,
       gen_ss_review_scripts_execute,
-      gen_ss_review_scripts_outputs,
       gen_ss_review_scripts_params,
 };

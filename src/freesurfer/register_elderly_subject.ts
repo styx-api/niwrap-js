@@ -176,14 +176,16 @@ function register_elderly_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegisterElderlySubjectOutputs`).
  */
 function register_elderly_subject_execute(
     params: RegisterElderlySubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegisterElderlySubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REGISTER_ELDERLY_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = register_elderly_subject_cargs(params, execution)
     const ret = register_elderly_subject_outputs(params, execution)
@@ -218,10 +220,8 @@ function register_elderly_subject(
     sampling_percentage: number | null = 0.5,
     runner: Runner | null = null,
 ): RegisterElderlySubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REGISTER_ELDERLY_SUBJECT_METADATA);
     const params = register_elderly_subject_params(output_fsamples, output_norm, input_volume, gca_file, transform_file, sampling_percentage)
-    return register_elderly_subject_execute(params, execution);
+    return register_elderly_subject_execute(params, runner);
 }
 
 
@@ -230,8 +230,6 @@ export {
       RegisterElderlySubjectOutputs,
       RegisterElderlySubjectParameters,
       register_elderly_subject,
-      register_elderly_subject_cargs,
       register_elderly_subject_execute,
-      register_elderly_subject_outputs,
       register_elderly_subject_params,
 };

@@ -189,14 +189,16 @@ function slices_summary_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SlicesSummaryOutputs`).
  */
 function slices_summary_execute(
     params: SlicesSummaryParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SlicesSummaryOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SLICES_SUMMARY_METADATA);
     params = execution.params(params)
     const cargs = slices_summary_cargs(params, execution)
     const ret = slices_summary_outputs(params, execution)
@@ -239,10 +241,8 @@ function slices_summary(
     dumb_rule_flag: boolean = false,
     runner: Runner | null = null,
 ): SlicesSummaryOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SLICES_SUMMARY_METADATA);
     const params = slices_summary_params(v_4d_input_file, threshold, background_image, pictures_sum, pictures_sum_second, output_png, timepoints, single_slice_flag, darker_background_flag, dumb_rule_flag)
-    return slices_summary_execute(params, execution);
+    return slices_summary_execute(params, runner);
 }
 
 
@@ -251,8 +251,6 @@ export {
       SlicesSummaryOutputs,
       SlicesSummaryParameters,
       slices_summary,
-      slices_summary_cargs,
       slices_summary_execute,
-      slices_summary_outputs,
       slices_summary_params,
 };

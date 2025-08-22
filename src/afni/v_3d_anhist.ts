@@ -202,14 +202,16 @@ function v_3d_anhist_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dAnhistOutputs`).
  */
 function v_3d_anhist_execute(
     params: V3dAnhistParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dAnhistOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ANHIST_METADATA);
     params = execution.params(params)
     const cargs = v_3d_anhist_cargs(params, execution)
     const ret = v_3d_anhist_outputs(params, execution)
@@ -248,10 +250,8 @@ function v_3d_anhist(
     filename: string | null = null,
     runner: Runner | null = null,
 ): V3dAnhistOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ANHIST_METADATA);
     const params = v_3d_anhist_params(dataset, quiet, dump_histogram, no_scurve, winsorize, top_2peaks, label, filename)
-    return v_3d_anhist_execute(params, execution);
+    return v_3d_anhist_execute(params, runner);
 }
 
 
@@ -260,8 +260,6 @@ export {
       V3dAnhistParameters,
       V_3D_ANHIST_METADATA,
       v_3d_anhist,
-      v_3d_anhist_cargs,
       v_3d_anhist_execute,
-      v_3d_anhist_outputs,
       v_3d_anhist_params,
 };

@@ -169,14 +169,16 @@ function print_unique_labels_csh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PrintUniqueLabelsCshOutputs`).
  */
 function print_unique_labels_csh_execute(
     params: PrintUniqueLabelsCshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PrintUniqueLabelsCshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PRINT_UNIQUE_LABELS_CSH_METADATA);
     params = execution.params(params)
     const cargs = print_unique_labels_csh_cargs(params, execution)
     const ret = print_unique_labels_csh_outputs(params, execution)
@@ -209,10 +211,8 @@ function print_unique_labels_csh(
     help: boolean = false,
     runner: Runner | null = null,
 ): PrintUniqueLabelsCshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PRINT_UNIQUE_LABELS_CSH_METADATA);
     const params = print_unique_labels_csh_params(label_volume, output_file, list_only, version, help)
-    return print_unique_labels_csh_execute(params, execution);
+    return print_unique_labels_csh_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       PrintUniqueLabelsCshOutputs,
       PrintUniqueLabelsCshParameters,
       print_unique_labels_csh,
-      print_unique_labels_csh_cargs,
       print_unique_labels_csh_execute,
-      print_unique_labels_csh_outputs,
       print_unique_labels_csh_params,
 };

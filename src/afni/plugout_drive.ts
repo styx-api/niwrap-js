@@ -267,14 +267,16 @@ function plugout_drive_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PlugoutDriveOutputs`).
  */
 function plugout_drive_execute(
     params: PlugoutDriveParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PlugoutDriveOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PLUGOUT_DRIVE_METADATA);
     params = execution.params(params)
     const cargs = plugout_drive_cargs(params, execution)
     const ret = plugout_drive_outputs(params, execution)
@@ -327,10 +329,8 @@ function plugout_drive(
     num_assigned_ports_quiet: boolean = false,
     runner: Runner | null = null,
 ): PlugoutDriveOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PLUGOUT_DRIVE_METADATA);
     const params = plugout_drive_params(host, shm, verbose, port, maxwait, name, command, quit, np, npq, npb, max_port_bloc, max_port_bloc_quiet, num_assigned_ports, num_assigned_ports_quiet)
-    return plugout_drive_execute(params, execution);
+    return plugout_drive_execute(params, runner);
 }
 
 
@@ -339,8 +339,6 @@ export {
       PlugoutDriveOutputs,
       PlugoutDriveParameters,
       plugout_drive,
-      plugout_drive_cargs,
       plugout_drive_execute,
-      plugout_drive_outputs,
       plugout_drive_params,
 };

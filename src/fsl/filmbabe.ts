@@ -446,14 +446,16 @@ function filmbabe_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FilmbabeOutputs`).
  */
 function filmbabe_execute(
     params: FilmbabeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FilmbabeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FILMBABE_METADATA);
     params = execution.params(params)
     const cargs = filmbabe_cargs(params, execution)
     const ret = filmbabe_outputs(params, execution)
@@ -542,10 +544,8 @@ function filmbabe(
     temporal_ar_order: number | null = 3,
     runner: Runner | null = null,
 ): FilmbabeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FILMBABE_METADATA);
     const params = filmbabe_params(datafile, datafile_alias, mask, mask_alias, designfile, designfile_alias_1, designfile_alias_2, frf, verbose_flag, verbose_flag_alias, debug_level, debug_level_alias_1, debug_level_alias_2, timing_on_flag, help_flag, help_flag_alias, flobs_prior_off_flag, flobs_prior_off_alias, flobs_dir, prior_covar_file, prior_covar_file_alias, prior_mean_file, prior_mean_file_alias, log_dir, log_dir_alias_1, log_dir_alias_2, num_iterations, temporal_ar_mrf_prec, temporal_ar_mrf_prec_alias, temporal_ar_flag, num_trace_samples, num_trace_samples_alias, temporal_ar_order)
-    return filmbabe_execute(params, execution);
+    return filmbabe_execute(params, runner);
 }
 
 
@@ -554,8 +554,6 @@ export {
       FilmbabeOutputs,
       FilmbabeParameters,
       filmbabe,
-      filmbabe_cargs,
       filmbabe_execute,
-      filmbabe_outputs,
       filmbabe_params,
 };

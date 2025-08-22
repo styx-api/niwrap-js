@@ -176,14 +176,16 @@ function longmc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LongmcOutputs`).
  */
 function longmc_execute(
     params: LongmcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LongmcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LONGMC_METADATA);
     params = execution.params(params)
     const cargs = longmc_cargs(params, execution)
     const ret = longmc_outputs(params, execution)
@@ -220,10 +222,8 @@ function longmc(
     no_force_update: boolean = false,
     runner: Runner | null = null,
 ): LongmcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LONGMC_METADATA);
     const params = longmc_params(cross_tp_name, base_name, subjects_dir, conform_to_hires, no_conform_to_hires, subject_name, no_force_update)
-    return longmc_execute(params, execution);
+    return longmc_execute(params, runner);
 }
 
 
@@ -232,8 +232,6 @@ export {
       LongmcOutputs,
       LongmcParameters,
       longmc,
-      longmc_cargs,
       longmc_execute,
-      longmc_outputs,
       longmc_params,
 };

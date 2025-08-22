@@ -187,14 +187,16 @@ function v__afni_r_package_install_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAfniRPackageInstallOutputs`).
  */
 function v__afni_r_package_install_execute(
     params: VAfniRPackageInstallParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAfniRPackageInstallOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__AFNI_R_PACKAGE_INSTALL_METADATA);
     params = execution.params(params)
     const cargs = v__afni_r_package_install_cargs(params, execution)
     const ret = v__afni_r_package_install_outputs(params, execution)
@@ -231,10 +233,8 @@ function v__afni_r_package_install(
     help: boolean = false,
     runner: Runner | null = null,
 ): VAfniRPackageInstallOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__AFNI_R_PACKAGE_INSTALL_METADATA);
     const params = v__afni_r_package_install_params(afni, shiny, bayes_view, circos, custom_packages, mirror, help)
-    return v__afni_r_package_install_execute(params, execution);
+    return v__afni_r_package_install_execute(params, runner);
 }
 
 
@@ -243,8 +243,6 @@ export {
       VAfniRPackageInstallParameters,
       V__AFNI_R_PACKAGE_INSTALL_METADATA,
       v__afni_r_package_install,
-      v__afni_r_package_install_cargs,
       v__afni_r_package_install_execute,
-      v__afni_r_package_install_outputs,
       v__afni_r_package_install_params,
 };

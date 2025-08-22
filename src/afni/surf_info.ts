@@ -306,14 +306,16 @@ function surf_info_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfInfoOutputs`).
  */
 function surf_info_execute(
     params: SurfInfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfInfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_INFO_METADATA);
     params = execution.params(params)
     const cargs = surf_info_cargs(params, execution)
     const ret = surf_info_outputs(params, execution)
@@ -376,10 +378,8 @@ function surf_info(
     yesmall: boolean = false,
     runner: Runner | null = null,
 ): SurfInfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_INFO_METADATA);
     const params = surf_info_params(surface, com, debug_level, detail_level, n_node, n_faceset, n_tri, quiet, separator, input_surface, surface_state, surface_volume, spec_file, novolreg, noxform, setenv, trace, extreme_trace, nomall, yesmall)
-    return surf_info_execute(params, execution);
+    return surf_info_execute(params, runner);
 }
 
 
@@ -388,8 +388,6 @@ export {
       SurfInfoOutputs,
       SurfInfoParameters,
       surf_info,
-      surf_info_cargs,
       surf_info_execute,
-      surf_info_outputs,
       surf_info_params,
 };

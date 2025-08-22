@@ -212,14 +212,16 @@ function mris_inflate_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisInflateOutputs`).
  */
 function mris_inflate_execute(
     params: MrisInflateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisInflateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_INFLATE_METADATA);
     params = execution.params(params)
     const cargs = mris_inflate_cargs(params, execution)
     const ret = mris_inflate_outputs(params, execution)
@@ -260,10 +262,8 @@ function mris_inflate(
     scale_flag: number | null = null,
     runner: Runner | null = null,
 ): MrisInflateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_INFLATE_METADATA);
     const params = mris_inflate_params(input_surface, output_surface, max_iterations, snapshot_interval, dist_coefficient, no_save_sulc, sulcname, mm_flag, scale_flag)
-    return mris_inflate_execute(params, execution);
+    return mris_inflate_execute(params, runner);
 }
 
 
@@ -272,8 +272,6 @@ export {
       MrisInflateOutputs,
       MrisInflateParameters,
       mris_inflate,
-      mris_inflate_cargs,
       mris_inflate_execute,
-      mris_inflate_outputs,
       mris_inflate_params,
 };

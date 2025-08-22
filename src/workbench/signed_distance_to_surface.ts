@@ -165,14 +165,16 @@ function signed_distance_to_surface_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SignedDistanceToSurfaceOutputs`).
  */
 function signed_distance_to_surface_execute(
     params: SignedDistanceToSurfaceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SignedDistanceToSurfaceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SIGNED_DISTANCE_TO_SURFACE_METADATA);
     params = execution.params(params)
     const cargs = signed_distance_to_surface_cargs(params, execution)
     const ret = signed_distance_to_surface_outputs(params, execution)
@@ -212,10 +214,8 @@ function signed_distance_to_surface(
     opt_winding_method: string | null = null,
     runner: Runner | null = null,
 ): SignedDistanceToSurfaceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SIGNED_DISTANCE_TO_SURFACE_METADATA);
     const params = signed_distance_to_surface_params(surface_comp, surface_ref, metric, opt_winding_method)
-    return signed_distance_to_surface_execute(params, execution);
+    return signed_distance_to_surface_execute(params, runner);
 }
 
 
@@ -224,8 +224,6 @@ export {
       SignedDistanceToSurfaceOutputs,
       SignedDistanceToSurfaceParameters,
       signed_distance_to_surface,
-      signed_distance_to_surface_cargs,
       signed_distance_to_surface_execute,
-      signed_distance_to_surface_outputs,
       signed_distance_to_surface_params,
 };

@@ -250,14 +250,16 @@ function v_3d_roistats_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dRoistatsOutputs`).
  */
 function v_3d_roistats_execute(
     params: V3dRoistatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dRoistatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ROISTATS_METADATA);
     params = execution.params(params)
     const cargs = v_3d_roistats_cargs(params, execution)
     const ret = v_3d_roistats_outputs(params, execution)
@@ -308,10 +310,8 @@ function v_3d_roistats(
     zerofill: string | null = null,
     runner: Runner | null = null,
 ): V3dRoistatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ROISTATS_METADATA);
     const params = v_3d_roistats_params(in_file, mask, debug, format1_d, format1_dr, mask_f2short, mask_file, nobriklab, nomeanout, num_roi, quiet, roisel, stat, zerofill)
-    return v_3d_roistats_execute(params, execution);
+    return v_3d_roistats_execute(params, runner);
 }
 
 
@@ -320,8 +320,6 @@ export {
       V3dRoistatsParameters,
       V_3D_ROISTATS_METADATA,
       v_3d_roistats,
-      v_3d_roistats_cargs,
       v_3d_roistats_execute,
-      v_3d_roistats_outputs,
       v_3d_roistats_params,
 };

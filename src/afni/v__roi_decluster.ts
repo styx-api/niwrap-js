@@ -196,14 +196,16 @@ function v__roi_decluster_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VRoiDeclusterOutputs`).
  */
 function v__roi_decluster_execute(
     params: VRoiDeclusterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VRoiDeclusterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__ROI_DECLUSTER_METADATA);
     params = execution.params(params)
     const cargs = v__roi_decluster_cargs(params, execution)
     const ret = v__roi_decluster_outputs(params, execution)
@@ -238,10 +240,8 @@ function v__roi_decluster(
     neighborhood_type: number | null = null,
     runner: Runner | null = null,
 ): VRoiDeclusterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__ROI_DECLUSTER_METADATA);
     const params = v__roi_decluster_params(input_dset, output_dir, nvox_thresh, frac_thresh, prefix, neighborhood_type)
-    return v__roi_decluster_execute(params, execution);
+    return v__roi_decluster_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       VRoiDeclusterParameters,
       V__ROI_DECLUSTER_METADATA,
       v__roi_decluster,
-      v__roi_decluster_cargs,
       v__roi_decluster_execute,
-      v__roi_decluster_outputs,
       v__roi_decluster_params,
 };

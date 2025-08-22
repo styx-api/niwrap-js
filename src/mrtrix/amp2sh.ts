@@ -485,14 +485,16 @@ function amp2sh_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Amp2shOutputs`).
  */
 function amp2sh_execute(
     params: Amp2shParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Amp2shOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AMP2SH_METADATA);
     params = execution.params(params)
     const cargs = amp2sh_cargs(params, execution)
     const ret = amp2sh_outputs(params, execution)
@@ -563,10 +565,8 @@ function amp2sh(
     version: boolean = false,
     runner: Runner | null = null,
 ): Amp2shOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AMP2SH_METADATA);
     const params = amp2sh_params(amp, sh, lmax, normalise, directions, rician, grad, fslgrad, shells, strides, info, quiet, debug, force, nthreads, config, help, version)
-    return amp2sh_execute(params, execution);
+    return amp2sh_execute(params, runner);
 }
 
 
@@ -579,16 +579,10 @@ export {
       Amp2shVariousFileParameters,
       Amp2shVariousStringParameters,
       amp2sh,
-      amp2sh_cargs,
-      amp2sh_config_cargs,
       amp2sh_config_params,
       amp2sh_execute,
-      amp2sh_fslgrad_cargs,
       amp2sh_fslgrad_params,
-      amp2sh_outputs,
       amp2sh_params,
-      amp2sh_various_file_cargs,
       amp2sh_various_file_params,
-      amp2sh_various_string_cargs,
       amp2sh_various_string_params,
 };

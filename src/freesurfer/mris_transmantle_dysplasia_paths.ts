@@ -172,14 +172,16 @@ function mris_transmantle_dysplasia_paths_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisTransmantleDysplasiaPathsOutputs`).
  */
 function mris_transmantle_dysplasia_paths_execute(
     params: MrisTransmantleDysplasiaPathsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisTransmantleDysplasiaPathsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_TRANSMANTLE_DYSPLASIA_PATHS_METADATA);
     params = execution.params(params)
     const cargs = mris_transmantle_dysplasia_paths_cargs(params, execution)
     const ret = mris_transmantle_dysplasia_paths_outputs(params, execution)
@@ -216,10 +218,8 @@ function mris_transmantle_dysplasia_paths(
     noise_sensitivity: boolean = false,
     runner: Runner | null = null,
 ): MrisTransmantleDysplasiaPathsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_TRANSMANTLE_DYSPLASIA_PATHS_METADATA);
     const params = mris_transmantle_dysplasia_paths_params(surface, aseg_volume, intensity_volume, xform, output_volume, filter, noise_sensitivity)
-    return mris_transmantle_dysplasia_paths_execute(params, execution);
+    return mris_transmantle_dysplasia_paths_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       MrisTransmantleDysplasiaPathsOutputs,
       MrisTransmantleDysplasiaPathsParameters,
       mris_transmantle_dysplasia_paths,
-      mris_transmantle_dysplasia_paths_cargs,
       mris_transmantle_dysplasia_paths_execute,
-      mris_transmantle_dysplasia_paths_outputs,
       mris_transmantle_dysplasia_paths_params,
 };

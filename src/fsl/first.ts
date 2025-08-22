@@ -257,14 +257,16 @@ function first_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FirstOutputs`).
  */
 function first_execute(
     params: FirstParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FirstOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIRST_METADATA);
     params = execution.params(params)
     const cargs = first_cargs(params, execution)
     const ret = first_outputs(params, execution)
@@ -317,10 +319,8 @@ function first(
     loadbvars: boolean = false,
     runner: Runner | null = null,
 ): FirstOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIRST_METADATA);
     const params = first_params(input_file, output_name, input_model, flirt_matrix, verbose, help, input_model2, nmodes, intref, multi_image_input, binary_surface_output, bmap_name, bvars, shcond, loadbvars)
-    return first_execute(params, execution);
+    return first_execute(params, runner);
 }
 
 
@@ -329,8 +329,6 @@ export {
       FirstOutputs,
       FirstParameters,
       first,
-      first_cargs,
       first_execute,
-      first_outputs,
       first_params,
 };

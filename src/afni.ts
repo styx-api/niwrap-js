@@ -573,3 +573,1155 @@ export * from './afni/vecwarp'
 export * from './afni/waver'
 export * from './afni/whirlgif'
 export * from './afni/xmat_tool_py'
+import { Runner } from 'styxdefs';
+import { abids_json_info_py_execute } from './afni/abids_json_info_py'
+import { abids_json_tool_py_execute } from './afni/abids_json_tool_py'
+import { abids_tool_execute } from './afni/abids_tool'
+import { adjunct_apqc_tsnr_general_execute } from './afni/adjunct_apqc_tsnr_general'
+import { adjunct_aw_tableize_roi_info_py_execute } from './afni/adjunct_aw_tableize_roi_info_py'
+import { adjunct_calc_mont_dims_py_execute } from './afni/adjunct_calc_mont_dims_py'
+import { adjunct_combine_str_py_execute } from './afni/adjunct_combine_str_py'
+import { adjunct_is_label_py_execute } from './afni/adjunct_is_label_py'
+import { adjunct_make_script_and_rst_py_execute } from './afni/adjunct_make_script_and_rst_py'
+import { adjunct_select_str_py_execute } from './afni/adjunct_select_str_py'
+import { adjunct_simplify_cost_execute } from './afni/adjunct_simplify_cost'
+import { adjunct_suma_fs_mask_and_qc_execute } from './afni/adjunct_suma_fs_mask_and_qc'
+import { adjunct_suma_fs_roi_info_execute } from './afni/adjunct_suma_fs_roi_info'
+import { adjunct_tort_plot_dp_align_execute } from './afni/adjunct_tort_plot_dp_align'
+import { adwarp_execute } from './afni/adwarp'
+import { afni_batch_r_execute } from './afni/afni_batch_r'
+import { afni_check_omp_execute } from './afni/afni_check_omp'
+import { afni_execute } from './afni/afni'
+import { afni_history_execute } from './afni/afni_history'
+import { afni_open_execute } from './afni/afni_open'
+import { afni_proc_py_execute } from './afni/afni_proc_py'
+import { afni_run_r_execute } from './afni/afni_run_r'
+import { afni_system_check_py_execute } from './afni/afni_system_check_py'
+import { aiv_execute } from './afni/aiv'
+import { align_epi_anat_execute } from './afni/align_epi_anat'
+import { analyze_trace_execute } from './afni/analyze_trace'
+import { ap_run_simple_rest_execute } from './afni/ap_run_simple_rest'
+import { apqc_make_html_execute } from './afni/apqc_make_html'
+import { apqc_make_tcsh_py_execute } from './afni/apqc_make_tcsh_py'
+import { apsearch_execute } from './afni/apsearch'
+import { auto_warp_py_execute } from './afni/auto_warp_py'
+import { balloon_execute } from './afni/balloon'
+import { bayes_view_execute } from './afni/bayes_view'
+import { bayesian_group_ana_py_execute } from './afni/bayesian_group_ana_py'
+import { brain_skin_execute } from './afni/brain_skin'
+import { build_afni_py_execute } from './afni/build_afni_py'
+import { cat_matvec_execute } from './afni/cat_matvec'
+import { ccalc_execute } from './afni/ccalc'
+import { cifti_tool_execute } from './afni/cifti_tool'
+import { cjpeg_execute } from './afni/cjpeg'
+import { clust_exp_hist_table_py_execute } from './afni/clust_exp_hist_table_py'
+import { clust_exp_stat_parse_py_execute } from './afni/clust_exp_stat_parse_py'
+import { column_cat_execute } from './afni/column_cat'
+import { compare_surfaces_execute } from './afni/compare_surfaces'
+import { convert_cdiflist_to_grads_execute } from './afni/convert_cdiflist_to_grads'
+import { convert_dset_execute } from './afni/convert_dset'
+import { convert_surface_execute } from './afni/convert_surface'
+import { convex_hull_execute } from './afni/convex_hull'
+import { count_execute } from './afni/count'
+import { create_icosahedron_execute } from './afni/create_icosahedron'
+import { dcm2niix_afni_execute } from './afni/dcm2niix_afni'
+import { dicom_hdr_execute } from './afni/dicom_hdr'
+import { dicom_hinfo_execute } from './afni/dicom_hinfo'
+import { dicom_to_raw_execute } from './afni/dicom_to_raw'
+import { dimon_execute } from './afni/dimon'
+import { djpeg_execute } from './afni/djpeg'
+import { drive_suma_execute } from './afni/drive_suma'
+import { dsetstat2p_execute } from './afni/dsetstat2p'
+import { dtistudio_fiberto_segments_execute } from './afni/dtistudio_fiberto_segments'
+import { epi_b0_correct_execute } from './afni/epi_b0_correct'
+import { examine_xmat_execute } from './afni/examine_xmat'
+import { fat_mat2d_plot_py_execute } from './afni/fat_mat2d_plot_py'
+import { fat_mat_sel_py_execute } from './afni/fat_mat_sel_py'
+import { fat_mat_tableize_execute } from './afni/fat_mat_tableize'
+import { fat_mvm_gridconv_py_execute } from './afni/fat_mvm_gridconv_py'
+import { fat_mvm_prep_execute } from './afni/fat_mvm_prep'
+import { fat_mvm_scripter_py_execute } from './afni/fat_mvm_scripter_py'
+import { fat_proc_align_anat_pair_execute } from './afni/fat_proc_align_anat_pair'
+import { fat_proc_axialize_anat_execute } from './afni/fat_proc_axialize_anat'
+import { fat_proc_connec_vis_execute } from './afni/fat_proc_connec_vis'
+import { fat_proc_convert_dcm_anat_execute } from './afni/fat_proc_convert_dcm_anat'
+import { fat_proc_convert_dcm_dwis_execute } from './afni/fat_proc_convert_dcm_dwis'
+import { fat_proc_decmap_execute } from './afni/fat_proc_decmap'
+import { fat_proc_dwi_to_dt_execute } from './afni/fat_proc_dwi_to_dt'
+import { fat_proc_filter_dwis_execute } from './afni/fat_proc_filter_dwis'
+import { fat_proc_imit2w_from_t1w_execute } from './afni/fat_proc_imit2w_from_t1w'
+import { fat_proc_map_to_dti_execute } from './afni/fat_proc_map_to_dti'
+import { fat_proc_select_vols_execute } from './afni/fat_proc_select_vols'
+import { fat_roi_row_execute } from './afni/fat_roi_row'
+import { fatcat_matplot_execute } from './afni/fatcat_matplot'
+import { fdrval_execute } from './afni/fdrval'
+import { fftest_execute } from './afni/fftest'
+import { file_tool_execute } from './afni/file_tool'
+import { fim2_execute } from './afni/fim2'
+import { find_variance_lines_execute } from './afni/find_variance_lines'
+import { firdesign_execute } from './afni/firdesign'
+import { float_scan_execute } from './afni/float_scan'
+import { from3d_execute } from './afni/from3d'
+import { fsread_annot_execute } from './afni/fsread_annot'
+import { gen_epi_review_py_execute } from './afni/gen_epi_review_py'
+import { gen_group_command_execute } from './afni/gen_group_command'
+import { gen_ss_review_scripts_execute } from './afni/gen_ss_review_scripts'
+import { gen_ss_review_table_py_execute } from './afni/gen_ss_review_table_py'
+import { get_afni_model_prf_6_bad_execute } from './afni/get_afni_model_prf_6_bad'
+import { get_afni_model_prf_6_execute } from './afni/get_afni_model_prf_6'
+import { get_afni_model_prf_execute } from './afni/get_afni_model_prf'
+import { gifti_tool_execute } from './afni/gifti_tool'
+import { gltsymtest_execute } from './afni/gltsymtest'
+import { help_format_execute } from './afni/help_format'
+import { im2niml_execute } from './afni/im2niml'
+import { images_equal_execute } from './afni/images_equal'
+import { imand_execute } from './afni/imand'
+import { imaver_execute } from './afni/imaver'
+import { imcalc_execute } from './afni/imcalc'
+import { imcat_execute } from './afni/imcat'
+import { imcutup_execute } from './afni/imcutup'
+import { imdump_execute } from './afni/imdump'
+import { immask_execute } from './afni/immask'
+import { imreg_execute } from './afni/imreg'
+import { imrotate_execute } from './afni/imrotate'
+import { imstack_execute } from './afni/imstack'
+import { imstat_execute } from './afni/imstat'
+import { imupsam_execute } from './afni/imupsam'
+import { init_user_dotfiles_py_execute } from './afni/init_user_dotfiles_py'
+import { inspec_execute } from './afni/inspec'
+import { iso_surface_execute } from './afni/iso_surface'
+import { make_color_map_execute } from './afni/make_color_map'
+import { make_pq_script_py_execute } from './afni/make_pq_script_py'
+import { make_random_timing_py_execute } from './afni/make_random_timing_py'
+import { make_stim_times_py_execute } from './afni/make_stim_times_py'
+import { map_icosahedron_execute } from './afni/map_icosahedron'
+import { map_track_id_execute } from './afni/map_track_id'
+import { mba_execute } from './afni/mba'
+import { meica_py_execute } from './afni/meica_py'
+import { myget_execute } from './afni/myget'
+import { neuro_deconvolve_py_execute } from './afni/neuro_deconvolve_py'
+import { nicat_execute } from './afni/nicat'
+import { niccc_execute } from './afni/niccc'
+import { nifti_tool_execute } from './afni/nifti_tool'
+import { niml_feedme_execute } from './afni/niml_feedme'
+import { nsize_execute } from './afni/nsize'
+import { p2dsetstat_execute } from './afni/p2dsetstat'
+import { parse_fs_lt_log_py_execute } from './afni/parse_fs_lt_log_py'
+import { plugout_drive_execute } from './afni/plugout_drive'
+import { plugout_ijk_execute } from './afni/plugout_ijk'
+import { plugout_tt_execute } from './afni/plugout_tt'
+import { plugout_tta_execute } from './afni/plugout_tta'
+import { prompt_popup_execute } from './afni/prompt_popup'
+import { prompt_user_execute } from './afni/prompt_user'
+import { pta_execute } from './afni/pta'
+import { qdelaunay_execute } from './afni/qdelaunay'
+import { qhull_execute } from './afni/qhull'
+import { quick_alpha_vals_py_execute } from './afni/quick_alpha_vals_py'
+import { quickspec_execute } from './afni/quickspec'
+import { quickspec_sl_execute } from './afni/quickspec_sl'
+import { quotize_execute } from './afni/quotize'
+import { r_pkgs_install_execute } from './afni/r_pkgs_install'
+import { rba_execute } from './afni/rba'
+import { rbox_execute } from './afni/rbox'
+import { read_matlab_files_py_execute } from './afni/read_matlab_files_py'
+import { realtime_receiver_execute } from './afni/realtime_receiver'
+import { retro_ts_py_execute } from './afni/retro_ts_py'
+import { rmz_execute } from './afni/rmz'
+import { roi2dataset_execute } from './afni/roi2dataset'
+import { roigrow_execute } from './afni/roigrow'
+import { rotcom_execute } from './afni/rotcom'
+import { rsfgen_execute } from './afni/rsfgen'
+import { rtfeedme_execute } from './afni/rtfeedme'
+import { samp_bias_execute } from './afni/samp_bias'
+import { scale_to_map_execute } from './afni/scale_to_map'
+import { serial_helper_execute } from './afni/serial_helper'
+import { sfim_execute } from './afni/sfim'
+import { slow_surf_clustsim_py_execute } from './afni/slow_surf_clustsim_py'
+import { spharm_deco_execute } from './afni/spharm_deco'
+import { spharm_reco_execute } from './afni/spharm_reco'
+import { stimband_execute } from './afni/stimband'
+import { strblast_execute } from './afni/strblast'
+import { suma_change_spec_execute } from './afni/suma_change_spec'
+import { suma_glxdino_execute } from './afni/suma_glxdino'
+import { surf2_vol_coord_execute } from './afni/surf2_vol_coord'
+import { surf_clust_execute } from './afni/surf_clust'
+import { surf_dist_execute } from './afni/surf_dist'
+import { surf_dset_info_execute } from './afni/surf_dset_info'
+import { surf_extrema_execute } from './afni/surf_extrema'
+import { surf_fwhm_execute } from './afni/surf_fwhm'
+import { surf_info_execute } from './afni/surf_info'
+import { surf_layers_execute } from './afni/surf_layers'
+import { surf_localstat_execute } from './afni/surf_localstat'
+import { surf_measures_execute } from './afni/surf_measures'
+import { surf_mesh_execute } from './afni/surf_mesh'
+import { surf_patch_execute } from './afni/surf_patch'
+import { surf_qual_execute } from './afni/surf_qual'
+import { surf_retino_map_execute } from './afni/surf_retino_map'
+import { surf_smooth_execute } from './afni/surf_smooth'
+import { surf_to_surf_execute } from './afni/surf_to_surf'
+import { surface_metrics_execute } from './afni/surface_metrics'
+import { tedana_wrapper_py_execute } from './afni/tedana_wrapper_py'
+import { tfim_execute } from './afni/tfim'
+import { timing_tool_py_execute } from './afni/timing_tool_py'
+import { to3d_execute } from './afni/to3d'
+import { tokens_execute } from './afni/tokens'
+import { trr_execute } from './afni/trr'
+import { uber_align_test_py_execute } from './afni/uber_align_test_py'
+import { uber_proc_py_execute } from './afni/uber_proc_py'
+import { uber_skel_execute } from './afni/uber_skel'
+import { uber_subject_py_execute } from './afni/uber_subject_py'
+import { un_warp_epi_py_execute } from './afni/un_warp_epi_py'
+import { uniq_images_execute } from './afni/uniq_images'
+import { v_1d_apar2mat_execute } from './afni/v_1d_apar2mat'
+import { v_1d_astrip_execute } from './afni/v_1d_astrip'
+import { v_1d_bandpass_execute } from './afni/v_1d_bandpass'
+import { v_1d_bport_execute } from './afni/v_1d_bport'
+import { v_1d_correlate_execute } from './afni/v_1d_correlate'
+import { v_1d_dw_grad_o_mat___execute } from './afni/v_1d_dw_grad_o_mat__'
+import { v_1d_flag_motion_execute } from './afni/v_1d_flag_motion'
+import { v_1d_marry_execute } from './afni/v_1d_marry'
+import { v_1d_nlfit_execute } from './afni/v_1d_nlfit'
+import { v_1d_rplot_execute } from './afni/v_1d_rplot'
+import { v_1d_sem_execute } from './afni/v_1d_sem'
+import { v_1d_tool_py_execute } from './afni/v_1d_tool_py'
+import { v_1d_tsort_execute } from './afni/v_1d_tsort'
+import { v_1d_upsample_execute } from './afni/v_1d_upsample'
+import { v_1dcat_execute } from './afni/v_1dcat'
+import { v_1ddot_execute } from './afni/v_1ddot'
+import { v_1deval_execute } from './afni/v_1deval'
+import { v_1dfft_execute } from './afni/v_1dfft'
+import { v_1dgen_arma11_execute } from './afni/v_1dgen_arma11'
+import { v_1dgrayplot_execute } from './afni/v_1dgrayplot'
+import { v_1dmatcalc_execute } from './afni/v_1dmatcalc'
+import { v_1dnorm_execute } from './afni/v_1dnorm'
+import { v_1dplot_execute } from './afni/v_1dplot'
+import { v_1dplot_py_execute } from './afni/v_1dplot_py'
+import { v_1dsound_execute } from './afni/v_1dsound'
+import { v_1dsum_execute } from './afni/v_1dsum'
+import { v_1dsvd_execute } from './afni/v_1dsvd'
+import { v_1dtranspose_execute } from './afni/v_1dtranspose'
+import { v_24swap_execute } from './afni/v_24swap'
+import { v_2d_im_reg_execute } from './afni/v_2d_im_reg'
+import { v_2dcat_execute } from './afni/v_2dcat'
+import { v_2perm_execute } from './afni/v_2perm'
+import { v_2swap_execute } from './afni/v_2swap'
+import { v_3_droimaker_execute } from './afni/v_3_droimaker'
+import { v_3d_aboverlap_execute } from './afni/v_3d_aboverlap'
+import { v_3d_acost_execute } from './afni/v_3d_acost'
+import { v_3d_afnito3_d_execute } from './afni/v_3d_afnito3_d'
+import { v_3d_afnito_analyze_execute } from './afni/v_3d_afnito_analyze'
+import { v_3d_afnito_nifti_execute } from './afni/v_3d_afnito_nifti'
+import { v_3d_afnito_niml_execute } from './afni/v_3d_afnito_niml'
+import { v_3d_afnito_raw_execute } from './afni/v_3d_afnito_raw'
+import { v_3d_allineate_execute } from './afni/v_3d_allineate'
+import { v_3d_amp_to_rsfc_execute } from './afni/v_3d_amp_to_rsfc'
+import { v_3d_anhist_execute } from './afni/v_3d_anhist'
+import { v_3d_anova2_execute } from './afni/v_3d_anova2'
+import { v_3d_anova3_execute } from './afni/v_3d_anova3'
+import { v_3d_anova_execute } from './afni/v_3d_anova'
+import { v_3d_attribute_execute } from './afni/v_3d_attribute'
+import { v_3d_auto_tcorrelate_execute } from './afni/v_3d_auto_tcorrelate'
+import { v_3d_autobox_execute } from './afni/v_3d_autobox'
+import { v_3d_automask_execute } from './afni/v_3d_automask'
+import { v_3d_ball_match_execute } from './afni/v_3d_ball_match'
+import { v_3d_bandpass_execute } from './afni/v_3d_bandpass'
+import { v_3d_blur_in_mask_execute } from './afni/v_3d_blur_in_mask'
+import { v_3d_blur_to_fwhm_execute } from './afni/v_3d_blur_to_fwhm'
+import { v_3d_brain_sync_execute } from './afni/v_3d_brain_sync'
+import { v_3d_brain_voyagerto_afni_execute } from './afni/v_3d_brain_voyagerto_afni'
+import { v_3d_brick_stat_execute } from './afni/v_3d_brick_stat'
+import { v_3d_clip_level_execute } from './afni/v_3d_clip_level'
+import { v_3d_clust_count_execute } from './afni/v_3d_clust_count'
+import { v_3d_clust_sim_execute } from './afni/v_3d_clust_sim'
+import { v_3d_clusterize_execute } from './afni/v_3d_clusterize'
+import { v_3d_cm_execute } from './afni/v_3d_cm'
+import { v_3d_compare_affine_execute } from './afni/v_3d_compare_affine'
+import { v_3d_conformist_execute } from './afni/v_3d_conformist'
+import { v_3d_convolve_execute } from './afni/v_3d_convolve'
+import { v_3d_cruiseto_afni_execute } from './afni/v_3d_cruiseto_afni'
+import { v_3d_deconvolve_execute } from './afni/v_3d_deconvolve'
+import { v_3d_degree_centrality_execute } from './afni/v_3d_degree_centrality'
+import { v_3d_depth_map_execute } from './afni/v_3d_depth_map'
+import { v_3d_despike_execute } from './afni/v_3d_despike'
+import { v_3d_detrend_execute } from './afni/v_3d_detrend'
+import { v_3d_dft_execute } from './afni/v_3d_dft'
+import { v_3d_diff_execute } from './afni/v_3d_diff'
+import { v_3d_dteig_execute } from './afni/v_3d_dteig'
+import { v_3d_dtto_dwi_execute } from './afni/v_3d_dtto_dwi'
+import { v_3d_dtto_noisy_dwi_execute } from './afni/v_3d_dtto_noisy_dwi'
+import { v_3d_dwito_dt_execute } from './afni/v_3d_dwito_dt'
+import { v_3d_dwuncert_execute } from './afni/v_3d_dwuncert'
+import { v_3d_ecm_execute } from './afni/v_3d_ecm'
+import { v_3d_edu_01_scale_execute } from './afni/v_3d_edu_01_scale'
+import { v_3d_eigs_to_dt_execute } from './afni/v_3d_eigs_to_dt'
+import { v_3d_empty_execute } from './afni/v_3d_empty'
+import { v_3d_entropy_execute } from './afni/v_3d_entropy'
+import { v_3d_errts_cormat_execute } from './afni/v_3d_errts_cormat'
+import { v_3d_exchange_execute } from './afni/v_3d_exchange'
+import { v_3d_extract_group_in_corr_execute } from './afni/v_3d_extract_group_in_corr'
+import { v_3d_extrema_execute } from './afni/v_3d_extrema'
+import { v_3d_fdr_execute } from './afni/v_3d_fdr'
+import { v_3d_fft_execute } from './afni/v_3d_fft'
+import { v_3d_friedman_execute } from './afni/v_3d_friedman'
+import { v_3d_fwhmx_execute } from './afni/v_3d_fwhmx'
+import { v_3d_gen_feature_dist_execute } from './afni/v_3d_gen_feature_dist'
+import { v_3d_gen_priors_execute } from './afni/v_3d_gen_priors'
+import { v_3d_getrow_execute } from './afni/v_3d_getrow'
+import { v_3d_grayplot_execute } from './afni/v_3d_grayplot'
+import { v_3d_group_in_corr_execute } from './afni/v_3d_group_in_corr'
+import { v_3d_hist_execute } from './afni/v_3d_hist'
+import { v_3d_icc_execute } from './afni/v_3d_icc'
+import { v_3d_intracranial_execute } from './afni/v_3d_intracranial'
+import { v_3d_inv_fmri_execute } from './afni/v_3d_inv_fmri'
+import { v_3d_isc_execute } from './afni/v_3d_isc'
+import { v_3d_kruskal_wallis_execute } from './afni/v_3d_kruskal_wallis'
+import { v_3d_lfcd_execute } from './afni/v_3d_lfcd'
+import { v_3d_lme_execute } from './afni/v_3d_lme'
+import { v_3d_lmer_execute } from './afni/v_3d_lmer'
+import { v_3d_local_acf_execute } from './afni/v_3d_local_acf'
+import { v_3d_local_bistat_execute } from './afni/v_3d_local_bistat'
+import { v_3d_local_histog_execute } from './afni/v_3d_local_histog'
+import { v_3d_local_pv_execute } from './afni/v_3d_local_pv'
+import { v_3d_local_svd_execute } from './afni/v_3d_local_svd'
+import { v_3d_local_unifize_execute } from './afni/v_3d_local_unifize'
+import { v_3d_localstat_execute } from './afni/v_3d_localstat'
+import { v_3d_lomb_scargle_execute } from './afni/v_3d_lomb_scargle'
+import { v_3d_lrflip_execute } from './afni/v_3d_lrflip'
+import { v_3d_lss_execute } from './afni/v_3d_lss'
+import { v_3d_mann_whitney_execute } from './afni/v_3d_mann_whitney'
+import { v_3d_mask_to_ascii_execute } from './afni/v_3d_mask_to_ascii'
+import { v_3d_match_execute } from './afni/v_3d_match'
+import { v_3d_mean_execute } from './afni/v_3d_mean'
+import { v_3d_median_filter_execute } from './afni/v_3d_median_filter'
+import { v_3d_mema_execute } from './afni/v_3d_mema'
+import { v_3d_mepfm_execute } from './afni/v_3d_mepfm'
+import { v_3d_mse_execute } from './afni/v_3d_mse'
+import { v_3d_mss_execute } from './afni/v_3d_mss'
+import { v_3d_multi_thresh_execute } from './afni/v_3d_multi_thresh'
+import { v_3d_mvm_execute } from './afni/v_3d_mvm'
+import { v_3d_mvm_validator_execute } from './afni/v_3d_mvm_validator'
+import { v_3d_net_corr_execute } from './afni/v_3d_net_corr'
+import { v_3d_nlfim_execute } from './afni/v_3d_nlfim'
+import { v_3d_normality_test_execute } from './afni/v_3d_normality_test'
+import { v_3d_notes_execute } from './afni/v_3d_notes'
+import { v_3d_nwarp_adjust_execute } from './afni/v_3d_nwarp_adjust'
+import { v_3d_nwarp_apply_execute } from './afni/v_3d_nwarp_apply'
+import { v_3d_nwarp_cat_execute } from './afni/v_3d_nwarp_cat'
+import { v_3d_nwarp_funcs_execute } from './afni/v_3d_nwarp_funcs'
+import { v_3d_nwarp_xyz_execute } from './afni/v_3d_nwarp_xyz'
+import { v_3d_overlap_execute } from './afni/v_3d_overlap'
+import { v_3d_par2_afni_execute } from './afni/v_3d_par2_afni'
+import { v_3d_periodogram_execute } from './afni/v_3d_periodogram'
+import { v_3d_pfm_execute } from './afni/v_3d_pfm'
+import { v_3d_polyfit_execute } from './afni/v_3d_polyfit'
+import { v_3d_pval_execute } from './afni/v_3d_pval'
+import { v_3d_pvmap_execute } from './afni/v_3d_pvmap'
+import { v_3d_qwarp_execute } from './afni/v_3d_qwarp'
+import { v_3d_rank_execute } from './afni/v_3d_rank'
+import { v_3d_rankizer_execute } from './afni/v_3d_rankizer'
+import { v_3d_re_ho_execute } from './afni/v_3d_re_ho'
+import { v_3d_reg_ana_execute } from './afni/v_3d_reg_ana'
+import { v_3d_remlfit_execute } from './afni/v_3d_remlfit'
+import { v_3d_retino_phase_execute } from './afni/v_3d_retino_phase'
+import { v_3d_roistats_execute } from './afni/v_3d_roistats'
+import { v_3d_row_fillin_execute } from './afni/v_3d_row_fillin'
+import { v_3d_rprog_demo_execute } from './afni/v_3d_rprog_demo'
+import { v_3d_rsfc_execute } from './afni/v_3d_rsfc'
+import { v_3d_seg_execute } from './afni/v_3d_seg'
+import { v_3d_setup_group_in_corr_execute } from './afni/v_3d_setup_group_in_corr'
+import { v_3d_sharpen_execute } from './afni/v_3d_sharpen'
+import { v_3d_signatures_execute } from './afni/v_3d_signatures'
+import { v_3d_skull_strip_execute } from './afni/v_3d_skull_strip'
+import { v_3d_slice_ndice_execute } from './afni/v_3d_slice_ndice'
+import { v_3d_space_time_corr_execute } from './afni/v_3d_space_time_corr'
+import { v_3d_spat_norm_execute } from './afni/v_3d_spat_norm'
+import { v_3d_stat_clust_execute } from './afni/v_3d_stat_clust'
+import { v_3d_surf2_vol_execute } from './afni/v_3d_surf2_vol'
+import { v_3d_surf_mask_execute } from './afni/v_3d_surf_mask'
+import { v_3d_synthesize_execute } from './afni/v_3d_synthesize'
+import { v_3d_tagalign_execute } from './afni/v_3d_tagalign'
+import { v_3d_tcat_execute } from './afni/v_3d_tcat'
+import { v_3d_tcorr1_d_execute } from './afni/v_3d_tcorr1_d'
+import { v_3d_tcorr_map_execute } from './afni/v_3d_tcorr_map'
+import { v_3d_tcorrelate_execute } from './afni/v_3d_tcorrelate'
+import { v_3d_tfilter_execute } from './afni/v_3d_tfilter'
+import { v_3d_tfitter_execute } from './afni/v_3d_tfitter'
+import { v_3d_threeto_rgb_execute } from './afni/v_3d_threeto_rgb'
+import { v_3d_tnorm_execute } from './afni/v_3d_tnorm'
+import { v_3d_tortoiseto_here_execute } from './afni/v_3d_tortoiseto_here'
+import { v_3d_toutcount_execute } from './afni/v_3d_toutcount'
+import { v_3d_toy_prog_execute } from './afni/v_3d_toy_prog'
+import { v_3d_tproject_execute } from './afni/v_3d_tproject'
+import { v_3d_tqual_execute } from './afni/v_3d_tqual'
+import { v_3d_track_id_execute } from './afni/v_3d_track_id'
+import { v_3d_trfix_execute } from './afni/v_3d_trfix'
+import { v_3d_tsgen_execute } from './afni/v_3d_tsgen'
+import { v_3d_tshift_execute } from './afni/v_3d_tshift'
+import { v_3d_tsmooth_execute } from './afni/v_3d_tsmooth'
+import { v_3d_tsort_execute } from './afni/v_3d_tsort'
+import { v_3d_tsplit4_d_execute } from './afni/v_3d_tsplit4_d'
+import { v_3d_tstat_execute } from './afni/v_3d_tstat'
+import { v_3d_tto1_d_execute } from './afni/v_3d_tto1_d'
+import { v_3d_twoto_complex_execute } from './afni/v_3d_twoto_complex'
+import { v_3d_undump_execute } from './afni/v_3d_undump'
+import { v_3d_unifize_execute } from './afni/v_3d_unifize'
+import { v_3d_upsample_execute } from './afni/v_3d_upsample'
+import { v_3d_vec_rgb_to_hsl_execute } from './afni/v_3d_vec_rgb_to_hsl'
+import { v_3d_vol2_surf_execute } from './afni/v_3d_vol2_surf'
+import { v_3d_warp_drive_execute } from './afni/v_3d_warp_drive'
+import { v_3d_warp_execute } from './afni/v_3d_warp'
+import { v_3d_wilcoxon_execute } from './afni/v_3d_wilcoxon'
+import { v_3d_winsor_execute } from './afni/v_3d_winsor'
+import { v_3d_xclust_sim_execute } from './afni/v_3d_xclust_sim'
+import { v_3d_xyzcat_execute } from './afni/v_3d_xyzcat'
+import { v_3d_zcat_execute } from './afni/v_3d_zcat'
+import { v_3d_zcutup_execute } from './afni/v_3d_zcutup'
+import { v_3d_zeropad_execute } from './afni/v_3d_zeropad'
+import { v_3d_zipper_zapper_execute } from './afni/v_3d_zipper_zapper'
+import { v_3d_zregrid_execute } from './afni/v_3d_zregrid'
+import { v_3danisosmooth_execute } from './afni/v_3danisosmooth'
+import { v_3daxialize_execute } from './afni/v_3daxialize'
+import { v_3dbucket_execute } from './afni/v_3dbucket'
+import { v_3dcalc_execute } from './afni/v_3dcalc'
+import { v_3dclust_execute } from './afni/v_3dclust'
+import { v_3dcopy_execute } from './afni/v_3dcopy'
+import { v_3ddelay_execute } from './afni/v_3ddelay'
+import { v_3ddot_beta_execute } from './afni/v_3ddot_beta'
+import { v_3ddot_execute } from './afni/v_3ddot'
+import { v_3dedge3_execute } from './afni/v_3dedge3'
+import { v_3dedgedog_execute } from './afni/v_3dedgedog'
+import { v_3dfim__execute } from './afni/v_3dfim_'
+import { v_3dfractionize_execute } from './afni/v_3dfractionize'
+import { v_3dhistog_execute } from './afni/v_3dhistog'
+import { v_3dinfill_execute } from './afni/v_3dinfill'
+import { v_3dinfo_execute } from './afni/v_3dinfo'
+import { v_3dkmeans_execute } from './afni/v_3dkmeans'
+import { v_3dmask_svd_execute } from './afni/v_3dmask_svd'
+import { v_3dmask_tool_execute } from './afni/v_3dmask_tool'
+import { v_3dmaskave_execute } from './afni/v_3dmaskave'
+import { v_3dmaskdump_execute } from './afni/v_3dmaskdump'
+import { v_3dmatcalc_execute } from './afni/v_3dmatcalc'
+import { v_3dmatmult_execute } from './afni/v_3dmatmult'
+import { v_3dmaxdisp_execute } from './afni/v_3dmaxdisp'
+import { v_3dmaxima_execute } from './afni/v_3dmaxima'
+import { v_3dmerge_execute } from './afni/v_3dmerge'
+import { v_3dnewid_execute } from './afni/v_3dnewid'
+import { v_3dnvals_execute } from './afni/v_3dnvals'
+import { v_3dpc_execute } from './afni/v_3dpc'
+import { v_3drefit_execute } from './afni/v_3drefit'
+import { v_3drename_execute } from './afni/v_3drename'
+import { v_3dresample_execute } from './afni/v_3dresample'
+import { v_3dretroicor_execute } from './afni/v_3dretroicor'
+import { v_3drotate_execute } from './afni/v_3drotate'
+import { v_3dsvm_execute } from './afni/v_3dsvm'
+import { v_3dsvm_linpredict_execute } from './afni/v_3dsvm_linpredict'
+import { v_3dto_xdataset_execute } from './afni/v_3dto_xdataset'
+import { v_3dttest___execute } from './afni/v_3dttest__'
+import { v_3dvolreg_execute } from './afni/v_3dvolreg'
+import { v_4swap_execute } from './afni/v_4swap'
+import { v__1d_diff_mag_execute } from './afni/v__1d_diff_mag'
+import { v__2dwarper_allin_execute } from './afni/v__2dwarper_allin'
+import { v__2dwarper_execute } from './afni/v__2dwarper'
+import { v__4_daverage_execute } from './afni/v__4_daverage'
+import { v__add_edge_execute } from './afni/v__add_edge'
+import { v__afni_env_execute } from './afni/v__afni_env'
+import { v__afni_orient2_raimap_execute } from './afni/v__afni_orient2_raimap'
+import { v__afni_orient_sign_execute } from './afni/v__afni_orient_sign'
+import { v__afni_r_package_install_execute } from './afni/v__afni_r_package_install'
+import { v__afni_refacer_make_master_execute } from './afni/v__afni_refacer_make_master'
+import { v__afni_refacer_make_onebig_a12_execute } from './afni/v__afni_refacer_make_onebig_a12'
+import { v__afni_refacer_run_execute } from './afni/v__afni_refacer_run'
+import { v__afni_run_me_execute } from './afni/v__afni_run_me'
+import { v__align_centers_execute } from './afni/v__align_centers'
+import { v__align_partial_oblique_execute } from './afni/v__align_partial_oblique'
+import { v__anaticor_execute } from './afni/v__anaticor'
+import { v__animal_warper_execute } from './afni/v__animal_warper'
+import { v__atlasize_execute } from './afni/v__atlasize'
+import { v__auto_tlrc_execute } from './afni/v__auto_tlrc'
+import { v__build_afni_xlib_execute } from './afni/v__build_afni_xlib'
+import { v__center_distance_execute } from './afni/v__center_distance'
+import { v__chauffeur_afni_execute } from './afni/v__chauffeur_afni'
+import { v__check_for_afni_dset_execute } from './afni/v__check_for_afni_dset'
+import { v__clip_volume_execute } from './afni/v__clip_volume'
+import { v__clust_exp_cat_lab_execute } from './afni/v__clust_exp_cat_lab'
+import { v__clust_exp_run_shiny_execute } from './afni/v__clust_exp_run_shiny'
+import { v__command_globb_execute } from './afni/v__command_globb'
+import { v__compute_gcor_execute } from './afni/v__compute_gcor'
+import { v__compute_oc_weights_execute } from './afni/v__compute_oc_weights'
+import { v__deblank_file_names_execute } from './afni/v__deblank_file_names'
+import { v__demo_prompt_execute } from './afni/v__demo_prompt'
+import { v__dice_metric_execute } from './afni/v__dice_metric'
+import { v__diff_files_execute } from './afni/v__diff_files'
+import { v__diff_tree_execute } from './afni/v__diff_tree'
+import { v__djunct_4d_imager_execute } from './afni/v__djunct_4d_imager'
+import { v__djunct_4d_slices_to_3d_vol_execute } from './afni/v__djunct_4d_slices_to_3d_vol'
+import { v__djunct_anonymize_execute } from './afni/v__djunct_anonymize'
+import { v__djunct_dwi_selector_execute } from './afni/v__djunct_dwi_selector'
+import { v__djunct_edgy_align_check_execute } from './afni/v__djunct_edgy_align_check'
+import { v__djunct_modal_smoothing_with_rep_execute } from './afni/v__djunct_modal_smoothing_with_rep'
+import { v__djunct_montage_coordinator_execute } from './afni/v__djunct_montage_coordinator'
+import { v__djunct_overlap_check_execute } from './afni/v__djunct_overlap_check'
+import { v__djunct_ssw_intermed_edge_imgs_execute } from './afni/v__djunct_ssw_intermed_edge_imgs'
+import { v__do_examples_execute } from './afni/v__do_examples'
+import { v__electro_grid_execute } from './afni/v__electro_grid'
+import { v__examine_gen_feat_dists_execute } from './afni/v__examine_gen_feat_dists'
+import { v__extract_meica_ortvec_execute } from './afni/v__extract_meica_ortvec'
+import { v__fast_roi_execute } from './afni/v__fast_roi'
+import { v__fat_tract_colorize_execute } from './afni/v__fat_tract_colorize'
+import { v__find_afni_dset_path_execute } from './afni/v__find_afni_dset_path'
+import { v__fix_fssphere_execute } from './afni/v__fix_fssphere'
+import { v__float_fix_execute } from './afni/v__float_fix'
+import { v__from_rai_execute } from './afni/v__from_rai'
+import { v__fs_roi_label_execute } from './afni/v__fs_roi_label'
+import { v__fslabel2dset_execute } from './afni/v__fslabel2dset'
+import { v__get_afni_dims_execute } from './afni/v__get_afni_dims'
+import { v__get_afni_id_execute } from './afni/v__get_afni_id'
+import { v__get_afni_orient_execute } from './afni/v__get_afni_orient'
+import { v__get_afni_prefix_execute } from './afni/v__get_afni_prefix'
+import { v__get_afni_res_execute } from './afni/v__get_afni_res'
+import { v__get_afni_version_execute } from './afni/v__get_afni_version'
+import { v__get_afni_view_execute } from './afni/v__get_afni_view'
+import { v__grad_flip_test_execute } from './afni/v__grad_flip_test'
+import { v__grayplot_execute } from './afni/v__grayplot'
+import { v__help_afni_execute } from './afni/v__help_afni'
+import { v__is_oblique_execute } from './afni/v__is_oblique'
+import { v__iso_masks_execute } from './afni/v__iso_masks'
+import { v__make_label_table_execute } from './afni/v__make_label_table'
+import { v__make_plug_diff_execute } from './afni/v__make_plug_diff'
+import { v__measure_bb_thick_execute } from './afni/v__measure_bb_thick'
+import { v__measure_erosion_thick_execute } from './afni/v__measure_erosion_thick'
+import { v__measure_in2out_execute } from './afni/v__measure_in2out'
+import { v__move_to_series_dirs_execute } from './afni/v__move_to_series_dirs'
+import { v__no_ext_execute } from './afni/v__no_ext'
+import { v__no_pound_execute } from './afni/v__no_pound'
+import { v__noisy_skull_strip_execute } from './afni/v__noisy_skull_strip'
+import { v__np_execute } from './afni/v__np'
+import { v__parse_afni_name_execute } from './afni/v__parse_afni_name'
+import { v__purify_1_d_execute } from './afni/v__purify_1_d'
+import { v__quiet_talkers_execute } from './afni/v__quiet_talkers'
+import { v__radial_correlate_execute } from './afni/v__radial_correlate'
+import { v__rename_panga_execute } from './afni/v__rename_panga'
+import { v__reorder_execute } from './afni/v__reorder'
+import { v__retino_proc_execute } from './afni/v__retino_proc'
+import { v__roi_corr_mat_execute } from './afni/v__roi_corr_mat'
+import { v__roi_decluster_execute } from './afni/v__roi_decluster'
+import { v__roi_modal_grow_execute } from './afni/v__roi_modal_grow'
+import { v__scale_volume_execute } from './afni/v__scale_volume'
+import { v__script_check_execute } from './afni/v__script_check'
+import { v__shift_volume_execute } from './afni/v__shift_volume'
+import { v__show_dynamic_range_execute } from './afni/v__show_dynamic_range'
+import { v__simulate_motion_execute } from './afni/v__simulate_motion'
+import { v__skull_strip_touch_up_execute } from './afni/v__skull_strip_touch_up'
+import { v__snapshot_volreg_execute } from './afni/v__snapshot_volreg'
+import { v__spharm_examples_execute } from './afni/v__spharm_examples'
+import { v__sswarper_execute } from './afni/v__sswarper'
+import { v__statauxcode_execute } from './afni/v__statauxcode'
+import { v__suma_acknowledge_execute } from './afni/v__suma_acknowledge'
+import { v__suma_align_to_experiment_execute } from './afni/v__suma_align_to_experiment'
+import { v__suma_fsvol_to_brik_execute } from './afni/v__suma_fsvol_to_brik'
+import { v__suma_make_spec_caret_execute } from './afni/v__suma_make_spec_caret'
+import { v__suma_make_spec_fs_execute } from './afni/v__suma_make_spec_fs'
+import { v__suma_make_spec_sf_execute } from './afni/v__suma_make_spec_sf'
+import { v__suma_renumber_fs_execute } from './afni/v__suma_renumber_fs'
+import { v__suma_reprefixize_spec_execute } from './afni/v__suma_reprefixize_spec'
+import { v__surf_smooth_heat_07_examples_execute } from './afni/v__surf_smooth_heat_07_examples'
+import { v__surf_to_vol_spackle_execute } from './afni/v__surf_to_vol_spackle'
+import { v__t1scale_execute } from './afni/v__t1scale'
+import { v__thickness_master_execute } from './afni/v__thickness_master'
+import { v__time_diff_execute } from './afni/v__time_diff'
+import { v__to_mni_awarp_execute } from './afni/v__to_mni_awarp'
+import { v__to_mni_qwarpar_execute } from './afni/v__to_mni_qwarpar'
+import { v__to_rai_execute } from './afni/v__to_rai'
+import { v__update_afni_binaries_execute } from './afni/v__update_afni_binaries'
+import { v__vol_center_execute } from './afni/v__vol_center'
+import { v__xyz_to_ijk_execute } from './afni/v__xyz_to_ijk'
+import { vecwarp_execute } from './afni/vecwarp'
+import { waver_execute } from './afni/waver'
+import { whirlgif_execute } from './afni/whirlgif'
+import { xmat_tool_py_execute } from './afni/xmat_tool_py'
+
+
+/**
+ * Run a command in this package dynamically from a params object.
+ *
+ * @param params The parameters.
+ * @param runner Command runner
+ *
+ */
+function execute(
+    params: any,
+    runner: Runner | null = null,
+) {
+    return {
+        "afni.1dApar2mat": v_1d_apar2mat_execute,
+        "afni.1dAstrip": v_1d_astrip_execute,
+        "afni.1dBandpass": v_1d_bandpass_execute,
+        "afni.1dBport": v_1d_bport_execute,
+        "afni.1dCorrelate": v_1d_correlate_execute,
+        "afni.1dDW_Grad_o_Mat++": v_1d_dw_grad_o_mat___execute,
+        "afni.1dFlagMotion": v_1d_flag_motion_execute,
+        "afni.1dMarry": v_1d_marry_execute,
+        "afni.1dNLfit": v_1d_nlfit_execute,
+        "afni.1dRplot": v_1d_rplot_execute,
+        "afni.1dSEM": v_1d_sem_execute,
+        "afni.1dTsort": v_1d_tsort_execute,
+        "afni.1dUpsample": v_1d_upsample_execute,
+        "afni.1d_tool.py": v_1d_tool_py_execute,
+        "afni.1dcat": v_1dcat_execute,
+        "afni.1ddot": v_1ddot_execute,
+        "afni.1deval": v_1deval_execute,
+        "afni.1dfft": v_1dfft_execute,
+        "afni.1dgenARMA11": v_1dgen_arma11_execute,
+        "afni.1dgrayplot": v_1dgrayplot_execute,
+        "afni.1dmatcalc": v_1dmatcalc_execute,
+        "afni.1dnorm": v_1dnorm_execute,
+        "afni.1dplot": v_1dplot_execute,
+        "afni.1dplot.py": v_1dplot_py_execute,
+        "afni.1dsound": v_1dsound_execute,
+        "afni.1dsum": v_1dsum_execute,
+        "afni.1dsvd": v_1dsvd_execute,
+        "afni.1dtranspose": v_1dtranspose_execute,
+        "afni.24swap": v_24swap_execute,
+        "afni.2dImReg": v_2d_im_reg_execute,
+        "afni.2dcat": v_2dcat_execute,
+        "afni.2perm": v_2perm_execute,
+        "afni.2swap": v_2swap_execute,
+        "afni.3DROIMaker": v_3_droimaker_execute,
+        "afni.3dABoverlap": v_3d_aboverlap_execute,
+        "afni.3dAFNIto3D": v_3d_afnito3_d_execute,
+        "afni.3dAFNItoANALYZE": v_3d_afnito_analyze_execute,
+        "afni.3dAFNItoNIFTI": v_3d_afnito_nifti_execute,
+        "afni.3dAFNItoNIML": v_3d_afnito_niml_execute,
+        "afni.3dAFNItoRaw": v_3d_afnito_raw_execute,
+        "afni.3dANOVA": v_3d_anova_execute,
+        "afni.3dANOVA2": v_3d_anova2_execute,
+        "afni.3dANOVA3": v_3d_anova3_execute,
+        "afni.3dAcost": v_3d_acost_execute,
+        "afni.3dAllineate": v_3d_allineate_execute,
+        "afni.3dAmpToRSFC": v_3d_amp_to_rsfc_execute,
+        "afni.3dAnhist": v_3d_anhist_execute,
+        "afni.3dAttribute": v_3d_attribute_execute,
+        "afni.3dAutoTcorrelate": v_3d_auto_tcorrelate_execute,
+        "afni.3dAutobox": v_3d_autobox_execute,
+        "afni.3dAutomask": v_3d_automask_execute,
+        "afni.3dBRAIN_VOYAGERtoAFNI": v_3d_brain_voyagerto_afni_execute,
+        "afni.3dBallMatch": v_3d_ball_match_execute,
+        "afni.3dBandpass": v_3d_bandpass_execute,
+        "afni.3dBlurInMask": v_3d_blur_in_mask_execute,
+        "afni.3dBlurToFWHM": v_3d_blur_to_fwhm_execute,
+        "afni.3dBrainSync": v_3d_brain_sync_execute,
+        "afni.3dBrickStat": v_3d_brick_stat_execute,
+        "afni.3dCM": v_3d_cm_execute,
+        "afni.3dCRUISEtoAFNI": v_3d_cruiseto_afni_execute,
+        "afni.3dClipLevel": v_3d_clip_level_execute,
+        "afni.3dClustCount": v_3d_clust_count_execute,
+        "afni.3dClustSim": v_3d_clust_sim_execute,
+        "afni.3dClusterize": v_3d_clusterize_execute,
+        "afni.3dCompareAffine": v_3d_compare_affine_execute,
+        "afni.3dConformist": v_3d_conformist_execute,
+        "afni.3dConvolve": v_3d_convolve_execute,
+        "afni.3dDFT": v_3d_dft_execute,
+        "afni.3dDTeig": v_3d_dteig_execute,
+        "afni.3dDTtoDWI": v_3d_dtto_dwi_execute,
+        "afni.3dDTtoNoisyDWI": v_3d_dtto_noisy_dwi_execute,
+        "afni.3dDWItoDT": v_3d_dwito_dt_execute,
+        "afni.3dDWUncert": v_3d_dwuncert_execute,
+        "afni.3dDeconvolve": v_3d_deconvolve_execute,
+        "afni.3dDegreeCentrality": v_3d_degree_centrality_execute,
+        "afni.3dDepthMap": v_3d_depth_map_execute,
+        "afni.3dDespike": v_3d_despike_execute,
+        "afni.3dDetrend": v_3d_detrend_execute,
+        "afni.3dDiff": v_3d_diff_execute,
+        "afni.3dECM": v_3d_ecm_execute,
+        "afni.3dEdu_01_scale": v_3d_edu_01_scale_execute,
+        "afni.3dEigsToDT": v_3d_eigs_to_dt_execute,
+        "afni.3dEmpty": v_3d_empty_execute,
+        "afni.3dEntropy": v_3d_entropy_execute,
+        "afni.3dErrtsCormat": v_3d_errts_cormat_execute,
+        "afni.3dExchange": v_3d_exchange_execute,
+        "afni.3dExtractGroupInCorr": v_3d_extract_group_in_corr_execute,
+        "afni.3dExtrema": v_3d_extrema_execute,
+        "afni.3dFDR": v_3d_fdr_execute,
+        "afni.3dFFT": v_3d_fft_execute,
+        "afni.3dFWHMx": v_3d_fwhmx_execute,
+        "afni.3dFriedman": v_3d_friedman_execute,
+        "afni.3dGenFeatureDist": v_3d_gen_feature_dist_execute,
+        "afni.3dGenPriors": v_3d_gen_priors_execute,
+        "afni.3dGetrow": v_3d_getrow_execute,
+        "afni.3dGrayplot": v_3d_grayplot_execute,
+        "afni.3dGroupInCorr": v_3d_group_in_corr_execute,
+        "afni.3dHist": v_3d_hist_execute,
+        "afni.3dICC": v_3d_icc_execute,
+        "afni.3dISC": v_3d_isc_execute,
+        "afni.3dIntracranial": v_3d_intracranial_execute,
+        "afni.3dInvFMRI": v_3d_inv_fmri_execute,
+        "afni.3dKruskalWallis": v_3d_kruskal_wallis_execute,
+        "afni.3dLFCD": v_3d_lfcd_execute,
+        "afni.3dLME": v_3d_lme_execute,
+        "afni.3dLMEr": v_3d_lmer_execute,
+        "afni.3dLRflip": v_3d_lrflip_execute,
+        "afni.3dLSS": v_3d_lss_execute,
+        "afni.3dLocalACF": v_3d_local_acf_execute,
+        "afni.3dLocalBistat": v_3d_local_bistat_execute,
+        "afni.3dLocalHistog": v_3d_local_histog_execute,
+        "afni.3dLocalPV": v_3d_local_pv_execute,
+        "afni.3dLocalSVD": v_3d_local_svd_execute,
+        "afni.3dLocalUnifize": v_3d_local_unifize_execute,
+        "afni.3dLocalstat": v_3d_localstat_execute,
+        "afni.3dLombScargle": v_3d_lomb_scargle_execute,
+        "afni.3dMEMA": v_3d_mema_execute,
+        "afni.3dMEPFM": v_3d_mepfm_execute,
+        "afni.3dMSE": v_3d_mse_execute,
+        "afni.3dMSS": v_3d_mss_execute,
+        "afni.3dMVM": v_3d_mvm_execute,
+        "afni.3dMVM_validator": v_3d_mvm_validator_execute,
+        "afni.3dMannWhitney": v_3d_mann_whitney_execute,
+        "afni.3dMaskToASCII": v_3d_mask_to_ascii_execute,
+        "afni.3dMatch": v_3d_match_execute,
+        "afni.3dMean": v_3d_mean_execute,
+        "afni.3dMedianFilter": v_3d_median_filter_execute,
+        "afni.3dMultiThresh": v_3d_multi_thresh_execute,
+        "afni.3dNLfim": v_3d_nlfim_execute,
+        "afni.3dNetCorr": v_3d_net_corr_execute,
+        "afni.3dNormalityTest": v_3d_normality_test_execute,
+        "afni.3dNotes": v_3d_notes_execute,
+        "afni.3dNwarpAdjust": v_3d_nwarp_adjust_execute,
+        "afni.3dNwarpApply": v_3d_nwarp_apply_execute,
+        "afni.3dNwarpCat": v_3d_nwarp_cat_execute,
+        "afni.3dNwarpFuncs": v_3d_nwarp_funcs_execute,
+        "afni.3dNwarpXYZ": v_3d_nwarp_xyz_execute,
+        "afni.3dOverlap": v_3d_overlap_execute,
+        "afni.3dPAR2AFNI": v_3d_par2_afni_execute,
+        "afni.3dPFM": v_3d_pfm_execute,
+        "afni.3dPVmap": v_3d_pvmap_execute,
+        "afni.3dPeriodogram": v_3d_periodogram_execute,
+        "afni.3dPolyfit": v_3d_polyfit_execute,
+        "afni.3dPval": v_3d_pval_execute,
+        "afni.3dQwarp": v_3d_qwarp_execute,
+        "afni.3dREMLfit": v_3d_remlfit_execute,
+        "afni.3dROIstats": v_3d_roistats_execute,
+        "afni.3dRSFC": v_3d_rsfc_execute,
+        "afni.3dRank": v_3d_rank_execute,
+        "afni.3dRankizer": v_3d_rankizer_execute,
+        "afni.3dReHo": v_3d_re_ho_execute,
+        "afni.3dRegAna": v_3d_reg_ana_execute,
+        "afni.3dRetinoPhase": v_3d_retino_phase_execute,
+        "afni.3dRowFillin": v_3d_row_fillin_execute,
+        "afni.3dRprogDemo": v_3d_rprog_demo_execute,
+        "afni.3dSeg": v_3d_seg_execute,
+        "afni.3dSetupGroupInCorr": v_3d_setup_group_in_corr_execute,
+        "afni.3dSharpen": v_3d_sharpen_execute,
+        "afni.3dSignatures": v_3d_signatures_execute,
+        "afni.3dSkullStrip": v_3d_skull_strip_execute,
+        "afni.3dSliceNDice": v_3d_slice_ndice_execute,
+        "afni.3dSpaceTimeCorr": v_3d_space_time_corr_execute,
+        "afni.3dSpatNorm": v_3d_spat_norm_execute,
+        "afni.3dStatClust": v_3d_stat_clust_execute,
+        "afni.3dSurf2Vol": v_3d_surf2_vol_execute,
+        "afni.3dSurfMask": v_3d_surf_mask_execute,
+        "afni.3dSynthesize": v_3d_synthesize_execute,
+        "afni.3dTORTOISEtoHere": v_3d_tortoiseto_here_execute,
+        "afni.3dTRfix": v_3d_trfix_execute,
+        "afni.3dTSgen": v_3d_tsgen_execute,
+        "afni.3dTagalign": v_3d_tagalign_execute,
+        "afni.3dTcat": v_3d_tcat_execute,
+        "afni.3dTcorr1D": v_3d_tcorr1_d_execute,
+        "afni.3dTcorrMap": v_3d_tcorr_map_execute,
+        "afni.3dTcorrelate": v_3d_tcorrelate_execute,
+        "afni.3dTfilter": v_3d_tfilter_execute,
+        "afni.3dTfitter": v_3d_tfitter_execute,
+        "afni.3dThreetoRGB": v_3d_threeto_rgb_execute,
+        "afni.3dTnorm": v_3d_tnorm_execute,
+        "afni.3dToutcount": v_3d_toutcount_execute,
+        "afni.3dToyProg": v_3d_toy_prog_execute,
+        "afni.3dTproject": v_3d_tproject_execute,
+        "afni.3dTqual": v_3d_tqual_execute,
+        "afni.3dTrackID": v_3d_track_id_execute,
+        "afni.3dTshift": v_3d_tshift_execute,
+        "afni.3dTsmooth": v_3d_tsmooth_execute,
+        "afni.3dTsort": v_3d_tsort_execute,
+        "afni.3dTsplit4D": v_3d_tsplit4_d_execute,
+        "afni.3dTstat": v_3d_tstat_execute,
+        "afni.3dTto1D": v_3d_tto1_d_execute,
+        "afni.3dTwotoComplex": v_3d_twoto_complex_execute,
+        "afni.3dUndump": v_3d_undump_execute,
+        "afni.3dUnifize": v_3d_unifize_execute,
+        "afni.3dUpsample": v_3d_upsample_execute,
+        "afni.3dVecRGB_to_HSL": v_3d_vec_rgb_to_hsl_execute,
+        "afni.3dVol2Surf": v_3d_vol2_surf_execute,
+        "afni.3dWarp": v_3d_warp_execute,
+        "afni.3dWarpDrive": v_3d_warp_drive_execute,
+        "afni.3dWilcoxon": v_3d_wilcoxon_execute,
+        "afni.3dWinsor": v_3d_winsor_execute,
+        "afni.3dXClustSim": v_3d_xclust_sim_execute,
+        "afni.3dXYZcat": v_3d_xyzcat_execute,
+        "afni.3dZcat": v_3d_zcat_execute,
+        "afni.3dZcutup": v_3d_zcutup_execute,
+        "afni.3dZeropad": v_3d_zeropad_execute,
+        "afni.3dZipperZapper": v_3d_zipper_zapper_execute,
+        "afni.3dZregrid": v_3d_zregrid_execute,
+        "afni.3danisosmooth": v_3danisosmooth_execute,
+        "afni.3daxialize": v_3daxialize_execute,
+        "afni.3dbucket": v_3dbucket_execute,
+        "afni.3dcalc": v_3dcalc_execute,
+        "afni.3dclust": v_3dclust_execute,
+        "afni.3dcopy": v_3dcopy_execute,
+        "afni.3ddelay": v_3ddelay_execute,
+        "afni.3ddot": v_3ddot_execute,
+        "afni.3ddot_beta": v_3ddot_beta_execute,
+        "afni.3dedge3": v_3dedge3_execute,
+        "afni.3dedgedog": v_3dedgedog_execute,
+        "afni.3dfim+": v_3dfim__execute,
+        "afni.3dfractionize": v_3dfractionize_execute,
+        "afni.3dhistog": v_3dhistog_execute,
+        "afni.3dinfill": v_3dinfill_execute,
+        "afni.3dinfo": v_3dinfo_execute,
+        "afni.3dkmeans": v_3dkmeans_execute,
+        "afni.3dmaskSVD": v_3dmask_svd_execute,
+        "afni.3dmask_tool": v_3dmask_tool_execute,
+        "afni.3dmaskave": v_3dmaskave_execute,
+        "afni.3dmaskdump": v_3dmaskdump_execute,
+        "afni.3dmatcalc": v_3dmatcalc_execute,
+        "afni.3dmatmult": v_3dmatmult_execute,
+        "afni.3dmaxdisp": v_3dmaxdisp_execute,
+        "afni.3dmaxima": v_3dmaxima_execute,
+        "afni.3dmerge": v_3dmerge_execute,
+        "afni.3dnewid": v_3dnewid_execute,
+        "afni.3dnvals": v_3dnvals_execute,
+        "afni.3dpc": v_3dpc_execute,
+        "afni.3drefit": v_3drefit_execute,
+        "afni.3drename": v_3drename_execute,
+        "afni.3dresample": v_3dresample_execute,
+        "afni.3dretroicor": v_3dretroicor_execute,
+        "afni.3drotate": v_3drotate_execute,
+        "afni.3dsvm": v_3dsvm_execute,
+        "afni.3dsvm_linpredict": v_3dsvm_linpredict_execute,
+        "afni.3dtoXdataset": v_3dto_xdataset_execute,
+        "afni.3dttest++": v_3dttest___execute,
+        "afni.3dvolreg": v_3dvolreg_execute,
+        "afni.4swap": v_4swap_execute,
+        "afni.@1dDiffMag": v__1d_diff_mag_execute,
+        "afni.@2dwarper.Allin": v__2dwarper_allin_execute,
+        "afni.@2dwarper": v__2dwarper_execute,
+        "afni.@4Daverage": v__4_daverage_execute,
+        "afni.@ANATICOR": v__anaticor_execute,
+        "afni.@AddEdge": v__add_edge_execute,
+        "afni.@AfniEnv": v__afni_env_execute,
+        "afni.@AfniOrient2RAImap": v__afni_orient2_raimap_execute,
+        "afni.@AfniOrientSign": v__afni_orient_sign_execute,
+        "afni.@Align_Centers": v__align_centers_execute,
+        "afni.@Atlasize": v__atlasize_execute,
+        "afni.@Center_Distance": v__center_distance_execute,
+        "afni.@CheckForAfniDset": v__check_for_afni_dset_execute,
+        "afni.@ClustExp_CatLab": v__clust_exp_cat_lab_execute,
+        "afni.@ClustExp_run_shiny": v__clust_exp_run_shiny_execute,
+        "afni.@CommandGlobb": v__command_globb_execute,
+        "afni.@DO.examples": v__do_examples_execute,
+        "afni.@DeblankFileNames": v__deblank_file_names_execute,
+        "afni.@DiceMetric": v__dice_metric_execute,
+        "afni.@ElectroGrid": v__electro_grid_execute,
+        "afni.@ExamineGenFeatDists": v__examine_gen_feat_dists_execute,
+        "afni.@FS_roi_label": v__fs_roi_label_execute,
+        "afni.@FSlabel2dset": v__fslabel2dset_execute,
+        "afni.@FindAfniDsetPath": v__find_afni_dset_path_execute,
+        "afni.@FromRAI": v__from_rai_execute,
+        "afni.@GetAfniDims": v__get_afni_dims_execute,
+        "afni.@GetAfniID": v__get_afni_id_execute,
+        "afni.@GetAfniOrient": v__get_afni_orient_execute,
+        "afni.@GetAfniPrefix": v__get_afni_prefix_execute,
+        "afni.@GetAfniRes": v__get_afni_res_execute,
+        "afni.@GetAfniView": v__get_afni_view_execute,
+        "afni.@GradFlipTest": v__grad_flip_test_execute,
+        "afni.@IsoMasks": v__iso_masks_execute,
+        "afni.@MakeLabelTable": v__make_label_table_execute,
+        "afni.@NoExt": v__no_ext_execute,
+        "afni.@NoPound": v__no_pound_execute,
+        "afni.@NoisySkullStrip": v__noisy_skull_strip_execute,
+        "afni.@Purify_1D": v__purify_1_d_execute,
+        "afni.@Quiet_Talkers": v__quiet_talkers_execute,
+        "afni.@ROI_Corr_Mat": v__roi_corr_mat_execute,
+        "afni.@ROI_decluster": v__roi_decluster_execute,
+        "afni.@ROI_modal_grow": v__roi_modal_grow_execute,
+        "afni.@RenamePanga": v__rename_panga_execute,
+        "afni.@Reorder": v__reorder_execute,
+        "afni.@RetinoProc": v__retino_proc_execute,
+        "afni.@SSwarper": v__sswarper_execute,
+        "afni.@SUMA_AlignToExperiment": v__suma_align_to_experiment_execute,
+        "afni.@SUMA_FSvolToBRIK": v__suma_fsvol_to_brik_execute,
+        "afni.@SUMA_Make_Spec_Caret": v__suma_make_spec_caret_execute,
+        "afni.@SUMA_Make_Spec_FS": v__suma_make_spec_fs_execute,
+        "afni.@SUMA_Make_Spec_SF": v__suma_make_spec_sf_execute,
+        "afni.@SUMA_renumber_FS": v__suma_renumber_fs_execute,
+        "afni.@ScaleVolume": v__scale_volume_execute,
+        "afni.@ScriptCheck": v__script_check_execute,
+        "afni.@Shift_Volume": v__shift_volume_execute,
+        "afni.@ShowDynamicRange": v__show_dynamic_range_execute,
+        "afni.@SkullStrip_TouchUp": v__skull_strip_touch_up_execute,
+        "afni.@Spharm.examples": v__spharm_examples_execute,
+        "afni.@SurfSmooth.HEAT_07.examples": v__surf_smooth_heat_07_examples_execute,
+        "afni.@T1scale": v__t1scale_execute,
+        "afni.@TimeDiff": v__time_diff_execute,
+        "afni.@ToRAI": v__to_rai_execute,
+        "afni.@VolCenter": v__vol_center_execute,
+        "afni.@afni.run.me": v__afni_run_me_execute,
+        "afni.@afni_R_package_install": v__afni_r_package_install_execute,
+        "afni.@afni_refacer_make_master": v__afni_refacer_make_master_execute,
+        "afni.@afni_refacer_make_onebigA12": v__afni_refacer_make_onebig_a12_execute,
+        "afni.@afni_refacer_run": v__afni_refacer_run_execute,
+        "afni.@align_partial_oblique": v__align_partial_oblique_execute,
+        "afni.@animal_warper": v__animal_warper_execute,
+        "afni.@auto_tlrc": v__auto_tlrc_execute,
+        "afni.@build_afni_Xlib": v__build_afni_xlib_execute,
+        "afni.@chauffeur_afni": v__chauffeur_afni_execute,
+        "afni.@clip_volume": v__clip_volume_execute,
+        "afni.@compute_OC_weights": v__compute_oc_weights_execute,
+        "afni.@compute_gcor": v__compute_gcor_execute,
+        "afni.@demo_prompt": v__demo_prompt_execute,
+        "afni.@diff.files": v__diff_files_execute,
+        "afni.@diff.tree": v__diff_tree_execute,
+        "afni.@djunct_4d_imager": v__djunct_4d_imager_execute,
+        "afni.@djunct_4d_slices_to_3d_vol": v__djunct_4d_slices_to_3d_vol_execute,
+        "afni.@djunct_anonymize": v__djunct_anonymize_execute,
+        "afni.@djunct_dwi_selector": v__djunct_dwi_selector_execute,
+        "afni.@djunct_edgy_align_check": v__djunct_edgy_align_check_execute,
+        "afni.@djunct_modal_smoothing_with_rep": v__djunct_modal_smoothing_with_rep_execute,
+        "afni.@djunct_montage_coordinator": v__djunct_montage_coordinator_execute,
+        "afni.@djunct_overlap_check": v__djunct_overlap_check_execute,
+        "afni.@djunct_ssw_intermed_edge_imgs": v__djunct_ssw_intermed_edge_imgs_execute,
+        "afni.@extract_meica_ortvec": v__extract_meica_ortvec_execute,
+        "afni.@fast_roi": v__fast_roi_execute,
+        "afni.@fat_tract_colorize": v__fat_tract_colorize_execute,
+        "afni.@fix_FSsphere": v__fix_fssphere_execute,
+        "afni.@float_fix": v__float_fix_execute,
+        "afni.@get.afni.version": v__get_afni_version_execute,
+        "afni.@grayplot": v__grayplot_execute,
+        "afni.@help.AFNI": v__help_afni_execute,
+        "afni.@isOblique": v__is_oblique_execute,
+        "afni.@make_plug_diff": v__make_plug_diff_execute,
+        "afni.@measure_bb_thick": v__measure_bb_thick_execute,
+        "afni.@measure_erosion_thick": v__measure_erosion_thick_execute,
+        "afni.@measure_in2out": v__measure_in2out_execute,
+        "afni.@move.to.series.dirs": v__move_to_series_dirs_execute,
+        "afni.@np": v__np_execute,
+        "afni.@parse_afni_name": v__parse_afni_name_execute,
+        "afni.@radial_correlate": v__radial_correlate_execute,
+        "afni.@simulate_motion": v__simulate_motion_execute,
+        "afni.@snapshot_volreg": v__snapshot_volreg_execute,
+        "afni.@statauxcode": v__statauxcode_execute,
+        "afni.@suma_acknowledge": v__suma_acknowledge_execute,
+        "afni.@suma_reprefixize_spec": v__suma_reprefixize_spec_execute,
+        "afni.@surf_to_vol_spackle": v__surf_to_vol_spackle_execute,
+        "afni.@thickness_master": v__thickness_master_execute,
+        "afni.@toMNI_Awarp": v__to_mni_awarp_execute,
+        "afni.@toMNI_Qwarpar": v__to_mni_qwarpar_execute,
+        "afni.@update.afni.binaries": v__update_afni_binaries_execute,
+        "afni.@xyz_to_ijk": v__xyz_to_ijk_execute,
+        "afni.AFNI_Batch_R": afni_batch_r_execute,
+        "afni.AnalyzeTrace": analyze_trace_execute,
+        "afni.BayesianGroupAna.py": bayesian_group_ana_py_execute,
+        "afni.BrainSkin": brain_skin_execute,
+        "afni.ClustExp_HistTable.py": clust_exp_hist_table_py_execute,
+        "afni.ClustExp_StatParse.py": clust_exp_stat_parse_py_execute,
+        "afni.CompareSurfaces": compare_surfaces_execute,
+        "afni.ConvertDset": convert_dset_execute,
+        "afni.ConvertSurface": convert_surface_execute,
+        "afni.ConvexHull": convex_hull_execute,
+        "afni.CreateIcosahedron": create_icosahedron_execute,
+        "afni.DTIStudioFibertoSegments": dtistudio_fiberto_segments_execute,
+        "afni.Dimon": dimon_execute,
+        "afni.DriveSuma": drive_suma_execute,
+        "afni.ExamineXmat": examine_xmat_execute,
+        "afni.FATCAT_matplot": fatcat_matplot_execute,
+        "afni.FIRdesign": firdesign_execute,
+        "afni.FSread_annot": fsread_annot_execute,
+        "afni.GLTsymtest": gltsymtest_execute,
+        "afni.IsoSurface": iso_surface_execute,
+        "afni.MBA": mba_execute,
+        "afni.MakeColorMap": make_color_map_execute,
+        "afni.MapIcosahedron": map_icosahedron_execute,
+        "afni.PTA": pta_execute,
+        "afni.RBA": rba_execute,
+        "afni.ROI2dataset": roi2dataset_execute,
+        "afni.ROIgrow": roigrow_execute,
+        "afni.RSFgen": rsfgen_execute,
+        "afni.RetroTS.py": retro_ts_py_execute,
+        "afni.SUMA_glxdino": suma_glxdino_execute,
+        "afni.SampBias": samp_bias_execute,
+        "afni.ScaleToMap": scale_to_map_execute,
+        "afni.SpharmDeco": spharm_deco_execute,
+        "afni.SpharmReco": spharm_reco_execute,
+        "afni.Surf2VolCoord": surf2_vol_coord_execute,
+        "afni.SurfClust": surf_clust_execute,
+        "afni.SurfDist": surf_dist_execute,
+        "afni.SurfDsetInfo": surf_dset_info_execute,
+        "afni.SurfExtrema": surf_extrema_execute,
+        "afni.SurfFWHM": surf_fwhm_execute,
+        "afni.SurfInfo": surf_info_execute,
+        "afni.SurfLayers": surf_layers_execute,
+        "afni.SurfLocalstat": surf_localstat_execute,
+        "afni.SurfMeasures": surf_measures_execute,
+        "afni.SurfMesh": surf_mesh_execute,
+        "afni.SurfPatch": surf_patch_execute,
+        "afni.SurfQual": surf_qual_execute,
+        "afni.SurfRetinoMap": surf_retino_map_execute,
+        "afni.SurfSmooth": surf_smooth_execute,
+        "afni.SurfToSurf": surf_to_surf_execute,
+        "afni.SurfaceMetrics": surface_metrics_execute,
+        "afni.TRR": trr_execute,
+        "afni.Vecwarp": vecwarp_execute,
+        "afni.abids_json_info.py": abids_json_info_py_execute,
+        "afni.abids_json_tool.py": abids_json_tool_py_execute,
+        "afni.abids_tool": abids_tool_execute,
+        "afni.adjunct_apqc_tsnr_general": adjunct_apqc_tsnr_general_execute,
+        "afni.adjunct_aw_tableize_roi_info.py": adjunct_aw_tableize_roi_info_py_execute,
+        "afni.adjunct_calc_mont_dims.py": adjunct_calc_mont_dims_py_execute,
+        "afni.adjunct_combine_str.py": adjunct_combine_str_py_execute,
+        "afni.adjunct_is_label.py": adjunct_is_label_py_execute,
+        "afni.adjunct_make_script_and_rst.py": adjunct_make_script_and_rst_py_execute,
+        "afni.adjunct_select_str.py": adjunct_select_str_py_execute,
+        "afni.adjunct_simplify_cost": adjunct_simplify_cost_execute,
+        "afni.adjunct_suma_fs_mask_and_qc": adjunct_suma_fs_mask_and_qc_execute,
+        "afni.adjunct_suma_fs_roi_info": adjunct_suma_fs_roi_info_execute,
+        "afni.adjunct_tort_plot_dp_align": adjunct_tort_plot_dp_align_execute,
+        "afni.adwarp": adwarp_execute,
+        "afni.afni": afni_execute,
+        "afni.afni_check_omp": afni_check_omp_execute,
+        "afni.afni_history": afni_history_execute,
+        "afni.afni_open": afni_open_execute,
+        "afni.afni_proc.py": afni_proc_py_execute,
+        "afni.afni_run_R": afni_run_r_execute,
+        "afni.afni_system_check.py": afni_system_check_py_execute,
+        "afni.aiv": aiv_execute,
+        "afni.align_epi_anat": align_epi_anat_execute,
+        "afni.ap_run_simple_rest": ap_run_simple_rest_execute,
+        "afni.apqc_make_html": apqc_make_html_execute,
+        "afni.apqc_make_tcsh.py": apqc_make_tcsh_py_execute,
+        "afni.apsearch": apsearch_execute,
+        "afni.auto_warp.py": auto_warp_py_execute,
+        "afni.balloon": balloon_execute,
+        "afni.bayes_view": bayes_view_execute,
+        "afni.build_afni.py": build_afni_py_execute,
+        "afni.cat_matvec": cat_matvec_execute,
+        "afni.ccalc": ccalc_execute,
+        "afni.cifti_tool": cifti_tool_execute,
+        "afni.cjpeg": cjpeg_execute,
+        "afni.column_cat": column_cat_execute,
+        "afni.convert_cdiflist_to_grads": convert_cdiflist_to_grads_execute,
+        "afni.count": count_execute,
+        "afni.dcm2niix_afni": dcm2niix_afni_execute,
+        "afni.dicom_hdr": dicom_hdr_execute,
+        "afni.dicom_hinfo": dicom_hinfo_execute,
+        "afni.dicom_to_raw": dicom_to_raw_execute,
+        "afni.djpeg": djpeg_execute,
+        "afni.dsetstat2p": dsetstat2p_execute,
+        "afni.epi_b0_correct": epi_b0_correct_execute,
+        "afni.fat_mat2d_plot.py": fat_mat2d_plot_py_execute,
+        "afni.fat_mat_sel.py": fat_mat_sel_py_execute,
+        "afni.fat_mat_tableize": fat_mat_tableize_execute,
+        "afni.fat_mvm_gridconv.py": fat_mvm_gridconv_py_execute,
+        "afni.fat_mvm_prep": fat_mvm_prep_execute,
+        "afni.fat_mvm_scripter.py": fat_mvm_scripter_py_execute,
+        "afni.fat_proc_align_anat_pair": fat_proc_align_anat_pair_execute,
+        "afni.fat_proc_axialize_anat": fat_proc_axialize_anat_execute,
+        "afni.fat_proc_connec_vis": fat_proc_connec_vis_execute,
+        "afni.fat_proc_convert_dcm_anat": fat_proc_convert_dcm_anat_execute,
+        "afni.fat_proc_convert_dcm_dwis": fat_proc_convert_dcm_dwis_execute,
+        "afni.fat_proc_decmap": fat_proc_decmap_execute,
+        "afni.fat_proc_dwi_to_dt": fat_proc_dwi_to_dt_execute,
+        "afni.fat_proc_filter_dwis": fat_proc_filter_dwis_execute,
+        "afni.fat_proc_imit2w_from_t1w": fat_proc_imit2w_from_t1w_execute,
+        "afni.fat_proc_map_to_dti": fat_proc_map_to_dti_execute,
+        "afni.fat_proc_select_vols": fat_proc_select_vols_execute,
+        "afni.fat_roi_row": fat_roi_row_execute,
+        "afni.fdrval": fdrval_execute,
+        "afni.fftest": fftest_execute,
+        "afni.file_tool": file_tool_execute,
+        "afni.fim2": fim2_execute,
+        "afni.find_variance_lines": find_variance_lines_execute,
+        "afni.float_scan": float_scan_execute,
+        "afni.from3d": from3d_execute,
+        "afni.gen_epi_review.py": gen_epi_review_py_execute,
+        "afni.gen_group_command": gen_group_command_execute,
+        "afni.gen_ss_review_scripts": gen_ss_review_scripts_execute,
+        "afni.gen_ss_review_table.py": gen_ss_review_table_py_execute,
+        "afni.get_afni_model_PRF": get_afni_model_prf_execute,
+        "afni.get_afni_model_PRF_6": get_afni_model_prf_6_execute,
+        "afni.get_afni_model_PRF_6_BAD": get_afni_model_prf_6_bad_execute,
+        "afni.gifti_tool": gifti_tool_execute,
+        "afni.help_format": help_format_execute,
+        "afni.im2niml": im2niml_execute,
+        "afni.images_equal": images_equal_execute,
+        "afni.imand": imand_execute,
+        "afni.imaver": imaver_execute,
+        "afni.imcalc": imcalc_execute,
+        "afni.imcat": imcat_execute,
+        "afni.imcutup": imcutup_execute,
+        "afni.imdump": imdump_execute,
+        "afni.immask": immask_execute,
+        "afni.imreg": imreg_execute,
+        "afni.imrotate": imrotate_execute,
+        "afni.imstack": imstack_execute,
+        "afni.imstat": imstat_execute,
+        "afni.imupsam": imupsam_execute,
+        "afni.init_user_dotfiles.py": init_user_dotfiles_py_execute,
+        "afni.inspec": inspec_execute,
+        "afni.make_pq_script.py": make_pq_script_py_execute,
+        "afni.make_random_timing.py": make_random_timing_py_execute,
+        "afni.make_stim_times.py": make_stim_times_py_execute,
+        "afni.map_TrackID": map_track_id_execute,
+        "afni.meica.py": meica_py_execute,
+        "afni.myget": myget_execute,
+        "afni.neuro_deconvolve.py": neuro_deconvolve_py_execute,
+        "afni.nicat": nicat_execute,
+        "afni.niccc": niccc_execute,
+        "afni.nifti_tool": nifti_tool_execute,
+        "afni.niml_feedme": niml_feedme_execute,
+        "afni.nsize": nsize_execute,
+        "afni.p2dsetstat": p2dsetstat_execute,
+        "afni.parse_fs_lt_log.py": parse_fs_lt_log_py_execute,
+        "afni.plugout_drive": plugout_drive_execute,
+        "afni.plugout_ijk": plugout_ijk_execute,
+        "afni.plugout_tt": plugout_tt_execute,
+        "afni.plugout_tta": plugout_tta_execute,
+        "afni.prompt_popup": prompt_popup_execute,
+        "afni.prompt_user": prompt_user_execute,
+        "afni.qdelaunay": qdelaunay_execute,
+        "afni.qhull": qhull_execute,
+        "afni.quick.alpha.vals.py": quick_alpha_vals_py_execute,
+        "afni.quickspec": quickspec_execute,
+        "afni.quickspecSL": quickspec_sl_execute,
+        "afni.quotize": quotize_execute,
+        "afni.rPkgsInstall": r_pkgs_install_execute,
+        "afni.rbox": rbox_execute,
+        "afni.read_matlab_files.py": read_matlab_files_py_execute,
+        "afni.realtime_receiver": realtime_receiver_execute,
+        "afni.rmz": rmz_execute,
+        "afni.rotcom": rotcom_execute,
+        "afni.rtfeedme": rtfeedme_execute,
+        "afni.serial_helper": serial_helper_execute,
+        "afni.sfim": sfim_execute,
+        "afni.slow_surf_clustsim.py": slow_surf_clustsim_py_execute,
+        "afni.stimband": stimband_execute,
+        "afni.strblast": strblast_execute,
+        "afni.suma_change_spec": suma_change_spec_execute,
+        "afni.tedana_wrapper.py": tedana_wrapper_py_execute,
+        "afni.tfim": tfim_execute,
+        "afni.timing_tool.py": timing_tool_py_execute,
+        "afni.to3d": to3d_execute,
+        "afni.tokens": tokens_execute,
+        "afni.uber_align_test.py": uber_align_test_py_execute,
+        "afni.uber_proc.py": uber_proc_py_execute,
+        "afni.uber_skel": uber_skel_execute,
+        "afni.uber_subject.py": uber_subject_py_execute,
+        "afni.unWarpEPI.py": un_warp_epi_py_execute,
+        "afni.uniq_images": uniq_images_execute,
+        "afni.waver": waver_execute,
+        "afni.whirlgif": whirlgif_execute,
+        "afni.xmat_tool.py": xmat_tool_py_execute,
+    }[params["@type"]](params, runner)
+}
+
+
+export {
+      execute,
+};

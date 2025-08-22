@@ -363,14 +363,16 @@ function dcmdrle_fs_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DcmdrleFsOutputs`).
  */
 function dcmdrle_fs_execute(
     params: DcmdrleFsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DcmdrleFsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DCMDRLE_FS_METADATA);
     params = execution.params(params)
     const cargs = dcmdrle_fs_cargs(params, execution)
     const ret = dcmdrle_fs_outputs(params, execution)
@@ -457,10 +459,8 @@ function dcmdrle_fs(
     padding_create: string | null = null,
     runner: Runner | null = null,
 ): DcmdrleFsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DCMDRLE_FS_METADATA);
     const params = dcmdrle_fs_params(input_file, output_file, help, version, arguments_, quiet, verbose, debug, log_level, log_config, read_file, read_file_only, read_dataset, uid_default, uid_always, byte_order_default, byte_order_reverse, write_file, write_dataset, write_xfer_little, write_xfer_big, write_xfer_implicit, enable_new_vr, disable_new_vr, group_length_recalc, group_length_create, group_length_remove, length_explicit, length_undefined, padding_retain, padding_off, padding_create)
-    return dcmdrle_fs_execute(params, execution);
+    return dcmdrle_fs_execute(params, runner);
 }
 
 
@@ -469,8 +469,6 @@ export {
       DcmdrleFsOutputs,
       DcmdrleFsParameters,
       dcmdrle_fs,
-      dcmdrle_fs_cargs,
       dcmdrle_fs_execute,
-      dcmdrle_fs_outputs,
       dcmdrle_fs_params,
 };

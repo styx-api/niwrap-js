@@ -151,14 +151,16 @@ function v_3dmaxdisp_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dmaxdispOutputs`).
  */
 function v_3dmaxdisp_execute(
     params: V3dmaxdispParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dmaxdispOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DMAXDISP_METADATA);
     params = execution.params(params)
     const cargs = v_3dmaxdisp_cargs(params, execution)
     const ret = v_3dmaxdisp_outputs(params, execution)
@@ -187,10 +189,8 @@ function v_3dmaxdisp(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dmaxdispOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DMAXDISP_METADATA);
     const params = v_3dmaxdisp_params(inset, matrix, verbose)
-    return v_3dmaxdisp_execute(params, execution);
+    return v_3dmaxdisp_execute(params, runner);
 }
 
 
@@ -199,8 +199,6 @@ export {
       V3dmaxdispParameters,
       V_3DMAXDISP_METADATA,
       v_3dmaxdisp,
-      v_3dmaxdisp_cargs,
       v_3dmaxdisp_execute,
-      v_3dmaxdisp_outputs,
       v_3dmaxdisp_params,
 };

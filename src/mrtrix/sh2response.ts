@@ -296,14 +296,16 @@ function sh2response_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Sh2responseOutputs`).
  */
 function sh2response_execute(
     params: Sh2responseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Sh2responseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SH2RESPONSE_METADATA);
     params = execution.params(params)
     const cargs = sh2response_cargs(params, execution)
     const ret = sh2response_outputs(params, execution)
@@ -361,10 +363,8 @@ function sh2response(
     version: boolean = false,
     runner: Runner | null = null,
 ): Sh2responseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SH2RESPONSE_METADATA);
     const params = sh2response_params(sh, mask, directions, response, lmax, dump, info, quiet, debug, force, nthreads, config, help, version)
-    return sh2response_execute(params, execution);
+    return sh2response_execute(params, runner);
 }
 
 
@@ -374,10 +374,7 @@ export {
       Sh2responseOutputs,
       Sh2responseParameters,
       sh2response,
-      sh2response_cargs,
-      sh2response_config_cargs,
       sh2response_config_params,
       sh2response_execute,
-      sh2response_outputs,
       sh2response_params,
 };

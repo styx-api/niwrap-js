@@ -146,14 +146,16 @@ function dmri_violin_plots_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriViolinPlotsOutputs`).
  */
 function dmri_violin_plots_execute(
     params: DmriViolinPlotsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriViolinPlotsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_VIOLIN_PLOTS_METADATA);
     params = execution.params(params)
     const cargs = dmri_violin_plots_cargs(params, execution)
     const ret = dmri_violin_plots_outputs(params, execution)
@@ -182,10 +184,8 @@ function dmri_violin_plots(
     structure: string,
     runner: Runner | null = null,
 ): DmriViolinPlotsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_VIOLIN_PLOTS_METADATA);
     const params = dmri_violin_plots_params(input_directory, labels, structure)
-    return dmri_violin_plots_execute(params, execution);
+    return dmri_violin_plots_execute(params, runner);
 }
 
 
@@ -194,8 +194,6 @@ export {
       DmriViolinPlotsOutputs,
       DmriViolinPlotsParameters,
       dmri_violin_plots,
-      dmri_violin_plots_cargs,
       dmri_violin_plots_execute,
-      dmri_violin_plots_outputs,
       dmri_violin_plots_params,
 };

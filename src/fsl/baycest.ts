@@ -172,14 +172,16 @@ function baycest_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BaycestOutputs`).
  */
 function baycest_execute(
     params: BaycestParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BaycestOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BAYCEST_METADATA);
     params = execution.params(params)
     const cargs = baycest_cargs(params, execution)
     const ret = baycest_outputs(params, execution)
@@ -218,10 +220,8 @@ function baycest(
     t12prior_flag: boolean = false,
     runner: Runner | null = null,
 ): BaycestOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BAYCEST_METADATA);
     const params = baycest_params(data_file, mask_file, output_dir, pools_file, spec_file, ptrain_file, spatial_flag, t12prior_flag)
-    return baycest_execute(params, execution);
+    return baycest_execute(params, runner);
 }
 
 
@@ -230,8 +230,6 @@ export {
       BaycestOutputs,
       BaycestParameters,
       baycest,
-      baycest_cargs,
       baycest_execute,
-      baycest_outputs,
       baycest_params,
 };

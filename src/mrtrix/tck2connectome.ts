@@ -415,14 +415,16 @@ function tck2connectome_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Tck2connectomeOutputs`).
  */
 function tck2connectome_execute(
     params: Tck2connectomeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Tck2connectomeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCK2CONNECTOME_METADATA);
     params = execution.params(params)
     const cargs = tck2connectome_cargs(params, execution)
     const ret = tck2connectome_outputs(params, execution)
@@ -507,10 +509,8 @@ function tck2connectome(
     version: boolean = false,
     runner: Runner | null = null,
 ): Tck2connectomeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCK2CONNECTOME_METADATA);
     const params = tck2connectome_params(tracks_in, nodes_in, connectome_out, assignment_end_voxels, assignment_radial_search, assignment_reverse_search, assignment_forward_search, assignment_all_voxels, scale_length, scale_invlength, scale_invnodevol, scale_file, symmetric, zero_diagonal, stat_edge, tck_weights_in, keep_unassigned, out_assignments, vector, info, quiet, debug, force, nthreads, config, help, version)
-    return tck2connectome_execute(params, execution);
+    return tck2connectome_execute(params, runner);
 }
 
 
@@ -520,10 +520,7 @@ export {
       Tck2connectomeOutputs,
       Tck2connectomeParameters,
       tck2connectome,
-      tck2connectome_cargs,
-      tck2connectome_config_cargs,
       tck2connectome_config_params,
       tck2connectome_execute,
-      tck2connectome_outputs,
       tck2connectome_params,
 };

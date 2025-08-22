@@ -136,14 +136,16 @@ function tkmedit_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TkmeditOutputs`).
  */
 function tkmedit_execute(
     params: TkmeditParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TkmeditOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TKMEDIT_METADATA);
     params = execution.params(params)
     const cargs = tkmedit_cargs(params, execution)
     const ret = tkmedit_outputs(params, execution)
@@ -170,10 +172,8 @@ function tkmedit(
     options: string | null = null,
     runner: Runner | null = null,
 ): TkmeditOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TKMEDIT_METADATA);
     const params = tkmedit_params(input_volume, options)
-    return tkmedit_execute(params, execution);
+    return tkmedit_execute(params, runner);
 }
 
 
@@ -182,8 +182,6 @@ export {
       TkmeditOutputs,
       TkmeditParameters,
       tkmedit,
-      tkmedit_cargs,
       tkmedit_execute,
-      tkmedit_outputs,
       tkmedit_params,
 };

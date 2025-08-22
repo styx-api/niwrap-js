@@ -234,14 +234,16 @@ function trac_paths_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TracPathsOutputs`).
  */
 function trac_paths_execute(
     params: TracPathsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TracPathsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TRAC_PATHS_METADATA);
     params = execution.params(params)
     const cargs = trac_paths_cargs(params, execution)
     const ret = trac_paths_outputs(params, execution)
@@ -290,10 +292,8 @@ function trac_paths(
     help: boolean = false,
     runner: Runner | null = null,
 ): TracPathsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TRAC_PATHS_METADATA);
     const params = trac_paths_params(dmrirc_file, log_file, no_log, cmd_file, no_cmd, no_isrunning, umask, group_id, allow_core_dump, debug, dontrun, version, help)
-    return trac_paths_execute(params, execution);
+    return trac_paths_execute(params, runner);
 }
 
 
@@ -302,8 +302,6 @@ export {
       TracPathsOutputs,
       TracPathsParameters,
       trac_paths,
-      trac_paths_cargs,
       trac_paths_execute,
-      trac_paths_outputs,
       trac_paths_params,
 };

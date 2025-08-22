@@ -148,14 +148,16 @@ function antsuse_landmark_images_to_get_affine_transform_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsuseLandmarkImagesToGetAffineTransformOutputs`).
  */
 function antsuse_landmark_images_to_get_affine_transform_execute(
     params: AntsuseLandmarkImagesToGetAffineTransformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsuseLandmarkImagesToGetAffineTransformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTSUSE_LANDMARK_IMAGES_TO_GET_AFFINE_TRANSFORM_METADATA);
     params = execution.params(params)
     const cargs = antsuse_landmark_images_to_get_affine_transform_cargs(params, execution)
     const ret = antsuse_landmark_images_to_get_affine_transform_outputs(params, execution)
@@ -186,10 +188,8 @@ function antsuse_landmark_images_to_get_affine_transform(
     output_affine: string,
     runner: Runner | null = null,
 ): AntsuseLandmarkImagesToGetAffineTransformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTSUSE_LANDMARK_IMAGES_TO_GET_AFFINE_TRANSFORM_METADATA);
     const params = antsuse_landmark_images_to_get_affine_transform_params(fixed_image, moving_image, transform_type, output_affine)
-    return antsuse_landmark_images_to_get_affine_transform_execute(params, execution);
+    return antsuse_landmark_images_to_get_affine_transform_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       AntsuseLandmarkImagesToGetAffineTransformOutputs,
       AntsuseLandmarkImagesToGetAffineTransformParameters,
       antsuse_landmark_images_to_get_affine_transform,
-      antsuse_landmark_images_to_get_affine_transform_cargs,
       antsuse_landmark_images_to_get_affine_transform_execute,
-      antsuse_landmark_images_to_get_affine_transform_outputs,
       antsuse_landmark_images_to_get_affine_transform_params,
 };

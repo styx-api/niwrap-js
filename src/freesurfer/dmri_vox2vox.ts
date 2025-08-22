@@ -229,14 +229,16 @@ function dmri_vox2vox_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriVox2voxOutputs`).
  */
 function dmri_vox2vox_execute(
     params: DmriVox2voxParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriVox2voxOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_VOX2VOX_METADATA);
     params = execution.params(params)
     const cargs = dmri_vox2vox_cargs(params, execution)
     const ret = dmri_vox2vox_outputs(params, execution)
@@ -285,10 +287,8 @@ function dmri_vox2vox(
     version: boolean = false,
     runner: Runner | null = null,
 ): DmriVox2voxOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_VOX2VOX_METADATA);
     const params = dmri_vox2vox_params(input_files, output_files, input_reference, output_reference, affine_registration, nonlinear_registration, input_directory, output_directory, inverse_nonlinear, debug, check_options, help, version)
-    return dmri_vox2vox_execute(params, execution);
+    return dmri_vox2vox_execute(params, runner);
 }
 
 
@@ -297,8 +297,6 @@ export {
       DmriVox2voxOutputs,
       DmriVox2voxParameters,
       dmri_vox2vox,
-      dmri_vox2vox_cargs,
       dmri_vox2vox_execute,
-      dmri_vox2vox_outputs,
       dmri_vox2vox_params,
 };

@@ -296,14 +296,16 @@ function v_3dvolreg_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dvolregOutputs`).
  */
 function v_3dvolreg_execute(
     params: V3dvolregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dvolregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DVOLREG_METADATA);
     params = execution.params(params)
     const cargs = v_3dvolreg_cargs(params, execution)
     const ret = v_3dvolreg_outputs(params, execution)
@@ -356,10 +358,8 @@ function v_3dvolreg(
     maxdisp1d: string | null = null,
     runner: Runner | null = null,
 ): V3dvolregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DVOLREG_METADATA);
     const params = v_3dvolreg_params(prefix, in_file, copyorigin, twopass, fourier, in_weight_volume, in_weight_volume_2, interp, num_threads, outputtype, timeshift, verbose, basefile, zpad, maxdisp1d)
-    return v_3dvolreg_execute(params, execution);
+    return v_3dvolreg_execute(params, runner);
 }
 
 
@@ -368,8 +368,6 @@ export {
       V3dvolregParameters,
       V_3DVOLREG_METADATA,
       v_3dvolreg,
-      v_3dvolreg_cargs,
       v_3dvolreg_execute,
-      v_3dvolreg_outputs,
       v_3dvolreg_params,
 };

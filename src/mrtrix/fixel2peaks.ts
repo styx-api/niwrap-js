@@ -361,14 +361,16 @@ function fixel2peaks_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fixel2peaksOutputs`).
  */
 function fixel2peaks_execute(
     params: Fixel2peaksParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fixel2peaksOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIXEL2PEAKS_METADATA);
     params = execution.params(params)
     const cargs = fixel2peaks_cargs(params, execution)
     const ret = fixel2peaks_outputs(params, execution)
@@ -421,10 +423,8 @@ function fixel2peaks(
     version: boolean = false,
     runner: Runner | null = null,
 ): Fixel2peaksOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIXEL2PEAKS_METADATA);
     const params = fixel2peaks_params(in_, out, number_, nan, info, quiet, debug, force, nthreads, config, help, version)
-    return fixel2peaks_execute(params, execution);
+    return fixel2peaks_execute(params, runner);
 }
 
 
@@ -436,14 +436,9 @@ export {
       Fixel2peaksVariousFileParameters,
       Fixel2peaksVariousStringParameters,
       fixel2peaks,
-      fixel2peaks_cargs,
-      fixel2peaks_config_cargs,
       fixel2peaks_config_params,
       fixel2peaks_execute,
-      fixel2peaks_outputs,
       fixel2peaks_params,
-      fixel2peaks_various_file_cargs,
       fixel2peaks_various_file_params,
-      fixel2peaks_various_string_cargs,
       fixel2peaks_various_string_params,
 };

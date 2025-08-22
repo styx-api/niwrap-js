@@ -143,14 +143,16 @@ function quotize_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `QuotizeOutputs`).
  */
 function quotize_execute(
     params: QuotizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): QuotizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(QUOTIZE_METADATA);
     params = execution.params(params)
     const cargs = quotize_cargs(params, execution)
     const ret = quotize_outputs(params, execution)
@@ -179,10 +181,8 @@ function quotize(
     output_file: string,
     runner: Runner | null = null,
 ): QuotizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(QUOTIZE_METADATA);
     const params = quotize_params(name, input_file, output_file)
-    return quotize_execute(params, execution);
+    return quotize_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       QuotizeOutputs,
       QuotizeParameters,
       quotize,
-      quotize_cargs,
       quotize_execute,
-      quotize_outputs,
       quotize_params,
 };

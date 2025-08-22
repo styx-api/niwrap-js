@@ -193,14 +193,16 @@ function mri_hausdorff_dist_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriHausdorffDistOutputs`).
  */
 function mri_hausdorff_dist_execute(
     params: MriHausdorffDistParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriHausdorffDistOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_HAUSDORFF_DIST_METADATA);
     params = execution.params(params)
     const cargs = mri_hausdorff_dist_cargs(params, execution)
     const ret = mri_hausdorff_dist_outputs(params, execution)
@@ -239,10 +241,8 @@ function mri_hausdorff_dist(
     label_index: number | null = null,
     runner: Runner | null = null,
 ): MriHausdorffDistOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_HAUSDORFF_DIST_METADATA);
     const params = mri_hausdorff_dist_params(vol1, vol2, output_text_file, threshold, input_file_flag, blur_sigma, max_flag, label_index)
-    return mri_hausdorff_dist_execute(params, execution);
+    return mri_hausdorff_dist_execute(params, runner);
 }
 
 
@@ -251,8 +251,6 @@ export {
       MriHausdorffDistOutputs,
       MriHausdorffDistParameters,
       mri_hausdorff_dist,
-      mri_hausdorff_dist_cargs,
       mri_hausdorff_dist_execute,
-      mri_hausdorff_dist_outputs,
       mri_hausdorff_dist_params,
 };

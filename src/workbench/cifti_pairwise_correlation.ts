@@ -160,14 +160,16 @@ function cifti_pairwise_correlation_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiPairwiseCorrelationOutputs`).
  */
 function cifti_pairwise_correlation_execute(
     params: CiftiPairwiseCorrelationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiPairwiseCorrelationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_PAIRWISE_CORRELATION_METADATA);
     params = execution.params(params)
     const cargs = cifti_pairwise_correlation_cargs(params, execution)
     const ret = cifti_pairwise_correlation_outputs(params, execution)
@@ -202,10 +204,8 @@ function cifti_pairwise_correlation(
     opt_override_mapping_check: boolean = false,
     runner: Runner | null = null,
 ): CiftiPairwiseCorrelationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_PAIRWISE_CORRELATION_METADATA);
     const params = cifti_pairwise_correlation_params(cifti_a, cifti_b, cifti_out, opt_fisher_z, opt_override_mapping_check)
-    return cifti_pairwise_correlation_execute(params, execution);
+    return cifti_pairwise_correlation_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       CiftiPairwiseCorrelationOutputs,
       CiftiPairwiseCorrelationParameters,
       cifti_pairwise_correlation,
-      cifti_pairwise_correlation_cargs,
       cifti_pairwise_correlation_execute,
-      cifti_pairwise_correlation_outputs,
       cifti_pairwise_correlation_params,
 };

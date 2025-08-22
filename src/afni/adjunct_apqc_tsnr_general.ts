@@ -378,14 +378,16 @@ function adjunct_apqc_tsnr_general_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AdjunctApqcTsnrGeneralOutputs`).
  */
 function adjunct_apqc_tsnr_general_execute(
     params: AdjunctApqcTsnrGeneralParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AdjunctApqcTsnrGeneralOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADJUNCT_APQC_TSNR_GENERAL_METADATA);
     params = execution.params(params)
     const cargs = adjunct_apqc_tsnr_general_cargs(params, execution)
     const ret = adjunct_apqc_tsnr_general_outputs(params, execution)
@@ -454,10 +456,8 @@ function adjunct_apqc_tsnr_general(
     echo: boolean = false,
     runner: Runner | null = null,
 ): AdjunctApqcTsnrGeneralOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADJUNCT_APQC_TSNR_GENERAL_METADATA);
     const params = adjunct_apqc_tsnr_general_params(montgap, montcolor, montx, monty, opacity, blowup, save_ftype, set_dicom_xyz, set_ijk, set_subbricks, olay_alpha, olay_boxed, thr_olay, ulay_range_nz, ulay_range, delta_slices, olay_disc_hot_range, olay_cont_max, cbar_cont, no_cor, no_sag, no_axi, echo)
-    return adjunct_apqc_tsnr_general_execute(params, execution);
+    return adjunct_apqc_tsnr_general_execute(params, runner);
 }
 
 
@@ -466,8 +466,6 @@ export {
       AdjunctApqcTsnrGeneralOutputs,
       AdjunctApqcTsnrGeneralParameters,
       adjunct_apqc_tsnr_general,
-      adjunct_apqc_tsnr_general_cargs,
       adjunct_apqc_tsnr_general_execute,
-      adjunct_apqc_tsnr_general_outputs,
       adjunct_apqc_tsnr_general_params,
 };

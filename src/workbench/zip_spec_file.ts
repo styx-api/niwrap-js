@@ -159,14 +159,16 @@ function zip_spec_file_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ZipSpecFileOutputs`).
  */
 function zip_spec_file_execute(
     params: ZipSpecFileParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ZipSpecFileOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ZIP_SPEC_FILE_METADATA);
     params = execution.params(params)
     const cargs = zip_spec_file_cargs(params, execution)
     const ret = zip_spec_file_outputs(params, execution)
@@ -201,10 +203,8 @@ function zip_spec_file(
     opt_skip_missing: boolean = false,
     runner: Runner | null = null,
 ): ZipSpecFileOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ZIP_SPEC_FILE_METADATA);
     const params = zip_spec_file_params(spec_file, extract_folder, zip_file, opt_base_dir_directory, opt_skip_missing)
-    return zip_spec_file_execute(params, execution);
+    return zip_spec_file_execute(params, runner);
 }
 
 
@@ -213,8 +213,6 @@ export {
       ZipSpecFileOutputs,
       ZipSpecFileParameters,
       zip_spec_file,
-      zip_spec_file_cargs,
       zip_spec_file_execute,
-      zip_spec_file_outputs,
       zip_spec_file_params,
 };

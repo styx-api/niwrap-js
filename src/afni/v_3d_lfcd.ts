@@ -213,14 +213,16 @@ function v_3d_lfcd_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dLfcdOutputs`).
  */
 function v_3d_lfcd_execute(
     params: V3dLfcdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dLfcdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_LFCD_METADATA);
     params = execution.params(params)
     const cargs = v_3d_lfcd_cargs(params, execution)
     const ret = v_3d_lfcd_outputs(params, execution)
@@ -261,10 +263,8 @@ function v_3d_lfcd(
     thresh: number | null = null,
     runner: Runner | null = null,
 ): V3dLfcdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_LFCD_METADATA);
     const params = v_3d_lfcd_params(in_file, autoclip, automask, mask, num_threads, out_file, outputtype, polort, thresh)
-    return v_3d_lfcd_execute(params, execution);
+    return v_3d_lfcd_execute(params, runner);
 }
 
 
@@ -273,8 +273,6 @@ export {
       V3dLfcdParameters,
       V_3D_LFCD_METADATA,
       v_3d_lfcd,
-      v_3d_lfcd_cargs,
       v_3d_lfcd_execute,
-      v_3d_lfcd_outputs,
       v_3d_lfcd_params,
 };

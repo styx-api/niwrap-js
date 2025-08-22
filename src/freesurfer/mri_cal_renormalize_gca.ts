@@ -153,14 +153,16 @@ function mri_cal_renormalize_gca_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCalRenormalizeGcaOutputs`).
  */
 function mri_cal_renormalize_gca_execute(
     params: MriCalRenormalizeGcaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCalRenormalizeGcaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CAL_RENORMALIZE_GCA_METADATA);
     params = execution.params(params)
     const cargs = mri_cal_renormalize_gca_cargs(params, execution)
     const ret = mri_cal_renormalize_gca_outputs(params, execution)
@@ -193,10 +195,8 @@ function mri_cal_renormalize_gca(
     output_atlas: string,
     runner: Runner | null = null,
 ): MriCalRenormalizeGcaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CAL_RENORMALIZE_GCA_METADATA);
     const params = mri_cal_renormalize_gca_params(timepoint_file, in_vol, input_atlas, transform_file, output_atlas)
-    return mri_cal_renormalize_gca_execute(params, execution);
+    return mri_cal_renormalize_gca_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       MriCalRenormalizeGcaOutputs,
       MriCalRenormalizeGcaParameters,
       mri_cal_renormalize_gca,
-      mri_cal_renormalize_gca_cargs,
       mri_cal_renormalize_gca_execute,
-      mri_cal_renormalize_gca_outputs,
       mri_cal_renormalize_gca_params,
 };

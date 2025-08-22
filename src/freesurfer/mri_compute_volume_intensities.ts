@@ -143,14 +143,16 @@ function mri_compute_volume_intensities_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriComputeVolumeIntensitiesOutputs`).
  */
 function mri_compute_volume_intensities_execute(
     params: MriComputeVolumeIntensitiesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriComputeVolumeIntensitiesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_COMPUTE_VOLUME_INTENSITIES_METADATA);
     params = execution.params(params)
     const cargs = mri_compute_volume_intensities_cargs(params, execution)
     const ret = mri_compute_volume_intensities_outputs(params, execution)
@@ -179,10 +181,8 @@ function mri_compute_volume_intensities(
     output_volume: string,
     runner: Runner | null = null,
 ): MriComputeVolumeIntensitiesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_COMPUTE_VOLUME_INTENSITIES_METADATA);
     const params = mri_compute_volume_intensities_params(input_intensity, volume_fraction_stem, output_volume)
-    return mri_compute_volume_intensities_execute(params, execution);
+    return mri_compute_volume_intensities_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MriComputeVolumeIntensitiesOutputs,
       MriComputeVolumeIntensitiesParameters,
       mri_compute_volume_intensities,
-      mri_compute_volume_intensities_cargs,
       mri_compute_volume_intensities_execute,
-      mri_compute_volume_intensities_outputs,
       mri_compute_volume_intensities_params,
 };

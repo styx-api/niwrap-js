@@ -148,14 +148,16 @@ function tbss_2_reg_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Tbss2RegOutputs`).
  */
 function tbss_2_reg_execute(
     params: Tbss2RegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Tbss2RegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TBSS_2_REG_METADATA);
     params = execution.params(params)
     const cargs = tbss_2_reg_cargs(params, execution)
     const ret = tbss_2_reg_outputs(params, execution)
@@ -184,10 +186,8 @@ function tbss_2_reg(
     find_best_target: boolean = false,
     runner: Runner | null = null,
 ): Tbss2RegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TBSS_2_REG_METADATA);
     const params = tbss_2_reg_params(use_fmrib58_fa_1mm, target_image, find_best_target)
-    return tbss_2_reg_execute(params, execution);
+    return tbss_2_reg_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       Tbss2RegOutputs,
       Tbss2RegParameters,
       tbss_2_reg,
-      tbss_2_reg_cargs,
       tbss_2_reg_execute,
-      tbss_2_reg_outputs,
       tbss_2_reg_params,
 };

@@ -185,14 +185,16 @@ function possum_matrix_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PossumMatrixOutputs`).
  */
 function possum_matrix_execute(
     params: PossumMatrixParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PossumMatrixOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(POSSUM_MATRIX_METADATA);
     params = execution.params(params)
     const cargs = possum_matrix_cargs(params, execution)
     const ret = possum_matrix_outputs(params, execution)
@@ -229,10 +231,8 @@ function possum_matrix(
     segment_size: number | null = null,
     runner: Runner | null = null,
 ): PossumMatrixOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(POSSUM_MATRIX_METADATA);
     const params = possum_matrix_params(pulse_sequence, motion_matrix, output_matrix, verbose_flag, help_flag, old_version_flag, segment_size)
-    return possum_matrix_execute(params, execution);
+    return possum_matrix_execute(params, runner);
 }
 
 
@@ -241,8 +241,6 @@ export {
       PossumMatrixOutputs,
       PossumMatrixParameters,
       possum_matrix,
-      possum_matrix_cargs,
       possum_matrix_execute,
-      possum_matrix_outputs,
       possum_matrix_params,
 };

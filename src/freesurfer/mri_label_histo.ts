@@ -148,14 +148,16 @@ function mri_label_histo_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriLabelHistoOutputs`).
  */
 function mri_label_histo_execute(
     params: MriLabelHistoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriLabelHistoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_LABEL_HISTO_METADATA);
     params = execution.params(params)
     const cargs = mri_label_histo_cargs(params, execution)
     const ret = mri_label_histo_outputs(params, execution)
@@ -186,10 +188,8 @@ function mri_label_histo(
     output: string,
     runner: Runner | null = null,
 ): MriLabelHistoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_LABEL_HISTO_METADATA);
     const params = mri_label_histo_params(t1_volume, labeled_volume, label, output)
-    return mri_label_histo_execute(params, execution);
+    return mri_label_histo_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MriLabelHistoOutputs,
       MriLabelHistoParameters,
       mri_label_histo,
-      mri_label_histo_cargs,
       mri_label_histo_execute,
-      mri_label_histo_outputs,
       mri_label_histo_params,
 };

@@ -219,14 +219,16 @@ function slow_surf_clustsim_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SlowSurfClustsimPyOutputs`).
  */
 function slow_surf_clustsim_py_execute(
     params: SlowSurfClustsimPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SlowSurfClustsimPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SLOW_SURF_CLUSTSIM_PY_METADATA);
     params = execution.params(params)
     const cargs = slow_surf_clustsim_py_cargs(params, execution)
     const ret = slow_surf_clustsim_py_outputs(params, execution)
@@ -271,10 +273,8 @@ function slow_surf_clustsim_py(
     version: boolean = false,
     runner: Runner | null = null,
 ): SlowSurfClustsimPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SLOW_SURF_CLUSTSIM_PY_METADATA);
     const params = slow_surf_clustsim_py_params(on_surface, save_script, print_script, uvar, verbosity, help, hist, show_default_cvars, show_default_uvars, show_valid_opts, version)
-    return slow_surf_clustsim_py_execute(params, execution);
+    return slow_surf_clustsim_py_execute(params, runner);
 }
 
 
@@ -283,8 +283,6 @@ export {
       SlowSurfClustsimPyOutputs,
       SlowSurfClustsimPyParameters,
       slow_surf_clustsim_py,
-      slow_surf_clustsim_py_cargs,
       slow_surf_clustsim_py_execute,
-      slow_surf_clustsim_py_outputs,
       slow_surf_clustsim_py_params,
 };

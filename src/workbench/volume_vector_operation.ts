@@ -184,14 +184,16 @@ function volume_vector_operation_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeVectorOperationOutputs`).
  */
 function volume_vector_operation_execute(
     params: VolumeVectorOperationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeVectorOperationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_VECTOR_OPERATION_METADATA);
     params = execution.params(params)
     const cargs = volume_vector_operation_cargs(params, execution)
     const ret = volume_vector_operation_outputs(params, execution)
@@ -237,10 +239,8 @@ function volume_vector_operation(
     opt_magnitude: boolean = false,
     runner: Runner | null = null,
 ): VolumeVectorOperationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_VECTOR_OPERATION_METADATA);
     const params = volume_vector_operation_params(vectors_a, vectors_b, operation, volume_out, opt_normalize_a, opt_normalize_b, opt_normalize_output, opt_magnitude)
-    return volume_vector_operation_execute(params, execution);
+    return volume_vector_operation_execute(params, runner);
 }
 
 
@@ -249,8 +249,6 @@ export {
       VolumeVectorOperationOutputs,
       VolumeVectorOperationParameters,
       volume_vector_operation,
-      volume_vector_operation_cargs,
       volume_vector_operation_execute,
-      volume_vector_operation_outputs,
       volume_vector_operation_params,
 };

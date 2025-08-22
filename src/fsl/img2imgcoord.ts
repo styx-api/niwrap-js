@@ -203,14 +203,16 @@ function img2imgcoord_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Img2imgcoordOutputs`).
  */
 function img2imgcoord_execute(
     params: Img2imgcoordParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Img2imgcoordOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMG2IMGCOORD_METADATA);
     params = execution.params(params)
     const cargs = img2imgcoord_cargs(params, execution)
     const ret = img2imgcoord_outputs(params, execution)
@@ -253,10 +255,8 @@ function img2imgcoord(
     help: boolean = false,
     runner: Runner | null = null,
 ): Img2imgcoordOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMG2IMGCOORD_METADATA);
     const params = img2imgcoord_params(coordinates_file, source_image, dest_image, affine_transform, warp_field, pre_warp_affine, coords_in_voxels, coords_in_mm, verbose, help)
-    return img2imgcoord_execute(params, execution);
+    return img2imgcoord_execute(params, runner);
 }
 
 
@@ -265,8 +265,6 @@ export {
       Img2imgcoordOutputs,
       Img2imgcoordParameters,
       img2imgcoord,
-      img2imgcoord_cargs,
       img2imgcoord_execute,
-      img2imgcoord_outputs,
       img2imgcoord_params,
 };

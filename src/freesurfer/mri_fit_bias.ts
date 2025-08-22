@@ -247,14 +247,16 @@ function mri_fit_bias_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriFitBiasOutputs`).
  */
 function mri_fit_bias_execute(
     params: MriFitBiasParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriFitBiasOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_FIT_BIAS_METADATA);
     params = execution.params(params)
     const cargs = mri_fit_bias_cargs(params, execution)
     const ret = mri_fit_bias_outputs(params, execution)
@@ -301,10 +303,8 @@ function mri_fit_bias(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MriFitBiasOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_FIT_BIAS_METADATA);
     const params = mri_fit_bias_params(inputvol, segvol, maskvol, outvol, biasfield, lpf_cutoff, dctvol, threshold, nerode, nthreads, debug, checkopts)
-    return mri_fit_bias_execute(params, execution);
+    return mri_fit_bias_execute(params, runner);
 }
 
 
@@ -313,8 +313,6 @@ export {
       MriFitBiasOutputs,
       MriFitBiasParameters,
       mri_fit_bias,
-      mri_fit_bias_cargs,
       mri_fit_bias_execute,
-      mri_fit_bias_outputs,
       mri_fit_bias_params,
 };

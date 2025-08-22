@@ -263,14 +263,16 @@ function count_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CountOutputs`).
  */
 function count_execute(
     params: CountParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CountOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(COUNT_METADATA);
     params = execution.params(params)
     const cargs = count_cargs(params, execution)
     const ret = count_outputs(params, execution)
@@ -321,10 +323,8 @@ function count(
     skipnmodm: string | null = null,
     runner: Runner | null = null,
 ): CountOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(COUNT_METADATA);
     const params = count_params(bot, top, step, seed, sseed, column, digits, form, root, sep, suffix, scale, comma, skipnmodm)
-    return count_execute(params, execution);
+    return count_execute(params, runner);
 }
 
 
@@ -333,8 +333,6 @@ export {
       CountOutputs,
       CountParameters,
       count,
-      count_cargs,
       count_execute,
-      count_outputs,
       count_params,
 };

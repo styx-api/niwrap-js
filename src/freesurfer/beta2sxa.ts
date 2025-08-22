@@ -164,14 +164,16 @@ function beta2sxa_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Beta2sxaOutputs`).
  */
 function beta2sxa_execute(
     params: Beta2sxaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Beta2sxaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BETA2SXA_METADATA);
     params = execution.params(params)
     const cargs = beta2sxa_cargs(params, execution)
     const ret = beta2sxa_outputs(params, execution)
@@ -202,10 +204,8 @@ function beta2sxa(
     sxa_output: string | null = "h.beta",
     runner: Runner | null = null,
 ): Beta2sxaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BETA2SXA_METADATA);
     const params = beta2sxa_params(beta_files, number_of_conditions, number_of_per_subjects, sxa_output)
-    return beta2sxa_execute(params, execution);
+    return beta2sxa_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       Beta2sxaOutputs,
       Beta2sxaParameters,
       beta2sxa,
-      beta2sxa_cargs,
       beta2sxa_execute,
-      beta2sxa_outputs,
       beta2sxa_params,
 };

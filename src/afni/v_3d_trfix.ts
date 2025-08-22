@@ -185,14 +185,16 @@ function v_3d_trfix_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTrfixOutputs`).
  */
 function v_3d_trfix_execute(
     params: V3dTrfixParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTrfixOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TRFIX_METADATA);
     params = execution.params(params)
     const cargs = v_3d_trfix_cargs(params, execution)
     const ret = v_3d_trfix_outputs(params, execution)
@@ -225,10 +227,8 @@ function v_3d_trfix(
     output_tr: number | null = null,
     runner: Runner | null = null,
 ): V3dTrfixOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TRFIX_METADATA);
     const params = v_3d_trfix_params(input_file, prefix, tr_list, time_list, output_tr)
-    return v_3d_trfix_execute(params, execution);
+    return v_3d_trfix_execute(params, runner);
 }
 
 
@@ -237,8 +237,6 @@ export {
       V3dTrfixParameters,
       V_3D_TRFIX_METADATA,
       v_3d_trfix,
-      v_3d_trfix_cargs,
       v_3d_trfix_execute,
-      v_3d_trfix_outputs,
       v_3d_trfix_params,
 };

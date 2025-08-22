@@ -319,14 +319,16 @@ function amp2response_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Amp2responseOutputs`).
  */
 function amp2response_execute(
     params: Amp2responseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Amp2responseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AMP2RESPONSE_METADATA);
     params = execution.params(params)
     const cargs = amp2response_cargs(params, execution)
     const ret = amp2response_outputs(params, execution)
@@ -392,10 +394,8 @@ function amp2response(
     version: boolean = false,
     runner: Runner | null = null,
 ): Amp2responseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AMP2RESPONSE_METADATA);
     const params = amp2response_params(amps, mask, directions_1, response, isotropic, noconstraint, directions, shells, lmax, info, quiet, debug, force, nthreads, config, help, version)
-    return amp2response_execute(params, execution);
+    return amp2response_execute(params, runner);
 }
 
 
@@ -405,10 +405,7 @@ export {
       Amp2responseOutputs,
       Amp2responseParameters,
       amp2response,
-      amp2response_cargs,
-      amp2response_config_cargs,
       amp2response_config_params,
       amp2response_execute,
-      amp2response_outputs,
       amp2response_params,
 };

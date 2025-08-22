@@ -425,14 +425,16 @@ function auto_warp_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AutoWarpPyOutputs`).
  */
 function auto_warp_py_execute(
     params: AutoWarpPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AutoWarpPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AUTO_WARP_PY_METADATA);
     params = execution.params(params)
     const cargs = auto_warp_py_cargs(params, execution)
     const ret = auto_warp_py_outputs(params, execution)
@@ -521,10 +523,8 @@ function auto_warp_py(
     at_opts: string | null = null,
     runner: Runner | null = null,
 ): AutoWarpPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AUTO_WARP_PY_METADATA);
     const params = auto_warp_py_params(base, input, skull_strip_input, qblur, qworkhard, qw_opts, keep_rm_files, prep_only, help, hview, limited_help, option_help, version, ver, verb, save_script, skip_affine, skull_strip_base, ex_mode, overwrite, suffix, child_anat, warp_dxyz, affine_dxyz, affine_input_xmat, smooth_anat, smooth_base, unifize_input, output_dir, followers, affine_followers_xmat, skullstrip_opts, at_opts)
-    return auto_warp_py_execute(params, execution);
+    return auto_warp_py_execute(params, runner);
 }
 
 
@@ -533,8 +533,6 @@ export {
       AutoWarpPyOutputs,
       AutoWarpPyParameters,
       auto_warp_py,
-      auto_warp_py_cargs,
       auto_warp_py_execute,
-      auto_warp_py_outputs,
       auto_warp_py_params,
 };

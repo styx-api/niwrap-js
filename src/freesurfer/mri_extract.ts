@@ -159,14 +159,16 @@ function mri_extract_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriExtractOutputs`).
  */
 function mri_extract_execute(
     params: MriExtractParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriExtractOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_EXTRACT_METADATA);
     params = execution.params(params)
     const cargs = mri_extract_cargs(params, execution)
     const ret = mri_extract_outputs(params, execution)
@@ -197,10 +199,8 @@ function mri_extract(
     coordinates: Array<number> | null = null,
     runner: Runner | null = null,
 ): MriExtractOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_EXTRACT_METADATA);
     const params = mri_extract_params(src_volume, dst_volume, like_template, coordinates)
-    return mri_extract_execute(params, execution);
+    return mri_extract_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       MriExtractOutputs,
       MriExtractParameters,
       mri_extract,
-      mri_extract_cargs,
       mri_extract_execute,
-      mri_extract_outputs,
       mri_extract_params,
 };

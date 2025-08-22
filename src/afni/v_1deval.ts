@@ -215,14 +215,16 @@ function v_1deval_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1devalOutputs`).
  */
 function v_1deval_execute(
     params: V1devalParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1devalOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1DEVAL_METADATA);
     params = execution.params(params)
     const cargs = v_1deval_cargs(params, execution)
     const ret = v_1deval_outputs(params, execution)
@@ -261,10 +263,8 @@ function v_1deval(
     symbol_values: Array<string> | null = null,
     runner: Runner | null = null,
 ): V1devalOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1DEVAL_METADATA);
     const params = v_1deval_params(expression, del, start, num, index, v_1_d, symbols, symbol_values)
-    return v_1deval_execute(params, execution);
+    return v_1deval_execute(params, runner);
 }
 
 
@@ -273,8 +273,6 @@ export {
       V1devalParameters,
       V_1DEVAL_METADATA,
       v_1deval,
-      v_1deval_cargs,
       v_1deval_execute,
-      v_1deval_outputs,
       v_1deval_params,
 };

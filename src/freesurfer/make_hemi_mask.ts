@@ -143,14 +143,16 @@ function make_hemi_mask_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeHemiMaskOutputs`).
  */
 function make_hemi_mask_execute(
     params: MakeHemiMaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeHemiMaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_HEMI_MASK_METADATA);
     params = execution.params(params)
     const cargs = make_hemi_mask_cargs(params, execution)
     const ret = make_hemi_mask_outputs(params, execution)
@@ -179,10 +181,8 @@ function make_hemi_mask(
     output_file: string,
     runner: Runner | null = null,
 ): MakeHemiMaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_HEMI_MASK_METADATA);
     const params = make_hemi_mask_params(hemi, input_file, output_file)
-    return make_hemi_mask_execute(params, execution);
+    return make_hemi_mask_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MakeHemiMaskOutputs,
       MakeHemiMaskParameters,
       make_hemi_mask,
-      make_hemi_mask_cargs,
       make_hemi_mask_execute,
-      make_hemi_mask_outputs,
       make_hemi_mask_params,
 };

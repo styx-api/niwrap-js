@@ -171,14 +171,16 @@ function mris_defects_pointset_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisDefectsPointsetOutputs`).
  */
 function mris_defects_pointset_execute(
     params: MrisDefectsPointsetParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisDefectsPointsetOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_DEFECTS_POINTSET_METADATA);
     params = execution.params(params)
     const cargs = mris_defects_pointset_cargs(params, execution)
     const ret = mris_defects_pointset_outputs(params, execution)
@@ -211,10 +213,8 @@ function mris_defects_pointset(
     control: boolean = false,
     runner: Runner | null = null,
 ): MrisDefectsPointsetOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_DEFECTS_POINTSET_METADATA);
     const params = mris_defects_pointset_params(surface, defects, out, label, control)
-    return mris_defects_pointset_execute(params, execution);
+    return mris_defects_pointset_execute(params, runner);
 }
 
 
@@ -223,8 +223,6 @@ export {
       MrisDefectsPointsetOutputs,
       MrisDefectsPointsetParameters,
       mris_defects_pointset,
-      mris_defects_pointset_cargs,
       mris_defects_pointset_execute,
-      mris_defects_pointset_outputs,
       mris_defects_pointset_params,
 };

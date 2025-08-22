@@ -199,14 +199,16 @@ function metric_rois_from_extrema_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricRoisFromExtremaOutputs`).
  */
 function metric_rois_from_extrema_execute(
     params: MetricRoisFromExtremaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricRoisFromExtremaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_ROIS_FROM_EXTREMA_METADATA);
     params = execution.params(params)
     const cargs = metric_rois_from_extrema_cargs(params, execution)
     const ret = metric_rois_from_extrema_outputs(params, execution)
@@ -247,10 +249,8 @@ function metric_rois_from_extrema(
     opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): MetricRoisFromExtremaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_ROIS_FROM_EXTREMA_METADATA);
     const params = metric_rois_from_extrema_params(surface, metric, limit, metric_out, opt_gaussian_sigma, opt_roi_roi_metric, opt_overlap_logic_method, opt_column_column)
-    return metric_rois_from_extrema_execute(params, execution);
+    return metric_rois_from_extrema_execute(params, runner);
 }
 
 
@@ -259,8 +259,6 @@ export {
       MetricRoisFromExtremaOutputs,
       MetricRoisFromExtremaParameters,
       metric_rois_from_extrema,
-      metric_rois_from_extrema_cargs,
       metric_rois_from_extrema_execute,
-      metric_rois_from_extrema_outputs,
       metric_rois_from_extrema_params,
 };

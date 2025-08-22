@@ -162,14 +162,16 @@ function ttoz_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TtozOutputs`).
  */
 function ttoz_execute(
     params: TtozParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TtozOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TTOZ_METADATA);
     params = execution.params(params)
     const cargs = ttoz_cargs(params, execution)
     const ret = ttoz_outputs(params, execution)
@@ -202,10 +204,8 @@ function ttoz(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): TtozOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TTOZ_METADATA);
     const params = ttoz_params(varsfile, cbsfile, dof, outputvol, help_flag)
-    return ttoz_execute(params, execution);
+    return ttoz_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       TtozOutputs,
       TtozParameters,
       ttoz,
-      ttoz_cargs,
       ttoz_execute,
-      ttoz_outputs,
       ttoz_params,
 };

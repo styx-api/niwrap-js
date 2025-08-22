@@ -252,14 +252,16 @@ function tedana_wrapper_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TedanaWrapperPyOutputs`).
  */
 function tedana_wrapper_py_execute(
     params: TedanaWrapperPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TedanaWrapperPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TEDANA_WRAPPER_PY_METADATA);
     params = execution.params(params)
     const cargs = tedana_wrapper_py_cargs(params, execution)
     const ret = tedana_wrapper_py_outputs(params, execution)
@@ -308,10 +310,8 @@ function tedana_wrapper_py(
     detailed_help: boolean = false,
     runner: Runner | null = null,
 ): TedanaWrapperPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TEDANA_WRAPPER_PY_METADATA);
     const params = tedana_wrapper_py_params(input_files, echo_times, mask, results_dir, prefix, save_all, prep_only, tedana_prog, tedana_is_exec, ted_label, tedana_opts, help, detailed_help)
-    return tedana_wrapper_py_execute(params, execution);
+    return tedana_wrapper_py_execute(params, runner);
 }
 
 
@@ -320,8 +320,6 @@ export {
       TedanaWrapperPyOutputs,
       TedanaWrapperPyParameters,
       tedana_wrapper_py,
-      tedana_wrapper_py_cargs,
       tedana_wrapper_py_execute,
-      tedana_wrapper_py_outputs,
       tedana_wrapper_py_params,
 };

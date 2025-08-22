@@ -208,14 +208,16 @@ function mri_edit_segmentation_with_surfaces_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriEditSegmentationWithSurfacesOutputs`).
  */
 function mri_edit_segmentation_with_surfaces_execute(
     params: MriEditSegmentationWithSurfacesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriEditSegmentationWithSurfacesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_EDIT_SEGMENTATION_WITH_SURFACES_METADATA);
     params = execution.params(params)
     const cargs = mri_edit_segmentation_with_surfaces_cargs(params, execution)
     const ret = mri_edit_segmentation_with_surfaces_outputs(params, execution)
@@ -256,10 +258,8 @@ function mri_edit_segmentation_with_surfaces(
     annotation_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriEditSegmentationWithSurfacesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_EDIT_SEGMENTATION_WITH_SURFACES_METADATA);
     const params = mri_edit_segmentation_with_surfaces_params(aseg_name, surface_dir, norm_volume, output_volume, label_file, hypo_flag, cerebellum_flag, cortex_flag, annotation_file)
-    return mri_edit_segmentation_with_surfaces_execute(params, execution);
+    return mri_edit_segmentation_with_surfaces_execute(params, runner);
 }
 
 
@@ -268,8 +268,6 @@ export {
       MriEditSegmentationWithSurfacesOutputs,
       MriEditSegmentationWithSurfacesParameters,
       mri_edit_segmentation_with_surfaces,
-      mri_edit_segmentation_with_surfaces_cargs,
       mri_edit_segmentation_with_surfaces_execute,
-      mri_edit_segmentation_with_surfaces_outputs,
       mri_edit_segmentation_with_surfaces_params,
 };

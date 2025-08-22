@@ -199,14 +199,16 @@ function surface_geodesic_rois_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicRoisOutputs`).
  */
 function surface_geodesic_rois_execute(
     params: SurfaceGeodesicRoisParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceGeodesicRoisOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_GEODESIC_ROIS_METADATA);
     params = execution.params(params)
     const cargs = surface_geodesic_rois_cargs(params, execution)
     const ret = surface_geodesic_rois_outputs(params, execution)
@@ -247,10 +249,8 @@ function surface_geodesic_rois(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): SurfaceGeodesicRoisOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_GEODESIC_ROIS_METADATA);
     const params = surface_geodesic_rois_params(surface, limit, vertex_list_file, metric_out, opt_gaussian_sigma, opt_overlap_logic_method, opt_names_name_list_file, opt_corrected_areas_area_metric)
-    return surface_geodesic_rois_execute(params, execution);
+    return surface_geodesic_rois_execute(params, runner);
 }
 
 
@@ -259,8 +259,6 @@ export {
       SurfaceGeodesicRoisOutputs,
       SurfaceGeodesicRoisParameters,
       surface_geodesic_rois,
-      surface_geodesic_rois_cargs,
       surface_geodesic_rois_execute,
-      surface_geodesic_rois_outputs,
       surface_geodesic_rois_params,
 };

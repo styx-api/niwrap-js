@@ -143,14 +143,16 @@ function mri_relabel_hypointensities_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriRelabelHypointensitiesOutputs`).
  */
 function mri_relabel_hypointensities_execute(
     params: MriRelabelHypointensitiesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriRelabelHypointensitiesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_RELABEL_HYPOINTENSITIES_METADATA);
     params = execution.params(params)
     const cargs = mri_relabel_hypointensities_cargs(params, execution)
     const ret = mri_relabel_hypointensities_outputs(params, execution)
@@ -179,10 +181,8 @@ function mri_relabel_hypointensities(
     output_aseg: string,
     runner: Runner | null = null,
 ): MriRelabelHypointensitiesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_RELABEL_HYPOINTENSITIES_METADATA);
     const params = mri_relabel_hypointensities_params(input_aseg, surface_directory, output_aseg)
-    return mri_relabel_hypointensities_execute(params, execution);
+    return mri_relabel_hypointensities_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MriRelabelHypointensitiesOutputs,
       MriRelabelHypointensitiesParameters,
       mri_relabel_hypointensities,
-      mri_relabel_hypointensities_cargs,
       mri_relabel_hypointensities_execute,
-      mri_relabel_hypointensities_outputs,
       mri_relabel_hypointensities_params,
 };

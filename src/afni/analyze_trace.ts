@@ -217,14 +217,16 @@ function analyze_trace_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AnalyzeTraceOutputs`).
  */
 function analyze_trace_execute(
     params: AnalyzeTraceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AnalyzeTraceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANALYZE_TRACE_METADATA);
     params = execution.params(params)
     const cargs = analyze_trace_cargs(params, execution)
     const ret = analyze_trace_outputs(params, execution)
@@ -269,10 +271,8 @@ function analyze_trace(
     yesmall: boolean = false,
     runner: Runner | null = null,
 ): AnalyzeTraceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANALYZE_TRACE_METADATA);
     const params = analyze_trace_params(tracefile, max_func_lines, suma_c, max_err, novolreg, noxform, setenv, trace, extreme_trace, nomall, yesmall)
-    return analyze_trace_execute(params, execution);
+    return analyze_trace_execute(params, runner);
 }
 
 
@@ -281,8 +281,6 @@ export {
       AnalyzeTraceOutputs,
       AnalyzeTraceParameters,
       analyze_trace,
-      analyze_trace_cargs,
       analyze_trace_execute,
-      analyze_trace_outputs,
       analyze_trace_params,
 };

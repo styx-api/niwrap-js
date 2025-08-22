@@ -351,14 +351,16 @@ function cifti_false_correlation_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiFalseCorrelationOutputs`).
  */
 function cifti_false_correlation_execute(
     params: CiftiFalseCorrelationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiFalseCorrelationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_FALSE_CORRELATION_METADATA);
     params = execution.params(params)
     const cargs = cifti_false_correlation_cargs(params, execution)
     const ret = cifti_false_correlation_outputs(params, execution)
@@ -399,10 +401,8 @@ function cifti_false_correlation(
     cerebellum_surface: CiftiFalseCorrelationCerebellumSurfaceParameters | null = null,
     runner: Runner | null = null,
 ): CiftiFalseCorrelationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_FALSE_CORRELATION_METADATA);
     const params = cifti_false_correlation_params(cifti_in, v_3d_dist, geo_outer, geo_inner, cifti_out, left_surface, right_surface, cerebellum_surface)
-    return cifti_false_correlation_execute(params, execution);
+    return cifti_false_correlation_execute(params, runner);
 }
 
 
@@ -414,14 +414,9 @@ export {
       CiftiFalseCorrelationParameters,
       CiftiFalseCorrelationRightSurfaceParameters,
       cifti_false_correlation,
-      cifti_false_correlation_cargs,
-      cifti_false_correlation_cerebellum_surface_cargs,
       cifti_false_correlation_cerebellum_surface_params,
       cifti_false_correlation_execute,
-      cifti_false_correlation_left_surface_cargs,
       cifti_false_correlation_left_surface_params,
-      cifti_false_correlation_outputs,
       cifti_false_correlation_params,
-      cifti_false_correlation_right_surface_cargs,
       cifti_false_correlation_right_surface_params,
 };

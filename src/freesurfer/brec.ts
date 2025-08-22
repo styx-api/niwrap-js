@@ -134,14 +134,16 @@ function brec_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BrecOutputs`).
  */
 function brec_execute(
     params: BrecParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BrecOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BREC_METADATA);
     params = execution.params(params)
     const cargs = brec_cargs(params, execution)
     const ret = brec_outputs(params, execution)
@@ -168,10 +170,8 @@ function brec(
     depth_limit: boolean = false,
     runner: Runner | null = null,
 ): BrecOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BREC_METADATA);
     const params = brec_params(my_file, depth_limit)
-    return brec_execute(params, execution);
+    return brec_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       BrecOutputs,
       BrecParameters,
       brec,
-      brec_cargs,
       brec_execute,
-      brec_outputs,
       brec_params,
 };

@@ -202,14 +202,16 @@ function mri_func2sph_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriFunc2sphOutputs`).
  */
 function mri_func2sph_execute(
     params: MriFunc2sphParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriFunc2sphOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_FUNC2SPH_METADATA);
     params = execution.params(params)
     const cargs = mri_func2sph_cargs(params, execution)
     const ret = mri_func2sph_outputs(params, execution)
@@ -248,10 +250,8 @@ function mri_func2sph(
     umask: string | null = null,
     runner: Runner | null = null,
 ): MriFunc2sphOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_FUNC2SPH_METADATA);
     const params = mri_func2sph_params(instem, outstem, hemisphere, fvitdir, hole_filling_iters, icosahedron_size, input_type, umask)
-    return mri_func2sph_execute(params, execution);
+    return mri_func2sph_execute(params, runner);
 }
 
 
@@ -260,8 +260,6 @@ export {
       MriFunc2sphOutputs,
       MriFunc2sphParameters,
       mri_func2sph,
-      mri_func2sph_cargs,
       mri_func2sph_execute,
-      mri_func2sph_outputs,
       mri_func2sph_params,
 };

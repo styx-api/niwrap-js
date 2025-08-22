@@ -190,14 +190,16 @@ function v__electro_grid_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VElectroGridOutputs`).
  */
 function v__electro_grid_execute(
     params: VElectroGridParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VElectroGridOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__ELECTRO_GRID_METADATA);
     params = execution.params(params)
     const cargs = v__electro_grid_cargs(params, execution)
     const ret = v__electro_grid_outputs(params, execution)
@@ -232,10 +234,8 @@ function v__electro_grid(
     echo: boolean = false,
     runner: Runner | null = null,
 ): VElectroGridOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__ELECTRO_GRID_METADATA);
     const params = v__electro_grid_params(strip, grid, prefix, coords, with_markers, echo)
-    return v__electro_grid_execute(params, execution);
+    return v__electro_grid_execute(params, runner);
 }
 
 
@@ -244,8 +244,6 @@ export {
       VElectroGridParameters,
       V__ELECTRO_GRID_METADATA,
       v__electro_grid,
-      v__electro_grid_cargs,
       v__electro_grid_execute,
-      v__electro_grid_outputs,
       v__electro_grid_params,
 };

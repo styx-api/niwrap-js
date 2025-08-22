@@ -148,14 +148,16 @@ function mris_surface_to_vol_distances_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisSurfaceToVolDistancesOutputs`).
  */
 function mris_surface_to_vol_distances_execute(
     params: MrisSurfaceToVolDistancesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisSurfaceToVolDistancesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_SURFACE_TO_VOL_DISTANCES_METADATA);
     params = execution.params(params)
     const cargs = mris_surface_to_vol_distances_cargs(params, execution)
     const ret = mris_surface_to_vol_distances_outputs(params, execution)
@@ -186,10 +188,8 @@ function mris_surface_to_vol_distances(
     output_prefix: string,
     runner: Runner | null = null,
 ): MrisSurfaceToVolDistancesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_SURFACE_TO_VOL_DISTANCES_METADATA);
     const params = mris_surface_to_vol_distances_params(average_subject, hemisphere, subjects, output_prefix)
-    return mris_surface_to_vol_distances_execute(params, execution);
+    return mris_surface_to_vol_distances_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MrisSurfaceToVolDistancesOutputs,
       MrisSurfaceToVolDistancesParameters,
       mris_surface_to_vol_distances,
-      mris_surface_to_vol_distances_cargs,
       mris_surface_to_vol_distances_execute,
-      mris_surface_to_vol_distances_outputs,
       mris_surface_to_vol_distances_params,
 };

@@ -352,14 +352,16 @@ function transformcompose_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TransformcomposeOutputs`).
  */
 function transformcompose_execute(
     params: TransformcomposeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TransformcomposeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TRANSFORMCOMPOSE_METADATA);
     params = execution.params(params)
     const cargs = transformcompose_cargs(params, execution)
     const ret = transformcompose_outputs(params, execution)
@@ -414,10 +416,8 @@ function transformcompose(
     version: boolean = false,
     runner: Runner | null = null,
 ): TransformcomposeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TRANSFORMCOMPOSE_METADATA);
     const params = transformcompose_params(input, output, template, info, quiet, debug, force, nthreads, config, help, version)
-    return transformcompose_execute(params, execution);
+    return transformcompose_execute(params, runner);
 }
 
 
@@ -429,14 +429,9 @@ export {
       TransformcomposeVariousFileParameters,
       TransformcomposeVariousStringParameters,
       transformcompose,
-      transformcompose_cargs,
-      transformcompose_config_cargs,
       transformcompose_config_params,
       transformcompose_execute,
-      transformcompose_outputs,
       transformcompose_params,
-      transformcompose_various_file_cargs,
       transformcompose_various_file_params,
-      transformcompose_various_string_cargs,
       transformcompose_various_string_params,
 };

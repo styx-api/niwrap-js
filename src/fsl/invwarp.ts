@@ -190,14 +190,16 @@ function invwarp_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `InvwarpOutputs`).
  */
 function invwarp_execute(
     params: InvwarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): InvwarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(INVWARP_METADATA);
     params = execution.params(params)
     const cargs = invwarp_cargs(params, execution)
     const ret = invwarp_outputs(params, execution)
@@ -239,10 +241,8 @@ function invwarp(
     debug: boolean = false,
     runner: Runner | null = null,
 ): InvwarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(INVWARP_METADATA);
     const params = invwarp_params(warp, out_img, ref_img, absolute, relative, noconstraint, jacobian_min, jacobian_max, debug)
-    return invwarp_execute(params, execution);
+    return invwarp_execute(params, runner);
 }
 
 
@@ -251,8 +251,6 @@ export {
       InvwarpOutputs,
       InvwarpParameters,
       invwarp,
-      invwarp_cargs,
       invwarp_execute,
-      invwarp_outputs,
       invwarp_params,
 };

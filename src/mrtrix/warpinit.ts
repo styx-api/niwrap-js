@@ -262,14 +262,16 @@ function warpinit_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WarpinitOutputs`).
  */
 function warpinit_execute(
     params: WarpinitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WarpinitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WARPINIT_METADATA);
     params = execution.params(params)
     const cargs = warpinit_cargs(params, execution)
     const ret = warpinit_outputs(params, execution)
@@ -324,10 +326,8 @@ function warpinit(
     version: boolean = false,
     runner: Runner | null = null,
 ): WarpinitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WARPINIT_METADATA);
     const params = warpinit_params(template, warp, info, quiet, debug, force, nthreads, config, help, version)
-    return warpinit_execute(params, execution);
+    return warpinit_execute(params, runner);
 }
 
 
@@ -337,10 +337,7 @@ export {
       WarpinitOutputs,
       WarpinitParameters,
       warpinit,
-      warpinit_cargs,
-      warpinit_config_cargs,
       warpinit_config_params,
       warpinit_execute,
-      warpinit_outputs,
       warpinit_params,
 };

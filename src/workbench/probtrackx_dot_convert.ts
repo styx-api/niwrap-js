@@ -448,14 +448,16 @@ function probtrackx_dot_convert_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ProbtrackxDotConvertOutputs`).
  */
 function probtrackx_dot_convert_execute(
     params: ProbtrackxDotConvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ProbtrackxDotConvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PROBTRACKX_DOT_CONVERT_METADATA);
     params = execution.params(params)
     const cargs = probtrackx_dot_convert_cargs(params, execution)
     const ret = probtrackx_dot_convert_outputs(params, execution)
@@ -537,10 +539,8 @@ function probtrackx_dot_convert(
     opt_make_symmetric: boolean = false,
     runner: Runner | null = null,
 ): ProbtrackxDotConvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PROBTRACKX_DOT_CONVERT_METADATA);
     const params = probtrackx_dot_convert_params(dot_file, cifti_out, row_voxels, opt_row_surface_roi_metric, row_cifti, col_voxels, opt_col_surface_roi_metric, col_cifti, opt_transpose, opt_make_symmetric)
-    return probtrackx_dot_convert_execute(params, execution);
+    return probtrackx_dot_convert_execute(params, runner);
 }
 
 
@@ -553,16 +553,10 @@ export {
       ProbtrackxDotConvertRowCiftiParameters,
       ProbtrackxDotConvertRowVoxelsParameters,
       probtrackx_dot_convert,
-      probtrackx_dot_convert_cargs,
-      probtrackx_dot_convert_col_cifti_cargs,
       probtrackx_dot_convert_col_cifti_params,
-      probtrackx_dot_convert_col_voxels_cargs,
       probtrackx_dot_convert_col_voxels_params,
       probtrackx_dot_convert_execute,
-      probtrackx_dot_convert_outputs,
       probtrackx_dot_convert_params,
-      probtrackx_dot_convert_row_cifti_cargs,
       probtrackx_dot_convert_row_cifti_params,
-      probtrackx_dot_convert_row_voxels_cargs,
       probtrackx_dot_convert_row_voxels_params,
 };

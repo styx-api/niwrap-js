@@ -445,14 +445,16 @@ function v_3d_warp_drive_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dWarpDriveOutputs`).
  */
 function v_3d_warp_drive_execute(
     params: V3dWarpDriveParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dWarpDriveOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_WARP_DRIVE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_warp_drive_cargs(params, execution)
     const ret = v_3d_warp_drive_outputs(params, execution)
@@ -547,10 +549,8 @@ function v_3d_warp_drive(
     bshift: boolean = false,
     runner: Runner | null = null,
 ): V3dWarpDriveOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_WARP_DRIVE_METADATA);
     const params = v_3d_warp_drive_params(dataset, base_dataset, prefix, shift_only, shift_rotate, shift_rotate_scale, affine_general, bilinear_general, linear, cubic, nn, quintic, input_dataset, verbosity_flag, summary_file, max_iterations, delta, weight, convergence_thresh, twopass, final_mode, parfix, oned_file, float_format, coarserot_init, oned_matrix_save, sdu_order, sud_order, dsu_order, dus_order, usd_order, uds_order, supper_s_matrix, slower_s_matrix, ashift, bshift)
-    return v_3d_warp_drive_execute(params, execution);
+    return v_3d_warp_drive_execute(params, runner);
 }
 
 
@@ -559,8 +559,6 @@ export {
       V3dWarpDriveParameters,
       V_3D_WARP_DRIVE_METADATA,
       v_3d_warp_drive,
-      v_3d_warp_drive_cargs,
       v_3d_warp_drive_execute,
-      v_3d_warp_drive_outputs,
       v_3d_warp_drive_params,
 };

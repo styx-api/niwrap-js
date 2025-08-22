@@ -327,14 +327,16 @@ function label_resample_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelResampleOutputs`).
  */
 function label_resample_execute(
     params: LabelResampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelResampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_RESAMPLE_METADATA);
     params = execution.params(params)
     const cargs = label_resample_cargs(params, execution)
     const ret = label_resample_outputs(params, execution)
@@ -393,10 +395,8 @@ function label_resample(
     opt_bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
 ): LabelResampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_RESAMPLE_METADATA);
     const params = label_resample_params(label_in, current_sphere, new_sphere, method, label_out, area_surfs, area_metrics, opt_current_roi_roi_metric, opt_valid_roi_out_roi_out, opt_largest, opt_bypass_sphere_check)
-    return label_resample_execute(params, execution);
+    return label_resample_execute(params, runner);
 }
 
 
@@ -407,12 +407,8 @@ export {
       LabelResampleOutputs,
       LabelResampleParameters,
       label_resample,
-      label_resample_area_metrics_cargs,
       label_resample_area_metrics_params,
-      label_resample_area_surfs_cargs,
       label_resample_area_surfs_params,
-      label_resample_cargs,
       label_resample_execute,
-      label_resample_outputs,
       label_resample_params,
 };

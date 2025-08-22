@@ -297,14 +297,16 @@ function mba_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MbaOutputs`).
  */
 function mba_execute(
     params: MbaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MbaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MBA_METADATA);
     params = execution.params(params)
     const cargs = mba_cargs(params, execution)
     const ret = mba_outputs(params, execution)
@@ -357,10 +359,8 @@ function mba(
     help: boolean = false,
     runner: Runner | null = null,
 ): MbaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MBA_METADATA);
     const params = mba_params(prefix, data_table, chains, iterations, model, eoi, cvars, qvars, qcvar, stdz, wcp, disty, se, dbg_args, help)
-    return mba_execute(params, execution);
+    return mba_execute(params, runner);
 }
 
 
@@ -369,8 +369,6 @@ export {
       MbaOutputs,
       MbaParameters,
       mba,
-      mba_cargs,
       mba_execute,
-      mba_outputs,
       mba_params,
 };

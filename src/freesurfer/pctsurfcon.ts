@@ -244,14 +244,16 @@ function pctsurfcon_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PctsurfconOutputs`).
  */
 function pctsurfcon_execute(
     params: PctsurfconParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PctsurfconOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PCTSURFCON_METADATA);
     params = execution.params(params)
     const cargs = pctsurfcon_cargs(params, execution)
     const ret = pctsurfcon_outputs(params, execution)
@@ -300,10 +302,8 @@ function pctsurfcon(
     nocleanup: boolean = false,
     runner: Runner | null = null,
 ): PctsurfconOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PCTSURFCON_METADATA);
     const params = pctsurfcon_params(subject, fsvol, outbase, lh_only, rh_only, gm_proj_frac, gm_proj_abs, wm_proj_abs, neg, no_mask, pial, tmp, nocleanup)
-    return pctsurfcon_execute(params, execution);
+    return pctsurfcon_execute(params, runner);
 }
 
 
@@ -312,8 +312,6 @@ export {
       PctsurfconOutputs,
       PctsurfconParameters,
       pctsurfcon,
-      pctsurfcon_cargs,
       pctsurfcon_execute,
-      pctsurfcon_outputs,
       pctsurfcon_params,
 };

@@ -138,14 +138,16 @@ function mris_distance_map_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisDistanceMapOutputs`).
  */
 function mris_distance_map_execute(
     params: MrisDistanceMapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisDistanceMapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_DISTANCE_MAP_METADATA);
     params = execution.params(params)
     const cargs = mris_distance_map_cargs(params, execution)
     const ret = mris_distance_map_outputs(params, execution)
@@ -172,10 +174,8 @@ function mris_distance_map(
     output_scalar_field: string,
     runner: Runner | null = null,
 ): MrisDistanceMapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_DISTANCE_MAP_METADATA);
     const params = mris_distance_map_params(input_surface_file, output_scalar_field)
-    return mris_distance_map_execute(params, execution);
+    return mris_distance_map_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MrisDistanceMapOutputs,
       MrisDistanceMapParameters,
       mris_distance_map,
-      mris_distance_map_cargs,
       mris_distance_map_execute,
-      mris_distance_map_outputs,
       mris_distance_map_params,
 };

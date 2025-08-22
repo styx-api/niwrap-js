@@ -207,14 +207,16 @@ function surf_qual_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfQualOutputs`).
  */
 function surf_qual_execute(
     params: SurfQualParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfQualOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_QUAL_METADATA);
     params = execution.params(params)
     const cargs = surf_qual_cargs(params, execution)
     const ret = surf_qual_outputs(params, execution)
@@ -249,10 +251,8 @@ function surf_qual(
     output_prefix: string | null = null,
     runner: Runner | null = null,
 ): SurfQualOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_QUAL_METADATA);
     const params = surf_qual_params(spec_file, surface_a, sphere_flag, summary_flag, self_intersect_flag, output_prefix)
-    return surf_qual_execute(params, execution);
+    return surf_qual_execute(params, runner);
 }
 
 
@@ -261,8 +261,6 @@ export {
       SurfQualOutputs,
       SurfQualParameters,
       surf_qual,
-      surf_qual_cargs,
       surf_qual_execute,
-      surf_qual_outputs,
       surf_qual_params,
 };

@@ -141,14 +141,16 @@ function surface_coordinates_to_metric_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceCoordinatesToMetricOutputs`).
  */
 function surface_coordinates_to_metric_execute(
     params: SurfaceCoordinatesToMetricParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceCoordinatesToMetricOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_COORDINATES_TO_METRIC_METADATA);
     params = execution.params(params)
     const cargs = surface_coordinates_to_metric_cargs(params, execution)
     const ret = surface_coordinates_to_metric_outputs(params, execution)
@@ -177,10 +179,8 @@ function surface_coordinates_to_metric(
     metric_out: string,
     runner: Runner | null = null,
 ): SurfaceCoordinatesToMetricOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_COORDINATES_TO_METRIC_METADATA);
     const params = surface_coordinates_to_metric_params(surface, metric_out)
-    return surface_coordinates_to_metric_execute(params, execution);
+    return surface_coordinates_to_metric_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       SurfaceCoordinatesToMetricOutputs,
       SurfaceCoordinatesToMetricParameters,
       surface_coordinates_to_metric,
-      surface_coordinates_to_metric_cargs,
       surface_coordinates_to_metric_execute,
-      surface_coordinates_to_metric_outputs,
       surface_coordinates_to_metric_params,
 };

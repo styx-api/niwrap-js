@@ -263,14 +263,16 @@ function mri_z2p_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriZ2pOutputs`).
  */
 function mri_z2p_execute(
     params: MriZ2pParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriZ2pOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_Z2P_METADATA);
     params = execution.params(params)
     const cargs = mri_z2p_cargs(params, execution)
     const ret = mri_z2p_outputs(params, execution)
@@ -325,10 +327,8 @@ function mri_z2p(
     check_opts: boolean = false,
     runner: Runner | null = null,
 ): MriZ2pOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_Z2P_METADATA);
     const params = mri_z2p_params(z_volume, p_volume, sig_volume, mask_volume, two_sided, one_sided, signed, feat, feat_format, nii_format, niigz_format, mgh_format, mgz_format, img_format, debug, check_opts)
-    return mri_z2p_execute(params, execution);
+    return mri_z2p_execute(params, runner);
 }
 
 
@@ -337,8 +337,6 @@ export {
       MriZ2pOutputs,
       MriZ2pParameters,
       mri_z2p,
-      mri_z2p_cargs,
       mri_z2p_execute,
-      mri_z2p_outputs,
       mri_z2p_params,
 };

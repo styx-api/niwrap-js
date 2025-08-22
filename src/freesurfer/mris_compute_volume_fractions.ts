@@ -174,14 +174,16 @@ function mris_compute_volume_fractions_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisComputeVolumeFractionsOutputs`).
  */
 function mris_compute_volume_fractions_execute(
     params: MrisComputeVolumeFractionsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisComputeVolumeFractionsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_COMPUTE_VOLUME_FRACTIONS_METADATA);
     params = execution.params(params)
     const cargs = mris_compute_volume_fractions_cargs(params, execution)
     const ret = mris_compute_volume_fractions_outputs(params, execution)
@@ -216,10 +218,8 @@ function mris_compute_volume_fractions(
     checkopts: boolean = false,
     runner: Runner | null = null,
 ): MrisComputeVolumeFractionsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_COMPUTE_VOLUME_FRACTIONS_METADATA);
     const params = mris_compute_volume_fractions_params(volume_file, surface_file, accuracy, output_file, debug, checkopts)
-    return mris_compute_volume_fractions_execute(params, execution);
+    return mris_compute_volume_fractions_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       MrisComputeVolumeFractionsOutputs,
       MrisComputeVolumeFractionsParameters,
       mris_compute_volume_fractions,
-      mris_compute_volume_fractions_cargs,
       mris_compute_volume_fractions_execute,
-      mris_compute_volume_fractions_outputs,
       mris_compute_volume_fractions_params,
 };

@@ -183,14 +183,16 @@ function isolate_labels_csh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `IsolateLabelsCshOutputs`).
  */
 function isolate_labels_csh_execute(
     params: IsolateLabelsCshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): IsolateLabelsCshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ISOLATE_LABELS_CSH_METADATA);
     params = execution.params(params)
     const cargs = isolate_labels_csh_cargs(params, execution)
     const ret = isolate_labels_csh_outputs(params, execution)
@@ -227,10 +229,8 @@ function isolate_labels_csh(
     help: boolean = false,
     runner: Runner | null = null,
 ): IsolateLabelsCshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ISOLATE_LABELS_CSH_METADATA);
     const params = isolate_labels_csh_params(label_volume, output_prefix, label_option, lowercase_label_option, version, keepval, help)
-    return isolate_labels_csh_execute(params, execution);
+    return isolate_labels_csh_execute(params, runner);
 }
 
 
@@ -239,8 +239,6 @@ export {
       IsolateLabelsCshOutputs,
       IsolateLabelsCshParameters,
       isolate_labels_csh,
-      isolate_labels_csh_cargs,
       isolate_labels_csh_execute,
-      isolate_labels_csh_outputs,
       isolate_labels_csh_params,
 };

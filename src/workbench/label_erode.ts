@@ -189,14 +189,16 @@ function label_erode_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelErodeOutputs`).
  */
 function label_erode_execute(
     params: LabelErodeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelErodeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_ERODE_METADATA);
     params = execution.params(params)
     const cargs = label_erode_cargs(params, execution)
     const ret = label_erode_outputs(params, execution)
@@ -237,10 +239,8 @@ function label_erode(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelErodeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_ERODE_METADATA);
     const params = label_erode_params(label, surface, erode_dist, label_out, opt_roi_roi_metric, opt_column_column, opt_corrected_areas_area_metric)
-    return label_erode_execute(params, execution);
+    return label_erode_execute(params, runner);
 }
 
 
@@ -249,8 +249,6 @@ export {
       LabelErodeOutputs,
       LabelErodeParameters,
       label_erode,
-      label_erode_cargs,
       label_erode_execute,
-      label_erode_outputs,
       label_erode_params,
 };

@@ -158,14 +158,16 @@ function mris_annot_to_segmentation_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisAnnotToSegmentationOutputs`).
  */
 function mris_annot_to_segmentation_execute(
     params: MrisAnnotToSegmentationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisAnnotToSegmentationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_ANNOT_TO_SEGMENTATION_METADATA);
     params = execution.params(params)
     const cargs = mris_annot_to_segmentation_cargs(params, execution)
     const ret = mris_annot_to_segmentation_outputs(params, execution)
@@ -200,10 +202,8 @@ function mris_annot_to_segmentation(
     output_volume: string,
     runner: Runner | null = null,
 ): MrisAnnotToSegmentationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_ANNOT_TO_SEGMENTATION_METADATA);
     const params = mris_annot_to_segmentation_params(subject_name, hemi, surface, annot_file, color_table, output_volume)
-    return mris_annot_to_segmentation_execute(params, execution);
+    return mris_annot_to_segmentation_execute(params, runner);
 }
 
 
@@ -212,8 +212,6 @@ export {
       MrisAnnotToSegmentationOutputs,
       MrisAnnotToSegmentationParameters,
       mris_annot_to_segmentation,
-      mris_annot_to_segmentation_cargs,
       mris_annot_to_segmentation_execute,
-      mris_annot_to_segmentation_outputs,
       mris_annot_to_segmentation_params,
 };

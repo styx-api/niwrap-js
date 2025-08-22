@@ -140,14 +140,16 @@ function mkima_index_tcl_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MkimaIndexTclOutputs`).
  */
 function mkima_index_tcl_execute(
     params: MkimaIndexTclParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MkimaIndexTclOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MKIMA_INDEX_TCL_METADATA);
     params = execution.params(params)
     const cargs = mkima_index_tcl_cargs(params, execution)
     const ret = mkima_index_tcl_outputs(params, execution)
@@ -174,10 +176,8 @@ function mkima_index_tcl(
     output_flag: boolean = false,
     runner: Runner | null = null,
 ): MkimaIndexTclOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MKIMA_INDEX_TCL_METADATA);
     const params = mkima_index_tcl_params(input_file, output_flag)
-    return mkima_index_tcl_execute(params, execution);
+    return mkima_index_tcl_execute(params, runner);
 }
 
 
@@ -186,8 +186,6 @@ export {
       MkimaIndexTclOutputs,
       MkimaIndexTclParameters,
       mkima_index_tcl,
-      mkima_index_tcl_cargs,
       mkima_index_tcl_execute,
-      mkima_index_tcl_outputs,
       mkima_index_tcl_params,
 };

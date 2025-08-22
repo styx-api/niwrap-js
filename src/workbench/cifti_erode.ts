@@ -360,14 +360,16 @@ function cifti_erode_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiErodeOutputs`).
  */
 function cifti_erode_execute(
     params: CiftiErodeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiErodeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_ERODE_METADATA);
     params = execution.params(params)
     const cargs = cifti_erode_cargs(params, execution)
     const ret = cifti_erode_outputs(params, execution)
@@ -412,10 +414,8 @@ function cifti_erode(
     opt_merged_volume: boolean = false,
     runner: Runner | null = null,
 ): CiftiErodeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_ERODE_METADATA);
     const params = cifti_erode_params(cifti_in, direction, surface_distance, volume_distance, cifti_out, left_surface, right_surface, cerebellum_surface, opt_merged_volume)
-    return cifti_erode_execute(params, execution);
+    return cifti_erode_execute(params, runner);
 }
 
 
@@ -427,14 +427,9 @@ export {
       CiftiErodeParameters,
       CiftiErodeRightSurfaceParameters,
       cifti_erode,
-      cifti_erode_cargs,
-      cifti_erode_cerebellum_surface_cargs,
       cifti_erode_cerebellum_surface_params,
       cifti_erode_execute,
-      cifti_erode_left_surface_cargs,
       cifti_erode_left_surface_params,
-      cifti_erode_outputs,
       cifti_erode_params,
-      cifti_erode_right_surface_cargs,
       cifti_erode_right_surface_params,
 };

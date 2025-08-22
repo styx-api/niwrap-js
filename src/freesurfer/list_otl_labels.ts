@@ -130,14 +130,16 @@ function list_otl_labels_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ListOtlLabelsOutputs`).
  */
 function list_otl_labels_execute(
     params: ListOtlLabelsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ListOtlLabelsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LIST_OTL_LABELS_METADATA);
     params = execution.params(params)
     const cargs = list_otl_labels_cargs(params, execution)
     const ret = list_otl_labels_outputs(params, execution)
@@ -162,10 +164,8 @@ function list_otl_labels(
     input_file: InputPathType,
     runner: Runner | null = null,
 ): ListOtlLabelsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LIST_OTL_LABELS_METADATA);
     const params = list_otl_labels_params(input_file)
-    return list_otl_labels_execute(params, execution);
+    return list_otl_labels_execute(params, runner);
 }
 
 
@@ -174,8 +174,6 @@ export {
       ListOtlLabelsOutputs,
       ListOtlLabelsParameters,
       list_otl_labels,
-      list_otl_labels_cargs,
       list_otl_labels_execute,
-      list_otl_labels_outputs,
       list_otl_labels_params,
 };

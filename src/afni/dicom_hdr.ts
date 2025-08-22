@@ -195,14 +195,16 @@ function dicom_hdr_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DicomHdrOutputs`).
  */
 function dicom_hdr_execute(
     params: DicomHdrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DicomHdrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DICOM_HDR_METADATA);
     params = execution.params(params)
     const cargs = dicom_hdr_cargs(params, execution)
     const ret = dicom_hdr_outputs(params, execution)
@@ -245,10 +247,8 @@ function dicom_hdr(
     siemens_csa_data: boolean = false,
     runner: Runner | null = null,
 ): DicomHdrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DICOM_HDR_METADATA);
     const params = dicom_hdr_params(files, hex, noname, sexinfo, mulfram, v_dump, no_length, slice_times, slice_times_verb, siemens_csa_data)
-    return dicom_hdr_execute(params, execution);
+    return dicom_hdr_execute(params, runner);
 }
 
 
@@ -257,8 +257,6 @@ export {
       DicomHdrOutputs,
       DicomHdrParameters,
       dicom_hdr,
-      dicom_hdr_cargs,
       dicom_hdr_execute,
-      dicom_hdr_outputs,
       dicom_hdr_params,
 };

@@ -386,14 +386,16 @@ function v_2dcat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V2dcatOutputs`).
  */
 function v_2dcat_execute(
     params: V2dcatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V2dcatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_2DCAT_METADATA);
     params = execution.params(params)
     const cargs = v_2dcat_cargs(params, execution)
     const ret = v_2dcat_outputs(params, execution)
@@ -466,10 +468,8 @@ function v_2dcat(
     gap_col: Array<number> | null = null,
     runner: Runner | null = null,
 ): V2dcatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_2DCAT_METADATA);
     const params = v_2dcat_params(filenames, scale_image, scale_pixels, scale_intensity, gscale, rgb_out, res_in, respad_in, pad_val, crop, autocrop_ctol, autocrop_atol, autocrop, zero_wrap, white_wrap, gray_wrap, image_wrap, rand_wrap, prefix, matrix, nx, ny, matrix_from_scale, gap, gap_col)
-    return v_2dcat_execute(params, execution);
+    return v_2dcat_execute(params, runner);
 }
 
 
@@ -478,8 +478,6 @@ export {
       V2dcatParameters,
       V_2DCAT_METADATA,
       v_2dcat,
-      v_2dcat_cargs,
       v_2dcat_execute,
-      v_2dcat_outputs,
       v_2dcat_params,
 };

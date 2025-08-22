@@ -172,14 +172,16 @@ function histo_register_block_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `HistoRegisterBlockOutputs`).
  */
 function histo_register_block_execute(
     params: HistoRegisterBlockParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): HistoRegisterBlockOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(HISTO_REGISTER_BLOCK_METADATA);
     params = execution.params(params)
     const cargs = histo_register_block_cargs(params, execution)
     const ret = histo_register_block_outputs(params, execution)
@@ -216,10 +218,8 @@ function histo_register_block(
     invert_transform: boolean = false,
     runner: Runner | null = null,
 ): HistoRegisterBlockOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(HISTO_REGISTER_BLOCK_METADATA);
     const params = histo_register_block_params(seg_time1, seg_time2, transform1, transform2, output_file, out_like, invert_transform)
-    return histo_register_block_execute(params, execution);
+    return histo_register_block_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       HistoRegisterBlockOutputs,
       HistoRegisterBlockParameters,
       histo_register_block,
-      histo_register_block_cargs,
       histo_register_block_execute,
-      histo_register_block_outputs,
       histo_register_block_params,
 };

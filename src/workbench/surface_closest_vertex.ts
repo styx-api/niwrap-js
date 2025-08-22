@@ -143,14 +143,16 @@ function surface_closest_vertex_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceClosestVertexOutputs`).
  */
 function surface_closest_vertex_execute(
     params: SurfaceClosestVertexParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceClosestVertexOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_CLOSEST_VERTEX_METADATA);
     params = execution.params(params)
     const cargs = surface_closest_vertex_cargs(params, execution)
     const ret = surface_closest_vertex_outputs(params, execution)
@@ -184,10 +186,8 @@ function surface_closest_vertex(
     vertex_list_out: string,
     runner: Runner | null = null,
 ): SurfaceClosestVertexOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_CLOSEST_VERTEX_METADATA);
     const params = surface_closest_vertex_params(surface, coord_list_file, vertex_list_out)
-    return surface_closest_vertex_execute(params, execution);
+    return surface_closest_vertex_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       SurfaceClosestVertexOutputs,
       SurfaceClosestVertexParameters,
       surface_closest_vertex,
-      surface_closest_vertex_cargs,
       surface_closest_vertex_execute,
-      surface_closest_vertex_outputs,
       surface_closest_vertex_params,
 };

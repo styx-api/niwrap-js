@@ -127,14 +127,16 @@ function v__surf_smooth_heat_07_examples_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSurfSmoothHeat07ExamplesOutputs`).
  */
 function v__surf_smooth_heat_07_examples_execute(
     params: VSurfSmoothHeat07ExamplesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSurfSmoothHeat07ExamplesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SURF_SMOOTH_HEAT_07_EXAMPLES_METADATA);
     params = execution.params(params)
     const cargs = v__surf_smooth_heat_07_examples_cargs(params, execution)
     const ret = v__surf_smooth_heat_07_examples_outputs(params, execution)
@@ -159,10 +161,8 @@ function v__surf_smooth_heat_07_examples(
     path_to_suma_demo: string,
     runner: Runner | null = null,
 ): VSurfSmoothHeat07ExamplesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SURF_SMOOTH_HEAT_07_EXAMPLES_METADATA);
     const params = v__surf_smooth_heat_07_examples_params(path_to_suma_demo)
-    return v__surf_smooth_heat_07_examples_execute(params, execution);
+    return v__surf_smooth_heat_07_examples_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       VSurfSmoothHeat07ExamplesParameters,
       V__SURF_SMOOTH_HEAT_07_EXAMPLES_METADATA,
       v__surf_smooth_heat_07_examples,
-      v__surf_smooth_heat_07_examples_cargs,
       v__surf_smooth_heat_07_examples_execute,
-      v__surf_smooth_heat_07_examples_outputs,
       v__surf_smooth_heat_07_examples_params,
 };

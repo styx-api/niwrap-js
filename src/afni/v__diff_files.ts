@@ -210,14 +210,16 @@ function v__diff_files_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDiffFilesOutputs`).
  */
 function v__diff_files_execute(
     params: VDiffFilesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDiffFilesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DIFF_FILES_METADATA);
     params = execution.params(params)
     const cargs = v__diff_files_cargs(params, execution)
     const ret = v__diff_files_outputs(params, execution)
@@ -262,10 +264,8 @@ function v__diff_files(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): VDiffFilesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DIFF_FILES_METADATA);
     const params = v__diff_files_params(files, old_dir, diff_opts, diff_prog, ignore_missing, longlist, save, show, xxdiff, x_flag, verbosity)
-    return v__diff_files_execute(params, execution);
+    return v__diff_files_execute(params, runner);
 }
 
 
@@ -274,8 +274,6 @@ export {
       VDiffFilesParameters,
       V__DIFF_FILES_METADATA,
       v__diff_files,
-      v__diff_files_cargs,
       v__diff_files_execute,
-      v__diff_files_outputs,
       v__diff_files_params,
 };

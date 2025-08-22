@@ -396,14 +396,16 @@ function cifti_gradient_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiGradientOutputs`).
  */
 function cifti_gradient_execute(
     params: CiftiGradientParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiGradientOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_GRADIENT_METADATA);
     params = execution.params(params)
     const cargs = cifti_gradient_cargs(params, execution)
     const ret = cifti_gradient_outputs(params, execution)
@@ -450,10 +452,8 @@ function cifti_gradient(
     opt_vectors_vectors_out: string | null = null,
     runner: Runner | null = null,
 ): CiftiGradientOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_GRADIENT_METADATA);
     const params = cifti_gradient_params(cifti, direction, cifti_out, left_surface, right_surface, cerebellum_surface, opt_surface_presmooth_surface_kernel, opt_volume_presmooth_volume_kernel, opt_presmooth_fwhm, opt_average_output, opt_vectors_vectors_out)
-    return cifti_gradient_execute(params, execution);
+    return cifti_gradient_execute(params, runner);
 }
 
 
@@ -465,14 +465,9 @@ export {
       CiftiGradientParameters,
       CiftiGradientRightSurfaceParameters,
       cifti_gradient,
-      cifti_gradient_cargs,
-      cifti_gradient_cerebellum_surface_cargs,
       cifti_gradient_cerebellum_surface_params,
       cifti_gradient_execute,
-      cifti_gradient_left_surface_cargs,
       cifti_gradient_left_surface_params,
-      cifti_gradient_outputs,
       cifti_gradient_params,
-      cifti_gradient_right_surface_cargs,
       cifti_gradient_right_surface_params,
 };

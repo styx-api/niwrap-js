@@ -326,14 +326,16 @@ function file_convert_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FileConvertOutputs`).
  */
 function file_convert_execute(
     params: FileConvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FileConvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FILE_CONVERT_METADATA);
     params = execution.params(params)
     const cargs = file_convert_cargs(params, execution)
     const ret = file_convert_outputs(params, execution)
@@ -364,10 +366,8 @@ function file_convert(
     cifti_version_convert: FileConvertCiftiVersionConvertParameters | null = null,
     runner: Runner | null = null,
 ): FileConvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FILE_CONVERT_METADATA);
     const params = file_convert_params(border_version_convert, nifti_version_convert, cifti_version_convert)
-    return file_convert_execute(params, execution);
+    return file_convert_execute(params, runner);
 }
 
 
@@ -379,14 +379,9 @@ export {
       FileConvertOutputs,
       FileConvertParameters,
       file_convert,
-      file_convert_border_version_convert_cargs,
       file_convert_border_version_convert_params,
-      file_convert_cargs,
-      file_convert_cifti_version_convert_cargs,
       file_convert_cifti_version_convert_params,
       file_convert_execute,
-      file_convert_nifti_version_convert_cargs,
       file_convert_nifti_version_convert_params,
-      file_convert_outputs,
       file_convert_params,
 };

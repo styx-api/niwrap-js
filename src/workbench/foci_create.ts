@@ -209,14 +209,16 @@ function foci_create_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FociCreateOutputs`).
  */
 function foci_create_execute(
     params: FociCreateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FociCreateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FOCI_CREATE_METADATA);
     params = execution.params(params)
     const cargs = foci_create_cargs(params, execution)
     const ret = foci_create_outputs(params, execution)
@@ -255,10 +257,8 @@ function foci_create(
     class_: Array<FociCreateClassParameters> | null = null,
     runner: Runner | null = null,
 ): FociCreateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FOCI_CREATE_METADATA);
     const params = foci_create_params(output, class_)
-    return foci_create_execute(params, execution);
+    return foci_create_execute(params, runner);
 }
 
 
@@ -268,10 +268,7 @@ export {
       FociCreateOutputs,
       FociCreateParameters,
       foci_create,
-      foci_create_cargs,
-      foci_create_class_cargs,
       foci_create_class_params,
       foci_create_execute,
-      foci_create_outputs,
       foci_create_params,
 };

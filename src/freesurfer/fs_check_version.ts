@@ -184,14 +184,16 @@ function fs_check_version_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsCheckVersionOutputs`).
  */
 function fs_check_version_execute(
     params: FsCheckVersionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsCheckVersionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FS_CHECK_VERSION_METADATA);
     params = execution.params(params)
     const cargs = fs_check_version_cargs(params, execution)
     const ret = fs_check_version_outputs(params, execution)
@@ -228,10 +230,8 @@ function fs_check_version(
     test_debug: boolean = false,
     runner: Runner | null = null,
 ): FsCheckVersionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FS_CHECK_VERSION_METADATA);
     const params = fs_check_version_params(subjects_dir, outfile, subject, require_match, no_require_match, test, test_debug)
-    return fs_check_version_execute(params, execution);
+    return fs_check_version_execute(params, runner);
 }
 
 
@@ -240,8 +240,6 @@ export {
       FsCheckVersionOutputs,
       FsCheckVersionParameters,
       fs_check_version,
-      fs_check_version_cargs,
       fs_check_version_execute,
-      fs_check_version_outputs,
       fs_check_version_params,
 };

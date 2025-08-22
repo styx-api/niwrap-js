@@ -322,14 +322,16 @@ function metric_gradient_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricGradientOutputs`).
  */
 function metric_gradient_execute(
     params: MetricGradientParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricGradientOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_GRADIENT_METADATA);
     params = execution.params(params)
     const cargs = metric_gradient_cargs(params, execution)
     const ret = metric_gradient_outputs(params, execution)
@@ -380,10 +382,8 @@ function metric_gradient(
     opt_average_normals: boolean = false,
     runner: Runner | null = null,
 ): MetricGradientOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_GRADIENT_METADATA);
     const params = metric_gradient_params(surface, metric_in, metric_out, presmooth, roi, opt_vectors_vector_metric_out, opt_column_column, opt_corrected_areas_area_metric, opt_average_normals)
-    return metric_gradient_execute(params, execution);
+    return metric_gradient_execute(params, runner);
 }
 
 
@@ -394,12 +394,8 @@ export {
       MetricGradientPresmoothParameters,
       MetricGradientRoiParameters,
       metric_gradient,
-      metric_gradient_cargs,
       metric_gradient_execute,
-      metric_gradient_outputs,
       metric_gradient_params,
-      metric_gradient_presmooth_cargs,
       metric_gradient_presmooth_params,
-      metric_gradient_roi_cargs,
       metric_gradient_roi_params,
 };

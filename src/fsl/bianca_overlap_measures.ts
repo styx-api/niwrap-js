@@ -178,14 +178,16 @@ function bianca_overlap_measures_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BiancaOverlapMeasuresOutputs`).
  */
 function bianca_overlap_measures_execute(
     params: BiancaOverlapMeasuresParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BiancaOverlapMeasuresOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BIANCA_OVERLAP_MEASURES_METADATA);
     params = execution.params(params)
     const cargs = bianca_overlap_measures_cargs(params, execution)
     const ret = bianca_overlap_measures_outputs(params, execution)
@@ -214,10 +216,8 @@ function bianca_overlap_measures(
     output_dir: string,
     runner: Runner | null = null,
 ): BiancaOverlapMeasuresOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BIANCA_OVERLAP_MEASURES_METADATA);
     const params = bianca_overlap_measures_params(lesion_mask, manual_mask, output_dir)
-    return bianca_overlap_measures_execute(params, execution);
+    return bianca_overlap_measures_execute(params, runner);
 }
 
 
@@ -226,8 +226,6 @@ export {
       BiancaOverlapMeasuresOutputs,
       BiancaOverlapMeasuresParameters,
       bianca_overlap_measures,
-      bianca_overlap_measures_cargs,
       bianca_overlap_measures_execute,
-      bianca_overlap_measures_outputs,
       bianca_overlap_measures_params,
 };

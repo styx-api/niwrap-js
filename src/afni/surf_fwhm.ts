@@ -284,14 +284,16 @@ function surf_fwhm_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfFwhmOutputs`).
  */
 function surf_fwhm_execute(
     params: SurfFwhmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfFwhmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_FWHM_METADATA);
     params = execution.params(params)
     const cargs = surf_fwhm_cargs(params, execution)
     const ret = surf_fwhm_outputs(params, execution)
@@ -342,10 +344,8 @@ function surf_fwhm(
     slice: boolean = false,
     runner: Runner | null = null,
 ): SurfFwhmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_FWHM_METADATA);
     const params = surf_fwhm_params(input_file, mask, surf_1, surf_sphere, clean, detrend, detpoly, detprefix, prefix, vox_size, neighborhood, ok_warn, examples, slice)
-    return surf_fwhm_execute(params, execution);
+    return surf_fwhm_execute(params, runner);
 }
 
 
@@ -354,8 +354,6 @@ export {
       SurfFwhmOutputs,
       SurfFwhmParameters,
       surf_fwhm,
-      surf_fwhm_cargs,
       surf_fwhm_execute,
-      surf_fwhm_outputs,
       surf_fwhm_params,
 };

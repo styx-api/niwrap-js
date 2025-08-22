@@ -166,14 +166,16 @@ function v__deblank_file_names_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDeblankFileNamesOutputs`).
  */
 function v__deblank_file_names_execute(
     params: VDeblankFileNamesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDeblankFileNamesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DEBLANK_FILE_NAMES_METADATA);
     params = execution.params(params)
     const cargs = v__deblank_file_names_cargs(params, execution)
     const ret = v__deblank_file_names_outputs(params, execution)
@@ -208,10 +210,8 @@ function v__deblank_file_names(
     files: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): VDeblankFileNamesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DEBLANK_FILE_NAMES_METADATA);
     const params = v__deblank_file_names_params(move, nobrac, demo_set, echo, help, files)
-    return v__deblank_file_names_execute(params, execution);
+    return v__deblank_file_names_execute(params, runner);
 }
 
 
@@ -220,8 +220,6 @@ export {
       VDeblankFileNamesParameters,
       V__DEBLANK_FILE_NAMES_METADATA,
       v__deblank_file_names,
-      v__deblank_file_names_cargs,
       v__deblank_file_names_execute,
-      v__deblank_file_names_outputs,
       v__deblank_file_names_params,
 };

@@ -127,14 +127,16 @@ function check_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CheckSubjectOutputs`).
  */
 function check_subject_execute(
     params: CheckSubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CheckSubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CHECK_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = check_subject_cargs(params, execution)
     const ret = check_subject_outputs(params, execution)
@@ -159,10 +161,8 @@ function check_subject(
     subject_dir: string,
     runner: Runner | null = null,
 ): CheckSubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CHECK_SUBJECT_METADATA);
     const params = check_subject_params(subject_dir)
-    return check_subject_execute(params, execution);
+    return check_subject_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       CheckSubjectOutputs,
       CheckSubjectParameters,
       check_subject,
-      check_subject_cargs,
       check_subject_execute,
-      check_subject_outputs,
       check_subject_params,
 };

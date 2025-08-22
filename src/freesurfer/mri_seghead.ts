@@ -279,14 +279,16 @@ function mri_seghead_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSegheadOutputs`).
  */
 function mri_seghead_execute(
     params: MriSegheadParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSegheadOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SEGHEAD_METADATA);
     params = execution.params(params)
     const cargs = mri_seghead_cargs(params, execution)
     const ret = mri_seghead_outputs(params, execution)
@@ -339,10 +341,8 @@ function mri_seghead(
     gdiag_option: string | null = null,
     runner: Runner | null = null,
 ): MriSegheadOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SEGHEAD_METADATA);
     const params = mri_seghead_params(input_volume, output_volume, fill_value, fhi_value, thresh1_value, thresh2_value, threshold, nhitsmin_value, hvoldat_file, signal_behind_head, rescale, fill_holes_islands, seed_point, or_mask_file, gdiag_option)
-    return mri_seghead_execute(params, execution);
+    return mri_seghead_execute(params, runner);
 }
 
 
@@ -351,8 +351,6 @@ export {
       MriSegheadOutputs,
       MriSegheadParameters,
       mri_seghead,
-      mri_seghead_cargs,
       mri_seghead_execute,
-      mri_seghead_outputs,
       mri_seghead_params,
 };

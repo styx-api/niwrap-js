@@ -428,14 +428,16 @@ function scale_to_map_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ScaleToMapOutputs`).
  */
 function scale_to_map_execute(
     params: ScaleToMapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ScaleToMapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SCALE_TO_MAP_METADATA);
     params = execution.params(params)
     const cargs = scale_to_map_cargs(params, execution)
     const ret = scale_to_map_outputs(params, execution)
@@ -516,10 +518,8 @@ function scale_to_map(
     yesmall: boolean = false,
     runner: Runner | null = null,
 ): ScaleToMapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SCALE_TO_MAP_METADATA);
     const params = scale_to_map_params(input_file, icol, vcol, cmap, cmapfile, cmapdb, frf, clp, perc_clp, apr, anr, interp, nointerp, direct, msk_zero, msk, msk_col, nomsk_col, br, help, verbose, showmap, showdb, novolreg, noxform, setenv, trace, nomall, yesmall)
-    return scale_to_map_execute(params, execution);
+    return scale_to_map_execute(params, runner);
 }
 
 
@@ -529,10 +529,7 @@ export {
       ScaleToMapParameters,
       ScaleToMapTraceParameters,
       scale_to_map,
-      scale_to_map_cargs,
       scale_to_map_execute,
-      scale_to_map_outputs,
       scale_to_map_params,
-      scale_to_map_trace_cargs,
       scale_to_map_trace_params,
 };

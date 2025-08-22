@@ -139,14 +139,16 @@ function v__iso_masks_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VIsoMasksOutputs`).
  */
 function v__iso_masks_execute(
     params: VIsoMasksParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VIsoMasksOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__ISO_MASKS_METADATA);
     params = execution.params(params)
     const cargs = v__iso_masks_cargs(params, execution)
     const ret = v__iso_masks_outputs(params, execution)
@@ -173,10 +175,8 @@ function v__iso_masks(
     isovals: Array<number> | null = null,
     runner: Runner | null = null,
 ): VIsoMasksOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__ISO_MASKS_METADATA);
     const params = v__iso_masks_params(input_dataset, isovals)
-    return v__iso_masks_execute(params, execution);
+    return v__iso_masks_execute(params, runner);
 }
 
 
@@ -185,8 +185,6 @@ export {
       VIsoMasksParameters,
       V__ISO_MASKS_METADATA,
       v__iso_masks,
-      v__iso_masks_cargs,
       v__iso_masks_execute,
-      v__iso_masks_outputs,
       v__iso_masks_params,
 };

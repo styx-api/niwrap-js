@@ -142,14 +142,16 @@ function border_export_color_table_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BorderExportColorTableOutputs`).
  */
 function border_export_color_table_execute(
     params: BorderExportColorTableParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BorderExportColorTableOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BORDER_EXPORT_COLOR_TABLE_METADATA);
     params = execution.params(params)
     const cargs = border_export_color_table_cargs(params, execution)
     const ret = border_export_color_table_outputs(params, execution)
@@ -180,10 +182,8 @@ function border_export_color_table(
     opt_class_colors: boolean = false,
     runner: Runner | null = null,
 ): BorderExportColorTableOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BORDER_EXPORT_COLOR_TABLE_METADATA);
     const params = border_export_color_table_params(border_file, table_out, opt_class_colors)
-    return border_export_color_table_execute(params, execution);
+    return border_export_color_table_execute(params, runner);
 }
 
 
@@ -192,8 +192,6 @@ export {
       BorderExportColorTableOutputs,
       BorderExportColorTableParameters,
       border_export_color_table,
-      border_export_color_table_cargs,
       border_export_color_table_execute,
-      border_export_color_table_outputs,
       border_export_color_table_params,
 };

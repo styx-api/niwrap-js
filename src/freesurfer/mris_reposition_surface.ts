@@ -196,14 +196,16 @@ function mris_reposition_surface_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRepositionSurfaceOutputs`).
  */
 function mris_reposition_surface_execute(
     params: MrisRepositionSurfaceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRepositionSurfaceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_REPOSITION_SURFACE_METADATA);
     params = execution.params(params)
     const cargs = mris_reposition_surface_cargs(params, execution)
     const ret = mris_reposition_surface_outputs(params, execution)
@@ -240,10 +242,8 @@ function mris_reposition_surface(
     iterations: number | null = 1,
     runner: Runner | null = null,
 ): MrisRepositionSurfaceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_REPOSITION_SURFACE_METADATA);
     const params = mris_reposition_surface_params(surf, volume, points, output, size, sigma, iterations)
-    return mris_reposition_surface_execute(params, execution);
+    return mris_reposition_surface_execute(params, runner);
 }
 
 
@@ -252,8 +252,6 @@ export {
       MrisRepositionSurfaceOutputs,
       MrisRepositionSurfaceParameters,
       mris_reposition_surface,
-      mris_reposition_surface_cargs,
       mris_reposition_surface_execute,
-      mris_reposition_surface_outputs,
       mris_reposition_surface_params,
 };

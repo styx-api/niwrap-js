@@ -154,14 +154,16 @@ function prompt_user_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PromptUserOutputs`).
  */
 function prompt_user_execute(
     params: PromptUserParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PromptUserOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PROMPT_USER_METADATA);
     params = execution.params(params)
     const cargs = prompt_user_cargs(params, execution)
     const ret = prompt_user_outputs(params, execution)
@@ -190,10 +192,8 @@ function prompt_user(
     timeout_alias: number | null = null,
     runner: Runner | null = null,
 ): PromptUserOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PROMPT_USER_METADATA);
     const params = prompt_user_params(pause_message, timeout, timeout_alias)
-    return prompt_user_execute(params, execution);
+    return prompt_user_execute(params, runner);
 }
 
 
@@ -202,8 +202,6 @@ export {
       PromptUserOutputs,
       PromptUserParameters,
       prompt_user,
-      prompt_user_cargs,
       prompt_user_execute,
-      prompt_user_outputs,
       prompt_user_params,
 };

@@ -153,14 +153,16 @@ function make_symmetric_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeSymmetricOutputs`).
  */
 function make_symmetric_execute(
     params: MakeSymmetricParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeSymmetricOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_SYMMETRIC_METADATA);
     params = execution.params(params)
     const cargs = make_symmetric_cargs(params, execution)
     const ret = make_symmetric_outputs(params, execution)
@@ -191,10 +193,8 @@ function make_symmetric(
     transform_map: string,
     runner: Runner | null = null,
 ): MakeSymmetricOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_SYMMETRIC_METADATA);
     const params = make_symmetric_params(hemi, input_file, output_file, transform_map)
-    return make_symmetric_execute(params, execution);
+    return make_symmetric_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       MakeSymmetricOutputs,
       MakeSymmetricParameters,
       make_symmetric,
-      make_symmetric_cargs,
       make_symmetric_execute,
-      make_symmetric_outputs,
       make_symmetric_params,
 };

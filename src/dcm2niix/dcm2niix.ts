@@ -438,14 +438,16 @@ function dcm2niix_outputs(
  * Author: Chris Rorden
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Dcm2niixOutputs`).
  */
 function dcm2niix_execute(
     params: Dcm2niixParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Dcm2niixOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DCM2NIIX_METADATA);
     params = execution.params(params)
     const cargs = dcm2niix_cargs(params, execution)
     const ret = dcm2niix_outputs(params, execution)
@@ -524,10 +526,8 @@ function dcm2niix_(
     xml: boolean = false,
     runner: Runner | null = null,
 ): Dcm2niixOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DCM2NIIX_METADATA);
     const params = dcm2niix_params(input_dir, compression_level, adjacent, bids, bids_anon, comment, depth, export_format, filename, defaults, ignore_derived, scaling, merge_2d, series_number, output_dir, philips_scaling, search_mode, rename, single_file, update_check, verbose, conflict_behavior, crop_3d, compression, endian, progress, ignore_trigger, terse, xml)
-    return dcm2niix_execute(params, execution);
+    return dcm2niix_execute(params, runner);
 }
 
 
@@ -536,8 +536,6 @@ export {
       Dcm2niixOutputs,
       Dcm2niixParameters,
       dcm2niix_,
-      dcm2niix_cargs,
       dcm2niix_execute,
-      dcm2niix_outputs,
       dcm2niix_params,
 };

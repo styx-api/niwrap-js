@@ -132,14 +132,16 @@ function immv_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImmvOutputs`).
  */
 function immv_execute(
     params: ImmvParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImmvOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMMV_METADATA);
     params = execution.params(params)
     const cargs = immv_cargs(params, execution)
     const ret = immv_outputs(params, execution)
@@ -166,10 +168,8 @@ function immv(
     destination: string,
     runner: Runner | null = null,
 ): ImmvOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMMV_METADATA);
     const params = immv_params(source_files, destination)
-    return immv_execute(params, execution);
+    return immv_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       ImmvOutputs,
       ImmvParameters,
       immv,
-      immv_cargs,
       immv_execute,
-      immv_outputs,
       immv_params,
 };

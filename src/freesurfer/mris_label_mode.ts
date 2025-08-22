@@ -175,14 +175,16 @@ function mris_label_mode_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisLabelModeOutputs`).
  */
 function mris_label_mode_execute(
     params: MrisLabelModeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisLabelModeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_LABEL_MODE_METADATA);
     params = execution.params(params)
     const cargs = mris_label_mode_cargs(params, execution)
     const ret = mris_label_mode_outputs(params, execution)
@@ -221,10 +223,8 @@ function mris_label_mode(
     output_directory: string | null = null,
     runner: Runner | null = null,
 ): MrisLabelModeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_LABEL_MODE_METADATA);
     const params = mris_label_mode_params(input_curv_file, hemi, surface, subject, output_curv_file, summary_statistics, statistics_cond, output_directory)
-    return mris_label_mode_execute(params, execution);
+    return mris_label_mode_execute(params, runner);
 }
 
 
@@ -233,8 +233,6 @@ export {
       MrisLabelModeOutputs,
       MrisLabelModeParameters,
       mris_label_mode,
-      mris_label_mode_cargs,
       mris_label_mode_execute,
-      mris_label_mode_outputs,
       mris_label_mode_params,
 };

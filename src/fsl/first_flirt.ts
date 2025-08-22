@@ -200,14 +200,16 @@ function first_flirt_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FirstFlirtOutputs`).
  */
 function first_flirt_execute(
     params: FirstFlirtParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FirstFlirtOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIRST_FLIRT_METADATA);
     params = execution.params(params)
     const cargs = first_flirt_cargs(params, execution)
     const ret = first_flirt_outputs(params, execution)
@@ -246,10 +248,8 @@ function first_flirt(
     cost_function: string | null = null,
     runner: Runner | null = null,
 ): FirstFlirtOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIRST_FLIRT_METADATA);
     const params = first_flirt_params(input_image, output_basename, already_brain_extracted_flag, debug_flag, inweight_flag, strucweight_mask, cort_flag, cost_function)
-    return first_flirt_execute(params, execution);
+    return first_flirt_execute(params, runner);
 }
 
 
@@ -258,8 +258,6 @@ export {
       FirstFlirtOutputs,
       FirstFlirtParameters,
       first_flirt,
-      first_flirt_cargs,
       first_flirt_execute,
-      first_flirt_outputs,
       first_flirt_params,
 };

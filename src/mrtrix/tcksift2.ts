@@ -525,14 +525,16 @@ function tcksift2_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Tcksift2Outputs`).
  */
 function tcksift2_execute(
     params: Tcksift2Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Tcksift2Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCKSIFT2_METADATA);
     params = execution.params(params)
     const cargs = tcksift2_cargs(params, execution)
     const ret = tcksift2_outputs(params, execution)
@@ -632,10 +634,8 @@ function tcksift2(
     version: boolean = false,
     runner: Runner | null = null,
 ): Tcksift2Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCKSIFT2_METADATA);
     const params = tcksift2_params(in_tracks, in_fod, out_weights, proc_mask, act, fd_scale_gm, no_dilate_lut, make_null_lobes, remove_untracked, fd_thresh, csv, out_mu, output_debug, out_coeffs, reg_tikhonov, reg_tv, min_td_frac, min_iters, max_iters, min_factor, min_coeff, max_factor, max_coeff, max_coeff_step, min_cf_decrease, linear, info, quiet, debug, force, nthreads, config, help, version)
-    return tcksift2_execute(params, execution);
+    return tcksift2_execute(params, runner);
 }
 
 
@@ -645,10 +645,7 @@ export {
       Tcksift2Outputs,
       Tcksift2Parameters,
       tcksift2,
-      tcksift2_cargs,
-      tcksift2_config_cargs,
       tcksift2_config_params,
       tcksift2_execute,
-      tcksift2_outputs,
       tcksift2_params,
 };

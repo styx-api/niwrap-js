@@ -262,14 +262,16 @@ function vol2segavg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Vol2segavgOutputs`).
  */
 function vol2segavg_execute(
     params: Vol2segavgParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Vol2segavgOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOL2SEGAVG_METADATA);
     params = execution.params(params)
     const cargs = vol2segavg_cargs(params, execution)
     const ret = vol2segavg_outputs(params, execution)
@@ -322,10 +324,8 @@ function vol2segavg(
     remove_mean_flag: boolean = false,
     runner: Runner | null = null,
 ): Vol2segavgOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOL2SEGAVG_METADATA);
     const params = vol2segavg_params(output_file, input_volume, registration, segmentation_file, aparc_aseg_flag, subject_id, segmentation_id, multiply_value, no_bb_flag, erode_value, dilate_value, wm_flag, vcsf_flag, xcsf_flag, remove_mean_flag)
-    return vol2segavg_execute(params, execution);
+    return vol2segavg_execute(params, runner);
 }
 
 
@@ -334,8 +334,6 @@ export {
       Vol2segavgOutputs,
       Vol2segavgParameters,
       vol2segavg,
-      vol2segavg_cargs,
       vol2segavg_execute,
-      vol2segavg_outputs,
       vol2segavg_params,
 };

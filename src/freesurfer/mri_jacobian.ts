@@ -230,14 +230,16 @@ function mri_jacobian_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriJacobianOutputs`).
  */
 function mri_jacobian_execute(
     params: MriJacobianParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriJacobianOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_JACOBIAN_METADATA);
     params = execution.params(params)
     const cargs = mri_jacobian_cargs(params, execution)
     const ret = mri_jacobian_outputs(params, execution)
@@ -288,10 +290,8 @@ function mri_jacobian(
     remove: boolean = false,
     runner: Runner | null = null,
 ): MriJacobianOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_JACOBIAN_METADATA);
     const params = mri_jacobian_params(morph_file, template_vol, output_vol, atlas_coord, write_area_vols, log_jacobian, smooth_sigma, zero_mean_log, tm3d, help1, help2, dt, debug_voxel, remove)
-    return mri_jacobian_execute(params, execution);
+    return mri_jacobian_execute(params, runner);
 }
 
 
@@ -300,8 +300,6 @@ export {
       MriJacobianOutputs,
       MriJacobianParameters,
       mri_jacobian,
-      mri_jacobian_cargs,
       mri_jacobian_execute,
-      mri_jacobian_outputs,
       mri_jacobian_params,
 };

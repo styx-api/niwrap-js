@@ -162,14 +162,16 @@ function pairreg_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PairregOutputs`).
  */
 function pairreg_execute(
     params: PairregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PairregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PAIRREG_METADATA);
     params = execution.params(params)
     const cargs = pairreg_cargs(params, execution)
     const ret = pairreg_outputs(params, execution)
@@ -204,10 +206,8 @@ function pairreg(
     extra_flirt_args: string | null = null,
     runner: Runner | null = null,
 ): PairregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PAIRREG_METADATA);
     const params = pairreg_params(brain1, brain2, skull1, skull2, outputmatrix, extra_flirt_args)
-    return pairreg_execute(params, execution);
+    return pairreg_execute(params, runner);
 }
 
 
@@ -216,8 +216,6 @@ export {
       PairregOutputs,
       PairregParameters,
       pairreg,
-      pairreg_cargs,
       pairreg_execute,
-      pairreg_outputs,
       pairreg_params,
 };

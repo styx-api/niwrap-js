@@ -253,14 +253,16 @@ function mri_funcvits_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriFuncvitsOutputs`).
  */
 function mri_funcvits_execute(
     params: MriFuncvitsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriFuncvitsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_FUNCVITS_METADATA);
     params = execution.params(params)
     const cargs = mri_funcvits_cargs(params, execution)
     const ret = mri_funcvits_outputs(params, execution)
@@ -307,10 +309,8 @@ function mri_funcvits(
     noforce: boolean = false,
     runner: Runner | null = null,
 ): MriFuncvitsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_FUNCVITS_METADATA);
     const params = mri_funcvits_params(stem, outdir, reg, paintsurf, sphere, icosize, hemi, svitdir, icodir, umask, mail, noforce)
-    return mri_funcvits_execute(params, execution);
+    return mri_funcvits_execute(params, runner);
 }
 
 
@@ -319,8 +319,6 @@ export {
       MriFuncvitsOutputs,
       MriFuncvitsParameters,
       mri_funcvits,
-      mri_funcvits_cargs,
       mri_funcvits_execute,
-      mri_funcvits_outputs,
       mri_funcvits_params,
 };

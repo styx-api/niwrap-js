@@ -155,14 +155,16 @@ function mri_mark_temporal_lobe_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMarkTemporalLobeOutputs`).
  */
 function mri_mark_temporal_lobe_execute(
     params: MriMarkTemporalLobeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMarkTemporalLobeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MARK_TEMPORAL_LOBE_METADATA);
     params = execution.params(params)
     const cargs = mri_mark_temporal_lobe_cargs(params, execution)
     const ret = mri_mark_temporal_lobe_outputs(params, execution)
@@ -193,10 +195,8 @@ function mri_mark_temporal_lobe(
     use_gradient: boolean = false,
     runner: Runner | null = null,
 ): MriMarkTemporalLobeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MARK_TEMPORAL_LOBE_METADATA);
     const params = mri_mark_temporal_lobe_params(subjects, output_file, spacing, use_gradient)
-    return mri_mark_temporal_lobe_execute(params, execution);
+    return mri_mark_temporal_lobe_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       MriMarkTemporalLobeOutputs,
       MriMarkTemporalLobeParameters,
       mri_mark_temporal_lobe,
-      mri_mark_temporal_lobe_cargs,
       mri_mark_temporal_lobe_execute,
-      mri_mark_temporal_lobe_outputs,
       mri_mark_temporal_lobe_params,
 };

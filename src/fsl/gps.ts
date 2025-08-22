@@ -200,14 +200,16 @@ function gps_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GpsOutputs`).
  */
 function gps_execute(
     params: GpsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GpsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GPS_METADATA);
     params = execution.params(params)
     const cargs = gps_cargs(params, execution)
     const ret = gps_outputs(params, execution)
@@ -246,10 +248,8 @@ function gps(
     help: boolean = false,
     runner: Runner | null = null,
 ): GpsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GPS_METADATA);
     const params = gps_params(ndir, optws, output, ranseed, init, report, verbose, help)
-    return gps_execute(params, execution);
+    return gps_execute(params, runner);
 }
 
 
@@ -258,8 +258,6 @@ export {
       GpsOutputs,
       GpsParameters,
       gps,
-      gps_cargs,
       gps_execute,
-      gps_outputs,
       gps_params,
 };

@@ -169,14 +169,16 @@ function v__spharm_examples_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSpharmExamplesOutputs`).
  */
 function v__spharm_examples_execute(
     params: VSpharmExamplesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSpharmExamplesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SPHARM_EXAMPLES_METADATA);
     params = execution.params(params)
     const cargs = v__spharm_examples_cargs(params, execution)
     const ret = v__spharm_examples_outputs(params, execution)
@@ -211,10 +213,8 @@ function v__spharm_examples(
     help_find: string | null = null,
     runner: Runner | null = null,
 ): VSpharmExamplesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SPHARM_EXAMPLES_METADATA);
     const params = v__spharm_examples_params(help_web, help_web_alias, help_view, help_view_alias, all_opts, help_find)
-    return v__spharm_examples_execute(params, execution);
+    return v__spharm_examples_execute(params, runner);
 }
 
 
@@ -223,8 +223,6 @@ export {
       VSpharmExamplesParameters,
       V__SPHARM_EXAMPLES_METADATA,
       v__spharm_examples,
-      v__spharm_examples_cargs,
       v__spharm_examples_execute,
-      v__spharm_examples_outputs,
       v__spharm_examples_params,
 };

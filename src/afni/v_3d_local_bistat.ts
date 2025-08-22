@@ -246,14 +246,16 @@ function v_3d_local_bistat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dLocalBistatOutputs`).
  */
 function v_3d_local_bistat_execute(
     params: V3dLocalBistatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dLocalBistatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_LOCAL_BISTAT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_local_bistat_cargs(params, execution)
     const ret = v_3d_local_bistat_outputs(params, execution)
@@ -300,10 +302,8 @@ function v_3d_local_bistat(
     hclip2: Array<string> | null = null,
     runner: Runner | null = null,
 ): V3dLocalBistatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_LOCAL_BISTAT_METADATA);
     const params = v_3d_local_bistat_params(nbhd, stats, prefix, dataset1, dataset2, mask, automask, weight, histpow, histbin, hclip1, hclip2)
-    return v_3d_local_bistat_execute(params, execution);
+    return v_3d_local_bistat_execute(params, runner);
 }
 
 
@@ -312,8 +312,6 @@ export {
       V3dLocalBistatParameters,
       V_3D_LOCAL_BISTAT_METADATA,
       v_3d_local_bistat,
-      v_3d_local_bistat_cargs,
       v_3d_local_bistat_execute,
-      v_3d_local_bistat_outputs,
       v_3d_local_bistat_params,
 };

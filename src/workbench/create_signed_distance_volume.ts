@@ -230,14 +230,16 @@ function create_signed_distance_volume_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CreateSignedDistanceVolumeOutputs`).
  */
 function create_signed_distance_volume_execute(
     params: CreateSignedDistanceVolumeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CreateSignedDistanceVolumeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CREATE_SIGNED_DISTANCE_VOLUME_METADATA);
     params = execution.params(params)
     const cargs = create_signed_distance_volume_cargs(params, execution)
     const ret = create_signed_distance_volume_outputs(params, execution)
@@ -287,10 +289,8 @@ function create_signed_distance_volume(
     opt_winding_method: string | null = null,
     runner: Runner | null = null,
 ): CreateSignedDistanceVolumeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CREATE_SIGNED_DISTANCE_VOLUME_METADATA);
     const params = create_signed_distance_volume_params(surface, refspace, outvol, opt_roi_out_roi_vol, opt_fill_value_value, opt_exact_limit_dist, opt_approx_limit_dist, opt_approx_neighborhood_num, opt_winding_method)
-    return create_signed_distance_volume_execute(params, execution);
+    return create_signed_distance_volume_execute(params, runner);
 }
 
 
@@ -299,8 +299,6 @@ export {
       CreateSignedDistanceVolumeOutputs,
       CreateSignedDistanceVolumeParameters,
       create_signed_distance_volume,
-      create_signed_distance_volume_cargs,
       create_signed_distance_volume_execute,
-      create_signed_distance_volume_outputs,
       create_signed_distance_volume_params,
 };

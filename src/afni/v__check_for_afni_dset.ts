@@ -133,14 +133,16 @@ function v__check_for_afni_dset_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VCheckForAfniDsetOutputs`).
  */
 function v__check_for_afni_dset_execute(
     params: VCheckForAfniDsetParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VCheckForAfniDsetOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__CHECK_FOR_AFNI_DSET_METADATA);
     params = execution.params(params)
     const cargs = v__check_for_afni_dset_cargs(params, execution)
     const ret = v__check_for_afni_dset_outputs(params, execution)
@@ -165,10 +167,8 @@ function v__check_for_afni_dset(
     dataset_name: string,
     runner: Runner | null = null,
 ): VCheckForAfniDsetOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__CHECK_FOR_AFNI_DSET_METADATA);
     const params = v__check_for_afni_dset_params(dataset_name)
-    return v__check_for_afni_dset_execute(params, execution);
+    return v__check_for_afni_dset_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       VCheckForAfniDsetParameters,
       V__CHECK_FOR_AFNI_DSET_METADATA,
       v__check_for_afni_dset,
-      v__check_for_afni_dset_cargs,
       v__check_for_afni_dset_execute,
-      v__check_for_afni_dset_outputs,
       v__check_for_afni_dset_params,
 };

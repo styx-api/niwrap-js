@@ -160,14 +160,16 @@ function mris_label_calc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisLabelCalcOutputs`).
  */
 function mris_label_calc_execute(
     params: MrisLabelCalcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisLabelCalcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_LABEL_CALC_METADATA);
     params = execution.params(params)
     const cargs = mris_label_calc_cargs(params, execution)
     const ret = mris_label_calc_outputs(params, execution)
@@ -200,10 +202,8 @@ function mris_label_calc(
     iterations: number | null = null,
     runner: Runner | null = null,
 ): MrisLabelCalcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_LABEL_CALC_METADATA);
     const params = mris_label_calc_params(command, input1, input2, output, iterations)
-    return mris_label_calc_execute(params, execution);
+    return mris_label_calc_execute(params, runner);
 }
 
 
@@ -212,8 +212,6 @@ export {
       MrisLabelCalcOutputs,
       MrisLabelCalcParameters,
       mris_label_calc,
-      mris_label_calc_cargs,
       mris_label_calc_execute,
-      mris_label_calc_outputs,
       mris_label_calc_params,
 };

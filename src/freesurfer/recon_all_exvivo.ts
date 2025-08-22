@@ -149,14 +149,16 @@ function recon_all_exvivo_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ReconAllExvivoOutputs`).
  */
 function recon_all_exvivo_execute(
     params: ReconAllExvivoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ReconAllExvivoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RECON_ALL_EXVIVO_METADATA);
     params = execution.params(params)
     const cargs = recon_all_exvivo_cargs(params, execution)
     const ret = recon_all_exvivo_outputs(params, execution)
@@ -185,10 +187,8 @@ function recon_all_exvivo(
     nocerebellum: boolean = false,
     runner: Runner | null = null,
 ): ReconAllExvivoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RECON_ALL_EXVIVO_METADATA);
     const params = recon_all_exvivo_params(subject_id, hemisphere, nocerebellum)
-    return recon_all_exvivo_execute(params, execution);
+    return recon_all_exvivo_execute(params, runner);
 }
 
 
@@ -197,8 +197,6 @@ export {
       ReconAllExvivoOutputs,
       ReconAllExvivoParameters,
       recon_all_exvivo,
-      recon_all_exvivo_cargs,
       recon_all_exvivo_execute,
-      recon_all_exvivo_outputs,
       recon_all_exvivo_params,
 };

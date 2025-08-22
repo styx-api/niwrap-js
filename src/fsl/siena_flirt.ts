@@ -143,14 +143,16 @@ function siena_flirt_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SienaFlirtOutputs`).
  */
 function siena_flirt_execute(
     params: SienaFlirtParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SienaFlirtOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SIENA_FLIRT_METADATA);
     params = execution.params(params)
     const cargs = siena_flirt_cargs(params, execution)
     const ret = siena_flirt_outputs(params, execution)
@@ -177,10 +179,8 @@ function siena_flirt(
     input2_fileroot: string,
     runner: Runner | null = null,
 ): SienaFlirtOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SIENA_FLIRT_METADATA);
     const params = siena_flirt_params(input1_fileroot, input2_fileroot)
-    return siena_flirt_execute(params, execution);
+    return siena_flirt_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       SienaFlirtOutputs,
       SienaFlirtParameters,
       siena_flirt,
-      siena_flirt_cargs,
       siena_flirt_execute,
-      siena_flirt_outputs,
       siena_flirt_params,
 };

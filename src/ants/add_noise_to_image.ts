@@ -176,14 +176,16 @@ function add_noise_to_image_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AddNoiseToImageOutputs`).
  */
 function add_noise_to_image_execute(
     params: AddNoiseToImageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AddNoiseToImageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADD_NOISE_TO_IMAGE_METADATA);
     params = execution.params(params)
     const cargs = add_noise_to_image_cargs(params, execution)
     const ret = add_noise_to_image_outputs(params, execution)
@@ -216,10 +218,8 @@ function add_noise_to_image(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AddNoiseToImageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADD_NOISE_TO_IMAGE_METADATA);
     const params = add_noise_to_image_params(input_image, noise_model, output, image_dimensionality, verbose)
-    return add_noise_to_image_execute(params, execution);
+    return add_noise_to_image_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       AddNoiseToImageOutputs,
       AddNoiseToImageParameters,
       add_noise_to_image,
-      add_noise_to_image_cargs,
       add_noise_to_image_execute,
-      add_noise_to_image_outputs,
       add_noise_to_image_params,
 };

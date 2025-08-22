@@ -252,14 +252,16 @@ function fslmeants_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslmeantsOutputs`).
  */
 function fslmeants_execute(
     params: FslmeantsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslmeantsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLMEANTS_METADATA);
     params = execution.params(params)
     const cargs = fslmeants_cargs(params, execution)
     const ret = fslmeants_outputs(params, execution)
@@ -310,10 +312,8 @@ function fslmeants(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FslmeantsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLMEANTS_METADATA);
     const params = fslmeants_params(input_image, output, mask, coordinates, usemm_flag, showall_flag, eigenv_flag, eigenvariates_order, no_bin_flag, label_image, transpose_flag, weighted_mean_flag, verbose_flag, help_flag)
-    return fslmeants_execute(params, execution);
+    return fslmeants_execute(params, runner);
 }
 
 
@@ -322,8 +322,6 @@ export {
       FslmeantsOutputs,
       FslmeantsParameters,
       fslmeants,
-      fslmeants_cargs,
       fslmeants_execute,
-      fslmeants_outputs,
       fslmeants_params,
 };

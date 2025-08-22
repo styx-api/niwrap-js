@@ -427,14 +427,16 @@ function tkregisterfv_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TkregisterfvOutputs`).
  */
 function tkregisterfv_execute(
     params: TkregisterfvParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TkregisterfvOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TKREGISTERFV_METADATA);
     params = execution.params(params)
     const cargs = tkregisterfv_cargs(params, execution)
     const ret = tkregisterfv_outputs(params, execution)
@@ -521,10 +523,8 @@ function tkregisterfv(
     aux: InputPathType | null = null,
     runner: Runner | null = null,
 ): TkregisterfvOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TKREGISTERFV_METADATA);
     const params = tkregisterfv_params(reg, mov, targ, subject, fstarg, sd, seg, aseg_flag, aparc_aseg_flag, opacity, surfs_flag, pial_surfs_flag, all_surfs_flag, no_surfs_flag, lh_only_flag, rh_only_flag, surf, aux_s, plane, no_config_flag, mov2, reg2, mov3, reg3, heat_flag, regheader_flag, params_, flip_x_flag, flip_y_flag, flip_z_flag, fstal, aux)
-    return tkregisterfv_execute(params, execution);
+    return tkregisterfv_execute(params, runner);
 }
 
 
@@ -533,8 +533,6 @@ export {
       TkregisterfvOutputs,
       TkregisterfvParameters,
       tkregisterfv,
-      tkregisterfv_cargs,
       tkregisterfv_execute,
-      tkregisterfv_outputs,
       tkregisterfv_params,
 };

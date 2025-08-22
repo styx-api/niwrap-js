@@ -202,14 +202,16 @@ function v_3d_dtto_noisy_dwi_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dDttoNoisyDwiOutputs`).
  */
 function v_3d_dtto_noisy_dwi_execute(
     params: V3dDttoNoisyDwiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dDttoNoisyDwiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_DTTO_NOISY_DWI_METADATA);
     params = execution.params(params)
     const cargs = v_3d_dtto_noisy_dwi_cargs(params, execution)
     const ret = v_3d_dtto_noisy_dwi_outputs(params, execution)
@@ -248,10 +250,8 @@ function v_3d_dtto_noisy_dwi(
     s0: number | null = null,
     runner: Runner | null = null,
 ): V3dDttoNoisyDwiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_DTTO_NOISY_DWI_METADATA);
     const params = v_3d_dtto_noisy_dwi_params(dt_file, grad_file, noise_dwi, prefix, noise_b0, mask, bval, s0)
-    return v_3d_dtto_noisy_dwi_execute(params, execution);
+    return v_3d_dtto_noisy_dwi_execute(params, runner);
 }
 
 
@@ -260,8 +260,6 @@ export {
       V3dDttoNoisyDwiParameters,
       V_3D_DTTO_NOISY_DWI_METADATA,
       v_3d_dtto_noisy_dwi,
-      v_3d_dtto_noisy_dwi_cargs,
       v_3d_dtto_noisy_dwi_execute,
-      v_3d_dtto_noisy_dwi_outputs,
       v_3d_dtto_noisy_dwi_params,
 };

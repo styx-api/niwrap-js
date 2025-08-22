@@ -338,14 +338,16 @@ function run_samseg_long_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RunSamsegLongOutputs`).
  */
 function run_samseg_long_execute(
     params: RunSamsegLongParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RunSamsegLongOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RUN_SAMSEG_LONG_METADATA);
     params = execution.params(params)
     const cargs = run_samseg_long_cargs(params, execution)
     const ret = run_samseg_long_outputs(params, execution)
@@ -412,10 +414,8 @@ function run_samseg_long(
     movie: boolean = false,
     runner: Runner | null = null,
 ): RunSamsegLongOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RUN_SAMSEG_LONG_METADATA);
     const params = run_samseg_long_params(timepoint, output, lesion, threshold, samples, burnin, lesion_mask_structure, lesion_mask_pattern, mode, atlas, deformation_hyperprior, gmm_hyperprior, save_warp, save_mesh, save_posteriors, pallidum_separate, threads, tp_to_base_transform, force_different_resolutions, history, showfigs, movie)
-    return run_samseg_long_execute(params, execution);
+    return run_samseg_long_execute(params, runner);
 }
 
 
@@ -424,8 +424,6 @@ export {
       RunSamsegLongOutputs,
       RunSamsegLongParameters,
       run_samseg_long,
-      run_samseg_long_cargs,
       run_samseg_long_execute,
-      run_samseg_long_outputs,
       run_samseg_long_params,
 };

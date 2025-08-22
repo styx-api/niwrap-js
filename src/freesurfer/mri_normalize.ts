@@ -477,14 +477,16 @@ function mri_normalize_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriNormalizeOutputs`).
  */
 function mri_normalize_execute(
     params: MriNormalizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriNormalizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_NORMALIZE_METADATA);
     params = execution.params(params)
     const cargs = mri_normalize_cargs(params, execution)
     const ret = mri_normalize_outputs(params, execution)
@@ -575,10 +577,8 @@ function mri_normalize(
     print_help: boolean = false,
     runner: Runner | null = null,
 ): MriNormalizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_NORMALIZE_METADATA);
     const params = mri_normalize_params(input_vol, output_vol, norm_iters, disable_1d, nonmax_suppress, conform, nonconform, gentle, control_points, fonly_control_points, lonly_labels, labels, write_volumes, intensity_above, intensity_below, intensity_gradient, prune, no_gentle_cp, mask_file, atlas_transform, noskull, monkey, nosnr, sigma_smooth, aseg_file, debug_v, debug_d, renorm_vol, checknorm_vol, load_read_cp, cp_output_vol, surface_transform, seed_value, print_help)
-    return mri_normalize_execute(params, execution);
+    return mri_normalize_execute(params, runner);
 }
 
 
@@ -587,8 +587,6 @@ export {
       MriNormalizeOutputs,
       MriNormalizeParameters,
       mri_normalize,
-      mri_normalize_cargs,
       mri_normalize_execute,
-      mri_normalize_outputs,
       mri_normalize_params,
 };

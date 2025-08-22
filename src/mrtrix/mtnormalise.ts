@@ -443,14 +443,16 @@ function mtnormalise_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MtnormaliseOutputs`).
  */
 function mtnormalise_execute(
     params: MtnormaliseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MtnormaliseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MTNORMALISE_METADATA);
     params = execution.params(params)
     const cargs = mtnormalise_cargs(params, execution)
     const ret = mtnormalise_outputs(params, execution)
@@ -517,10 +519,8 @@ function mtnormalise(
     version: boolean = false,
     runner: Runner | null = null,
 ): MtnormaliseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MTNORMALISE_METADATA);
     const params = mtnormalise_params(mask, input_output, order, niter, reference, balanced, check_norm, check_mask, check_factors, info, quiet, debug, force, nthreads, config, help, version)
-    return mtnormalise_execute(params, execution);
+    return mtnormalise_execute(params, runner);
 }
 
 
@@ -532,13 +532,8 @@ export {
       MtnormaliseOutputs,
       MtnormaliseParameters,
       mtnormalise,
-      mtnormalise_cargs,
-      mtnormalise_config_cargs,
       mtnormalise_config_params,
       mtnormalise_execute,
-      mtnormalise_input_output_cargs,
-      mtnormalise_input_output_outputs,
       mtnormalise_input_output_params,
-      mtnormalise_outputs,
       mtnormalise_params,
 };

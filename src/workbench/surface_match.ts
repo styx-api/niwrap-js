@@ -140,14 +140,16 @@ function surface_match_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceMatchOutputs`).
  */
 function surface_match_execute(
     params: SurfaceMatchParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceMatchOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_MATCH_METADATA);
     params = execution.params(params)
     const cargs = surface_match_cargs(params, execution)
     const ret = surface_match_outputs(params, execution)
@@ -178,10 +180,8 @@ function surface_match(
     output_surface_name: string,
     runner: Runner | null = null,
 ): SurfaceMatchOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_MATCH_METADATA);
     const params = surface_match_params(match_surface_file, input_surface_file, output_surface_name)
-    return surface_match_execute(params, execution);
+    return surface_match_execute(params, runner);
 }
 
 
@@ -190,8 +190,6 @@ export {
       SurfaceMatchOutputs,
       SurfaceMatchParameters,
       surface_match,
-      surface_match_cargs,
       surface_match_execute,
-      surface_match_outputs,
       surface_match_params,
 };

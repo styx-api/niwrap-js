@@ -136,14 +136,16 @@ function v__afni_orient_sign_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAfniOrientSignOutputs`).
  */
 function v__afni_orient_sign_execute(
     params: VAfniOrientSignParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAfniOrientSignOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__AFNI_ORIENT_SIGN_METADATA);
     params = execution.params(params)
     const cargs = v__afni_orient_sign_cargs(params, execution)
     const ret = v__afni_orient_sign_outputs(params, execution)
@@ -168,10 +170,8 @@ function v__afni_orient_sign(
     infile: InputPathType,
     runner: Runner | null = null,
 ): VAfniOrientSignOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__AFNI_ORIENT_SIGN_METADATA);
     const params = v__afni_orient_sign_params(infile)
-    return v__afni_orient_sign_execute(params, execution);
+    return v__afni_orient_sign_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       VAfniOrientSignParameters,
       V__AFNI_ORIENT_SIGN_METADATA,
       v__afni_orient_sign,
-      v__afni_orient_sign_cargs,
       v__afni_orient_sign_execute,
-      v__afni_orient_sign_outputs,
       v__afni_orient_sign_params,
 };

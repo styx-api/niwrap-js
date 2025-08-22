@@ -151,14 +151,16 @@ function siena_flow2std_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SienaFlow2stdOutputs`).
  */
 function siena_flow2std_execute(
     params: SienaFlow2stdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SienaFlow2stdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SIENA_FLOW2STD_METADATA);
     params = execution.params(params)
     const cargs = siena_flow2std_cargs(params, execution)
     const ret = siena_flow2std_outputs(params, execution)
@@ -189,10 +191,8 @@ function siena_flow2std(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): SienaFlow2stdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SIENA_FLOW2STD_METADATA);
     const params = siena_flow2std_params(fileroot1, fileroot2, sigma, debug_flag)
-    return siena_flow2std_execute(params, execution);
+    return siena_flow2std_execute(params, runner);
 }
 
 
@@ -201,8 +201,6 @@ export {
       SienaFlow2stdOutputs,
       SienaFlow2stdParameters,
       siena_flow2std,
-      siena_flow2std_cargs,
       siena_flow2std_execute,
-      siena_flow2std_outputs,
       siena_flow2std_params,
 };

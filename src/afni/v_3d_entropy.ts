@@ -134,14 +134,16 @@ function v_3d_entropy_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dEntropyOutputs`).
  */
 function v_3d_entropy_execute(
     params: V3dEntropyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dEntropyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ENTROPY_METADATA);
     params = execution.params(params)
     const cargs = v_3d_entropy_cargs(params, execution)
     const ret = v_3d_entropy_outputs(params, execution)
@@ -168,10 +170,8 @@ function v_3d_entropy(
     zskip: boolean = false,
     runner: Runner | null = null,
 ): V3dEntropyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ENTROPY_METADATA);
     const params = v_3d_entropy_params(input_dataset, zskip)
-    return v_3d_entropy_execute(params, execution);
+    return v_3d_entropy_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       V3dEntropyParameters,
       V_3D_ENTROPY_METADATA,
       v_3d_entropy,
-      v_3d_entropy_cargs,
       v_3d_entropy_execute,
-      v_3d_entropy_outputs,
       v_3d_entropy_params,
 };

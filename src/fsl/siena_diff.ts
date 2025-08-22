@@ -184,14 +184,16 @@ function siena_diff_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SienaDiffOutputs`).
  */
 function siena_diff_execute(
     params: SienaDiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SienaDiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SIENA_DIFF_METADATA);
     params = execution.params(params)
     const cargs = siena_diff_cargs(params, execution)
     const ret = siena_diff_outputs(params, execution)
@@ -230,10 +232,8 @@ function siena_diff(
     segment_options: string | null = null,
     runner: Runner | null = null,
 ): SienaDiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SIENA_DIFF_METADATA);
     const params = siena_diff_params(input1_basename, input2_basename, debug_flag, no_seg_flag, self_corr_factor, ignore_z_flow_flag, apply_std_mask_flag, segment_options)
-    return siena_diff_execute(params, execution);
+    return siena_diff_execute(params, runner);
 }
 
 
@@ -242,8 +242,6 @@ export {
       SienaDiffOutputs,
       SienaDiffParameters,
       siena_diff,
-      siena_diff_cargs,
       siena_diff_execute,
-      siena_diff_outputs,
       siena_diff_params,
 };

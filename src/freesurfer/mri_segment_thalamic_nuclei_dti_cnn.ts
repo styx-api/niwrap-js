@@ -237,14 +237,16 @@ function mri_segment_thalamic_nuclei_dti_cnn_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSegmentThalamicNucleiDtiCnnOutputs`).
  */
 function mri_segment_thalamic_nuclei_dti_cnn_execute(
     params: MriSegmentThalamicNucleiDtiCnnParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSegmentThalamicNucleiDtiCnnOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SEGMENT_THALAMIC_NUCLEI_DTI_CNN_METADATA);
     params = execution.params(params)
     const cargs = mri_segment_thalamic_nuclei_dti_cnn_cargs(params, execution)
     const ret = mri_segment_thalamic_nuclei_dti_cnn_outputs(params, execution)
@@ -287,10 +289,8 @@ function mri_segment_thalamic_nuclei_dti_cnn(
     model: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriSegmentThalamicNucleiDtiCnnOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SEGMENT_THALAMIC_NUCLEI_DTI_CNN_METADATA);
     const params = mri_segment_thalamic_nuclei_dti_cnn_params(t1_images, fa, v1, output, aseg, volume_output, posteriors_output, threads, force_cpu, model)
-    return mri_segment_thalamic_nuclei_dti_cnn_execute(params, execution);
+    return mri_segment_thalamic_nuclei_dti_cnn_execute(params, runner);
 }
 
 
@@ -299,8 +299,6 @@ export {
       MriSegmentThalamicNucleiDtiCnnOutputs,
       MriSegmentThalamicNucleiDtiCnnParameters,
       mri_segment_thalamic_nuclei_dti_cnn,
-      mri_segment_thalamic_nuclei_dti_cnn_cargs,
       mri_segment_thalamic_nuclei_dti_cnn_execute,
-      mri_segment_thalamic_nuclei_dti_cnn_outputs,
       mri_segment_thalamic_nuclei_dti_cnn_params,
 };

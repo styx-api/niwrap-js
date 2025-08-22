@@ -380,14 +380,16 @@ function retro_ts_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RetroTsPyOutputs`).
  */
 function retro_ts_py_execute(
     params: RetroTsPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RetroTsPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RETRO_TS_PY_METADATA);
     params = execution.params(params)
     const cargs = retro_ts_py_cargs(params, execution)
     const ret = retro_ts_py_outputs(params, execution)
@@ -460,10 +462,8 @@ function retro_ts_py(
     legacy_transform: number | null = null,
     runner: Runner | null = null,
 ): RetroTsPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RETRO_TS_PY_METADATA);
     const params = retro_ts_py_params(num_slices, volume_tr, resp_file, card_file, phys_fs, phys_file, phys_json, prefix, rvt_shifts, rvt_out, resp_cutoff_freq, cardiac_cutoff_freq, cardiac_out, respiration_out, interp_style, fir_order, quiet, demo, show_graphs, debug, slice_offset, slice_major, slice_order, zero_phase_offset, legacy_transform)
-    return retro_ts_py_execute(params, execution);
+    return retro_ts_py_execute(params, runner);
 }
 
 
@@ -472,8 +472,6 @@ export {
       RetroTsPyOutputs,
       RetroTsPyParameters,
       retro_ts_py,
-      retro_ts_py_cargs,
       retro_ts_py_execute,
-      retro_ts_py_outputs,
       retro_ts_py_params,
 };

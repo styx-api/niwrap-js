@@ -145,14 +145,16 @@ function gifti_convert_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GiftiConvertOutputs`).
  */
 function gifti_convert_execute(
     params: GiftiConvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GiftiConvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GIFTI_CONVERT_METADATA);
     params = execution.params(params)
     const cargs = gifti_convert_cargs(params, execution)
     const ret = gifti_convert_outputs(params, execution)
@@ -188,10 +190,8 @@ function gifti_convert(
     output_gifti_file: string,
     runner: Runner | null = null,
 ): GiftiConvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GIFTI_CONVERT_METADATA);
     const params = gifti_convert_params(gifti_encoding, input_gifti_file, output_gifti_file)
-    return gifti_convert_execute(params, execution);
+    return gifti_convert_execute(params, runner);
 }
 
 
@@ -200,8 +200,6 @@ export {
       GiftiConvertOutputs,
       GiftiConvertParameters,
       gifti_convert,
-      gifti_convert_cargs,
       gifti_convert_execute,
-      gifti_convert_outputs,
       gifti_convert_params,
 };

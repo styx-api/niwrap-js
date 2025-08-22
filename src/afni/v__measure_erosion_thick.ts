@@ -275,14 +275,16 @@ function v__measure_erosion_thick_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VMeasureErosionThickOutputs`).
  */
 function v__measure_erosion_thick_execute(
     params: VMeasureErosionThickParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VMeasureErosionThickOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__MEASURE_EROSION_THICK_METADATA);
     params = execution.params(params)
     const cargs = v__measure_erosion_thick_cargs(params, execution)
     const ret = v__measure_erosion_thick_outputs(params, execution)
@@ -325,10 +327,8 @@ function v__measure_erosion_thick(
     surfsmooth_method: string | null = null,
     runner: Runner | null = null,
 ): VMeasureErosionThickOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__MEASURE_EROSION_THICK_METADATA);
     const params = v__measure_erosion_thick_params(maskset, surfset, outdir, resample, surfsmooth, smoothmm, maxthick, depthsearch, keep_temp_files, surfsmooth_method)
-    return v__measure_erosion_thick_execute(params, execution);
+    return v__measure_erosion_thick_execute(params, runner);
 }
 
 
@@ -337,8 +337,6 @@ export {
       VMeasureErosionThickParameters,
       V__MEASURE_EROSION_THICK_METADATA,
       v__measure_erosion_thick,
-      v__measure_erosion_thick_cargs,
       v__measure_erosion_thick_execute,
-      v__measure_erosion_thick_outputs,
       v__measure_erosion_thick_params,
 };

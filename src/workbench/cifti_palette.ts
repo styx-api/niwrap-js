@@ -602,14 +602,16 @@ function cifti_palette_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiPaletteOutputs`).
  */
 function cifti_palette_execute(
     params: CiftiPaletteParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiPaletteOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_PALETTE_METADATA);
     params = execution.params(params)
     const cargs = cifti_palette_cargs(params, execution)
     const ret = cifti_palette_outputs(params, execution)
@@ -736,10 +738,8 @@ function cifti_palette(
     opt_inversion_type: string | null = null,
     runner: Runner | null = null,
 ): CiftiPaletteOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_PALETTE_METADATA);
     const params = cifti_palette_params(cifti_in, mode, cifti_out, opt_column_column, pos_percent, neg_percent, pos_user, neg_user, opt_interpolate_interpolate, opt_disp_pos_display, opt_disp_neg_display, opt_disp_zero_display, opt_palette_name_name, thresholding, opt_inversion_type)
-    return cifti_palette_execute(params, execution);
+    return cifti_palette_execute(params, runner);
 }
 
 
@@ -753,18 +753,11 @@ export {
       CiftiPalettePosUserParameters,
       CiftiPaletteThresholdingParameters,
       cifti_palette,
-      cifti_palette_cargs,
       cifti_palette_execute,
-      cifti_palette_neg_percent_cargs,
       cifti_palette_neg_percent_params,
-      cifti_palette_neg_user_cargs,
       cifti_palette_neg_user_params,
-      cifti_palette_outputs,
       cifti_palette_params,
-      cifti_palette_pos_percent_cargs,
       cifti_palette_pos_percent_params,
-      cifti_palette_pos_user_cargs,
       cifti_palette_pos_user_params,
-      cifti_palette_thresholding_cargs,
       cifti_palette_thresholding_params,
 };

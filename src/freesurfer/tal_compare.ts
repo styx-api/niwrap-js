@@ -150,14 +150,16 @@ function tal_compare_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TalCompareOutputs`).
  */
 function tal_compare_execute(
     params: TalCompareParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TalCompareOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TAL_COMPARE_METADATA);
     params = execution.params(params)
     const cargs = tal_compare_cargs(params, execution)
     const ret = tal_compare_outputs(params, execution)
@@ -188,10 +190,8 @@ function tal_compare(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): TalCompareOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TAL_COMPARE_METADATA);
     const params = tal_compare_params(ref_file, moving_file, output_file, verbose)
-    return tal_compare_execute(params, execution);
+    return tal_compare_execute(params, runner);
 }
 
 
@@ -200,8 +200,6 @@ export {
       TalCompareOutputs,
       TalCompareParameters,
       tal_compare,
-      tal_compare_cargs,
       tal_compare_execute,
-      tal_compare_outputs,
       tal_compare_params,
 };

@@ -133,14 +133,16 @@ function v__get_afni_version_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VGetAfniVersionOutputs`).
  */
 function v__get_afni_version_execute(
     params: VGetAfniVersionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VGetAfniVersionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__GET_AFNI_VERSION_METADATA);
     params = execution.params(params)
     const cargs = v__get_afni_version_cargs(params, execution)
     const ret = v__get_afni_version_outputs(params, execution)
@@ -165,10 +167,8 @@ function v__get_afni_version(
     version: string,
     runner: Runner | null = null,
 ): VGetAfniVersionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__GET_AFNI_VERSION_METADATA);
     const params = v__get_afni_version_params(version)
-    return v__get_afni_version_execute(params, execution);
+    return v__get_afni_version_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       VGetAfniVersionParameters,
       V__GET_AFNI_VERSION_METADATA,
       v__get_afni_version,
-      v__get_afni_version_cargs,
       v__get_afni_version_execute,
-      v__get_afni_version_outputs,
       v__get_afni_version_params,
 };

@@ -305,14 +305,16 @@ function xmat_tool_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `XmatToolPyOutputs`).
  */
 function xmat_tool_py_execute(
     params: XmatToolPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): XmatToolPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(XMAT_TOOL_PY_METADATA);
     params = execution.params(params)
     const cargs = xmat_tool_py_cargs(params, execution)
     const ret = xmat_tool_py_outputs(params, execution)
@@ -377,10 +379,8 @@ function xmat_tool_py(
     gui_plot_xmat_as_one: boolean = false,
     runner: Runner | null = null,
 ): XmatToolPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(XMAT_TOOL_PY_METADATA);
     const params = xmat_tool_py_params(no_gui, load_xmat, load_1d, choose_cols, choose_nonzero_cols, chrono, cormat_cutoff, cosmat_cutoff, cosmat_motion, verb, show_col_types, show_conds, show_cormat, show_cormat_warnings, show_cosmat, show_cosmat_warnings, show_fit_betas, show_fit_ts, show_xmat, show_1d, gui_plot_xmat_as_one)
-    return xmat_tool_py_execute(params, execution);
+    return xmat_tool_py_execute(params, runner);
 }
 
 
@@ -389,8 +389,6 @@ export {
       XmatToolPyOutputs,
       XmatToolPyParameters,
       xmat_tool_py,
-      xmat_tool_py_cargs,
       xmat_tool_py_execute,
-      xmat_tool_py_outputs,
       xmat_tool_py_params,
 };

@@ -155,14 +155,16 @@ function mris_make_face_parcellation_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisMakeFaceParcellationOutputs`).
  */
 function mris_make_face_parcellation_execute(
     params: MrisMakeFaceParcellationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisMakeFaceParcellationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_MAKE_FACE_PARCELLATION_METADATA);
     params = execution.params(params)
     const cargs = mris_make_face_parcellation_cargs(params, execution)
     const ret = mris_make_face_parcellation_outputs(params, execution)
@@ -193,10 +195,8 @@ function mris_make_face_parcellation(
     colortable: InputPathType | null = null,
     runner: Runner | null = null,
 ): MrisMakeFaceParcellationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_MAKE_FACE_PARCELLATION_METADATA);
     const params = mris_make_face_parcellation_params(input_surface, ico_file, output_annot, colortable)
-    return mris_make_face_parcellation_execute(params, execution);
+    return mris_make_face_parcellation_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       MrisMakeFaceParcellationOutputs,
       MrisMakeFaceParcellationParameters,
       mris_make_face_parcellation,
-      mris_make_face_parcellation_cargs,
       mris_make_face_parcellation_execute,
-      mris_make_face_parcellation_outputs,
       mris_make_face_parcellation_params,
 };

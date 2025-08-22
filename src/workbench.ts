@@ -210,3 +210,429 @@ export * from './workbench/volume_weighted_stats'
 export * from './workbench/wbsparse_merge_dense'
 export * from './workbench/zip_scene_file'
 export * from './workbench/zip_spec_file'
+import { Runner } from 'styxdefs';
+import { add_to_spec_file_execute } from './workbench/add_to_spec_file'
+import { annotation_resample_execute } from './workbench/annotation_resample'
+import { backend_average_dense_roi_execute } from './workbench/backend_average_dense_roi'
+import { backend_average_roi_correlation_execute } from './workbench/backend_average_roi_correlation'
+import { border_export_color_table_execute } from './workbench/border_export_color_table'
+import { border_file_export_to_caret5_execute } from './workbench/border_file_export_to_caret5'
+import { border_length_execute } from './workbench/border_length'
+import { border_merge_execute } from './workbench/border_merge'
+import { border_resample_execute } from './workbench/border_resample'
+import { border_to_rois_execute } from './workbench/border_to_rois'
+import { border_to_vertices_execute } from './workbench/border_to_vertices'
+import { cifti_all_labels_to_rois_execute } from './workbench/cifti_all_labels_to_rois'
+import { cifti_average_dense_roi_execute } from './workbench/cifti_average_dense_roi'
+import { cifti_average_execute } from './workbench/cifti_average'
+import { cifti_average_roi_correlation_execute } from './workbench/cifti_average_roi_correlation'
+import { cifti_change_mapping_execute } from './workbench/cifti_change_mapping'
+import { cifti_convert_execute } from './workbench/cifti_convert'
+import { cifti_correlation_execute } from './workbench/cifti_correlation'
+import { cifti_correlation_gradient_execute } from './workbench/cifti_correlation_gradient'
+import { cifti_create_dense_from_template_execute } from './workbench/cifti_create_dense_from_template'
+import { cifti_create_dense_scalar_execute } from './workbench/cifti_create_dense_scalar'
+import { cifti_create_dense_timeseries_execute } from './workbench/cifti_create_dense_timeseries'
+import { cifti_create_label_execute } from './workbench/cifti_create_label'
+import { cifti_create_parcellated_from_template_execute } from './workbench/cifti_create_parcellated_from_template'
+import { cifti_create_scalar_series_execute } from './workbench/cifti_create_scalar_series'
+import { cifti_cross_correlation_execute } from './workbench/cifti_cross_correlation'
+import { cifti_dilate_execute } from './workbench/cifti_dilate'
+import { cifti_erode_execute } from './workbench/cifti_erode'
+import { cifti_estimate_fwhm_execute } from './workbench/cifti_estimate_fwhm'
+import { cifti_export_dense_mapping_execute } from './workbench/cifti_export_dense_mapping'
+import { cifti_extrema_execute } from './workbench/cifti_extrema'
+import { cifti_false_correlation_execute } from './workbench/cifti_false_correlation'
+import { cifti_find_clusters_execute } from './workbench/cifti_find_clusters'
+import { cifti_gradient_execute } from './workbench/cifti_gradient'
+import { cifti_label_adjacency_execute } from './workbench/cifti_label_adjacency'
+import { cifti_label_export_table_execute } from './workbench/cifti_label_export_table'
+import { cifti_label_import_execute } from './workbench/cifti_label_import'
+import { cifti_label_modify_keys_execute } from './workbench/cifti_label_modify_keys'
+import { cifti_label_probability_execute } from './workbench/cifti_label_probability'
+import { cifti_label_to_border_execute } from './workbench/cifti_label_to_border'
+import { cifti_label_to_roi_execute } from './workbench/cifti_label_to_roi'
+import { cifti_math_execute } from './workbench/cifti_math'
+import { cifti_merge_dense_execute } from './workbench/cifti_merge_dense'
+import { cifti_merge_execute } from './workbench/cifti_merge'
+import { cifti_merge_parcels_execute } from './workbench/cifti_merge_parcels'
+import { cifti_pairwise_correlation_execute } from './workbench/cifti_pairwise_correlation'
+import { cifti_palette_execute } from './workbench/cifti_palette'
+import { cifti_parcel_mapping_to_label_execute } from './workbench/cifti_parcel_mapping_to_label'
+import { cifti_parcellate_execute } from './workbench/cifti_parcellate'
+import { cifti_reduce_execute } from './workbench/cifti_reduce'
+import { cifti_reorder_execute } from './workbench/cifti_reorder'
+import { cifti_replace_structure_execute } from './workbench/cifti_replace_structure'
+import { cifti_resample_dconn_memory_execute } from './workbench/cifti_resample_dconn_memory'
+import { cifti_resample_execute } from './workbench/cifti_resample'
+import { cifti_restrict_dense_map_execute } from './workbench/cifti_restrict_dense_map'
+import { cifti_roi_average_execute } from './workbench/cifti_roi_average'
+import { cifti_rois_from_extrema_execute } from './workbench/cifti_rois_from_extrema'
+import { cifti_separate_execute } from './workbench/cifti_separate'
+import { cifti_smoothing_execute } from './workbench/cifti_smoothing'
+import { cifti_stats_execute } from './workbench/cifti_stats'
+import { cifti_transpose_execute } from './workbench/cifti_transpose'
+import { cifti_vector_operation_execute } from './workbench/cifti_vector_operation'
+import { cifti_weighted_stats_execute } from './workbench/cifti_weighted_stats'
+import { convert_affine_execute } from './workbench/convert_affine'
+import { convert_fiber_orientations_execute } from './workbench/convert_fiber_orientations'
+import { convert_matrix4_to_matrix2_execute } from './workbench/convert_matrix4_to_matrix2'
+import { convert_matrix4_to_workbench_sparse_execute } from './workbench/convert_matrix4_to_workbench_sparse'
+import { convert_warpfield_execute } from './workbench/convert_warpfield'
+import { create_signed_distance_volume_execute } from './workbench/create_signed_distance_volume'
+import { estimate_fiber_binghams_execute } from './workbench/estimate_fiber_binghams'
+import { fiber_dot_products_execute } from './workbench/fiber_dot_products'
+import { file_convert_execute } from './workbench/file_convert'
+import { file_information_execute } from './workbench/file_information'
+import { foci_create_execute } from './workbench/foci_create'
+import { foci_get_projection_vertex_execute } from './workbench/foci_get_projection_vertex'
+import { foci_list_coords_execute } from './workbench/foci_list_coords'
+import { foci_resample_execute } from './workbench/foci_resample'
+import { gifti_all_labels_to_rois_execute } from './workbench/gifti_all_labels_to_rois'
+import { gifti_convert_execute } from './workbench/gifti_convert'
+import { gifti_label_add_prefix_execute } from './workbench/gifti_label_add_prefix'
+import { gifti_label_to_roi_execute } from './workbench/gifti_label_to_roi'
+import { label_dilate_execute } from './workbench/label_dilate'
+import { label_erode_execute } from './workbench/label_erode'
+import { label_export_table_execute } from './workbench/label_export_table'
+import { label_mask_execute } from './workbench/label_mask'
+import { label_merge_execute } from './workbench/label_merge'
+import { label_modify_keys_execute } from './workbench/label_modify_keys'
+import { label_probability_execute } from './workbench/label_probability'
+import { label_resample_execute } from './workbench/label_resample'
+import { label_to_border_execute } from './workbench/label_to_border'
+import { label_to_volume_mapping_execute } from './workbench/label_to_volume_mapping'
+import { metadata_remove_provenance_execute } from './workbench/metadata_remove_provenance'
+import { metadata_string_replace_execute } from './workbench/metadata_string_replace'
+import { metric_convert_execute } from './workbench/metric_convert'
+import { metric_dilate_execute } from './workbench/metric_dilate'
+import { metric_erode_execute } from './workbench/metric_erode'
+import { metric_estimate_fwhm_execute } from './workbench/metric_estimate_fwhm'
+import { metric_extrema_execute } from './workbench/metric_extrema'
+import { metric_false_correlation_execute } from './workbench/metric_false_correlation'
+import { metric_fill_holes_execute } from './workbench/metric_fill_holes'
+import { metric_find_clusters_execute } from './workbench/metric_find_clusters'
+import { metric_gradient_execute } from './workbench/metric_gradient'
+import { metric_label_import_execute } from './workbench/metric_label_import'
+import { metric_mask_execute } from './workbench/metric_mask'
+import { metric_math_execute } from './workbench/metric_math'
+import { metric_merge_execute } from './workbench/metric_merge'
+import { metric_palette_execute } from './workbench/metric_palette'
+import { metric_reduce_execute } from './workbench/metric_reduce'
+import { metric_regression_execute } from './workbench/metric_regression'
+import { metric_remove_islands_execute } from './workbench/metric_remove_islands'
+import { metric_resample_execute } from './workbench/metric_resample'
+import { metric_rois_from_extrema_execute } from './workbench/metric_rois_from_extrema'
+import { metric_rois_to_border_execute } from './workbench/metric_rois_to_border'
+import { metric_smoothing_execute } from './workbench/metric_smoothing'
+import { metric_stats_execute } from './workbench/metric_stats'
+import { metric_tfce_execute } from './workbench/metric_tfce'
+import { metric_to_volume_mapping_execute } from './workbench/metric_to_volume_mapping'
+import { metric_vector_operation_execute } from './workbench/metric_vector_operation'
+import { metric_vector_toward_roi_execute } from './workbench/metric_vector_toward_roi'
+import { metric_weighted_stats_execute } from './workbench/metric_weighted_stats'
+import { nifti_information_execute } from './workbench/nifti_information'
+import { probtrackx_dot_convert_execute } from './workbench/probtrackx_dot_convert'
+import { scene_capture_image_execute } from './workbench/scene_capture_image'
+import { scene_file_merge_execute } from './workbench/scene_file_merge'
+import { scene_file_relocate_execute } from './workbench/scene_file_relocate'
+import { scene_file_update_execute } from './workbench/scene_file_update'
+import { set_map_names_execute } from './workbench/set_map_names'
+import { set_structure_execute } from './workbench/set_structure'
+import { signed_distance_to_surface_execute } from './workbench/signed_distance_to_surface'
+import { spec_file_merge_execute } from './workbench/spec_file_merge'
+import { spec_file_relocate_execute } from './workbench/spec_file_relocate'
+import { surface_affine_regression_execute } from './workbench/surface_affine_regression'
+import { surface_apply_affine_execute } from './workbench/surface_apply_affine'
+import { surface_apply_warpfield_execute } from './workbench/surface_apply_warpfield'
+import { surface_average_execute } from './workbench/surface_average'
+import { surface_closest_vertex_execute } from './workbench/surface_closest_vertex'
+import { surface_coordinates_to_metric_execute } from './workbench/surface_coordinates_to_metric'
+import { surface_cortex_layer_execute } from './workbench/surface_cortex_layer'
+import { surface_create_sphere_execute } from './workbench/surface_create_sphere'
+import { surface_curvature_execute } from './workbench/surface_curvature'
+import { surface_cut_resample_execute } from './workbench/surface_cut_resample'
+import { surface_distortion_execute } from './workbench/surface_distortion'
+import { surface_flip_lr_execute } from './workbench/surface_flip_lr'
+import { surface_flip_normals_execute } from './workbench/surface_flip_normals'
+import { surface_generate_inflated_execute } from './workbench/surface_generate_inflated'
+import { surface_geodesic_distance_all_to_all_execute } from './workbench/surface_geodesic_distance_all_to_all'
+import { surface_geodesic_distance_execute } from './workbench/surface_geodesic_distance'
+import { surface_geodesic_rois_execute } from './workbench/surface_geodesic_rois'
+import { surface_inflation_execute } from './workbench/surface_inflation'
+import { surface_information_execute } from './workbench/surface_information'
+import { surface_match_execute } from './workbench/surface_match'
+import { surface_modify_sphere_execute } from './workbench/surface_modify_sphere'
+import { surface_normals_execute } from './workbench/surface_normals'
+import { surface_resample_execute } from './workbench/surface_resample'
+import { surface_set_coordinates_execute } from './workbench/surface_set_coordinates'
+import { surface_smoothing_execute } from './workbench/surface_smoothing'
+import { surface_sphere_project_unproject_execute } from './workbench/surface_sphere_project_unproject'
+import { surface_sphere_triangular_patches_execute } from './workbench/surface_sphere_triangular_patches'
+import { surface_to_surface_3d_distance_execute } from './workbench/surface_to_surface_3d_distance'
+import { surface_vertex_areas_execute } from './workbench/surface_vertex_areas'
+import { surface_wedge_volume_execute } from './workbench/surface_wedge_volume'
+import { volume_all_labels_to_rois_execute } from './workbench/volume_all_labels_to_rois'
+import { volume_capture_plane_execute } from './workbench/volume_capture_plane'
+import { volume_components_to_frames_execute } from './workbench/volume_components_to_frames'
+import { volume_copy_extensions_execute } from './workbench/volume_copy_extensions'
+import { volume_create_execute } from './workbench/volume_create'
+import { volume_dilate_execute } from './workbench/volume_dilate'
+import { volume_distortion_execute } from './workbench/volume_distortion'
+import { volume_erode_execute } from './workbench/volume_erode'
+import { volume_estimate_fwhm_execute } from './workbench/volume_estimate_fwhm'
+import { volume_extrema_execute } from './workbench/volume_extrema'
+import { volume_fill_holes_execute } from './workbench/volume_fill_holes'
+import { volume_find_clusters_execute } from './workbench/volume_find_clusters'
+import { volume_gradient_execute } from './workbench/volume_gradient'
+import { volume_label_export_table_execute } from './workbench/volume_label_export_table'
+import { volume_label_import_execute } from './workbench/volume_label_import'
+import { volume_label_modify_keys_execute } from './workbench/volume_label_modify_keys'
+import { volume_label_probability_execute } from './workbench/volume_label_probability'
+import { volume_label_to_roi_execute } from './workbench/volume_label_to_roi'
+import { volume_label_to_surface_mapping_execute } from './workbench/volume_label_to_surface_mapping'
+import { volume_math_execute } from './workbench/volume_math'
+import { volume_merge_execute } from './workbench/volume_merge'
+import { volume_palette_execute } from './workbench/volume_palette'
+import { volume_parcel_resampling_execute } from './workbench/volume_parcel_resampling'
+import { volume_parcel_resampling_generic_execute } from './workbench/volume_parcel_resampling_generic'
+import { volume_parcel_smoothing_execute } from './workbench/volume_parcel_smoothing'
+import { volume_reduce_execute } from './workbench/volume_reduce'
+import { volume_remove_islands_execute } from './workbench/volume_remove_islands'
+import { volume_reorient_execute } from './workbench/volume_reorient'
+import { volume_resample_execute } from './workbench/volume_resample'
+import { volume_rois_from_extrema_execute } from './workbench/volume_rois_from_extrema'
+import { volume_set_space_execute } from './workbench/volume_set_space'
+import { volume_smoothing_execute } from './workbench/volume_smoothing'
+import { volume_stats_execute } from './workbench/volume_stats'
+import { volume_tfce_execute } from './workbench/volume_tfce'
+import { volume_to_surface_mapping_execute } from './workbench/volume_to_surface_mapping'
+import { volume_vector_operation_execute } from './workbench/volume_vector_operation'
+import { volume_warpfield_affine_regression_execute } from './workbench/volume_warpfield_affine_regression'
+import { volume_weighted_stats_execute } from './workbench/volume_weighted_stats'
+import { wbsparse_merge_dense_execute } from './workbench/wbsparse_merge_dense'
+import { zip_scene_file_execute } from './workbench/zip_scene_file'
+import { zip_spec_file_execute } from './workbench/zip_spec_file'
+
+
+/**
+ * Run a command in this package dynamically from a params object.
+ *
+ * @param params The parameters.
+ * @param runner Command runner
+ *
+ */
+function execute(
+    params: any,
+    runner: Runner | null = null,
+) {
+    return {
+        "workbench.add-to-spec-file": add_to_spec_file_execute,
+        "workbench.annotation-resample": annotation_resample_execute,
+        "workbench.backend-average-dense-roi": backend_average_dense_roi_execute,
+        "workbench.backend-average-roi-correlation": backend_average_roi_correlation_execute,
+        "workbench.border-export-color-table": border_export_color_table_execute,
+        "workbench.border-file-export-to-caret5": border_file_export_to_caret5_execute,
+        "workbench.border-length": border_length_execute,
+        "workbench.border-merge": border_merge_execute,
+        "workbench.border-resample": border_resample_execute,
+        "workbench.border-to-rois": border_to_rois_execute,
+        "workbench.border-to-vertices": border_to_vertices_execute,
+        "workbench.cifti-all-labels-to-rois": cifti_all_labels_to_rois_execute,
+        "workbench.cifti-average-dense-roi": cifti_average_dense_roi_execute,
+        "workbench.cifti-average-roi-correlation": cifti_average_roi_correlation_execute,
+        "workbench.cifti-average": cifti_average_execute,
+        "workbench.cifti-change-mapping": cifti_change_mapping_execute,
+        "workbench.cifti-convert": cifti_convert_execute,
+        "workbench.cifti-correlation-gradient": cifti_correlation_gradient_execute,
+        "workbench.cifti-correlation": cifti_correlation_execute,
+        "workbench.cifti-create-dense-from-template": cifti_create_dense_from_template_execute,
+        "workbench.cifti-create-dense-scalar": cifti_create_dense_scalar_execute,
+        "workbench.cifti-create-dense-timeseries": cifti_create_dense_timeseries_execute,
+        "workbench.cifti-create-label": cifti_create_label_execute,
+        "workbench.cifti-create-parcellated-from-template": cifti_create_parcellated_from_template_execute,
+        "workbench.cifti-create-scalar-series": cifti_create_scalar_series_execute,
+        "workbench.cifti-cross-correlation": cifti_cross_correlation_execute,
+        "workbench.cifti-dilate": cifti_dilate_execute,
+        "workbench.cifti-erode": cifti_erode_execute,
+        "workbench.cifti-estimate-fwhm": cifti_estimate_fwhm_execute,
+        "workbench.cifti-export-dense-mapping": cifti_export_dense_mapping_execute,
+        "workbench.cifti-extrema": cifti_extrema_execute,
+        "workbench.cifti-false-correlation": cifti_false_correlation_execute,
+        "workbench.cifti-find-clusters": cifti_find_clusters_execute,
+        "workbench.cifti-gradient": cifti_gradient_execute,
+        "workbench.cifti-label-adjacency": cifti_label_adjacency_execute,
+        "workbench.cifti-label-export-table": cifti_label_export_table_execute,
+        "workbench.cifti-label-import": cifti_label_import_execute,
+        "workbench.cifti-label-modify-keys": cifti_label_modify_keys_execute,
+        "workbench.cifti-label-probability": cifti_label_probability_execute,
+        "workbench.cifti-label-to-border": cifti_label_to_border_execute,
+        "workbench.cifti-label-to-roi": cifti_label_to_roi_execute,
+        "workbench.cifti-math": cifti_math_execute,
+        "workbench.cifti-merge-dense": cifti_merge_dense_execute,
+        "workbench.cifti-merge-parcels": cifti_merge_parcels_execute,
+        "workbench.cifti-merge": cifti_merge_execute,
+        "workbench.cifti-pairwise-correlation": cifti_pairwise_correlation_execute,
+        "workbench.cifti-palette": cifti_palette_execute,
+        "workbench.cifti-parcel-mapping-to-label": cifti_parcel_mapping_to_label_execute,
+        "workbench.cifti-parcellate": cifti_parcellate_execute,
+        "workbench.cifti-reduce": cifti_reduce_execute,
+        "workbench.cifti-reorder": cifti_reorder_execute,
+        "workbench.cifti-replace-structure": cifti_replace_structure_execute,
+        "workbench.cifti-resample-dconn-memory": cifti_resample_dconn_memory_execute,
+        "workbench.cifti-resample": cifti_resample_execute,
+        "workbench.cifti-restrict-dense-map": cifti_restrict_dense_map_execute,
+        "workbench.cifti-roi-average": cifti_roi_average_execute,
+        "workbench.cifti-rois-from-extrema": cifti_rois_from_extrema_execute,
+        "workbench.cifti-separate": cifti_separate_execute,
+        "workbench.cifti-smoothing": cifti_smoothing_execute,
+        "workbench.cifti-stats": cifti_stats_execute,
+        "workbench.cifti-transpose": cifti_transpose_execute,
+        "workbench.cifti-vector-operation": cifti_vector_operation_execute,
+        "workbench.cifti-weighted-stats": cifti_weighted_stats_execute,
+        "workbench.convert-affine": convert_affine_execute,
+        "workbench.convert-fiber-orientations": convert_fiber_orientations_execute,
+        "workbench.convert-matrix4-to-matrix2": convert_matrix4_to_matrix2_execute,
+        "workbench.convert-matrix4-to-workbench-sparse": convert_matrix4_to_workbench_sparse_execute,
+        "workbench.convert-warpfield": convert_warpfield_execute,
+        "workbench.create-signed-distance-volume": create_signed_distance_volume_execute,
+        "workbench.estimate-fiber-binghams": estimate_fiber_binghams_execute,
+        "workbench.fiber-dot-products": fiber_dot_products_execute,
+        "workbench.file-convert": file_convert_execute,
+        "workbench.file-information": file_information_execute,
+        "workbench.foci-create": foci_create_execute,
+        "workbench.foci-get-projection-vertex": foci_get_projection_vertex_execute,
+        "workbench.foci-list-coords": foci_list_coords_execute,
+        "workbench.foci-resample": foci_resample_execute,
+        "workbench.gifti-all-labels-to-rois": gifti_all_labels_to_rois_execute,
+        "workbench.gifti-convert": gifti_convert_execute,
+        "workbench.gifti-label-add-prefix": gifti_label_add_prefix_execute,
+        "workbench.gifti-label-to-roi": gifti_label_to_roi_execute,
+        "workbench.label-dilate": label_dilate_execute,
+        "workbench.label-erode": label_erode_execute,
+        "workbench.label-export-table": label_export_table_execute,
+        "workbench.label-mask": label_mask_execute,
+        "workbench.label-merge": label_merge_execute,
+        "workbench.label-modify-keys": label_modify_keys_execute,
+        "workbench.label-probability": label_probability_execute,
+        "workbench.label-resample": label_resample_execute,
+        "workbench.label-to-border": label_to_border_execute,
+        "workbench.label-to-volume-mapping": label_to_volume_mapping_execute,
+        "workbench.metadata-remove-provenance": metadata_remove_provenance_execute,
+        "workbench.metadata-string-replace": metadata_string_replace_execute,
+        "workbench.metric-convert": metric_convert_execute,
+        "workbench.metric-dilate": metric_dilate_execute,
+        "workbench.metric-erode": metric_erode_execute,
+        "workbench.metric-estimate-fwhm": metric_estimate_fwhm_execute,
+        "workbench.metric-extrema": metric_extrema_execute,
+        "workbench.metric-false-correlation": metric_false_correlation_execute,
+        "workbench.metric-fill-holes": metric_fill_holes_execute,
+        "workbench.metric-find-clusters": metric_find_clusters_execute,
+        "workbench.metric-gradient": metric_gradient_execute,
+        "workbench.metric-label-import": metric_label_import_execute,
+        "workbench.metric-mask": metric_mask_execute,
+        "workbench.metric-math": metric_math_execute,
+        "workbench.metric-merge": metric_merge_execute,
+        "workbench.metric-palette": metric_palette_execute,
+        "workbench.metric-reduce": metric_reduce_execute,
+        "workbench.metric-regression": metric_regression_execute,
+        "workbench.metric-remove-islands": metric_remove_islands_execute,
+        "workbench.metric-resample": metric_resample_execute,
+        "workbench.metric-rois-from-extrema": metric_rois_from_extrema_execute,
+        "workbench.metric-rois-to-border": metric_rois_to_border_execute,
+        "workbench.metric-smoothing": metric_smoothing_execute,
+        "workbench.metric-stats": metric_stats_execute,
+        "workbench.metric-tfce": metric_tfce_execute,
+        "workbench.metric-to-volume-mapping": metric_to_volume_mapping_execute,
+        "workbench.metric-vector-operation": metric_vector_operation_execute,
+        "workbench.metric-vector-toward-roi": metric_vector_toward_roi_execute,
+        "workbench.metric-weighted-stats": metric_weighted_stats_execute,
+        "workbench.nifti-information": nifti_information_execute,
+        "workbench.probtrackx-dot-convert": probtrackx_dot_convert_execute,
+        "workbench.scene-capture-image": scene_capture_image_execute,
+        "workbench.scene-file-merge": scene_file_merge_execute,
+        "workbench.scene-file-relocate": scene_file_relocate_execute,
+        "workbench.scene-file-update": scene_file_update_execute,
+        "workbench.set-map-names": set_map_names_execute,
+        "workbench.set-structure": set_structure_execute,
+        "workbench.signed-distance-to-surface": signed_distance_to_surface_execute,
+        "workbench.spec-file-merge": spec_file_merge_execute,
+        "workbench.spec-file-relocate": spec_file_relocate_execute,
+        "workbench.surface-affine-regression": surface_affine_regression_execute,
+        "workbench.surface-apply-affine": surface_apply_affine_execute,
+        "workbench.surface-apply-warpfield": surface_apply_warpfield_execute,
+        "workbench.surface-average": surface_average_execute,
+        "workbench.surface-closest-vertex": surface_closest_vertex_execute,
+        "workbench.surface-coordinates-to-metric": surface_coordinates_to_metric_execute,
+        "workbench.surface-cortex-layer": surface_cortex_layer_execute,
+        "workbench.surface-create-sphere": surface_create_sphere_execute,
+        "workbench.surface-curvature": surface_curvature_execute,
+        "workbench.surface-cut-resample": surface_cut_resample_execute,
+        "workbench.surface-distortion": surface_distortion_execute,
+        "workbench.surface-flip-lr": surface_flip_lr_execute,
+        "workbench.surface-flip-normals": surface_flip_normals_execute,
+        "workbench.surface-generate-inflated": surface_generate_inflated_execute,
+        "workbench.surface-geodesic-distance-all-to-all": surface_geodesic_distance_all_to_all_execute,
+        "workbench.surface-geodesic-distance": surface_geodesic_distance_execute,
+        "workbench.surface-geodesic-rois": surface_geodesic_rois_execute,
+        "workbench.surface-inflation": surface_inflation_execute,
+        "workbench.surface-information": surface_information_execute,
+        "workbench.surface-match": surface_match_execute,
+        "workbench.surface-modify-sphere": surface_modify_sphere_execute,
+        "workbench.surface-normals": surface_normals_execute,
+        "workbench.surface-resample": surface_resample_execute,
+        "workbench.surface-set-coordinates": surface_set_coordinates_execute,
+        "workbench.surface-smoothing": surface_smoothing_execute,
+        "workbench.surface-sphere-project-unproject": surface_sphere_project_unproject_execute,
+        "workbench.surface-sphere-triangular-patches": surface_sphere_triangular_patches_execute,
+        "workbench.surface-to-surface-3d-distance": surface_to_surface_3d_distance_execute,
+        "workbench.surface-vertex-areas": surface_vertex_areas_execute,
+        "workbench.surface-wedge-volume": surface_wedge_volume_execute,
+        "workbench.volume-all-labels-to-rois": volume_all_labels_to_rois_execute,
+        "workbench.volume-capture-plane": volume_capture_plane_execute,
+        "workbench.volume-components-to-frames": volume_components_to_frames_execute,
+        "workbench.volume-copy-extensions": volume_copy_extensions_execute,
+        "workbench.volume-create": volume_create_execute,
+        "workbench.volume-dilate": volume_dilate_execute,
+        "workbench.volume-distortion": volume_distortion_execute,
+        "workbench.volume-erode": volume_erode_execute,
+        "workbench.volume-estimate-fwhm": volume_estimate_fwhm_execute,
+        "workbench.volume-extrema": volume_extrema_execute,
+        "workbench.volume-fill-holes": volume_fill_holes_execute,
+        "workbench.volume-find-clusters": volume_find_clusters_execute,
+        "workbench.volume-gradient": volume_gradient_execute,
+        "workbench.volume-label-export-table": volume_label_export_table_execute,
+        "workbench.volume-label-import": volume_label_import_execute,
+        "workbench.volume-label-modify-keys": volume_label_modify_keys_execute,
+        "workbench.volume-label-probability": volume_label_probability_execute,
+        "workbench.volume-label-to-roi": volume_label_to_roi_execute,
+        "workbench.volume-label-to-surface-mapping": volume_label_to_surface_mapping_execute,
+        "workbench.volume-math": volume_math_execute,
+        "workbench.volume-merge": volume_merge_execute,
+        "workbench.volume-palette": volume_palette_execute,
+        "workbench.volume-parcel-resampling-generic": volume_parcel_resampling_generic_execute,
+        "workbench.volume-parcel-resampling": volume_parcel_resampling_execute,
+        "workbench.volume-parcel-smoothing": volume_parcel_smoothing_execute,
+        "workbench.volume-reduce": volume_reduce_execute,
+        "workbench.volume-remove-islands": volume_remove_islands_execute,
+        "workbench.volume-reorient": volume_reorient_execute,
+        "workbench.volume-resample": volume_resample_execute,
+        "workbench.volume-rois-from-extrema": volume_rois_from_extrema_execute,
+        "workbench.volume-set-space": volume_set_space_execute,
+        "workbench.volume-smoothing": volume_smoothing_execute,
+        "workbench.volume-stats": volume_stats_execute,
+        "workbench.volume-tfce": volume_tfce_execute,
+        "workbench.volume-to-surface-mapping": volume_to_surface_mapping_execute,
+        "workbench.volume-vector-operation": volume_vector_operation_execute,
+        "workbench.volume-warpfield-affine-regression": volume_warpfield_affine_regression_execute,
+        "workbench.volume-weighted-stats": volume_weighted_stats_execute,
+        "workbench.wbsparse-merge-dense": wbsparse_merge_dense_execute,
+        "workbench.zip-scene-file": zip_scene_file_execute,
+        "workbench.zip-spec-file": zip_spec_file_execute,
+    }[params["@type"]](params, runner)
+}
+
+
+export {
+      execute,
+};

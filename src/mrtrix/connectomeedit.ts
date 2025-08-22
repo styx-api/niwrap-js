@@ -255,14 +255,16 @@ function connectomeedit_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConnectomeeditOutputs`).
  */
 function connectomeedit_execute(
     params: ConnectomeeditParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConnectomeeditOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONNECTOMEEDIT_METADATA);
     params = execution.params(params)
     const cargs = connectomeedit_cargs(params, execution)
     const ret = connectomeedit_outputs(params, execution)
@@ -313,10 +315,8 @@ function connectomeedit(
     version: boolean = false,
     runner: Runner | null = null,
 ): ConnectomeeditOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONNECTOMEEDIT_METADATA);
     const params = connectomeedit_params(input, operation, output, info, quiet, debug, force, nthreads, config, help, version)
-    return connectomeedit_execute(params, execution);
+    return connectomeedit_execute(params, runner);
 }
 
 
@@ -326,10 +326,7 @@ export {
       ConnectomeeditOutputs,
       ConnectomeeditParameters,
       connectomeedit,
-      connectomeedit_cargs,
-      connectomeedit_config_cargs,
       connectomeedit_config_params,
       connectomeedit_execute,
-      connectomeedit_outputs,
       connectomeedit_params,
 };

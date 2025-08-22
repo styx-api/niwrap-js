@@ -235,14 +235,16 @@ function reg_resample_outputs(
  * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegResampleOutputs`).
  */
 function reg_resample_execute(
     params: RegResampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegResampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REG_RESAMPLE_METADATA);
     params = execution.params(params)
     const cargs = reg_resample_cargs(params, execution)
     const ret = reg_resample_outputs(params, execution)
@@ -285,10 +287,8 @@ function reg_resample(
     linear_interpolation: boolean = false,
     runner: Runner | null = null,
 ): RegResampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REG_RESAMPLE_METADATA);
     const params = reg_resample_params(reference_image, floating_image, affine_transform, flirt_affine_transform, control_point_grid, deformation_field, resampled_image, resampled_blank, nearest_neighbor, linear_interpolation)
-    return reg_resample_execute(params, execution);
+    return reg_resample_execute(params, runner);
 }
 
 
@@ -297,8 +297,6 @@ export {
       RegResampleOutputs,
       RegResampleParameters,
       reg_resample,
-      reg_resample_cargs,
       reg_resample_execute,
-      reg_resample_outputs,
       reg_resample_params,
 };

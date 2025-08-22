@@ -195,14 +195,16 @@ function surf_dist_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfDistOutputs`).
  */
 function surf_dist_execute(
     params: SurfDistParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfDistOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_DIST_METADATA);
     params = execution.params(params)
     const cargs = surf_dist_cargs(params, execution)
     const ret = surf_dist_outputs(params, execution)
@@ -241,10 +243,8 @@ function surf_dist(
     to_nodes: InputPathType | null = null,
     runner: Runner | null = null,
 ): SurfDistOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_DIST_METADATA);
     const params = surf_dist_params(surface, nodepairs, node_path_do, euclidean, euclidian, graph, from_node, to_nodes)
-    return surf_dist_execute(params, execution);
+    return surf_dist_execute(params, runner);
 }
 
 
@@ -253,8 +253,6 @@ export {
       SurfDistOutputs,
       SurfDistParameters,
       surf_dist,
-      surf_dist_cargs,
       surf_dist_execute,
-      surf_dist_outputs,
       surf_dist_params,
 };

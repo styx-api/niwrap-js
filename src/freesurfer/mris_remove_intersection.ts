@@ -171,14 +171,16 @@ function mris_remove_intersection_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRemoveIntersectionOutputs`).
  */
 function mris_remove_intersection_execute(
     params: MrisRemoveIntersectionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRemoveIntersectionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_REMOVE_INTERSECTION_METADATA);
     params = execution.params(params)
     const cargs = mris_remove_intersection_cargs(params, execution)
     const ret = mris_remove_intersection_outputs(params, execution)
@@ -211,10 +213,8 @@ function mris_remove_intersection(
     projdistmm: number | null = null,
     runner: Runner | null = null,
 ): MrisRemoveIntersectionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_REMOVE_INTERSECTION_METADATA);
     const params = mris_remove_intersection_params(surface_in_file, corrected_surface_out_file, fill_holes, map_option, projdistmm)
-    return mris_remove_intersection_execute(params, execution);
+    return mris_remove_intersection_execute(params, runner);
 }
 
 
@@ -223,8 +223,6 @@ export {
       MrisRemoveIntersectionOutputs,
       MrisRemoveIntersectionParameters,
       mris_remove_intersection,
-      mris_remove_intersection_cargs,
       mris_remove_intersection_execute,
-      mris_remove_intersection_outputs,
       mris_remove_intersection_params,
 };

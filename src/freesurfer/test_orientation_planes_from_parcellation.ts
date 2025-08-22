@@ -145,14 +145,16 @@ function test_orientation_planes_from_parcellation_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TestOrientationPlanesFromParcellationOutputs`).
  */
 function test_orientation_planes_from_parcellation_execute(
     params: TestOrientationPlanesFromParcellationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TestOrientationPlanesFromParcellationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TEST_ORIENTATION_PLANES_FROM_PARCELLATION_METADATA);
     params = execution.params(params)
     const cargs = test_orientation_planes_from_parcellation_cargs(params, execution)
     const ret = test_orientation_planes_from_parcellation_outputs(params, execution)
@@ -181,10 +183,8 @@ function test_orientation_planes_from_parcellation(
     bb_flag: boolean = false,
     runner: Runner | null = null,
 ): TestOrientationPlanesFromParcellationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TEST_ORIENTATION_PLANES_FROM_PARCELLATION_METADATA);
     const params = test_orientation_planes_from_parcellation_params(input_file, output_file, bb_flag)
-    return test_orientation_planes_from_parcellation_execute(params, execution);
+    return test_orientation_planes_from_parcellation_execute(params, runner);
 }
 
 
@@ -193,8 +193,6 @@ export {
       TestOrientationPlanesFromParcellationOutputs,
       TestOrientationPlanesFromParcellationParameters,
       test_orientation_planes_from_parcellation,
-      test_orientation_planes_from_parcellation_cargs,
       test_orientation_planes_from_parcellation_execute,
-      test_orientation_planes_from_parcellation_outputs,
       test_orientation_planes_from_parcellation_params,
 };

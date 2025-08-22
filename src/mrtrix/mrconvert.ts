@@ -1166,14 +1166,16 @@ function mrconvert_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrconvertOutputs`).
  */
 function mrconvert_execute(
     params: MrconvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrconvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRCONVERT_METADATA);
     params = execution.params(params)
     const cargs = mrconvert_cargs(params, execution)
     const ret = mrconvert_outputs(params, execution)
@@ -1276,10 +1278,8 @@ function mrconvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrconvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRCONVERT_METADATA);
     const params = mrconvert_params(input, output, coord, vox, axes, scaling, json_import, json_export, clear_property, set_property, append_property, copy_properties, strides, datatype, grad, fslgrad, bvalue_scaling, export_grad_mrtrix, export_grad_fsl, import_pe_table, import_pe_eddy, export_pe_table, export_pe_eddy, info, quiet, debug, force, nthreads, config, help, version)
-    return mrconvert_execute(params, execution);
+    return mrconvert_execute(params, runner);
 }
 
 
@@ -1303,36 +1303,19 @@ export {
       MrconvertVariousString1Parameters,
       MrconvertVariousStringParameters,
       mrconvert,
-      mrconvert_append_property_cargs,
       mrconvert_append_property_params,
-      mrconvert_cargs,
-      mrconvert_clear_property_cargs,
       mrconvert_clear_property_params,
-      mrconvert_config_cargs,
       mrconvert_config_params,
-      mrconvert_coord_cargs,
       mrconvert_coord_params,
       mrconvert_execute,
-      mrconvert_export_grad_fsl_cargs,
-      mrconvert_export_grad_fsl_outputs,
       mrconvert_export_grad_fsl_params,
-      mrconvert_export_pe_eddy_cargs,
-      mrconvert_export_pe_eddy_outputs,
       mrconvert_export_pe_eddy_params,
-      mrconvert_fslgrad_cargs,
       mrconvert_fslgrad_params,
-      mrconvert_import_pe_eddy_cargs,
       mrconvert_import_pe_eddy_params,
-      mrconvert_outputs,
       mrconvert_params,
-      mrconvert_set_property_cargs,
       mrconvert_set_property_params,
-      mrconvert_various_file_1_cargs,
       mrconvert_various_file_1_params,
-      mrconvert_various_file_cargs,
       mrconvert_various_file_params,
-      mrconvert_various_string_1_cargs,
       mrconvert_various_string_1_params,
-      mrconvert_various_string_cargs,
       mrconvert_various_string_params,
 };

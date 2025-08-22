@@ -131,14 +131,16 @@ function fs_print_help_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsPrintHelpOutputs`).
  */
 function fs_print_help_execute(
     params: FsPrintHelpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsPrintHelpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FS_PRINT_HELP_METADATA);
     params = execution.params(params)
     const cargs = fs_print_help_cargs(params, execution)
     const ret = fs_print_help_outputs(params, execution)
@@ -163,10 +165,8 @@ function fs_print_help(
     arguments_: string | null = null,
     runner: Runner | null = null,
 ): FsPrintHelpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FS_PRINT_HELP_METADATA);
     const params = fs_print_help_params(arguments_)
-    return fs_print_help_execute(params, execution);
+    return fs_print_help_execute(params, runner);
 }
 
 
@@ -175,8 +175,6 @@ export {
       FsPrintHelpOutputs,
       FsPrintHelpParameters,
       fs_print_help,
-      fs_print_help_cargs,
       fs_print_help_execute,
-      fs_print_help_outputs,
       fs_print_help_params,
 };

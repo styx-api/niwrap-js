@@ -215,14 +215,16 @@ function v_3dbucket_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dbucketOutputs`).
  */
 function v_3dbucket_execute(
     params: V3dbucketParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dbucketOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DBUCKET_METADATA);
     params = execution.params(params)
     const cargs = v_3dbucket_cargs(params, execution)
     const ret = v_3dbucket_outputs(params, execution)
@@ -265,10 +267,8 @@ function v_3dbucket(
     abuc: boolean = false,
     runner: Runner | null = null,
 ): V3dbucketOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DBUCKET_METADATA);
     const params = v_3dbucket_params(input_files, prefix, output, session, glueto, aglueto, dry, verbose, fbuc, abuc)
-    return v_3dbucket_execute(params, execution);
+    return v_3dbucket_execute(params, runner);
 }
 
 
@@ -277,8 +277,6 @@ export {
       V3dbucketParameters,
       V_3DBUCKET_METADATA,
       v_3dbucket,
-      v_3dbucket_cargs,
       v_3dbucket_execute,
-      v_3dbucket_outputs,
       v_3dbucket_params,
 };

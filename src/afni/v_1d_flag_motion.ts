@@ -157,14 +157,16 @@ function v_1d_flag_motion_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dFlagMotionOutputs`).
  */
 function v_1d_flag_motion_execute(
     params: V1dFlagMotionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dFlagMotionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_FLAG_MOTION_METADATA);
     params = execution.params(params)
     const cargs = v_1d_flag_motion_cargs(params, execution)
     const ret = v_1d_flag_motion_outputs(params, execution)
@@ -193,10 +195,8 @@ function v_1d_flag_motion(
     max_rotation: number | null = null,
     runner: Runner | null = null,
 ): V1dFlagMotionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_FLAG_MOTION_METADATA);
     const params = v_1d_flag_motion_params(input_motion_file, max_translation, max_rotation)
-    return v_1d_flag_motion_execute(params, execution);
+    return v_1d_flag_motion_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       V1dFlagMotionParameters,
       V_1D_FLAG_MOTION_METADATA,
       v_1d_flag_motion,
-      v_1d_flag_motion_cargs,
       v_1d_flag_motion_execute,
-      v_1d_flag_motion_outputs,
       v_1d_flag_motion_params,
 };

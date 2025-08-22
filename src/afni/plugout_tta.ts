@@ -217,14 +217,16 @@ function plugout_tta_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PlugoutTtaOutputs`).
  */
 function plugout_tta_execute(
     params: PlugoutTtaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PlugoutTtaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PLUGOUT_TTA_METADATA);
     params = execution.params(params)
     const cargs = plugout_tta_cargs(params, execution)
     const ret = plugout_tta_outputs(params, execution)
@@ -267,10 +269,8 @@ function plugout_tta(
     num_assigned_ports_quiet: boolean = false,
     runner: Runner | null = null,
 ): PlugoutTtaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PLUGOUT_TTA_METADATA);
     const params = plugout_tta_params(host, port, verbose, port_offset, port_offset_quiet, port_offset_bloc, max_port_bloc, max_port_bloc_quiet, num_assigned_ports, num_assigned_ports_quiet)
-    return plugout_tta_execute(params, execution);
+    return plugout_tta_execute(params, runner);
 }
 
 
@@ -279,8 +279,6 @@ export {
       PlugoutTtaOutputs,
       PlugoutTtaParameters,
       plugout_tta,
-      plugout_tta_cargs,
       plugout_tta_execute,
-      plugout_tta_outputs,
       plugout_tta_params,
 };

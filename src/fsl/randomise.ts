@@ -420,14 +420,16 @@ function randomise_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RandomiseOutputs`).
  */
 function randomise_execute(
     params: RandomiseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RandomiseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RANDOMISE_METADATA);
     params = execution.params(params)
     const cargs = randomise_cargs(params, execution)
     const ret = randomise_outputs(params, execution)
@@ -506,10 +508,8 @@ function randomise(
     x_block_labels: InputPathType | null = null,
     runner: Runner | null = null,
 ): RandomiseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RANDOMISE_METADATA);
     const params = randomise_params(in_file, base_name, design_mat, tcon, c_thresh, cm_thresh, demean, f_c_thresh, f_cm_thresh, f_only, fcon, mask, num_perm, one_sample_group_mean, output_type, p_vec_n_dist_files, raw_stats_imgs, seed, show_info_parallel_mode, show_total_perms, tfce, tfce2_d, tfce_c, tfce_e, tfce_h, var_smooth, vox_p_values, x_block_labels)
-    return randomise_execute(params, execution);
+    return randomise_execute(params, runner);
 }
 
 
@@ -518,8 +518,6 @@ export {
       RandomiseOutputs,
       RandomiseParameters,
       randomise,
-      randomise_cargs,
       randomise_execute,
-      randomise_outputs,
       randomise_params,
 };

@@ -133,14 +133,16 @@ function im2niml_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Im2nimlOutputs`).
  */
 function im2niml_execute(
     params: Im2nimlParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Im2nimlOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IM2NIML_METADATA);
     params = execution.params(params)
     const cargs = im2niml_cargs(params, execution)
     const ret = im2niml_outputs(params, execution)
@@ -165,10 +167,8 @@ function im2niml(
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): Im2nimlOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IM2NIML_METADATA);
     const params = im2niml_params(input_files)
-    return im2niml_execute(params, execution);
+    return im2niml_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       Im2nimlOutputs,
       Im2nimlParameters,
       im2niml,
-      im2niml_cargs,
       im2niml_execute,
-      im2niml_outputs,
       im2niml_params,
 };

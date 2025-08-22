@@ -157,14 +157,16 @@ function mris_fill_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisFillOutputs`).
  */
 function mris_fill_execute(
     params: MrisFillParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisFillOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_FILL_METADATA);
     params = execution.params(params)
     const cargs = mris_fill_cargs(params, execution)
     const ret = mris_fill_outputs(params, execution)
@@ -195,10 +197,8 @@ function mris_fill(
     conform: boolean = false,
     runner: Runner | null = null,
 ): MrisFillOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_FILL_METADATA);
     const params = mris_fill_params(input_surface, output_volume, resolution, conform)
-    return mris_fill_execute(params, execution);
+    return mris_fill_execute(params, runner);
 }
 
 
@@ -207,8 +207,6 @@ export {
       MrisFillOutputs,
       MrisFillParameters,
       mris_fill,
-      mris_fill_cargs,
       mris_fill_execute,
-      mris_fill_outputs,
       mris_fill_params,
 };

@@ -209,14 +209,16 @@ function volume_estimate_fwhm_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeEstimateFwhmOutputs`).
  */
 function volume_estimate_fwhm_execute(
     params: VolumeEstimateFwhmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeEstimateFwhmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_ESTIMATE_FWHM_METADATA);
     params = execution.params(params)
     const cargs = volume_estimate_fwhm_cargs(params, execution)
     const ret = volume_estimate_fwhm_outputs(params, execution)
@@ -249,10 +251,8 @@ function volume_estimate_fwhm(
     whole_file: VolumeEstimateFwhmWholeFileParameters | null = null,
     runner: Runner | null = null,
 ): VolumeEstimateFwhmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_ESTIMATE_FWHM_METADATA);
     const params = volume_estimate_fwhm_params(volume, opt_roi_roivol, opt_subvolume_subvol, whole_file)
-    return volume_estimate_fwhm_execute(params, execution);
+    return volume_estimate_fwhm_execute(params, runner);
 }
 
 
@@ -262,10 +262,7 @@ export {
       VolumeEstimateFwhmParameters,
       VolumeEstimateFwhmWholeFileParameters,
       volume_estimate_fwhm,
-      volume_estimate_fwhm_cargs,
       volume_estimate_fwhm_execute,
-      volume_estimate_fwhm_outputs,
       volume_estimate_fwhm_params,
-      volume_estimate_fwhm_whole_file_cargs,
       volume_estimate_fwhm_whole_file_params,
 };

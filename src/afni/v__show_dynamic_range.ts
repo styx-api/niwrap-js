@@ -138,14 +138,16 @@ function v__show_dynamic_range_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VShowDynamicRangeOutputs`).
  */
 function v__show_dynamic_range_execute(
     params: VShowDynamicRangeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VShowDynamicRangeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SHOW_DYNAMIC_RANGE_METADATA);
     params = execution.params(params)
     const cargs = v__show_dynamic_range_cargs(params, execution)
     const ret = v__show_dynamic_range_outputs(params, execution)
@@ -170,10 +172,8 @@ function v__show_dynamic_range(
     infile: InputPathType,
     runner: Runner | null = null,
 ): VShowDynamicRangeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SHOW_DYNAMIC_RANGE_METADATA);
     const params = v__show_dynamic_range_params(infile)
-    return v__show_dynamic_range_execute(params, execution);
+    return v__show_dynamic_range_execute(params, runner);
 }
 
 
@@ -182,8 +182,6 @@ export {
       VShowDynamicRangeParameters,
       V__SHOW_DYNAMIC_RANGE_METADATA,
       v__show_dynamic_range,
-      v__show_dynamic_range_cargs,
       v__show_dynamic_range_execute,
-      v__show_dynamic_range_outputs,
       v__show_dynamic_range_params,
 };

@@ -137,14 +137,16 @@ function fix_subject_rh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FixSubjectRhOutputs`).
  */
 function fix_subject_rh_execute(
     params: FixSubjectRhParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FixSubjectRhOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIX_SUBJECT_RH_METADATA);
     params = execution.params(params)
     const cargs = fix_subject_rh_cargs(params, execution)
     const ret = fix_subject_rh_outputs(params, execution)
@@ -171,10 +173,8 @@ function fix_subject_rh(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FixSubjectRhOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIX_SUBJECT_RH_METADATA);
     const params = fix_subject_rh_params(input_directory, help_flag)
-    return fix_subject_rh_execute(params, execution);
+    return fix_subject_rh_execute(params, runner);
 }
 
 
@@ -183,8 +183,6 @@ export {
       FixSubjectRhOutputs,
       FixSubjectRhParameters,
       fix_subject_rh,
-      fix_subject_rh_cargs,
       fix_subject_rh_execute,
-      fix_subject_rh_outputs,
       fix_subject_rh_params,
 };

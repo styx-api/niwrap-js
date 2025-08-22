@@ -767,14 +767,16 @@ function recon_all_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ReconAllOutputs`).
  */
 function recon_all_execute(
     params: ReconAllParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ReconAllOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RECON_ALL_METADATA);
     params = execution.params(params)
     const cargs = recon_all_cargs(params, execution)
     const ret = recon_all_outputs(params, execution)
@@ -935,10 +937,8 @@ function recon_all(
     help: boolean = false,
     runner: Runner | null = null,
 ): ReconAllOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RECON_ALL_METADATA);
     const params = recon_all_params(subjid, all_flag, autorecon_all_flag, autorecon1_flag, autorecon2_flag, autorecon2_cp_flag, autorecon2_wm_flag, autorecon2_inflate1_flag, autorecon2_perhemi_flag, autorecon3_flag, hemi, pons_crs, cc_crs, lh_crs, rh_crs, nofill, watershed, external_brain_mask, wsless, wsmore, wsatlas, no_wsatlas, no_wsgcaatlas, wsthresh, wsseed, norm_3d_iters, norm_max_grad, norm1_b, norm2_b, norm1_n, norm2_n, cm, no_fix_with_ga, fix_diag_only, seg_wlo, seg_ghi, nothicken, no_ca_align_after, no_ca_align, deface, expert_file, xopts_use, xopts_clean, xopts_overwrite, termscript_file, mprage, washu_mprage, schwartzya3t_atlas, threads, waitfor_file, notify_file, log_file, status_file, noappend, no_isrunning, hippocampal_subfields_t1, hippocampal_subfields_t2, hippocampal_subfields_t1t2, brainstem_structures, subjects_dir, mail_user, umask, group_id, only_versions, debug, allow_coredump, dontrun, version, help)
-    return recon_all_execute(params, execution);
+    return recon_all_execute(params, runner);
 }
 
 
@@ -947,8 +947,6 @@ export {
       ReconAllOutputs,
       ReconAllParameters,
       recon_all,
-      recon_all_cargs,
       recon_all_execute,
-      recon_all_outputs,
       recon_all_params,
 };

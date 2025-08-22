@@ -143,14 +143,16 @@ function mri_dct_align_binary_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriDctAlignBinaryOutputs`).
  */
 function mri_dct_align_binary_execute(
     params: MriDctAlignBinaryParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriDctAlignBinaryOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_DCT_ALIGN_BINARY_METADATA);
     params = execution.params(params)
     const cargs = mri_dct_align_binary_cargs(params, execution)
     const ret = mri_dct_align_binary_outputs(params, execution)
@@ -179,10 +181,8 @@ function mri_dct_align_binary(
     output_transformation: string,
     runner: Runner | null = null,
 ): MriDctAlignBinaryOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_DCT_ALIGN_BINARY_METADATA);
     const params = mri_dct_align_binary_params(source_image, destination_image, output_transformation)
-    return mri_dct_align_binary_execute(params, execution);
+    return mri_dct_align_binary_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MriDctAlignBinaryOutputs,
       MriDctAlignBinaryParameters,
       mri_dct_align_binary,
-      mri_dct_align_binary_cargs,
       mri_dct_align_binary_execute,
-      mri_dct_align_binary_outputs,
       mri_dct_align_binary_params,
 };

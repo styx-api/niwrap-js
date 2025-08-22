@@ -218,14 +218,16 @@ function segment_subregions_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegmentSubregionsOutputs`).
  */
 function segment_subregions_execute(
     params: SegmentSubregionsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegmentSubregionsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGMENT_SUBREGIONS_METADATA);
     params = execution.params(params)
     const cargs = segment_subregions_cargs(params, execution)
     const ret = segment_subregions_outputs(params, execution)
@@ -266,10 +268,8 @@ function segment_subregions(
     threads: number | null = null,
     runner: Runner | null = null,
 ): SegmentSubregionsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGMENT_SUBREGIONS_METADATA);
     const params = segment_subregions_params(structure, cross, long_base, sd, suffix, temp_dir, out_dir, debug, threads)
-    return segment_subregions_execute(params, execution);
+    return segment_subregions_execute(params, runner);
 }
 
 
@@ -278,8 +278,6 @@ export {
       SegmentSubregionsOutputs,
       SegmentSubregionsParameters,
       segment_subregions,
-      segment_subregions_cargs,
       segment_subregions_execute,
-      segment_subregions_outputs,
       segment_subregions_params,
 };

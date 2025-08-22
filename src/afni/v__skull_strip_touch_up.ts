@@ -178,14 +178,16 @@ function v__skull_strip_touch_up_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSkullStripTouchUpOutputs`).
  */
 function v__skull_strip_touch_up_execute(
     params: VSkullStripTouchUpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSkullStripTouchUpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SKULL_STRIP_TOUCH_UP_METADATA);
     params = execution.params(params)
     const cargs = v__skull_strip_touch_up_cargs(params, execution)
     const ret = v__skull_strip_touch_up_outputs(params, execution)
@@ -220,10 +222,8 @@ function v__skull_strip_touch_up(
     help: boolean = false,
     runner: Runner | null = null,
 ): VSkullStripTouchUpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SKULL_STRIP_TOUCH_UP_METADATA);
     const params = v__skull_strip_touch_up_params(prefix, brain_dataset, head_dataset, mask_out, orig_dim, help)
-    return v__skull_strip_touch_up_execute(params, execution);
+    return v__skull_strip_touch_up_execute(params, runner);
 }
 
 
@@ -232,8 +232,6 @@ export {
       VSkullStripTouchUpParameters,
       V__SKULL_STRIP_TOUCH_UP_METADATA,
       v__skull_strip_touch_up,
-      v__skull_strip_touch_up_cargs,
       v__skull_strip_touch_up_execute,
-      v__skull_strip_touch_up_outputs,
       v__skull_strip_touch_up_params,
 };

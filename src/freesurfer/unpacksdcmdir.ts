@@ -138,14 +138,16 @@ function unpacksdcmdir_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `UnpacksdcmdirOutputs`).
  */
 function unpacksdcmdir_execute(
     params: UnpacksdcmdirParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): UnpacksdcmdirOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(UNPACKSDCMDIR_METADATA);
     params = execution.params(params)
     const cargs = unpacksdcmdir_cargs(params, execution)
     const ret = unpacksdcmdir_outputs(params, execution)
@@ -172,10 +174,8 @@ function unpacksdcmdir(
     output_directory: string,
     runner: Runner | null = null,
 ): UnpacksdcmdirOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UNPACKSDCMDIR_METADATA);
     const params = unpacksdcmdir_params(input_directory, output_directory)
-    return unpacksdcmdir_execute(params, execution);
+    return unpacksdcmdir_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       UnpacksdcmdirOutputs,
       UnpacksdcmdirParameters,
       unpacksdcmdir,
-      unpacksdcmdir_cargs,
       unpacksdcmdir_execute,
-      unpacksdcmdir_outputs,
       unpacksdcmdir_params,
 };

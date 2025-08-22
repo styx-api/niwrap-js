@@ -273,14 +273,16 @@ function dirmerge_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DirmergeOutputs`).
  */
 function dirmerge_execute(
     params: DirmergeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DirmergeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DIRMERGE_METADATA);
     params = execution.params(params)
     const cargs = dirmerge_cargs(params, execution)
     const ret = dirmerge_outputs(params, execution)
@@ -333,10 +335,8 @@ function dirmerge(
     version: boolean = false,
     runner: Runner | null = null,
 ): DirmergeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DIRMERGE_METADATA);
     const params = dirmerge_params(subsets, bvalue_files, out, unipolar_weight, info, quiet, debug, force, nthreads, config, help, version)
-    return dirmerge_execute(params, execution);
+    return dirmerge_execute(params, runner);
 }
 
 
@@ -346,10 +346,7 @@ export {
       DirmergeOutputs,
       DirmergeParameters,
       dirmerge,
-      dirmerge_cargs,
-      dirmerge_config_cargs,
       dirmerge_config_params,
       dirmerge_execute,
-      dirmerge_outputs,
       dirmerge_params,
 };

@@ -229,14 +229,16 @@ function featquery_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FeatqueryOutputs`).
  */
 function featquery_execute(
     params: FeatqueryParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FeatqueryOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FEATQUERY_METADATA);
     params = execution.params(params)
     const cargs = featquery_cargs(params, execution)
     const ret = featquery_outputs(params, execution)
@@ -287,10 +289,8 @@ function featquery(
     coords: Array<number> | null = null,
     runner: Runner | null = null,
 ): FeatqueryOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FEATQUERY_METADATA);
     const params = featquery_params(n_featdirs, featdirs, n_stats, stats, output_rootname, mask_file, atlas_flag, percent_convert_flag, thresh_flag, interp_thresh, timeseries_flag, weight_flag, browser_flag, coords)
-    return featquery_execute(params, execution);
+    return featquery_execute(params, runner);
 }
 
 
@@ -299,8 +299,6 @@ export {
       FeatqueryOutputs,
       FeatqueryParameters,
       featquery,
-      featquery_cargs,
       featquery_execute,
-      featquery_outputs,
       featquery_params,
 };

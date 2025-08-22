@@ -163,14 +163,16 @@ function mris_image2vtk_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisImage2vtkOutputs`).
  */
 function mris_image2vtk_execute(
     params: MrisImage2vtkParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisImage2vtkOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_IMAGE2VTK_METADATA);
     params = execution.params(params)
     const cargs = mris_image2vtk_cargs(params, execution)
     const ret = mris_image2vtk_outputs(params, execution)
@@ -207,10 +209,8 @@ function mris_image2vtk(
     reduction_percent: number,
     runner: Runner | null = null,
 ): MrisImage2vtkOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_IMAGE2VTK_METADATA);
     const params = mris_image2vtk_params(input_filename, output_filename, lower_threshold, upper_threshold, vtk_smoothing_iters, image_smoothing_size, reduction_percent)
-    return mris_image2vtk_execute(params, execution);
+    return mris_image2vtk_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       MrisImage2vtkOutputs,
       MrisImage2vtkParameters,
       mris_image2vtk,
-      mris_image2vtk_cargs,
       mris_image2vtk_execute,
-      mris_image2vtk_outputs,
       mris_image2vtk_params,
 };

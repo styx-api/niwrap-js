@@ -143,14 +143,16 @@ function histo_compute_joint_density_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `HistoComputeJointDensityOutputs`).
  */
 function histo_compute_joint_density_execute(
     params: HistoComputeJointDensityParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): HistoComputeJointDensityOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(HISTO_COMPUTE_JOINT_DENSITY_METADATA);
     params = execution.params(params)
     const cargs = histo_compute_joint_density_cargs(params, execution)
     const ret = histo_compute_joint_density_outputs(params, execution)
@@ -179,10 +181,8 @@ function histo_compute_joint_density(
     joint_density_file: string,
     runner: Runner | null = null,
 ): HistoComputeJointDensityOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(HISTO_COMPUTE_JOINT_DENSITY_METADATA);
     const params = histo_compute_joint_density_params(volume1, volume2, joint_density_file)
-    return histo_compute_joint_density_execute(params, execution);
+    return histo_compute_joint_density_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       HistoComputeJointDensityOutputs,
       HistoComputeJointDensityParameters,
       histo_compute_joint_density,
-      histo_compute_joint_density_cargs,
       histo_compute_joint_density_execute,
-      histo_compute_joint_density_outputs,
       histo_compute_joint_density_params,
 };

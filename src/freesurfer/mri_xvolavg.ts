@@ -164,14 +164,16 @@ function mri_xvolavg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriXvolavgOutputs`).
  */
 function mri_xvolavg_execute(
     params: MriXvolavgParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriXvolavgOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_XVOLAVG_METADATA);
     params = execution.params(params)
     const cargs = mri_xvolavg_cargs(params, execution)
     const ret = mri_xvolavg_outputs(params, execution)
@@ -202,10 +204,8 @@ function mri_xvolavg(
     output_type: string | null = null,
     runner: Runner | null = null,
 ): MriXvolavgOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_XVOLAVG_METADATA);
     const params = mri_xvolavg_params(input_volumes, vol_type, output_volume, output_type)
-    return mri_xvolavg_execute(params, execution);
+    return mri_xvolavg_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       MriXvolavgOutputs,
       MriXvolavgParameters,
       mri_xvolavg,
-      mri_xvolavg_cargs,
       mri_xvolavg_execute,
-      mri_xvolavg_outputs,
       mri_xvolavg_params,
 };

@@ -138,14 +138,16 @@ function fsl_gen_3_d_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslGen3DOutputs`).
  */
 function fsl_gen_3_d_execute(
     params: FslGen3DParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslGen3DOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_GEN_3_D_METADATA);
     params = execution.params(params)
     const cargs = fsl_gen_3_d_cargs(params, execution)
     const ret = fsl_gen_3_d_outputs(params, execution)
@@ -172,10 +174,8 @@ function fsl_gen_3_d(
     outfile: InputPathType,
     runner: Runner | null = null,
 ): FslGen3DOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_GEN_3_D_METADATA);
     const params = fsl_gen_3_d_params(infile, outfile)
-    return fsl_gen_3_d_execute(params, execution);
+    return fsl_gen_3_d_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       FslGen3DOutputs,
       FslGen3DParameters,
       fsl_gen_3_d,
-      fsl_gen_3_d_cargs,
       fsl_gen_3_d_execute,
-      fsl_gen_3_d_outputs,
       fsl_gen_3_d_params,
 };

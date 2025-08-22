@@ -188,14 +188,16 @@ function xcorr_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `XcorrOutputs`).
  */
 function xcorr_execute(
     params: XcorrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): XcorrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(XCORR_METADATA);
     params = execution.params(params)
     const cargs = xcorr_cargs(params, execution)
     const ret = xcorr_outputs(params, execution)
@@ -230,10 +232,8 @@ function xcorr(
     no_cleanup: boolean = false,
     runner: Runner | null = null,
 ): XcorrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(XCORR_METADATA);
     const params = xcorr_params(input1, input2, output, log_file, tmp_dir, no_cleanup)
-    return xcorr_execute(params, execution);
+    return xcorr_execute(params, runner);
 }
 
 
@@ -242,8 +242,6 @@ export {
       XcorrOutputs,
       XcorrParameters,
       xcorr,
-      xcorr_cargs,
       xcorr_execute,
-      xcorr_outputs,
       xcorr_params,
 };

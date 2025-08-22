@@ -138,14 +138,16 @@ function v__to_mni_awarp_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VToMniAwarpOutputs`).
  */
 function v__to_mni_awarp_execute(
     params: VToMniAwarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VToMniAwarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__TO_MNI_AWARP_METADATA);
     params = execution.params(params)
     const cargs = v__to_mni_awarp_cargs(params, execution)
     const ret = v__to_mni_awarp_outputs(params, execution)
@@ -172,10 +174,8 @@ function v__to_mni_awarp(
     datasets: Array<InputPathType>,
     runner: Runner | null = null,
 ): VToMniAwarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__TO_MNI_AWARP_METADATA);
     const params = v__to_mni_awarp_params(directory, datasets)
-    return v__to_mni_awarp_execute(params, execution);
+    return v__to_mni_awarp_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       VToMniAwarpParameters,
       V__TO_MNI_AWARP_METADATA,
       v__to_mni_awarp,
-      v__to_mni_awarp_cargs,
       v__to_mni_awarp_execute,
-      v__to_mni_awarp_outputs,
       v__to_mni_awarp_params,
 };

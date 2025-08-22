@@ -142,14 +142,16 @@ function get_afni_model_prf_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GetAfniModelPrfOutputs`).
  */
 function get_afni_model_prf_execute(
     params: GetAfniModelPrfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GetAfniModelPrfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GET_AFNI_MODEL_PRF_METADATA);
     params = execution.params(params)
     const cargs = get_afni_model_prf_cargs(params, execution)
     const ret = get_afni_model_prf_outputs(params, execution)
@@ -180,10 +182,8 @@ function get_afni_model_prf(
     sigma: number,
     runner: Runner | null = null,
 ): GetAfniModelPrfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GET_AFNI_MODEL_PRF_METADATA);
     const params = get_afni_model_prf_params(amplitude, x_coord, y_coord, sigma)
-    return get_afni_model_prf_execute(params, execution);
+    return get_afni_model_prf_execute(params, runner);
 }
 
 
@@ -192,8 +192,6 @@ export {
       GetAfniModelPrfOutputs,
       GetAfniModelPrfParameters,
       get_afni_model_prf,
-      get_afni_model_prf_cargs,
       get_afni_model_prf_execute,
-      get_afni_model_prf_outputs,
       get_afni_model_prf_params,
 };

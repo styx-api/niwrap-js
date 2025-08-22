@@ -153,14 +153,16 @@ function ico_supersample_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `IcoSupersampleOutputs`).
  */
 function ico_supersample_execute(
     params: IcoSupersampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): IcoSupersampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ICO_SUPERSAMPLE_METADATA);
     params = execution.params(params)
     const cargs = ico_supersample_cargs(params, execution)
     const ret = ico_supersample_outputs(params, execution)
@@ -189,10 +191,8 @@ function ico_supersample(
     projection_point: Array<number> | null = null,
     runner: Runner | null = null,
 ): IcoSupersampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ICO_SUPERSAMPLE_METADATA);
     const params = ico_supersample_params(refine, radius, projection_point)
-    return ico_supersample_execute(params, execution);
+    return ico_supersample_execute(params, runner);
 }
 
 
@@ -201,8 +201,6 @@ export {
       IcoSupersampleOutputs,
       IcoSupersampleParameters,
       ico_supersample,
-      ico_supersample_cargs,
       ico_supersample_execute,
-      ico_supersample_outputs,
       ico_supersample_params,
 };

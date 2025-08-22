@@ -264,14 +264,16 @@ function non_local_super_resolution_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `NonLocalSuperResolutionOutputs`).
  */
 function non_local_super_resolution_execute(
     params: NonLocalSuperResolutionParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): NonLocalSuperResolutionOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(NON_LOCAL_SUPER_RESOLUTION_METADATA);
     params = execution.params(params)
     const cargs = non_local_super_resolution_cargs(params, execution)
     const ret = non_local_super_resolution_outputs(params, execution)
@@ -318,10 +320,8 @@ function non_local_super_resolution(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): NonLocalSuperResolutionOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(NON_LOCAL_SUPER_RESOLUTION_METADATA);
     const params = non_local_super_resolution_params(input_image, output, image_dimensionality, interpolated_image, reference_image, patch_radius, search_radius, intensity_difference_sigma, patch_similarity_sigma, scale_levels, interpolation, verbose)
-    return non_local_super_resolution_execute(params, execution);
+    return non_local_super_resolution_execute(params, runner);
 }
 
 
@@ -330,8 +330,6 @@ export {
       NonLocalSuperResolutionOutputs,
       NonLocalSuperResolutionParameters,
       non_local_super_resolution,
-      non_local_super_resolution_cargs,
       non_local_super_resolution_execute,
-      non_local_super_resolution_outputs,
       non_local_super_resolution_params,
 };

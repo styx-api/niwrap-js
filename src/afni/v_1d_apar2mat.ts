@@ -182,14 +182,16 @@ function v_1d_apar2mat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dApar2matOutputs`).
  */
 function v_1d_apar2mat_execute(
     params: V1dApar2matParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dApar2matOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_APAR2MAT_METADATA);
     params = execution.params(params)
     const cargs = v_1d_apar2mat_cargs(params, execution)
     const ret = v_1d_apar2mat_outputs(params, execution)
@@ -236,10 +238,8 @@ function v_1d_apar2mat(
     z_y_shear: number,
     runner: Runner | null = null,
 ): V1dApar2matOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_APAR2MAT_METADATA);
     const params = v_1d_apar2mat_params(x_shift, y_shift, z_shift, z_angle, x_angle, y_angle, x_scale, y_scale, z_scale, y_x_shear, z_x_shear, z_y_shear)
-    return v_1d_apar2mat_execute(params, execution);
+    return v_1d_apar2mat_execute(params, runner);
 }
 
 
@@ -248,8 +248,6 @@ export {
       V1dApar2matParameters,
       V_1D_APAR2MAT_METADATA,
       v_1d_apar2mat,
-      v_1d_apar2mat_cargs,
       v_1d_apar2mat_execute,
-      v_1d_apar2mat_outputs,
       v_1d_apar2mat_params,
 };

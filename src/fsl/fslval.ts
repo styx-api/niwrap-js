@@ -138,14 +138,16 @@ function fslval_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslvalOutputs`).
  */
 function fslval_execute(
     params: FslvalParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslvalOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLVAL_METADATA);
     params = execution.params(params)
     const cargs = fslval_cargs(params, execution)
     const ret = fslval_outputs(params, execution)
@@ -172,10 +174,8 @@ function fslval(
     keyword: string,
     runner: Runner | null = null,
 ): FslvalOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLVAL_METADATA);
     const params = fslval_params(input_file, keyword)
-    return fslval_execute(params, execution);
+    return fslval_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       FslvalOutputs,
       FslvalParameters,
       fslval,
-      fslval_cargs,
       fslval_execute,
-      fslval_outputs,
       fslval_params,
 };

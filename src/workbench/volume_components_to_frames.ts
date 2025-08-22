@@ -141,14 +141,16 @@ function volume_components_to_frames_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeComponentsToFramesOutputs`).
  */
 function volume_components_to_frames_execute(
     params: VolumeComponentsToFramesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeComponentsToFramesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_COMPONENTS_TO_FRAMES_METADATA);
     params = execution.params(params)
     const cargs = volume_components_to_frames_cargs(params, execution)
     const ret = volume_components_to_frames_outputs(params, execution)
@@ -177,10 +179,8 @@ function volume_components_to_frames(
     output: string,
     runner: Runner | null = null,
 ): VolumeComponentsToFramesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_COMPONENTS_TO_FRAMES_METADATA);
     const params = volume_components_to_frames_params(input, output)
-    return volume_components_to_frames_execute(params, execution);
+    return volume_components_to_frames_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       VolumeComponentsToFramesOutputs,
       VolumeComponentsToFramesParameters,
       volume_components_to_frames,
-      volume_components_to_frames_cargs,
       volume_components_to_frames_execute,
-      volume_components_to_frames_outputs,
       volume_components_to_frames_params,
 };

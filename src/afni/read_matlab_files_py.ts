@@ -173,14 +173,16 @@ function read_matlab_files_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ReadMatlabFilesPyOutputs`).
  */
 function read_matlab_files_py_execute(
     params: ReadMatlabFilesPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ReadMatlabFilesPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(READ_MATLAB_FILES_PY_METADATA);
     params = execution.params(params)
     const cargs = read_matlab_files_py_cargs(params, execution)
     const ret = read_matlab_files_py_outputs(params, execution)
@@ -215,10 +217,8 @@ function read_matlab_files_py(
     version: boolean = false,
     runner: Runner | null = null,
 ): ReadMatlabFilesPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(READ_MATLAB_FILES_PY_METADATA);
     const params = read_matlab_files_py_params(infiles, prefix, overwrite, help, history, version)
-    return read_matlab_files_py_execute(params, execution);
+    return read_matlab_files_py_execute(params, runner);
 }
 
 
@@ -227,8 +227,6 @@ export {
       ReadMatlabFilesPyOutputs,
       ReadMatlabFilesPyParameters,
       read_matlab_files_py,
-      read_matlab_files_py_cargs,
       read_matlab_files_py_execute,
-      read_matlab_files_py_outputs,
       read_matlab_files_py_params,
 };

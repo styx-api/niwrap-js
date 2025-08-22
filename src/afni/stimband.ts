@@ -188,14 +188,16 @@ function stimband_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `StimbandOutputs`).
  */
 function stimband_execute(
     params: StimbandParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): StimbandOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(STIMBAND_METADATA);
     params = execution.params(params)
     const cargs = stimband_cargs(params, execution)
     const ret = stimband_outputs(params, execution)
@@ -230,10 +232,8 @@ function stimband(
     min_pow: number | null = null,
     runner: Runner | null = null,
 ): StimbandOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(STIMBAND_METADATA);
     const params = stimband_params(matrixfiles, verbose_flag, additional_matrixfiles, min_freq, min_bwidth, min_pow)
-    return stimband_execute(params, execution);
+    return stimband_execute(params, runner);
 }
 
 
@@ -242,8 +242,6 @@ export {
       StimbandOutputs,
       StimbandParameters,
       stimband,
-      stimband_cargs,
       stimband_execute,
-      stimband_outputs,
       stimband_params,
 };

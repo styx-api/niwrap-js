@@ -427,14 +427,16 @@ function mris_register_to_volume_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRegisterToVolumeOutputs`).
  */
 function mris_register_to_volume_execute(
     params: MrisRegisterToVolumeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRegisterToVolumeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_REGISTER_TO_VOLUME_METADATA);
     params = execution.params(params)
     const cargs = mris_register_to_volume_cargs(params, execution)
     const ret = mris_register_to_volume_outputs(params, execution)
@@ -513,10 +515,8 @@ function mris_register_to_volume(
     out_reg: string | null = null,
     runner: Runner | null = null,
 ): MrisRegisterToVolumeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_REGISTER_TO_VOLUME_METADATA);
     const params = mris_register_to_volume_params(surface, pial, reg, mri_reg, pial_only, noglobal, median, tx_mmd, ty_mmd, tz_mmd, ax_mmd, ay_mmd, az_mmd, cost, interp, noise, seed, skip, sigma, cnr, max_rot, max_trans, border, subject, dilate, patch, label, out_reg)
-    return mris_register_to_volume_execute(params, execution);
+    return mris_register_to_volume_execute(params, runner);
 }
 
 
@@ -525,8 +525,6 @@ export {
       MrisRegisterToVolumeOutputs,
       MrisRegisterToVolumeParameters,
       mris_register_to_volume,
-      mris_register_to_volume_cargs,
       mris_register_to_volume_execute,
-      mris_register_to_volume_outputs,
       mris_register_to_volume_params,
 };

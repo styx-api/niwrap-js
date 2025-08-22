@@ -138,14 +138,16 @@ function remove_talairach_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RemoveTalairachOutputs`).
  */
 function remove_talairach_execute(
     params: RemoveTalairachParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RemoveTalairachOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REMOVE_TALAIRACH_METADATA);
     params = execution.params(params)
     const cargs = remove_talairach_cargs(params, execution)
     const ret = remove_talairach_outputs(params, execution)
@@ -172,10 +174,8 @@ function remove_talairach(
     output_file: string,
     runner: Runner | null = null,
 ): RemoveTalairachOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REMOVE_TALAIRACH_METADATA);
     const params = remove_talairach_params(input_file, output_file)
-    return remove_talairach_execute(params, execution);
+    return remove_talairach_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       RemoveTalairachOutputs,
       RemoveTalairachParameters,
       remove_talairach,
-      remove_talairach_cargs,
       remove_talairach_execute,
-      remove_talairach_outputs,
       remove_talairach_params,
 };

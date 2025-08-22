@@ -193,14 +193,16 @@ function lta_diff_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LtaDiffOutputs`).
  */
 function lta_diff_execute(
     params: LtaDiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LtaDiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LTA_DIFF_METADATA);
     params = execution.params(params)
     const cargs = lta_diff_cargs(params, execution)
     const ret = lta_diff_outputs(params, execution)
@@ -239,10 +241,8 @@ function lta_diff(
     radius: number | null = null,
     runner: Runner | null = null,
 ): LtaDiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LTA_DIFF_METADATA);
     const params = lta_diff_params(transform1, transform2, dist_type, invert1, invert2, vox, normdiv, radius)
-    return lta_diff_execute(params, execution);
+    return lta_diff_execute(params, runner);
 }
 
 
@@ -251,8 +251,6 @@ export {
       LtaDiffOutputs,
       LtaDiffParameters,
       lta_diff,
-      lta_diff_cargs,
       lta_diff_execute,
-      lta_diff_outputs,
       lta_diff_params,
 };

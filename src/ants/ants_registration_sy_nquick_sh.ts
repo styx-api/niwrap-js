@@ -184,14 +184,16 @@ function ants_registration_sy_nquick_sh_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsRegistrationSyNquickShOutputs`).
  */
 function ants_registration_sy_nquick_sh_execute(
     params: AntsRegistrationSyNquickShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsRegistrationSyNquickShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_REGISTRATION_SY_NQUICK_SH_METADATA);
     params = execution.params(params)
     const cargs = ants_registration_sy_nquick_sh_cargs(params, execution)
     const ret = ants_registration_sy_nquick_sh_outputs(params, execution)
@@ -224,10 +226,8 @@ function ants_registration_sy_nquick_sh(
     transform_type: "s" | "b" | null = null,
     runner: Runner | null = null,
 ): AntsRegistrationSyNquickShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_REGISTRATION_SY_NQUICK_SH_METADATA);
     const params = ants_registration_sy_nquick_sh_params(dimensionality, fixed_image, moving_image, output_prefix, transform_type)
-    return ants_registration_sy_nquick_sh_execute(params, execution);
+    return ants_registration_sy_nquick_sh_execute(params, runner);
 }
 
 
@@ -236,8 +236,6 @@ export {
       AntsRegistrationSyNquickShOutputs,
       AntsRegistrationSyNquickShParameters,
       ants_registration_sy_nquick_sh,
-      ants_registration_sy_nquick_sh_cargs,
       ants_registration_sy_nquick_sh_execute,
-      ants_registration_sy_nquick_sh_outputs,
       ants_registration_sy_nquick_sh_params,
 };

@@ -589,14 +589,16 @@ function metric_palette_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricPaletteOutputs`).
  */
 function metric_palette_execute(
     params: MetricPaletteParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricPaletteOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_PALETTE_METADATA);
     params = execution.params(params)
     const cargs = metric_palette_cargs(params, execution)
     const ret = metric_palette_outputs(params, execution)
@@ -719,10 +721,8 @@ function metric_palette(
     opt_inversion_type: string | null = null,
     runner: Runner | null = null,
 ): MetricPaletteOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_PALETTE_METADATA);
     const params = metric_palette_params(metric, mode, opt_column_column, pos_percent, neg_percent, pos_user, neg_user, opt_interpolate_interpolate, opt_disp_pos_display, opt_disp_neg_display, opt_disp_zero_display, opt_palette_name_name, thresholding, opt_inversion_type)
-    return metric_palette_execute(params, execution);
+    return metric_palette_execute(params, runner);
 }
 
 
@@ -736,18 +736,11 @@ export {
       MetricPalettePosUserParameters,
       MetricPaletteThresholdingParameters,
       metric_palette,
-      metric_palette_cargs,
       metric_palette_execute,
-      metric_palette_neg_percent_cargs,
       metric_palette_neg_percent_params,
-      metric_palette_neg_user_cargs,
       metric_palette_neg_user_params,
-      metric_palette_outputs,
       metric_palette_params,
-      metric_palette_pos_percent_cargs,
       metric_palette_pos_percent_params,
-      metric_palette_pos_user_cargs,
       metric_palette_pos_user_params,
-      metric_palette_thresholding_cargs,
       metric_palette_thresholding_params,
 };

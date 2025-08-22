@@ -232,14 +232,16 @@ function rtfeedme_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RtfeedmeOutputs`).
  */
 function rtfeedme_execute(
     params: RtfeedmeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RtfeedmeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RTFEEDME_METADATA);
     params = execution.params(params)
     const cargs = rtfeedme_cargs(params, execution)
     const ret = rtfeedme_outputs(params, execution)
@@ -284,10 +286,8 @@ function rtfeedme(
     yrange: number | null = null,
     runner: Runner | null = null,
 ): RtfeedmeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RTFEEDME_METADATA);
     const params = rtfeedme_params(datasets, host, interval_ms, send_3d, buffer_mb, verbose, swap_bytes, nz_fake, drive_cmd, note, yrange)
-    return rtfeedme_execute(params, execution);
+    return rtfeedme_execute(params, runner);
 }
 
 
@@ -296,8 +296,6 @@ export {
       RtfeedmeOutputs,
       RtfeedmeParameters,
       rtfeedme,
-      rtfeedme_cargs,
       rtfeedme_execute,
-      rtfeedme_outputs,
       rtfeedme_params,
 };

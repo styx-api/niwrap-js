@@ -241,14 +241,16 @@ function v_3ddot_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3ddotOutputs`).
  */
 function v_3ddot_execute(
     params: V3ddotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3ddotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DDOT_METADATA);
     params = execution.params(params)
     const cargs = v_3ddot_cargs(params, execution)
     const ret = v_3ddot_outputs(params, execution)
@@ -301,10 +303,8 @@ function v_3ddot(
     niml: boolean = false,
     runner: Runner | null = null,
 ): V3ddotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DDOT_METADATA);
     const params = v_3ddot_params(input_datasets, mask, mrange, demean, docor, dodot, docoef, dosums, doeta2, dodice, show_labels, upper, full, v_1_d, niml)
-    return v_3ddot_execute(params, execution);
+    return v_3ddot_execute(params, runner);
 }
 
 
@@ -313,8 +313,6 @@ export {
       V3ddotParameters,
       V_3DDOT_METADATA,
       v_3ddot,
-      v_3ddot_cargs,
       v_3ddot_execute,
-      v_3ddot_outputs,
       v_3ddot_params,
 };

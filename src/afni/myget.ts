@@ -150,14 +150,16 @@ function myget_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MygetOutputs`).
  */
 function myget_execute(
     params: MygetParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MygetOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MYGET_METADATA);
     params = execution.params(params)
     const cargs = myget_cargs(params, execution)
     const ret = myget_outputs(params, execution)
@@ -186,10 +188,8 @@ function myget(
     protocol_version: "-1" | "-1.1" | null = null,
     runner: Runner | null = null,
 ): MygetOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MYGET_METADATA);
     const params = myget_params(url, output_file, protocol_version)
-    return myget_execute(params, execution);
+    return myget_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MygetOutputs,
       MygetParameters,
       myget,
-      myget_cargs,
       myget_execute,
-      myget_outputs,
       myget_params,
 };

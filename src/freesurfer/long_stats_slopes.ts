@@ -390,14 +390,16 @@ function long_stats_slopes_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LongStatsSlopesOutputs`).
  */
 function long_stats_slopes_execute(
     params: LongStatsSlopesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LongStatsSlopesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LONG_STATS_SLOPES_METADATA);
     params = execution.params(params)
     const cargs = long_stats_slopes_cargs(params, execution)
     const ret = long_stats_slopes_outputs(params, execution)
@@ -474,10 +476,8 @@ function long_stats_slopes(
     stack_resid: string | null = null,
     runner: Runner | null = null,
 ): LongStatsSlopesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LONG_STATS_SLOPES_METADATA);
     const params = long_stats_slopes_params(qdec_table, stats_file, measure, subjects_dir, do_avg, do_rate, do_pc1fit, do_pc1, do_spc, do_stack, resid, time_var, generic_time, cross_sectional, out_avg, out_rate, out_pc1fit, out_pc1, out_spc, out_resid, out_stack, stack_avg, stack_rate, stack_pc1fit, stack_pc1, stack_spc, stack_resid)
-    return long_stats_slopes_execute(params, execution);
+    return long_stats_slopes_execute(params, runner);
 }
 
 
@@ -486,8 +486,6 @@ export {
       LongStatsSlopesOutputs,
       LongStatsSlopesParameters,
       long_stats_slopes,
-      long_stats_slopes_cargs,
       long_stats_slopes_execute,
-      long_stats_slopes_outputs,
       long_stats_slopes_params,
 };

@@ -158,14 +158,16 @@ function label_mask_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelMaskOutputs`).
  */
 function label_mask_execute(
     params: LabelMaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelMaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_MASK_METADATA);
     params = execution.params(params)
     const cargs = label_mask_cargs(params, execution)
     const ret = label_mask_outputs(params, execution)
@@ -198,10 +200,8 @@ function label_mask(
     opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): LabelMaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_MASK_METADATA);
     const params = label_mask_params(label, mask, label_out, opt_column_column)
-    return label_mask_execute(params, execution);
+    return label_mask_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       LabelMaskOutputs,
       LabelMaskParameters,
       label_mask,
-      label_mask_cargs,
       label_mask_execute,
-      label_mask_outputs,
       label_mask_params,
 };

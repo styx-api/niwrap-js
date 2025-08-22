@@ -178,14 +178,16 @@ function flirt_average_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FlirtAverageOutputs`).
  */
 function flirt_average_execute(
     params: FlirtAverageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FlirtAverageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FLIRT_AVERAGE_METADATA);
     params = execution.params(params)
     const cargs = flirt_average_cargs(params, execution)
     const ret = flirt_average_outputs(params, execution)
@@ -222,10 +224,8 @@ function flirt_average(
     flirt_options: string | null = null,
     runner: Runner | null = null,
 ): FlirtAverageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FLIRT_AVERAGE_METADATA);
     const params = flirt_average_params(ninputs, input1, input2, output_file, input3, reference_image, flirt_options)
-    return flirt_average_execute(params, execution);
+    return flirt_average_execute(params, runner);
 }
 
 
@@ -234,8 +234,6 @@ export {
       FlirtAverageOutputs,
       FlirtAverageParameters,
       flirt_average,
-      flirt_average_cargs,
       flirt_average_execute,
-      flirt_average_outputs,
       flirt_average_params,
 };

@@ -144,14 +144,16 @@ function design_ttest2_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DesignTtest2Outputs`).
  */
 function design_ttest2_execute(
     params: DesignTtest2Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DesignTtest2Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DESIGN_TTEST2_METADATA);
     params = execution.params(params)
     const cargs = design_ttest2_cargs(params, execution)
     const ret = design_ttest2_outputs(params, execution)
@@ -182,10 +184,8 @@ function design_ttest2(
     include_mean_contrasts: boolean = false,
     runner: Runner | null = null,
 ): DesignTtest2Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DESIGN_TTEST2_METADATA);
     const params = design_ttest2_params(design_files_rootname, ngroupa, ngroupb, include_mean_contrasts)
-    return design_ttest2_execute(params, execution);
+    return design_ttest2_execute(params, runner);
 }
 
 
@@ -194,8 +194,6 @@ export {
       DesignTtest2Outputs,
       DesignTtest2Parameters,
       design_ttest2,
-      design_ttest2_cargs,
       design_ttest2_execute,
-      design_ttest2_outputs,
       design_ttest2_params,
 };

@@ -201,14 +201,16 @@ function v_3d_par2_afni_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dPar2AfniOutputs`).
  */
 function v_3d_par2_afni_execute(
     params: V3dPar2AfniParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dPar2AfniOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_PAR2_AFNI_METADATA);
     params = execution.params(params)
     const cargs = v_3d_par2_afni_cargs(params, execution)
     const ret = v_3d_par2_afni_outputs(params, execution)
@@ -251,10 +253,8 @@ function v_3d_par2_afni(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): V3dPar2AfniOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_PAR2_AFNI_METADATA);
     const params = v_3d_par2_afni_params(input_file, skip_outliers_test, output_nifti, output_analyze, output_dir, verbose_flag, gzip_files, byte_swap_2, byte_swap_4, help_flag)
-    return v_3d_par2_afni_execute(params, execution);
+    return v_3d_par2_afni_execute(params, runner);
 }
 
 
@@ -263,8 +263,6 @@ export {
       V3dPar2AfniParameters,
       V_3D_PAR2_AFNI_METADATA,
       v_3d_par2_afni,
-      v_3d_par2_afni_cargs,
       v_3d_par2_afni_execute,
-      v_3d_par2_afni_outputs,
       v_3d_par2_afni_params,
 };

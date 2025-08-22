@@ -372,14 +372,16 @@ function film_gls_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FilmGlsOutputs`).
  */
 function film_gls_execute(
     params: FilmGlsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FilmGlsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FILM_GLS_METADATA);
     params = execution.params(params)
     const cargs = film_gls_cargs(params, execution)
     const ret = film_gls_outputs(params, execution)
@@ -448,10 +450,8 @@ function film_gls(
     vef: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): FilmGlsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FILM_GLS_METADATA);
     const params = film_gls_params(infile, ac_flag, threshold, ar_flag, noest_flag, output_pw_flag, pava_flag, sa_flag, verbose_flag, results_dir, mode, input_surface, mean_func_file, min_timepoint_file, paradigm_file, t_contrasts_file, f_contrasts_file, epith, ms, tukey, mt, ven, vef)
-    return film_gls_execute(params, execution);
+    return film_gls_execute(params, runner);
 }
 
 
@@ -460,8 +460,6 @@ export {
       FilmGlsOutputs,
       FilmGlsParameters,
       film_gls,
-      film_gls_cargs,
       film_gls_execute,
-      film_gls_outputs,
       film_gls_params,
 };

@@ -186,14 +186,16 @@ function applyxfm4_d_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Applyxfm4DOutputs`).
  */
 function applyxfm4_d_execute(
     params: Applyxfm4DParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Applyxfm4DOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(APPLYXFM4_D_METADATA);
     params = execution.params(params)
     const cargs = applyxfm4_d_cargs(params, execution)
     const ret = applyxfm4_d_outputs(params, execution)
@@ -232,10 +234,8 @@ function applyxfm4_d(
     user_prefix: string | null = null,
     runner: Runner | null = null,
 ): Applyxfm4DOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(APPLYXFM4_D_METADATA);
     const params = applyxfm4_d_params(input_volume, ref_volume, output_volume, transformation_matrix, interpolation_method, single_matrix_flag, four_digit_flag, user_prefix)
-    return applyxfm4_d_execute(params, execution);
+    return applyxfm4_d_execute(params, runner);
 }
 
 
@@ -244,8 +244,6 @@ export {
       Applyxfm4DOutputs,
       Applyxfm4DParameters,
       applyxfm4_d,
-      applyxfm4_d_cargs,
       applyxfm4_d_execute,
-      applyxfm4_d_outputs,
       applyxfm4_d_params,
 };

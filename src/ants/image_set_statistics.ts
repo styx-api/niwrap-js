@@ -181,14 +181,16 @@ function image_set_statistics_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImageSetStatisticsOutputs`).
  */
 function image_set_statistics_execute(
     params: ImageSetStatisticsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImageSetStatisticsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMAGE_SET_STATISTICS_METADATA);
     params = execution.params(params)
     const cargs = image_set_statistics_cargs(params, execution)
     const ret = image_set_statistics_outputs(params, execution)
@@ -223,10 +225,8 @@ function image_set_statistics(
     imagelist2: InputPathType | null = null,
     runner: Runner | null = null,
 ): ImageSetStatisticsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMAGE_SET_STATISTICS_METADATA);
     const params = image_set_statistics_params(image_dimension, controls_list, output_image, which_stat, roi, imagelist2)
-    return image_set_statistics_execute(params, execution);
+    return image_set_statistics_execute(params, runner);
 }
 
 
@@ -235,8 +235,6 @@ export {
       ImageSetStatisticsOutputs,
       ImageSetStatisticsParameters,
       image_set_statistics,
-      image_set_statistics_cargs,
       image_set_statistics_execute,
-      image_set_statistics_outputs,
       image_set_statistics_params,
 };

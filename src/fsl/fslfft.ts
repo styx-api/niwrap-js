@@ -145,14 +145,16 @@ function fslfft_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslfftOutputs`).
  */
 function fslfft_execute(
     params: FslfftParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslfftOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLFFT_METADATA);
     params = execution.params(params)
     const cargs = fslfft_cargs(params, execution)
     const ret = fslfft_outputs(params, execution)
@@ -181,10 +183,8 @@ function fslfft(
     inverse_flag: boolean = false,
     runner: Runner | null = null,
 ): FslfftOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLFFT_METADATA);
     const params = fslfft_params(input_volume, output_volume, inverse_flag)
-    return fslfft_execute(params, execution);
+    return fslfft_execute(params, runner);
 }
 
 
@@ -193,8 +193,6 @@ export {
       FslfftOutputs,
       FslfftParameters,
       fslfft,
-      fslfft_cargs,
       fslfft_execute,
-      fslfft_outputs,
       fslfft_params,
 };

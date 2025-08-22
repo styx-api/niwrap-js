@@ -672,14 +672,16 @@ function cifti_separate_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiSeparateOutputs`).
  */
 function cifti_separate_execute(
     params: CiftiSeparateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiSeparateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_SEPARATE_METADATA);
     params = execution.params(params)
     const cargs = cifti_separate_cargs(params, execution)
     const ret = cifti_separate_outputs(params, execution)
@@ -754,10 +756,8 @@ function cifti_separate(
     volume: Array<CiftiSeparateVolumeParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiSeparateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_SEPARATE_METADATA);
     const params = cifti_separate_params(cifti_in, direction, volume_all, label, metric, volume)
-    return cifti_separate_execute(params, execution);
+    return cifti_separate_execute(params, runner);
 }
 
 
@@ -774,20 +774,10 @@ export {
       CiftiSeparateVolumeOutputs,
       CiftiSeparateVolumeParameters,
       cifti_separate,
-      cifti_separate_cargs,
       cifti_separate_execute,
-      cifti_separate_label_cargs,
-      cifti_separate_label_outputs,
       cifti_separate_label_params,
-      cifti_separate_metric_cargs,
-      cifti_separate_metric_outputs,
       cifti_separate_metric_params,
-      cifti_separate_outputs,
       cifti_separate_params,
-      cifti_separate_volume_all_cargs,
-      cifti_separate_volume_all_outputs,
       cifti_separate_volume_all_params,
-      cifti_separate_volume_cargs,
-      cifti_separate_volume_outputs,
       cifti_separate_volume_params,
 };

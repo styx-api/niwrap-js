@@ -167,14 +167,16 @@ function mri_paint_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriPaintOutputs`).
  */
 function mri_paint_execute(
     params: MriPaintParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriPaintOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_PAINT_METADATA);
     params = execution.params(params)
     const cargs = mri_paint_cargs(params, execution)
     const ret = mri_paint_outputs(params, execution)
@@ -209,10 +211,8 @@ function mri_paint(
     paint_surf_coords: boolean = false,
     runner: Runner | null = null,
 ): MriPaintOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_PAINT_METADATA);
     const params = mri_paint_params(input_volume, input_surface, registration_file, output_float_file, image_offset, paint_surf_coords)
-    return mri_paint_execute(params, execution);
+    return mri_paint_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       MriPaintOutputs,
       MriPaintParameters,
       mri_paint,
-      mri_paint_cargs,
       mri_paint_execute,
-      mri_paint_outputs,
       mri_paint_params,
 };

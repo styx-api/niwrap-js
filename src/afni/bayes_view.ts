@@ -146,14 +146,16 @@ function bayes_view_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BayesViewOutputs`).
  */
 function bayes_view_execute(
     params: BayesViewParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BayesViewOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BAYES_VIEW_METADATA);
     params = execution.params(params)
     const cargs = bayes_view_cargs(params, execution)
     const ret = bayes_view_outputs(params, execution)
@@ -182,10 +184,8 @@ function bayes_view(
     shiny_folder: string | null = null,
     runner: Runner | null = null,
 ): BayesViewOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BAYES_VIEW_METADATA);
     const params = bayes_view_params(input_folder, help, shiny_folder)
-    return bayes_view_execute(params, execution);
+    return bayes_view_execute(params, runner);
 }
 
 
@@ -194,8 +194,6 @@ export {
       BayesViewOutputs,
       BayesViewParameters,
       bayes_view,
-      bayes_view_cargs,
       bayes_view_execute,
-      bayes_view_outputs,
       bayes_view_params,
 };

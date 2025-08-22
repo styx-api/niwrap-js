@@ -242,14 +242,16 @@ function v_3d_brain_voyagerto_afni_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dBrainVoyagertoAfniOutputs`).
  */
 function v_3d_brain_voyagerto_afni_execute(
     params: V3dBrainVoyagertoAfniParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dBrainVoyagertoAfniOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_BRAIN_VOYAGERTO_AFNI_METADATA);
     params = execution.params(params)
     const cargs = v_3d_brain_voyagerto_afni_cargs(params, execution)
     const ret = v_3d_brain_voyagerto_afni_outputs(params, execution)
@@ -300,10 +302,8 @@ function v_3d_brain_voyagerto_afni(
     turn_on_memory_tracing: boolean = false,
     runner: Runner | null = null,
 ): V3dBrainVoyagertoAfniOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_BRAIN_VOYAGERTO_AFNI_METADATA);
     const params = v_3d_brain_voyagerto_afni_params(input_file, force_byte_swap, brainvoyager_qx, tlrc_space, acpc_space, orig_space, prefix, novolreg, noxform, set_environment, trace_debugging, trace_extreme_debugging, turn_off_memory_tracing, turn_on_memory_tracing)
-    return v_3d_brain_voyagerto_afni_execute(params, execution);
+    return v_3d_brain_voyagerto_afni_execute(params, runner);
 }
 
 
@@ -312,8 +312,6 @@ export {
       V3dBrainVoyagertoAfniParameters,
       V_3D_BRAIN_VOYAGERTO_AFNI_METADATA,
       v_3d_brain_voyagerto_afni,
-      v_3d_brain_voyagerto_afni_cargs,
       v_3d_brain_voyagerto_afni_execute,
-      v_3d_brain_voyagerto_afni_outputs,
       v_3d_brain_voyagerto_afni_params,
 };

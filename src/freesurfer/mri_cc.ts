@@ -255,14 +255,16 @@ function mri_cc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCcOutputs`).
  */
 function mri_cc_execute(
     params: MriCcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CC_METADATA);
     params = execution.params(params)
     const cargs = mri_cc_cargs(params, execution)
     const ret = mri_cc_outputs(params, execution)
@@ -309,10 +311,8 @@ function mri_cc(
     max_rotation: number | null = 7.0,
     runner: Runner | null = null,
 ): MriCcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CC_METADATA);
     const params = mri_cc_params(subject_name, output_file, aseg_file, norm_file, sdir, rotation_lta, force_flag, include_fornix, compartments, thickness, skip_voxels, max_rotation)
-    return mri_cc_execute(params, execution);
+    return mri_cc_execute(params, runner);
 }
 
 
@@ -321,8 +321,6 @@ export {
       MriCcOutputs,
       MriCcParameters,
       mri_cc,
-      mri_cc_cargs,
       mri_cc_execute,
-      mri_cc_outputs,
       mri_cc_params,
 };

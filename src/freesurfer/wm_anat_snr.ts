@@ -189,14 +189,16 @@ function wm_anat_snr_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WmAnatSnrOutputs`).
  */
 function wm_anat_snr_execute(
     params: WmAnatSnrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WmAnatSnrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WM_ANAT_SNR_METADATA);
     params = execution.params(params)
     const cargs = wm_anat_snr_cargs(params, execution)
     const ret = wm_anat_snr_outputs(params, execution)
@@ -233,10 +235,8 @@ function wm_anat_snr(
     no_cleanup: boolean = false,
     runner: Runner | null = null,
 ): WmAnatSnrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WM_ANAT_SNR_METADATA);
     const params = wm_anat_snr_params(subject, output_file, force, nerode, tmp_dir, cleanup, no_cleanup)
-    return wm_anat_snr_execute(params, execution);
+    return wm_anat_snr_execute(params, runner);
 }
 
 
@@ -245,8 +245,6 @@ export {
       WmAnatSnrOutputs,
       WmAnatSnrParameters,
       wm_anat_snr,
-      wm_anat_snr_cargs,
       wm_anat_snr_execute,
-      wm_anat_snr_outputs,
       wm_anat_snr_params,
 };

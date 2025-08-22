@@ -261,14 +261,16 @@ function transformcalc_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TransformcalcOutputs`).
  */
 function transformcalc_execute(
     params: TransformcalcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TransformcalcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TRANSFORMCALC_METADATA);
     params = execution.params(params)
     const cargs = transformcalc_cargs(params, execution)
     const ret = transformcalc_outputs(params, execution)
@@ -319,10 +321,8 @@ function transformcalc(
     version: boolean = false,
     runner: Runner | null = null,
 ): TransformcalcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TRANSFORMCALC_METADATA);
     const params = transformcalc_params(inputs, operation, output, info, quiet, debug, force, nthreads, config, help, version)
-    return transformcalc_execute(params, execution);
+    return transformcalc_execute(params, runner);
 }
 
 
@@ -332,10 +332,7 @@ export {
       TransformcalcOutputs,
       TransformcalcParameters,
       transformcalc,
-      transformcalc_cargs,
-      transformcalc_config_cargs,
       transformcalc_config_params,
       transformcalc_execute,
-      transformcalc_outputs,
       transformcalc_params,
 };

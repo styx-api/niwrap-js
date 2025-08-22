@@ -211,14 +211,16 @@ function quickspec_sl_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `QuickspecSlOutputs`).
  */
 function quickspec_sl_execute(
     params: QuickspecSlParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): QuickspecSlOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(QUICKSPEC_SL_METADATA);
     params = execution.params(params)
     const cargs = quickspec_sl_cargs(params, execution)
     const ret = quickspec_sl_outputs(params, execution)
@@ -257,10 +259,8 @@ function quickspec_sl(
     out_spec: string | null = null,
     runner: Runner | null = null,
 ): QuickspecSlOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(QUICKSPEC_SL_METADATA);
     const params = quickspec_sl_params(surf_a, surf_b, surf_intermed_pref, infl_surf_a, infl_surf_b, infl_surf_intermed_pref, both_lr_flag, out_spec)
-    return quickspec_sl_execute(params, execution);
+    return quickspec_sl_execute(params, runner);
 }
 
 
@@ -269,8 +269,6 @@ export {
       QuickspecSlOutputs,
       QuickspecSlParameters,
       quickspec_sl,
-      quickspec_sl_cargs,
       quickspec_sl_execute,
-      quickspec_sl_outputs,
       quickspec_sl_params,
 };

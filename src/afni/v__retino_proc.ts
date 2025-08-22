@@ -565,14 +565,16 @@ function v__retino_proc_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VRetinoProcOutputs`).
  */
 function v__retino_proc_execute(
     params: VRetinoProcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VRetinoProcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__RETINO_PROC_METADATA);
     params = execution.params(params)
     const cargs = v__retino_proc_cargs(params, execution)
     const ret = v__retino_proc_outputs(params, execution)
@@ -675,10 +677,8 @@ function v__retino_proc(
     aea_opts: string | null = null,
     runner: Runner | null = null,
 ): VRetinoProcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__RETINO_PROC_METADATA);
     const params = v__retino_proc_params(tr, period_ecc, period_pol, ccw, clw, exp, con, epi_ref, epi_anat_ref, anat_vol, anat_vol_epi, surf_vol, surf_vol_epi, phase, delay, pre_ecc, pre_pol, on_ecc, on_pol, var_on_ecc, var_on_pol, nwedges, nrings, fwhm_pol, fwhm_ecc, ignore, no_tshift, spec_left, spec_right, dorts, ccw_orts, clw_orts, exp_orts, con_orts, sid, out_dir, echo, echo_edu, a2e_opts, aea_opts)
-    return v__retino_proc_execute(params, execution);
+    return v__retino_proc_execute(params, runner);
 }
 
 
@@ -687,8 +687,6 @@ export {
       VRetinoProcParameters,
       V__RETINO_PROC_METADATA,
       v__retino_proc,
-      v__retino_proc_cargs,
       v__retino_proc_execute,
-      v__retino_proc_outputs,
       v__retino_proc_params,
 };

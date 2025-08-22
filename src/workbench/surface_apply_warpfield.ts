@@ -160,14 +160,16 @@ function surface_apply_warpfield_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceApplyWarpfieldOutputs`).
  */
 function surface_apply_warpfield_execute(
     params: SurfaceApplyWarpfieldParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceApplyWarpfieldOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_APPLY_WARPFIELD_METADATA);
     params = execution.params(params)
     const cargs = surface_apply_warpfield_cargs(params, execution)
     const ret = surface_apply_warpfield_outputs(params, execution)
@@ -202,10 +204,8 @@ function surface_apply_warpfield(
     opt_fnirt_forward_warp: string | null = null,
     runner: Runner | null = null,
 ): SurfaceApplyWarpfieldOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_APPLY_WARPFIELD_METADATA);
     const params = surface_apply_warpfield_params(in_surf, warpfield, out_surf, opt_fnirt_forward_warp)
-    return surface_apply_warpfield_execute(params, execution);
+    return surface_apply_warpfield_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       SurfaceApplyWarpfieldOutputs,
       SurfaceApplyWarpfieldParameters,
       surface_apply_warpfield,
-      surface_apply_warpfield_cargs,
       surface_apply_warpfield_execute,
-      surface_apply_warpfield_outputs,
       surface_apply_warpfield_params,
 };

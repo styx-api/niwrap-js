@@ -136,14 +136,16 @@ function segment_subject_notal2_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegmentSubjectNotal2Outputs`).
  */
 function segment_subject_notal2_execute(
     params: SegmentSubjectNotal2Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegmentSubjectNotal2Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGMENT_SUBJECT_NOTAL2_METADATA);
     params = execution.params(params)
     const cargs = segment_subject_notal2_cargs(params, execution)
     const ret = segment_subject_notal2_outputs(params, execution)
@@ -168,10 +170,8 @@ function segment_subject_notal2(
     license_file: InputPathType,
     runner: Runner | null = null,
 ): SegmentSubjectNotal2Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGMENT_SUBJECT_NOTAL2_METADATA);
     const params = segment_subject_notal2_params(license_file)
-    return segment_subject_notal2_execute(params, execution);
+    return segment_subject_notal2_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       SegmentSubjectNotal2Outputs,
       SegmentSubjectNotal2Parameters,
       segment_subject_notal2,
-      segment_subject_notal2_cargs,
       segment_subject_notal2_execute,
-      segment_subject_notal2_outputs,
       segment_subject_notal2_params,
 };

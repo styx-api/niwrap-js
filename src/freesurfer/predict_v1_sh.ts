@@ -172,14 +172,16 @@ function predict_v1_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PredictV1ShOutputs`).
  */
 function predict_v1_sh_execute(
     params: PredictV1ShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PredictV1ShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PREDICT_V1_SH_METADATA);
     params = execution.params(params)
     const cargs = predict_v1_sh_cargs(params, execution)
     const ret = predict_v1_sh_outputs(params, execution)
@@ -214,10 +216,8 @@ function predict_v1_sh(
     usage_flag: boolean = false,
     runner: Runner | null = null,
 ): PredictV1ShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PREDICT_V1_SH_METADATA);
     const params = predict_v1_sh_params(subjects, template, inflated_surface_flag, hemisphere, print_mode_flag, usage_flag)
-    return predict_v1_sh_execute(params, execution);
+    return predict_v1_sh_execute(params, runner);
 }
 
 
@@ -226,8 +226,6 @@ export {
       PredictV1ShOutputs,
       PredictV1ShParameters,
       predict_v1_sh,
-      predict_v1_sh_cargs,
       predict_v1_sh_execute,
-      predict_v1_sh_outputs,
       predict_v1_sh_params,
 };

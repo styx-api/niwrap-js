@@ -260,14 +260,16 @@ function mris_pmake_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisPmakeOutputs`).
  */
 function mris_pmake_execute(
     params: MrisPmakeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisPmakeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_PMAKE_METADATA);
     params = execution.params(params)
     const cargs = mris_pmake_cargs(params, execution)
     const ret = mris_pmake_outputs(params, execution)
@@ -316,10 +318,8 @@ function mris_pmake(
     mpm_args: string | null = null,
     runner: Runner | null = null,
 ): MrisPmakeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_PMAKE_METADATA);
     const params = mris_pmake_params(subject, hemisphere, options_file, working_dir, listen_mode, listen_on_port, surface0, surface1, curve0, curve1, use_abs_curvs, mpm_prog, mpm_args)
-    return mris_pmake_execute(params, execution);
+    return mris_pmake_execute(params, runner);
 }
 
 
@@ -328,8 +328,6 @@ export {
       MrisPmakeOutputs,
       MrisPmakeParameters,
       mris_pmake,
-      mris_pmake_cargs,
       mris_pmake_execute,
-      mris_pmake_outputs,
       mris_pmake_params,
 };

@@ -244,14 +244,16 @@ function fnirt_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FnirtOutputs`).
  */
 function fnirt_execute(
     params: FnirtParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FnirtOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FNIRT_METADATA);
     params = execution.params(params)
     const cargs = fnirt_cargs(params, execution)
     const ret = fnirt_outputs(params, execution)
@@ -296,10 +298,8 @@ function fnirt(
     warped_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): FnirtOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FNIRT_METADATA);
     const params = fnirt_params(in_file, ref_file, affine_file, config_file, field_file, fieldcoeff_file, jacobian_file, log_file, modulatedref_file, refmask_file, warped_file)
-    return fnirt_execute(params, execution);
+    return fnirt_execute(params, runner);
 }
 
 
@@ -308,8 +308,6 @@ export {
       FnirtOutputs,
       FnirtParameters,
       fnirt,
-      fnirt_cargs,
       fnirt_execute,
-      fnirt_outputs,
       fnirt_params,
 };

@@ -374,14 +374,16 @@ function long_submit_jobs_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LongSubmitJobsOutputs`).
  */
 function long_submit_jobs_execute(
     params: LongSubmitJobsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LongSubmitJobsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LONG_SUBMIT_JOBS_METADATA);
     params = execution.params(params)
     const cargs = long_submit_jobs_cargs(params, execution)
     const ret = long_submit_jobs_outputs(params, execution)
@@ -454,10 +456,8 @@ function long_submit_jobs(
     lnodes: number | null = null,
     runner: Runner | null = null,
 ): LongSubmitJobsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LONG_SUBMIT_JOBS_METADATA);
     const params = long_submit_jobs_params(qdec, cdir, bdir, ldir, scriptsdir, cross, base, long, cflags, bflags, lflags, affine, force, simulate, simfiles, check, pause, max, queue, cmem, bmem, lmem, cnodes, bnodes, lnodes)
-    return long_submit_jobs_execute(params, execution);
+    return long_submit_jobs_execute(params, runner);
 }
 
 
@@ -466,8 +466,6 @@ export {
       LongSubmitJobsOutputs,
       LongSubmitJobsParameters,
       long_submit_jobs,
-      long_submit_jobs_cargs,
       long_submit_jobs_execute,
-      long_submit_jobs_outputs,
       long_submit_jobs_params,
 };

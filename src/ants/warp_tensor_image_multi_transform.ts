@@ -205,14 +205,16 @@ function warp_tensor_image_multi_transform_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WarpTensorImageMultiTransformOutputs`).
  */
 function warp_tensor_image_multi_transform_execute(
     params: WarpTensorImageMultiTransformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WarpTensorImageMultiTransformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WARP_TENSOR_IMAGE_MULTI_TRANSFORM_METADATA);
     params = execution.params(params)
     const cargs = warp_tensor_image_multi_transform_cargs(params, execution)
     const ret = warp_tensor_image_multi_transform_outputs(params, execution)
@@ -255,10 +257,8 @@ function warp_tensor_image_multi_transform(
     ants_prefix_invert: string | null = null,
     runner: Runner | null = null,
 ): WarpTensorImageMultiTransformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WARP_TENSOR_IMAGE_MULTI_TRANSFORM_METADATA);
     const params = warp_tensor_image_multi_transform_params(image_dimension, moving_image, output_image, transforms, reference_image, tightest_bounding_box, reslice_by_header, use_nearest_neighbor, ants_prefix, ants_prefix_invert)
-    return warp_tensor_image_multi_transform_execute(params, execution);
+    return warp_tensor_image_multi_transform_execute(params, runner);
 }
 
 
@@ -267,8 +267,6 @@ export {
       WarpTensorImageMultiTransformOutputs,
       WarpTensorImageMultiTransformParameters,
       warp_tensor_image_multi_transform,
-      warp_tensor_image_multi_transform_cargs,
       warp_tensor_image_multi_transform_execute,
-      warp_tensor_image_multi_transform_outputs,
       warp_tensor_image_multi_transform_params,
 };

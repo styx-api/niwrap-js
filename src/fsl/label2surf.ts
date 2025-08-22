@@ -166,14 +166,16 @@ function label2surf_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Label2surfOutputs`).
  */
 function label2surf_execute(
     params: Label2surfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Label2surfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL2SURF_METADATA);
     params = execution.params(params)
     const cargs = label2surf_cargs(params, execution)
     const ret = label2surf_outputs(params, execution)
@@ -206,10 +208,8 @@ function label2surf(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): Label2surfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL2SURF_METADATA);
     const params = label2surf_params(input_surface, output_surface, labels, verbose_flag, help_flag)
-    return label2surf_execute(params, execution);
+    return label2surf_execute(params, runner);
 }
 
 
@@ -218,8 +218,6 @@ export {
       Label2surfOutputs,
       Label2surfParameters,
       label2surf,
-      label2surf_cargs,
       label2surf_execute,
-      label2surf_outputs,
       label2surf_params,
 };

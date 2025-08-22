@@ -218,14 +218,16 @@ function volume_find_clusters_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeFindClustersOutputs`).
  */
 function volume_find_clusters_execute(
     params: VolumeFindClustersParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeFindClustersOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_FIND_CLUSTERS_METADATA);
     params = execution.params(params)
     const cargs = volume_find_clusters_cargs(params, execution)
     const ret = volume_find_clusters_outputs(params, execution)
@@ -270,10 +272,8 @@ function volume_find_clusters(
     opt_start_startval: number | null = null,
     runner: Runner | null = null,
 ): VolumeFindClustersOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_FIND_CLUSTERS_METADATA);
     const params = volume_find_clusters_params(volume_in, value_threshold, minimum_volume, volume_out, opt_less_than, opt_roi_roi_volume, opt_subvolume_subvol, opt_size_ratio_ratio, opt_distance_distance, opt_start_startval)
-    return volume_find_clusters_execute(params, execution);
+    return volume_find_clusters_execute(params, runner);
 }
 
 
@@ -282,8 +282,6 @@ export {
       VolumeFindClustersOutputs,
       VolumeFindClustersParameters,
       volume_find_clusters,
-      volume_find_clusters_cargs,
       volume_find_clusters_execute,
-      volume_find_clusters_outputs,
       volume_find_clusters_params,
 };

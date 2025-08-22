@@ -178,14 +178,16 @@ function tkregister2_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Tkregister2Outputs`).
  */
 function tkregister2_execute(
     params: Tkregister2Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Tkregister2Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TKREGISTER2_METADATA);
     params = execution.params(params)
     const cargs = tkregister2_cargs(params, execution)
     const ret = tkregister2_outputs(params, execution)
@@ -224,10 +226,8 @@ function tkregister2(
     help: boolean = false,
     runner: Runner | null = null,
 ): Tkregister2Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TKREGISTER2_METADATA);
     const params = tkregister2_params(fixed_volume, moving_volume, reg_file, noedit, lta, surf_reg, reg_only, help)
-    return tkregister2_execute(params, execution);
+    return tkregister2_execute(params, runner);
 }
 
 
@@ -236,8 +236,6 @@ export {
       Tkregister2Outputs,
       Tkregister2Parameters,
       tkregister2,
-      tkregister2_cargs,
       tkregister2_execute,
-      tkregister2_outputs,
       tkregister2_params,
 };

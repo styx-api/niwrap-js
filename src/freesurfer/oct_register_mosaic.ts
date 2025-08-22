@@ -162,14 +162,16 @@ function oct_register_mosaic_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `OctRegisterMosaicOutputs`).
  */
 function oct_register_mosaic_execute(
     params: OctRegisterMosaicParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): OctRegisterMosaicOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(OCT_REGISTER_MOSAIC_METADATA);
     params = execution.params(params)
     const cargs = oct_register_mosaic_cargs(params, execution)
     const ret = oct_register_mosaic_outputs(params, execution)
@@ -200,10 +202,8 @@ function oct_register_mosaic(
     weight_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): OctRegisterMosaicOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(OCT_REGISTER_MOSAIC_METADATA);
     const params = oct_register_mosaic_params(tiles_or_mosaic_list, output_volume, downsample, weight_file)
-    return oct_register_mosaic_execute(params, execution);
+    return oct_register_mosaic_execute(params, runner);
 }
 
 
@@ -212,8 +212,6 @@ export {
       OctRegisterMosaicOutputs,
       OctRegisterMosaicParameters,
       oct_register_mosaic,
-      oct_register_mosaic_cargs,
       oct_register_mosaic_execute,
-      oct_register_mosaic_outputs,
       oct_register_mosaic_params,
 };

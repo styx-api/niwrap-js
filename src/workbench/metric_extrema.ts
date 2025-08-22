@@ -329,14 +329,16 @@ function metric_extrema_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricExtremaOutputs`).
  */
 function metric_extrema_execute(
     params: MetricExtremaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricExtremaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_EXTREMA_METADATA);
     params = execution.params(params)
     const cargs = metric_extrema_cargs(params, execution)
     const ret = metric_extrema_outputs(params, execution)
@@ -393,10 +395,8 @@ function metric_extrema(
     opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): MetricExtremaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_EXTREMA_METADATA);
     const params = metric_extrema_params(surface, metric_in, distance, metric_out, presmooth, opt_roi_roi_metric, threshold, opt_sum_columns, opt_consolidate_mode, opt_only_maxima, opt_only_minima, opt_column_column)
-    return metric_extrema_execute(params, execution);
+    return metric_extrema_execute(params, runner);
 }
 
 
@@ -407,12 +407,8 @@ export {
       MetricExtremaPresmoothParameters,
       MetricExtremaThresholdParameters,
       metric_extrema,
-      metric_extrema_cargs,
       metric_extrema_execute,
-      metric_extrema_outputs,
       metric_extrema_params,
-      metric_extrema_presmooth_cargs,
       metric_extrema_presmooth_params,
-      metric_extrema_threshold_cargs,
       metric_extrema_threshold_params,
 };

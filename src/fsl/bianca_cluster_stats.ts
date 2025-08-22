@@ -146,14 +146,16 @@ function bianca_cluster_stats_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BiancaClusterStatsOutputs`).
  */
 function bianca_cluster_stats_execute(
     params: BiancaClusterStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BiancaClusterStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BIANCA_CLUSTER_STATS_METADATA);
     params = execution.params(params)
     const cargs = bianca_cluster_stats_cargs(params, execution)
     const ret = bianca_cluster_stats_outputs(params, execution)
@@ -184,10 +186,8 @@ function bianca_cluster_stats(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): BiancaClusterStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BIANCA_CLUSTER_STATS_METADATA);
     const params = bianca_cluster_stats_params(bianca_output_map, threshold, min_cluster_size, mask)
-    return bianca_cluster_stats_execute(params, execution);
+    return bianca_cluster_stats_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       BiancaClusterStatsOutputs,
       BiancaClusterStatsParameters,
       bianca_cluster_stats,
-      bianca_cluster_stats_cargs,
       bianca_cluster_stats_execute,
-      bianca_cluster_stats_outputs,
       bianca_cluster_stats_params,
 };

@@ -307,14 +307,16 @@ function fsl_tsplot_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslTsplotOutputs`).
  */
 function fsl_tsplot_execute(
     params: FslTsplotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslTsplotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_TSPLOT_METADATA);
     params = execution.params(params)
     const cargs = fsl_tsplot_cargs(params, execution)
     const ret = fsl_tsplot_outputs(params, execution)
@@ -369,10 +371,8 @@ function fsl_tsplot(
     end_col: number | null = null,
     runner: Runner | null = null,
 ): FslTsplotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_TSPLOT_METADATA);
     const params = fsl_tsplot_params(input_files, output_file, title, legend_file, labels, ymin, ymax, xlabel, ylabel, height, width, unit, precision, sci_flag, start_col, end_col)
-    return fsl_tsplot_execute(params, execution);
+    return fsl_tsplot_execute(params, runner);
 }
 
 
@@ -381,8 +381,6 @@ export {
       FslTsplotOutputs,
       FslTsplotParameters,
       fsl_tsplot,
-      fsl_tsplot_cargs,
       fsl_tsplot_execute,
-      fsl_tsplot_outputs,
       fsl_tsplot_params,
 };

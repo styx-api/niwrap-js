@@ -242,14 +242,16 @@ function mri_nu_correct_mni_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriNuCorrectMniOutputs`).
  */
 function mri_nu_correct_mni_execute(
     params: MriNuCorrectMniParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriNuCorrectMniOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_NU_CORRECT_MNI_METADATA);
     params = execution.params(params)
     const cargs = mri_nu_correct_mni_cargs(params, execution)
     const ret = mri_nu_correct_mni_outputs(params, execution)
@@ -298,10 +300,8 @@ function mri_nu_correct_mni(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): MriNuCorrectMniOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_NU_CORRECT_MNI_METADATA);
     const params = mri_nu_correct_mni_params(input_volume, output_volume, iterations, proto_iterations, mask_volume, stop_threshold, uchar_transform, ants_n3, ants_n4, no_uchar, ants_n4_replace_zeros, cm_flag, debug_flag)
-    return mri_nu_correct_mni_execute(params, execution);
+    return mri_nu_correct_mni_execute(params, runner);
 }
 
 
@@ -310,8 +310,6 @@ export {
       MriNuCorrectMniOutputs,
       MriNuCorrectMniParameters,
       mri_nu_correct_mni,
-      mri_nu_correct_mni_cargs,
       mri_nu_correct_mni_execute,
-      mri_nu_correct_mni_outputs,
       mri_nu_correct_mni_params,
 };

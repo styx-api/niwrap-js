@@ -271,14 +271,16 @@ function fixel2sh_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fixel2shOutputs`).
  */
 function fixel2sh_execute(
     params: Fixel2shParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fixel2shOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIXEL2SH_METADATA);
     params = execution.params(params)
     const cargs = fixel2sh_cargs(params, execution)
     const ret = fixel2sh_outputs(params, execution)
@@ -332,10 +334,8 @@ function fixel2sh(
     version: boolean = false,
     runner: Runner | null = null,
 ): Fixel2shOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIXEL2SH_METADATA);
     const params = fixel2sh_params(fixel_in, sh_out, lmax, info, quiet, debug, force, nthreads, config, help, version)
-    return fixel2sh_execute(params, execution);
+    return fixel2sh_execute(params, runner);
 }
 
 
@@ -345,10 +345,7 @@ export {
       Fixel2shOutputs,
       Fixel2shParameters,
       fixel2sh,
-      fixel2sh_cargs,
-      fixel2sh_config_cargs,
       fixel2sh_config_params,
       fixel2sh_execute,
-      fixel2sh_outputs,
       fixel2sh_params,
 };

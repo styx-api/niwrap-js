@@ -247,14 +247,16 @@ function v_2d_im_reg_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V2dImRegOutputs`).
  */
 function v_2d_im_reg_execute(
     params: V2dImRegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V2dImRegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_2D_IM_REG_METADATA);
     params = execution.params(params)
     const cargs = v_2d_im_reg_cargs(params, execution)
     const ret = v_2d_im_reg_outputs(params, execution)
@@ -301,10 +303,8 @@ function v_2d_im_reg(
     debug: boolean = false,
     runner: Runner | null = null,
 ): V2dImRegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_2D_IM_REG_METADATA);
     const params = v_2d_im_reg_params(input_file, prefix, base_file, base, nofine, fine_blur, fine_dxy, fine_dphi, dprefix, dmm, rprefix, debug)
-    return v_2d_im_reg_execute(params, execution);
+    return v_2d_im_reg_execute(params, runner);
 }
 
 
@@ -313,8 +313,6 @@ export {
       V2dImRegParameters,
       V_2D_IM_REG_METADATA,
       v_2d_im_reg,
-      v_2d_im_reg_cargs,
       v_2d_im_reg_execute,
-      v_2d_im_reg_outputs,
       v_2d_im_reg_params,
 };

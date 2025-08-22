@@ -302,14 +302,16 @@ function v_3d_zipper_zapper_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dZipperZapperOutputs`).
  */
 function v_3d_zipper_zapper_execute(
     params: V3dZipperZapperParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dZipperZapperOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ZIPPER_ZAPPER_METADATA);
     params = execution.params(params)
     const cargs = v_3d_zipper_zapper_cargs(params, execution)
     const ret = v_3d_zipper_zapper_outputs(params, execution)
@@ -364,10 +366,8 @@ function v_3d_zipper_zapper(
     min_corr_corr: number | null = null,
     runner: Runner | null = null,
 ): V3dZipperZapperOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ZIPPER_ZAPPER_METADATA);
     const params = v_3d_zipper_zapper_params(input_file, output_prefix, mask_file, min_slice_nvox, min_streak_len, do_out_slice_param, no_out_bad_mask, no_out_text_vals, dont_use_streak, dont_use_drop, dont_use_corr, min_streak_val, min_drop_frac, min_drop_diff, min_corr_len, min_corr_corr)
-    return v_3d_zipper_zapper_execute(params, execution);
+    return v_3d_zipper_zapper_execute(params, runner);
 }
 
 
@@ -376,8 +376,6 @@ export {
       V3dZipperZapperParameters,
       V_3D_ZIPPER_ZAPPER_METADATA,
       v_3d_zipper_zapper,
-      v_3d_zipper_zapper_cargs,
       v_3d_zipper_zapper_execute,
-      v_3d_zipper_zapper_outputs,
       v_3d_zipper_zapper_params,
 };

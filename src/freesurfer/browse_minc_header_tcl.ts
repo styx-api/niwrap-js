@@ -127,14 +127,16 @@ function browse_minc_header_tcl_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BrowseMincHeaderTclOutputs`).
  */
 function browse_minc_header_tcl_execute(
     params: BrowseMincHeaderTclParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BrowseMincHeaderTclOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BROWSE_MINC_HEADER_TCL_METADATA);
     params = execution.params(params)
     const cargs = browse_minc_header_tcl_cargs(params, execution)
     const ret = browse_minc_header_tcl_outputs(params, execution)
@@ -159,10 +161,8 @@ function browse_minc_header_tcl(
     infile: InputPathType,
     runner: Runner | null = null,
 ): BrowseMincHeaderTclOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BROWSE_MINC_HEADER_TCL_METADATA);
     const params = browse_minc_header_tcl_params(infile)
-    return browse_minc_header_tcl_execute(params, execution);
+    return browse_minc_header_tcl_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       BrowseMincHeaderTclOutputs,
       BrowseMincHeaderTclParameters,
       browse_minc_header_tcl,
-      browse_minc_header_tcl_cargs,
       browse_minc_header_tcl_execute,
-      browse_minc_header_tcl_outputs,
       browse_minc_header_tcl_params,
 };

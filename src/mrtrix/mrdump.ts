@@ -272,14 +272,16 @@ function mrdump_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrdumpOutputs`).
  */
 function mrdump_execute(
     params: MrdumpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrdumpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRDUMP_METADATA);
     params = execution.params(params)
     const cargs = mrdump_cargs(params, execution)
     const ret = mrdump_outputs(params, execution)
@@ -330,10 +332,8 @@ function mrdump(
     output: string | null = null,
     runner: Runner | null = null,
 ): MrdumpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRDUMP_METADATA);
     const params = mrdump_params(input, mask, info, quiet, debug, force, nthreads, config, help, version, output)
-    return mrdump_execute(params, execution);
+    return mrdump_execute(params, runner);
 }
 
 
@@ -343,10 +343,7 @@ export {
       MrdumpOutputs,
       MrdumpParameters,
       mrdump,
-      mrdump_cargs,
-      mrdump_config_cargs,
       mrdump_config_params,
       mrdump_execute,
-      mrdump_outputs,
       mrdump_params,
 };

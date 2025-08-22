@@ -143,14 +143,16 @@ function mri_edit_segmentation_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriEditSegmentationOutputs`).
  */
 function mri_edit_segmentation_execute(
     params: MriEditSegmentationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriEditSegmentationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_EDIT_SEGMENTATION_METADATA);
     params = execution.params(params)
     const cargs = mri_edit_segmentation_cargs(params, execution)
     const ret = mri_edit_segmentation_outputs(params, execution)
@@ -179,10 +181,8 @@ function mri_edit_segmentation(
     output_segmentation: string,
     runner: Runner | null = null,
 ): MriEditSegmentationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_EDIT_SEGMENTATION_METADATA);
     const params = mri_edit_segmentation_params(input_segmentation, t1_volume, output_segmentation)
-    return mri_edit_segmentation_execute(params, execution);
+    return mri_edit_segmentation_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MriEditSegmentationOutputs,
       MriEditSegmentationParameters,
       mri_edit_segmentation,
-      mri_edit_segmentation_cargs,
       mri_edit_segmentation_execute,
-      mri_edit_segmentation_outputs,
       mri_edit_segmentation_params,
 };

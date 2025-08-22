@@ -176,14 +176,16 @@ function sfim_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SfimOutputs`).
  */
 function sfim_execute(
     params: SfimParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SfimOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SFIM_METADATA);
     params = execution.params(params)
     const cargs = sfim_cargs(params, execution)
     const ret = sfim_outputs(params, execution)
@@ -216,10 +218,8 @@ function sfim(
     output_prefix: string | null = null,
     runner: Runner | null = null,
 ): SfimOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SFIM_METADATA);
     const params = sfim_params(input_images, sfint_file, baseline_state, local_base_option, output_prefix)
-    return sfim_execute(params, execution);
+    return sfim_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       SfimOutputs,
       SfimParameters,
       sfim,
-      sfim_cargs,
       sfim_execute,
-      sfim_outputs,
       sfim_params,
 };

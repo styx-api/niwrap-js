@@ -502,14 +502,16 @@ function v__animal_warper_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAnimalWarperOutputs`).
  */
 function v__animal_warper_execute(
     params: VAnimalWarperParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAnimalWarperOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__ANIMAL_WARPER_METADATA);
     params = execution.params(params)
     const cargs = v__animal_warper_cargs(params, execution)
     const ret = v__animal_warper_outputs(params, execution)
@@ -600,10 +602,8 @@ function v__animal_warper(
     echo: boolean = false,
     runner: Runner | null = null,
 ): VAnimalWarperOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__ANIMAL_WARPER_METADATA);
     const params = v__animal_warper_params(input_file, base_template, output_dir, brainmask, atlases, atlas_followers, seg_followers, template_followers, dset_followers, roidset_followers, input_abbrev, base_abbrev, atlas_abbrevs, template_abbrevs, seg_abbrevs, dset_abbrevs, roidset_abbrevs, align_centers_meth, aff_move_opt, cost, maxlev, no_surfaces, feature_size, supersize, init_scale, mode_smooth_size, mode_smooth_replacement_off, center_out, align_type, extra_qw_opts, keep_temp, version, ok_to_exist, echo)
-    return v__animal_warper_execute(params, execution);
+    return v__animal_warper_execute(params, runner);
 }
 
 
@@ -612,8 +612,6 @@ export {
       VAnimalWarperParameters,
       V__ANIMAL_WARPER_METADATA,
       v__animal_warper,
-      v__animal_warper_cargs,
       v__animal_warper_execute,
-      v__animal_warper_outputs,
       v__animal_warper_params,
 };

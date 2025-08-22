@@ -131,14 +131,16 @@ function uber_proc_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `UberProcPyOutputs`).
  */
 function uber_proc_py_execute(
     params: UberProcPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): UberProcPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(UBER_PROC_PY_METADATA);
     params = execution.params(params)
     const cargs = uber_proc_py_cargs(params, execution)
     const ret = uber_proc_py_outputs(params, execution)
@@ -163,10 +165,8 @@ function uber_proc_py(
     results_dir: string | null = null,
     runner: Runner | null = null,
 ): UberProcPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UBER_PROC_PY_METADATA);
     const params = uber_proc_py_params(results_dir)
-    return uber_proc_py_execute(params, execution);
+    return uber_proc_py_execute(params, runner);
 }
 
 
@@ -175,8 +175,6 @@ export {
       UberProcPyOutputs,
       UberProcPyParameters,
       uber_proc_py,
-      uber_proc_py_cargs,
       uber_proc_py_execute,
-      uber_proc_py_outputs,
       uber_proc_py_params,
 };

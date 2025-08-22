@@ -166,14 +166,16 @@ function smooth_image_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SmoothImageOutputs`).
  */
 function smooth_image_execute(
     params: SmoothImageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SmoothImageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SMOOTH_IMAGE_METADATA);
     params = execution.params(params)
     const cargs = smooth_image_cargs(params, execution)
     const ret = smooth_image_outputs(params, execution)
@@ -208,10 +210,8 @@ function smooth_image(
     median_filter: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): SmoothImageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SMOOTH_IMAGE_METADATA);
     const params = smooth_image_params(image_dimension, image_ext, smoothing_sigma, out_image_ext, sigma_units, median_filter)
-    return smooth_image_execute(params, execution);
+    return smooth_image_execute(params, runner);
 }
 
 
@@ -220,8 +220,6 @@ export {
       SmoothImageOutputs,
       SmoothImageParameters,
       smooth_image,
-      smooth_image_cargs,
       smooth_image_execute,
-      smooth_image_outputs,
       smooth_image_params,
 };

@@ -200,14 +200,16 @@ function whirlgif_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WhirlgifOutputs`).
  */
 function whirlgif_execute(
     params: WhirlgifParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WhirlgifOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WHIRLGIF_METADATA);
     params = execution.params(params)
     const cargs = whirlgif_cargs(params, execution)
     const ret = whirlgif_outputs(params, execution)
@@ -244,10 +246,8 @@ function whirlgif(
     infile: InputPathType | null = null,
     runner: Runner | null = null,
 ): WhirlgifOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WHIRLGIF_METADATA);
     const params = whirlgif_params(gif_files, verbose, loop, transparency_index, inter_frame_delay, outfile, infile)
-    return whirlgif_execute(params, execution);
+    return whirlgif_execute(params, runner);
 }
 
 
@@ -256,8 +256,6 @@ export {
       WhirlgifOutputs,
       WhirlgifParameters,
       whirlgif,
-      whirlgif_cargs,
       whirlgif_execute,
-      whirlgif_outputs,
       whirlgif_params,
 };

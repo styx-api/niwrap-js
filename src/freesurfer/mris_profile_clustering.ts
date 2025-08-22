@@ -147,14 +147,16 @@ function mris_profile_clustering_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisProfileClusteringOutputs`).
  */
 function mris_profile_clustering_execute(
     params: MrisProfileClusteringParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisProfileClusteringOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_PROFILE_CLUSTERING_METADATA);
     params = execution.params(params)
     const cargs = mris_profile_clustering_cargs(params, execution)
     const ret = mris_profile_clustering_outputs(params, execution)
@@ -183,10 +185,8 @@ function mris_profile_clustering(
     other_options: string | null = null,
     runner: Runner | null = null,
 ): MrisProfileClusteringOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_PROFILE_CLUSTERING_METADATA);
     const params = mris_profile_clustering_params(input_file, output_file, other_options)
-    return mris_profile_clustering_execute(params, execution);
+    return mris_profile_clustering_execute(params, runner);
 }
 
 
@@ -195,8 +195,6 @@ export {
       MrisProfileClusteringOutputs,
       MrisProfileClusteringParameters,
       mris_profile_clustering,
-      mris_profile_clustering_cargs,
       mris_profile_clustering_execute,
-      mris_profile_clustering_outputs,
       mris_profile_clustering_params,
 };

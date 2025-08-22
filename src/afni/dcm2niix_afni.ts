@@ -444,14 +444,16 @@ function dcm2niix_afni_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Dcm2niixAfniOutputs`).
  */
 function dcm2niix_afni_execute(
     params: Dcm2niixAfniParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Dcm2niixAfniOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DCM2NIIX_AFNI_METADATA);
     params = execution.params(params)
     const cargs = dcm2niix_afni_cargs(params, execution)
     const ret = dcm2niix_afni_outputs(params, execution)
@@ -532,10 +534,8 @@ function dcm2niix_afni(
     xml: boolean = false,
     runner: Runner | null = null,
 ): Dcm2niixAfniOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DCM2NIIX_AFNI_METADATA);
     const params = dcm2niix_afni_params(input_folder, compression_level, adjacent_dicoms, bids_sidecar, anonymize_bids, comment, directory_search_depth, export_format, filename_template, generate_defaults, ignore_images, lossless_scale, merge_slices, series_crc_number, output_directory, phillips_scaling, rename_dicoms, single_file_mode, up_to_date, verbose, write_behavior, crop_3d, gz_compress, big_endian, progress, ignore_trigger_times, terse, version, xml)
-    return dcm2niix_afni_execute(params, execution);
+    return dcm2niix_afni_execute(params, runner);
 }
 
 
@@ -544,8 +544,6 @@ export {
       Dcm2niixAfniOutputs,
       Dcm2niixAfniParameters,
       dcm2niix_afni,
-      dcm2niix_afni_cargs,
       dcm2niix_afni_execute,
-      dcm2niix_afni_outputs,
       dcm2niix_afni_params,
 };

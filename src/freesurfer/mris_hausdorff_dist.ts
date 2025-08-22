@@ -155,14 +155,16 @@ function mris_hausdorff_dist_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisHausdorffDistOutputs`).
  */
 function mris_hausdorff_dist_execute(
     params: MrisHausdorffDistParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisHausdorffDistOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_HAUSDORFF_DIST_METADATA);
     params = execution.params(params)
     const cargs = mris_hausdorff_dist_cargs(params, execution)
     const ret = mris_hausdorff_dist_outputs(params, execution)
@@ -193,10 +195,8 @@ function mris_hausdorff_dist(
     annot_name: string | null = null,
     runner: Runner | null = null,
 ): MrisHausdorffDistOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_HAUSDORFF_DIST_METADATA);
     const params = mris_hausdorff_dist_params(surface, label1, label2, annot_name)
-    return mris_hausdorff_dist_execute(params, execution);
+    return mris_hausdorff_dist_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       MrisHausdorffDistOutputs,
       MrisHausdorffDistParameters,
       mris_hausdorff_dist,
-      mris_hausdorff_dist_cargs,
       mris_hausdorff_dist_execute,
-      mris_hausdorff_dist_outputs,
       mris_hausdorff_dist_params,
 };

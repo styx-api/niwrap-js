@@ -331,14 +331,16 @@ function dwidenoise_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DwidenoiseOutputs`).
  */
 function dwidenoise_execute(
     params: DwidenoiseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DwidenoiseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DWIDENOISE_METADATA);
     params = execution.params(params)
     const cargs = dwidenoise_cargs(params, execution)
     const ret = dwidenoise_outputs(params, execution)
@@ -407,10 +409,8 @@ function dwidenoise(
     version: boolean = false,
     runner: Runner | null = null,
 ): DwidenoiseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DWIDENOISE_METADATA);
     const params = dwidenoise_params(dwi, out, mask, extent, noise, datatype, estimator, info, quiet, debug, force, nthreads, config, help, version)
-    return dwidenoise_execute(params, execution);
+    return dwidenoise_execute(params, runner);
 }
 
 
@@ -420,10 +420,7 @@ export {
       DwidenoiseOutputs,
       DwidenoiseParameters,
       dwidenoise,
-      dwidenoise_cargs,
-      dwidenoise_config_cargs,
       dwidenoise_config_params,
       dwidenoise_execute,
-      dwidenoise_outputs,
       dwidenoise_params,
 };

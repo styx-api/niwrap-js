@@ -445,14 +445,16 @@ function prelude_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PreludeOutputs`).
  */
 function prelude_execute(
     params: PreludeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PreludeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PRELUDE_METADATA);
     params = execution.params(params)
     const cargs = prelude_cargs(params, execution)
     const ret = prelude_outputs(params, execution)
@@ -535,10 +537,8 @@ function prelude(
     help_alias: boolean = false,
     runner: Runner | null = null,
 ): PreludeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PRELUDE_METADATA);
     const params = prelude_params(output_unwrap, output_unwrap_alias, complex_phase, complex_phase_alias, absolute_volume, absolute_volume_alias, phase_volume, phase_volume_alias, num_phase_split, label_slices, slice_processing, slice_processing_alias, force_3d, force_3d_alias, threshold, threshold_alias, mask_volume, mask_volume_alias, start_image, end_image, save_mask, save_raw_phase, save_raw_phase_alias, save_labels, save_labels_alias, remove_ramps, verbose, verbose_alias, help, help_alias)
-    return prelude_execute(params, execution);
+    return prelude_execute(params, runner);
 }
 
 
@@ -547,8 +547,6 @@ export {
       PreludeOutputs,
       PreludeParameters,
       prelude,
-      prelude_cargs,
       prelude_execute,
-      prelude_outputs,
       prelude_params,
 };

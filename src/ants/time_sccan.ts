@@ -427,14 +427,16 @@ function time_sccan_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TimeSccanOutputs`).
  */
 function time_sccan_execute(
     params: TimeSccanParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TimeSccanOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TIME_SCCAN_METADATA);
     params = execution.params(params)
     const cargs = time_sccan_cargs(params, execution)
     const ret = time_sccan_outputs(params, execution)
@@ -485,10 +487,8 @@ function time_sccan(
     network: TimeSccanNetworkSccaParameters | TimeSccanNetworkRegionAveragingParameters | null = null,
     runner: Runner | null = null,
 ): TimeSccanOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TIME_SCCAN_METADATA);
     const params = time_sccan_params(output, number_consecutive_labels, minimum_region_size, iterations, sparsity, n_eigenvectors, robustify, l1, cluster_thresh, ridge_cca, partial_scca_option, timeseriesimage_to_matrix, labelsimage_to_matrix, network)
-    return time_sccan_execute(params, execution);
+    return time_sccan_execute(params, runner);
 }
 
 
@@ -500,14 +500,9 @@ export {
       TimeSccanParameters,
       TimeSccanTimeseriesimageToMatrixParameters,
       time_sccan,
-      time_sccan_cargs,
       time_sccan_execute,
-      time_sccan_network_region_averaging_cargs,
       time_sccan_network_region_averaging_params,
-      time_sccan_network_scca_cargs,
       time_sccan_network_scca_params,
-      time_sccan_outputs,
       time_sccan_params,
-      time_sccan_timeseriesimage_to_matrix_cargs,
       time_sccan_timeseriesimage_to_matrix_params,
 };

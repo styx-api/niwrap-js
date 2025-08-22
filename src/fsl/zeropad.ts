@@ -138,14 +138,16 @@ function zeropad_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ZeropadOutputs`).
  */
 function zeropad_execute(
     params: ZeropadParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ZeropadOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ZEROPAD_METADATA);
     params = execution.params(params)
     const cargs = zeropad_cargs(params, execution)
     const ret = zeropad_outputs(params, execution)
@@ -172,10 +174,8 @@ function zeropad(
     length: number,
     runner: Runner | null = null,
 ): ZeropadOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ZEROPAD_METADATA);
     const params = zeropad_params(input_number, length)
-    return zeropad_execute(params, execution);
+    return zeropad_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       ZeropadOutputs,
       ZeropadParameters,
       zeropad,
-      zeropad_cargs,
       zeropad_execute,
-      zeropad_outputs,
       zeropad_params,
 };

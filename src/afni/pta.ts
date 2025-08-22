@@ -212,14 +212,16 @@ function pta_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PtaOutputs`).
  */
 function pta_execute(
     params: PtaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PtaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PTA_METADATA);
     params = execution.params(params)
     const cargs = pta_cargs(params, execution)
     const ret = pta_outputs(params, execution)
@@ -258,10 +260,8 @@ function pta(
     dbg_args: boolean = false,
     runner: Runner | null = null,
 ): PtaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PTA_METADATA);
     const params = pta_params(prefix, input_file, model_formula, vt_formulation, prediction_table, verbosity_level, response_var, dbg_args)
-    return pta_execute(params, execution);
+    return pta_execute(params, runner);
 }
 
 
@@ -270,8 +270,6 @@ export {
       PtaOutputs,
       PtaParameters,
       pta,
-      pta_cargs,
       pta_execute,
-      pta_outputs,
       pta_params,
 };

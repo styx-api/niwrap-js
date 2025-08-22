@@ -159,14 +159,16 @@ function unpack_mnc_tcl_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `UnpackMncTclOutputs`).
  */
 function unpack_mnc_tcl_execute(
     params: UnpackMncTclParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): UnpackMncTclOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(UNPACK_MNC_TCL_METADATA);
     params = execution.params(params)
     const cargs = unpack_mnc_tcl_cargs(params, execution)
     const ret = unpack_mnc_tcl_outputs(params, execution)
@@ -195,10 +197,8 @@ function unpack_mnc_tcl(
     input_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): UnpackMncTclOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UNPACK_MNC_TCL_METADATA);
     const params = unpack_mnc_tcl_params(verbose, output_dir, input_file)
-    return unpack_mnc_tcl_execute(params, execution);
+    return unpack_mnc_tcl_execute(params, runner);
 }
 
 
@@ -207,8 +207,6 @@ export {
       UnpackMncTclOutputs,
       UnpackMncTclParameters,
       unpack_mnc_tcl,
-      unpack_mnc_tcl_cargs,
       unpack_mnc_tcl_execute,
-      unpack_mnc_tcl_outputs,
       unpack_mnc_tcl_params,
 };

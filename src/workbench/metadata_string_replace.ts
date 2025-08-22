@@ -152,14 +152,16 @@ function metadata_string_replace_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetadataStringReplaceOutputs`).
  */
 function metadata_string_replace_execute(
     params: MetadataStringReplaceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetadataStringReplaceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METADATA_STRING_REPLACE_METADATA);
     params = execution.params(params)
     const cargs = metadata_string_replace_cargs(params, execution)
     const ret = metadata_string_replace_outputs(params, execution)
@@ -194,10 +196,8 @@ function metadata_string_replace(
     opt_case_insensitive: boolean = false,
     runner: Runner | null = null,
 ): MetadataStringReplaceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METADATA_STRING_REPLACE_METADATA);
     const params = metadata_string_replace_params(input_file, find_string, replace_string, output_file, opt_case_insensitive)
-    return metadata_string_replace_execute(params, execution);
+    return metadata_string_replace_execute(params, runner);
 }
 
 
@@ -206,8 +206,6 @@ export {
       MetadataStringReplaceOutputs,
       MetadataStringReplaceParameters,
       metadata_string_replace,
-      metadata_string_replace_cargs,
       metadata_string_replace_execute,
-      metadata_string_replace_outputs,
       metadata_string_replace_params,
 };

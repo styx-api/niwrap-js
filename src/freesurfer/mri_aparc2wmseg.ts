@@ -152,14 +152,16 @@ function mri_aparc2wmseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriAparc2wmsegOutputs`).
  */
 function mri_aparc2wmseg_execute(
     params: MriAparc2wmsegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriAparc2wmsegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_APARC2WMSEG_METADATA);
     params = execution.params(params)
     const cargs = mri_aparc2wmseg_cargs(params, execution)
     const ret = mri_aparc2wmseg_outputs(params, execution)
@@ -190,10 +192,8 @@ function mri_aparc2wmseg(
     version: boolean = false,
     runner: Runner | null = null,
 ): MriAparc2wmsegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_APARC2WMSEG_METADATA);
     const params = mri_aparc2wmseg_params(subject, wmseg_file, help, version)
-    return mri_aparc2wmseg_execute(params, execution);
+    return mri_aparc2wmseg_execute(params, runner);
 }
 
 
@@ -202,8 +202,6 @@ export {
       MriAparc2wmsegOutputs,
       MriAparc2wmsegParameters,
       mri_aparc2wmseg,
-      mri_aparc2wmseg_cargs,
       mri_aparc2wmseg_execute,
-      mri_aparc2wmseg_outputs,
       mri_aparc2wmseg_params,
 };

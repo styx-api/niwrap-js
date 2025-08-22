@@ -151,14 +151,16 @@ function mri_refine_seg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriRefineSegOutputs`).
  */
 function mri_refine_seg_execute(
     params: MriRefineSegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriRefineSegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_REFINE_SEG_METADATA);
     params = execution.params(params)
     const cargs = mri_refine_seg_cargs(params, execution)
     const ret = mri_refine_seg_outputs(params, execution)
@@ -187,10 +189,8 @@ function mri_refine_seg(
     debug: boolean = false,
     runner: Runner | null = null,
 ): MriRefineSegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_REFINE_SEG_METADATA);
     const params = mri_refine_seg_params(input_segmentation, output_segmentation, debug)
-    return mri_refine_seg_execute(params, execution);
+    return mri_refine_seg_execute(params, runner);
 }
 
 
@@ -199,8 +199,6 @@ export {
       MriRefineSegOutputs,
       MriRefineSegParameters,
       mri_refine_seg,
-      mri_refine_seg_cargs,
       mri_refine_seg_execute,
-      mri_refine_seg_outputs,
       mri_refine_seg_params,
 };

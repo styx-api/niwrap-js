@@ -314,14 +314,16 @@ function brain_skin_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BrainSkinOutputs`).
  */
 function brain_skin_execute(
     params: BrainSkinParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BrainSkinOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BRAIN_SKIN_METADATA);
     params = execution.params(params)
     const cargs = brain_skin_cargs(params, execution)
     const ret = brain_skin_outputs(params, execution)
@@ -370,10 +372,8 @@ function brain_skin(
     node_dbg: number | null = null,
     runner: Runner | null = null,
 ): BrainSkinOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BRAIN_SKIN_METADATA);
     const params = brain_skin_params(surface, skingrid_volume, prefix, plimit, dlimit, segdo, voxelize, infill, out_file, vol_skin, vol_hull, no_zero_attraction, node_dbg)
-    return brain_skin_execute(params, execution);
+    return brain_skin_execute(params, runner);
 }
 
 
@@ -382,8 +382,6 @@ export {
       BrainSkinOutputs,
       BrainSkinParameters,
       brain_skin,
-      brain_skin_cargs,
       brain_skin_execute,
-      brain_skin_outputs,
       brain_skin_params,
 };

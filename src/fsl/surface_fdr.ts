@@ -143,14 +143,16 @@ function surface_fdr_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceFdrOutputs`).
  */
 function surface_fdr_execute(
     params: SurfaceFdrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceFdrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_FDR_METADATA);
     params = execution.params(params)
     const cargs = surface_fdr_cargs(params, execution)
     const ret = surface_fdr_outputs(params, execution)
@@ -175,10 +177,8 @@ function surface_fdr(
     input_vtk: InputPathType,
     runner: Runner | null = null,
 ): SurfaceFdrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_FDR_METADATA);
     const params = surface_fdr_params(input_vtk)
-    return surface_fdr_execute(params, execution);
+    return surface_fdr_execute(params, runner);
 }
 
 
@@ -187,8 +187,6 @@ export {
       SurfaceFdrOutputs,
       SurfaceFdrParameters,
       surface_fdr,
-      surface_fdr_cargs,
       surface_fdr_execute,
-      surface_fdr_outputs,
       surface_fdr_params,
 };

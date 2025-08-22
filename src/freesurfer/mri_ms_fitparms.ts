@@ -481,14 +481,16 @@ function mri_ms_fitparms_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMsFitparmsOutputs`).
  */
 function mri_ms_fitparms_execute(
     params: MriMsFitparmsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMsFitparmsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MS_FITPARMS_METADATA);
     params = execution.params(params)
     const cargs = mri_ms_fitparms_cargs(params, execution)
     const ret = mri_ms_fitparms_outputs(params, execution)
@@ -583,10 +585,8 @@ function mri_ms_fitparms(
     window_flag: boolean = false,
     runner: Runner | null = null,
 ): MriMsFitparmsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MS_FITPARMS_METADATA);
     const params = mri_ms_fitparms_params(volumes, output_dir, afi_flag, ait_flag, at, conform_flag, correct_flag, cubic_flag, debug_slice_flag, debug_voxel_flag, dt, fa, fa_scale, faf, fsmooth, invert_flag, momentum, max_t2, n_iter, nearest_flag, nocompress_flag, nosynth_flag, residuals, smooth_sigma, scale_factor, sinc_flag, transform_flag, echo_time, repetition_time, trilinear_flag, tukey_flag, help_flag, use_brain_mask_flag, write_intermediate, extract_subimage, window_flag)
-    return mri_ms_fitparms_execute(params, execution);
+    return mri_ms_fitparms_execute(params, runner);
 }
 
 
@@ -595,8 +595,6 @@ export {
       MriMsFitparmsOutputs,
       MriMsFitparmsParameters,
       mri_ms_fitparms,
-      mri_ms_fitparms_cargs,
       mri_ms_fitparms_execute,
-      mri_ms_fitparms_outputs,
       mri_ms_fitparms_params,
 };

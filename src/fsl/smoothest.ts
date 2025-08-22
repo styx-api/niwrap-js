@@ -173,14 +173,16 @@ function smoothest_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SmoothestOutputs`).
  */
 function smoothest_execute(
     params: SmoothestParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SmoothestOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SMOOTHEST_METADATA);
     params = execution.params(params)
     const cargs = smoothest_cargs(params, execution)
     const ret = smoothest_outputs(params, execution)
@@ -213,10 +215,8 @@ function smoothest(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): SmoothestOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SMOOTHEST_METADATA);
     const params = smoothest_params(mask, dof, residual_fit_image, zstat_image, verbose_flag)
-    return smoothest_execute(params, execution);
+    return smoothest_execute(params, runner);
 }
 
 
@@ -225,8 +225,6 @@ export {
       SmoothestOutputs,
       SmoothestParameters,
       smoothest,
-      smoothest_cargs,
       smoothest_execute,
-      smoothest_outputs,
       smoothest_params,
 };

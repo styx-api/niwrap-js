@@ -127,14 +127,16 @@ function inflate_subject_new_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `InflateSubjectNewOutputs`).
  */
 function inflate_subject_new_execute(
     params: InflateSubjectNewParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): InflateSubjectNewOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(INFLATE_SUBJECT_NEW_METADATA);
     params = execution.params(params)
     const cargs = inflate_subject_new_cargs(params, execution)
     const ret = inflate_subject_new_outputs(params, execution)
@@ -159,10 +161,8 @@ function inflate_subject_new(
     subject_dir: string,
     runner: Runner | null = null,
 ): InflateSubjectNewOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(INFLATE_SUBJECT_NEW_METADATA);
     const params = inflate_subject_new_params(subject_dir)
-    return inflate_subject_new_execute(params, execution);
+    return inflate_subject_new_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       InflateSubjectNewOutputs,
       InflateSubjectNewParameters,
       inflate_subject_new,
-      inflate_subject_new_cargs,
       inflate_subject_new_execute,
-      inflate_subject_new_outputs,
       inflate_subject_new_params,
 };

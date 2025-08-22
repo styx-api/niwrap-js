@@ -341,14 +341,16 @@ function pnm_evs_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PnmEvsOutputs`).
  */
 function pnm_evs_execute(
     params: PnmEvsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PnmEvsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PNM_EVS_METADATA);
     params = execution.params(params)
     const cargs = pnm_evs_cargs(params, execution)
     const ret = pnm_evs_outputs(params, execution)
@@ -411,10 +413,8 @@ function pnm_evs(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): PnmEvsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PNM_EVS_METADATA);
     const params = pnm_evs_params(input_file, output_file, tr_value, cardiac_file, respiratory_file, order_cardiac, order_respiratory, order_mult_cardiac, order_mult_respiratory, csf_mask, rvt_file, heartrate_file, rvt_smooth, heartrate_smooth, slice_direction, slice_order, slice_timing_file, debug_flag, verbose_flag, help_flag)
-    return pnm_evs_execute(params, execution);
+    return pnm_evs_execute(params, runner);
 }
 
 
@@ -423,8 +423,6 @@ export {
       PnmEvsOutputs,
       PnmEvsParameters,
       pnm_evs,
-      pnm_evs_cargs,
       pnm_evs_execute,
-      pnm_evs_outputs,
       pnm_evs_params,
 };

@@ -192,14 +192,16 @@ function v_3daxialize_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3daxializeOutputs`).
  */
 function v_3daxialize_execute(
     params: V3daxializeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3daxializeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DAXIALIZE_METADATA);
     params = execution.params(params)
     const cargs = v_3daxialize_cargs(params, execution)
     const ret = v_3daxialize_outputs(params, execution)
@@ -238,10 +240,8 @@ function v_3daxialize(
     frugal: boolean = false,
     runner: Runner | null = null,
 ): V3daxializeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DAXIALIZE_METADATA);
     const params = v_3daxialize_params(infile, prefix, verb, sagittal, coronal, axial, orient_code, frugal)
-    return v_3daxialize_execute(params, execution);
+    return v_3daxialize_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       V3daxializeParameters,
       V_3DAXIALIZE_METADATA,
       v_3daxialize,
-      v_3daxialize_cargs,
       v_3daxialize_execute,
-      v_3daxialize_outputs,
       v_3daxialize_params,
 };

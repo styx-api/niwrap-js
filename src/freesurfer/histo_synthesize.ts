@@ -143,14 +143,16 @@ function histo_synthesize_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `HistoSynthesizeOutputs`).
  */
 function histo_synthesize_execute(
     params: HistoSynthesizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): HistoSynthesizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(HISTO_SYNTHESIZE_METADATA);
     params = execution.params(params)
     const cargs = histo_synthesize_cargs(params, execution)
     const ret = histo_synthesize_outputs(params, execution)
@@ -179,10 +181,8 @@ function histo_synthesize(
     synthetic_histo: string,
     runner: Runner | null = null,
 ): HistoSynthesizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(HISTO_SYNTHESIZE_METADATA);
     const params = histo_synthesize_params(mri_volume, histo_volume, synthetic_histo)
-    return histo_synthesize_execute(params, execution);
+    return histo_synthesize_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       HistoSynthesizeOutputs,
       HistoSynthesizeParameters,
       histo_synthesize,
-      histo_synthesize_cargs,
       histo_synthesize_execute,
-      histo_synthesize_outputs,
       histo_synthesize_params,
 };

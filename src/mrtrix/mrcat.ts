@@ -285,14 +285,16 @@ function mrcat_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrcatOutputs`).
  */
 function mrcat_execute(
     params: MrcatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrcatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRCAT_METADATA);
     params = execution.params(params)
     const cargs = mrcat_cargs(params, execution)
     const ret = mrcat_outputs(params, execution)
@@ -347,10 +349,8 @@ function mrcat(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrcatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRCAT_METADATA);
     const params = mrcat_params(image1, image2, output, axis, datatype, info, quiet, debug, force, nthreads, config, help, version)
-    return mrcat_execute(params, execution);
+    return mrcat_execute(params, runner);
 }
 
 
@@ -360,10 +360,7 @@ export {
       MrcatOutputs,
       MrcatParameters,
       mrcat,
-      mrcat_cargs,
-      mrcat_config_cargs,
       mrcat_config_params,
       mrcat_execute,
-      mrcat_outputs,
       mrcat_params,
 };

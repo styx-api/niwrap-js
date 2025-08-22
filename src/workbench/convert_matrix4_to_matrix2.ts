@@ -274,14 +274,16 @@ function convert_matrix4_to_matrix2_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertMatrix4ToMatrix2Outputs`).
  */
 function convert_matrix4_to_matrix2_execute(
     params: ConvertMatrix4ToMatrix2Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvertMatrix4ToMatrix2Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVERT_MATRIX4_TO_MATRIX2_METADATA);
     params = execution.params(params)
     const cargs = convert_matrix4_to_matrix2_cargs(params, execution)
     const ret = convert_matrix4_to_matrix2_outputs(params, execution)
@@ -314,10 +316,8 @@ function convert_matrix4_to_matrix2(
     individual_fibers: ConvertMatrix4ToMatrix2IndividualFibersParameters | null = null,
     runner: Runner | null = null,
 ): ConvertMatrix4ToMatrix2Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVERT_MATRIX4_TO_MATRIX2_METADATA);
     const params = convert_matrix4_to_matrix2_params(matrix4_wbsparse, counts_out, opt_distances_distance_out, individual_fibers)
-    return convert_matrix4_to_matrix2_execute(params, execution);
+    return convert_matrix4_to_matrix2_execute(params, runner);
 }
 
 
@@ -328,11 +328,7 @@ export {
       ConvertMatrix4ToMatrix2Outputs,
       ConvertMatrix4ToMatrix2Parameters,
       convert_matrix4_to_matrix2,
-      convert_matrix4_to_matrix2_cargs,
       convert_matrix4_to_matrix2_execute,
-      convert_matrix4_to_matrix2_individual_fibers_cargs,
-      convert_matrix4_to_matrix2_individual_fibers_outputs,
       convert_matrix4_to_matrix2_individual_fibers_params,
-      convert_matrix4_to_matrix2_outputs,
       convert_matrix4_to_matrix2_params,
 };

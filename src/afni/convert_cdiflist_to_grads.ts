@@ -190,14 +190,16 @@ function convert_cdiflist_to_grads_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertCdiflistToGradsOutputs`).
  */
 function convert_cdiflist_to_grads_execute(
     params: ConvertCdiflistToGradsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvertCdiflistToGradsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVERT_CDIFLIST_TO_GRADS_METADATA);
     params = execution.params(params)
     const cargs = convert_cdiflist_to_grads_cargs(params, execution)
     const ret = convert_cdiflist_to_grads_outputs(params, execution)
@@ -234,10 +236,8 @@ function convert_cdiflist_to_grads(
     hview: boolean = false,
     runner: Runner | null = null,
 ): ConvertCdiflistToGradsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVERT_CDIFLIST_TO_GRADS_METADATA);
     const params = convert_cdiflist_to_grads_params(cdiflist, bval_max, prefix, ver, date, help, hview)
-    return convert_cdiflist_to_grads_execute(params, execution);
+    return convert_cdiflist_to_grads_execute(params, runner);
 }
 
 
@@ -246,8 +246,6 @@ export {
       ConvertCdiflistToGradsOutputs,
       ConvertCdiflistToGradsParameters,
       convert_cdiflist_to_grads,
-      convert_cdiflist_to_grads_cargs,
       convert_cdiflist_to_grads_execute,
-      convert_cdiflist_to_grads_outputs,
       convert_cdiflist_to_grads_params,
 };

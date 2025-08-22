@@ -153,14 +153,16 @@ function connected_components_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConnectedComponentsOutputs`).
  */
 function connected_components_execute(
     params: ConnectedComponentsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConnectedComponentsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONNECTED_COMPONENTS_METADATA);
     params = execution.params(params)
     const cargs = connected_components_cargs(params, execution)
     const ret = connected_components_outputs(params, execution)
@@ -189,10 +191,8 @@ function connected_components(
     threshold: number | null = null,
     runner: Runner | null = null,
 ): ConnectedComponentsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONNECTED_COMPONENTS_METADATA);
     const params = connected_components_params(input_image, output_image, threshold)
-    return connected_components_execute(params, execution);
+    return connected_components_execute(params, runner);
 }
 
 
@@ -201,8 +201,6 @@ export {
       ConnectedComponentsOutputs,
       ConnectedComponentsParameters,
       connected_components,
-      connected_components_cargs,
       connected_components_execute,
-      connected_components_outputs,
       connected_components_params,
 };

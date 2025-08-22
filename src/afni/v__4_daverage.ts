@@ -132,14 +132,16 @@ function v__4_daverage_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V4DaverageOutputs`).
  */
 function v__4_daverage_execute(
     params: V4DaverageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V4DaverageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__4_DAVERAGE_METADATA);
     params = execution.params(params)
     const cargs = v__4_daverage_cargs(params, execution)
     const ret = v__4_daverage_outputs(params, execution)
@@ -166,10 +168,8 @@ function v__4_daverage(
     input_files: Array<InputPathType>,
     runner: Runner | null = null,
 ): V4DaverageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__4_DAVERAGE_METADATA);
     const params = v__4_daverage_params(output_prefix, input_files)
-    return v__4_daverage_execute(params, execution);
+    return v__4_daverage_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       V4DaverageParameters,
       V__4_DAVERAGE_METADATA,
       v__4_daverage,
-      v__4_daverage_cargs,
       v__4_daverage_execute,
-      v__4_daverage_outputs,
       v__4_daverage_params,
 };

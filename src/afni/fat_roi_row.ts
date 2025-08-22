@@ -167,14 +167,16 @@ function fat_roi_row_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatRoiRowOutputs`).
  */
 function fat_roi_row_execute(
     params: FatRoiRowParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatRoiRowOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_ROI_ROW_METADATA);
     params = execution.params(params)
     const cargs = fat_roi_row_cargs(params, execution)
     const ret = fat_roi_row_outputs(params, execution)
@@ -205,10 +207,8 @@ function fat_roi_row(
     extern_labs_no: boolean = false,
     runner: Runner | null = null,
 ): FatRoiRowOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_ROI_ROW_METADATA);
     const params = fat_roi_row_params(roi, matrix_files, list_file, extern_labs_no)
-    return fat_roi_row_execute(params, execution);
+    return fat_roi_row_execute(params, runner);
 }
 
 
@@ -217,8 +217,6 @@ export {
       FatRoiRowOutputs,
       FatRoiRowParameters,
       fat_roi_row,
-      fat_roi_row_cargs,
       fat_roi_row_execute,
-      fat_roi_row_outputs,
       fat_roi_row_params,
 };

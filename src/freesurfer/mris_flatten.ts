@@ -205,14 +205,16 @@ function mris_flatten_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisFlattenOutputs`).
  */
 function mris_flatten_execute(
     params: MrisFlattenParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisFlattenOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_FLATTEN_METADATA);
     params = execution.params(params)
     const cargs = mris_flatten_cargs(params, execution)
     const ret = mris_flatten_outputs(params, execution)
@@ -251,10 +253,8 @@ function mris_flatten(
     norand: boolean = false,
     runner: Runner | null = null,
 ): MrisFlattenOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_FLATTEN_METADATA);
     const params = mris_flatten_params(input_patch, output_patch, iterations, distances, dilations, random_seed, copy_coords, norand)
-    return mris_flatten_execute(params, execution);
+    return mris_flatten_execute(params, runner);
 }
 
 
@@ -263,8 +263,6 @@ export {
       MrisFlattenOutputs,
       MrisFlattenParameters,
       mris_flatten,
-      mris_flatten_cargs,
       mris_flatten_execute,
-      mris_flatten_outputs,
       mris_flatten_params,
 };

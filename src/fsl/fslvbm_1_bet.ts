@@ -145,14 +145,16 @@ function fslvbm_1_bet_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fslvbm1BetOutputs`).
  */
 function fslvbm_1_bet_execute(
     params: Fslvbm1BetParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fslvbm1BetOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLVBM_1_BET_METADATA);
     params = execution.params(params)
     const cargs = fslvbm_1_bet_cargs(params, execution)
     const ret = fslvbm_1_bet_outputs(params, execution)
@@ -181,10 +183,8 @@ function fslvbm_1_bet(
     bet_parameters: string | null = null,
     runner: Runner | null = null,
 ): Fslvbm1BetOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLVBM_1_BET_METADATA);
     const params = fslvbm_1_bet_params(default_bet, increased_robustness, bet_parameters)
-    return fslvbm_1_bet_execute(params, execution);
+    return fslvbm_1_bet_execute(params, runner);
 }
 
 
@@ -193,8 +193,6 @@ export {
       Fslvbm1BetOutputs,
       Fslvbm1BetParameters,
       fslvbm_1_bet,
-      fslvbm_1_bet_cargs,
       fslvbm_1_bet_execute,
-      fslvbm_1_bet_outputs,
       fslvbm_1_bet_params,
 };

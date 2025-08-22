@@ -331,14 +331,16 @@ function extract_region_from_image_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ExtractRegionFromImageOutputs`).
  */
 function extract_region_from_image_execute(
     params: ExtractRegionFromImageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ExtractRegionFromImageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EXTRACT_REGION_FROM_IMAGE_METADATA);
     params = execution.params(params)
     const cargs = extract_region_from_image_cargs(params, execution)
     const ret = extract_region_from_image_outputs(params, execution)
@@ -369,10 +371,8 @@ function extract_region_from_image(
     region_specification: ExtractRegionFromImageRegionMinMaxIndexParameters | ExtractRegionFromImageRegionLabelParameters | ExtractRegionFromImageRegionDomainImageParameters | ExtractRegionFromImageRegionLabelWithImageParameters,
     runner: Runner | null = null,
 ): ExtractRegionFromImageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EXTRACT_REGION_FROM_IMAGE_METADATA);
     const params = extract_region_from_image_params(image_dimension, input_image, output_image, region_specification)
-    return extract_region_from_image_execute(params, execution);
+    return extract_region_from_image_execute(params, runner);
 }
 
 
@@ -385,16 +385,10 @@ export {
       ExtractRegionFromImageRegionLabelWithImageParameters,
       ExtractRegionFromImageRegionMinMaxIndexParameters,
       extract_region_from_image,
-      extract_region_from_image_cargs,
       extract_region_from_image_execute,
-      extract_region_from_image_outputs,
       extract_region_from_image_params,
-      extract_region_from_image_region_domain_image_cargs,
       extract_region_from_image_region_domain_image_params,
-      extract_region_from_image_region_label_cargs,
       extract_region_from_image_region_label_params,
-      extract_region_from_image_region_label_with_image_cargs,
       extract_region_from_image_region_label_with_image_params,
-      extract_region_from_image_region_min_max_index_cargs,
       extract_region_from_image_region_min_max_index_params,
 };

@@ -136,14 +136,16 @@ function v__get_afni_res_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VGetAfniResOutputs`).
  */
 function v__get_afni_res_execute(
     params: VGetAfniResParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VGetAfniResOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__GET_AFNI_RES_METADATA);
     params = execution.params(params)
     const cargs = v__get_afni_res_cargs(params, execution)
     const ret = v__get_afni_res_outputs(params, execution)
@@ -170,10 +172,8 @@ function v__get_afni_res(
     output_type: "-min" | "-max" | "-mean" | null = null,
     runner: Runner | null = null,
 ): VGetAfniResOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__GET_AFNI_RES_METADATA);
     const params = v__get_afni_res_params(input_dataset, output_type)
-    return v__get_afni_res_execute(params, execution);
+    return v__get_afni_res_execute(params, runner);
 }
 
 
@@ -182,8 +182,6 @@ export {
       VGetAfniResParameters,
       V__GET_AFNI_RES_METADATA,
       v__get_afni_res,
-      v__get_afni_res_cargs,
       v__get_afni_res_execute,
-      v__get_afni_res_outputs,
       v__get_afni_res_params,
 };

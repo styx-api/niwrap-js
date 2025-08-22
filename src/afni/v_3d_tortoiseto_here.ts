@@ -177,14 +177,16 @@ function v_3d_tortoiseto_here_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTortoisetoHereOutputs`).
  */
 function v_3d_tortoiseto_here_execute(
     params: V3dTortoisetoHereParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTortoisetoHereOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TORTOISETO_HERE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tortoiseto_here_cargs(params, execution)
     const ret = v_3d_tortoiseto_here_outputs(params, execution)
@@ -219,10 +221,8 @@ function v_3d_tortoiseto_here(
     flip_z: boolean = false,
     runner: Runner | null = null,
 ): V3dTortoisetoHereOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TORTOISETO_HERE_METADATA);
     const params = v_3d_tortoiseto_here_params(dt_tort, prefix, scale_factor, flip_x, flip_y, flip_z)
-    return v_3d_tortoiseto_here_execute(params, execution);
+    return v_3d_tortoiseto_here_execute(params, runner);
 }
 
 
@@ -231,8 +231,6 @@ export {
       V3dTortoisetoHereParameters,
       V_3D_TORTOISETO_HERE_METADATA,
       v_3d_tortoiseto_here,
-      v_3d_tortoiseto_here_cargs,
       v_3d_tortoiseto_here_execute,
-      v_3d_tortoiseto_here_outputs,
       v_3d_tortoiseto_here_params,
 };

@@ -268,14 +268,16 @@ function label2colour_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Label2colourOutputs`).
  */
 function label2colour_execute(
     params: Label2colourParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Label2colourOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL2COLOUR_METADATA);
     params = execution.params(params)
     const cargs = label2colour_cargs(params, execution)
     const ret = label2colour_outputs(params, execution)
@@ -326,10 +328,8 @@ function label2colour(
     version: boolean = false,
     runner: Runner | null = null,
 ): Label2colourOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL2COLOUR_METADATA);
     const params = label2colour_params(nodes_in, colour_out, lut, info, quiet, debug, force, nthreads, config, help, version)
-    return label2colour_execute(params, execution);
+    return label2colour_execute(params, runner);
 }
 
 
@@ -339,10 +339,7 @@ export {
       Label2colourOutputs,
       Label2colourParameters,
       label2colour,
-      label2colour_cargs,
-      label2colour_config_cargs,
       label2colour_config_params,
       label2colour_execute,
-      label2colour_outputs,
       label2colour_params,
 };

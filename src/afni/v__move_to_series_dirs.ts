@@ -191,14 +191,16 @@ function v__move_to_series_dirs_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VMoveToSeriesDirsOutputs`).
  */
 function v__move_to_series_dirs_execute(
     params: VMoveToSeriesDirsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VMoveToSeriesDirsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__MOVE_TO_SERIES_DIRS_METADATA);
     params = execution.params(params)
     const cargs = v__move_to_series_dirs_cargs(params, execution)
     const ret = v__move_to_series_dirs_outputs(params, execution)
@@ -237,10 +239,8 @@ function v__move_to_series_dirs(
     ver: boolean = false,
     runner: Runner | null = null,
 ): VMoveToSeriesDirsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__MOVE_TO_SERIES_DIRS_METADATA);
     const params = v__move_to_series_dirs_params(dicom_files, action, dprefix, tag, test, help, hist, ver)
-    return v__move_to_series_dirs_execute(params, execution);
+    return v__move_to_series_dirs_execute(params, runner);
 }
 
 
@@ -249,8 +249,6 @@ export {
       VMoveToSeriesDirsParameters,
       V__MOVE_TO_SERIES_DIRS_METADATA,
       v__move_to_series_dirs,
-      v__move_to_series_dirs_cargs,
       v__move_to_series_dirs_execute,
-      v__move_to_series_dirs_outputs,
       v__move_to_series_dirs_params,
 };

@@ -143,14 +143,16 @@ function segment_ha_t2_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegmentHaT2ShOutputs`).
  */
 function segment_ha_t2_sh_execute(
     params: SegmentHaT2ShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegmentHaT2ShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGMENT_HA_T2_SH_METADATA);
     params = execution.params(params)
     const cargs = segment_ha_t2_sh_cargs(params, execution)
     const ret = segment_ha_t2_sh_outputs(params, execution)
@@ -177,10 +179,8 @@ function segment_ha_t2_sh(
     output_directory: string,
     runner: Runner | null = null,
 ): SegmentHaT2ShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGMENT_HA_T2_SH_METADATA);
     const params = segment_ha_t2_sh_params(input_image, output_directory)
-    return segment_ha_t2_sh_execute(params, execution);
+    return segment_ha_t2_sh_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       SegmentHaT2ShOutputs,
       SegmentHaT2ShParameters,
       segment_ha_t2_sh,
-      segment_ha_t2_sh_cargs,
       segment_ha_t2_sh_execute,
-      segment_ha_t2_sh_outputs,
       segment_ha_t2_sh_params,
 };

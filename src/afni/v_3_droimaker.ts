@@ -328,14 +328,16 @@ function v_3_droimaker_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3DroimakerOutputs`).
  */
 function v_3_droimaker_execute(
     params: V3DroimakerParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3DroimakerOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3_DROIMAKER_METADATA);
     params = execution.params(params)
     const cargs = v_3_droimaker_cargs(params, execution)
     const ret = v_3_droimaker_outputs(params, execution)
@@ -398,10 +400,8 @@ function v_3_droimaker(
     dump_no_labtab: boolean = false,
     runner: Runner | null = null,
 ): V3DroimakerOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3_DROIMAKER_METADATA);
     const params = v_3_droimaker_params(inset, thresh, prefix, refset, volthr, only_some_top, only_conn_top, inflate, trim_off_wm, wm_skel, skel_thr, skel_stop, skel_stop_strict, csf_skel, mask, neigh_upto_vert, nifti, preinfl_inset, preinfl_inflate, dump_no_labtab)
-    return v_3_droimaker_execute(params, execution);
+    return v_3_droimaker_execute(params, runner);
 }
 
 
@@ -410,8 +410,6 @@ export {
       V3DroimakerParameters,
       V_3_DROIMAKER_METADATA,
       v_3_droimaker,
-      v_3_droimaker_cargs,
       v_3_droimaker_execute,
-      v_3_droimaker_outputs,
       v_3_droimaker_params,
 };

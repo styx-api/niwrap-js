@@ -319,14 +319,16 @@ function v_3d_warp_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dWarpOutputs`).
  */
 function v_3d_warp_execute(
     params: V3dWarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dWarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_WARP_METADATA);
     params = execution.params(params)
     const cargs = v_3d_warp_cargs(params, execution)
     const ret = v_3d_warp_outputs(params, execution)
@@ -393,10 +395,8 @@ function v_3d_warp(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dWarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_WARP_METADATA);
     const params = v_3d_warp_params(dataset, matvec_in2out, matvec_out2in, tta2mni, mni2tta, matparent, card2oblique, oblique_parent, deoblique, oblique2card, disp_obl_xform_only, linear, cubic, nn, quintic, wsinc5, fsl_matvec, newgrid, gridset, zpad, verb, prefix)
-    return v_3d_warp_execute(params, execution);
+    return v_3d_warp_execute(params, runner);
 }
 
 
@@ -405,8 +405,6 @@ export {
       V3dWarpParameters,
       V_3D_WARP_METADATA,
       v_3d_warp,
-      v_3d_warp_cargs,
       v_3d_warp_execute,
-      v_3d_warp_outputs,
       v_3d_warp_params,
 };

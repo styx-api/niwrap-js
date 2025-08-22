@@ -557,14 +557,16 @@ function tckmap_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TckmapOutputs`).
  */
 function tckmap_execute(
     params: TckmapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TckmapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCKMAP_METADATA);
     params = execution.params(params)
     const cargs = tckmap_cargs(params, execution)
     const ret = tckmap_outputs(params, execution)
@@ -673,10 +675,8 @@ function tckmap(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckmapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCKMAP_METADATA);
     const params = tckmap_params(tracks, output, template, vox, datatype, dec, dixel, tod, contrast, image, vector_file, stat_vox, stat_tck, fwhm_tck, map_zero, backtrack, upsample, precise, ends_only, tck_weights_in, info, quiet, debug, force, nthreads, config, help, version)
-    return tckmap_execute(params, execution);
+    return tckmap_execute(params, runner);
 }
 
 
@@ -688,14 +688,9 @@ export {
       TckmapVariousFileParameters,
       TckmapVariousStringParameters,
       tckmap,
-      tckmap_cargs,
-      tckmap_config_cargs,
       tckmap_config_params,
       tckmap_execute,
-      tckmap_outputs,
       tckmap_params,
-      tckmap_various_file_cargs,
       tckmap_various_file_params,
-      tckmap_various_string_cargs,
       tckmap_various_string_params,
 };

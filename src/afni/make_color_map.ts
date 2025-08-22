@@ -343,14 +343,16 @@ function make_color_map_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeColorMapOutputs`).
  */
 function make_color_map_execute(
     params: MakeColorMapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeColorMapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_COLOR_MAP_METADATA);
     params = execution.params(params)
     const cargs = make_color_map_cargs(params, execution)
     const ret = make_color_map_outputs(params, execution)
@@ -413,10 +415,8 @@ function make_color_map(
     flip_map_updside_down: boolean = false,
     runner: Runner | null = null,
 ): MakeColorMapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_COLOR_MAP_METADATA);
     const params = make_color_map_params(fiducials_ncol, fiducials, num_colors, std_mapname, palette_file, cmap_name, fscolut_labels, fscolut_file, afni_hex, afni_hex_complete, suma_colormap, user_colut_file, sdset, sdset_prefix, flipupdown, skip_last, show_fscolut, help_flag, help_full_flag, flip_map_updside_down)
-    return make_color_map_execute(params, execution);
+    return make_color_map_execute(params, runner);
 }
 
 
@@ -425,8 +425,6 @@ export {
       MakeColorMapOutputs,
       MakeColorMapParameters,
       make_color_map,
-      make_color_map_cargs,
       make_color_map_execute,
-      make_color_map_outputs,
       make_color_map_params,
 };

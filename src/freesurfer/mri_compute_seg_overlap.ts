@@ -208,14 +208,16 @@ function mri_compute_seg_overlap_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriComputeSegOverlapOutputs`).
  */
 function mri_compute_seg_overlap_execute(
     params: MriComputeSegOverlapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriComputeSegOverlapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_COMPUTE_SEG_OVERLAP_METADATA);
     params = execution.params(params)
     const cargs = mri_compute_seg_overlap_cargs(params, execution)
     const ret = mri_compute_seg_overlap_outputs(params, execution)
@@ -258,10 +260,8 @@ function mri_compute_seg_overlap(
     dice_params: string | null = null,
     runner: Runner | null = null,
 ): MriComputeSegOverlapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_COMPUTE_SEG_OVERLAP_METADATA);
     const params = mri_compute_seg_overlap_params(segvol1, segvol2, log_file, mean_log_file, std_log_file, overall_log_flag, exclude_cortex_flag, exclude_wm_flag, all_labels_flag, dice_params)
-    return mri_compute_seg_overlap_execute(params, execution);
+    return mri_compute_seg_overlap_execute(params, runner);
 }
 
 
@@ -270,8 +270,6 @@ export {
       MriComputeSegOverlapOutputs,
       MriComputeSegOverlapParameters,
       mri_compute_seg_overlap,
-      mri_compute_seg_overlap_cargs,
       mri_compute_seg_overlap_execute,
-      mri_compute_seg_overlap_outputs,
       mri_compute_seg_overlap_params,
 };

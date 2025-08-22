@@ -142,14 +142,16 @@ function fslslice_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslsliceOutputs`).
  */
 function fslslice_execute(
     params: FslsliceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslsliceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLSLICE_METADATA);
     params = execution.params(params)
     const cargs = fslslice_cargs(params, execution)
     const ret = fslslice_outputs(params, execution)
@@ -176,10 +178,8 @@ function fslslice(
     output_basename: string | null = null,
     runner: Runner | null = null,
 ): FslsliceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLSLICE_METADATA);
     const params = fslslice_params(volume, output_basename)
-    return fslslice_execute(params, execution);
+    return fslslice_execute(params, runner);
 }
 
 
@@ -188,8 +188,6 @@ export {
       FslsliceOutputs,
       FslsliceParameters,
       fslslice,
-      fslslice_cargs,
       fslslice_execute,
-      fslslice_outputs,
       fslslice_params,
 };

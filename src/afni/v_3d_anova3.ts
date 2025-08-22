@@ -633,14 +633,16 @@ function v_3d_anova3_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dAnova3Outputs`).
  */
 function v_3d_anova3_execute(
     params: V3dAnova3Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dAnova3Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ANOVA3_METADATA);
     params = execution.params(params)
     const cargs = v_3d_anova3_cargs(params, execution)
     const ret = v_3d_anova3_outputs(params, execution)
@@ -725,10 +727,8 @@ function v_3d_anova3(
     anova_options: Array<string> | null = null,
     runner: Runner | null = null,
 ): V3dAnova3Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ANOVA3_METADATA);
     const params = v_3d_anova3_params(type_, alevels, blevels, clevels, dsets, voxel_num, diskspace, mask, outfile_fa, outfile_fb, outfile_fc, outfile_fab, outfile_fac, outfile_fbc, outfile_fabc, outfile_amean, outfile_bmean, outfile_cmean, outfile_xmean, outfile_adiff, outfile_bdiff, outfile_cdiff, outfile_xdiff, outfile_acontr, outfile_bcontr, outfile_ccontr, outfile_abcontr, outfile_abdiff, outfile_abmean, outfile_bucket, anova_options)
-    return v_3d_anova3_execute(params, execution);
+    return v_3d_anova3_execute(params, runner);
 }
 
 
@@ -739,12 +739,8 @@ export {
       V3dAnova3Parameters,
       V_3D_ANOVA3_METADATA,
       v_3d_anova3,
-      v_3d_anova3_cargs,
       v_3d_anova3_execute,
-      v_3d_anova3_outfile_abcontr_1_cargs,
       v_3d_anova3_outfile_abcontr_1_params,
-      v_3d_anova3_outfile_abcontr_cargs,
       v_3d_anova3_outfile_abcontr_params,
-      v_3d_anova3_outputs,
       v_3d_anova3_params,
 };

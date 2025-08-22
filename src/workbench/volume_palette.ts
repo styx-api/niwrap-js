@@ -589,14 +589,16 @@ function volume_palette_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumePaletteOutputs`).
  */
 function volume_palette_execute(
     params: VolumePaletteParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumePaletteOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_PALETTE_METADATA);
     params = execution.params(params)
     const cargs = volume_palette_cargs(params, execution)
     const ret = volume_palette_outputs(params, execution)
@@ -719,10 +721,8 @@ function volume_palette(
     opt_inversion_type: string | null = null,
     runner: Runner | null = null,
 ): VolumePaletteOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_PALETTE_METADATA);
     const params = volume_palette_params(volume, mode, opt_subvolume_subvolume, pos_percent, neg_percent, pos_user, neg_user, opt_interpolate_interpolate, opt_disp_pos_display, opt_disp_neg_display, opt_disp_zero_display, opt_palette_name_name, thresholding, opt_inversion_type)
-    return volume_palette_execute(params, execution);
+    return volume_palette_execute(params, runner);
 }
 
 
@@ -736,18 +736,11 @@ export {
       VolumePalettePosUserParameters,
       VolumePaletteThresholdingParameters,
       volume_palette,
-      volume_palette_cargs,
       volume_palette_execute,
-      volume_palette_neg_percent_cargs,
       volume_palette_neg_percent_params,
-      volume_palette_neg_user_cargs,
       volume_palette_neg_user_params,
-      volume_palette_outputs,
       volume_palette_params,
-      volume_palette_pos_percent_cargs,
       volume_palette_pos_percent_params,
-      volume_palette_pos_user_cargs,
       volume_palette_pos_user_params,
-      volume_palette_thresholding_cargs,
       volume_palette_thresholding_params,
 };

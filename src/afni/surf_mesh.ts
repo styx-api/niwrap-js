@@ -197,14 +197,16 @@ function surf_mesh_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfMeshOutputs`).
  */
 function surf_mesh_execute(
     params: SurfMeshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfMeshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_MESH_METADATA);
     params = execution.params(params)
     const cargs = surf_mesh_cargs(params, execution)
     const ret = surf_mesh_outputs(params, execution)
@@ -243,10 +245,8 @@ function surf_mesh(
     set_env: string | null = null,
     runner: Runner | null = null,
 ): SurfMeshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_MESH_METADATA);
     const params = surf_mesh_params(input_surface, output_surface, edge_fraction, surface_volume, one_state, anatomical_label, no_volume_registration, set_env)
-    return surf_mesh_execute(params, execution);
+    return surf_mesh_execute(params, runner);
 }
 
 
@@ -255,8 +255,6 @@ export {
       SurfMeshOutputs,
       SurfMeshParameters,
       surf_mesh,
-      surf_mesh_cargs,
       surf_mesh_execute,
-      surf_mesh_outputs,
       surf_mesh_params,
 };

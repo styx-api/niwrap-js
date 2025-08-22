@@ -230,14 +230,16 @@ function niccc_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `NicccOutputs`).
  */
 function niccc_execute(
     params: NicccParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): NicccOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(NICCC_METADATA);
     params = execution.params(params)
     const cargs = niccc_cargs(params, execution)
     const ret = niccc_outputs(params, execution)
@@ -284,10 +286,8 @@ function niccc(
     skip_attr: Array<string> | null = null,
     runner: Runner | null = null,
 ): NicccOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(NICCC_METADATA);
     const params = niccc_params(streamspec, duplicate, nodata, attribute, match, file, string_, stdout, hash, quiet, find_attr, skip_attr)
-    return niccc_execute(params, execution);
+    return niccc_execute(params, runner);
 }
 
 
@@ -296,8 +296,6 @@ export {
       NicccOutputs,
       NicccParameters,
       niccc,
-      niccc_cargs,
       niccc_execute,
-      niccc_outputs,
       niccc_params,
 };

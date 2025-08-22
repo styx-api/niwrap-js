@@ -197,14 +197,16 @@ function trk_tools_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TrkToolsOutputs`).
  */
 function trk_tools_execute(
     params: TrkToolsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TrkToolsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TRK_TOOLS_METADATA);
     params = execution.params(params)
     const cargs = trk_tools_cargs(params, execution)
     const ret = trk_tools_outputs(params, execution)
@@ -239,10 +241,8 @@ function trk_tools(
     output_vtk: string | null = null,
     runner: Runner | null = null,
 ): TrkToolsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TRK_TOOLS_METADATA);
     const params = trk_tools_params(reference_image, input_trk, output_trk, output_image, update_header, output_vtk)
-    return trk_tools_execute(params, execution);
+    return trk_tools_execute(params, runner);
 }
 
 
@@ -251,8 +251,6 @@ export {
       TrkToolsOutputs,
       TrkToolsParameters,
       trk_tools,
-      trk_tools_cargs,
       trk_tools_execute,
-      trk_tools_outputs,
       trk_tools_params,
 };

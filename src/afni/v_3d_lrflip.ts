@@ -187,14 +187,16 @@ function v_3d_lrflip_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dLrflipOutputs`).
  */
 function v_3d_lrflip_execute(
     params: V3dLrflipParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dLrflipOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_LRFLIP_METADATA);
     params = execution.params(params)
     const cargs = v_3d_lrflip_cargs(params, execution)
     const ret = v_3d_lrflip_outputs(params, execution)
@@ -233,10 +235,8 @@ function v_3d_lrflip(
     output_prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dLrflipOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_LRFLIP_METADATA);
     const params = v_3d_lrflip_params(datasets, flip_lr, flip_ap, flip_is, flip_x, flip_y, flip_z, output_prefix)
-    return v_3d_lrflip_execute(params, execution);
+    return v_3d_lrflip_execute(params, runner);
 }
 
 
@@ -245,8 +245,6 @@ export {
       V3dLrflipParameters,
       V_3D_LRFLIP_METADATA,
       v_3d_lrflip,
-      v_3d_lrflip_cargs,
       v_3d_lrflip_execute,
-      v_3d_lrflip_outputs,
       v_3d_lrflip_params,
 };

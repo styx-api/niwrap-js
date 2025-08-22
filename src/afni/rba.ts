@@ -422,14 +422,16 @@ function rba_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RbaOutputs`).
  */
 function rba_execute(
     params: RbaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RbaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RBA_METADATA);
     params = execution.params(params)
     const cargs = rba_cargs(params, execution)
     const ret = rba_outputs(params, execution)
@@ -504,10 +506,8 @@ function rba(
     r2z: boolean = false,
     runner: Runner | null = null,
 ): RbaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RBA_METADATA);
     const params = rba_params(prefix, data_table, chains, iterations, model, eoi, wcp, tstat, stdz, c_vars, q_vars, dist_roi, dist_subj, dist_y, ridge_plot, roi, subj, scale, se, pdp, mean, sigma, debug, verbose, md, r2z)
-    return rba_execute(params, execution);
+    return rba_execute(params, runner);
 }
 
 
@@ -516,8 +516,6 @@ export {
       RbaOutputs,
       RbaParameters,
       rba,
-      rba_cargs,
       rba_execute,
-      rba_outputs,
       rba_params,
 };

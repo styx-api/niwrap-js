@@ -305,14 +305,16 @@ function feat2segstats_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Feat2segstatsOutputs`).
  */
 function feat2segstats_execute(
     params: Feat2segstatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Feat2segstatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FEAT2SEGSTATS_METADATA);
     params = execution.params(params)
     const cargs = feat2segstats_cargs(params, execution)
     const ret = feat2segstats_outputs(params, execution)
@@ -375,10 +377,8 @@ function feat2segstats(
     nolog_flag: boolean = false,
     runner: Runner | null = null,
 ): Feat2segstatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FEAT2SEGSTATS_METADATA);
     const params = feat2segstats_params(feat_dir, stat, featdirfile, seg_vol, aseg_flag, aparc_aseg_flag, ctab, all_segs_flag, copes_flag, varcopes_flag, zstats_flag, pes_flag, rvar, example_func, mask, mean_func, version_flag, help_flag, debug_flag, nolog_flag)
-    return feat2segstats_execute(params, execution);
+    return feat2segstats_execute(params, runner);
 }
 
 
@@ -387,8 +387,6 @@ export {
       Feat2segstatsOutputs,
       Feat2segstatsParameters,
       feat2segstats,
-      feat2segstats_cargs,
       feat2segstats_execute,
-      feat2segstats_outputs,
       feat2segstats_params,
 };

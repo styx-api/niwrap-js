@@ -316,14 +316,16 @@ function asl_mfree_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AslMfreeOutputs`).
  */
 function asl_mfree_execute(
     params: AslMfreeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AslMfreeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ASL_MFREE_METADATA);
     params = execution.params(params)
     const cargs = asl_mfree_cargs(params, execution)
     const ret = asl_mfree_outputs(params, execution)
@@ -384,10 +386,8 @@ function asl_mfree(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): AslMfreeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ASL_MFREE_METADATA);
     const params = asl_mfree_params(datafile, mask, out, aif, dt, metric, mthresh, tcorrect, bata, batt, bat, bat_grad_thr, t1, fa, std, nwb, turbo_quasar, shift_factor, verbose)
-    return asl_mfree_execute(params, execution);
+    return asl_mfree_execute(params, runner);
 }
 
 
@@ -396,8 +396,6 @@ export {
       AslMfreeOutputs,
       AslMfreeParameters,
       asl_mfree,
-      asl_mfree_cargs,
       asl_mfree_execute,
-      asl_mfree_outputs,
       asl_mfree_params,
 };

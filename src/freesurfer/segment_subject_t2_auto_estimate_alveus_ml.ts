@@ -127,14 +127,16 @@ function segment_subject_t2_auto_estimate_alveus_ml_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegmentSubjectT2AutoEstimateAlveusMlOutputs`).
  */
 function segment_subject_t2_auto_estimate_alveus_ml_execute(
     params: SegmentSubjectT2AutoEstimateAlveusMlParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegmentSubjectT2AutoEstimateAlveusMlOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGMENT_SUBJECT_T2_AUTO_ESTIMATE_ALVEUS_ML_METADATA);
     params = execution.params(params)
     const cargs = segment_subject_t2_auto_estimate_alveus_ml_cargs(params, execution)
     const ret = segment_subject_t2_auto_estimate_alveus_ml_outputs(params, execution)
@@ -159,10 +161,8 @@ function segment_subject_t2_auto_estimate_alveus_ml(
     missing_library: string = "libmwlaunchermain.so: cannot open shared object file",
     runner: Runner | null = null,
 ): SegmentSubjectT2AutoEstimateAlveusMlOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGMENT_SUBJECT_T2_AUTO_ESTIMATE_ALVEUS_ML_METADATA);
     const params = segment_subject_t2_auto_estimate_alveus_ml_params(missing_library)
-    return segment_subject_t2_auto_estimate_alveus_ml_execute(params, execution);
+    return segment_subject_t2_auto_estimate_alveus_ml_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       SegmentSubjectT2AutoEstimateAlveusMlOutputs,
       SegmentSubjectT2AutoEstimateAlveusMlParameters,
       segment_subject_t2_auto_estimate_alveus_ml,
-      segment_subject_t2_auto_estimate_alveus_ml_cargs,
       segment_subject_t2_auto_estimate_alveus_ml_execute,
-      segment_subject_t2_auto_estimate_alveus_ml_outputs,
       segment_subject_t2_auto_estimate_alveus_ml_params,
 };

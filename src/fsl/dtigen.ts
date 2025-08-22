@@ -200,14 +200,16 @@ function dtigen_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DtigenOutputs`).
  */
 function dtigen_execute(
     params: DtigenParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DtigenOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DTIGEN_METADATA);
     params = execution.params(params)
     const cargs = dtigen_cargs(params, execution)
     const ret = dtigen_outputs(params, execution)
@@ -246,10 +248,8 @@ function dtigen(
     help: boolean = false,
     runner: Runner | null = null,
 ): DtigenOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DTIGEN_METADATA);
     const params = dtigen_params(tensor, s0, output_data, bvecs, bvals, brainmask, kurtosis, help)
-    return dtigen_execute(params, execution);
+    return dtigen_execute(params, runner);
 }
 
 
@@ -258,8 +258,6 @@ export {
       DtigenOutputs,
       DtigenParameters,
       dtigen,
-      dtigen_cargs,
       dtigen_execute,
-      dtigen_outputs,
       dtigen_params,
 };

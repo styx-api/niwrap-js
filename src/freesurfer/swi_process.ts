@@ -239,14 +239,16 @@ function swi_process_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SwiProcessOutputs`).
  */
 function swi_process_execute(
     params: SwiProcessParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SwiProcessOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SWI_PROCESS_METADATA);
     params = execution.params(params)
     const cargs = swi_process_cargs(params, execution)
     const ret = swi_process_outputs(params, execution)
@@ -291,10 +293,8 @@ function swi_process(
     phase_mask_method: string | null = null,
     runner: Runner | null = null,
 ): SwiProcessOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SWI_PROCESS_METADATA);
     const params = swi_process_params(magnitude_image, phase_image, swi_output, stddev, phase_mask_cutoff, phase_mask_right_cutoff, sigmoid_a, sigmoid_b, phase_multiplications, mip_level, phase_mask_method)
-    return swi_process_execute(params, execution);
+    return swi_process_execute(params, runner);
 }
 
 
@@ -303,8 +303,6 @@ export {
       SwiProcessOutputs,
       SwiProcessParameters,
       swi_process,
-      swi_process_cargs,
       swi_process_execute,
-      swi_process_outputs,
       swi_process_params,
 };

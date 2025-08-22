@@ -129,14 +129,16 @@ function fsr_getxopts_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsrGetxoptsOutputs`).
  */
 function fsr_getxopts_execute(
     params: FsrGetxoptsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsrGetxoptsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSR_GETXOPTS_METADATA);
     params = execution.params(params)
     const cargs = fsr_getxopts_cargs(params, execution)
     const ret = fsr_getxopts_outputs(params, execution)
@@ -161,10 +163,8 @@ function fsr_getxopts(
     help: boolean = false,
     runner: Runner | null = null,
 ): FsrGetxoptsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSR_GETXOPTS_METADATA);
     const params = fsr_getxopts_params(help)
-    return fsr_getxopts_execute(params, execution);
+    return fsr_getxopts_execute(params, runner);
 }
 
 
@@ -173,8 +173,6 @@ export {
       FsrGetxoptsOutputs,
       FsrGetxoptsParameters,
       fsr_getxopts,
-      fsr_getxopts_cargs,
       fsr_getxopts_execute,
-      fsr_getxopts_outputs,
       fsr_getxopts_params,
 };

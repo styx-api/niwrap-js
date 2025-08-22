@@ -419,14 +419,16 @@ function fabber_dualecho_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FabberDualechoOutputs`).
  */
 function fabber_dualecho_execute(
     params: FabberDualechoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FabberDualechoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FABBER_DUALECHO_METADATA);
     params = execution.params(params)
     const cargs = fabber_dualecho_cargs(params, execution)
     const ret = fabber_dualecho_outputs(params, execution)
@@ -519,10 +521,8 @@ function fabber_dualecho(
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): FabberDualechoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FABBER_DUALECHO_METADATA);
     const params = fabber_dualecho_params(output_directory, method, model, data, data_order, mask_file, mt_list, supp_data, options_file, help_flag, list_methods_flag, list_models_flag, list_params_flag, desc_params_flag, list_outputs_flag, evaluate, evaluate_params, evaluate_nt, simple_output_flag, overwrite_flag, link_to_latest_flag, load_models, dump_param_names_flag, save_model_fit_flag, save_residuals_flag, save_model_extras_flag, save_mvn_flag, save_mean_flag, save_std_flag, save_var_flag, save_zstat_flag, save_noise_mean_flag, save_noise_std_flag, save_free_energy_flag, debug_flag)
-    return fabber_dualecho_execute(params, execution);
+    return fabber_dualecho_execute(params, runner);
 }
 
 
@@ -531,8 +531,6 @@ export {
       FabberDualechoOutputs,
       FabberDualechoParameters,
       fabber_dualecho,
-      fabber_dualecho_cargs,
       fabber_dualecho_execute,
-      fabber_dualecho_outputs,
       fabber_dualecho_params,
 };

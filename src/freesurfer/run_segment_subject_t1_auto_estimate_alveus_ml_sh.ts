@@ -136,14 +136,16 @@ function run_segment_subject_t1_auto_estimate_alveus_ml_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs`).
  */
 function run_segment_subject_t1_auto_estimate_alveus_ml_sh_execute(
     params: RunSegmentSubjectT1AutoEstimateAlveusMlShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RUN_SEGMENT_SUBJECT_T1_AUTO_ESTIMATE_ALVEUS_ML_SH_METADATA);
     params = execution.params(params)
     const cargs = run_segment_subject_t1_auto_estimate_alveus_ml_sh_cargs(params, execution)
     const ret = run_segment_subject_t1_auto_estimate_alveus_ml_sh_outputs(params, execution)
@@ -170,10 +172,8 @@ function run_segment_subject_t1_auto_estimate_alveus_ml_sh(
     additional_args: string | null = null,
     runner: Runner | null = null,
 ): RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RUN_SEGMENT_SUBJECT_T1_AUTO_ESTIMATE_ALVEUS_ML_SH_METADATA);
     const params = run_segment_subject_t1_auto_estimate_alveus_ml_sh_params(deployed_mcr_root, additional_args)
-    return run_segment_subject_t1_auto_estimate_alveus_ml_sh_execute(params, execution);
+    return run_segment_subject_t1_auto_estimate_alveus_ml_sh_execute(params, runner);
 }
 
 
@@ -182,8 +182,6 @@ export {
       RunSegmentSubjectT1AutoEstimateAlveusMlShOutputs,
       RunSegmentSubjectT1AutoEstimateAlveusMlShParameters,
       run_segment_subject_t1_auto_estimate_alveus_ml_sh,
-      run_segment_subject_t1_auto_estimate_alveus_ml_sh_cargs,
       run_segment_subject_t1_auto_estimate_alveus_ml_sh_execute,
-      run_segment_subject_t1_auto_estimate_alveus_ml_sh_outputs,
       run_segment_subject_t1_auto_estimate_alveus_ml_sh_params,
 };

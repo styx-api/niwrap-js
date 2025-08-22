@@ -127,14 +127,16 @@ function nmovie_qt_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `NmovieQtOutputs`).
  */
 function nmovie_qt_execute(
     params: NmovieQtParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): NmovieQtOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(NMOVIE_QT_METADATA);
     params = execution.params(params)
     const cargs = nmovie_qt_cargs(params, execution)
     const ret = nmovie_qt_outputs(params, execution)
@@ -159,10 +161,8 @@ function nmovie_qt(
     images: Array<InputPathType>,
     runner: Runner | null = null,
 ): NmovieQtOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(NMOVIE_QT_METADATA);
     const params = nmovie_qt_params(images)
-    return nmovie_qt_execute(params, execution);
+    return nmovie_qt_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       NmovieQtOutputs,
       NmovieQtParameters,
       nmovie_qt,
-      nmovie_qt_cargs,
       nmovie_qt_execute,
-      nmovie_qt_outputs,
       nmovie_qt_params,
 };

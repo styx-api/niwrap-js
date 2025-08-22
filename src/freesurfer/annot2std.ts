@@ -311,14 +311,16 @@ function annot2std_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Annot2stdOutputs`).
  */
 function annot2std_execute(
     params: Annot2stdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Annot2stdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANNOT2STD_METADATA);
     params = execution.params(params)
     const cargs = annot2std_cargs(params, execution)
     const ret = annot2std_outputs(params, execution)
@@ -377,10 +379,8 @@ function annot2std(
     version: boolean = false,
     runner: Runner | null = null,
 ): Annot2stdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANNOT2STD_METADATA);
     const params = annot2std_params(output_annot_path, subjects, fsgd_file, subject_list_file, target, left_hemisphere, right_hemisphere, xhemi, surfreg, srcsurfreg, trgsurfreg, annotname, aparc, a2009s, segmentation, stack, help, version)
-    return annot2std_execute(params, execution);
+    return annot2std_execute(params, runner);
 }
 
 
@@ -389,8 +389,6 @@ export {
       Annot2stdOutputs,
       Annot2stdParameters,
       annot2std,
-      annot2std_cargs,
       annot2std_execute,
-      annot2std_outputs,
       annot2std_params,
 };

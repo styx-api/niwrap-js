@@ -133,14 +133,16 @@ function mri_gradient_info_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriGradientInfoOutputs`).
  */
 function mri_gradient_info_execute(
     params: MriGradientInfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriGradientInfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_GRADIENT_INFO_METADATA);
     params = execution.params(params)
     const cargs = mri_gradient_info_cargs(params, execution)
     const ret = mri_gradient_info_outputs(params, execution)
@@ -165,10 +167,8 @@ function mri_gradient_info(
     input_image: InputPathType,
     runner: Runner | null = null,
 ): MriGradientInfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_GRADIENT_INFO_METADATA);
     const params = mri_gradient_info_params(input_image)
-    return mri_gradient_info_execute(params, execution);
+    return mri_gradient_info_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       MriGradientInfoOutputs,
       MriGradientInfoParameters,
       mri_gradient_info,
-      mri_gradient_info_cargs,
       mri_gradient_info_execute,
-      mri_gradient_info_outputs,
       mri_gradient_info_params,
 };

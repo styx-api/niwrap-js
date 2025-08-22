@@ -272,14 +272,16 @@ function ants_apply_transforms_to_points_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsApplyTransformsToPointsOutputs`).
  */
 function ants_apply_transforms_to_points_execute(
     params: AntsApplyTransformsToPointsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsApplyTransformsToPointsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_APPLY_TRANSFORMS_TO_POINTS_METADATA);
     params = execution.params(params)
     const cargs = ants_apply_transforms_to_points_cargs(params, execution)
     const ret = ants_apply_transforms_to_points_outputs(params, execution)
@@ -314,10 +316,8 @@ function ants_apply_transforms_to_points(
     transform: AntsApplyTransformsToPointsSingleTransformParameters | AntsApplyTransformsToPointsInverseTransformParameters | null = null,
     runner: Runner | null = null,
 ): AntsApplyTransformsToPointsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_APPLY_TRANSFORMS_TO_POINTS_METADATA);
     const params = ants_apply_transforms_to_points_params(input, output, dimensionality, precision, forantsr, transform)
-    return ants_apply_transforms_to_points_execute(params, execution);
+    return ants_apply_transforms_to_points_execute(params, runner);
 }
 
 
@@ -328,12 +328,8 @@ export {
       AntsApplyTransformsToPointsParameters,
       AntsApplyTransformsToPointsSingleTransformParameters,
       ants_apply_transforms_to_points,
-      ants_apply_transforms_to_points_cargs,
       ants_apply_transforms_to_points_execute,
-      ants_apply_transforms_to_points_inverse_transform_cargs,
       ants_apply_transforms_to_points_inverse_transform_params,
-      ants_apply_transforms_to_points_outputs,
       ants_apply_transforms_to_points_params,
-      ants_apply_transforms_to_points_single_transform_cargs,
       ants_apply_transforms_to_points_single_transform_params,
 };

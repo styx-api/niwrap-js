@@ -182,14 +182,16 @@ function v__fix_fssphere_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VFixFssphereOutputs`).
  */
 function v__fix_fssphere_execute(
     params: VFixFssphereParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VFixFssphereOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__FIX_FSSPHERE_METADATA);
     params = execution.params(params)
     const cargs = v__fix_fssphere_cargs(params, execution)
     const ret = v__fix_fssphere_outputs(params, execution)
@@ -224,10 +226,8 @@ function v__fix_fssphere(
     keep_temp: boolean = false,
     runner: Runner | null = null,
 ): VFixFssphereOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__FIX_FSSPHERE_METADATA);
     const params = v__fix_fssphere_params(spec_file, sphere_file, num_iterations, extent_lim, project_first, keep_temp)
-    return v__fix_fssphere_execute(params, execution);
+    return v__fix_fssphere_execute(params, runner);
 }
 
 
@@ -236,8 +236,6 @@ export {
       VFixFssphereParameters,
       V__FIX_FSSPHERE_METADATA,
       v__fix_fssphere,
-      v__fix_fssphere_cargs,
       v__fix_fssphere_execute,
-      v__fix_fssphere_outputs,
       v__fix_fssphere_params,
 };

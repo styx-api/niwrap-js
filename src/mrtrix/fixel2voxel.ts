@@ -310,14 +310,16 @@ function fixel2voxel_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fixel2voxelOutputs`).
  */
 function fixel2voxel_execute(
     params: Fixel2voxelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fixel2voxelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIXEL2VOXEL_METADATA);
     params = execution.params(params)
     const cargs = fixel2voxel_cargs(params, execution)
     const ret = fixel2voxel_outputs(params, execution)
@@ -387,10 +389,8 @@ function fixel2voxel(
     version: boolean = false,
     runner: Runner | null = null,
 ): Fixel2voxelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIXEL2VOXEL_METADATA);
     const params = fixel2voxel_params(fixel_in, operation, image_out, number_, fill, weighted, info, quiet, debug, force, nthreads, config, help, version)
-    return fixel2voxel_execute(params, execution);
+    return fixel2voxel_execute(params, runner);
 }
 
 
@@ -400,10 +400,7 @@ export {
       Fixel2voxelOutputs,
       Fixel2voxelParameters,
       fixel2voxel,
-      fixel2voxel_cargs,
-      fixel2voxel_config_cargs,
       fixel2voxel_config_params,
       fixel2voxel_execute,
-      fixel2voxel_outputs,
       fixel2voxel_params,
 };

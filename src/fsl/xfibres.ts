@@ -381,14 +381,16 @@ function xfibres_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `XfibresOutputs`).
  */
 function xfibres_execute(
     params: XfibresParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): XfibresOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(XFIBRES_METADATA);
     params = execution.params(params)
     const cargs = xfibres_cargs(params, execution)
     const ret = xfibres_outputs(params, execution)
@@ -465,10 +467,8 @@ function xfibres(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): XfibresOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(XFIBRES_METADATA);
     const params = xfibres_params(datafile, maskfile, bvecs, bvals, logdir, forcedir, max_fibres, model, fudge, num_jumps, num_burnin, burnin_noard, sampleevery, updateproposal, seed, noard, allard, nospat, nonlinear, cnonlinear, rician, add_f0, ard_f0, rmean, rstd, verbose_flag, help_flag)
-    return xfibres_execute(params, execution);
+    return xfibres_execute(params, runner);
 }
 
 
@@ -477,8 +477,6 @@ export {
       XfibresOutputs,
       XfibresParameters,
       xfibres,
-      xfibres_cargs,
       xfibres_execute,
-      xfibres_outputs,
       xfibres_params,
 };

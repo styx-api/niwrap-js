@@ -464,14 +464,16 @@ function probtrackx_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ProbtrackxOutputs`).
  */
 function probtrackx_execute(
     params: ProbtrackxParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ProbtrackxOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PROBTRACKX_METADATA);
     params = execution.params(params)
     const cargs = probtrackx_cargs(params, execution)
     const ret = probtrackx_outputs(params, execution)
@@ -562,10 +564,8 @@ function probtrackx(
     s2tastext: boolean = false,
     runner: Runner | null = null,
 ): ProbtrackxOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PROBTRACKX_METADATA);
     const params = probtrackx_params(samples, mask, seed, out, verbose, targetmasks, mask2, waypoints, network, mesh, seedref, dir, forcedir, opd, pd, os2t, avoid, stop, xfm, invxfm, nsamples, nsteps, distthresh, cthr, fibthresh, sampvox, steplength, loopcheck, usef, randfib, fibst, modeuler, rseed, s2tastext)
-    return probtrackx_execute(params, execution);
+    return probtrackx_execute(params, runner);
 }
 
 
@@ -574,8 +574,6 @@ export {
       ProbtrackxOutputs,
       ProbtrackxParameters,
       probtrackx,
-      probtrackx_cargs,
       probtrackx_execute,
-      probtrackx_outputs,
       probtrackx_params,
 };

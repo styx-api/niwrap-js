@@ -419,14 +419,16 @@ function ants_cortical_thickness_sh_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsCorticalThicknessShOutputs`).
  */
 function ants_cortical_thickness_sh_execute(
     params: AntsCorticalThicknessShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsCorticalThicknessShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_CORTICAL_THICKNESS_SH_METADATA);
     params = execution.params(params)
     const cargs = ants_cortical_thickness_sh_cargs(params, execution)
     const ret = ants_cortical_thickness_sh_outputs(params, execution)
@@ -499,10 +501,8 @@ function ants_cortical_thickness_sh(
     test_debug_mode: number | null = null,
     runner: Runner | null = null,
 ): AntsCorticalThicknessShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_CORTICAL_THICKNESS_SH_METADATA);
     const params = ants_cortical_thickness_sh_params(image_dimension, anatomical_image, brain_template, brain_extraction_probability_mask, brain_segmentation_priors, output_prefix, image_file_suffix, template_for_t1_registration, extraction_registration_mask, keep_temporary_files, denoise_anatomical_images, max_iterations_for_registration, atropos_prior_segmentation_weight, number_of_segmentation_iterations, posterior_formulation, use_floating_point_precision, use_random_seeding, use_b_spline_smoothing, cortical_thickness_prior_image, label_propagation, additional_priors_for_thickness, use_quick_registration_parameters, atropos_iterations, script_stage_to_run, test_debug_mode)
-    return ants_cortical_thickness_sh_execute(params, execution);
+    return ants_cortical_thickness_sh_execute(params, runner);
 }
 
 
@@ -511,8 +511,6 @@ export {
       AntsCorticalThicknessShOutputs,
       AntsCorticalThicknessShParameters,
       ants_cortical_thickness_sh,
-      ants_cortical_thickness_sh_cargs,
       ants_cortical_thickness_sh_execute,
-      ants_cortical_thickness_sh_outputs,
       ants_cortical_thickness_sh_params,
 };

@@ -379,14 +379,16 @@ function v_3d_mema_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dMemaOutputs`).
  */
 function v_3d_mema_execute(
     params: V3dMemaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dMemaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_MEMA_METADATA);
     params = execution.params(params)
     const cargs = v_3d_mema_cargs(params, execution)
     const ret = v_3d_mema_outputs(params, execution)
@@ -463,10 +465,8 @@ function v_3d_mema(
     no_tstat: boolean = false,
     runner: Runner | null = null,
 ): V3dMemaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_MEMA_METADATA);
     const params = v_3d_mema_params(prefix, set_, jobs, covariates, covariates_center, covariates_model, covariates_name, groups, cio, hktest, mask, max_zeros, missing_data, model_outliers, n_nonzero, no_hktest, no_model_outliers, no_residual_z, residual_z, rio, equal_variance, unequal_variance, verb, dbg_args, help, conditions, no_tstat)
-    return v_3d_mema_execute(params, execution);
+    return v_3d_mema_execute(params, runner);
 }
 
 
@@ -475,8 +475,6 @@ export {
       V3dMemaParameters,
       V_3D_MEMA_METADATA,
       v_3d_mema,
-      v_3d_mema_cargs,
       v_3d_mema_execute,
-      v_3d_mema_outputs,
       v_3d_mema_params,
 };

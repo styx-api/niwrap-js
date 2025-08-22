@@ -139,14 +139,16 @@ function gltsymtest_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GltsymtestOutputs`).
  */
 function gltsymtest_execute(
     params: GltsymtestParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GltsymtestOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GLTSYMTEST_METADATA);
     params = execution.params(params)
     const cargs = gltsymtest_cargs(params, execution)
     const ret = gltsymtest_outputs(params, execution)
@@ -175,10 +177,8 @@ function gltsymtest(
     badonly: boolean = false,
     runner: Runner | null = null,
 ): GltsymtestOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GLTSYMTEST_METADATA);
     const params = gltsymtest_params(varlist, expr, badonly)
-    return gltsymtest_execute(params, execution);
+    return gltsymtest_execute(params, runner);
 }
 
 
@@ -187,8 +187,6 @@ export {
       GltsymtestOutputs,
       GltsymtestParameters,
       gltsymtest,
-      gltsymtest_cargs,
       gltsymtest_execute,
-      gltsymtest_outputs,
       gltsymtest_params,
 };

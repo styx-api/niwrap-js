@@ -199,14 +199,16 @@ function stat_normalize_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `StatNormalizeOutputs`).
  */
 function stat_normalize_execute(
     params: StatNormalizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): StatNormalizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(STAT_NORMALIZE_METADATA);
     params = execution.params(params)
     const cargs = stat_normalize_cargs(params, execution)
     const ret = stat_normalize_outputs(params, execution)
@@ -245,10 +247,8 @@ function stat_normalize(
     float2int_option: string | null = null,
     runner: Runner | null = null,
 ): StatNormalizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(STAT_NORMALIZE_METADATA);
     const params = stat_normalize_params(input_sv_prefix, output_sv_prefix, resolution, field_of_view, sph_avg, xfm_file, fix_xfm_flag, float2int_option)
-    return stat_normalize_execute(params, execution);
+    return stat_normalize_execute(params, runner);
 }
 
 
@@ -257,8 +257,6 @@ export {
       StatNormalizeOutputs,
       StatNormalizeParameters,
       stat_normalize,
-      stat_normalize_cargs,
       stat_normalize_execute,
-      stat_normalize_outputs,
       stat_normalize_params,
 };

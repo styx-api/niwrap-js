@@ -272,14 +272,16 @@ function gems_compute_atlas_probs_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GemsComputeAtlasProbsOutputs`).
  */
 function gems_compute_atlas_probs_execute(
     params: GemsComputeAtlasProbsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GemsComputeAtlasProbsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GEMS_COMPUTE_ATLAS_PROBS_METADATA);
     params = execution.params(params)
     const cargs = gems_compute_atlas_probs_cargs(params, execution)
     const ret = gems_compute_atlas_probs_outputs(params, execution)
@@ -334,10 +336,8 @@ function gems_compute_atlas_probs(
     samseg_subdir: string | null = null,
     runner: Runner | null = null,
 ): GemsComputeAtlasProbsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GEMS_COMPUTE_ATLAS_PROBS_METADATA);
     const params = gems_compute_atlas_probs_params(subjects_dir, mesh_collections, out_dir, segmentations_dir, gt_from_fs, segmentation_name, multi_structure, labels, from_samseg, em_iterations, show_figs, save_figs, save_average_figs, subjects_file, labels_file, samseg_subdir)
-    return gems_compute_atlas_probs_execute(params, execution);
+    return gems_compute_atlas_probs_execute(params, runner);
 }
 
 
@@ -346,8 +346,6 @@ export {
       GemsComputeAtlasProbsOutputs,
       GemsComputeAtlasProbsParameters,
       gems_compute_atlas_probs,
-      gems_compute_atlas_probs_cargs,
       gems_compute_atlas_probs_execute,
-      gems_compute_atlas_probs_outputs,
       gems_compute_atlas_probs_params,
 };

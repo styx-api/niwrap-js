@@ -174,14 +174,16 @@ function mksubjdirs_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MksubjdirsOutputs`).
  */
 function mksubjdirs_execute(
     params: MksubjdirsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MksubjdirsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MKSUBJDIRS_METADATA);
     params = execution.params(params)
     const cargs = mksubjdirs_cargs(params, execution)
     const ret = mksubjdirs_outputs(params, execution)
@@ -218,10 +220,8 @@ function mksubjdirs(
     version: boolean = false,
     runner: Runner | null = null,
 ): MksubjdirsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MKSUBJDIRS_METADATA);
     const params = mksubjdirs_params(subj_name, mode, parents, verbose, selinux_context, help, version)
-    return mksubjdirs_execute(params, execution);
+    return mksubjdirs_execute(params, runner);
 }
 
 
@@ -230,8 +230,6 @@ export {
       MksubjdirsOutputs,
       MksubjdirsParameters,
       mksubjdirs,
-      mksubjdirs_cargs,
       mksubjdirs_execute,
-      mksubjdirs_outputs,
       mksubjdirs_params,
 };

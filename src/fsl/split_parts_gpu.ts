@@ -172,14 +172,16 @@ function split_parts_gpu_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SplitPartsGpuOutputs`).
  */
 function split_parts_gpu_execute(
     params: SplitPartsGpuParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SplitPartsGpuOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SPLIT_PARTS_GPU_METADATA);
     params = execution.params(params)
     const cargs = split_parts_gpu_cargs(params, execution)
     const ret = split_parts_gpu_outputs(params, execution)
@@ -218,10 +220,8 @@ function split_parts_gpu(
     grad_file: string | null = null,
     runner: Runner | null = null,
 ): SplitPartsGpuOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SPLIT_PARTS_GPU_METADATA);
     const params = split_parts_gpu_params(datafile, maskfile, bvals_file, bvecs_file, use_grad_file, total_num_parts, output_directory, grad_file)
-    return split_parts_gpu_execute(params, execution);
+    return split_parts_gpu_execute(params, runner);
 }
 
 
@@ -230,8 +230,6 @@ export {
       SplitPartsGpuOutputs,
       SplitPartsGpuParameters,
       split_parts_gpu,
-      split_parts_gpu_cargs,
       split_parts_gpu_execute,
-      split_parts_gpu_outputs,
       split_parts_gpu_params,
 };

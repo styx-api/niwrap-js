@@ -133,14 +133,16 @@ function v__np_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VNpOutputs`).
  */
 function v__np_execute(
     params: VNpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VNpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__NP_METADATA);
     params = execution.params(params)
     const cargs = v__np_cargs(params, execution)
     const ret = v__np_outputs(params, execution)
@@ -165,10 +167,8 @@ function v__np(
     prefix: string,
     runner: Runner | null = null,
 ): VNpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__NP_METADATA);
     const params = v__np_params(prefix)
-    return v__np_execute(params, execution);
+    return v__np_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       VNpParameters,
       V__NP_METADATA,
       v__np,
-      v__np_cargs,
       v__np_execute,
-      v__np_outputs,
       v__np_params,
 };

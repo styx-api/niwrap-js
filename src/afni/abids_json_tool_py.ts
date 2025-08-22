@@ -235,14 +235,16 @@ function abids_json_tool_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AbidsJsonToolPyOutputs`).
  */
 function abids_json_tool_py_execute(
     params: AbidsJsonToolPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AbidsJsonToolPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ABIDS_JSON_TOOL_PY_METADATA);
     params = execution.params(params)
     const cargs = abids_json_tool_py_cargs(params, execution)
     const ret = abids_json_tool_py_outputs(params, execution)
@@ -291,10 +293,8 @@ function abids_json_tool_py(
     values_stay_str: boolean = false,
     runner: Runner | null = null,
 ): AbidsJsonToolPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ABIDS_JSON_TOOL_PY_METADATA);
     const params = abids_json_tool_py_params(input_file, prefix, txt2json, json2txt, add_json, del_json, force_add, overwrite, help, delimiter_major, delimiter_minor, literal_keys, values_stay_str)
-    return abids_json_tool_py_execute(params, execution);
+    return abids_json_tool_py_execute(params, runner);
 }
 
 
@@ -303,8 +303,6 @@ export {
       AbidsJsonToolPyOutputs,
       AbidsJsonToolPyParameters,
       abids_json_tool_py,
-      abids_json_tool_py_cargs,
       abids_json_tool_py_execute,
-      abids_json_tool_py_outputs,
       abids_json_tool_py_params,
 };

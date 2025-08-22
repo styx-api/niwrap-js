@@ -138,14 +138,16 @@ function v__to_mni_qwarpar_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VToMniQwarparOutputs`).
  */
 function v__to_mni_qwarpar_execute(
     params: VToMniQwarparParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VToMniQwarparOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__TO_MNI_QWARPAR_METADATA);
     params = execution.params(params)
     const cargs = v__to_mni_qwarpar_cargs(params, execution)
     const ret = v__to_mni_qwarpar_outputs(params, execution)
@@ -172,10 +174,8 @@ function v__to_mni_qwarpar(
     numjob: number,
     runner: Runner | null = null,
 ): VToMniQwarparOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__TO_MNI_QWARPAR_METADATA);
     const params = v__to_mni_qwarpar_params(numcpu, numjob)
-    return v__to_mni_qwarpar_execute(params, execution);
+    return v__to_mni_qwarpar_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       VToMniQwarparParameters,
       V__TO_MNI_QWARPAR_METADATA,
       v__to_mni_qwarpar,
-      v__to_mni_qwarpar_cargs,
       v__to_mni_qwarpar_execute,
-      v__to_mni_qwarpar_outputs,
       v__to_mni_qwarpar_params,
 };

@@ -298,14 +298,16 @@ function v_3d_re_ho_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dReHoOutputs`).
  */
 function v_3d_re_ho_execute(
     params: V3dReHoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dReHoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_RE_HO_METADATA);
     params = execution.params(params)
     const cargs = v_3d_re_ho_cargs(params, execution)
     const ret = v_3d_re_ho_outputs(params, execution)
@@ -356,10 +358,8 @@ function v_3d_re_ho(
     in_rois: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dReHoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_RE_HO_METADATA);
     const params = v_3d_re_ho_params(prefix, inset, nneigh, chi_sq, mask, neigh_rad, neigh_x, neigh_y, neigh_z, box_rad, box_x, box_y, box_z, in_rois)
-    return v_3d_re_ho_execute(params, execution);
+    return v_3d_re_ho_execute(params, runner);
 }
 
 
@@ -368,8 +368,6 @@ export {
       V3dReHoParameters,
       V_3D_RE_HO_METADATA,
       v_3d_re_ho,
-      v_3d_re_ho_cargs,
       v_3d_re_ho_execute,
-      v_3d_re_ho_outputs,
       v_3d_re_ho_params,
 };

@@ -237,14 +237,16 @@ function serial_helper_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SerialHelperOutputs`).
  */
 function serial_helper_execute(
     params: SerialHelperParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SerialHelperOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SERIAL_HELPER_METADATA);
     params = execution.params(params)
     const cargs = serial_helper_cargs(params, execution)
     const ret = serial_helper_outputs(params, execution)
@@ -291,10 +293,8 @@ function serial_helper(
     version: boolean = false,
     runner: Runner | null = null,
 ): SerialHelperOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SERIAL_HELPER_METADATA);
     const params = serial_helper_params(serial_port, sock_num, mp_max, mp_min, num_extra, disp_all, debug, show_times, help, hist, no_serial, version)
-    return serial_helper_execute(params, execution);
+    return serial_helper_execute(params, runner);
 }
 
 
@@ -303,8 +303,6 @@ export {
       SerialHelperOutputs,
       SerialHelperParameters,
       serial_helper,
-      serial_helper_cargs,
       serial_helper_execute,
-      serial_helper_outputs,
       serial_helper_params,
 };

@@ -176,14 +176,16 @@ function v_3d_mann_whitney_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dMannWhitneyOutputs`).
  */
 function v_3d_mann_whitney_execute(
     params: V3dMannWhitneyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dMannWhitneyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_MANN_WHITNEY_METADATA);
     params = execution.params(params)
     const cargs = v_3d_mann_whitney_cargs(params, execution)
     const ret = v_3d_mann_whitney_outputs(params, execution)
@@ -216,10 +218,8 @@ function v_3d_mann_whitney(
     voxel_num: number | null = null,
     runner: Runner | null = null,
 ): V3dMannWhitneyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_MANN_WHITNEY_METADATA);
     const params = v_3d_mann_whitney_params(dset1_x, dset2_y, output_prefix, workmem, voxel_num)
-    return v_3d_mann_whitney_execute(params, execution);
+    return v_3d_mann_whitney_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       V3dMannWhitneyParameters,
       V_3D_MANN_WHITNEY_METADATA,
       v_3d_mann_whitney,
-      v_3d_mann_whitney_cargs,
       v_3d_mann_whitney_execute,
-      v_3d_mann_whitney_outputs,
       v_3d_mann_whitney_params,
 };

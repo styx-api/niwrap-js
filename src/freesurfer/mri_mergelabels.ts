@@ -156,14 +156,16 @@ function mri_mergelabels_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMergelabelsOutputs`).
  */
 function mri_mergelabels_execute(
     params: MriMergelabelsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMergelabelsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MERGELABELS_METADATA);
     params = execution.params(params)
     const cargs = mri_mergelabels_cargs(params, execution)
     const ret = mri_mergelabels_outputs(params, execution)
@@ -192,10 +194,8 @@ function mri_mergelabels(
     input_directory: string | null = null,
     runner: Runner | null = null,
 ): MriMergelabelsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MERGELABELS_METADATA);
     const params = mri_mergelabels_params(input_labels, output_label, input_directory)
-    return mri_mergelabels_execute(params, execution);
+    return mri_mergelabels_execute(params, runner);
 }
 
 
@@ -204,8 +204,6 @@ export {
       MriMergelabelsOutputs,
       MriMergelabelsParameters,
       mri_mergelabels,
-      mri_mergelabels_cargs,
       mri_mergelabels_execute,
-      mri_mergelabels_outputs,
       mri_mergelabels_params,
 };

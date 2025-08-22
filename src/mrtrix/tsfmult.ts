@@ -256,14 +256,16 @@ function tsfmult_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TsfmultOutputs`).
  */
 function tsfmult_execute(
     params: TsfmultParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TsfmultOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TSFMULT_METADATA);
     params = execution.params(params)
     const cargs = tsfmult_cargs(params, execution)
     const ret = tsfmult_outputs(params, execution)
@@ -312,10 +314,8 @@ function tsfmult(
     version: boolean = false,
     runner: Runner | null = null,
 ): TsfmultOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TSFMULT_METADATA);
     const params = tsfmult_params(input1, output, info, quiet, debug, force, nthreads, config, help, version)
-    return tsfmult_execute(params, execution);
+    return tsfmult_execute(params, runner);
 }
 
 
@@ -325,10 +325,7 @@ export {
       TsfmultOutputs,
       TsfmultParameters,
       tsfmult,
-      tsfmult_cargs,
-      tsfmult_config_cargs,
       tsfmult_config_params,
       tsfmult_execute,
-      tsfmult_outputs,
       tsfmult_params,
 };

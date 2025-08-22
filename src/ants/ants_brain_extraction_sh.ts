@@ -282,14 +282,16 @@ function ants_brain_extraction_sh_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsBrainExtractionShOutputs`).
  */
 function ants_brain_extraction_sh_execute(
     params: AntsBrainExtractionShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsBrainExtractionShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_BRAIN_EXTRACTION_SH_METADATA);
     params = execution.params(params)
     const cargs = ants_brain_extraction_sh_cargs(params, execution)
     const ret = ants_brain_extraction_sh_outputs(params, execution)
@@ -342,10 +344,8 @@ function ants_brain_extraction_sh(
     output_prefix: string | null = "output",
     runner: Runner | null = null,
 ): AntsBrainExtractionShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_BRAIN_EXTRACTION_SH_METADATA);
     const params = ants_brain_extraction_sh_params(anatomical_image, template, probability_mask, image_dimension, tissue_classification, brain_extraction_registration_mask, keep_temporary_files, single_floating_point_precision, initial_moving_transform, rotation_search_params, image_file_suffix, translation_search_params, random_seeding, debug_mode, output_prefix)
-    return ants_brain_extraction_sh_execute(params, execution);
+    return ants_brain_extraction_sh_execute(params, runner);
 }
 
 
@@ -354,8 +354,6 @@ export {
       AntsBrainExtractionShOutputs,
       AntsBrainExtractionShParameters,
       ants_brain_extraction_sh,
-      ants_brain_extraction_sh_cargs,
       ants_brain_extraction_sh_execute,
-      ants_brain_extraction_sh_outputs,
       ants_brain_extraction_sh_params,
 };

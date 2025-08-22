@@ -192,14 +192,16 @@ function volume_label_import_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelImportOutputs`).
  */
 function volume_label_import_execute(
     params: VolumeLabelImportParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeLabelImportOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_LABEL_IMPORT_METADATA);
     params = execution.params(params)
     const cargs = volume_label_import_cargs(params, execution)
     const ret = volume_label_import_outputs(params, execution)
@@ -246,10 +248,8 @@ function volume_label_import(
     opt_drop_unused_labels: boolean = false,
     runner: Runner | null = null,
 ): VolumeLabelImportOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_LABEL_IMPORT_METADATA);
     const params = volume_label_import_params(input, label_list_file, output, opt_discard_others, opt_unlabeled_value_value, opt_subvolume_subvol, opt_drop_unused_labels)
-    return volume_label_import_execute(params, execution);
+    return volume_label_import_execute(params, runner);
 }
 
 
@@ -258,8 +258,6 @@ export {
       VolumeLabelImportOutputs,
       VolumeLabelImportParameters,
       volume_label_import,
-      volume_label_import_cargs,
       volume_label_import_execute,
-      volume_label_import_outputs,
       volume_label_import_params,
 };

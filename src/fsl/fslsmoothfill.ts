@@ -163,14 +163,16 @@ function fslsmoothfill_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslsmoothfillOutputs`).
  */
 function fslsmoothfill_execute(
     params: FslsmoothfillParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslsmoothfillOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLSMOOTHFILL_METADATA);
     params = execution.params(params)
     const cargs = fslsmoothfill_cargs(params, execution)
     const ret = fslsmoothfill_outputs(params, execution)
@@ -205,10 +207,8 @@ function fslsmoothfill(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): FslsmoothfillOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLSMOOTHFILL_METADATA);
     const params = fslsmoothfill_params(input_image, mask_image, output_image, number_of_iterations, debug_flag, verbose_flag)
-    return fslsmoothfill_execute(params, execution);
+    return fslsmoothfill_execute(params, runner);
 }
 
 
@@ -217,8 +217,6 @@ export {
       FslsmoothfillOutputs,
       FslsmoothfillParameters,
       fslsmoothfill,
-      fslsmoothfill_cargs,
       fslsmoothfill_execute,
-      fslsmoothfill_outputs,
       fslsmoothfill_params,
 };

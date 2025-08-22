@@ -188,14 +188,16 @@ function fsl_reg_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslRegOutputs`).
  */
 function fsl_reg_execute(
     params: FslRegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslRegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_REG_METADATA);
     params = execution.params(params)
     const cargs = fsl_reg_cargs(params, execution)
     const ret = fsl_reg_outputs(params, execution)
@@ -234,10 +236,8 @@ function fsl_reg(
     fnirt_options: string | null = null,
     runner: Runner | null = null,
 ): FslRegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_REG_METADATA);
     const params = fsl_reg_params(input_file, reference_file, output_file, estimate_only_flag, affine_only_flag, fnirt_fa_config_flag, flirt_options, fnirt_options)
-    return fsl_reg_execute(params, execution);
+    return fsl_reg_execute(params, runner);
 }
 
 
@@ -246,8 +246,6 @@ export {
       FslRegOutputs,
       FslRegParameters,
       fsl_reg,
-      fsl_reg_cargs,
       fsl_reg_execute,
-      fsl_reg_outputs,
       fsl_reg_params,
 };

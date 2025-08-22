@@ -310,14 +310,16 @@ function metric_tfce_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricTfceOutputs`).
  */
 function metric_tfce_execute(
     params: MetricTfceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricTfceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_TFCE_METADATA);
     params = execution.params(params)
     const cargs = metric_tfce_cargs(params, execution)
     const ret = metric_tfce_outputs(params, execution)
@@ -368,10 +370,8 @@ function metric_tfce(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricTfceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_TFCE_METADATA);
     const params = metric_tfce_params(surface, metric_in, metric_out, presmooth, opt_roi_roi_metric, parameters, opt_column_column, opt_corrected_areas_area_metric)
-    return metric_tfce_execute(params, execution);
+    return metric_tfce_execute(params, runner);
 }
 
 
@@ -382,12 +382,8 @@ export {
       MetricTfceParametersParameters,
       MetricTfcePresmoothParameters,
       metric_tfce,
-      metric_tfce_cargs,
       metric_tfce_execute,
-      metric_tfce_outputs,
-      metric_tfce_parameters_cargs,
       metric_tfce_parameters_params,
       metric_tfce_params,
-      metric_tfce_presmooth_cargs,
       metric_tfce_presmooth_params,
 };

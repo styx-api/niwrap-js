@@ -12,3 +12,33 @@ export * from './c3d/c2d'
 export * from './c3d/c3d'
 export * from './c3d/c3d_affine_tool'
 export * from './c3d/c4d'
+import { Runner } from 'styxdefs';
+import { c2d_execute } from './c3d/c2d'
+import { c3d_affine_tool_execute } from './c3d/c3d_affine_tool'
+import { c3d_execute } from './c3d/c3d'
+import { c4d_execute } from './c3d/c4d'
+
+
+/**
+ * Run a command in this package dynamically from a params object.
+ *
+ * @param params The parameters.
+ * @param runner Command runner
+ *
+ */
+function execute(
+    params: any,
+    runner: Runner | null = null,
+) {
+    return {
+        "c3d.c2d": c2d_execute,
+        "c3d.c3d": c3d_execute,
+        "c3d.c3d_affine_tool": c3d_affine_tool_execute,
+        "c3d.c4d": c4d_execute,
+    }[params["@type"]](params, runner)
+}
+
+
+export {
+      execute,
+};

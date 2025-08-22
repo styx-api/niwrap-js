@@ -345,14 +345,16 @@ function afni_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AfniOutputs`).
  */
 function afni_execute(
     params: AfniParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AfniOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AFNI_METADATA);
     params = execution.params(params)
     const cargs = afni_cargs(params, execution)
     const ret = afni_outputs(params, execution)
@@ -425,10 +427,8 @@ function afni_(
     comsep: string | null = null,
     runner: Runner | null = null,
 ): AfniOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AFNI_METADATA);
     const params = afni_params(session_directories, bysub, all_dsets, purge, posfunc, recursive, no1_d, nocsv, notsv, unique, orient, noplugins, seehidden, allow_all_plugins, yesplugouts, debug_plugouts, noplugouts, skip_afnirc, layout, niml, np, npq, npb, com, comsep)
-    return afni_execute(params, execution);
+    return afni_execute(params, runner);
 }
 
 
@@ -437,8 +437,6 @@ export {
       AfniOutputs,
       AfniParameters,
       afni_,
-      afni_cargs,
       afni_execute,
-      afni_outputs,
       afni_params,
 };

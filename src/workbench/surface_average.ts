@@ -239,14 +239,16 @@ function surface_average_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceAverageOutputs`).
  */
 function surface_average_execute(
     params: SurfaceAverageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceAverageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_AVERAGE_METADATA);
     params = execution.params(params)
     const cargs = surface_average_cargs(params, execution)
     const ret = surface_average_outputs(params, execution)
@@ -283,10 +285,8 @@ function surface_average(
     surf: Array<SurfaceAverageSurfParameters> | null = null,
     runner: Runner | null = null,
 ): SurfaceAverageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_AVERAGE_METADATA);
     const params = surface_average_params(surface_out, opt_stddev_stddev_metric_out, opt_uncertainty_uncert_metric_out, surf)
-    return surface_average_execute(params, execution);
+    return surface_average_execute(params, runner);
 }
 
 
@@ -296,10 +296,7 @@ export {
       SurfaceAverageParameters,
       SurfaceAverageSurfParameters,
       surface_average,
-      surface_average_cargs,
       surface_average_execute,
-      surface_average_outputs,
       surface_average_params,
-      surface_average_surf_cargs,
       surface_average_surf_params,
 };

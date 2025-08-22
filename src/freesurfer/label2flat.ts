@@ -148,14 +148,16 @@ function label2flat_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Label2flatOutputs`).
  */
 function label2flat_execute(
     params: Label2flatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Label2flatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL2FLAT_METADATA);
     params = execution.params(params)
     const cargs = label2flat_cargs(params, execution)
     const ret = label2flat_outputs(params, execution)
@@ -186,10 +188,8 @@ function label2flat(
     output_file: string,
     runner: Runner | null = null,
 ): Label2flatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL2FLAT_METADATA);
     const params = label2flat_params(subject_name, label_file, patch_file, output_file)
-    return label2flat_execute(params, execution);
+    return label2flat_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       Label2flatOutputs,
       Label2flatParameters,
       label2flat,
-      label2flat_cargs,
       label2flat_execute,
-      label2flat_outputs,
       label2flat_params,
 };

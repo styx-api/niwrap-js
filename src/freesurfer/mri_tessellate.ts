@@ -169,14 +169,16 @@ function mri_tessellate_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriTessellateOutputs`).
  */
 function mri_tessellate_execute(
     params: MriTessellateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriTessellateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_TESSELLATE_METADATA);
     params = execution.params(params)
     const cargs = mri_tessellate_cargs(params, execution)
     const ret = mri_tessellate_outputs(params, execution)
@@ -211,10 +213,8 @@ function mri_tessellate(
     real_ras: boolean = false,
     runner: Runner | null = null,
 ): MriTessellateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_TESSELLATE_METADATA);
     const params = mri_tessellate_params(input_volume, label_value, output_surf, different_labels, max_vertices, real_ras)
-    return mri_tessellate_execute(params, execution);
+    return mri_tessellate_execute(params, runner);
 }
 
 
@@ -223,8 +223,6 @@ export {
       MriTessellateOutputs,
       MriTessellateParameters,
       mri_tessellate,
-      mri_tessellate_cargs,
       mri_tessellate_execute,
-      mri_tessellate_outputs,
       mri_tessellate_params,
 };

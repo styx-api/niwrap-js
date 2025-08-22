@@ -133,14 +133,16 @@ function v__get_afni_dims_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VGetAfniDimsOutputs`).
  */
 function v__get_afni_dims_execute(
     params: VGetAfniDimsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VGetAfniDimsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__GET_AFNI_DIMS_METADATA);
     params = execution.params(params)
     const cargs = v__get_afni_dims_cargs(params, execution)
     const ret = v__get_afni_dims_outputs(params, execution)
@@ -165,10 +167,8 @@ function v__get_afni_dims(
     input_dset: InputPathType,
     runner: Runner | null = null,
 ): VGetAfniDimsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__GET_AFNI_DIMS_METADATA);
     const params = v__get_afni_dims_params(input_dset)
-    return v__get_afni_dims_execute(params, execution);
+    return v__get_afni_dims_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       VGetAfniDimsParameters,
       V__GET_AFNI_DIMS_METADATA,
       v__get_afni_dims,
-      v__get_afni_dims_cargs,
       v__get_afni_dims_execute,
-      v__get_afni_dims_outputs,
       v__get_afni_dims_params,
 };

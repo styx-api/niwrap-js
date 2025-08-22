@@ -172,14 +172,16 @@ function border_to_rois_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BorderToRoisOutputs`).
  */
 function border_to_rois_execute(
     params: BorderToRoisParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BorderToRoisOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BORDER_TO_ROIS_METADATA);
     params = execution.params(params)
     const cargs = border_to_rois_cargs(params, execution)
     const ret = border_to_rois_outputs(params, execution)
@@ -216,10 +218,8 @@ function border_to_rois(
     opt_include_border: boolean = false,
     runner: Runner | null = null,
 ): BorderToRoisOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BORDER_TO_ROIS_METADATA);
     const params = border_to_rois_params(surface, border_file, metric_out, opt_border_name, opt_inverse, opt_include_border)
-    return border_to_rois_execute(params, execution);
+    return border_to_rois_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       BorderToRoisOutputs,
       BorderToRoisParameters,
       border_to_rois,
-      border_to_rois_cargs,
       border_to_rois_execute,
-      border_to_rois_outputs,
       border_to_rois_params,
 };

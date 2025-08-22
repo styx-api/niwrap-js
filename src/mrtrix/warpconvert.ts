@@ -292,14 +292,16 @@ function warpconvert_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WarpconvertOutputs`).
  */
 function warpconvert_execute(
     params: WarpconvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WarpconvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WARPCONVERT_METADATA);
     params = execution.params(params)
     const cargs = warpconvert_cargs(params, execution)
     const ret = warpconvert_outputs(params, execution)
@@ -356,10 +358,8 @@ function warpconvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): WarpconvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WARPCONVERT_METADATA);
     const params = warpconvert_params(in_, type_, out, template, midway_space, from_, info, quiet, debug, force, nthreads, config, help, version)
-    return warpconvert_execute(params, execution);
+    return warpconvert_execute(params, runner);
 }
 
 
@@ -369,10 +369,7 @@ export {
       WarpconvertOutputs,
       WarpconvertParameters,
       warpconvert,
-      warpconvert_cargs,
-      warpconvert_config_cargs,
       warpconvert_config_params,
       warpconvert_execute,
-      warpconvert_outputs,
       warpconvert_params,
 };

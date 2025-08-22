@@ -160,14 +160,16 @@ function estnoise_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `EstnoiseOutputs`).
  */
 function estnoise_execute(
     params: EstnoiseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): EstnoiseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ESTNOISE_METADATA);
     params = execution.params(params)
     const cargs = estnoise_cargs(params, execution)
     const ret = estnoise_outputs(params, execution)
@@ -198,10 +200,8 @@ function estnoise(
     temp_lp_sigma: number | null = null,
     runner: Runner | null = null,
 ): EstnoiseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ESTNOISE_METADATA);
     const params = estnoise_params(input_4d_data, spatial_sigma, temp_hp_sigma, temp_lp_sigma)
-    return estnoise_execute(params, execution);
+    return estnoise_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       EstnoiseOutputs,
       EstnoiseParameters,
       estnoise,
-      estnoise_cargs,
       estnoise_execute,
-      estnoise_outputs,
       estnoise_params,
 };

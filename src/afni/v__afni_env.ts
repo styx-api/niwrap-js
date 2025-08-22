@@ -212,14 +212,16 @@ function v__afni_env_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VAfniEnvOutputs`).
  */
 function v__afni_env_execute(
     params: VAfniEnvParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VAfniEnvOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__AFNI_ENV_METADATA);
     params = execution.params(params)
     const cargs = v__afni_env_cargs(params, execution)
     const ret = v__afni_env_outputs(params, execution)
@@ -262,10 +264,8 @@ function v__afni_env(
     help_find_flag: string | null = null,
     runner: Runner | null = null,
 ): VAfniEnvOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__AFNI_ENV_METADATA);
     const params = v__afni_env_params(set_flag, unset_flag, get_flag, help_flag, help_web_flag, help_web_flag_alias, help_view_flag, help_view_flag_alias, all_opts_flag, help_find_flag)
-    return v__afni_env_execute(params, execution);
+    return v__afni_env_execute(params, runner);
 }
 
 
@@ -274,8 +274,6 @@ export {
       VAfniEnvParameters,
       V__AFNI_ENV_METADATA,
       v__afni_env,
-      v__afni_env_cargs,
       v__afni_env_execute,
-      v__afni_env_outputs,
       v__afni_env_params,
 };

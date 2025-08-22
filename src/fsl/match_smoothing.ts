@@ -142,14 +142,16 @@ function match_smoothing_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MatchSmoothingOutputs`).
  */
 function match_smoothing_execute(
     params: MatchSmoothingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MatchSmoothingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MATCH_SMOOTHING_METADATA);
     params = execution.params(params)
     const cargs = match_smoothing_cargs(params, execution)
     const ret = match_smoothing_outputs(params, execution)
@@ -180,10 +182,8 @@ function match_smoothing(
     standard_space_resolution: number,
     runner: Runner | null = null,
 ): MatchSmoothingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MATCH_SMOOTHING_METADATA);
     const params = match_smoothing_params(example_func, func_smoothing_fwhm, example_structural, standard_space_resolution)
-    return match_smoothing_execute(params, execution);
+    return match_smoothing_execute(params, runner);
 }
 
 
@@ -192,8 +192,6 @@ export {
       MatchSmoothingOutputs,
       MatchSmoothingParameters,
       match_smoothing,
-      match_smoothing_cargs,
       match_smoothing_execute,
-      match_smoothing_outputs,
       match_smoothing_params,
 };

@@ -215,14 +215,16 @@ function mri_fdr_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriFdrOutputs`).
  */
 function mri_fdr_execute(
     params: MriFdrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriFdrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_FDR_METADATA);
     params = execution.params(params)
     const cargs = mri_fdr_cargs(params, execution)
     const ret = mri_fdr_outputs(params, execution)
@@ -265,10 +267,8 @@ function mri_fdr(
     check_options: boolean = false,
     runner: Runner | null = null,
 ): MriFdrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_FDR_METADATA);
     const params = mri_fdr_params(input_files, fdr_value, default_frame, positive_only, negative_only, all_voxels, raw_p_values, threshold_file, debug, check_options)
-    return mri_fdr_execute(params, execution);
+    return mri_fdr_execute(params, runner);
 }
 
 
@@ -277,8 +277,6 @@ export {
       MriFdrOutputs,
       MriFdrParameters,
       mri_fdr,
-      mri_fdr_cargs,
       mri_fdr_execute,
-      mri_fdr_outputs,
       mri_fdr_params,
 };

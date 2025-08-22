@@ -168,14 +168,16 @@ function dmri_stats_ac_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriStatsAcOutputs`).
  */
 function dmri_stats_ac_execute(
     params: DmriStatsAcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriStatsAcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_STATS_AC_METADATA);
     params = execution.params(params)
     const cargs = dmri_stats_ac_cargs(params, execution)
     const ret = dmri_stats_ac_outputs(params, execution)
@@ -208,10 +210,8 @@ function dmri_stats_ac(
     output_file: string,
     runner: Runner | null = null,
 ): DmriStatsAcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_STATS_AC_METADATA);
     const params = dmri_stats_ac_params(anatomicuts_folder, num_clusters, correspondence_file, measures, output_file)
-    return dmri_stats_ac_execute(params, execution);
+    return dmri_stats_ac_execute(params, runner);
 }
 
 
@@ -220,8 +220,6 @@ export {
       DmriStatsAcOutputs,
       DmriStatsAcParameters,
       dmri_stats_ac,
-      dmri_stats_ac_cargs,
       dmri_stats_ac_execute,
-      dmri_stats_ac_outputs,
       dmri_stats_ac_params,
 };

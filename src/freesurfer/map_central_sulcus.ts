@@ -464,14 +464,16 @@ function map_central_sulcus_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MapCentralSulcusOutputs`).
  */
 function map_central_sulcus_execute(
     params: MapCentralSulcusParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MapCentralSulcusOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAP_CENTRAL_SULCUS_METADATA);
     params = execution.params(params)
     const cargs = map_central_sulcus_cargs(params, execution)
     const ret = map_central_sulcus_outputs(params, execution)
@@ -566,10 +568,8 @@ function map_central_sulcus(
     threads: number | null = null,
     runner: Runner | null = null,
 ): MapCentralSulcusOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAP_CENTRAL_SULCUS_METADATA);
     const params = map_central_sulcus_params(subjid, process_directive, hemi_flag, expert_prefs_file, xopts_use, xopts_clean, xopts_overwrite, watershed_cmd, xmask_file, wsless, wsmore, wsatlas, no_wsatlas, no_wsgcaatlas, wsthresh, wsseed, norm3diters, normmaxgrad, norm1_b, norm2_b, norm1_n, norm2_n, cm_flag, no_fix_with_ga, fix_diag_only, seg_wlo, seg_ghi, nothicken, no_ca_align_after, no_ca_align, deface, mprage, washu_mprage, schwartzya3t_atlas, mail_username, threads)
-    return map_central_sulcus_execute(params, execution);
+    return map_central_sulcus_execute(params, runner);
 }
 
 
@@ -578,8 +578,6 @@ export {
       MapCentralSulcusOutputs,
       MapCentralSulcusParameters,
       map_central_sulcus,
-      map_central_sulcus_cargs,
       map_central_sulcus_execute,
-      map_central_sulcus_outputs,
       map_central_sulcus_params,
 };

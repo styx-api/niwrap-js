@@ -164,14 +164,16 @@ function ants_align_origin_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsAlignOriginOutputs`).
  */
 function ants_align_origin_execute(
     params: AntsAlignOriginParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsAlignOriginOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_ALIGN_ORIGIN_METADATA);
     params = execution.params(params)
     const cargs = ants_align_origin_cargs(params, execution)
     const ret = ants_align_origin_outputs(params, execution)
@@ -202,10 +204,8 @@ function ants_align_origin(
     dimensionality: 2 | 3 | null = null,
     runner: Runner | null = null,
 ): AntsAlignOriginOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_ALIGN_ORIGIN_METADATA);
     const params = ants_align_origin_params(input, reference_image, output, dimensionality)
-    return ants_align_origin_execute(params, execution);
+    return ants_align_origin_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       AntsAlignOriginOutputs,
       AntsAlignOriginParameters,
       ants_align_origin,
-      ants_align_origin_cargs,
       ants_align_origin_execute,
-      ants_align_origin_outputs,
       ants_align_origin_params,
 };

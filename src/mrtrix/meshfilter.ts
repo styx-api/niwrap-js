@@ -285,14 +285,16 @@ function meshfilter_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MeshfilterOutputs`).
  */
 function meshfilter_execute(
     params: MeshfilterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MeshfilterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MESHFILTER_METADATA);
     params = execution.params(params)
     const cargs = meshfilter_cargs(params, execution)
     const ret = meshfilter_outputs(params, execution)
@@ -347,10 +349,8 @@ function meshfilter(
     version: boolean = false,
     runner: Runner | null = null,
 ): MeshfilterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MESHFILTER_METADATA);
     const params = meshfilter_params(input, filter, output, smooth_spatial, smooth_influence, info, quiet, debug, force, nthreads, config, help, version)
-    return meshfilter_execute(params, execution);
+    return meshfilter_execute(params, runner);
 }
 
 
@@ -360,10 +360,7 @@ export {
       MeshfilterOutputs,
       MeshfilterParameters,
       meshfilter,
-      meshfilter_cargs,
-      meshfilter_config_cargs,
       meshfilter_config_params,
       meshfilter_execute,
-      meshfilter_outputs,
       meshfilter_params,
 };

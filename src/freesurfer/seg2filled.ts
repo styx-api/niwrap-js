@@ -195,14 +195,16 @@ function seg2filled_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Seg2filledOutputs`).
  */
 function seg2filled_execute(
     params: Seg2filledParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Seg2filledOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEG2FILLED_METADATA);
     params = execution.params(params)
     const cargs = seg2filled_cargs(params, execution)
     const ret = seg2filled_outputs(params, execution)
@@ -239,10 +241,8 @@ function seg2filled(
     surf_dir: string | null = null,
     runner: Runner | null = null,
 ): Seg2filledOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEG2FILLED_METADATA);
     const params = seg2filled_params(seg_file, norm_file, output_file, ndil, cavity_flag, surf_name, surf_dir)
-    return seg2filled_execute(params, execution);
+    return seg2filled_execute(params, runner);
 }
 
 
@@ -251,8 +251,6 @@ export {
       Seg2filledOutputs,
       Seg2filledParameters,
       seg2filled,
-      seg2filled_cargs,
       seg2filled_execute,
-      seg2filled_outputs,
       seg2filled_params,
 };

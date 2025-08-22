@@ -259,14 +259,16 @@ function v_3d_grayplot_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dGrayplotOutputs`).
  */
 function v_3d_grayplot_execute(
     params: V3dGrayplotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dGrayplotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_GRAYPLOT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_grayplot_cargs(params, execution)
     const ret = v_3d_grayplot_outputs(params, execution)
@@ -317,10 +319,8 @@ function v_3d_grayplot(
     raw_with_bounds: Array<number> | null = null,
     runner: Runner | null = null,
 ): V3dGrayplotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_GRAYPLOT_METADATA);
     const params = v_3d_grayplot_params(input, mask, prefix, dimensions, resample_old, polort, fwhm, pvorder, ljorder, peelorder, ijkorder, range, percent, raw_with_bounds)
-    return v_3d_grayplot_execute(params, execution);
+    return v_3d_grayplot_execute(params, runner);
 }
 
 
@@ -329,8 +329,6 @@ export {
       V3dGrayplotParameters,
       V_3D_GRAYPLOT_METADATA,
       v_3d_grayplot,
-      v_3d_grayplot_cargs,
       v_3d_grayplot_execute,
-      v_3d_grayplot_outputs,
       v_3d_grayplot_params,
 };

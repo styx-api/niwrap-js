@@ -289,14 +289,16 @@ function mris_surface_stats_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisSurfaceStatsOutputs`).
  */
 function mris_surface_stats_execute(
     params: MrisSurfaceStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisSurfaceStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_SURFACE_STATS_METADATA);
     params = execution.params(params)
     const cargs = mris_surface_stats_cargs(params, execution)
     const ret = mris_surface_stats_outputs(params, execution)
@@ -345,10 +347,8 @@ function mris_surface_stats(
     debug: number | null = null,
     runner: Runner | null = null,
 ): MrisSurfaceStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_SURFACE_STATS_METADATA);
     const params = mris_surface_stats_params(surf_name, out_name, data_files, nsmooth, mask_name, mean, absmean, absstd, zscore, first_group_size, src_type, trg_type, debug)
-    return mris_surface_stats_execute(params, execution);
+    return mris_surface_stats_execute(params, runner);
 }
 
 
@@ -357,8 +357,6 @@ export {
       MrisSurfaceStatsOutputs,
       MrisSurfaceStatsParameters,
       mris_surface_stats,
-      mris_surface_stats_cargs,
       mris_surface_stats_execute,
-      mris_surface_stats_outputs,
       mris_surface_stats_params,
 };

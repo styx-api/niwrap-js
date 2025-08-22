@@ -272,14 +272,16 @@ function ccops_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CcopsOutputs`).
  */
 function ccops_execute(
     params: CcopsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CcopsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CCOPS_METADATA);
     params = execution.params(params)
     const cargs = ccops_cargs(params, execution)
     const ret = ccops_outputs(params, execution)
@@ -330,10 +332,8 @@ function ccops(
     help: boolean = false,
     runner: Runner | null = null,
 ): CcopsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CCOPS_METADATA);
     const params = ccops_params(basename, infile, tract_dir, exclusion_mask, reorder_seedspace, reorder_tractspace, tract_reord, connexity_constraint, binarise_val, matrix_power, brain_mask, scheme, nclusters, help)
-    return ccops_execute(params, execution);
+    return ccops_execute(params, runner);
 }
 
 
@@ -342,8 +342,6 @@ export {
       CcopsOutputs,
       CcopsParameters,
       ccops,
-      ccops_cargs,
       ccops_execute,
-      ccops_outputs,
       ccops_params,
 };

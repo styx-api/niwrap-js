@@ -254,14 +254,16 @@ function mris_make_template_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisMakeTemplateOutputs`).
  */
 function mris_make_template_execute(
     params: MrisMakeTemplateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisMakeTemplateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_MAKE_TEMPLATE_METADATA);
     params = execution.params(params)
     const cargs = mris_make_template_cargs(params, execution)
     const ret = mris_make_template_outputs(params, execution)
@@ -314,10 +316,8 @@ function mris_make_template(
     subjects_dir: string | null = null,
     runner: Runner | null = null,
 ): MrisMakeTemplateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_MAKE_TEMPLATE_METADATA);
     const params = mris_make_template_params(hemi, surface_name, subjects, output_name, addframe_parameters, vector, norot, rot, annot, overlay_parameters, overlay_dir, scale, surf_dir, smooth_iterations, subjects_dir)
-    return mris_make_template_execute(params, execution);
+    return mris_make_template_execute(params, runner);
 }
 
 
@@ -326,8 +326,6 @@ export {
       MrisMakeTemplateOutputs,
       MrisMakeTemplateParameters,
       mris_make_template,
-      mris_make_template_cargs,
       mris_make_template_execute,
-      mris_make_template_outputs,
       mris_make_template_params,
 };

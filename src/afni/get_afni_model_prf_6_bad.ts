@@ -152,14 +152,16 @@ function get_afni_model_prf_6_bad_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GetAfniModelPrf6BadOutputs`).
  */
 function get_afni_model_prf_6_bad_execute(
     params: GetAfniModelPrf6BadParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GetAfniModelPrf6BadOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GET_AFNI_MODEL_PRF_6_BAD_METADATA);
     params = execution.params(params)
     const cargs = get_afni_model_prf_6_bad_cargs(params, execution)
     const ret = get_afni_model_prf_6_bad_outputs(params, execution)
@@ -194,10 +196,8 @@ function get_afni_model_prf_6_bad(
     theta: number,
     runner: Runner | null = null,
 ): GetAfniModelPrf6BadOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GET_AFNI_MODEL_PRF_6_BAD_METADATA);
     const params = get_afni_model_prf_6_bad_params(amplitude, x_coord, y_coord, sigma, sigrat, theta)
-    return get_afni_model_prf_6_bad_execute(params, execution);
+    return get_afni_model_prf_6_bad_execute(params, runner);
 }
 
 
@@ -206,8 +206,6 @@ export {
       GetAfniModelPrf6BadOutputs,
       GetAfniModelPrf6BadParameters,
       get_afni_model_prf_6_bad,
-      get_afni_model_prf_6_bad_cargs,
       get_afni_model_prf_6_bad_execute,
-      get_afni_model_prf_6_bad_outputs,
       get_afni_model_prf_6_bad_params,
 };

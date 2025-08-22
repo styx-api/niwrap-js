@@ -185,14 +185,16 @@ function v_3d_synthesize_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dSynthesizeOutputs`).
  */
 function v_3d_synthesize_execute(
     params: V3dSynthesizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dSynthesizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_SYNTHESIZE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_synthesize_cargs(params, execution)
     const ret = v_3d_synthesize_outputs(params, execution)
@@ -229,10 +231,8 @@ function v_3d_synthesize(
     cenfill: "zero" | "nbhr" | "none" | null = null,
     runner: Runner | null = null,
 ): V3dSynthesizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_SYNTHESIZE_METADATA);
     const params = v_3d_synthesize_params(c_bucket, matrix, select, prefix, dry_flag, tr, cenfill)
-    return v_3d_synthesize_execute(params, execution);
+    return v_3d_synthesize_execute(params, runner);
 }
 
 
@@ -241,8 +241,6 @@ export {
       V3dSynthesizeParameters,
       V_3D_SYNTHESIZE_METADATA,
       v_3d_synthesize,
-      v_3d_synthesize_cargs,
       v_3d_synthesize_execute,
-      v_3d_synthesize_outputs,
       v_3d_synthesize_params,
 };

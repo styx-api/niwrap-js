@@ -161,14 +161,16 @@ function mris_rf_label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRfLabelOutputs`).
  */
 function mris_rf_label_execute(
     params: MrisRfLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRfLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_RF_LABEL_METADATA);
     params = execution.params(params)
     const cargs = mris_rf_label_cargs(params, execution)
     const ret = mris_rf_label_outputs(params, execution)
@@ -201,10 +203,8 @@ function mris_rf_label(
     surf: string | null = null,
     runner: Runner | null = null,
 ): MrisRfLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_RF_LABEL_METADATA);
     const params = mris_rf_label_params(subject, rf_classifier, output_name, hemi, surf)
-    return mris_rf_label_execute(params, execution);
+    return mris_rf_label_execute(params, runner);
 }
 
 
@@ -213,8 +213,6 @@ export {
       MrisRfLabelOutputs,
       MrisRfLabelParameters,
       mris_rf_label,
-      mris_rf_label_cargs,
       mris_rf_label_execute,
-      mris_rf_label_outputs,
       mris_rf_label_params,
 };

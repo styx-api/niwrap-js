@@ -195,14 +195,16 @@ function fixup_mni_paths_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FixupMniPathsOutputs`).
  */
 function fixup_mni_paths_execute(
     params: FixupMniPathsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FixupMniPathsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIXUP_MNI_PATHS_METADATA);
     params = execution.params(params)
     const cargs = fixup_mni_paths_cargs(params, execution)
     const ret = fixup_mni_paths_outputs(params, execution)
@@ -227,10 +229,8 @@ function fixup_mni_paths(
     verbose: boolean = false,
     runner: Runner | null = null,
 ): FixupMniPathsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIXUP_MNI_PATHS_METADATA);
     const params = fixup_mni_paths_params(verbose)
-    return fixup_mni_paths_execute(params, execution);
+    return fixup_mni_paths_execute(params, runner);
 }
 
 
@@ -239,8 +239,6 @@ export {
       FixupMniPathsOutputs,
       FixupMniPathsParameters,
       fixup_mni_paths,
-      fixup_mni_paths_cargs,
       fixup_mni_paths_execute,
-      fixup_mni_paths_outputs,
       fixup_mni_paths_params,
 };

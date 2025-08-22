@@ -135,14 +135,16 @@ function label_export_table_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelExportTableOutputs`).
  */
 function label_export_table_execute(
     params: LabelExportTableParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelExportTableOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_EXPORT_TABLE_METADATA);
     params = execution.params(params)
     const cargs = label_export_table_cargs(params, execution)
     const ret = label_export_table_outputs(params, execution)
@@ -171,10 +173,8 @@ function label_export_table(
     table_out: string,
     runner: Runner | null = null,
 ): LabelExportTableOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_EXPORT_TABLE_METADATA);
     const params = label_export_table_params(label_in, table_out)
-    return label_export_table_execute(params, execution);
+    return label_export_table_execute(params, runner);
 }
 
 
@@ -183,8 +183,6 @@ export {
       LabelExportTableOutputs,
       LabelExportTableParameters,
       label_export_table,
-      label_export_table_cargs,
       label_export_table_execute,
-      label_export_table_outputs,
       label_export_table_params,
 };

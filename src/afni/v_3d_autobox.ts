@@ -248,14 +248,16 @@ function v_3d_autobox_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dAutoboxOutputs`).
  */
 function v_3d_autobox_execute(
     params: V3dAutoboxParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dAutoboxOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_AUTOBOX_METADATA);
     params = execution.params(params)
     const cargs = v_3d_autobox_cargs(params, execution)
     const ret = v_3d_autobox_outputs(params, execution)
@@ -306,10 +308,8 @@ function v_3d_autobox(
     npad_safety_on: boolean = false,
     runner: Runner | null = null,
 ): V3dAutoboxOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_AUTOBOX_METADATA);
     const params = v_3d_autobox_params(input, prefix, alt_input, noclust, extent, extent_ijk, extent_ijk_to_file, extent_ijk_midslice, extent_ijkord, extent_ijkord_to_file, extent_xyz_to_file, extent_xyz_midslice, npad, npad_safety_on)
-    return v_3d_autobox_execute(params, execution);
+    return v_3d_autobox_execute(params, runner);
 }
 
 
@@ -318,8 +318,6 @@ export {
       V3dAutoboxParameters,
       V_3D_AUTOBOX_METADATA,
       v_3d_autobox,
-      v_3d_autobox_cargs,
       v_3d_autobox_execute,
-      v_3d_autobox_outputs,
       v_3d_autobox_params,
 };

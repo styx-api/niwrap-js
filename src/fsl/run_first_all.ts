@@ -208,14 +208,16 @@ function run_first_all_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RunFirstAllOutputs`).
  */
 function run_first_all_execute(
     params: RunFirstAllParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RunFirstAllOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RUN_FIRST_ALL_METADATA);
     params = execution.params(params)
     const cargs = run_first_all_cargs(params, execution)
     const ret = run_first_all_outputs(params, execution)
@@ -256,10 +258,8 @@ function run_first_all(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): RunFirstAllOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RUN_FIRST_ALL_METADATA);
     const params = run_first_all_params(input_image, output_image, method, brainextract_flag, structure, affine_matrix, threestage_flag, debug_flag, verbose_flag)
-    return run_first_all_execute(params, execution);
+    return run_first_all_execute(params, runner);
 }
 
 
@@ -268,8 +268,6 @@ export {
       RunFirstAllOutputs,
       RunFirstAllParameters,
       run_first_all,
-      run_first_all_cargs,
       run_first_all_execute,
-      run_first_all_outputs,
       run_first_all_params,
 };

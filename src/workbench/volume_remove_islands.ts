@@ -141,14 +141,16 @@ function volume_remove_islands_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeRemoveIslandsOutputs`).
  */
 function volume_remove_islands_execute(
     params: VolumeRemoveIslandsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeRemoveIslandsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_REMOVE_ISLANDS_METADATA);
     params = execution.params(params)
     const cargs = volume_remove_islands_cargs(params, execution)
     const ret = volume_remove_islands_outputs(params, execution)
@@ -177,10 +179,8 @@ function volume_remove_islands(
     volume_out: string,
     runner: Runner | null = null,
 ): VolumeRemoveIslandsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_REMOVE_ISLANDS_METADATA);
     const params = volume_remove_islands_params(volume_in, volume_out)
-    return volume_remove_islands_execute(params, execution);
+    return volume_remove_islands_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       VolumeRemoveIslandsOutputs,
       VolumeRemoveIslandsParameters,
       volume_remove_islands,
-      volume_remove_islands_cargs,
       volume_remove_islands_execute,
-      volume_remove_islands_outputs,
       volume_remove_islands_params,
 };

@@ -234,14 +234,16 @@ function test_tutorials_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TestTutorialsShOutputs`).
  */
 function test_tutorials_sh_execute(
     params: TestTutorialsShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TestTutorialsShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TEST_TUTORIALS_SH_METADATA);
     params = execution.params(params)
     const cargs = test_tutorials_sh_cargs(params, execution)
     const ret = test_tutorials_sh_outputs(params, execution)
@@ -296,10 +298,8 @@ function test_tutorials_sh(
     multimodal: boolean = false,
     runner: Runner | null = null,
 ): TestTutorialsShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TEST_TUTORIALS_SH_METADATA);
     const params = test_tutorials_sh_params(all_tutorials, quick_test, auto_quit_freeview, skip_all_guis, skip_tk_guis, skip_qdec_guis, individual_subject, troubleshooting, group_analysis, qdec, longitudinal, roi_analysis, diffusion, tracula, fsfast, multimodal)
-    return test_tutorials_sh_execute(params, execution);
+    return test_tutorials_sh_execute(params, runner);
 }
 
 
@@ -308,8 +308,6 @@ export {
       TestTutorialsShOutputs,
       TestTutorialsShParameters,
       test_tutorials_sh,
-      test_tutorials_sh_cargs,
       test_tutorials_sh_execute,
-      test_tutorials_sh_outputs,
       test_tutorials_sh_params,
 };

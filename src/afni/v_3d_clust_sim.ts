@@ -392,14 +392,16 @@ function v_3d_clust_sim_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dClustSimOutputs`).
  */
 function v_3d_clust_sim_execute(
     params: V3dClustSimParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dClustSimOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_CLUST_SIM_METADATA);
     params = execution.params(params)
     const cargs = v_3d_clust_sim_cargs(params, execution)
     const ret = v_3d_clust_sim_outputs(params, execution)
@@ -466,10 +468,8 @@ function v_3d_clust_sim(
     ssave: string | null = null,
     runner: Runner | null = null,
 ): V3dClustSimOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_CLUST_SIM_METADATA);
     const params = v_3d_clust_sim_params(nxyz, dxyz, ball, mask, oksmallmask, inset, fwhm, acf, nopad, pthr, athr, lots, mega, iter, nodec, seed, niml, both, prefix, cmd, quiet, ssave)
-    return v_3d_clust_sim_execute(params, execution);
+    return v_3d_clust_sim_execute(params, runner);
 }
 
 
@@ -478,8 +478,6 @@ export {
       V3dClustSimParameters,
       V_3D_CLUST_SIM_METADATA,
       v_3d_clust_sim,
-      v_3d_clust_sim_cargs,
       v_3d_clust_sim_execute,
-      v_3d_clust_sim_outputs,
       v_3d_clust_sim_params,
 };

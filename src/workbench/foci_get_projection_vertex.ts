@@ -158,14 +158,16 @@ function foci_get_projection_vertex_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FociGetProjectionVertexOutputs`).
  */
 function foci_get_projection_vertex_execute(
     params: FociGetProjectionVertexParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FociGetProjectionVertexOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FOCI_GET_PROJECTION_VERTEX_METADATA);
     params = execution.params(params)
     const cargs = foci_get_projection_vertex_cargs(params, execution)
     const ret = foci_get_projection_vertex_outputs(params, execution)
@@ -198,10 +200,8 @@ function foci_get_projection_vertex(
     opt_name_name: string | null = null,
     runner: Runner | null = null,
 ): FociGetProjectionVertexOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FOCI_GET_PROJECTION_VERTEX_METADATA);
     const params = foci_get_projection_vertex_params(foci, surface, metric_out, opt_name_name)
-    return foci_get_projection_vertex_execute(params, execution);
+    return foci_get_projection_vertex_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       FociGetProjectionVertexOutputs,
       FociGetProjectionVertexParameters,
       foci_get_projection_vertex,
-      foci_get_projection_vertex_cargs,
       foci_get_projection_vertex_execute,
-      foci_get_projection_vertex_outputs,
       foci_get_projection_vertex_params,
 };

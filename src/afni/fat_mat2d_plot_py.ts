@@ -331,14 +331,16 @@ function fat_mat2d_plot_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatMat2dPlotPyOutputs`).
  */
 function fat_mat2d_plot_py_execute(
     params: FatMat2dPlotPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatMat2dPlotPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_MAT2D_PLOT_PY_METADATA);
     params = execution.params(params)
     const cargs = fat_mat2d_plot_py_cargs(params, execution)
     const ret = fat_mat2d_plot_py_outputs(params, execution)
@@ -411,10 +413,8 @@ function fat_mat2d_plot_py(
     help_view: boolean = false,
     runner: Runner | null = null,
 ): FatMat2dPlotPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_MAT2D_PLOT_PY_METADATA);
     const params = fat_mat2d_plot_py_params(input_file, matrices, prefix, file_type, dpi, min_colorbar, max_colorbar, fs_xticks, fs_yticks, fs_title, fs_cbar, cbar_n_intervals, cbar, cbar_width_perc, no_colorbar, figsize_x, figsize_y, hold_image, tight_layout, xticks_off, yticks_off, version, date, help, help_view)
-    return fat_mat2d_plot_py_execute(params, execution);
+    return fat_mat2d_plot_py_execute(params, runner);
 }
 
 
@@ -423,8 +423,6 @@ export {
       FatMat2dPlotPyOutputs,
       FatMat2dPlotPyParameters,
       fat_mat2d_plot_py,
-      fat_mat2d_plot_py_cargs,
       fat_mat2d_plot_py_execute,
-      fat_mat2d_plot_py_outputs,
       fat_mat2d_plot_py_params,
 };

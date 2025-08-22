@@ -152,14 +152,16 @@ function dtistudio_fiberto_segments_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DtistudioFibertoSegmentsOutputs`).
  */
 function dtistudio_fiberto_segments_execute(
     params: DtistudioFibertoSegmentsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DtistudioFibertoSegmentsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DTISTUDIO_FIBERTO_SEGMENTS_METADATA);
     params = execution.params(params)
     const cargs = dtistudio_fiberto_segments_cargs(params, execution)
     const ret = dtistudio_fiberto_segments_outputs(params, execution)
@@ -188,10 +190,8 @@ function dtistudio_fiberto_segments(
     swap_flag: boolean = false,
     runner: Runner | null = null,
 ): DtistudioFibertoSegmentsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DTISTUDIO_FIBERTO_SEGMENTS_METADATA);
     const params = dtistudio_fiberto_segments_params(dataset, output_file, swap_flag)
-    return dtistudio_fiberto_segments_execute(params, execution);
+    return dtistudio_fiberto_segments_execute(params, runner);
 }
 
 
@@ -200,8 +200,6 @@ export {
       DtistudioFibertoSegmentsOutputs,
       DtistudioFibertoSegmentsParameters,
       dtistudio_fiberto_segments,
-      dtistudio_fiberto_segments_cargs,
       dtistudio_fiberto_segments_execute,
-      dtistudio_fiberto_segments_outputs,
       dtistudio_fiberto_segments_params,
 };

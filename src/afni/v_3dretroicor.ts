@@ -239,14 +239,16 @@ function v_3dretroicor_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dretroicorOutputs`).
  */
 function v_3dretroicor_execute(
     params: V3dretroicorParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dretroicorOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DRETROICOR_METADATA);
     params = execution.params(params)
     const cargs = v_3dretroicor_cargs(params, execution)
     const ret = v_3dretroicor_outputs(params, execution)
@@ -287,10 +289,8 @@ function v_3dretroicor(
     order: number | null = null,
     runner: Runner | null = null,
 ): V3dretroicorOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DRETROICOR_METADATA);
     const params = v_3dretroicor_params(dataset, ignore, prefix, card, cardphase, threshold, resp, respphase, order)
-    return v_3dretroicor_execute(params, execution);
+    return v_3dretroicor_execute(params, runner);
 }
 
 
@@ -299,8 +299,6 @@ export {
       V3dretroicorParameters,
       V_3DRETROICOR_METADATA,
       v_3dretroicor,
-      v_3dretroicor_cargs,
       v_3dretroicor_execute,
-      v_3dretroicor_outputs,
       v_3dretroicor_params,
 };

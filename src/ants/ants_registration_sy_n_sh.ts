@@ -331,14 +331,16 @@ function ants_registration_sy_n_sh_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsRegistrationSyNShOutputs`).
  */
 function ants_registration_sy_n_sh_execute(
     params: AntsRegistrationSyNShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsRegistrationSyNShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_REGISTRATION_SY_N_SH_METADATA);
     params = execution.params(params)
     const cargs = ants_registration_sy_n_sh_cargs(params, execution)
     const ret = ants_registration_sy_n_sh_outputs(params, execution)
@@ -410,10 +412,8 @@ function ants_registration_sy_n_sh(
     random_seed: number | null = null,
     runner: Runner | null = null,
 ): AntsRegistrationSyNShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_REGISTRATION_SY_N_SH_METADATA);
     const params = ants_registration_sy_n_sh_params(image_dimension, fixed_image, moving_image, output_prefix, threads, initial_transform, transform_type, radius, spline_distance, gradient_step, masks, precision_type, use_histogram_matching, use_repro_mode, collapse_output_transforms, random_seed)
-    return ants_registration_sy_n_sh_execute(params, execution);
+    return ants_registration_sy_n_sh_execute(params, runner);
 }
 
 
@@ -422,8 +422,6 @@ export {
       AntsRegistrationSyNShOutputs,
       AntsRegistrationSyNShParameters,
       ants_registration_sy_n_sh,
-      ants_registration_sy_n_sh_cargs,
       ants_registration_sy_n_sh_execute,
-      ants_registration_sy_n_sh_outputs,
       ants_registration_sy_n_sh_params,
 };

@@ -451,14 +451,16 @@ function mredit_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MreditOutputs`).
  */
 function mredit_execute(
     params: MreditParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MreditOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MREDIT_METADATA);
     params = execution.params(params)
     const cargs = mredit_cargs(params, execution)
     const ret = mredit_outputs(params, execution)
@@ -515,10 +517,8 @@ function mredit(
     output: string | null = null,
     runner: Runner | null = null,
 ): MreditOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MREDIT_METADATA);
     const params = mredit_params(input, plane, sphere, voxel, scanner, info, quiet, debug, force, nthreads, config, help, version, output)
-    return mredit_execute(params, execution);
+    return mredit_execute(params, runner);
 }
 
 
@@ -531,16 +531,10 @@ export {
       MreditSphereParameters,
       MreditVoxelParameters,
       mredit,
-      mredit_cargs,
-      mredit_config_cargs,
       mredit_config_params,
       mredit_execute,
-      mredit_outputs,
       mredit_params,
-      mredit_plane_cargs,
       mredit_plane_params,
-      mredit_sphere_cargs,
       mredit_sphere_params,
-      mredit_voxel_cargs,
       mredit_voxel_params,
 };

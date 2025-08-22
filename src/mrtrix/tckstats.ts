@@ -352,14 +352,16 @@ function tckstats_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TckstatsOutputs`).
  */
 function tckstats_execute(
     params: TckstatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TckstatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCKSTATS_METADATA);
     params = execution.params(params)
     const cargs = tckstats_cargs(params, execution)
     const ret = tckstats_outputs(params, execution)
@@ -416,10 +418,8 @@ function tckstats(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckstatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCKSTATS_METADATA);
     const params = tckstats_params(tracks_in, output, histogram, dump, ignorezero, tck_weights_in, info, quiet, debug, force, nthreads, config, help, version)
-    return tckstats_execute(params, execution);
+    return tckstats_execute(params, runner);
 }
 
 
@@ -430,12 +430,8 @@ export {
       TckstatsOutputs,
       TckstatsParameters,
       tckstats,
-      tckstats_cargs,
-      tckstats_config_cargs,
       tckstats_config_params,
       tckstats_execute,
-      tckstats_output_cargs,
       tckstats_output_params,
-      tckstats_outputs,
       tckstats_params,
 };

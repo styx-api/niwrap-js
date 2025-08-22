@@ -199,14 +199,16 @@ function v_1dcat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dcatOutputs`).
  */
 function v_1dcat_execute(
     params: V1dcatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dcatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1DCAT_METADATA);
     params = execution.params(params)
     const cargs = v_1dcat_cargs(params, execution)
     const ret = v_1dcat_outputs(params, execution)
@@ -247,10 +249,8 @@ function v_1dcat(
     ok_empty: boolean = false,
     runner: Runner | null = null,
 ): V1dcatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1DCAT_METADATA);
     const params = v_1dcat_params(input_files, tsv_output, csv_output, nonconst_output, nonfixed_output, number_format, stack_output, column_row_selection, ok_empty)
-    return v_1dcat_execute(params, execution);
+    return v_1dcat_execute(params, runner);
 }
 
 
@@ -259,8 +259,6 @@ export {
       V1dcatParameters,
       V_1DCAT_METADATA,
       v_1dcat,
-      v_1dcat_cargs,
       v_1dcat_execute,
-      v_1dcat_outputs,
       v_1dcat_params,
 };

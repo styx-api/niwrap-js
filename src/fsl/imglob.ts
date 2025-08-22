@@ -141,14 +141,16 @@ function imglob_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImglobOutputs`).
  */
 function imglob_execute(
     params: ImglobParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImglobOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMGLOB_METADATA);
     params = execution.params(params)
     const cargs = imglob_cargs(params, execution)
     const ret = imglob_outputs(params, execution)
@@ -177,10 +179,8 @@ function imglob(
     single_extension: boolean = false,
     runner: Runner | null = null,
 ): ImglobOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMGLOB_METADATA);
     const params = imglob_params(input_list, multiple_extensions, single_extension)
-    return imglob_execute(params, execution);
+    return imglob_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       ImglobOutputs,
       ImglobParameters,
       imglob,
-      imglob_cargs,
       imglob_execute,
-      imglob_outputs,
       imglob_params,
 };

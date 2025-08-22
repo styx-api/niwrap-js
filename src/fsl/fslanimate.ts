@@ -147,14 +147,16 @@ function fslanimate_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslanimateOutputs`).
  */
 function fslanimate_execute(
     params: FslanimateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslanimateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLANIMATE_METADATA);
     params = execution.params(params)
     const cargs = fslanimate_cargs(params, execution)
     const ret = fslanimate_outputs(params, execution)
@@ -183,10 +185,8 @@ function fslanimate(
     tmp_dir: string | null = null,
     runner: Runner | null = null,
 ): FslanimateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLANIMATE_METADATA);
     const params = fslanimate_params(input_file, output_file, tmp_dir)
-    return fslanimate_execute(params, execution);
+    return fslanimate_execute(params, runner);
 }
 
 
@@ -195,8 +195,6 @@ export {
       FslanimateOutputs,
       FslanimateParameters,
       fslanimate,
-      fslanimate_cargs,
       fslanimate_execute,
-      fslanimate_outputs,
       fslanimate_params,
 };

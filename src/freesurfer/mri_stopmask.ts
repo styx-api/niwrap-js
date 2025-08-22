@@ -230,14 +230,16 @@ function mri_stopmask_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriStopmaskOutputs`).
  */
 function mri_stopmask_execute(
     params: MriStopmaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriStopmaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_STOPMASK_METADATA);
     params = execution.params(params)
     const cargs = mri_stopmask_cargs(params, execution)
     const ret = mri_stopmask_outputs(params, execution)
@@ -284,10 +286,8 @@ function mri_stopmask(
     no_bfs: boolean = false,
     runner: Runner | null = null,
 ): MriStopmaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_STOPMASK_METADATA);
     const params = mri_stopmask_params(output_mask, filled, aseg_presurf, lateral_ventricles, wmsa, wm_voxels, brain_final_surfs, no_filled, no_lv, no_wmsa, no_wm, no_bfs)
-    return mri_stopmask_execute(params, execution);
+    return mri_stopmask_execute(params, runner);
 }
 
 
@@ -296,8 +296,6 @@ export {
       MriStopmaskOutputs,
       MriStopmaskParameters,
       mri_stopmask,
-      mri_stopmask_cargs,
       mri_stopmask_execute,
-      mri_stopmask_outputs,
       mri_stopmask_params,
 };

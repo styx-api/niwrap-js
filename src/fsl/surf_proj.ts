@@ -241,14 +241,16 @@ function surf_proj_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfProjOutputs`).
  */
 function surf_proj_execute(
     params: SurfProjParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfProjOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_PROJ_METADATA);
     params = execution.params(params)
     const cargs = surf_proj_cargs(params, execution)
     const ret = surf_proj_outputs(params, execution)
@@ -291,10 +293,8 @@ function surf_proj(
     surface_output: string | null = null,
     runner: Runner | null = null,
 ): SurfProjOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_PROJ_METADATA);
     const params = surf_proj_params(data, surface, output_file, surface_reference, transform, meshspace, step_size, direction, operation, surface_output)
-    return surf_proj_execute(params, execution);
+    return surf_proj_execute(params, runner);
 }
 
 
@@ -303,8 +303,6 @@ export {
       SurfProjOutputs,
       SurfProjParameters,
       surf_proj,
-      surf_proj_cargs,
       surf_proj_execute,
-      surf_proj_outputs,
       surf_proj_params,
 };

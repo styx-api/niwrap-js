@@ -160,14 +160,16 @@ function v__suma_make_spec_sf_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VSumaMakeSpecSfOutputs`).
  */
 function v__suma_make_spec_sf_execute(
     params: VSumaMakeSpecSfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VSumaMakeSpecSfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__SUMA_MAKE_SPEC_SF_METADATA);
     params = execution.params(params)
     const cargs = v__suma_make_spec_sf_cargs(params, execution)
     const ret = v__suma_make_spec_sf_outputs(params, execution)
@@ -196,10 +198,8 @@ function v__suma_make_spec_sf(
     surface_path: string | null = null,
     runner: Runner | null = null,
 ): VSumaMakeSpecSfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__SUMA_MAKE_SPEC_SF_METADATA);
     const params = v__suma_make_spec_sf_params(subject_id, debug_level, surface_path)
-    return v__suma_make_spec_sf_execute(params, execution);
+    return v__suma_make_spec_sf_execute(params, runner);
 }
 
 
@@ -208,8 +208,6 @@ export {
       VSumaMakeSpecSfParameters,
       V__SUMA_MAKE_SPEC_SF_METADATA,
       v__suma_make_spec_sf,
-      v__suma_make_spec_sf_cargs,
       v__suma_make_spec_sf_execute,
-      v__suma_make_spec_sf_outputs,
       v__suma_make_spec_sf_params,
 };

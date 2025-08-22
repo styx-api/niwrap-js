@@ -336,14 +336,16 @@ function connectome2tck_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Connectome2tckOutputs`).
  */
 function connectome2tck_execute(
     params: Connectome2tckParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Connectome2tckOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONNECTOME2TCK_METADATA);
     params = execution.params(params)
     const cargs = connectome2tck_cargs(params, execution)
     const ret = connectome2tck_outputs(params, execution)
@@ -410,10 +412,8 @@ function connectome2tck(
     version: boolean = false,
     runner: Runner | null = null,
 ): Connectome2tckOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONNECTOME2TCK_METADATA);
     const params = connectome2tck_params(tracks_in, assignments_in, prefix_out, nodes, exclusive, files, exemplars, keep_unassigned, keep_self, tck_weights_in, prefix_tck_weights_out, info, quiet, debug, force, nthreads, config, help, version)
-    return connectome2tck_execute(params, execution);
+    return connectome2tck_execute(params, runner);
 }
 
 
@@ -423,10 +423,7 @@ export {
       Connectome2tckOutputs,
       Connectome2tckParameters,
       connectome2tck,
-      connectome2tck_cargs,
-      connectome2tck_config_cargs,
       connectome2tck_config_params,
       connectome2tck_execute,
-      connectome2tck_outputs,
       connectome2tck_params,
 };

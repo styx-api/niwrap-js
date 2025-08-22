@@ -158,14 +158,16 @@ function metric_remove_islands_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricRemoveIslandsOutputs`).
  */
 function metric_remove_islands_execute(
     params: MetricRemoveIslandsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricRemoveIslandsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_REMOVE_ISLANDS_METADATA);
     params = execution.params(params)
     const cargs = metric_remove_islands_cargs(params, execution)
     const ret = metric_remove_islands_outputs(params, execution)
@@ -198,10 +200,8 @@ function metric_remove_islands(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricRemoveIslandsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_REMOVE_ISLANDS_METADATA);
     const params = metric_remove_islands_params(surface, metric_in, metric_out, opt_corrected_areas_area_metric)
-    return metric_remove_islands_execute(params, execution);
+    return metric_remove_islands_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       MetricRemoveIslandsOutputs,
       MetricRemoveIslandsParameters,
       metric_remove_islands,
-      metric_remove_islands_cargs,
       metric_remove_islands_execute,
-      metric_remove_islands_outputs,
       metric_remove_islands_params,
 };

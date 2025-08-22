@@ -143,14 +143,16 @@ function mris_copy_header_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisCopyHeaderOutputs`).
  */
 function mris_copy_header_execute(
     params: MrisCopyHeaderParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisCopyHeaderOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_COPY_HEADER_METADATA);
     params = execution.params(params)
     const cargs = mris_copy_header_cargs(params, execution)
     const ret = mris_copy_header_outputs(params, execution)
@@ -179,10 +181,8 @@ function mris_copy_header(
     output_surface: string,
     runner: Runner | null = null,
 ): MrisCopyHeaderOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_COPY_HEADER_METADATA);
     const params = mris_copy_header_params(input_surface, template_surface, output_surface)
-    return mris_copy_header_execute(params, execution);
+    return mris_copy_header_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MrisCopyHeaderOutputs,
       MrisCopyHeaderParameters,
       mris_copy_header,
-      mris_copy_header_cargs,
       mris_copy_header_execute,
-      mris_copy_header_outputs,
       mris_copy_header_params,
 };

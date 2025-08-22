@@ -132,14 +132,16 @@ function mri_correct_segmentations_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCorrectSegmentationsOutputs`).
  */
 function mri_correct_segmentations_execute(
     params: MriCorrectSegmentationsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCorrectSegmentationsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_CORRECT_SEGMENTATIONS_METADATA);
     params = execution.params(params)
     const cargs = mri_correct_segmentations_cargs(params, execution)
     const ret = mri_correct_segmentations_outputs(params, execution)
@@ -166,10 +168,8 @@ function mri_correct_segmentations(
     input_file_2: InputPathType,
     runner: Runner | null = null,
 ): MriCorrectSegmentationsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_CORRECT_SEGMENTATIONS_METADATA);
     const params = mri_correct_segmentations_params(input_file_1, input_file_2)
-    return mri_correct_segmentations_execute(params, execution);
+    return mri_correct_segmentations_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       MriCorrectSegmentationsOutputs,
       MriCorrectSegmentationsParameters,
       mri_correct_segmentations,
-      mri_correct_segmentations_cargs,
       mri_correct_segmentations_execute,
-      mri_correct_segmentations_outputs,
       mri_correct_segmentations_params,
 };

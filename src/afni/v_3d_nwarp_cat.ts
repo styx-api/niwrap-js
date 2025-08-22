@@ -216,14 +216,16 @@ function v_3d_nwarp_cat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dNwarpCatOutputs`).
  */
 function v_3d_nwarp_cat_execute(
     params: V3dNwarpCatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dNwarpCatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_NWARP_CAT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_nwarp_cat_cargs(params, execution)
     const ret = v_3d_nwarp_cat_outputs(params, execution)
@@ -264,10 +266,8 @@ function v_3d_nwarp_cat(
     extra_padding: number | null = null,
     runner: Runner | null = null,
 ): V3dNwarpCatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_NWARP_CAT_METADATA);
     const params = v_3d_nwarp_cat_params(output_prefix, warp1, warp2, interpolation, verbosity, space_marker, additional_warps, invert_final_warp, extra_padding)
-    return v_3d_nwarp_cat_execute(params, execution);
+    return v_3d_nwarp_cat_execute(params, runner);
 }
 
 
@@ -276,8 +276,6 @@ export {
       V3dNwarpCatParameters,
       V_3D_NWARP_CAT_METADATA,
       v_3d_nwarp_cat,
-      v_3d_nwarp_cat_cargs,
       v_3d_nwarp_cat_execute,
-      v_3d_nwarp_cat_outputs,
       v_3d_nwarp_cat_params,
 };

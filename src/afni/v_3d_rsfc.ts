@@ -345,14 +345,16 @@ function v_3d_rsfc_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dRsfcOutputs`).
  */
 function v_3d_rsfc_execute(
     params: V3dRsfcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dRsfcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_RSFC_METADATA);
     params = execution.params(params)
     const cargs = v_3d_rsfc_cargs(params, execution)
     const ret = v_3d_rsfc_outputs(params, execution)
@@ -423,10 +425,8 @@ function v_3d_rsfc(
     nosat: boolean = false,
     runner: Runner | null = null,
 ): V3dRsfcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_RSFC_METADATA);
     const params = v_3d_rsfc_params(fbot, ftop, input_dataset, despike, ort_file, dsort_file, nodetrend, time_step, nfft, norm, mask, automask, blur, localpv, input_alt, band, prefix, quiet, no_rs_out, un_bandpass_out, no_rsfa, bp_at_end, notrans, nosat)
-    return v_3d_rsfc_execute(params, execution);
+    return v_3d_rsfc_execute(params, runner);
 }
 
 
@@ -435,8 +435,6 @@ export {
       V3dRsfcParameters,
       V_3D_RSFC_METADATA,
       v_3d_rsfc,
-      v_3d_rsfc_cargs,
       v_3d_rsfc_execute,
-      v_3d_rsfc_outputs,
       v_3d_rsfc_params,
 };

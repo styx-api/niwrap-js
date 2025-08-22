@@ -351,14 +351,16 @@ function v__djunct_overlap_check_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDjunctOverlapCheckOutputs`).
  */
 function v__djunct_overlap_check_execute(
     params: VDjunctOverlapCheckParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDjunctOverlapCheckOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DJUNCT_OVERLAP_CHECK_METADATA);
     params = execution.params(params)
     const cargs = v__djunct_overlap_check_cargs(params, execution)
     const ret = v__djunct_overlap_check_outputs(params, execution)
@@ -429,10 +431,8 @@ function v__djunct_overlap_check(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): VDjunctOverlapCheckOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DJUNCT_OVERLAP_CHECK_METADATA);
     const params = v__djunct_overlap_check_params(ulay, olay, prefix, box_focus_slices, montgap, montcolor, cbar, opacity, zerocolor, set_dicom_xyz, ulay_range, ulay_range_nz, montx, monty, montx_cat, monty_cat, label_mode, pbar_posonly_off, edgy_ulay, set_dicom_xyz_off, no_cor, no_axi, no_sag, no_clean)
-    return v__djunct_overlap_check_execute(params, execution);
+    return v__djunct_overlap_check_execute(params, runner);
 }
 
 
@@ -441,8 +441,6 @@ export {
       VDjunctOverlapCheckParameters,
       V__DJUNCT_OVERLAP_CHECK_METADATA,
       v__djunct_overlap_check,
-      v__djunct_overlap_check_cargs,
       v__djunct_overlap_check_execute,
-      v__djunct_overlap_check_outputs,
       v__djunct_overlap_check_params,
 };

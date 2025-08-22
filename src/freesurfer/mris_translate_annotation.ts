@@ -153,14 +153,16 @@ function mris_translate_annotation_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisTranslateAnnotationOutputs`).
  */
 function mris_translate_annotation_execute(
     params: MrisTranslateAnnotationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisTranslateAnnotationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_TRANSLATE_ANNOTATION_METADATA);
     params = execution.params(params)
     const cargs = mris_translate_annotation_cargs(params, execution)
     const ret = mris_translate_annotation_outputs(params, execution)
@@ -193,10 +195,8 @@ function mris_translate_annotation(
     out_annot: string,
     runner: Runner | null = null,
 ): MrisTranslateAnnotationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_TRANSLATE_ANNOTATION_METADATA);
     const params = mris_translate_annotation_params(subject, hemi, in_annot, translation_file, out_annot)
-    return mris_translate_annotation_execute(params, execution);
+    return mris_translate_annotation_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       MrisTranslateAnnotationOutputs,
       MrisTranslateAnnotationParameters,
       mris_translate_annotation,
-      mris_translate_annotation_cargs,
       mris_translate_annotation_execute,
-      mris_translate_annotation_outputs,
       mris_translate_annotation_params,
 };

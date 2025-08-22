@@ -132,14 +132,16 @@ function tbss_x_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TbssXOutputs`).
  */
 function tbss_x_execute(
     params: TbssXParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TbssXOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TBSS_X_METADATA);
     params = execution.params(params)
     const cargs = tbss_x_cargs(params, execution)
     const ret = tbss_x_outputs(params, execution)
@@ -166,10 +168,8 @@ function tbss_x(
     vector_dirs: Array<string>,
     runner: Runner | null = null,
 ): TbssXOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TBSS_X_METADATA);
     const params = tbss_x_params(scalar_dirs, vector_dirs)
-    return tbss_x_execute(params, execution);
+    return tbss_x_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       TbssXOutputs,
       TbssXParameters,
       tbss_x,
-      tbss_x_cargs,
       tbss_x_execute,
-      tbss_x_outputs,
       tbss_x_params,
 };

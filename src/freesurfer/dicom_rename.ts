@@ -158,14 +158,16 @@ function dicom_rename_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DicomRenameOutputs`).
  */
 function dicom_rename_execute(
     params: DicomRenameParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DicomRenameOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DICOM_RENAME_METADATA);
     params = execution.params(params)
     const cargs = dicom_rename_cargs(params, execution)
     const ret = dicom_rename_outputs(params, execution)
@@ -196,10 +198,8 @@ function dicom_rename(
     help: boolean = false,
     runner: Runner | null = null,
 ): DicomRenameOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DICOM_RENAME_METADATA);
     const params = dicom_rename_params(input_files, output_base, version, help)
-    return dicom_rename_execute(params, execution);
+    return dicom_rename_execute(params, runner);
 }
 
 
@@ -208,8 +208,6 @@ export {
       DicomRenameOutputs,
       DicomRenameParameters,
       dicom_rename,
-      dicom_rename_cargs,
       dicom_rename_execute,
-      dicom_rename_outputs,
       dicom_rename_params,
 };

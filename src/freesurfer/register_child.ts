@@ -143,14 +143,16 @@ function register_child_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegisterChildOutputs`).
  */
 function register_child_execute(
     params: RegisterChildParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegisterChildOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REGISTER_CHILD_METADATA);
     params = execution.params(params)
     const cargs = register_child_cargs(params, execution)
     const ret = register_child_outputs(params, execution)
@@ -177,10 +179,8 @@ function register_child(
     output_directory: string,
     runner: Runner | null = null,
 ): RegisterChildOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REGISTER_CHILD_METADATA);
     const params = register_child_params(input_volume, output_directory)
-    return register_child_execute(params, execution);
+    return register_child_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       RegisterChildOutputs,
       RegisterChildParameters,
       register_child,
-      register_child_cargs,
       register_child_execute,
-      register_child_outputs,
       register_child_params,
 };

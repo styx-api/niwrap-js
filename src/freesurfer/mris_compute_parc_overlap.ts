@@ -271,14 +271,16 @@ function mris_compute_parc_overlap_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisComputeParcOverlapOutputs`).
  */
 function mris_compute_parc_overlap_execute(
     params: MrisComputeParcOverlapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisComputeParcOverlapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_COMPUTE_PARC_OVERLAP_METADATA);
     params = execution.params(params)
     const cargs = mris_compute_parc_overlap_cargs(params, execution)
     const ret = mris_compute_parc_overlap_outputs(params, execution)
@@ -333,10 +335,8 @@ function mris_compute_parc_overlap(
     debug_overlap: boolean = false,
     runner: Runner | null = null,
 ): MrisComputeParcOverlapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_COMPUTE_PARC_OVERLAP_METADATA);
     const params = mris_compute_parc_overlap_params(subject, hemi, annot1, annot2, label1, label2, subj_dir, log_file, label_list, nocheck_label1_xyz, nocheck_label2_xyz, nocheck_label_xyz, use_label1_xyz, use_label2_xyz, use_label_xyz, debug_overlap)
-    return mris_compute_parc_overlap_execute(params, execution);
+    return mris_compute_parc_overlap_execute(params, runner);
 }
 
 
@@ -345,8 +345,6 @@ export {
       MrisComputeParcOverlapOutputs,
       MrisComputeParcOverlapParameters,
       mris_compute_parc_overlap,
-      mris_compute_parc_overlap_cargs,
       mris_compute_parc_overlap_execute,
-      mris_compute_parc_overlap_outputs,
       mris_compute_parc_overlap_params,
 };

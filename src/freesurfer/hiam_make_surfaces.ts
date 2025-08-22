@@ -132,14 +132,16 @@ function hiam_make_surfaces_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `HiamMakeSurfacesOutputs`).
  */
 function hiam_make_surfaces_execute(
     params: HiamMakeSurfacesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): HiamMakeSurfacesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(HIAM_MAKE_SURFACES_METADATA);
     params = execution.params(params)
     const cargs = hiam_make_surfaces_cargs(params, execution)
     const ret = hiam_make_surfaces_outputs(params, execution)
@@ -166,10 +168,8 @@ function hiam_make_surfaces(
     structure: "RA" | "LA" | "RH" | "LH",
     runner: Runner | null = null,
 ): HiamMakeSurfacesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(HIAM_MAKE_SURFACES_METADATA);
     const params = hiam_make_surfaces_params(subject_name, structure)
-    return hiam_make_surfaces_execute(params, execution);
+    return hiam_make_surfaces_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       HiamMakeSurfacesOutputs,
       HiamMakeSurfacesParameters,
       hiam_make_surfaces,
-      hiam_make_surfaces_cargs,
       hiam_make_surfaces_execute,
-      hiam_make_surfaces_outputs,
       hiam_make_surfaces_params,
 };

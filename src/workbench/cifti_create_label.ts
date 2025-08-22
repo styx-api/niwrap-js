@@ -425,14 +425,16 @@ function cifti_create_label_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCreateLabelOutputs`).
  */
 function cifti_create_label_execute(
     params: CiftiCreateLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiCreateLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_CREATE_LABEL_METADATA);
     params = execution.params(params)
     const cargs = cifti_create_label_cargs(params, execution)
     const ret = cifti_create_label_outputs(params, execution)
@@ -503,10 +505,8 @@ function cifti_create_label(
     cerebellum_label: CiftiCreateLabelCerebellumLabelParameters | null = null,
     runner: Runner | null = null,
 ): CiftiCreateLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_CREATE_LABEL_METADATA);
     const params = cifti_create_label_params(cifti_out, volume, left_label, right_label, cerebellum_label)
-    return cifti_create_label_execute(params, execution);
+    return cifti_create_label_execute(params, runner);
 }
 
 
@@ -519,16 +519,10 @@ export {
       CiftiCreateLabelRightLabelParameters,
       CiftiCreateLabelVolumeParameters,
       cifti_create_label,
-      cifti_create_label_cargs,
-      cifti_create_label_cerebellum_label_cargs,
       cifti_create_label_cerebellum_label_params,
       cifti_create_label_execute,
-      cifti_create_label_left_label_cargs,
       cifti_create_label_left_label_params,
-      cifti_create_label_outputs,
       cifti_create_label_params,
-      cifti_create_label_right_label_cargs,
       cifti_create_label_right_label_params,
-      cifti_create_label_volume_cargs,
       cifti_create_label_volume_params,
 };

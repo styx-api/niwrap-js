@@ -387,14 +387,16 @@ function epi_b0_correct_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `EpiB0CorrectOutputs`).
  */
 function epi_b0_correct_execute(
     params: EpiB0CorrectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): EpiB0CorrectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EPI_B0_CORRECT_METADATA);
     params = execution.params(params)
     const cargs = epi_b0_correct_cargs(params, execution)
     const ret = epi_b0_correct_outputs(params, execution)
@@ -465,10 +467,8 @@ function epi_b0_correct(
     date: boolean = false,
     runner: Runner | null = null,
 ): EpiB0CorrectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EPI_B0_CORRECT_METADATA);
     const params = epi_b0_correct_params(prefix, input_freq, input_epi, epi_pe_dir, input_mask, input_magn, input_anat, input_json, epi_pe_bwpp, epi_pe_echo_sp, epi_pe_vox_dim, scale_freq, out_cmds, out_pars, wdir_name, blur_sigma, do_recenter_freq, mask_dilate, no_clean, qc_box_focus_ulay, no_qc_image, help, ver, date)
-    return epi_b0_correct_execute(params, execution);
+    return epi_b0_correct_execute(params, runner);
 }
 
 
@@ -477,8 +477,6 @@ export {
       EpiB0CorrectOutputs,
       EpiB0CorrectParameters,
       epi_b0_correct,
-      epi_b0_correct_cargs,
       epi_b0_correct_execute,
-      epi_b0_correct_outputs,
       epi_b0_correct_params,
 };

@@ -138,14 +138,16 @@ function fsl2ascii_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Fsl2asciiOutputs`).
  */
 function fsl2ascii_execute(
     params: Fsl2asciiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Fsl2asciiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL2ASCII_METADATA);
     params = execution.params(params)
     const cargs = fsl2ascii_cargs(params, execution)
     const ret = fsl2ascii_outputs(params, execution)
@@ -172,10 +174,8 @@ function fsl2ascii(
     output_file: string,
     runner: Runner | null = null,
 ): Fsl2asciiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL2ASCII_METADATA);
     const params = fsl2ascii_params(input_file, output_file)
-    return fsl2ascii_execute(params, execution);
+    return fsl2ascii_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       Fsl2asciiOutputs,
       Fsl2asciiParameters,
       fsl2ascii,
-      fsl2ascii_cargs,
       fsl2ascii_execute,
-      fsl2ascii_outputs,
       fsl2ascii_params,
 };

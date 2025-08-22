@@ -184,14 +184,16 @@ function rca_fix_ento_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RcaFixEntoOutputs`).
  */
 function rca_fix_ento_execute(
     params: RcaFixEntoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RcaFixEntoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RCA_FIX_ENTO_METADATA);
     params = execution.params(params)
     const cargs = rca_fix_ento_cargs(params, execution)
     const ret = rca_fix_ento_outputs(params, execution)
@@ -224,10 +226,8 @@ function rca_fix_ento(
     brain_mask: boolean = false,
     runner: Runner | null = null,
 ): RcaFixEntoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RCA_FIX_ENTO_METADATA);
     const params = rca_fix_ento_params(subject, threads, submit, account, brain_mask)
-    return rca_fix_ento_execute(params, execution);
+    return rca_fix_ento_execute(params, runner);
 }
 
 
@@ -236,8 +236,6 @@ export {
       RcaFixEntoOutputs,
       RcaFixEntoParameters,
       rca_fix_ento,
-      rca_fix_ento_cargs,
       rca_fix_ento_execute,
-      rca_fix_ento_outputs,
       rca_fix_ento_params,
 };

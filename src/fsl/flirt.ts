@@ -612,14 +612,16 @@ function flirt_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FlirtOutputs`).
  */
 function flirt_execute(
     params: FlirtParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FlirtOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FLIRT_METADATA);
     params = execution.params(params)
     const cargs = flirt_cargs(params, execution)
     const ret = flirt_outputs(params, execution)
@@ -732,10 +734,8 @@ function flirt(
     wmnorms: InputPathType | null = null,
     runner: Runner | null = null,
 ): FlirtOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FLIRT_METADATA);
     const params = flirt_params(in_file, reference, out_file, out_matrix_file, angle_rep, apply_isoxfm, apply_xfm, bbrslope, bbrtype, bgvalue, bins, coarse_search, cost, cost_func, datatype, display_init, dof, echospacing, fieldmap, fieldmapmask, fine_search, force_scaling, in_matrix_file, in_weight, interp, min_sampling, no_clamp, no_resample, no_resample_blur, no_search, padding_size, pedir, ref_weight, rigid2_d, schedule, searchr_x, searchr_y, searchr_z, sinc_width, sinc_window, uses_qform, verbose, wm_seg, wmcoords, wmnorms)
-    return flirt_execute(params, execution);
+    return flirt_execute(params, runner);
 }
 
 
@@ -744,8 +744,6 @@ export {
       FlirtOutputs,
       FlirtParameters,
       flirt,
-      flirt_cargs,
       flirt_execute,
-      flirt_outputs,
       flirt_params,
 };

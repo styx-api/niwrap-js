@@ -150,14 +150,16 @@ function fs_update_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FsUpdateOutputs`).
  */
 function fs_update_execute(
     params: FsUpdateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FsUpdateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FS_UPDATE_METADATA);
     params = execution.params(params)
     const cargs = fs_update_cargs(params, execution)
     const ret = fs_update_outputs(params, execution)
@@ -186,10 +188,8 @@ function fs_update(
     help_long: boolean = false,
     runner: Runner | null = null,
 ): FsUpdateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FS_UPDATE_METADATA);
     const params = fs_update_params(update_path, help_short, help_medium, help_long)
-    return fs_update_execute(params, execution);
+    return fs_update_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       FsUpdateOutputs,
       FsUpdateParameters,
       fs_update,
-      fs_update_cargs,
       fs_update_execute,
-      fs_update_outputs,
       fs_update_params,
 };

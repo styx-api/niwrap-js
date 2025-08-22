@@ -132,14 +132,16 @@ function mri_histo_eq_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriHistoEqOutputs`).
  */
 function mri_histo_eq_execute(
     params: MriHistoEqParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriHistoEqOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_HISTO_EQ_METADATA);
     params = execution.params(params)
     const cargs = mri_histo_eq_cargs(params, execution)
     const ret = mri_histo_eq_outputs(params, execution)
@@ -166,10 +168,8 @@ function mri_histo_eq(
     input_volume_2: InputPathType,
     runner: Runner | null = null,
 ): MriHistoEqOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_HISTO_EQ_METADATA);
     const params = mri_histo_eq_params(input_volume_1, input_volume_2)
-    return mri_histo_eq_execute(params, execution);
+    return mri_histo_eq_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       MriHistoEqOutputs,
       MriHistoEqParameters,
       mri_histo_eq,
-      mri_histo_eq_cargs,
       mri_histo_eq_execute,
-      mri_histo_eq_outputs,
       mri_histo_eq_params,
 };

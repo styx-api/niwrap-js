@@ -172,14 +172,16 @@ function map_to_base_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MapToBaseOutputs`).
  */
 function map_to_base_execute(
     params: MapToBaseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MapToBaseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAP_TO_BASE_METADATA);
     params = execution.params(params)
     const cargs = map_to_base_cargs(params, execution)
     const ret = map_to_base_outputs(params, execution)
@@ -212,10 +214,8 @@ function map_to_base(
     cross: string | null = null,
     runner: Runner | null = null,
 ): MapToBaseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAP_TO_BASE_METADATA);
     const params = map_to_base_params(baseid, tpid, input_image, resample_type, cross)
-    return map_to_base_execute(params, execution);
+    return map_to_base_execute(params, runner);
 }
 
 
@@ -224,8 +224,6 @@ export {
       MapToBaseOutputs,
       MapToBaseParameters,
       map_to_base,
-      map_to_base_cargs,
       map_to_base_execute,
-      map_to_base_outputs,
       map_to_base_params,
 };

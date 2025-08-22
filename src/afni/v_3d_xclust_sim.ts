@@ -299,14 +299,16 @@ function v_3d_xclust_sim_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dXclustSimOutputs`).
  */
 function v_3d_xclust_sim_execute(
     params: V3dXclustSimParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dXclustSimOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_XCLUST_SIM_METADATA);
     params = execution.params(params)
     const cargs = v_3d_xclust_sim_cargs(params, execution)
     const ret = v_3d_xclust_sim_outputs(params, execution)
@@ -365,10 +367,8 @@ function v_3d_xclust_sim(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dXclustSimOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_XCLUST_SIM_METADATA);
     const params = v_3d_xclust_sim_params(inset, insdat, nn, sid, hpow, ncase, pthr, fpr, multi_fpr, minclust, local, global, nolocal, noglobal, splitfrac, prefix, verbose, quiet)
-    return v_3d_xclust_sim_execute(params, execution);
+    return v_3d_xclust_sim_execute(params, runner);
 }
 
 
@@ -377,8 +377,6 @@ export {
       V3dXclustSimParameters,
       V_3D_XCLUST_SIM_METADATA,
       v_3d_xclust_sim,
-      v_3d_xclust_sim_cargs,
       v_3d_xclust_sim_execute,
-      v_3d_xclust_sim_outputs,
       v_3d_xclust_sim_params,
 };

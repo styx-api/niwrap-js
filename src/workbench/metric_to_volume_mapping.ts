@@ -247,14 +247,16 @@ function metric_to_volume_mapping_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricToVolumeMappingOutputs`).
  */
 function metric_to_volume_mapping_execute(
     params: MetricToVolumeMappingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricToVolumeMappingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_TO_VOLUME_MAPPING_METADATA);
     params = execution.params(params)
     const cargs = metric_to_volume_mapping_cargs(params, execution)
     const ret = metric_to_volume_mapping_outputs(params, execution)
@@ -291,10 +293,8 @@ function metric_to_volume_mapping(
     ribbon_constrained: MetricToVolumeMappingRibbonConstrainedParameters | null = null,
     runner: Runner | null = null,
 ): MetricToVolumeMappingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_TO_VOLUME_MAPPING_METADATA);
     const params = metric_to_volume_mapping_params(metric, surface, volume_space, volume_out, opt_nearest_vertex_distance, ribbon_constrained)
-    return metric_to_volume_mapping_execute(params, execution);
+    return metric_to_volume_mapping_execute(params, runner);
 }
 
 
@@ -304,10 +304,7 @@ export {
       MetricToVolumeMappingParameters,
       MetricToVolumeMappingRibbonConstrainedParameters,
       metric_to_volume_mapping,
-      metric_to_volume_mapping_cargs,
       metric_to_volume_mapping_execute,
-      metric_to_volume_mapping_outputs,
       metric_to_volume_mapping_params,
-      metric_to_volume_mapping_ribbon_constrained_cargs,
       metric_to_volume_mapping_ribbon_constrained_params,
 };

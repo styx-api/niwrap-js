@@ -275,14 +275,16 @@ function warpinvert_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WarpinvertOutputs`).
  */
 function warpinvert_execute(
     params: WarpinvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WarpinvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WARPINVERT_METADATA);
     params = execution.params(params)
     const cargs = warpinvert_cargs(params, execution)
     const ret = warpinvert_outputs(params, execution)
@@ -335,10 +337,8 @@ function warpinvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): WarpinvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WARPINVERT_METADATA);
     const params = warpinvert_params(in_, out, template, displacement, info, quiet, debug, force, nthreads, config, help, version)
-    return warpinvert_execute(params, execution);
+    return warpinvert_execute(params, runner);
 }
 
 
@@ -348,10 +348,7 @@ export {
       WarpinvertOutputs,
       WarpinvertParameters,
       warpinvert,
-      warpinvert_cargs,
-      warpinvert_config_cargs,
       warpinvert_config_params,
       warpinvert_execute,
-      warpinvert_outputs,
       warpinvert_params,
 };

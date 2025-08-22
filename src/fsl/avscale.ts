@@ -155,14 +155,16 @@ function avscale_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AvscaleOutputs`).
  */
 function avscale_execute(
     params: AvscaleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AvscaleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AVSCALE_METADATA);
     params = execution.params(params)
     const cargs = avscale_cargs(params, execution)
     const ret = avscale_outputs(params, execution)
@@ -193,10 +195,8 @@ function avscale(
     non_reference_volume: InputPathType | null = null,
     runner: Runner | null = null,
 ): AvscaleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AVSCALE_METADATA);
     const params = avscale_params(matrix_file, allparams_flag, inverteddies_flag, non_reference_volume)
-    return avscale_execute(params, execution);
+    return avscale_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       AvscaleOutputs,
       AvscaleParameters,
       avscale,
-      avscale_cargs,
       avscale_execute,
-      avscale_outputs,
       avscale_params,
 };

@@ -352,14 +352,16 @@ function mris_apply_reg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisApplyRegOutputs`).
  */
 function mris_apply_reg_execute(
     params: MrisApplyRegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisApplyRegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_APPLY_REG_METADATA);
     params = execution.params(params)
     const cargs = mris_apply_reg_cargs(params, execution)
     const ret = mris_apply_reg_outputs(params, execution)
@@ -428,10 +430,8 @@ function mris_apply_reg(
     check_options: boolean = false,
     runner: Runner | null = null,
 ): MrisApplyRegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_APPLY_REG_METADATA);
     const params = mris_apply_reg_params(src_input, trg_output, streg_pair, src_label, src_annotation, src_xyz, jacobian, no_reverse, rand_noise, replace_ones, center_output, curv_format, lta_transform, lta_patch_transform, reverse_surface, patch_apply, save_vertex_pair, m3z_transform, inv_m3z_transform, src_reg_scale, trg_reg_scale, debug_mode, check_options)
-    return mris_apply_reg_execute(params, execution);
+    return mris_apply_reg_execute(params, runner);
 }
 
 
@@ -440,8 +440,6 @@ export {
       MrisApplyRegOutputs,
       MrisApplyRegParameters,
       mris_apply_reg,
-      mris_apply_reg_cargs,
       mris_apply_reg_execute,
-      mris_apply_reg_outputs,
       mris_apply_reg_params,
 };

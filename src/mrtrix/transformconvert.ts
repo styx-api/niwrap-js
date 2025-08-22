@@ -262,14 +262,16 @@ function transformconvert_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TransformconvertOutputs`).
  */
 function transformconvert_execute(
     params: TransformconvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TransformconvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TRANSFORMCONVERT_METADATA);
     params = execution.params(params)
     const cargs = transformconvert_cargs(params, execution)
     const ret = transformconvert_outputs(params, execution)
@@ -321,10 +323,8 @@ function transformconvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): TransformconvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TRANSFORMCONVERT_METADATA);
     const params = transformconvert_params(input, operation, output, info, quiet, debug, force, nthreads, config, help, version)
-    return transformconvert_execute(params, execution);
+    return transformconvert_execute(params, runner);
 }
 
 
@@ -334,10 +334,7 @@ export {
       TransformconvertOutputs,
       TransformconvertParameters,
       transformconvert,
-      transformconvert_cargs,
-      transformconvert_config_cargs,
       transformconvert_config_params,
       transformconvert_execute,
-      transformconvert_outputs,
       transformconvert_params,
 };

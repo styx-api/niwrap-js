@@ -167,14 +167,16 @@ function mri_compute_change_map_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriComputeChangeMapOutputs`).
  */
 function mri_compute_change_map_execute(
     params: MriComputeChangeMapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriComputeChangeMapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_COMPUTE_CHANGE_MAP_METADATA);
     params = execution.params(params)
     const cargs = mri_compute_change_map_cargs(params, execution)
     const ret = mri_compute_change_map_outputs(params, execution)
@@ -209,10 +211,8 @@ function mri_compute_change_map(
     gaussian_sigma: number | null = null,
     runner: Runner | null = null,
 ): MriComputeChangeMapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_COMPUTE_CHANGE_MAP_METADATA);
     const params = mri_compute_change_map_params(volume1, volume2, transform, outvolume, mean_filter, gaussian_sigma)
-    return mri_compute_change_map_execute(params, execution);
+    return mri_compute_change_map_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       MriComputeChangeMapOutputs,
       MriComputeChangeMapParameters,
       mri_compute_change_map,
-      mri_compute_change_map_cargs,
       mri_compute_change_map_execute,
-      mri_compute_change_map_outputs,
       mri_compute_change_map_params,
 };

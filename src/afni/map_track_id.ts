@@ -188,14 +188,16 @@ function map_track_id_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MapTrackIdOutputs`).
  */
 function map_track_id_execute(
     params: MapTrackIdParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MapTrackIdOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAP_TRACK_ID_METADATA);
     params = execution.params(params)
     const cargs = map_track_id_cargs(params, execution)
     const ret = map_track_id_outputs(params, execution)
@@ -234,10 +236,8 @@ function map_track_id(
     already_inv: boolean = false,
     runner: Runner | null = null,
 ): MapTrackIdOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAP_TRACK_ID_METADATA);
     const params = map_track_id_params(prefix, in_trk, in_map, reference, verbose, orig_zero, line_only_num, already_inv)
-    return map_track_id_execute(params, execution);
+    return map_track_id_execute(params, runner);
 }
 
 
@@ -246,8 +246,6 @@ export {
       MapTrackIdOutputs,
       MapTrackIdParameters,
       map_track_id,
-      map_track_id_cargs,
       map_track_id_execute,
-      map_track_id_outputs,
       map_track_id_params,
 };

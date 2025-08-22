@@ -136,14 +136,16 @@ function v__get_afni_prefix_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VGetAfniPrefixOutputs`).
  */
 function v__get_afni_prefix_execute(
     params: VGetAfniPrefixParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VGetAfniPrefixOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__GET_AFNI_PREFIX_METADATA);
     params = execution.params(params)
     const cargs = v__get_afni_prefix_cargs(params, execution)
     const ret = v__get_afni_prefix_outputs(params, execution)
@@ -170,10 +172,8 @@ function v__get_afni_prefix(
     suffix: string | null = null,
     runner: Runner | null = null,
 ): VGetAfniPrefixOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__GET_AFNI_PREFIX_METADATA);
     const params = v__get_afni_prefix_params(name, suffix)
-    return v__get_afni_prefix_execute(params, execution);
+    return v__get_afni_prefix_execute(params, runner);
 }
 
 
@@ -182,8 +182,6 @@ export {
       VGetAfniPrefixParameters,
       V__GET_AFNI_PREFIX_METADATA,
       v__get_afni_prefix,
-      v__get_afni_prefix_cargs,
       v__get_afni_prefix_execute,
-      v__get_afni_prefix_outputs,
       v__get_afni_prefix_params,
 };

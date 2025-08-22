@@ -167,14 +167,16 @@ function abids_tool_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AbidsToolOutputs`).
  */
 function abids_tool_execute(
     params: AbidsToolParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AbidsToolOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ABIDS_TOOL_METADATA);
     params = execution.params(params)
     const cargs = abids_tool_cargs(params, execution)
     const ret = abids_tool_outputs(params, execution)
@@ -209,10 +211,8 @@ function abids_tool(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): AbidsToolOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ABIDS_TOOL_METADATA);
     const params = abids_tool_params(input_files, tr_match, add_tr, add_slice_times, copy_prefix, help_flag)
-    return abids_tool_execute(params, execution);
+    return abids_tool_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       AbidsToolOutputs,
       AbidsToolParameters,
       abids_tool,
-      abids_tool_cargs,
       abids_tool_execute,
-      abids_tool_outputs,
       abids_tool_params,
 };

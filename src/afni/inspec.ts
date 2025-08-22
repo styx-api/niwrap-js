@@ -197,14 +197,16 @@ function inspec_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `InspecOutputs`).
  */
 function inspec_execute(
     params: InspecParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): InspecOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(INSPEC_METADATA);
     params = execution.params(params)
     const cargs = inspec_cargs(params, execution)
     const ret = inspec_outputs(params, execution)
@@ -241,10 +243,8 @@ function inspec(
     help: boolean = false,
     runner: Runner | null = null,
 ): InspecOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(INSPEC_METADATA);
     const params = inspec_params(specfile, newspecname, detail, leftspec, rightspec, state_rm, help)
-    return inspec_execute(params, execution);
+    return inspec_execute(params, runner);
 }
 
 
@@ -253,8 +253,6 @@ export {
       InspecOutputs,
       InspecParameters,
       inspec,
-      inspec_cargs,
       inspec_execute,
-      inspec_outputs,
       inspec_params,
 };

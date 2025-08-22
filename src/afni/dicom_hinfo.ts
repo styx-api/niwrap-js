@@ -168,14 +168,16 @@ function dicom_hinfo_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DicomHinfoOutputs`).
  */
 function dicom_hinfo_execute(
     params: DicomHinfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DicomHinfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DICOM_HINFO_METADATA);
     params = execution.params(params)
     const cargs = dicom_hinfo_cargs(params, execution)
     const ret = dicom_hinfo_outputs(params, execution)
@@ -210,10 +212,8 @@ function dicom_hinfo(
     namelast: boolean = false,
     runner: Runner | null = null,
 ): DicomHinfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DICOM_HINFO_METADATA);
     const params = dicom_hinfo_params(tag, files, sepstr, full_entry, no_name, namelast)
-    return dicom_hinfo_execute(params, execution);
+    return dicom_hinfo_execute(params, runner);
 }
 
 
@@ -222,8 +222,6 @@ export {
       DicomHinfoOutputs,
       DicomHinfoParameters,
       dicom_hinfo,
-      dicom_hinfo_cargs,
       dicom_hinfo_execute,
-      dicom_hinfo_outputs,
       dicom_hinfo_params,
 };

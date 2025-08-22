@@ -189,14 +189,16 @@ function niml_feedme_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `NimlFeedmeOutputs`).
  */
 function niml_feedme_execute(
     params: NimlFeedmeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): NimlFeedmeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(NIML_FEEDME_METADATA);
     params = execution.params(params)
     const cargs = niml_feedme_cargs(params, execution)
     const ret = niml_feedme_outputs(params, execution)
@@ -233,10 +235,8 @@ function niml_feedme(
     drive_cmds: Array<string> | null = null,
     runner: Runner | null = null,
 ): NimlFeedmeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(NIML_FEEDME_METADATA);
     const params = niml_feedme_params(dataset, host, interval, verbose, accum, target_dataset, drive_cmds)
-    return niml_feedme_execute(params, execution);
+    return niml_feedme_execute(params, runner);
 }
 
 
@@ -245,8 +245,6 @@ export {
       NimlFeedmeOutputs,
       NimlFeedmeParameters,
       niml_feedme,
-      niml_feedme_cargs,
       niml_feedme_execute,
-      niml_feedme_outputs,
       niml_feedme_params,
 };

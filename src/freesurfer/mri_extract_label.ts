@@ -198,14 +198,16 @@ function mri_extract_label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriExtractLabelOutputs`).
  */
 function mri_extract_label_execute(
     params: MriExtractLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriExtractLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_EXTRACT_LABEL_METADATA);
     params = execution.params(params)
     const cargs = mri_extract_label_cargs(params, execution)
     const ret = mri_extract_label_outputs(params, execution)
@@ -244,10 +246,8 @@ function mri_extract_label(
     erode: number | null = null,
     runner: Runner | null = null,
 ): MriExtractLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_EXTRACT_LABEL_METADATA);
     const params = mri_extract_label_params(input_volume, labels, output_name, gaussian_smoothing, transform_file, exit_none_found, dilate, erode)
-    return mri_extract_label_execute(params, execution);
+    return mri_extract_label_execute(params, runner);
 }
 
 
@@ -256,8 +256,6 @@ export {
       MriExtractLabelOutputs,
       MriExtractLabelParameters,
       mri_extract_label,
-      mri_extract_label_cargs,
       mri_extract_label_execute,
-      mri_extract_label_outputs,
       mri_extract_label_params,
 };

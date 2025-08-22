@@ -184,14 +184,16 @@ function cifti_vector_operation_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiVectorOperationOutputs`).
  */
 function cifti_vector_operation_execute(
     params: CiftiVectorOperationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiVectorOperationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_VECTOR_OPERATION_METADATA);
     params = execution.params(params)
     const cargs = cifti_vector_operation_cargs(params, execution)
     const ret = cifti_vector_operation_outputs(params, execution)
@@ -237,10 +239,8 @@ function cifti_vector_operation(
     opt_magnitude: boolean = false,
     runner: Runner | null = null,
 ): CiftiVectorOperationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_VECTOR_OPERATION_METADATA);
     const params = cifti_vector_operation_params(vectors_a, vectors_b, operation, cifti_out, opt_normalize_a, opt_normalize_b, opt_normalize_output, opt_magnitude)
-    return cifti_vector_operation_execute(params, execution);
+    return cifti_vector_operation_execute(params, runner);
 }
 
 
@@ -249,8 +249,6 @@ export {
       CiftiVectorOperationOutputs,
       CiftiVectorOperationParameters,
       cifti_vector_operation,
-      cifti_vector_operation_cargs,
       cifti_vector_operation_execute,
-      cifti_vector_operation_outputs,
       cifti_vector_operation_params,
 };

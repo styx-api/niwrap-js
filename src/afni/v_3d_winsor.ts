@@ -229,14 +229,16 @@ function v_3d_winsor_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dWinsorOutputs`).
  */
 function v_3d_winsor_execute(
     params: V3dWinsorParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dWinsorOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_WINSOR_METADATA);
     params = execution.params(params)
     const cargs = v_3d_winsor_cargs(params, execution)
     const ret = v_3d_winsor_outputs(params, execution)
@@ -277,10 +279,8 @@ function v_3d_winsor(
     mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dWinsorOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_WINSOR_METADATA);
     const params = v_3d_winsor_params(dataset, irad, cbot, ctop, nrep, keepzero, clip, prefix, mask)
-    return v_3d_winsor_execute(params, execution);
+    return v_3d_winsor_execute(params, runner);
 }
 
 
@@ -289,8 +289,6 @@ export {
       V3dWinsorParameters,
       V_3D_WINSOR_METADATA,
       v_3d_winsor,
-      v_3d_winsor_cargs,
       v_3d_winsor_execute,
-      v_3d_winsor_outputs,
       v_3d_winsor_params,
 };

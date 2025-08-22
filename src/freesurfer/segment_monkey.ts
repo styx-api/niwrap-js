@@ -127,14 +127,16 @@ function segment_monkey_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegmentMonkeyOutputs`).
  */
 function segment_monkey_execute(
     params: SegmentMonkeyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegmentMonkeyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGMENT_MONKEY_METADATA);
     params = execution.params(params)
     const cargs = segment_monkey_cargs(params, execution)
     const ret = segment_monkey_outputs(params, execution)
@@ -159,10 +161,8 @@ function segment_monkey(
     control_points: Array<string>,
     runner: Runner | null = null,
 ): SegmentMonkeyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGMENT_MONKEY_METADATA);
     const params = segment_monkey_params(control_points)
-    return segment_monkey_execute(params, execution);
+    return segment_monkey_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       SegmentMonkeyOutputs,
       SegmentMonkeyParameters,
       segment_monkey,
-      segment_monkey_cargs,
       segment_monkey_execute,
-      segment_monkey_outputs,
       segment_monkey_params,
 };

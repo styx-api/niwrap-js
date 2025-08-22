@@ -221,14 +221,16 @@ function betsurf_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BetsurfOutputs`).
  */
 function betsurf_execute(
     params: BetsurfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BetsurfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BETSURF_METADATA);
     params = execution.params(params)
     const cargs = betsurf_cargs(params, execution)
     const ret = betsurf_outputs(params, execution)
@@ -275,10 +277,8 @@ function betsurf(
     increased_precision: number | null = null,
     runner: Runner | null = null,
 ): BetsurfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BETSURF_METADATA);
     const params = betsurf_params(t1_image, bet_mesh, t1_to_standard_mat, output_prefix, t2_image, help_flag, verbose_flag, t1only_flag, outline_flag, mask_flag, skull_mask_flag, increased_precision)
-    return betsurf_execute(params, execution);
+    return betsurf_execute(params, runner);
 }
 
 
@@ -287,8 +287,6 @@ export {
       BetsurfOutputs,
       BetsurfParameters,
       betsurf,
-      betsurf_cargs,
       betsurf_execute,
-      betsurf_outputs,
       betsurf_params,
 };

@@ -164,14 +164,16 @@ function volume_label_modify_keys_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelModifyKeysOutputs`).
  */
 function volume_label_modify_keys_execute(
     params: VolumeLabelModifyKeysParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeLabelModifyKeysOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_LABEL_MODIFY_KEYS_METADATA);
     params = execution.params(params)
     const cargs = volume_label_modify_keys_cargs(params, execution)
     const ret = volume_label_modify_keys_outputs(params, execution)
@@ -210,10 +212,8 @@ function volume_label_modify_keys(
     opt_subvolume_subvolume: string | null = null,
     runner: Runner | null = null,
 ): VolumeLabelModifyKeysOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_LABEL_MODIFY_KEYS_METADATA);
     const params = volume_label_modify_keys_params(volume_in, remap_file, volume_out, opt_subvolume_subvolume)
-    return volume_label_modify_keys_execute(params, execution);
+    return volume_label_modify_keys_execute(params, runner);
 }
 
 
@@ -222,8 +222,6 @@ export {
       VolumeLabelModifyKeysOutputs,
       VolumeLabelModifyKeysParameters,
       volume_label_modify_keys,
-      volume_label_modify_keys_cargs,
       volume_label_modify_keys_execute,
-      volume_label_modify_keys_outputs,
       volume_label_modify_keys_params,
 };

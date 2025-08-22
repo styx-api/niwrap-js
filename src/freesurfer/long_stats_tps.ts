@@ -195,14 +195,16 @@ function long_stats_tps_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LongStatsTpsOutputs`).
  */
 function long_stats_tps_execute(
     params: LongStatsTpsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LongStatsTpsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LONG_STATS_TPS_METADATA);
     params = execution.params(params)
     const cargs = long_stats_tps_cargs(params, execution)
     const ret = long_stats_tps_outputs(params, execution)
@@ -241,10 +243,8 @@ function long_stats_tps(
     cross_sectional: boolean = false,
     runner: Runner | null = null,
 ): LongStatsTpsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LONG_STATS_TPS_METADATA);
     const params = long_stats_tps_params(qdec_table, stats_file, measure, subjects_dir, time_point, output_file, qcolumn, cross_sectional)
-    return long_stats_tps_execute(params, execution);
+    return long_stats_tps_execute(params, runner);
 }
 
 
@@ -253,8 +253,6 @@ export {
       LongStatsTpsOutputs,
       LongStatsTpsParameters,
       long_stats_tps,
-      long_stats_tps_cargs,
       long_stats_tps_execute,
-      long_stats_tps_outputs,
       long_stats_tps_params,
 };

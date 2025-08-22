@@ -141,14 +141,16 @@ function surface_flip_lr_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceFlipLrOutputs`).
  */
 function surface_flip_lr_execute(
     params: SurfaceFlipLrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceFlipLrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_FLIP_LR_METADATA);
     params = execution.params(params)
     const cargs = surface_flip_lr_cargs(params, execution)
     const ret = surface_flip_lr_outputs(params, execution)
@@ -177,10 +179,8 @@ function surface_flip_lr(
     surface_out: string,
     runner: Runner | null = null,
 ): SurfaceFlipLrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_FLIP_LR_METADATA);
     const params = surface_flip_lr_params(surface, surface_out)
-    return surface_flip_lr_execute(params, execution);
+    return surface_flip_lr_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       SurfaceFlipLrOutputs,
       SurfaceFlipLrParameters,
       surface_flip_lr,
-      surface_flip_lr_cargs,
       surface_flip_lr_execute,
-      surface_flip_lr_outputs,
       surface_flip_lr_params,
 };

@@ -670,14 +670,16 @@ function mri_volcluster_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriVolclusterOutputs`).
  */
 function mri_volcluster_execute(
     params: MriVolclusterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriVolclusterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_VOLCLUSTER_METADATA);
     params = execution.params(params)
     const cargs = mri_volcluster_cargs(params, execution)
     const ret = mri_volcluster_outputs(params, execution)
@@ -796,10 +798,8 @@ function mri_volcluster(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MriVolclusterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_VOLCLUSTER_METADATA);
     const params = mri_volcluster_params(input_file, summary_file, output_volid, output_cluster_num_volid, cwsig_volid, pointset_file, min_threshold, max_threshold, sign, no_adjust_flag, match_value, cwpval_threshold, registration_file, mni152reg_flag, regheader_subject, fsaverage_flag, frame_number, csd_files, cwsig_map, vwsig_map, max_cwpval_file, csdpdf_file, csdpdf_only_flag, fwhm_value, fwhm_file, min_size, min_size_vox, min_distance, allow_diag_flag, bonferroni_number, bonferroni_max_number, sig2p_max_flag, gte_flag, mask_volid, mask_type, mask_frame, mask_threshold, mask_sign, mask_invert_flag, out_mask_volid, out_mask_type, label_file, nlabel_cluster, label_base, synth_func, diagnostic_level, fill_params, help_flag)
-    return mri_volcluster_execute(params, execution);
+    return mri_volcluster_execute(params, runner);
 }
 
 
@@ -808,8 +808,6 @@ export {
       MriVolclusterOutputs,
       MriVolclusterParameters,
       mri_volcluster,
-      mri_volcluster_cargs,
       mri_volcluster_execute,
-      mri_volcluster_outputs,
       mri_volcluster_params,
 };

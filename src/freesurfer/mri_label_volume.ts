@@ -292,14 +292,16 @@ function mri_label_volume_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriLabelVolumeOutputs`).
  */
 function mri_label_volume_execute(
     params: MriLabelVolumeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriLabelVolumeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_LABEL_VOLUME_METADATA);
     params = execution.params(params)
     const cargs = mri_label_volume_cargs(params, execution)
     const ret = mri_label_volume_outputs(params, execution)
@@ -354,10 +356,8 @@ function mri_label_volume(
     etiv_subject: string | null = null,
     runner: Runner | null = null,
 ): MriLabelVolumeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_LABEL_VOLUME_METADATA);
     const params = mri_label_volume_params(volume, labels, partial_volume_effects, intracranial_volume, spreadsheet_subject, non_zero_voxels, replace_label_in, replace_label_out, brain_volume, percentage, log_results, atlas_transform_file, atlas_scalefactor, etiv_transform_file, etiv_scalefactor, etiv_subject)
-    return mri_label_volume_execute(params, execution);
+    return mri_label_volume_execute(params, runner);
 }
 
 
@@ -366,8 +366,6 @@ export {
       MriLabelVolumeOutputs,
       MriLabelVolumeParameters,
       mri_label_volume,
-      mri_label_volume_cargs,
       mri_label_volume_execute,
-      mri_label_volume_outputs,
       mri_label_volume_params,
 };

@@ -132,14 +132,16 @@ function mris_extract_patches_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisExtractPatchesOutputs`).
  */
 function mris_extract_patches_execute(
     params: MrisExtractPatchesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisExtractPatchesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_EXTRACT_PATCHES_METADATA);
     params = execution.params(params)
     const cargs = mris_extract_patches_cargs(params, execution)
     const ret = mris_extract_patches_outputs(params, execution)
@@ -166,10 +168,8 @@ function mris_extract_patches(
     output_dir: string,
     runner: Runner | null = null,
 ): MrisExtractPatchesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_EXTRACT_PATCHES_METADATA);
     const params = mris_extract_patches_params(subject, output_dir)
-    return mris_extract_patches_execute(params, execution);
+    return mris_extract_patches_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       MrisExtractPatchesOutputs,
       MrisExtractPatchesParameters,
       mris_extract_patches,
-      mris_extract_patches_cargs,
       mris_extract_patches_execute,
-      mris_extract_patches_outputs,
       mris_extract_patches_params,
 };

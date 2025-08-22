@@ -173,14 +173,16 @@ function v_3d_pval_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dPvalOutputs`).
  */
 function v_3d_pval_execute(
     params: V3dPvalParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dPvalOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_PVAL_METADATA);
     params = execution.params(params)
     const cargs = v_3d_pval_cargs(params, execution)
     const ret = v_3d_pval_outputs(params, execution)
@@ -215,10 +217,8 @@ function v_3d_pval(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dPvalOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_PVAL_METADATA);
     const params = v_3d_pval_params(input_dataset, zscore, log2, log10, qval, prefix)
-    return v_3d_pval_execute(params, execution);
+    return v_3d_pval_execute(params, runner);
 }
 
 
@@ -227,8 +227,6 @@ export {
       V3dPvalParameters,
       V_3D_PVAL_METADATA,
       v_3d_pval,
-      v_3d_pval_cargs,
       v_3d_pval_execute,
-      v_3d_pval_outputs,
       v_3d_pval_params,
 };

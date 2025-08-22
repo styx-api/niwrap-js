@@ -250,14 +250,16 @@ function tsfvalidate_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TsfvalidateOutputs`).
  */
 function tsfvalidate_execute(
     params: TsfvalidateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TsfvalidateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TSFVALIDATE_METADATA);
     params = execution.params(params)
     const cargs = tsfvalidate_cargs(params, execution)
     const ret = tsfvalidate_outputs(params, execution)
@@ -306,10 +308,8 @@ function tsfvalidate(
     version: boolean = false,
     runner: Runner | null = null,
 ): TsfvalidateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TSFVALIDATE_METADATA);
     const params = tsfvalidate_params(tsf, tracks, info, quiet, debug, force, nthreads, config, help, version)
-    return tsfvalidate_execute(params, execution);
+    return tsfvalidate_execute(params, runner);
 }
 
 
@@ -319,10 +319,7 @@ export {
       TsfvalidateOutputs,
       TsfvalidateParameters,
       tsfvalidate,
-      tsfvalidate_cargs,
-      tsfvalidate_config_cargs,
       tsfvalidate_config_params,
       tsfvalidate_execute,
-      tsfvalidate_outputs,
       tsfvalidate_params,
 };

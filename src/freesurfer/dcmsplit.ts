@@ -199,14 +199,16 @@ function dcmsplit_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DcmsplitOutputs`).
  */
 function dcmsplit_execute(
     params: DcmsplitParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DcmsplitOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DCMSPLIT_METADATA);
     params = execution.params(params)
     const cargs = dcmsplit_cargs(params, execution)
     const ret = dcmsplit_outputs(params, execution)
@@ -249,10 +251,8 @@ function dcmsplit(
     study_description: boolean = false,
     runner: Runner | null = null,
 ): DcmsplitOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DCMSPLIT_METADATA);
     const params = dcmsplit_params(dcm_dir, out_dir, copy, link, split_name, split_uid, series_no, series_plus, dicom_tag, study_description)
-    return dcmsplit_execute(params, execution);
+    return dcmsplit_execute(params, runner);
 }
 
 
@@ -261,8 +261,6 @@ export {
       DcmsplitOutputs,
       DcmsplitParameters,
       dcmsplit,
-      dcmsplit_cargs,
       dcmsplit_execute,
-      dcmsplit_outputs,
       dcmsplit_params,
 };

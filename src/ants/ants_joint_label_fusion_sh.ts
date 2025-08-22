@@ -264,14 +264,16 @@ function ants_joint_label_fusion_sh_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsJointLabelFusionShOutputs`).
  */
 function ants_joint_label_fusion_sh_execute(
     params: AntsJointLabelFusionShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsJointLabelFusionShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_JOINT_LABEL_FUSION_SH_METADATA);
     params = execution.params(params)
     const cargs = ants_joint_label_fusion_sh_cargs(params, execution)
     const ret = ants_joint_label_fusion_sh_outputs(params, execution)
@@ -318,10 +320,8 @@ function ants_joint_label_fusion_sh(
     similarity_metric_additional_options: string | null = null,
     runner: Runner | null = null,
 ): AntsJointLabelFusionShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_JOINT_LABEL_FUSION_SH_METADATA);
     const params = ants_joint_label_fusion_sh_params(target_image, mask_image, dimensionality, output, atlas_image_mrf, atlas_segmentation_mrf, rigid_transform, similarity_metric, other_options, verbose, rigid_transform_additional_options, similarity_metric_additional_options)
-    return ants_joint_label_fusion_sh_execute(params, execution);
+    return ants_joint_label_fusion_sh_execute(params, runner);
 }
 
 
@@ -330,8 +330,6 @@ export {
       AntsJointLabelFusionShOutputs,
       AntsJointLabelFusionShParameters,
       ants_joint_label_fusion_sh,
-      ants_joint_label_fusion_sh_cargs,
       ants_joint_label_fusion_sh_execute,
-      ants_joint_label_fusion_sh_outputs,
       ants_joint_label_fusion_sh_params,
 };

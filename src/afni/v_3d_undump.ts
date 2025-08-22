@@ -288,14 +288,16 @@ function v_3d_undump_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dUndumpOutputs`).
  */
 function v_3d_undump_execute(
     params: V3dUndumpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dUndumpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_UNDUMP_METADATA);
     params = execution.params(params)
     const cargs = v_3d_undump_cargs(params, execution)
     const ret = v_3d_undump_outputs(params, execution)
@@ -350,10 +352,8 @@ function v_3d_undump(
     allow_nan: boolean = false,
     runner: Runner | null = null,
 ): V3dUndumpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_UNDUMP_METADATA);
     const params = v_3d_undump_params(input_files, prefix, master, dimensions, mask, datatype, dval, fval, ijk, xyz, sphere_radius, cube_mode, orient, head_only, roimask, allow_nan)
-    return v_3d_undump_execute(params, execution);
+    return v_3d_undump_execute(params, runner);
 }
 
 
@@ -362,8 +362,6 @@ export {
       V3dUndumpParameters,
       V_3D_UNDUMP_METADATA,
       v_3d_undump,
-      v_3d_undump_cargs,
       v_3d_undump_execute,
-      v_3d_undump_outputs,
       v_3d_undump_params,
 };

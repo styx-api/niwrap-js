@@ -172,14 +172,16 @@ function surf_retino_map_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfRetinoMapOutputs`).
  */
 function surf_retino_map_execute(
     params: SurfRetinoMapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfRetinoMapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_RETINO_MAP_METADATA);
     params = execution.params(params)
     const cargs = surf_retino_map_cargs(params, execution)
     const ret = surf_retino_map_outputs(params, execution)
@@ -212,10 +214,8 @@ function surf_retino_map(
     node_debug: number | null = null,
     runner: Runner | null = null,
 ): SurfRetinoMapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_RETINO_MAP_METADATA);
     const params = surf_retino_map_params(surface, polar, eccentricity, prefix, node_debug)
-    return surf_retino_map_execute(params, execution);
+    return surf_retino_map_execute(params, runner);
 }
 
 
@@ -224,8 +224,6 @@ export {
       SurfRetinoMapOutputs,
       SurfRetinoMapParameters,
       surf_retino_map,
-      surf_retino_map_cargs,
       surf_retino_map_execute,
-      surf_retino_map_outputs,
       surf_retino_map_params,
 };

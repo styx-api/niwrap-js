@@ -432,14 +432,16 @@ function drive_suma_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DriveSumaOutputs`).
  */
 function drive_suma_execute(
     params: DriveSumaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DriveSumaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DRIVE_SUMA_METADATA);
     params = execution.params(params)
     const cargs = drive_suma_cargs(params, execution)
     const ret = drive_suma_outputs(params, execution)
@@ -524,10 +526,8 @@ function drive_suma(
     viewer_cont: boolean = false,
     runner: Runner | null = null,
 ): DriveSumaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DRIVE_SUMA_METADATA);
     const params = drive_suma_params(command, surf_label, surface_file, surf_state, surf_winding, coordinates, autorecord, background_color, view_file, do_file, do_draw_mask, fixed_do, mobile_do, key_press, viewer, anim_dup, save_as, save_index, save_range, save_last, save_last_n, save_all, echo_edu, echo_nel_stdout, echo_nel_stderr, examples, help, h, help_nido, c_demo, viewer_cont)
-    return drive_suma_execute(params, execution);
+    return drive_suma_execute(params, runner);
 }
 
 
@@ -536,8 +536,6 @@ export {
       DriveSumaOutputs,
       DriveSumaParameters,
       drive_suma,
-      drive_suma_cargs,
       drive_suma_execute,
-      drive_suma_outputs,
       drive_suma_params,
 };

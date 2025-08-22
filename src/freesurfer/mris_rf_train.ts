@@ -156,14 +156,16 @@ function mris_rf_train_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRfTrainOutputs`).
  */
 function mris_rf_train_execute(
     params: MrisRfTrainParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRfTrainOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_RF_TRAIN_METADATA);
     params = execution.params(params)
     const cargs = mris_rf_train_cargs(params, execution)
     const ret = mris_rf_train_outputs(params, execution)
@@ -194,10 +196,8 @@ function mris_rf_train(
     surf: string | null = null,
     runner: Runner | null = null,
 ): MrisRfTrainOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_RF_TRAIN_METADATA);
     const params = mris_rf_train_params(subjects, output_name, hemi, surf)
-    return mris_rf_train_execute(params, execution);
+    return mris_rf_train_execute(params, runner);
 }
 
 
@@ -206,8 +206,6 @@ export {
       MrisRfTrainOutputs,
       MrisRfTrainParameters,
       mris_rf_train,
-      mris_rf_train_cargs,
       mris_rf_train_execute,
-      mris_rf_train_outputs,
       mris_rf_train_params,
 };

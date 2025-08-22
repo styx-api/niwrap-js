@@ -255,14 +255,16 @@ function signal2image_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Signal2imageOutputs`).
  */
 function signal2image_execute(
     params: Signal2imageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Signal2imageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SIGNAL2IMAGE_METADATA);
     params = execution.params(params)
     const cargs = signal2image_cargs(params, execution)
     const ret = signal2image_outputs(params, execution)
@@ -311,10 +313,8 @@ function signal2image(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): Signal2imageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SIGNAL2IMAGE_METADATA);
     const params = signal2image_params(pulse_sequence, input_signal, output_image, kspace_coordinates, output_kspace, abs_flag, homodyne_flag, verbose_flag, apodize_flag, cutoff, rolloff, save_flag, help_flag)
-    return signal2image_execute(params, execution);
+    return signal2image_execute(params, runner);
 }
 
 
@@ -323,8 +323,6 @@ export {
       Signal2imageOutputs,
       Signal2imageParameters,
       signal2image,
-      signal2image_cargs,
       signal2image_execute,
-      signal2image_outputs,
       signal2image_params,
 };

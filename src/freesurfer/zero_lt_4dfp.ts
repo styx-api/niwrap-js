@@ -159,14 +159,16 @@ function zero_lt_4dfp_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ZeroLt4dfpOutputs`).
  */
 function zero_lt_4dfp_execute(
     params: ZeroLt4dfpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ZeroLt4dfpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ZERO_LT_4DFP_METADATA);
     params = execution.params(params)
     const cargs = zero_lt_4dfp_cargs(params, execution)
     const ret = zero_lt_4dfp_outputs(params, execution)
@@ -197,10 +199,8 @@ function zero_lt_4dfp(
     endianness: string | null = null,
     runner: Runner | null = null,
 ): ZeroLt4dfpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ZERO_LT_4DFP_METADATA);
     const params = zero_lt_4dfp_params(flt_value, file_4dfp, outroot, endianness)
-    return zero_lt_4dfp_execute(params, execution);
+    return zero_lt_4dfp_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       ZeroLt4dfpOutputs,
       ZeroLt4dfpParameters,
       zero_lt_4dfp,
-      zero_lt_4dfp_cargs,
       zero_lt_4dfp_execute,
-      zero_lt_4dfp_outputs,
       zero_lt_4dfp_params,
 };

@@ -282,14 +282,16 @@ function v_3d_qwarp_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dQwarpOutputs`).
  */
 function v_3d_qwarp_execute(
     params: V3dQwarpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dQwarpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_QWARP_METADATA);
     params = execution.params(params)
     const cargs = v_3d_qwarp_cargs(params, execution)
     const ret = v_3d_qwarp_outputs(params, execution)
@@ -352,10 +354,8 @@ function v_3d_qwarp(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dQwarpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_QWARP_METADATA);
     const params = v_3d_qwarp_params(base_dataset, source_dataset, prefix, no_warp, inverse_warp, no_dataset, a_warp, pcl, pear, hel, mi, nmi, lpc, lpa, noneg, nopenalty, minpatch, maxlev, verbose, quiet)
-    return v_3d_qwarp_execute(params, execution);
+    return v_3d_qwarp_execute(params, runner);
 }
 
 
@@ -364,8 +364,6 @@ export {
       V3dQwarpParameters,
       V_3D_QWARP_METADATA,
       v_3d_qwarp,
-      v_3d_qwarp_cargs,
       v_3d_qwarp_execute,
-      v_3d_qwarp_outputs,
       v_3d_qwarp_params,
 };

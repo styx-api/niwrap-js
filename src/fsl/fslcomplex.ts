@@ -161,14 +161,16 @@ function fslcomplex_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslcomplexOutputs`).
  */
 function fslcomplex_execute(
     params: FslcomplexParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslcomplexOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLCOMPLEX_METADATA);
     params = execution.params(params)
     const cargs = fslcomplex_cargs(params, execution)
     const ret = fslcomplex_outputs(params, execution)
@@ -201,10 +203,8 @@ function fslcomplex(
     end_vol: number | null = null,
     runner: Runner | null = null,
 ): FslcomplexOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLCOMPLEX_METADATA);
     const params = fslcomplex_params(input_file, output_file, output_type, start_vol, end_vol)
-    return fslcomplex_execute(params, execution);
+    return fslcomplex_execute(params, runner);
 }
 
 
@@ -213,8 +213,6 @@ export {
       FslcomplexOutputs,
       FslcomplexParameters,
       fslcomplex,
-      fslcomplex_cargs,
       fslcomplex_execute,
-      fslcomplex_outputs,
       fslcomplex_params,
 };

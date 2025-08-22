@@ -201,14 +201,16 @@ function fslmerge_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslmergeOutputs`).
  */
 function fslmerge_execute(
     params: FslmergeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslmergeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLMERGE_METADATA);
     params = execution.params(params)
     const cargs = fslmerge_cargs(params, execution)
     const ret = fslmerge_outputs(params, execution)
@@ -251,10 +253,8 @@ function fslmerge(
     tr_value: number | null = null,
     runner: Runner | null = null,
 ): FslmergeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLMERGE_METADATA);
     const params = fslmerge_params(output_file, input_files, merge_time, merge_x, merge_y, merge_z, auto_choose, merge_set_tr, volume_number, tr_value)
-    return fslmerge_execute(params, execution);
+    return fslmerge_execute(params, runner);
 }
 
 
@@ -263,8 +263,6 @@ export {
       FslmergeOutputs,
       FslmergeParameters,
       fslmerge,
-      fslmerge_cargs,
       fslmerge_execute,
-      fslmerge_outputs,
       fslmerge_params,
 };

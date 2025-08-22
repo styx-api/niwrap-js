@@ -135,14 +135,16 @@ function spec_file_relocate_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SpecFileRelocateOutputs`).
  */
 function spec_file_relocate_execute(
     params: SpecFileRelocateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SpecFileRelocateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SPEC_FILE_RELOCATE_METADATA);
     params = execution.params(params)
     const cargs = spec_file_relocate_cargs(params, execution)
     const ret = spec_file_relocate_outputs(params, execution)
@@ -171,10 +173,8 @@ function spec_file_relocate(
     output_spec: string,
     runner: Runner | null = null,
 ): SpecFileRelocateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SPEC_FILE_RELOCATE_METADATA);
     const params = spec_file_relocate_params(input_spec, output_spec)
-    return spec_file_relocate_execute(params, execution);
+    return spec_file_relocate_execute(params, runner);
 }
 
 
@@ -183,8 +183,6 @@ export {
       SpecFileRelocateOutputs,
       SpecFileRelocateParameters,
       spec_file_relocate,
-      spec_file_relocate_cargs,
       spec_file_relocate_execute,
-      spec_file_relocate_outputs,
       spec_file_relocate_params,
 };

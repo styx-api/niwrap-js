@@ -151,14 +151,16 @@ function eddy_correct_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `EddyCorrectOutputs`).
  */
 function eddy_correct_execute(
     params: EddyCorrectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): EddyCorrectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EDDY_CORRECT_METADATA);
     params = execution.params(params)
     const cargs = eddy_correct_cargs(params, execution)
     const ret = eddy_correct_outputs(params, execution)
@@ -189,10 +191,8 @@ function eddy_correct(
     interp_method: "trilinear" | "spline" | null = "trilinear",
     runner: Runner | null = null,
 ): EddyCorrectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EDDY_CORRECT_METADATA);
     const params = eddy_correct_params(v_4d_input, v_4d_output, reference_no, interp_method)
-    return eddy_correct_execute(params, execution);
+    return eddy_correct_execute(params, runner);
 }
 
 
@@ -201,8 +201,6 @@ export {
       EddyCorrectOutputs,
       EddyCorrectParameters,
       eddy_correct,
-      eddy_correct_cargs,
       eddy_correct_execute,
-      eddy_correct_outputs,
       eddy_correct_params,
 };

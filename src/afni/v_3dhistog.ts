@@ -297,14 +297,16 @@ function v_3dhistog_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dhistogOutputs`).
  */
 function v_3dhistog_execute(
     params: V3dhistogParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dhistogOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DHISTOG_METADATA);
     params = execution.params(params)
     const cargs = v_3dhistog_cargs(params, execution)
     const ret = v_3dhistog_outputs(params, execution)
@@ -363,10 +365,8 @@ function v_3dhistog(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dhistogOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DHISTOG_METADATA);
     const params = v_3dhistog_params(dataset, nbin, dind, omit, mask, roi_mask, doall, noempty, notitle, log10, pdf, min, max, igfac, int, float, unq, prefix)
-    return v_3dhistog_execute(params, execution);
+    return v_3dhistog_execute(params, runner);
 }
 
 
@@ -375,8 +375,6 @@ export {
       V3dhistogParameters,
       V_3DHISTOG_METADATA,
       v_3dhistog,
-      v_3dhistog_cargs,
       v_3dhistog_execute,
-      v_3dhistog_outputs,
       v_3dhistog_params,
 };

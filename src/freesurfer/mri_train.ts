@@ -138,14 +138,16 @@ function mri_train_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriTrainOutputs`).
  */
 function mri_train_execute(
     params: MriTrainParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriTrainOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_TRAIN_METADATA);
     params = execution.params(params)
     const cargs = mri_train_cargs(params, execution)
     const ret = mri_train_outputs(params, execution)
@@ -172,10 +174,8 @@ function mri_train(
     output_file: string,
     runner: Runner | null = null,
 ): MriTrainOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_TRAIN_METADATA);
     const params = mri_train_params(training_file, output_file)
-    return mri_train_execute(params, execution);
+    return mri_train_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MriTrainOutputs,
       MriTrainParameters,
       mri_train,
-      mri_train_cargs,
       mri_train_execute,
-      mri_train_outputs,
       mri_train_params,
 };

@@ -259,3 +259,515 @@ export * from './fsl/xfibres'
 export * from './fsl/xtract_stats'
 export * from './fsl/zeropad'
 export * from './fsl/ztop'
+import { Runner } from 'styxdefs';
+import { aff2rigid_execute } from './fsl/aff2rigid'
+import { anatomical_average_execute } from './fsl/anatomical_average'
+import { applytopup_execute } from './fsl/applytopup'
+import { applywarp_execute } from './fsl/applywarp'
+import { applyxfm4_d_execute } from './fsl/applyxfm4_d'
+import { asl_file_execute } from './fsl/asl_file'
+import { asl_mfree_execute } from './fsl/asl_mfree'
+import { atlasquery_execute } from './fsl/atlasquery'
+import { avscale_execute } from './fsl/avscale'
+import { avw2fsl_execute } from './fsl/avw2fsl'
+import { b0calc_execute } from './fsl/b0calc'
+import { basil_var_execute } from './fsl/basil_var'
+import { baycest_execute } from './fsl/baycest'
+import { bedpostx_datacheck_execute } from './fsl/bedpostx_datacheck'
+import { bedpostx_execute } from './fsl/bedpostx'
+import { bedpostx_gpu_execute } from './fsl/bedpostx_gpu'
+import { bet2_execute } from './fsl/bet2'
+import { bet_execute } from './fsl/bet'
+import { betsurf_execute } from './fsl/betsurf'
+import { bianca_cluster_stats_execute } from './fsl/bianca_cluster_stats'
+import { bianca_execute } from './fsl/bianca'
+import { bianca_overlap_measures_execute } from './fsl/bianca_overlap_measures'
+import { calc_grad_perc_dev_execute } from './fsl/calc_grad_perc_dev'
+import { ccops_execute } from './fsl/ccops'
+import { check_feat_execute } from './fsl/check_feat'
+import { cluster2html_execute } from './fsl/cluster2html'
+import { cluster_execute } from './fsl/cluster'
+import { concat_bvars_execute } from './fsl/concat_bvars'
+import { connectedcomp_execute } from './fsl/connectedcomp'
+import { convert_xfm_execute } from './fsl/convert_xfm'
+import { convertwarp_execute } from './fsl/convertwarp'
+import { create_lut_execute } from './fsl/create_lut'
+import { cutoffcalc_execute } from './fsl/cutoffcalc'
+import { design_ttest2_execute } from './fsl/design_ttest2'
+import { distancemap_execute } from './fsl/distancemap'
+import { dtifit_execute } from './fsl/dtifit'
+import { dtigen_execute } from './fsl/dtigen'
+import { dual_regression_execute } from './fsl/dual_regression'
+import { easythresh_execute } from './fsl/easythresh'
+import { eddy_combine_execute } from './fsl/eddy_combine'
+import { eddy_correct_execute } from './fsl/eddy_correct'
+import { eddy_cuda10_2_execute } from './fsl/eddy_cuda10_2'
+import { eddy_cuda8_0_execute } from './fsl/eddy_cuda8_0'
+import { eddy_cuda9_1_execute } from './fsl/eddy_cuda9_1'
+import { eddy_cuda_execute } from './fsl/eddy_cuda'
+import { eddy_execute } from './fsl/eddy'
+import { eddy_openmp_execute } from './fsl/eddy_openmp'
+import { eddy_quad_execute } from './fsl/eddy_quad'
+import { eddy_squad_execute } from './fsl/eddy_squad'
+import { epi_reg_execute } from './fsl/epi_reg'
+import { estnoise_execute } from './fsl/estnoise'
+import { extracttxt_execute } from './fsl/extracttxt'
+import { fabber_asl_execute } from './fsl/fabber_asl'
+import { fabber_cest_execute } from './fsl/fabber_cest'
+import { fabber_dce_execute } from './fsl/fabber_dce'
+import { fabber_dualecho_execute } from './fsl/fabber_dualecho'
+import { fabber_dwi_execute } from './fsl/fabber_dwi'
+import { fabber_execute } from './fsl/fabber'
+import { fabber_qbold_execute } from './fsl/fabber_qbold'
+import { fabber_t1_execute } from './fsl/fabber_t1'
+import { fast_execute } from './fsl/fast'
+import { fdr_execute } from './fsl/fdr'
+import { feat_execute } from './fsl/feat'
+import { feat_gm_prepare_execute } from './fsl/feat_gm_prepare'
+import { feat_model_execute } from './fsl/feat_model'
+import { featquery_execute } from './fsl/featquery'
+import { featregapply_execute } from './fsl/featregapply'
+import { film_cifti_execute } from './fsl/film_cifti'
+import { film_gls_execute } from './fsl/film_gls'
+import { filmbabe_execute } from './fsl/filmbabe'
+import { filmbabescript_execute } from './fsl/filmbabescript'
+import { find_the_biggest_execute } from './fsl/find_the_biggest'
+import { first_execute } from './fsl/first'
+import { first_flirt_execute } from './fsl/first_flirt'
+import { first_mult_bcorr_execute } from './fsl/first_mult_bcorr'
+import { first_roi_slicesdir_execute } from './fsl/first_roi_slicesdir'
+import { first_utils_execute } from './fsl/first_utils'
+import { flirt_average_execute } from './fsl/flirt_average'
+import { flirt_execute } from './fsl/flirt'
+import { fnirt_execute } from './fsl/fnirt'
+import { fnirtfileutils_execute } from './fsl/fnirtfileutils'
+import { fsl2ascii_execute } from './fsl/fsl2ascii'
+import { fsl_anat_execute } from './fsl/fsl_anat'
+import { fsl_boxplot_execute } from './fsl/fsl_boxplot'
+import { fsl_deface_execute } from './fsl/fsl_deface'
+import { fsl_ents_execute } from './fsl/fsl_ents'
+import { fsl_fix_text_execute } from './fsl/fsl_fix_text'
+import { fsl_gen_3_d_execute } from './fsl/fsl_gen_3_d'
+import { fsl_glm_execute } from './fsl/fsl_glm'
+import { fsl_histogram_execute } from './fsl/fsl_histogram'
+import { fsl_motion_outliers_execute } from './fsl/fsl_motion_outliers'
+import { fsl_mvlm_execute } from './fsl/fsl_mvlm'
+import { fsl_prepare_fieldmap_execute } from './fsl/fsl_prepare_fieldmap'
+import { fsl_reg_execute } from './fsl/fsl_reg'
+import { fsl_regfilt_execute } from './fsl/fsl_regfilt'
+import { fsl_sbca_execute } from './fsl/fsl_sbca'
+import { fsl_schurprod_execute } from './fsl/fsl_schurprod'
+import { fsl_sub_execute } from './fsl/fsl_sub'
+import { fsl_tsplot_execute } from './fsl/fsl_tsplot'
+import { fsladd_execute } from './fsl/fsladd'
+import { fslanimate_execute } from './fsl/fslanimate'
+import { fslascii2img_execute } from './fsl/fslascii2img'
+import { fslcc_execute } from './fsl/fslcc'
+import { fslchfiletype_execute } from './fsl/fslchfiletype'
+import { fslcomplex_execute } from './fsl/fslcomplex'
+import { fslcpgeom_execute } from './fsl/fslcpgeom'
+import { fslcreatehd_execute } from './fsl/fslcreatehd'
+import { fslfft_execute } from './fsl/fslfft'
+import { fslhd_execute } from './fsl/fslhd'
+import { fslinfo_execute } from './fsl/fslinfo'
+import { fslinterleave_execute } from './fsl/fslinterleave'
+import { fslmaths_execute } from './fsl/fslmaths'
+import { fslmeants_execute } from './fsl/fslmeants'
+import { fslmerge_execute } from './fsl/fslmerge'
+import { fslmodhd_execute } from './fsl/fslmodhd'
+import { fslnvols_execute } from './fsl/fslnvols'
+import { fslorient_execute } from './fsl/fslorient'
+import { fslpspec_execute } from './fsl/fslpspec'
+import { fslreorient2std_execute } from './fsl/fslreorient2std'
+import { fslroi_execute } from './fsl/fslroi'
+import { fslselectvols_execute } from './fsl/fslselectvols'
+import { fslsize_execute } from './fsl/fslsize'
+import { fslslice_execute } from './fsl/fslslice'
+import { fslsmoothfill_execute } from './fsl/fslsmoothfill'
+import { fslsplit_execute } from './fsl/fslsplit'
+import { fslstats_execute } from './fsl/fslstats'
+import { fslswapdim_exe_execute } from './fsl/fslswapdim_exe'
+import { fslswapdim_execute } from './fsl/fslswapdim'
+import { fslval_execute } from './fsl/fslval'
+import { fslvbm_1_bet_execute } from './fsl/fslvbm_1_bet'
+import { fslvbm_2_template_execute } from './fsl/fslvbm_2_template'
+import { fslvbm_3_proc_execute } from './fsl/fslvbm_3_proc'
+import { ftoz_execute } from './fsl/ftoz'
+import { fugue_execute } from './fsl/fugue'
+import { gps_execute } from './fsl/gps'
+import { halfcosbasis_execute } from './fsl/halfcosbasis'
+import { hist2prob_execute } from './fsl/hist2prob'
+import { imcp_execute } from './fsl/imcp'
+import { img2imgcoord_execute } from './fsl/img2imgcoord'
+import { img2stdcoord_execute } from './fsl/img2stdcoord'
+import { imglob_execute } from './fsl/imglob'
+import { imln_execute } from './fsl/imln'
+import { immv_execute } from './fsl/immv'
+import { imrm_execute } from './fsl/imrm'
+import { invfeatreg_execute } from './fsl/invfeatreg'
+import { invwarp_execute } from './fsl/invwarp'
+import { label2surf_execute } from './fsl/label2surf'
+import { lesion_filling_execute } from './fsl/lesion_filling'
+import { make_bianca_mask_execute } from './fsl/make_bianca_mask'
+import { make_dyadic_vectors_execute } from './fsl/make_dyadic_vectors'
+import { makerot_execute } from './fsl/makerot'
+import { maskdyads_execute } from './fsl/maskdyads'
+import { match_smoothing_execute } from './fsl/match_smoothing'
+import { mccutup_execute } from './fsl/mccutup'
+import { mcflirt_execute } from './fsl/mcflirt'
+import { mean_execute } from './fsl/mean'
+import { medianfilter_execute } from './fsl/medianfilter'
+import { melodic_execute } from './fsl/melodic'
+import { midtrans_execute } from './fsl/midtrans'
+import { mist_fa_reg_execute } from './fsl/mist_fa_reg'
+import { mm_execute } from './fsl/mm'
+import { morph_kernel_execute } from './fsl/morph_kernel'
+import { mp_diffpow_execute } from './fsl/mp_diffpow'
+import { msm_execute } from './fsl/msm'
+import { new_invwarp_execute } from './fsl/new_invwarp'
+import { old_betall_execute } from './fsl/old_betall'
+import { overlay_execute } from './fsl/overlay'
+import { oxford_asl_execute } from './fsl/oxford_asl'
+import { pairreg_execute } from './fsl/pairreg'
+import { perfusion_subtract_execute } from './fsl/perfusion_subtract'
+import { pngappend_execute } from './fsl/pngappend'
+import { pnm_evs_execute } from './fsl/pnm_evs'
+import { pointflirt_execute } from './fsl/pointflirt'
+import { popp_execute } from './fsl/popp'
+import { possum_execute } from './fsl/possum'
+import { possum_interpmot_execute } from './fsl/possum_interpmot'
+import { possum_matrix_execute } from './fsl/possum_matrix'
+import { possum_plot_execute } from './fsl/possum_plot'
+import { possum_sum_execute } from './fsl/possum_sum'
+import { prelude_execute } from './fsl/prelude'
+import { prewhiten_execute } from './fsl/prewhiten'
+import { probtrackx_execute } from './fsl/probtrackx'
+import { proj_thresh_execute } from './fsl/proj_thresh'
+import { ptoz_execute } from './fsl/ptoz'
+import { pulse_execute } from './fsl/pulse'
+import { pvmfit_execute } from './fsl/pvmfit'
+import { qboot_execute } from './fsl/qboot'
+import { randomise_execute } from './fsl/randomise'
+import { rmsdiff_execute } from './fsl/rmsdiff'
+import { robustfov_execute } from './fsl/robustfov'
+import { run_first_all_execute } from './fsl/run_first_all'
+import { run_first_execute } from './fsl/run_first'
+import { run_mesh_utils_execute } from './fsl/run_mesh_utils'
+import { siena_cal_execute } from './fsl/siena_cal'
+import { siena_diff_execute } from './fsl/siena_diff'
+import { siena_execute } from './fsl/siena'
+import { siena_flirt_execute } from './fsl/siena_flirt'
+import { siena_flow2std_execute } from './fsl/siena_flow2std'
+import { sienax_execute } from './fsl/sienax'
+import { sigloss_execute } from './fsl/sigloss'
+import { signal2image_execute } from './fsl/signal2image'
+import { sliceanimate_execute } from './fsl/sliceanimate'
+import { slicer_execute } from './fsl/slicer'
+import { slices_execute } from './fsl/slices'
+import { slices_summary_execute } from './fsl/slices_summary'
+import { slicesdir_execute } from './fsl/slicesdir'
+import { slicesmask_execute } from './fsl/slicesmask'
+import { slicetimer_execute } from './fsl/slicetimer'
+import { smoothest_execute } from './fsl/smoothest'
+import { spharm_rm_execute } from './fsl/spharm_rm'
+import { split_parts_gpu_execute } from './fsl/split_parts_gpu'
+import { standard_space_roi_execute } from './fsl/standard_space_roi'
+import { std2imgcoord_execute } from './fsl/std2imgcoord'
+import { surf2surf_execute } from './fsl/surf2surf'
+import { surf_proj_execute } from './fsl/surf_proj'
+import { surface_fdr_execute } from './fsl/surface_fdr'
+import { surfmaths_execute } from './fsl/surfmaths'
+import { susan_execute } from './fsl/susan'
+import { swap_subjectwise_execute } from './fsl/swap_subjectwise'
+import { swap_voxelwise_execute } from './fsl/swap_voxelwise'
+import { swe_execute } from './fsl/swe'
+import { systemnoise_execute } from './fsl/systemnoise'
+import { tbss_1_preproc_execute } from './fsl/tbss_1_preproc'
+import { tbss_2_reg_execute } from './fsl/tbss_2_reg'
+import { tbss_3_postreg_execute } from './fsl/tbss_3_postreg'
+import { tbss_4_prestats_execute } from './fsl/tbss_4_prestats'
+import { tbss_deproject_execute } from './fsl/tbss_deproject'
+import { tbss_fill_execute } from './fsl/tbss_fill'
+import { tbss_non_fa_execute } from './fsl/tbss_non_fa'
+import { tbss_skeleton_execute } from './fsl/tbss_skeleton'
+import { tbss_x_execute } from './fsl/tbss_x'
+import { tcalc_execute } from './fsl/tcalc'
+import { topup_execute } from './fsl/topup'
+import { tsplot_execute } from './fsl/tsplot'
+import { ttologp_execute } from './fsl/ttologp'
+import { ttoz_execute } from './fsl/ttoz'
+import { unconfound_execute } from './fsl/unconfound'
+import { vecreg_execute } from './fsl/vecreg'
+import { viena_quant_execute } from './fsl/viena_quant'
+import { whirlgif_execute } from './fsl/whirlgif'
+import { wpng_execute } from './fsl/wpng'
+import { xfibres_execute } from './fsl/xfibres'
+import { xtract_stats_execute } from './fsl/xtract_stats'
+import { zeropad_execute } from './fsl/zeropad'
+import { ztop_execute } from './fsl/ztop'
+
+
+/**
+ * Run a command in this package dynamically from a params object.
+ *
+ * @param params The parameters.
+ * @param runner Command runner
+ *
+ */
+function execute(
+    params: any,
+    runner: Runner | null = null,
+) {
+    return {
+        "fsl.AnatomicalAverage": anatomical_average_execute,
+        "fsl.aff2rigid": aff2rigid_execute,
+        "fsl.applytopup": applytopup_execute,
+        "fsl.applywarp": applywarp_execute,
+        "fsl.applyxfm4D": applyxfm4_d_execute,
+        "fsl.asl_file": asl_file_execute,
+        "fsl.asl_mfree": asl_mfree_execute,
+        "fsl.atlasquery": atlasquery_execute,
+        "fsl.avscale": avscale_execute,
+        "fsl.avw2fsl": avw2fsl_execute,
+        "fsl.b0calc": b0calc_execute,
+        "fsl.basil_var": basil_var_execute,
+        "fsl.baycest": baycest_execute,
+        "fsl.bedpostx": bedpostx_execute,
+        "fsl.bedpostx_datacheck": bedpostx_datacheck_execute,
+        "fsl.bedpostx_gpu": bedpostx_gpu_execute,
+        "fsl.bet": bet_execute,
+        "fsl.bet2": bet2_execute,
+        "fsl.betsurf": betsurf_execute,
+        "fsl.bianca": bianca_execute,
+        "fsl.bianca_cluster_stats": bianca_cluster_stats_execute,
+        "fsl.bianca_overlap_measures": bianca_overlap_measures_execute,
+        "fsl.calc_grad_perc_dev": calc_grad_perc_dev_execute,
+        "fsl.ccops": ccops_execute,
+        "fsl.checkFEAT": check_feat_execute,
+        "fsl.cluster": cluster_execute,
+        "fsl.cluster2html": cluster2html_execute,
+        "fsl.concat_bvars": concat_bvars_execute,
+        "fsl.connectedcomp": connectedcomp_execute,
+        "fsl.convert_xfm": convert_xfm_execute,
+        "fsl.convertwarp": convertwarp_execute,
+        "fsl.create_lut": create_lut_execute,
+        "fsl.cutoffcalc": cutoffcalc_execute,
+        "fsl.design_ttest2": design_ttest2_execute,
+        "fsl.distancemap": distancemap_execute,
+        "fsl.dtifit": dtifit_execute,
+        "fsl.dtigen": dtigen_execute,
+        "fsl.dual_regression": dual_regression_execute,
+        "fsl.easythresh": easythresh_execute,
+        "fsl.eddy": eddy_execute,
+        "fsl.eddy_combine": eddy_combine_execute,
+        "fsl.eddy_correct": eddy_correct_execute,
+        "fsl.eddy_cuda": eddy_cuda_execute,
+        "fsl.eddy_cuda10.2": eddy_cuda10_2_execute,
+        "fsl.eddy_cuda8.0": eddy_cuda8_0_execute,
+        "fsl.eddy_cuda9.1": eddy_cuda9_1_execute,
+        "fsl.eddy_openmp": eddy_openmp_execute,
+        "fsl.eddy_quad": eddy_quad_execute,
+        "fsl.eddy_squad": eddy_squad_execute,
+        "fsl.epi_reg": epi_reg_execute,
+        "fsl.estnoise": estnoise_execute,
+        "fsl.extracttxt": extracttxt_execute,
+        "fsl.fabber": fabber_execute,
+        "fsl.fabber_asl": fabber_asl_execute,
+        "fsl.fabber_cest": fabber_cest_execute,
+        "fsl.fabber_dce": fabber_dce_execute,
+        "fsl.fabber_dualecho": fabber_dualecho_execute,
+        "fsl.fabber_dwi": fabber_dwi_execute,
+        "fsl.fabber_qbold": fabber_qbold_execute,
+        "fsl.fabber_t1": fabber_t1_execute,
+        "fsl.fast": fast_execute,
+        "fsl.fdr": fdr_execute,
+        "fsl.feat": feat_execute,
+        "fsl.feat_gm_prepare": feat_gm_prepare_execute,
+        "fsl.feat_model": feat_model_execute,
+        "fsl.featquery": featquery_execute,
+        "fsl.featregapply": featregapply_execute,
+        "fsl.film_cifti": film_cifti_execute,
+        "fsl.film_gls": film_gls_execute,
+        "fsl.filmbabe": filmbabe_execute,
+        "fsl.filmbabescript": filmbabescript_execute,
+        "fsl.find_the_biggest": find_the_biggest_execute,
+        "fsl.first": first_execute,
+        "fsl.first_flirt": first_flirt_execute,
+        "fsl.first_mult_bcorr": first_mult_bcorr_execute,
+        "fsl.first_roi_slicesdir": first_roi_slicesdir_execute,
+        "fsl.first_utils": first_utils_execute,
+        "fsl.flirt": flirt_execute,
+        "fsl.flirt_average": flirt_average_execute,
+        "fsl.fnirt": fnirt_execute,
+        "fsl.fnirtfileutils": fnirtfileutils_execute,
+        "fsl.fsl2ascii": fsl2ascii_execute,
+        "fsl.fslFixText": fsl_fix_text_execute,
+        "fsl.fsl_anat": fsl_anat_execute,
+        "fsl.fsl_boxplot": fsl_boxplot_execute,
+        "fsl.fsl_deface": fsl_deface_execute,
+        "fsl.fsl_ents": fsl_ents_execute,
+        "fsl.fsl_gen_3D": fsl_gen_3_d_execute,
+        "fsl.fsl_glm": fsl_glm_execute,
+        "fsl.fsl_histogram": fsl_histogram_execute,
+        "fsl.fsl_motion_outliers": fsl_motion_outliers_execute,
+        "fsl.fsl_mvlm": fsl_mvlm_execute,
+        "fsl.fsl_prepare_fieldmap": fsl_prepare_fieldmap_execute,
+        "fsl.fsl_reg": fsl_reg_execute,
+        "fsl.fsl_regfilt": fsl_regfilt_execute,
+        "fsl.fsl_sbca": fsl_sbca_execute,
+        "fsl.fsl_schurprod": fsl_schurprod_execute,
+        "fsl.fsl_sub": fsl_sub_execute,
+        "fsl.fsl_tsplot": fsl_tsplot_execute,
+        "fsl.fsladd": fsladd_execute,
+        "fsl.fslanimate": fslanimate_execute,
+        "fsl.fslascii2img": fslascii2img_execute,
+        "fsl.fslcc": fslcc_execute,
+        "fsl.fslchfiletype": fslchfiletype_execute,
+        "fsl.fslcomplex": fslcomplex_execute,
+        "fsl.fslcpgeom": fslcpgeom_execute,
+        "fsl.fslcreatehd": fslcreatehd_execute,
+        "fsl.fslfft": fslfft_execute,
+        "fsl.fslhd": fslhd_execute,
+        "fsl.fslinfo": fslinfo_execute,
+        "fsl.fslinterleave": fslinterleave_execute,
+        "fsl.fslmaths": fslmaths_execute,
+        "fsl.fslmeants": fslmeants_execute,
+        "fsl.fslmerge": fslmerge_execute,
+        "fsl.fslmodhd": fslmodhd_execute,
+        "fsl.fslnvols": fslnvols_execute,
+        "fsl.fslorient": fslorient_execute,
+        "fsl.fslpspec": fslpspec_execute,
+        "fsl.fslreorient2std": fslreorient2std_execute,
+        "fsl.fslroi": fslroi_execute,
+        "fsl.fslselectvols": fslselectvols_execute,
+        "fsl.fslsize": fslsize_execute,
+        "fsl.fslslice": fslslice_execute,
+        "fsl.fslsmoothfill": fslsmoothfill_execute,
+        "fsl.fslsplit": fslsplit_execute,
+        "fsl.fslstats": fslstats_execute,
+        "fsl.fslswapdim": fslswapdim_execute,
+        "fsl.fslswapdim_exe": fslswapdim_exe_execute,
+        "fsl.fslval": fslval_execute,
+        "fsl.fslvbm_1_bet": fslvbm_1_bet_execute,
+        "fsl.fslvbm_2_template": fslvbm_2_template_execute,
+        "fsl.fslvbm_3_proc": fslvbm_3_proc_execute,
+        "fsl.ftoz": ftoz_execute,
+        "fsl.fugue": fugue_execute,
+        "fsl.gps": gps_execute,
+        "fsl.halfcosbasis": halfcosbasis_execute,
+        "fsl.hist2prob": hist2prob_execute,
+        "fsl.imcp": imcp_execute,
+        "fsl.img2imgcoord": img2imgcoord_execute,
+        "fsl.img2stdcoord": img2stdcoord_execute,
+        "fsl.imglob": imglob_execute,
+        "fsl.imln": imln_execute,
+        "fsl.immv": immv_execute,
+        "fsl.imrm": imrm_execute,
+        "fsl.invfeatreg": invfeatreg_execute,
+        "fsl.invwarp": invwarp_execute,
+        "fsl.label2surf": label2surf_execute,
+        "fsl.lesion_filling": lesion_filling_execute,
+        "fsl.make_bianca_mask": make_bianca_mask_execute,
+        "fsl.make_dyadic_vectors": make_dyadic_vectors_execute,
+        "fsl.makerot": makerot_execute,
+        "fsl.maskdyads": maskdyads_execute,
+        "fsl.match_smoothing": match_smoothing_execute,
+        "fsl.mccutup": mccutup_execute,
+        "fsl.mcflirt": mcflirt_execute,
+        "fsl.mean": mean_execute,
+        "fsl.medianfilter": medianfilter_execute,
+        "fsl.melodic": melodic_execute,
+        "fsl.midtrans": midtrans_execute,
+        "fsl.mist_FA_reg": mist_fa_reg_execute,
+        "fsl.mm": mm_execute,
+        "fsl.morph_kernel": morph_kernel_execute,
+        "fsl.mp_diffpow": mp_diffpow_execute,
+        "fsl.msm": msm_execute,
+        "fsl.new_invwarp": new_invwarp_execute,
+        "fsl.old_betall": old_betall_execute,
+        "fsl.overlay": overlay_execute,
+        "fsl.oxford_asl": oxford_asl_execute,
+        "fsl.pairreg": pairreg_execute,
+        "fsl.perfusion_subtract": perfusion_subtract_execute,
+        "fsl.pngappend": pngappend_execute,
+        "fsl.pnm_evs": pnm_evs_execute,
+        "fsl.pointflirt": pointflirt_execute,
+        "fsl.popp": popp_execute,
+        "fsl.possum": possum_execute,
+        "fsl.possum_interpmot": possum_interpmot_execute,
+        "fsl.possum_matrix": possum_matrix_execute,
+        "fsl.possum_plot": possum_plot_execute,
+        "fsl.possum_sum": possum_sum_execute,
+        "fsl.prelude": prelude_execute,
+        "fsl.prewhiten": prewhiten_execute,
+        "fsl.probtrackx": probtrackx_execute,
+        "fsl.proj_thresh": proj_thresh_execute,
+        "fsl.ptoz": ptoz_execute,
+        "fsl.pulse": pulse_execute,
+        "fsl.pvmfit": pvmfit_execute,
+        "fsl.qboot": qboot_execute,
+        "fsl.randomise": randomise_execute,
+        "fsl.rmsdiff": rmsdiff_execute,
+        "fsl.robustfov": robustfov_execute,
+        "fsl.run_first": run_first_execute,
+        "fsl.run_first_all": run_first_all_execute,
+        "fsl.run_mesh_utils": run_mesh_utils_execute,
+        "fsl.siena": siena_execute,
+        "fsl.siena_cal": siena_cal_execute,
+        "fsl.siena_diff": siena_diff_execute,
+        "fsl.siena_flirt": siena_flirt_execute,
+        "fsl.siena_flow2std": siena_flow2std_execute,
+        "fsl.sienax": sienax_execute,
+        "fsl.sigloss": sigloss_execute,
+        "fsl.signal2image": signal2image_execute,
+        "fsl.sliceanimate": sliceanimate_execute,
+        "fsl.slicer": slicer_execute,
+        "fsl.slices": slices_execute,
+        "fsl.slices_summary": slices_summary_execute,
+        "fsl.slicesdir": slicesdir_execute,
+        "fsl.slicesmask": slicesmask_execute,
+        "fsl.slicetimer": slicetimer_execute,
+        "fsl.smoothest": smoothest_execute,
+        "fsl.spharm_rm": spharm_rm_execute,
+        "fsl.split_parts_gpu": split_parts_gpu_execute,
+        "fsl.standard_space_roi": standard_space_roi_execute,
+        "fsl.std2imgcoord": std2imgcoord_execute,
+        "fsl.surf2surf": surf2surf_execute,
+        "fsl.surf_proj": surf_proj_execute,
+        "fsl.surface_fdr": surface_fdr_execute,
+        "fsl.surfmaths": surfmaths_execute,
+        "fsl.susan": susan_execute,
+        "fsl.swap_subjectwise": swap_subjectwise_execute,
+        "fsl.swap_voxelwise": swap_voxelwise_execute,
+        "fsl.swe": swe_execute,
+        "fsl.systemnoise": systemnoise_execute,
+        "fsl.tbss_1_preproc": tbss_1_preproc_execute,
+        "fsl.tbss_2_reg": tbss_2_reg_execute,
+        "fsl.tbss_3_postreg": tbss_3_postreg_execute,
+        "fsl.tbss_4_prestats": tbss_4_prestats_execute,
+        "fsl.tbss_deproject": tbss_deproject_execute,
+        "fsl.tbss_fill": tbss_fill_execute,
+        "fsl.tbss_non_FA": tbss_non_fa_execute,
+        "fsl.tbss_skeleton": tbss_skeleton_execute,
+        "fsl.tbss_x": tbss_x_execute,
+        "fsl.tcalc": tcalc_execute,
+        "fsl.topup": topup_execute,
+        "fsl.tsplot": tsplot_execute,
+        "fsl.ttologp": ttologp_execute,
+        "fsl.ttoz": ttoz_execute,
+        "fsl.unconfound": unconfound_execute,
+        "fsl.vecreg": vecreg_execute,
+        "fsl.viena_quant": viena_quant_execute,
+        "fsl.whirlgif": whirlgif_execute,
+        "fsl.wpng": wpng_execute,
+        "fsl.xfibres": xfibres_execute,
+        "fsl.xtract_stats": xtract_stats_execute,
+        "fsl.zeropad": zeropad_execute,
+        "fsl.ztop": ztop_execute,
+    }[params["@type"]](params, runner)
+}
+
+
+export {
+      execute,
+};

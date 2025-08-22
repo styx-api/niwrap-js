@@ -191,14 +191,16 @@ function mris_distance_transform_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisDistanceTransformOutputs`).
  */
 function mris_distance_transform_execute(
     params: MrisDistanceTransformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisDistanceTransformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_DISTANCE_TRANSFORM_METADATA);
     params = execution.params(params)
     const cargs = mris_distance_transform_cargs(params, execution)
     const ret = mris_distance_transform_outputs(params, execution)
@@ -237,10 +239,8 @@ function mris_distance_transform(
     olabel: boolean = false,
     runner: Runner | null = null,
 ): MrisDistanceTransformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_DISTANCE_TRANSFORM_METADATA);
     const params = mris_distance_transform_params(surface, label, mode, output_file, anterior, posterior, divide, olabel)
-    return mris_distance_transform_execute(params, execution);
+    return mris_distance_transform_execute(params, runner);
 }
 
 
@@ -249,8 +249,6 @@ export {
       MrisDistanceTransformOutputs,
       MrisDistanceTransformParameters,
       mris_distance_transform,
-      mris_distance_transform_cargs,
       mris_distance_transform_execute,
-      mris_distance_transform_outputs,
       mris_distance_transform_params,
 };

@@ -390,14 +390,16 @@ function tckdfc_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TckdfcOutputs`).
  */
 function tckdfc_execute(
     params: TckdfcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TckdfcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCKDFC_METADATA);
     params = execution.params(params)
     const cargs = tckdfc_cargs(params, execution)
     const ret = tckdfc_outputs(params, execution)
@@ -471,10 +473,8 @@ function tckdfc(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckdfcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCKDFC_METADATA);
     const params = tckdfc_params(tracks, fmri, output, static_, dynamic, template, vox, stat_vox, backtrack, upsample, info, quiet, debug, force, nthreads, config, help, version)
-    return tckdfc_execute(params, execution);
+    return tckdfc_execute(params, runner);
 }
 
 
@@ -485,12 +485,8 @@ export {
       TckdfcOutputs,
       TckdfcParameters,
       tckdfc,
-      tckdfc_cargs,
-      tckdfc_config_cargs,
       tckdfc_config_params,
-      tckdfc_dynamic_cargs,
       tckdfc_dynamic_params,
       tckdfc_execute,
-      tckdfc_outputs,
       tckdfc_params,
 };

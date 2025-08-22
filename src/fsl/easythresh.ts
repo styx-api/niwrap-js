@@ -165,14 +165,16 @@ function easythresh_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `EasythreshOutputs`).
  */
 function easythresh_execute(
     params: EasythreshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): EasythreshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EASYTHRESH_METADATA);
     params = execution.params(params)
     const cargs = easythresh_cargs(params, execution)
     const ret = easythresh_outputs(params, execution)
@@ -209,10 +211,8 @@ function easythresh(
     mm_flag: boolean = false,
     runner: Runner | null = null,
 ): EasythreshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EASYTHRESH_METADATA);
     const params = easythresh_params(raw_zstat_input, brain_mask_input, cluster_z_thresh_input, cluster_prob_thresh_input, background_image_input, output_root, mm_flag)
-    return easythresh_execute(params, execution);
+    return easythresh_execute(params, runner);
 }
 
 
@@ -221,8 +221,6 @@ export {
       EasythreshOutputs,
       EasythreshParameters,
       easythresh,
-      easythresh_cargs,
       easythresh_execute,
-      easythresh_outputs,
       easythresh_params,
 };

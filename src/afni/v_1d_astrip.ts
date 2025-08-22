@@ -133,14 +133,16 @@ function v_1d_astrip_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dAstripOutputs`).
  */
 function v_1d_astrip_execute(
     params: V1dAstripParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dAstripOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_ASTRIP_METADATA);
     params = execution.params(params)
     const cargs = v_1d_astrip_cargs(params, execution)
     const ret = v_1d_astrip_outputs(params, execution)
@@ -165,10 +167,8 @@ function v_1d_astrip(
     infile: InputPathType,
     runner: Runner | null = null,
 ): V1dAstripOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_ASTRIP_METADATA);
     const params = v_1d_astrip_params(infile)
-    return v_1d_astrip_execute(params, execution);
+    return v_1d_astrip_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       V1dAstripParameters,
       V_1D_ASTRIP_METADATA,
       v_1d_astrip,
-      v_1d_astrip_cargs,
       v_1d_astrip_execute,
-      v_1d_astrip_outputs,
       v_1d_astrip_params,
 };

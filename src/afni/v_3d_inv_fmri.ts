@@ -242,14 +242,16 @@ function v_3d_inv_fmri_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dInvFmriOutputs`).
  */
 function v_3d_inv_fmri_execute(
     params: V3dInvFmriParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dInvFmriOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_INV_FMRI_METADATA);
     params = execution.params(params)
     const cargs = v_3d_inv_fmri_cargs(params, execution)
     const ret = v_3d_inv_fmri_outputs(params, execution)
@@ -294,10 +296,8 @@ function v_3d_inv_fmri(
     smooth_median: boolean = false,
     runner: Runner | null = null,
 ): V3dInvFmriOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_INV_FMRI_METADATA);
     const params = v_3d_inv_fmri_params(input_file, activation_map, map_weight, mask, baseline_file, polynom_order, output_file, method, alpha, smooth_fir, smooth_median)
-    return v_3d_inv_fmri_execute(params, execution);
+    return v_3d_inv_fmri_execute(params, runner);
 }
 
 
@@ -306,8 +306,6 @@ export {
       V3dInvFmriParameters,
       V_3D_INV_FMRI_METADATA,
       v_3d_inv_fmri,
-      v_3d_inv_fmri_cargs,
       v_3d_inv_fmri_execute,
-      v_3d_inv_fmri_outputs,
       v_3d_inv_fmri_params,
 };

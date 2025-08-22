@@ -216,14 +216,16 @@ function surf2surf_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Surf2surfOutputs`).
  */
 function surf2surf_execute(
     params: Surf2surfParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Surf2surfOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF2SURF_METADATA);
     params = execution.params(params)
     const cargs = surf2surf_cargs(params, execution)
     const ret = surf2surf_outputs(params, execution)
@@ -264,10 +266,8 @@ function surf2surf(
     output_values: string | null = null,
     runner: Runner | null = null,
 ): Surf2surfOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF2SURF_METADATA);
     const params = surf2surf_params(input_surface, output_surface, input_convention, output_convention, input_ref_volume, output_ref_volume, transform, output_type, output_values)
-    return surf2surf_execute(params, execution);
+    return surf2surf_execute(params, runner);
 }
 
 
@@ -276,8 +276,6 @@ export {
       Surf2surfOutputs,
       Surf2surfParameters,
       surf2surf,
-      surf2surf_cargs,
       surf2surf_execute,
-      surf2surf_outputs,
       surf2surf_params,
 };

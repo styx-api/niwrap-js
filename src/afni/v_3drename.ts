@@ -132,14 +132,16 @@ function v_3drename_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3drenameOutputs`).
  */
 function v_3drename_execute(
     params: V3drenameParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3drenameOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DRENAME_METADATA);
     params = execution.params(params)
     const cargs = v_3drename_cargs(params, execution)
     const ret = v_3drename_outputs(params, execution)
@@ -166,10 +168,8 @@ function v_3drename(
     new_prefix: string,
     runner: Runner | null = null,
 ): V3drenameOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DRENAME_METADATA);
     const params = v_3drename_params(old_prefix, new_prefix)
-    return v_3drename_execute(params, execution);
+    return v_3drename_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       V3drenameParameters,
       V_3DRENAME_METADATA,
       v_3drename,
-      v_3drename_cargs,
       v_3drename_execute,
-      v_3drename_outputs,
       v_3drename_params,
 };

@@ -137,14 +137,16 @@ function mri_gdfglm_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriGdfglmOutputs`).
  */
 function mri_gdfglm_execute(
     params: MriGdfglmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriGdfglmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_GDFGLM_METADATA);
     params = execution.params(params)
     const cargs = mri_gdfglm_cargs(params, execution)
     const ret = mri_gdfglm_outputs(params, execution)
@@ -169,10 +171,8 @@ function mri_gdfglm(
     inputs: string | null = null,
     runner: Runner | null = null,
 ): MriGdfglmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_GDFGLM_METADATA);
     const params = mri_gdfglm_params(inputs)
-    return mri_gdfglm_execute(params, execution);
+    return mri_gdfglm_execute(params, runner);
 }
 
 
@@ -181,8 +181,6 @@ export {
       MriGdfglmOutputs,
       MriGdfglmParameters,
       mri_gdfglm,
-      mri_gdfglm_cargs,
       mri_gdfglm_execute,
-      mri_gdfglm_outputs,
       mri_gdfglm_params,
 };

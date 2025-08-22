@@ -309,14 +309,16 @@ function v_3d_tproject_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTprojectOutputs`).
  */
 function v_3d_tproject_execute(
     params: V3dTprojectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dTprojectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_TPROJECT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_tproject_cargs(params, execution)
     const ret = v_3d_tproject_outputs(params, execution)
@@ -373,10 +375,8 @@ function v_3d_tproject(
     stopband: Array<number> | null = null,
     runner: Runner | null = null,
 ): V3dTprojectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_TPROJECT_METADATA);
     const params = v_3d_tproject_params(in_file, prefix, tr, automask, bandpass, blur, cenmode, censor, censortr, concat, dsort, mask, noblock, norm, ort, polort, stopband)
-    return v_3d_tproject_execute(params, execution);
+    return v_3d_tproject_execute(params, runner);
 }
 
 
@@ -385,8 +385,6 @@ export {
       V3dTprojectParameters,
       V_3D_TPROJECT_METADATA,
       v_3d_tproject,
-      v_3d_tproject_cargs,
       v_3d_tproject_execute,
-      v_3d_tproject_outputs,
       v_3d_tproject_params,
 };

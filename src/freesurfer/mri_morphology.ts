@@ -160,14 +160,16 @@ function mri_morphology_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMorphologyOutputs`).
  */
 function mri_morphology_execute(
     params: MriMorphologyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMorphologyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MORPHOLOGY_METADATA);
     params = execution.params(params)
     const cargs = mri_morphology_cargs(params, execution)
     const ret = mri_morphology_outputs(params, execution)
@@ -200,10 +202,8 @@ function mri_morphology(
     label_option: number | null = null,
     runner: Runner | null = null,
 ): MriMorphologyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MORPHOLOGY_METADATA);
     const params = mri_morphology_params(input_volume, operation, number_iter, output_volume, label_option)
-    return mri_morphology_execute(params, execution);
+    return mri_morphology_execute(params, runner);
 }
 
 
@@ -212,8 +212,6 @@ export {
       MriMorphologyOutputs,
       MriMorphologyParameters,
       mri_morphology,
-      mri_morphology_cargs,
       mri_morphology_execute,
-      mri_morphology_outputs,
       mri_morphology_params,
 };

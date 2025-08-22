@@ -319,14 +319,16 @@ function vol2subfield_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Vol2subfieldOutputs`).
  */
 function vol2subfield_execute(
     params: Vol2subfieldParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Vol2subfieldOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOL2SUBFIELD_METADATA);
     params = execution.params(params)
     const cargs = vol2subfield_cargs(params, execution)
     const ret = vol2subfield_outputs(params, execution)
@@ -387,10 +389,8 @@ function vol2subfield(
     preset_subfield_brainstem: boolean = false,
     runner: Runner | null = null,
 ): Vol2subfieldOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOL2SUBFIELD_METADATA);
     const params = vol2subfield_params(input_volume, subfield_volume, registration_file, output_volume, output_registration, stats_output, avgwf_output, avgwfvol_output, color_table, interpolation_nearest, interpolation_trilin, interpolation_cubic, tmp_directory, preset_subfield_lh_hippoamyg, preset_subfield_rh_hippoamyg, preset_subfield_lh_hbt, preset_subfield_rh_hbt, preset_subfield_thalamus, preset_subfield_brainstem)
-    return vol2subfield_execute(params, execution);
+    return vol2subfield_execute(params, runner);
 }
 
 
@@ -399,8 +399,6 @@ export {
       Vol2subfieldOutputs,
       Vol2subfieldParameters,
       vol2subfield,
-      vol2subfield_cargs,
       vol2subfield_execute,
-      vol2subfield_outputs,
       vol2subfield_params,
 };

@@ -140,14 +140,16 @@ function surface_sphere_triangular_patches_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceSphereTriangularPatchesOutputs`).
  */
 function surface_sphere_triangular_patches_execute(
     params: SurfaceSphereTriangularPatchesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfaceSphereTriangularPatchesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFACE_SPHERE_TRIANGULAR_PATCHES_METADATA);
     params = execution.params(params)
     const cargs = surface_sphere_triangular_patches_cargs(params, execution)
     const ret = surface_sphere_triangular_patches_outputs(params, execution)
@@ -178,10 +180,8 @@ function surface_sphere_triangular_patches(
     text_out: string,
     runner: Runner | null = null,
 ): SurfaceSphereTriangularPatchesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFACE_SPHERE_TRIANGULAR_PATCHES_METADATA);
     const params = surface_sphere_triangular_patches_params(sphere, divisions, text_out)
-    return surface_sphere_triangular_patches_execute(params, execution);
+    return surface_sphere_triangular_patches_execute(params, runner);
 }
 
 
@@ -190,8 +190,6 @@ export {
       SurfaceSphereTriangularPatchesOutputs,
       SurfaceSphereTriangularPatchesParameters,
       surface_sphere_triangular_patches,
-      surface_sphere_triangular_patches_cargs,
       surface_sphere_triangular_patches_execute,
-      surface_sphere_triangular_patches_outputs,
       surface_sphere_triangular_patches_params,
 };

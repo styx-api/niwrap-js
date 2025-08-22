@@ -132,14 +132,16 @@ function regdat2xfm_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Regdat2xfmOutputs`).
  */
 function regdat2xfm_execute(
     params: Regdat2xfmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Regdat2xfmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REGDAT2XFM_METADATA);
     params = execution.params(params)
     const cargs = regdat2xfm_cargs(params, execution)
     const ret = regdat2xfm_outputs(params, execution)
@@ -166,10 +168,8 @@ function regdat2xfm(
     output_file: string,
     runner: Runner | null = null,
 ): Regdat2xfmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REGDAT2XFM_METADATA);
     const params = regdat2xfm_params(input_file, output_file)
-    return regdat2xfm_execute(params, execution);
+    return regdat2xfm_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       Regdat2xfmOutputs,
       Regdat2xfmParameters,
       regdat2xfm,
-      regdat2xfm_cargs,
       regdat2xfm_execute,
-      regdat2xfm_outputs,
       regdat2xfm_params,
 };

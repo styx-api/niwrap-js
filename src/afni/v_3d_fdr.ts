@@ -263,14 +263,16 @@ function v_3d_fdr_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dFdrOutputs`).
  */
 function v_3d_fdr_execute(
     params: V3dFdrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dFdrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_FDR_METADATA);
     params = execution.params(params)
     const cargs = v_3d_fdr_cargs(params, execution)
     const ret = v_3d_fdr_outputs(params, execution)
@@ -321,10 +323,8 @@ function v_3d_fdr(
     qval: boolean = false,
     runner: Runner | null = null,
 ): V3dFdrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_FDR_METADATA);
     const params = v_3d_fdr_params(input_file, prefix, input1d_file, mask_file, mask_threshold, constant_type, quiet, list, mode_option, pmask, nopmask, force, float, qval)
-    return v_3d_fdr_execute(params, execution);
+    return v_3d_fdr_execute(params, runner);
 }
 
 
@@ -333,8 +333,6 @@ export {
       V3dFdrParameters,
       V_3D_FDR_METADATA,
       v_3d_fdr,
-      v_3d_fdr_cargs,
       v_3d_fdr_execute,
-      v_3d_fdr_outputs,
       v_3d_fdr_params,
 };

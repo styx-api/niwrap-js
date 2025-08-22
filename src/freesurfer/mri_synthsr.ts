@@ -198,14 +198,16 @@ function mri_synthsr_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSynthsrOutputs`).
  */
 function mri_synthsr_execute(
     params: MriSynthsrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSynthsrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SYNTHSR_METADATA);
     params = execution.params(params)
     const cargs = mri_synthsr_cargs(params, execution)
     const ret = mri_synthsr_outputs(params, execution)
@@ -248,10 +250,8 @@ function mri_synthsr(
     model: string | null = null,
     runner: Runner | null = null,
 ): MriSynthsrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SYNTHSR_METADATA);
     const params = mri_synthsr_params(input, output, ct, disable_sharpening, disable_flipping, lowfield, v1, threads, cpu, model)
-    return mri_synthsr_execute(params, execution);
+    return mri_synthsr_execute(params, runner);
 }
 
 
@@ -260,8 +260,6 @@ export {
       MriSynthsrOutputs,
       MriSynthsrParameters,
       mri_synthsr,
-      mri_synthsr_cargs,
       mri_synthsr_execute,
-      mri_synthsr_outputs,
       mri_synthsr_params,
 };

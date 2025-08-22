@@ -134,14 +134,16 @@ function v__clust_exp_run_shiny_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VClustExpRunShinyOutputs`).
  */
 function v__clust_exp_run_shiny_execute(
     params: VClustExpRunShinyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VClustExpRunShinyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__CLUST_EXP_RUN_SHINY_METADATA);
     params = execution.params(params)
     const cargs = v__clust_exp_run_shiny_cargs(params, execution)
     const ret = v__clust_exp_run_shiny_outputs(params, execution)
@@ -168,10 +170,8 @@ function v__clust_exp_run_shiny(
     help: boolean = false,
     runner: Runner | null = null,
 ): VClustExpRunShinyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__CLUST_EXP_RUN_SHINY_METADATA);
     const params = v__clust_exp_run_shiny_params(directory, help)
-    return v__clust_exp_run_shiny_execute(params, execution);
+    return v__clust_exp_run_shiny_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       VClustExpRunShinyParameters,
       V__CLUST_EXP_RUN_SHINY_METADATA,
       v__clust_exp_run_shiny,
-      v__clust_exp_run_shiny_cargs,
       v__clust_exp_run_shiny_execute,
-      v__clust_exp_run_shiny_outputs,
       v__clust_exp_run_shiny_params,
 };

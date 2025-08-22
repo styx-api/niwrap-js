@@ -138,14 +138,16 @@ function mri_segreg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSegregOutputs`).
  */
 function mri_segreg_execute(
     params: MriSegregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSegregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SEGREG_METADATA);
     params = execution.params(params)
     const cargs = mri_segreg_cargs(params, execution)
     const ret = mri_segreg_outputs(params, execution)
@@ -172,10 +174,8 @@ function mri_segreg(
     output_file: string = "output.mgz",
     runner: Runner | null = null,
 ): MriSegregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SEGREG_METADATA);
     const params = mri_segreg_params(input_file, output_file)
-    return mri_segreg_execute(params, execution);
+    return mri_segreg_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MriSegregOutputs,
       MriSegregParameters,
       mri_segreg,
-      mri_segreg_cargs,
       mri_segreg_execute,
-      mri_segreg_outputs,
       mri_segreg_params,
 };

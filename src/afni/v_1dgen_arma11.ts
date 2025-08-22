@@ -267,14 +267,16 @@ function v_1dgen_arma11_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dgenArma11Outputs`).
  */
 function v_1dgen_arma11_execute(
     params: V1dgenArma11Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dgenArma11Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1DGEN_ARMA11_METADATA);
     params = execution.params(params)
     const cargs = v_1dgen_arma11_cargs(params, execution)
     const ret = v_1dgen_arma11_outputs(params, execution)
@@ -321,10 +323,8 @@ function v_1dgen_arma11(
     arma51: string | null = null,
     runner: Runner | null = null,
 ): V1dgenArma11Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1DGEN_ARMA11_METADATA);
     const params = v_1dgen_arma11_params(length, length_alt, num_series, param_a, param_b, param_lam, std_dev, normalize, seed, corcut, arma31, arma51)
-    return v_1dgen_arma11_execute(params, execution);
+    return v_1dgen_arma11_execute(params, runner);
 }
 
 
@@ -333,8 +333,6 @@ export {
       V1dgenArma11Parameters,
       V_1DGEN_ARMA11_METADATA,
       v_1dgen_arma11,
-      v_1dgen_arma11_cargs,
       v_1dgen_arma11_execute,
-      v_1dgen_arma11_outputs,
       v_1dgen_arma11_params,
 };

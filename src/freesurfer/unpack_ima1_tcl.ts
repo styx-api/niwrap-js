@@ -138,14 +138,16 @@ function unpack_ima1_tcl_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `UnpackIma1TclOutputs`).
  */
 function unpack_ima1_tcl_execute(
     params: UnpackIma1TclParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): UnpackIma1TclOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(UNPACK_IMA1_TCL_METADATA);
     params = execution.params(params)
     const cargs = unpack_ima1_tcl_cargs(params, execution)
     const ret = unpack_ima1_tcl_outputs(params, execution)
@@ -172,10 +174,8 @@ function unpack_ima1_tcl(
     output_directory: string,
     runner: Runner | null = null,
 ): UnpackIma1TclOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UNPACK_IMA1_TCL_METADATA);
     const params = unpack_ima1_tcl_params(input_directory, output_directory)
-    return unpack_ima1_tcl_execute(params, execution);
+    return unpack_ima1_tcl_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       UnpackIma1TclOutputs,
       UnpackIma1TclParameters,
       unpack_ima1_tcl,
-      unpack_ima1_tcl_cargs,
       unpack_ima1_tcl_execute,
-      unpack_ima1_tcl_outputs,
       unpack_ima1_tcl_params,
 };

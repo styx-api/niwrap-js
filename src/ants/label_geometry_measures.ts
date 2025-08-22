@@ -156,14 +156,16 @@ function label_geometry_measures_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelGeometryMeasuresOutputs`).
  */
 function label_geometry_measures_execute(
     params: LabelGeometryMeasuresParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelGeometryMeasuresOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_GEOMETRY_MEASURES_METADATA);
     params = execution.params(params)
     const cargs = label_geometry_measures_cargs(params, execution)
     const ret = label_geometry_measures_outputs(params, execution)
@@ -194,10 +196,8 @@ function label_geometry_measures(
     csv_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelGeometryMeasuresOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_GEOMETRY_MEASURES_METADATA);
     const params = label_geometry_measures_params(image_dimension, label_image, intensity_image, csv_file)
-    return label_geometry_measures_execute(params, execution);
+    return label_geometry_measures_execute(params, runner);
 }
 
 
@@ -206,8 +206,6 @@ export {
       LabelGeometryMeasuresOutputs,
       LabelGeometryMeasuresParameters,
       label_geometry_measures,
-      label_geometry_measures_cargs,
       label_geometry_measures_execute,
-      label_geometry_measures_outputs,
       label_geometry_measures_params,
 };

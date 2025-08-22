@@ -268,14 +268,16 @@ function v_3dedgedog_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dedgedogOutputs`).
  */
 function v_3dedgedog_execute(
     params: V3dedgedogParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dedgedogOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DEDGEDOG_METADATA);
     params = execution.params(params)
     const cargs = v_3dedgedog_cargs(params, execution)
     const ret = v_3dedgedog_outputs(params, execution)
@@ -322,10 +324,8 @@ function v_3dedgedog(
     only2d: string | null = null,
     runner: Runner | null = null,
 ): V3dedgedogOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DEDGEDOG_METADATA);
     const params = v_3dedgedog_params(input, prefix, mask, automask, sigma_rad, sigma_nvox, ratio_sigma, output_intermed, edge_bnd_nn, edge_bnd_side, edge_bnd_scale, only2d)
-    return v_3dedgedog_execute(params, execution);
+    return v_3dedgedog_execute(params, runner);
 }
 
 
@@ -334,8 +334,6 @@ export {
       V3dedgedogParameters,
       V_3DEDGEDOG_METADATA,
       v_3dedgedog,
-      v_3dedgedog_cargs,
       v_3dedgedog_execute,
-      v_3dedgedog_outputs,
       v_3dedgedog_params,
 };

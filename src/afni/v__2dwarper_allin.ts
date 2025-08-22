@@ -162,14 +162,16 @@ function v__2dwarper_allin_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V2dwarperAllinOutputs`).
  */
 function v__2dwarper_allin_execute(
     params: V2dwarperAllinParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V2dwarperAllinOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__2DWARPER_ALLIN_METADATA);
     params = execution.params(params)
     const cargs = v__2dwarper_allin_cargs(params, execution)
     const ret = v__2dwarper_allin_outputs(params, execution)
@@ -198,10 +200,8 @@ function v__2dwarper_allin(
     output_prefix: string | null = null,
     runner: Runner | null = null,
 ): V2dwarperAllinOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__2DWARPER_ALLIN_METADATA);
     const params = v__2dwarper_allin_params(input_prefix, mask_prefix, output_prefix)
-    return v__2dwarper_allin_execute(params, execution);
+    return v__2dwarper_allin_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       V2dwarperAllinParameters,
       V__2DWARPER_ALLIN_METADATA,
       v__2dwarper_allin,
-      v__2dwarper_allin_cargs,
       v__2dwarper_allin_execute,
-      v__2dwarper_allin_outputs,
       v__2dwarper_allin_params,
 };

@@ -136,14 +136,16 @@ function run_segment_subfields_t1_longitudinal_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RunSegmentSubfieldsT1LongitudinalShOutputs`).
  */
 function run_segment_subfields_t1_longitudinal_sh_execute(
     params: RunSegmentSubfieldsT1LongitudinalShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RunSegmentSubfieldsT1LongitudinalShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RUN_SEGMENT_SUBFIELDS_T1_LONGITUDINAL_SH_METADATA);
     params = execution.params(params)
     const cargs = run_segment_subfields_t1_longitudinal_sh_cargs(params, execution)
     const ret = run_segment_subfields_t1_longitudinal_sh_outputs(params, execution)
@@ -170,10 +172,8 @@ function run_segment_subfields_t1_longitudinal_sh(
     additional_args: string | null = null,
     runner: Runner | null = null,
 ): RunSegmentSubfieldsT1LongitudinalShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RUN_SEGMENT_SUBFIELDS_T1_LONGITUDINAL_SH_METADATA);
     const params = run_segment_subfields_t1_longitudinal_sh_params(deployed_mcr_root, additional_args)
-    return run_segment_subfields_t1_longitudinal_sh_execute(params, execution);
+    return run_segment_subfields_t1_longitudinal_sh_execute(params, runner);
 }
 
 
@@ -182,8 +182,6 @@ export {
       RunSegmentSubfieldsT1LongitudinalShOutputs,
       RunSegmentSubfieldsT1LongitudinalShParameters,
       run_segment_subfields_t1_longitudinal_sh,
-      run_segment_subfields_t1_longitudinal_sh_cargs,
       run_segment_subfields_t1_longitudinal_sh_execute,
-      run_segment_subfields_t1_longitudinal_sh_outputs,
       run_segment_subfields_t1_longitudinal_sh_params,
 };

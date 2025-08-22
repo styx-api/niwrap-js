@@ -228,14 +228,16 @@ function standard_space_roi_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `StandardSpaceRoiOutputs`).
  */
 function standard_space_roi_execute(
     params: StandardSpaceRoiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): StandardSpaceRoiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(STANDARD_SPACE_ROI_METADATA);
     params = execution.params(params)
     const cargs = standard_space_roi_cargs(params, execution)
     const ret = standard_space_roi_outputs(params, execution)
@@ -282,10 +284,8 @@ function standard_space_roi(
     bet_premask_flag: boolean = false,
     runner: Runner | null = null,
 ): StandardSpaceRoiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(STANDARD_SPACE_ROI_METADATA);
     const params = standard_space_roi_params(infile, outfile, mask_fov_flag, mask_mask, mask_none_flag, roi_fov_flag, roi_mask, roi_none_flag, ss_ref, alt_input, debug_flag, bet_premask_flag)
-    return standard_space_roi_execute(params, execution);
+    return standard_space_roi_execute(params, runner);
 }
 
 
@@ -294,8 +294,6 @@ export {
       StandardSpaceRoiOutputs,
       StandardSpaceRoiParameters,
       standard_space_roi,
-      standard_space_roi_cargs,
       standard_space_roi_execute,
-      standard_space_roi_outputs,
       standard_space_roi_params,
 };

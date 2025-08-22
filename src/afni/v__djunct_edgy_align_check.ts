@@ -326,14 +326,16 @@ function v__djunct_edgy_align_check_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDjunctEdgyAlignCheckOutputs`).
  */
 function v__djunct_edgy_align_check_execute(
     params: VDjunctEdgyAlignCheckParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDjunctEdgyAlignCheckOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DJUNCT_EDGY_ALIGN_CHECK_METADATA);
     params = execution.params(params)
     const cargs = v__djunct_edgy_align_check_cargs(params, execution)
     const ret = v__djunct_edgy_align_check_outputs(params, execution)
@@ -408,10 +410,8 @@ function v__djunct_edgy_align_check(
     ulay_range_am: Array<number> | null = null,
     runner: Runner | null = null,
 ): VDjunctEdgyAlignCheckOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DJUNCT_EDGY_ALIGN_CHECK_METADATA);
     const params = v__djunct_edgy_align_check_params(ulay, olay, prefix, set_dicom_xyz, box_focus_slices, montgap, montcolor, cbar, save_ftype, umin_fac, montx, monty, use_olay_grid, label_mode, help_flag, ver_flag, echo_flag, sharpen_ulay_off_flag, mask_olay_edges_flag, no_cor_flag, no_sag_flag, no_axi_flag, no_clean_flag, ulay_range, ulay_range_nz, ulay_range_am)
-    return v__djunct_edgy_align_check_execute(params, execution);
+    return v__djunct_edgy_align_check_execute(params, runner);
 }
 
 
@@ -420,8 +420,6 @@ export {
       VDjunctEdgyAlignCheckParameters,
       V__DJUNCT_EDGY_ALIGN_CHECK_METADATA,
       v__djunct_edgy_align_check,
-      v__djunct_edgy_align_check_cargs,
       v__djunct_edgy_align_check_execute,
-      v__djunct_edgy_align_check_outputs,
       v__djunct_edgy_align_check_params,
 };

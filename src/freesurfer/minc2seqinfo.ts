@@ -138,14 +138,16 @@ function minc2seqinfo_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Minc2seqinfoOutputs`).
  */
 function minc2seqinfo_execute(
     params: Minc2seqinfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Minc2seqinfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MINC2SEQINFO_METADATA);
     params = execution.params(params)
     const cargs = minc2seqinfo_cargs(params, execution)
     const ret = minc2seqinfo_outputs(params, execution)
@@ -172,10 +174,8 @@ function minc2seqinfo(
     seqinfofile: string,
     runner: Runner | null = null,
 ): Minc2seqinfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MINC2SEQINFO_METADATA);
     const params = minc2seqinfo_params(mincfile, seqinfofile)
-    return minc2seqinfo_execute(params, execution);
+    return minc2seqinfo_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       Minc2seqinfoOutputs,
       Minc2seqinfoParameters,
       minc2seqinfo,
-      minc2seqinfo_cargs,
       minc2seqinfo_execute,
-      minc2seqinfo_outputs,
       minc2seqinfo_params,
 };

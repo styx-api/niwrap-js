@@ -374,14 +374,16 @@ function dmri_train_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriTrainOutputs`).
  */
 function dmri_train_execute(
     params: DmriTrainParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriTrainOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_TRAIN_METADATA);
     params = execution.params(params)
     const cargs = dmri_train_cargs(params, execution)
     const ret = dmri_train_outputs(params, execution)
@@ -460,10 +462,8 @@ function dmri_train(
     version: boolean = false,
     runner: Runner | null = null,
 ): DmriTrainOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_TRAIN_METADATA);
     const params = dmri_train_params(slist, trk_files, seg, cmask, lmask, bmask_training, outtrk, bmask_test, ncpts, max_streamlines, out_files, rois, fa, reg, regnl, refnl, basereg, baseref, xstr, aprior, sprior, trunc, outdir, cptdir, debug, checkopts, help, version)
-    return dmri_train_execute(params, execution);
+    return dmri_train_execute(params, runner);
 }
 
 
@@ -472,8 +472,6 @@ export {
       DmriTrainOutputs,
       DmriTrainParameters,
       dmri_train,
-      dmri_train_cargs,
       dmri_train_execute,
-      dmri_train_outputs,
       dmri_train_params,
 };

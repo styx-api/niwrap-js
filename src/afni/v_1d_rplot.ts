@@ -337,14 +337,16 @@ function v_1d_rplot_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dRplotOutputs`).
  */
 function v_1d_rplot_execute(
     params: V1dRplotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dRplotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_RPLOT_METADATA);
     params = execution.params(params)
     const cargs = v_1d_rplot_cargs(params, execution)
     const ret = v_1d_rplot_outputs(params, execution)
@@ -405,10 +407,8 @@ function v_1d_rplot(
     column_name_show: boolean = false,
     runner: Runner | null = null,
 ): V1dRplotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_RPLOT_METADATA);
     const params = v_1d_rplot_params(input_file, output_prefix, save_size, tr, title, input_type, legend_font_size, left_y_margin_text, right_y_margin_text, x_axis_label, y_axis_label, x_axis_range, y_axis_range, plot_char, group_labels, legend_show, legend_position, save_plot, column_name_show)
-    return v_1d_rplot_execute(params, execution);
+    return v_1d_rplot_execute(params, runner);
 }
 
 
@@ -417,8 +417,6 @@ export {
       V1dRplotParameters,
       V_1D_RPLOT_METADATA,
       v_1d_rplot,
-      v_1d_rplot_cargs,
       v_1d_rplot_execute,
-      v_1d_rplot_outputs,
       v_1d_rplot_params,
 };

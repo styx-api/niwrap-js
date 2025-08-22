@@ -1141,14 +1141,16 @@ function cifti_resample_dconn_memory_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiResampleDconnMemoryOutputs`).
  */
 function cifti_resample_dconn_memory_execute(
     params: CiftiResampleDconnMemoryParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiResampleDconnMemoryOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_RESAMPLE_DCONN_MEMORY_METADATA);
     params = execution.params(params)
     const cargs = cifti_resample_dconn_memory_cargs(params, execution)
     const ret = cifti_resample_dconn_memory_outputs(params, execution)
@@ -1215,10 +1217,8 @@ function cifti_resample_dconn_memory(
     cerebellum_spheres: CiftiResampleDconnMemoryCerebellumSpheresParameters | null = null,
     runner: Runner | null = null,
 ): CiftiResampleDconnMemoryOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_RESAMPLE_DCONN_MEMORY_METADATA);
     const params = cifti_resample_dconn_memory_params(cifti_in, cifti_template, template_direction, surface_method, volume_method, cifti_out, opt_surface_largest, volume_predilate, surface_postdilate, affine, warpfield, left_spheres, right_spheres, cerebellum_spheres)
-    return cifti_resample_dconn_memory_execute(params, execution);
+    return cifti_resample_dconn_memory_execute(params, runner);
 }
 
 
@@ -1243,40 +1243,22 @@ export {
       CiftiResampleDconnMemoryWeighted1Parameters,
       CiftiResampleDconnMemoryWeightedParameters,
       cifti_resample_dconn_memory,
-      cifti_resample_dconn_memory_affine_cargs,
       cifti_resample_dconn_memory_affine_params,
-      cifti_resample_dconn_memory_cargs,
-      cifti_resample_dconn_memory_cerebellum_area_metrics_cargs,
       cifti_resample_dconn_memory_cerebellum_area_metrics_params,
-      cifti_resample_dconn_memory_cerebellum_area_surfs_cargs,
       cifti_resample_dconn_memory_cerebellum_area_surfs_params,
-      cifti_resample_dconn_memory_cerebellum_spheres_cargs,
       cifti_resample_dconn_memory_cerebellum_spheres_params,
       cifti_resample_dconn_memory_execute,
-      cifti_resample_dconn_memory_flirt_cargs,
       cifti_resample_dconn_memory_flirt_params,
-      cifti_resample_dconn_memory_left_area_metrics_cargs,
       cifti_resample_dconn_memory_left_area_metrics_params,
-      cifti_resample_dconn_memory_left_area_surfs_cargs,
       cifti_resample_dconn_memory_left_area_surfs_params,
-      cifti_resample_dconn_memory_left_spheres_cargs,
       cifti_resample_dconn_memory_left_spheres_params,
-      cifti_resample_dconn_memory_outputs,
       cifti_resample_dconn_memory_params,
-      cifti_resample_dconn_memory_right_area_metrics_cargs,
       cifti_resample_dconn_memory_right_area_metrics_params,
-      cifti_resample_dconn_memory_right_area_surfs_cargs,
       cifti_resample_dconn_memory_right_area_surfs_params,
-      cifti_resample_dconn_memory_right_spheres_cargs,
       cifti_resample_dconn_memory_right_spheres_params,
-      cifti_resample_dconn_memory_surface_postdilate_cargs,
       cifti_resample_dconn_memory_surface_postdilate_params,
-      cifti_resample_dconn_memory_volume_predilate_cargs,
       cifti_resample_dconn_memory_volume_predilate_params,
-      cifti_resample_dconn_memory_warpfield_cargs,
       cifti_resample_dconn_memory_warpfield_params,
-      cifti_resample_dconn_memory_weighted_1_cargs,
       cifti_resample_dconn_memory_weighted_1_params,
-      cifti_resample_dconn_memory_weighted_cargs,
       cifti_resample_dconn_memory_weighted_params,
 };

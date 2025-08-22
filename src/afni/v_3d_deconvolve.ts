@@ -309,14 +309,16 @@ function v_3d_deconvolve_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dDeconvolveOutputs`).
  */
 function v_3d_deconvolve_execute(
     params: V3dDeconvolveParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dDeconvolveOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_DECONVOLVE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_deconvolve_cargs(params, execution)
     const ret = v_3d_deconvolve_outputs(params, execution)
@@ -369,10 +371,8 @@ function v_3d_deconvolve(
     jobs: number | null = null,
     runner: Runner | null = null,
 ): V3dDeconvolveOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_DECONVOLVE_METADATA);
     const params = v_3d_deconvolve_params(input_dataset, mask_dataset, num_stimts, stim_file, stim_label, stim_base, stim_times, iresp, fitts, fout, tout, bucket, cbucket, x1_d, jobs)
-    return v_3d_deconvolve_execute(params, execution);
+    return v_3d_deconvolve_execute(params, runner);
 }
 
 
@@ -381,8 +381,6 @@ export {
       V3dDeconvolveParameters,
       V_3D_DECONVOLVE_METADATA,
       v_3d_deconvolve,
-      v_3d_deconvolve_cargs,
       v_3d_deconvolve_execute,
-      v_3d_deconvolve_outputs,
       v_3d_deconvolve_params,
 };

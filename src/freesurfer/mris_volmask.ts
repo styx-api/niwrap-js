@@ -301,14 +301,16 @@ function mris_volmask_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisVolmaskOutputs`).
  */
 function mris_volmask_execute(
     params: MrisVolmaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisVolmaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_VOLMASK_METADATA);
     params = execution.params(params)
     const cargs = mris_volmask_cargs(params, execution)
     const ret = mris_volmask_outputs(params, execution)
@@ -367,10 +369,8 @@ function mris_volmask(
     save_ribbon: boolean = false,
     runner: Runner | null = null,
 ): MrisVolmaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_VOLMASK_METADATA);
     const params = mris_volmask_params(io, cap_distance, label_background, label_left_white, label_left_ribbon, label_right_white, label_right_ribbon, surf_white, surf_pial, aseg_name, out_root, subjects_dir, save_distance, lh_only, rh_only, parallel, edit_aseg, save_ribbon)
-    return mris_volmask_execute(params, execution);
+    return mris_volmask_execute(params, runner);
 }
 
 
@@ -379,8 +379,6 @@ export {
       MrisVolmaskOutputs,
       MrisVolmaskParameters,
       mris_volmask,
-      mris_volmask_cargs,
       mris_volmask_execute,
-      mris_volmask_outputs,
       mris_volmask_params,
 };

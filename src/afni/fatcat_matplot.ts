@@ -134,14 +134,16 @@ function fatcat_matplot_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatcatMatplotOutputs`).
  */
 function fatcat_matplot_execute(
     params: FatcatMatplotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatcatMatplotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FATCAT_MATPLOT_METADATA);
     params = execution.params(params)
     const cargs = fatcat_matplot_cargs(params, execution)
     const ret = fatcat_matplot_outputs(params, execution)
@@ -168,10 +170,8 @@ function fatcat_matplot(
     shiny_folder: boolean = false,
     runner: Runner | null = null,
 ): FatcatMatplotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FATCAT_MATPLOT_METADATA);
     const params = fatcat_matplot_params(directory, shiny_folder)
-    return fatcat_matplot_execute(params, execution);
+    return fatcat_matplot_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       FatcatMatplotOutputs,
       FatcatMatplotParameters,
       fatcat_matplot,
-      fatcat_matplot_cargs,
       fatcat_matplot_execute,
-      fatcat_matplot_outputs,
       fatcat_matplot_params,
 };

@@ -372,14 +372,16 @@ function waver_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WaverOutputs`).
  */
 function waver_execute(
     params: WaverParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WaverOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WAVER_METADATA);
     params = execution.params(params)
     const cargs = waver_cargs(params, execution)
     const ret = waver_outputs(params, execution)
@@ -446,10 +448,8 @@ function waver(
     ver_flag: boolean = false,
     runner: Runner | null = null,
 ): WaverOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WAVER_METADATA);
     const params = waver_params(wav, gam, expr, file_opt, delay_time, rise_time, fall_time, undershoot, restore_time, gamb, gamc, gamd, peak, dt, tr, xyout, input_file, inline_data, tstim_data, when_data, numout, ver_flag)
-    return waver_execute(params, execution);
+    return waver_execute(params, runner);
 }
 
 
@@ -458,8 +458,6 @@ export {
       WaverOutputs,
       WaverParameters,
       waver,
-      waver_cargs,
       waver_execute,
-      waver_outputs,
       waver_params,
 };

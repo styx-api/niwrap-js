@@ -229,14 +229,16 @@ function xcerebralseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `XcerebralsegOutputs`).
  */
 function xcerebralseg_execute(
     params: XcerebralsegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): XcerebralsegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(XCEREBRALSEG_METADATA);
     params = execution.params(params)
     const cargs = xcerebralseg_cargs(params, execution)
     const ret = xcerebralseg_outputs(params, execution)
@@ -279,10 +281,8 @@ function xcerebralseg(
     threads: number | null = null,
     runner: Runner | null = null,
 ): XcerebralsegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(XCEREBRALSEG_METADATA);
     const params = xcerebralseg_params(subject, output_volume, atlas, mergevol, source_volume, no_stats, seg1_name, no_pons, no_vermis, threads)
-    return xcerebralseg_execute(params, execution);
+    return xcerebralseg_execute(params, runner);
 }
 
 
@@ -291,8 +291,6 @@ export {
       XcerebralsegOutputs,
       XcerebralsegParameters,
       xcerebralseg,
-      xcerebralseg_cargs,
       xcerebralseg_execute,
-      xcerebralseg_outputs,
       xcerebralseg_params,
 };

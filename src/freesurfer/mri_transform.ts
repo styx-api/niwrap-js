@@ -162,14 +162,16 @@ function mri_transform_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriTransformOutputs`).
  */
 function mri_transform_execute(
     params: MriTransformParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriTransformOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_TRANSFORM_METADATA);
     params = execution.params(params)
     const cargs = mri_transform_cargs(params, execution)
     const ret = mri_transform_outputs(params, execution)
@@ -202,10 +204,8 @@ function mri_transform(
     invert: boolean = false,
     runner: Runner | null = null,
 ): MriTransformOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_TRANSFORM_METADATA);
     const params = mri_transform_params(input_volume, lta_file, output_file, out_like, invert)
-    return mri_transform_execute(params, execution);
+    return mri_transform_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       MriTransformOutputs,
       MriTransformParameters,
       mri_transform,
-      mri_transform_cargs,
       mri_transform_execute,
-      mri_transform_outputs,
       mri_transform_params,
 };

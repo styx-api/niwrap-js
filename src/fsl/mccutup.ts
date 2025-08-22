@@ -169,14 +169,16 @@ function mccutup_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MccutupOutputs`).
  */
 function mccutup_execute(
     params: MccutupParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MccutupOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MCCUTUP_METADATA);
     params = execution.params(params)
     const cargs = mccutup_cargs(params, execution)
     const ret = mccutup_outputs(params, execution)
@@ -207,10 +209,8 @@ function mccutup(
     param2: string | null = null,
     runner: Runner | null = null,
 ): MccutupOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MCCUTUP_METADATA);
     const params = mccutup_params(input, output_file, param1, param2)
-    return mccutup_execute(params, execution);
+    return mccutup_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       MccutupOutputs,
       MccutupParameters,
       mccutup,
-      mccutup_cargs,
       mccutup_execute,
-      mccutup_outputs,
       mccutup_params,
 };

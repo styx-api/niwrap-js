@@ -175,14 +175,16 @@ function v_3dmaskave_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dmaskaveOutputs`).
  */
 function v_3dmaskave_execute(
     params: V3dmaskaveParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dmaskaveOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DMASKAVE_METADATA);
     params = execution.params(params)
     const cargs = v_3dmaskave_cargs(params, execution)
     const ret = v_3dmaskave_outputs(params, execution)
@@ -215,10 +217,8 @@ function v_3dmaskave(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): V3dmaskaveOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DMASKAVE_METADATA);
     const params = v_3dmaskave_params(in_file, mask, num_threads, outputtype, quiet)
-    return v_3dmaskave_execute(params, execution);
+    return v_3dmaskave_execute(params, runner);
 }
 
 
@@ -227,8 +227,6 @@ export {
       V3dmaskaveParameters,
       V_3DMASKAVE_METADATA,
       v_3dmaskave,
-      v_3dmaskave_cargs,
       v_3dmaskave_execute,
-      v_3dmaskave_outputs,
       v_3dmaskave_params,
 };

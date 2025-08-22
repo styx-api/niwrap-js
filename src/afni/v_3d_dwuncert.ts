@@ -224,14 +224,16 @@ function v_3d_dwuncert_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dDwuncertOutputs`).
  */
 function v_3d_dwuncert_execute(
     params: V3dDwuncertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dDwuncertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_DWUNCERT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_dwuncert_cargs(params, execution)
     const ret = v_3d_dwuncert_outputs(params, execution)
@@ -272,10 +274,8 @@ function v_3d_dwuncert(
     csf_fa: number | null = null,
     runner: Runner | null = null,
 ): V3dDwuncertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_DWUNCERT_METADATA);
     const params = v_3d_dwuncert_params(input_file, input_prefix, output_prefix, grad_file, bmatrix_file, num_iters, mask_file, calc_thr_fa, csf_fa)
-    return v_3d_dwuncert_execute(params, execution);
+    return v_3d_dwuncert_execute(params, runner);
 }
 
 
@@ -284,8 +284,6 @@ export {
       V3dDwuncertParameters,
       V_3D_DWUNCERT_METADATA,
       v_3d_dwuncert,
-      v_3d_dwuncert_cargs,
       v_3d_dwuncert_execute,
-      v_3d_dwuncert_outputs,
       v_3d_dwuncert_params,
 };

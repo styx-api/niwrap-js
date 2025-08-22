@@ -138,14 +138,16 @@ function segment_subject_t1_auto_estimate_alveus_ml_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegmentSubjectT1AutoEstimateAlveusMlOutputs`).
  */
 function segment_subject_t1_auto_estimate_alveus_ml_execute(
     params: SegmentSubjectT1AutoEstimateAlveusMlParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegmentSubjectT1AutoEstimateAlveusMlOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGMENT_SUBJECT_T1_AUTO_ESTIMATE_ALVEUS_ML_METADATA);
     params = execution.params(params)
     const cargs = segment_subject_t1_auto_estimate_alveus_ml_cargs(params, execution)
     const ret = segment_subject_t1_auto_estimate_alveus_ml_outputs(params, execution)
@@ -172,10 +174,8 @@ function segment_subject_t1_auto_estimate_alveus_ml(
     output_folder: string,
     runner: Runner | null = null,
 ): SegmentSubjectT1AutoEstimateAlveusMlOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGMENT_SUBJECT_T1_AUTO_ESTIMATE_ALVEUS_ML_METADATA);
     const params = segment_subject_t1_auto_estimate_alveus_ml_params(t1_file, output_folder)
-    return segment_subject_t1_auto_estimate_alveus_ml_execute(params, execution);
+    return segment_subject_t1_auto_estimate_alveus_ml_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       SegmentSubjectT1AutoEstimateAlveusMlOutputs,
       SegmentSubjectT1AutoEstimateAlveusMlParameters,
       segment_subject_t1_auto_estimate_alveus_ml,
-      segment_subject_t1_auto_estimate_alveus_ml_cargs,
       segment_subject_t1_auto_estimate_alveus_ml_execute,
-      segment_subject_t1_auto_estimate_alveus_ml_outputs,
       segment_subject_t1_auto_estimate_alveus_ml_params,
 };

@@ -256,14 +256,16 @@ function reg_aladin_outputs(
  * URL: http://cmictig.cs.ucl.ac.uk/wiki/index.php/NiftyReg
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RegAladinOutputs`).
  */
 function reg_aladin_execute(
     params: RegAladinParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RegAladinOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REG_ALADIN_METADATA);
     params = execution.params(params)
     const cargs = reg_aladin_cargs(params, execution)
     const ret = reg_aladin_outputs(params, execution)
@@ -312,10 +314,8 @@ function reg_aladin(
     percent_inlier: number | null = null,
     runner: Runner | null = null,
 ): RegAladinOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REG_ALADIN_METADATA);
     const params = reg_aladin_params(reference_image, floating_image, symmetric, output_affine, rigid_only, direct_affine, smooth_ref, smooth_float, num_levels, first_levels, use_nifti_origin, percent_block, percent_inlier)
-    return reg_aladin_execute(params, execution);
+    return reg_aladin_execute(params, runner);
 }
 
 
@@ -324,8 +324,6 @@ export {
       RegAladinOutputs,
       RegAladinParameters,
       reg_aladin,
-      reg_aladin_cargs,
       reg_aladin_execute,
-      reg_aladin_outputs,
       reg_aladin_params,
 };

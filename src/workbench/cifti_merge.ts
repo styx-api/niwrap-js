@@ -330,14 +330,16 @@ function cifti_merge_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiMergeOutputs`).
  */
 function cifti_merge_execute(
     params: CiftiMergeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiMergeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_MERGE_METADATA);
     params = execution.params(params)
     const cargs = cifti_merge_cargs(params, execution)
     const ret = cifti_merge_outputs(params, execution)
@@ -374,10 +376,8 @@ function cifti_merge(
     cifti: Array<CiftiMergeCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiMergeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_MERGE_METADATA);
     const params = cifti_merge_params(cifti_out, opt_direction_direction, opt_mem_limit_limit_gb, cifti)
-    return cifti_merge_execute(params, execution);
+    return cifti_merge_execute(params, runner);
 }
 
 
@@ -389,14 +389,9 @@ export {
       CiftiMergeParameters,
       CiftiMergeUpToParameters,
       cifti_merge,
-      cifti_merge_cargs,
-      cifti_merge_cifti_cargs,
       cifti_merge_cifti_params,
       cifti_merge_execute,
-      cifti_merge_index_cargs,
       cifti_merge_index_params,
-      cifti_merge_outputs,
       cifti_merge_params,
-      cifti_merge_up_to_cargs,
       cifti_merge_up_to_params,
 };

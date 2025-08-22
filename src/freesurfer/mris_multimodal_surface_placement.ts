@@ -253,14 +253,16 @@ function mris_multimodal_surface_placement_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisMultimodalSurfacePlacementOutputs`).
  */
 function mris_multimodal_surface_placement_execute(
     params: MrisMultimodalSurfacePlacementParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisMultimodalSurfacePlacementOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_MULTIMODAL_SURFACE_PLACEMENT_METADATA);
     params = execution.params(params)
     const cargs = mris_multimodal_surface_placement_cargs(params, execution)
     const ret = mris_multimodal_surface_placement_outputs(params, execution)
@@ -315,10 +317,8 @@ function mris_multimodal_surface_placement(
     min_max: boolean = false,
     runner: Runner | null = null,
 ): MrisMultimodalSurfacePlacementOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_MULTIMODAL_SURFACE_PLACEMENT_METADATA);
     const params = mris_multimodal_surface_placement_params(input_surface, output_surface, sphere_surface, normals, values, step_size, number_of_steps, gradient_sigma, aseg_aparc, white_surface, prob_of_csf, t1_image, t2_image, flair_image, debug_vertex, min_max)
-    return mris_multimodal_surface_placement_execute(params, execution);
+    return mris_multimodal_surface_placement_execute(params, runner);
 }
 
 
@@ -327,8 +327,6 @@ export {
       MrisMultimodalSurfacePlacementOutputs,
       MrisMultimodalSurfacePlacementParameters,
       mris_multimodal_surface_placement,
-      mris_multimodal_surface_placement_cargs,
       mris_multimodal_surface_placement_execute,
-      mris_multimodal_surface_placement_outputs,
       mris_multimodal_surface_placement_params,
 };

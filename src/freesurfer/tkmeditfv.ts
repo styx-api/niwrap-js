@@ -411,14 +411,16 @@ function tkmeditfv_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TkmeditfvOutputs`).
  */
 function tkmeditfv_execute(
     params: TkmeditfvParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TkmeditfvOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TKMEDITFV_METADATA);
     params = execution.params(params)
     const cargs = tkmeditfv_cargs(params, execution)
     const ret = tkmeditfv_outputs(params, execution)
@@ -505,10 +507,8 @@ function tkmeditfv(
     load_aparc_aseg: boolean = false,
     runner: Runner | null = null,
 ): TkmeditfvOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TKMEDITFV_METADATA);
     const params = tkmeditfv_params(mainvol, subject, aux_volume, seg_volume, overlay, timecourse, overlay_registration, surface, extra_volumes, crs_location, zoom_level, additional_segments, load_white, load_pial, load_orig, load_orig_nofix, load_smoothwm_nofix, load_white_preaparc, load_inflated, annot, load_aparc, surfext, seg_outline, intensity_minmax, load_defects, load_defect_pointset, trilin_interpolation, neurological_orientation, rotate_around_cursor, vgl_display, use_tkmedit, load_aparc_aseg)
-    return tkmeditfv_execute(params, execution);
+    return tkmeditfv_execute(params, runner);
 }
 
 
@@ -517,8 +517,6 @@ export {
       TkmeditfvOutputs,
       TkmeditfvParameters,
       tkmeditfv,
-      tkmeditfv_cargs,
       tkmeditfv_execute,
-      tkmeditfv_outputs,
       tkmeditfv_params,
 };

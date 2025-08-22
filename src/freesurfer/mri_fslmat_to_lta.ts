@@ -148,14 +148,16 @@ function mri_fslmat_to_lta_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriFslmatToLtaOutputs`).
  */
 function mri_fslmat_to_lta_execute(
     params: MriFslmatToLtaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriFslmatToLtaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_FSLMAT_TO_LTA_METADATA);
     params = execution.params(params)
     const cargs = mri_fslmat_to_lta_cargs(params, execution)
     const ret = mri_fslmat_to_lta_outputs(params, execution)
@@ -186,10 +188,8 @@ function mri_fslmat_to_lta(
     lta_file: string,
     runner: Runner | null = null,
 ): MriFslmatToLtaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_FSLMAT_TO_LTA_METADATA);
     const params = mri_fslmat_to_lta_params(src_vol, target_vol, fslmat_file, lta_file)
-    return mri_fslmat_to_lta_execute(params, execution);
+    return mri_fslmat_to_lta_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MriFslmatToLtaOutputs,
       MriFslmatToLtaParameters,
       mri_fslmat_to_lta,
-      mri_fslmat_to_lta_cargs,
       mri_fslmat_to_lta_execute,
-      mri_fslmat_to_lta_outputs,
       mri_fslmat_to_lta_params,
 };

@@ -332,14 +332,16 @@ function v_3d_localstat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dLocalstatOutputs`).
  */
 function v_3d_localstat_execute(
     params: V3dLocalstatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dLocalstatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_LOCALSTAT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_localstat_cargs(params, execution)
     const ret = v_3d_localstat_outputs(params, execution)
@@ -402,10 +404,8 @@ function v_3d_localstat(
     maskvalue2: number | null = null,
     runner: Runner | null = null,
 ): V3dLocalstatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_LOCALSTAT_METADATA);
     const params = v_3d_localstat_params(dataset, nbhd, stat, mask, automask, use_nonmask, prefix, datum, label_ext, reduce_grid, reduce_restore_grid, reduce_max_vox, grid_rmode, quiet, verbose, proceed_small_n, fillvalue, unfillvalue, maskvalue, maskvalue2)
-    return v_3d_localstat_execute(params, execution);
+    return v_3d_localstat_execute(params, runner);
 }
 
 
@@ -414,8 +414,6 @@ export {
       V3dLocalstatParameters,
       V_3D_LOCALSTAT_METADATA,
       v_3d_localstat,
-      v_3d_localstat_cargs,
       v_3d_localstat_execute,
-      v_3d_localstat_outputs,
       v_3d_localstat_params,
 };

@@ -192,14 +192,16 @@ function v__roi_modal_grow_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VRoiModalGrowOutputs`).
  */
 function v__roi_modal_grow_execute(
     params: VRoiModalGrowParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VRoiModalGrowOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__ROI_MODAL_GROW_METADATA);
     params = execution.params(params)
     const cargs = v__roi_modal_grow_cargs(params, execution)
     const ret = v__roi_modal_grow_outputs(params, execution)
@@ -234,10 +236,8 @@ function v__roi_modal_grow(
     neighborhood_type: number | null = null,
     runner: Runner | null = null,
 ): VRoiModalGrowOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__ROI_MODAL_GROW_METADATA);
     const params = v__roi_modal_grow_params(input_dset, niters, outdir, mask, prefix, neighborhood_type)
-    return v__roi_modal_grow_execute(params, execution);
+    return v__roi_modal_grow_execute(params, runner);
 }
 
 
@@ -246,8 +246,6 @@ export {
       VRoiModalGrowParameters,
       V__ROI_MODAL_GROW_METADATA,
       v__roi_modal_grow,
-      v__roi_modal_grow_cargs,
       v__roi_modal_grow_execute,
-      v__roi_modal_grow_outputs,
       v__roi_modal_grow_params,
 };

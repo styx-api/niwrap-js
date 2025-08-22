@@ -136,14 +136,16 @@ function morph_only_subject_rh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MorphOnlySubjectRhOutputs`).
  */
 function morph_only_subject_rh_execute(
     params: MorphOnlySubjectRhParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MorphOnlySubjectRhOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MORPH_ONLY_SUBJECT_RH_METADATA);
     params = execution.params(params)
     const cargs = morph_only_subject_rh_cargs(params, execution)
     const ret = morph_only_subject_rh_outputs(params, execution)
@@ -168,10 +170,8 @@ function morph_only_subject_rh(
     subject_dir: InputPathType,
     runner: Runner | null = null,
 ): MorphOnlySubjectRhOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MORPH_ONLY_SUBJECT_RH_METADATA);
     const params = morph_only_subject_rh_params(subject_dir)
-    return morph_only_subject_rh_execute(params, execution);
+    return morph_only_subject_rh_execute(params, runner);
 }
 
 
@@ -180,8 +180,6 @@ export {
       MorphOnlySubjectRhOutputs,
       MorphOnlySubjectRhParameters,
       morph_only_subject_rh,
-      morph_only_subject_rh_cargs,
       morph_only_subject_rh_execute,
-      morph_only_subject_rh_outputs,
       morph_only_subject_rh_params,
 };

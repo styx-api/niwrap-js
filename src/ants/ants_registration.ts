@@ -2091,14 +2091,16 @@ function ants_registration_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsRegistrationOutputs`).
  */
 function ants_registration_execute(
     params: AntsRegistrationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsRegistrationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_REGISTRATION_METADATA);
     params = execution.params(params)
     const cargs = ants_registration_cargs(params, execution)
     const ret = ants_registration_outputs(params, execution)
@@ -2162,10 +2164,8 @@ function ants_registration(
     float: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsRegistrationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_REGISTRATION_METADATA);
     const params = ants_registration_params(stages, dimensionality, output, save_state, restore_state, write_composite_transform, print_similarity_measure_interval, write_interval_volumes, collapse_output_transforms, initialize_transforms_per_stage, interpolation, restrict_deformation, initial_fixed_transform, initial_moving_transform, winsorize_image_intensities, masks, minc, random_seed, verbose, float)
-    return ants_registration_execute(params, execution);
+    return ants_registration_execute(params, runner);
 }
 
 
@@ -2205,70 +2205,37 @@ export {
       AntsRegistrationTransformTranslationParameters,
       AntsRegistrationWinsorizeImageIntensitiesParameters,
       ants_registration,
-      ants_registration_cargs,
-      ants_registration_convergence_cargs,
       ants_registration_convergence_params,
       ants_registration_execute,
-      ants_registration_initial_moving_transform_cargs,
-      ants_registration_initial_moving_transform_initialization_feature_cargs,
       ants_registration_initial_moving_transform_initialization_feature_params,
       ants_registration_initial_moving_transform_params,
-      ants_registration_initial_moving_transform_use_inverse_cargs,
       ants_registration_initial_moving_transform_use_inverse_params,
-      ants_registration_masks_cargs,
       ants_registration_masks_params,
-      ants_registration_metric_ants_neighbourhood_cross_correlation_cargs,
       ants_registration_metric_ants_neighbourhood_cross_correlation_params,
-      ants_registration_metric_demons_cargs,
       ants_registration_metric_demons_params,
-      ants_registration_metric_euclidean_icp_cargs,
       ants_registration_metric_euclidean_icp_params,
-      ants_registration_metric_global_correlation_cargs,
       ants_registration_metric_global_correlation_params,
-      ants_registration_metric_igdm_cargs,
       ants_registration_metric_igdm_params,
-      ants_registration_metric_jensen_havrda_charvet_tsallis_cargs,
       ants_registration_metric_jensen_havrda_charvet_tsallis_params,
-      ants_registration_metric_mattes_cargs,
       ants_registration_metric_mattes_params,
-      ants_registration_metric_mean_squares_cargs,
       ants_registration_metric_mean_squares_params,
-      ants_registration_metric_mutual_information_cargs,
       ants_registration_metric_mutual_information_params,
-      ants_registration_metric_point_set_expectation_cargs,
       ants_registration_metric_point_set_expectation_params,
-      ants_registration_outputs,
       ants_registration_params,
-      ants_registration_stage_cargs,
       ants_registration_stage_params,
-      ants_registration_transform_affine_cargs,
       ants_registration_transform_affine_params,
-      ants_registration_transform_bspline_cargs,
-      ants_registration_transform_bspline_displacement_field_cargs,
       ants_registration_transform_bspline_displacement_field_params,
-      ants_registration_transform_bspline_exponential_cargs,
       ants_registration_transform_bspline_exponential_params,
       ants_registration_transform_bspline_params,
-      ants_registration_transform_bspline_syn_cargs,
       ants_registration_transform_bspline_syn_params,
-      ants_registration_transform_composite_affine_cargs,
       ants_registration_transform_composite_affine_params,
-      ants_registration_transform_exponential_cargs,
       ants_registration_transform_exponential_params,
-      ants_registration_transform_gaussian_displacement_field_cargs,
       ants_registration_transform_gaussian_displacement_field_params,
-      ants_registration_transform_rigid_cargs,
       ants_registration_transform_rigid_params,
-      ants_registration_transform_similarity_cargs,
       ants_registration_transform_similarity_params,
-      ants_registration_transform_syn_cargs,
       ants_registration_transform_syn_params,
-      ants_registration_transform_time_varying_bspline_velocity_field_cargs,
       ants_registration_transform_time_varying_bspline_velocity_field_params,
-      ants_registration_transform_time_varying_velocity_field_cargs,
       ants_registration_transform_time_varying_velocity_field_params,
-      ants_registration_transform_translation_cargs,
       ants_registration_transform_translation_params,
-      ants_registration_winsorize_image_intensities_cargs,
       ants_registration_winsorize_image_intensities_params,
 };

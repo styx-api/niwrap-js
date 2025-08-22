@@ -297,14 +297,16 @@ function fixelconnectivity_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FixelconnectivityOutputs`).
  */
 function fixelconnectivity_execute(
     params: FixelconnectivityParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FixelconnectivityOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FIXELCONNECTIVITY_METADATA);
     params = execution.params(params)
     const cargs = fixelconnectivity_cargs(params, execution)
     const ret = fixelconnectivity_outputs(params, execution)
@@ -361,10 +363,8 @@ function fixelconnectivity(
     version: boolean = false,
     runner: Runner | null = null,
 ): FixelconnectivityOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIXELCONNECTIVITY_METADATA);
     const params = fixelconnectivity_params(fixel_directory, tracks, matrix, threshold, angle, mask, info, quiet, debug, force, nthreads, config, help, version)
-    return fixelconnectivity_execute(params, execution);
+    return fixelconnectivity_execute(params, runner);
 }
 
 
@@ -374,10 +374,7 @@ export {
       FixelconnectivityOutputs,
       FixelconnectivityParameters,
       fixelconnectivity,
-      fixelconnectivity_cargs,
-      fixelconnectivity_config_cargs,
       fixelconnectivity_config_params,
       fixelconnectivity_execute,
-      fixelconnectivity_outputs,
       fixelconnectivity_params,
 };

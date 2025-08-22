@@ -234,14 +234,16 @@ function surf2_vol_coord_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Surf2VolCoordOutputs`).
  */
 function surf2_vol_coord_execute(
     params: Surf2VolCoordParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Surf2VolCoordOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF2_VOL_COORD_METADATA);
     params = execution.params(params)
     const cargs = surf2_vol_coord_cargs(params, execution)
     const ret = surf2_vol_coord_outputs(params, execution)
@@ -286,10 +288,8 @@ function surf2_vol_coord(
     verb_level: number | null = null,
     runner: Runner | null = null,
 ): Surf2VolCoordOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF2_VOL_COORD_METADATA);
     const params = surf2_vol_coord_params(surface, grid_vol, closest_nodes, prefix, grid_subbrick, sv, one_node, qual, lpi, rai, verb_level)
-    return surf2_vol_coord_execute(params, execution);
+    return surf2_vol_coord_execute(params, runner);
 }
 
 
@@ -298,8 +298,6 @@ export {
       Surf2VolCoordOutputs,
       Surf2VolCoordParameters,
       surf2_vol_coord,
-      surf2_vol_coord_cargs,
       surf2_vol_coord_execute,
-      surf2_vol_coord_outputs,
       surf2_vol_coord_params,
 };

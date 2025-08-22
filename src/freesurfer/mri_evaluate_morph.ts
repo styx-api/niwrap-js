@@ -143,14 +143,16 @@ function mri_evaluate_morph_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriEvaluateMorphOutputs`).
  */
 function mri_evaluate_morph_execute(
     params: MriEvaluateMorphParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriEvaluateMorphOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_EVALUATE_MORPH_METADATA);
     params = execution.params(params)
     const cargs = mri_evaluate_morph_cargs(params, execution)
     const ret = mri_evaluate_morph_outputs(params, execution)
@@ -179,10 +181,8 @@ function mri_evaluate_morph(
     output_file: string,
     runner: Runner | null = null,
 ): MriEvaluateMorphOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_EVALUATE_MORPH_METADATA);
     const params = mri_evaluate_morph_params(xform_name, segmentation_files, output_file)
-    return mri_evaluate_morph_execute(params, execution);
+    return mri_evaluate_morph_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MriEvaluateMorphOutputs,
       MriEvaluateMorphParameters,
       mri_evaluate_morph,
-      mri_evaluate_morph_cargs,
       mri_evaluate_morph_execute,
-      mri_evaluate_morph_outputs,
       mri_evaluate_morph_params,
 };

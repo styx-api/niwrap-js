@@ -264,14 +264,16 @@ function bianca_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BiancaOutputs`).
  */
 function bianca_execute(
     params: BiancaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BiancaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BIANCA_METADATA);
     params = execution.params(params)
     const cargs = bianca_cargs(params, execution)
     const ret = bianca_outputs(params, execution)
@@ -328,10 +330,8 @@ function bianca(
     out_name: string | null = "output_bianca",
     runner: Runner | null = null,
 ): BiancaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BIANCA_METADATA);
     const params = bianca_params(master_file, label_feature_num, brain_mask_feature_num, query_subject_num, training_nums, feature_subset, mat_feature_num, spatial_weight, patch_sizes, patch_3d, select_pts, training_pts, non_les_pts, load_classifier_data, save_classifier_data, verbose_flag, out_name)
-    return bianca_execute(params, execution);
+    return bianca_execute(params, runner);
 }
 
 
@@ -340,8 +340,6 @@ export {
       BiancaOutputs,
       BiancaParameters,
       bianca,
-      bianca_cargs,
       bianca_execute,
-      bianca_outputs,
       bianca_params,
 };

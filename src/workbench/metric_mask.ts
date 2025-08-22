@@ -158,14 +158,16 @@ function metric_mask_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricMaskOutputs`).
  */
 function metric_mask_execute(
     params: MetricMaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricMaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_MASK_METADATA);
     params = execution.params(params)
     const cargs = metric_mask_cargs(params, execution)
     const ret = metric_mask_outputs(params, execution)
@@ -198,10 +200,8 @@ function metric_mask(
     opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): MetricMaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_MASK_METADATA);
     const params = metric_mask_params(metric, mask, metric_out, opt_column_column)
-    return metric_mask_execute(params, execution);
+    return metric_mask_execute(params, runner);
 }
 
 
@@ -210,8 +210,6 @@ export {
       MetricMaskOutputs,
       MetricMaskParameters,
       metric_mask,
-      metric_mask_cargs,
       metric_mask_execute,
-      metric_mask_outputs,
       metric_mask_params,
 };

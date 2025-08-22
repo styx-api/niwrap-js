@@ -152,14 +152,16 @@ function fat_mvm_gridconv_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatMvmGridconvPyOutputs`).
  */
 function fat_mvm_gridconv_py_execute(
     params: FatMvmGridconvPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatMvmGridconvPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_MVM_GRIDCONV_PY_METADATA);
     params = execution.params(params)
     const cargs = fat_mvm_gridconv_py_cargs(params, execution)
     const ret = fat_mvm_gridconv_py_outputs(params, execution)
@@ -186,10 +188,8 @@ function fat_mvm_gridconv_py(
     list_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): FatMvmGridconvPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_MVM_GRIDCONV_PY_METADATA);
     const params = fat_mvm_gridconv_py_params(matrix_files, list_file)
-    return fat_mvm_gridconv_py_execute(params, execution);
+    return fat_mvm_gridconv_py_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       FatMvmGridconvPyOutputs,
       FatMvmGridconvPyParameters,
       fat_mvm_gridconv_py,
-      fat_mvm_gridconv_py_cargs,
       fat_mvm_gridconv_py_execute,
-      fat_mvm_gridconv_py_outputs,
       fat_mvm_gridconv_py_params,
 };

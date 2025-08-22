@@ -185,14 +185,16 @@ function metric_false_correlation_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricFalseCorrelationOutputs`).
  */
 function metric_false_correlation_execute(
     params: MetricFalseCorrelationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricFalseCorrelationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_FALSE_CORRELATION_METADATA);
     params = execution.params(params)
     const cargs = metric_false_correlation_cargs(params, execution)
     const ret = metric_false_correlation_outputs(params, execution)
@@ -233,10 +235,8 @@ function metric_false_correlation(
     opt_dump_text_text_out: string | null = null,
     runner: Runner | null = null,
 ): MetricFalseCorrelationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_FALSE_CORRELATION_METADATA);
     const params = metric_false_correlation_params(surface, metric_in, v_3d_dist, geo_outer, geo_inner, metric_out, opt_roi_roi_metric, opt_dump_text_text_out)
-    return metric_false_correlation_execute(params, execution);
+    return metric_false_correlation_execute(params, runner);
 }
 
 
@@ -245,8 +245,6 @@ export {
       MetricFalseCorrelationOutputs,
       MetricFalseCorrelationParameters,
       metric_false_correlation,
-      metric_false_correlation_cargs,
       metric_false_correlation_execute,
-      metric_false_correlation_outputs,
       metric_false_correlation_params,
 };

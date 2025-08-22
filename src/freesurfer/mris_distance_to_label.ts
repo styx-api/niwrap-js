@@ -132,14 +132,16 @@ function mris_distance_to_label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisDistanceToLabelOutputs`).
  */
 function mris_distance_to_label_execute(
     params: MrisDistanceToLabelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisDistanceToLabelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_DISTANCE_TO_LABEL_METADATA);
     params = execution.params(params)
     const cargs = mris_distance_to_label_cargs(params, execution)
     const ret = mris_distance_to_label_outputs(params, execution)
@@ -166,10 +168,8 @@ function mris_distance_to_label(
     subject_1: string,
     runner: Runner | null = null,
 ): MrisDistanceToLabelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_DISTANCE_TO_LABEL_METADATA);
     const params = mris_distance_to_label_params(hemisphere, subject_1)
-    return mris_distance_to_label_execute(params, execution);
+    return mris_distance_to_label_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       MrisDistanceToLabelOutputs,
       MrisDistanceToLabelParameters,
       mris_distance_to_label,
-      mris_distance_to_label_cargs,
       mris_distance_to_label_execute,
-      mris_distance_to_label_outputs,
       mris_distance_to_label_params,
 };

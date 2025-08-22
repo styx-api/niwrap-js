@@ -217,14 +217,16 @@ function create_dticohort_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CreateDticohortOutputs`).
  */
 function create_dticohort_execute(
     params: CreateDticohortParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CreateDticohortOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CREATE_DTICOHORT_METADATA);
     params = execution.params(params)
     const cargs = create_dticohort_cargs(params, execution)
     const ret = create_dticohort_outputs(params, execution)
@@ -263,10 +265,8 @@ function create_dticohort(
     registered_population: InputPathType | null = null,
     runner: Runner | null = null,
 ): CreateDticohortOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CREATE_DTICOHORT_METADATA);
     const params = create_dticohort_params(dti_atlas, dwi_parameters, output, image_dimensionality, label_mask_image, noise_sigma, pathology, registered_population)
-    return create_dticohort_execute(params, execution);
+    return create_dticohort_execute(params, runner);
 }
 
 
@@ -275,8 +275,6 @@ export {
       CreateDticohortOutputs,
       CreateDticohortParameters,
       create_dticohort,
-      create_dticohort_cargs,
       create_dticohort_execute,
-      create_dticohort_outputs,
       create_dticohort_params,
 };

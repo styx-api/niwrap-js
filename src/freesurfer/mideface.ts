@@ -440,14 +440,16 @@ function mideface_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MidefaceOutputs`).
  */
 function mideface_execute(
     params: MidefaceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MidefaceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MIDEFACE_METADATA);
     params = execution.params(params)
     const cargs = mideface_cargs(params, execution)
     const ret = mideface_outputs(params, execution)
@@ -530,10 +532,8 @@ function mideface(
     check_output_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): MidefaceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MIDEFACE_METADATA);
     const params = mideface_params(input_volume, output_volume, facemask, output_dir, exclusion_mask, samseg_ndilations, samseg_json, samseg_fast, no_samseg_fast, init_reg, synthseg_ndilations, fill_const, fill_zero, fhi, no_ears, back_of_head, forehead, pics, code, image_convert, no_post, threads, force, output_format, atlas, expert, display_no, apply_volume, check_volume, check_output_file)
-    return mideface_execute(params, execution);
+    return mideface_execute(params, runner);
 }
 
 
@@ -542,8 +542,6 @@ export {
       MidefaceOutputs,
       MidefaceParameters,
       mideface,
-      mideface_cargs,
       mideface_execute,
-      mideface_outputs,
       mideface_params,
 };

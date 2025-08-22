@@ -158,14 +158,16 @@ function adjunct_aw_tableize_roi_info_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AdjunctAwTableizeRoiInfoPyOutputs`).
  */
 function adjunct_aw_tableize_roi_info_py_execute(
     params: AdjunctAwTableizeRoiInfoPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AdjunctAwTableizeRoiInfoPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADJUNCT_AW_TABLEIZE_ROI_INFO_PY_METADATA);
     params = execution.params(params)
     const cargs = adjunct_aw_tableize_roi_info_py_cargs(params, execution)
     const ret = adjunct_aw_tableize_roi_info_py_outputs(params, execution)
@@ -200,10 +202,8 @@ function adjunct_aw_tableize_roi_info_py(
     modesmooth_value: number,
     runner: Runner | null = null,
 ): AdjunctAwTableizeRoiInfoPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADJUNCT_AW_TABLEIZE_ROI_INFO_PY_METADATA);
     const params = adjunct_aw_tableize_roi_info_py_params(output_file, warped_atlas, warped_mask, reference_atlas, reference_mask, modesmooth_value)
-    return adjunct_aw_tableize_roi_info_py_execute(params, execution);
+    return adjunct_aw_tableize_roi_info_py_execute(params, runner);
 }
 
 
@@ -212,8 +212,6 @@ export {
       AdjunctAwTableizeRoiInfoPyOutputs,
       AdjunctAwTableizeRoiInfoPyParameters,
       adjunct_aw_tableize_roi_info_py,
-      adjunct_aw_tableize_roi_info_py_cargs,
       adjunct_aw_tableize_roi_info_py_execute,
-      adjunct_aw_tableize_roi_info_py_outputs,
       adjunct_aw_tableize_roi_info_py_params,
 };

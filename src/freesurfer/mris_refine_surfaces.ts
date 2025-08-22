@@ -193,14 +193,16 @@ function mris_refine_surfaces_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRefineSurfacesOutputs`).
  */
 function mris_refine_surfaces_execute(
     params: MrisRefineSurfacesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRefineSurfacesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_REFINE_SURFACES_METADATA);
     params = execution.params(params)
     const cargs = mris_refine_surfaces_cargs(params, execution)
     const ret = mris_refine_surfaces_outputs(params, execution)
@@ -239,10 +241,8 @@ function mris_refine_surfaces(
     suffix: string | null = null,
     runner: Runner | null = null,
 ): MrisRefineSurfacesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_REFINE_SURFACES_METADATA);
     const params = mris_refine_surfaces_params(subject_name, hemi, hires_volume, label_file, low_to_hires_xfm, sdir, use_mgz, suffix)
-    return mris_refine_surfaces_execute(params, execution);
+    return mris_refine_surfaces_execute(params, runner);
 }
 
 
@@ -251,8 +251,6 @@ export {
       MrisRefineSurfacesOutputs,
       MrisRefineSurfacesParameters,
       mris_refine_surfaces,
-      mris_refine_surfaces_cargs,
       mris_refine_surfaces_execute,
-      mris_refine_surfaces_outputs,
       mris_refine_surfaces_params,
 };

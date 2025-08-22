@@ -136,14 +136,16 @@ function run_mris_preproc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RunMrisPreprocOutputs`).
  */
 function run_mris_preproc_execute(
     params: RunMrisPreprocParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RunMrisPreprocOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RUN_MRIS_PREPROC_METADATA);
     params = execution.params(params)
     const cargs = run_mris_preproc_cargs(params, execution)
     const ret = run_mris_preproc_outputs(params, execution)
@@ -170,10 +172,8 @@ function run_mris_preproc(
     target_average: string | null = null,
     runner: Runner | null = null,
 ): RunMrisPreprocOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RUN_MRIS_PREPROC_METADATA);
     const params = run_mris_preproc_params(qdec_table, target_average)
-    return run_mris_preproc_execute(params, execution);
+    return run_mris_preproc_execute(params, runner);
 }
 
 
@@ -182,8 +182,6 @@ export {
       RunMrisPreprocOutputs,
       RunMrisPreprocParameters,
       run_mris_preproc,
-      run_mris_preproc_cargs,
       run_mris_preproc_execute,
-      run_mris_preproc_outputs,
       run_mris_preproc_params,
 };

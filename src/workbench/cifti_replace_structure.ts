@@ -431,14 +431,16 @@ function cifti_replace_structure_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiReplaceStructureOutputs`).
  */
 function cifti_replace_structure_execute(
     params: CiftiReplaceStructureParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiReplaceStructureOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_REPLACE_STRUCTURE_METADATA);
     params = execution.params(params)
     const cargs = cifti_replace_structure_cargs(params, execution)
     const ret = cifti_replace_structure_outputs(params, execution)
@@ -515,10 +517,8 @@ function cifti_replace_structure(
     volume: Array<CiftiReplaceStructureVolumeParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiReplaceStructureOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_REPLACE_STRUCTURE_METADATA);
     const params = cifti_replace_structure_params(cifti, direction, volume_all, opt_discard_unused_labels, opt_label_collision_action, label, metric, volume)
-    return cifti_replace_structure_execute(params, execution);
+    return cifti_replace_structure_execute(params, runner);
 }
 
 
@@ -531,16 +531,10 @@ export {
       CiftiReplaceStructureVolumeAllParameters,
       CiftiReplaceStructureVolumeParameters,
       cifti_replace_structure,
-      cifti_replace_structure_cargs,
       cifti_replace_structure_execute,
-      cifti_replace_structure_label_cargs,
       cifti_replace_structure_label_params,
-      cifti_replace_structure_metric_cargs,
       cifti_replace_structure_metric_params,
-      cifti_replace_structure_outputs,
       cifti_replace_structure_params,
-      cifti_replace_structure_volume_all_cargs,
       cifti_replace_structure_volume_all_params,
-      cifti_replace_structure_volume_cargs,
       cifti_replace_structure_volume_params,
 };

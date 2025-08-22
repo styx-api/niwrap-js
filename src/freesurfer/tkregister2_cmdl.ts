@@ -729,14 +729,16 @@ function tkregister2_cmdl_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Tkregister2CmdlOutputs`).
  */
 function tkregister2_cmdl_execute(
     params: Tkregister2CmdlParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Tkregister2CmdlOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TKREGISTER2_CMDL_METADATA);
     params = execution.params(params)
     const cargs = tkregister2_cmdl_cargs(params, execution)
     const ret = tkregister2_cmdl_outputs(params, execution)
@@ -879,10 +881,8 @@ function tkregister2_cmdl(
     conf_targ_flag: boolean = false,
     runner: Runner | null = null,
 ): Tkregister2CmdlOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TKREGISTER2_CMDL_METADATA);
     const params = tkregister2_cmdl_params(movable_volume, target_volume, fstarg_flag, reg_file, check_reg_flag, regheader_flag, regheader_center_flag, fsl_targ_flag, fsl_targ_lr_flag, gca_subject, gca_skull_subject, no_zero_cras_flag, movbright, no_inorm_flag, fmov, fmov_targ_flag, plane, slice, volview, fov, movscale, surf, surf_rgb, lh_only_flag, rh_only_flag, fstal_flag, talxfmname, ixfm, xfm, xfmout, fsl, fslregout, freeview, vox2vox, lta, lta_inv, ltaout, ltaout_inv_flag, feat, fsfeat, identity_flag, subject_id, subjects_dir, nofix_flag, float2int, title, tag_flag, mov_orientation, targ_orientation, int, double_window_size_flag, window_scale, det, aseg_flag, aparc_flag, wmparc_flag, gdiagno, trans, rot, conf_targ_flag)
-    return tkregister2_cmdl_execute(params, execution);
+    return tkregister2_cmdl_execute(params, runner);
 }
 
 
@@ -891,8 +891,6 @@ export {
       Tkregister2CmdlOutputs,
       Tkregister2CmdlParameters,
       tkregister2_cmdl,
-      tkregister2_cmdl_cargs,
       tkregister2_cmdl_execute,
-      tkregister2_cmdl_outputs,
       tkregister2_cmdl_params,
 };

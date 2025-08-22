@@ -224,14 +224,16 @@ function v_1d_bport_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dBportOutputs`).
  */
 function v_1d_bport_execute(
     params: V1dBportParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dBportOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_BPORT_METADATA);
     params = execution.params(params)
     const cargs = v_1d_bport_cargs(params, execution)
     const ret = v_1d_bport_outputs(params, execution)
@@ -274,10 +276,8 @@ function v_1d_bport(
     concat: InputPathType | null = null,
     runner: Runner | null = null,
 ): V1dBportOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_BPORT_METADATA);
     const params = v_1d_bport_params(band, invert, nozero, noconst, quad, input_dataset, input_1d_file, nodata, tr, concat)
-    return v_1d_bport_execute(params, execution);
+    return v_1d_bport_execute(params, runner);
 }
 
 
@@ -286,8 +286,6 @@ export {
       V1dBportParameters,
       V_1D_BPORT_METADATA,
       v_1d_bport,
-      v_1d_bport_cargs,
       v_1d_bport_execute,
-      v_1d_bport_outputs,
       v_1d_bport_params,
 };

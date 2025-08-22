@@ -442,14 +442,16 @@ function volume_resample_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeResampleOutputs`).
  */
 function volume_resample_execute(
     params: VolumeResampleParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeResampleOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_RESAMPLE_METADATA);
     params = execution.params(params)
     const cargs = volume_resample_cargs(params, execution)
     const ret = volume_resample_outputs(params, execution)
@@ -492,10 +494,8 @@ function volume_resample(
     warp: Array<VolumeResampleWarpParameters> | null = null,
     runner: Runner | null = null,
 ): VolumeResampleOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_RESAMPLE_METADATA);
     const params = volume_resample_params(volume_in, volume_space, method, volume_out, affine, affine_series, warp)
-    return volume_resample_execute(params, execution);
+    return volume_resample_execute(params, runner);
 }
 
 
@@ -509,18 +509,11 @@ export {
       VolumeResampleParameters,
       VolumeResampleWarpParameters,
       volume_resample,
-      volume_resample_affine_cargs,
       volume_resample_affine_params,
-      volume_resample_affine_series_cargs,
       volume_resample_affine_series_params,
-      volume_resample_cargs,
       volume_resample_execute,
-      volume_resample_flirt_1_cargs,
       volume_resample_flirt_1_params,
-      volume_resample_flirt_cargs,
       volume_resample_flirt_params,
-      volume_resample_outputs,
       volume_resample_params,
-      volume_resample_warp_cargs,
       volume_resample_warp_params,
 };

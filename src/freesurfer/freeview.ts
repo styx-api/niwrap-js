@@ -131,14 +131,16 @@ function freeview_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FreeviewOutputs`).
  */
 function freeview_execute(
     params: FreeviewParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FreeviewOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FREEVIEW_METADATA);
     params = execution.params(params)
     const cargs = freeview_cargs(params, execution)
     const ret = freeview_outputs(params, execution)
@@ -163,10 +165,8 @@ function freeview(
     args: string | null = null,
     runner: Runner | null = null,
 ): FreeviewOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FREEVIEW_METADATA);
     const params = freeview_params(args)
-    return freeview_execute(params, execution);
+    return freeview_execute(params, runner);
 }
 
 
@@ -175,8 +175,6 @@ export {
       FreeviewOutputs,
       FreeviewParameters,
       freeview,
-      freeview_cargs,
       freeview_execute,
-      freeview_outputs,
       freeview_params,
 };

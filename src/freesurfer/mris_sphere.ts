@@ -143,14 +143,16 @@ function mris_sphere_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisSphereOutputs`).
  */
 function mris_sphere_execute(
     params: MrisSphereParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisSphereOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_SPHERE_METADATA);
     params = execution.params(params)
     const cargs = mris_sphere_cargs(params, execution)
     const ret = mris_sphere_outputs(params, execution)
@@ -179,10 +181,8 @@ function mris_sphere(
     output_patch: string,
     runner: Runner | null = null,
 ): MrisSphereOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_SPHERE_METADATA);
     const params = mris_sphere_params(surface_file, patch_file, output_patch)
-    return mris_sphere_execute(params, execution);
+    return mris_sphere_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MrisSphereOutputs,
       MrisSphereParameters,
       mris_sphere,
-      mris_sphere_cargs,
       mris_sphere_execute,
-      mris_sphere_outputs,
       mris_sphere_params,
 };

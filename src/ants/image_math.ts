@@ -157,14 +157,16 @@ function image_math_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImageMathOutputs`).
  */
 function image_math_execute(
     params: ImageMathParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImageMathOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMAGE_MATH_METADATA);
     params = execution.params(params)
     const cargs = image_math_cargs(params, execution)
     const ret = image_math_outputs(params, execution)
@@ -197,10 +199,8 @@ function image_math(
     image2: InputPathType | null = null,
     runner: Runner | null = null,
 ): ImageMathOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMAGE_MATH_METADATA);
     const params = image_math_params(image_dimension, output_image, operations_and_inputs, image1, image2)
-    return image_math_execute(params, execution);
+    return image_math_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       ImageMathOutputs,
       ImageMathParameters,
       image_math,
-      image_math_cargs,
       image_math_execute,
-      image_math_outputs,
       image_math_params,
 };

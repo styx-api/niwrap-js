@@ -227,14 +227,16 @@ function trac_preproc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TracPreprocOutputs`).
  */
 function trac_preproc_execute(
     params: TracPreprocParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TracPreprocOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TRAC_PREPROC_METADATA);
     params = execution.params(params)
     const cargs = trac_preproc_cargs(params, execution)
     const ret = trac_preproc_outputs(params, execution)
@@ -281,10 +283,8 @@ function trac_preproc(
     version: boolean = false,
     runner: Runner | null = null,
 ): TracPreprocOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TRAC_PREPROC_METADATA);
     const params = trac_preproc_params(dmrirc_file, log_file, nolog, cmd_file, nocmd, no_isrunning, umask, group_id, allow_core_dump, debug, dontrun, version)
-    return trac_preproc_execute(params, execution);
+    return trac_preproc_execute(params, runner);
 }
 
 
@@ -293,8 +293,6 @@ export {
       TracPreprocOutputs,
       TracPreprocParameters,
       trac_preproc,
-      trac_preproc_cargs,
       trac_preproc_execute,
-      trac_preproc_outputs,
       trac_preproc_params,
 };

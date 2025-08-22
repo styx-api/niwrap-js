@@ -143,14 +143,16 @@ function compute_vox2vox_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ComputeVox2voxOutputs`).
  */
 function compute_vox2vox_execute(
     params: ComputeVox2voxParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ComputeVox2voxOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(COMPUTE_VOX2VOX_METADATA);
     params = execution.params(params)
     const cargs = compute_vox2vox_cargs(params, execution)
     const ret = compute_vox2vox_outputs(params, execution)
@@ -179,10 +181,8 @@ function compute_vox2vox(
     target: InputPathType,
     runner: Runner | null = null,
 ): ComputeVox2voxOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(COMPUTE_VOX2VOX_METADATA);
     const params = compute_vox2vox_params(source, t4file, target)
-    return compute_vox2vox_execute(params, execution);
+    return compute_vox2vox_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       ComputeVox2voxOutputs,
       ComputeVox2voxParameters,
       compute_vox2vox,
-      compute_vox2vox_cargs,
       compute_vox2vox_execute,
-      compute_vox2vox_outputs,
       compute_vox2vox_params,
 };

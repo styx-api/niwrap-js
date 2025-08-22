@@ -264,14 +264,16 @@ function gen_ss_review_table_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GenSsReviewTablePyOutputs`).
  */
 function gen_ss_review_table_py_execute(
     params: GenSsReviewTablePyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GenSsReviewTablePyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GEN_SS_REVIEW_TABLE_PY_METADATA);
     params = execution.params(params)
     const cargs = gen_ss_review_table_py_cargs(params, execution)
     const ret = gen_ss_review_table_py_outputs(params, execution)
@@ -322,10 +324,8 @@ function gen_ss_review_table_py(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): GenSsReviewTablePyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GEN_SS_REVIEW_TABLE_PY_METADATA);
     const params = gen_ss_review_table_py_params(infiles, write_table, write_outliers, overwrite, empty_is_outlier, outlier_sep, separator, showlabs, show_infiles, show_keepers, report_outliers, report_outliers_fill_style, show_missing, verbosity)
-    return gen_ss_review_table_py_execute(params, execution);
+    return gen_ss_review_table_py_execute(params, runner);
 }
 
 
@@ -334,8 +334,6 @@ export {
       GenSsReviewTablePyOutputs,
       GenSsReviewTablePyParameters,
       gen_ss_review_table_py,
-      gen_ss_review_table_py_cargs,
       gen_ss_review_table_py_execute,
-      gen_ss_review_table_py_outputs,
       gen_ss_review_table_py_params,
 };

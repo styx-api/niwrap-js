@@ -199,14 +199,16 @@ function dmri_forrest_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriForrestOutputs`).
  */
 function dmri_forrest_execute(
     params: DmriForrestParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriForrestOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_FORREST_METADATA);
     params = execution.params(params)
     const cargs = dmri_forrest_cargs(params, execution)
     const ret = dmri_forrest_outputs(params, execution)
@@ -247,10 +249,8 @@ function dmri_forrest(
     help: boolean = false,
     runner: Runner | null = null,
 ): DmriForrestOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_FORREST_METADATA);
     const params = dmri_forrest_params(test_dir, train_file, mask_file, tract_files, seg_file, diff_file, debug, checkopts, help)
-    return dmri_forrest_execute(params, execution);
+    return dmri_forrest_execute(params, runner);
 }
 
 
@@ -259,8 +259,6 @@ export {
       DmriForrestOutputs,
       DmriForrestParameters,
       dmri_forrest,
-      dmri_forrest_cargs,
       dmri_forrest_execute,
-      dmri_forrest_outputs,
       dmri_forrest_params,
 };

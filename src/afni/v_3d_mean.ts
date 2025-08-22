@@ -274,14 +274,16 @@ function v_3d_mean_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dMeanOutputs`).
  */
 function v_3d_mean_execute(
     params: V3dMeanParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dMeanOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_MEAN_METADATA);
     params = execution.params(params)
     const cargs = v_3d_mean_cargs(params, execution)
     const ret = v_3d_mean_outputs(params, execution)
@@ -342,10 +344,8 @@ function v_3d_mean(
     weightset: InputPathType | null = null,
     runner: Runner | null = null,
 ): V3dMeanOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_MEAN_METADATA);
     const params = v_3d_mean_params(input_files, verbose, prefix, datum, fscale, gscale, nscale, non_zero, stdev, sqr, sum, count, max, min, absmax, signed_absmax, mask_inter, mask_union, weightset)
-    return v_3d_mean_execute(params, execution);
+    return v_3d_mean_execute(params, runner);
 }
 
 
@@ -354,8 +354,6 @@ export {
       V3dMeanParameters,
       V_3D_MEAN_METADATA,
       v_3d_mean,
-      v_3d_mean_cargs,
       v_3d_mean_execute,
-      v_3d_mean_outputs,
       v_3d_mean_params,
 };

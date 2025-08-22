@@ -245,14 +245,16 @@ function exvivo_hemi_proc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ExvivoHemiProcOutputs`).
  */
 function exvivo_hemi_proc_execute(
     params: ExvivoHemiProcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ExvivoHemiProcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EXVIVO_HEMI_PROC_METADATA);
     params = execution.params(params)
     const cargs = exvivo_hemi_proc_cargs(params, execution)
     const ret = exvivo_hemi_proc_outputs(params, execution)
@@ -305,10 +307,8 @@ function exvivo_hemi_proc(
     force: boolean = false,
     runner: Runner | null = null,
 ): ExvivoHemiProcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EXVIVO_HEMI_PROC_METADATA);
     const params = exvivo_hemi_proc_params(flashdir, outdir, subject, left_hemi, right_hemi, suptent, no_rotate, t1thresh, threads, check_only, prep_only, mask_only, samseg_only, stop_mmppsp_after, force)
-    return exvivo_hemi_proc_execute(params, execution);
+    return exvivo_hemi_proc_execute(params, runner);
 }
 
 
@@ -317,8 +317,6 @@ export {
       ExvivoHemiProcOutputs,
       ExvivoHemiProcParameters,
       exvivo_hemi_proc,
-      exvivo_hemi_proc_cargs,
       exvivo_hemi_proc_execute,
-      exvivo_hemi_proc_outputs,
       exvivo_hemi_proc_params,
 };

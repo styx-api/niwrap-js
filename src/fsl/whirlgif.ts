@@ -193,14 +193,16 @@ function whirlgif_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `WhirlgifOutputs`).
  */
 function whirlgif_execute(
     params: WhirlgifParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): WhirlgifOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(WHIRLGIF_METADATA);
     params = execution.params(params)
     const cargs = whirlgif_cargs(params, execution)
     const ret = whirlgif_outputs(params, execution)
@@ -235,10 +237,8 @@ function whirlgif(
     list_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): WhirlgifOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(WHIRLGIF_METADATA);
     const params = whirlgif_params(input_files, outfile, loop_count, delay_time, disp_flag, list_file)
-    return whirlgif_execute(params, execution);
+    return whirlgif_execute(params, runner);
 }
 
 
@@ -247,8 +247,6 @@ export {
       WhirlgifOutputs,
       WhirlgifParameters,
       whirlgif,
-      whirlgif_cargs,
       whirlgif_execute,
-      whirlgif_outputs,
       whirlgif_params,
 };

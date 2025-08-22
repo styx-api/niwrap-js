@@ -286,14 +286,16 @@ function mris_skeletonize_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisSkeletonizeOutputs`).
  */
 function mris_skeletonize_execute(
     params: MrisSkeletonizeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisSkeletonizeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_SKELETONIZE_METADATA);
     params = execution.params(params)
     const cargs = mris_skeletonize_cargs(params, execution)
     const ret = mris_skeletonize_outputs(params, execution)
@@ -346,10 +348,8 @@ function mris_skeletonize(
     fwhm: number | null = null,
     runner: Runner | null = null,
 ): MrisSkeletonizeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_SKELETONIZE_METADATA);
     const params = mris_skeletonize_params(surface, surfvals, mask, k1, curv_nonmaxsup, gyrus, sulcus, outdir, sphere, pointset, label, nbrsize, threshold, cluster, fwhm)
-    return mris_skeletonize_execute(params, execution);
+    return mris_skeletonize_execute(params, runner);
 }
 
 
@@ -358,8 +358,6 @@ export {
       MrisSkeletonizeOutputs,
       MrisSkeletonizeParameters,
       mris_skeletonize,
-      mris_skeletonize_cargs,
       mris_skeletonize_execute,
-      mris_skeletonize_outputs,
       mris_skeletonize_params,
 };

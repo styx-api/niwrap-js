@@ -138,14 +138,16 @@ function medianfilter_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MedianfilterOutputs`).
  */
 function medianfilter_execute(
     params: MedianfilterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MedianfilterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MEDIANFILTER_METADATA);
     params = execution.params(params)
     const cargs = medianfilter_cargs(params, execution)
     const ret = medianfilter_outputs(params, execution)
@@ -172,10 +174,8 @@ function medianfilter(
     outfile: InputPathType,
     runner: Runner | null = null,
 ): MedianfilterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MEDIANFILTER_METADATA);
     const params = medianfilter_params(infile, outfile)
-    return medianfilter_execute(params, execution);
+    return medianfilter_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MedianfilterOutputs,
       MedianfilterParameters,
       medianfilter,
-      medianfilter_cargs,
       medianfilter_execute,
-      medianfilter_outputs,
       medianfilter_params,
 };

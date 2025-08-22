@@ -254,14 +254,16 @@ function ants_intermodality_intrasubject_sh_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsIntermodalityIntrasubjectShOutputs`).
  */
 function ants_intermodality_intrasubject_sh_execute(
     params: AntsIntermodalityIntrasubjectShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsIntermodalityIntrasubjectShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_INTERMODALITY_INTRASUBJECT_SH_METADATA);
     params = execution.params(params)
     const cargs = ants_intermodality_intrasubject_sh_cargs(params, execution)
     const ret = ants_intermodality_intrasubject_sh_outputs(params, execution)
@@ -308,10 +310,8 @@ function ants_intermodality_intrasubject_sh(
     auxiliary_dt_image: InputPathType | null = null,
     runner: Runner | null = null,
 ): AntsIntermodalityIntrasubjectShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_INTERMODALITY_INTRASUBJECT_SH_METADATA);
     const params = ants_intermodality_intrasubject_sh_params(dimension, anatomical_t1_image, scalar_image_to_match, anatomical_t1brainmask, transform_type, t1_to_template_prefix, output_prefix, anatomical_reference_image, template_space, labels_in_template_space, auxiliary_scalar_images, auxiliary_dt_image)
-    return ants_intermodality_intrasubject_sh_execute(params, execution);
+    return ants_intermodality_intrasubject_sh_execute(params, runner);
 }
 
 
@@ -320,8 +320,6 @@ export {
       AntsIntermodalityIntrasubjectShOutputs,
       AntsIntermodalityIntrasubjectShParameters,
       ants_intermodality_intrasubject_sh,
-      ants_intermodality_intrasubject_sh_cargs,
       ants_intermodality_intrasubject_sh_execute,
-      ants_intermodality_intrasubject_sh_outputs,
       ants_intermodality_intrasubject_sh_params,
 };

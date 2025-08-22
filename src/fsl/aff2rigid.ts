@@ -132,14 +132,16 @@ function aff2rigid_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Aff2rigidOutputs`).
  */
 function aff2rigid_execute(
     params: Aff2rigidParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Aff2rigidOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(AFF2RIGID_METADATA);
     params = execution.params(params)
     const cargs = aff2rigid_cargs(params, execution)
     const ret = aff2rigid_outputs(params, execution)
@@ -166,10 +168,8 @@ function aff2rigid(
     output_transform: string,
     runner: Runner | null = null,
 ): Aff2rigidOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AFF2RIGID_METADATA);
     const params = aff2rigid_params(input_transform, output_transform)
-    return aff2rigid_execute(params, execution);
+    return aff2rigid_execute(params, runner);
 }
 
 
@@ -178,8 +178,6 @@ export {
       Aff2rigidOutputs,
       Aff2rigidParameters,
       aff2rigid,
-      aff2rigid_cargs,
       aff2rigid_execute,
-      aff2rigid_outputs,
       aff2rigid_params,
 };

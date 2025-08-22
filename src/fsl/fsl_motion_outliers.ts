@@ -275,14 +275,16 @@ function fsl_motion_outliers_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslMotionOutliersOutputs`).
  */
 function fsl_motion_outliers_execute(
     params: FslMotionOutliersParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslMotionOutliersOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_MOTION_OUTLIERS_METADATA);
     params = execution.params(params)
     const cargs = fsl_motion_outliers_cargs(params, execution)
     const ret = fsl_motion_outliers_outputs(params, execution)
@@ -335,10 +337,8 @@ function fsl_motion_outliers(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): FslMotionOutliersOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_MOTION_OUTLIERS_METADATA);
     const params = fsl_motion_outliers_params(input_4d_image, output_confound_file, mask_image, save_metric_file, save_metric_plot, temp_path, refrms_flag, dvars_flag, refmse_flag, fd_flag, fdrms_flag, abs_thresh, no_moco_flag, dummy_scans, verbose_flag)
-    return fsl_motion_outliers_execute(params, execution);
+    return fsl_motion_outliers_execute(params, runner);
 }
 
 
@@ -347,8 +347,6 @@ export {
       FslMotionOutliersOutputs,
       FslMotionOutliersParameters,
       fsl_motion_outliers,
-      fsl_motion_outliers_cargs,
       fsl_motion_outliers_execute,
-      fsl_motion_outliers_outputs,
       fsl_motion_outliers_params,
 };

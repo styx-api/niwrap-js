@@ -223,14 +223,16 @@ function fsl_boxplot_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslBoxplotOutputs`).
  */
 function fsl_boxplot_execute(
     params: FslBoxplotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslBoxplotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_BOXPLOT_METADATA);
     params = execution.params(params)
     const cargs = fsl_boxplot_cargs(params, execution)
     const ret = fsl_boxplot_outputs(params, execution)
@@ -271,10 +273,8 @@ function fsl_boxplot(
     plot_width: number | null = null,
     runner: Runner | null = null,
 ): FslBoxplotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_BOXPLOT_METADATA);
     const params = fsl_boxplot_params(input_files, output_image, help_flag, title, legend_file, x_label, y_label, plot_height, plot_width)
-    return fsl_boxplot_execute(params, execution);
+    return fsl_boxplot_execute(params, runner);
 }
 
 
@@ -283,8 +283,6 @@ export {
       FslBoxplotOutputs,
       FslBoxplotParameters,
       fsl_boxplot,
-      fsl_boxplot_cargs,
       fsl_boxplot_execute,
-      fsl_boxplot_outputs,
       fsl_boxplot_params,
 };

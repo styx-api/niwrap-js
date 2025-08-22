@@ -153,14 +153,16 @@ function simple_syn_registration_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SimpleSynRegistrationOutputs`).
  */
 function simple_syn_registration_execute(
     params: SimpleSynRegistrationParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SimpleSynRegistrationOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SIMPLE_SYN_REGISTRATION_METADATA);
     params = execution.params(params)
     const cargs = simple_syn_registration_cargs(params, execution)
     const ret = simple_syn_registration_outputs(params, execution)
@@ -191,10 +193,8 @@ function simple_syn_registration(
     output_prefix: string,
     runner: Runner | null = null,
 ): SimpleSynRegistrationOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SIMPLE_SYN_REGISTRATION_METADATA);
     const params = simple_syn_registration_params(fixed_image, moving_image, initial_transform, output_prefix)
-    return simple_syn_registration_execute(params, execution);
+    return simple_syn_registration_execute(params, runner);
 }
 
 
@@ -203,8 +203,6 @@ export {
       SimpleSynRegistrationOutputs,
       SimpleSynRegistrationParameters,
       simple_syn_registration,
-      simple_syn_registration_cargs,
       simple_syn_registration_execute,
-      simple_syn_registration_outputs,
       simple_syn_registration_params,
 };

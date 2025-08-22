@@ -176,14 +176,16 @@ function eddy_squad_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `EddySquadOutputs`).
  */
 function eddy_squad_execute(
     params: EddySquadParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): EddySquadOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(EDDY_SQUAD_METADATA);
     params = execution.params(params)
     const cargs = eddy_squad_cargs(params, execution)
     const ret = eddy_squad_outputs(params, execution)
@@ -216,10 +218,8 @@ function eddy_squad(
     output_dir: string | null = null,
     runner: Runner | null = null,
 ): EddySquadOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EDDY_SQUAD_METADATA);
     const params = eddy_squad_params(subject_list, grouping, group_db, update, output_dir)
-    return eddy_squad_execute(params, execution);
+    return eddy_squad_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       EddySquadOutputs,
       EddySquadParameters,
       eddy_squad,
-      eddy_squad_cargs,
       eddy_squad_execute,
-      eddy_squad_outputs,
       eddy_squad_params,
 };

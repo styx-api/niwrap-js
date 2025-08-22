@@ -263,14 +263,16 @@ function label2mesh_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Label2meshOutputs`).
  */
 function label2mesh_execute(
     params: Label2meshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Label2meshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL2MESH_METADATA);
     params = execution.params(params)
     const cargs = label2mesh_cargs(params, execution)
     const ret = label2mesh_outputs(params, execution)
@@ -321,10 +323,8 @@ function label2mesh(
     version: boolean = false,
     runner: Runner | null = null,
 ): Label2meshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL2MESH_METADATA);
     const params = label2mesh_params(nodes_in, mesh_out, blocky, info, quiet, debug, force, nthreads, config, help, version)
-    return label2mesh_execute(params, execution);
+    return label2mesh_execute(params, runner);
 }
 
 
@@ -334,10 +334,7 @@ export {
       Label2meshOutputs,
       Label2meshParameters,
       label2mesh,
-      label2mesh_cargs,
-      label2mesh_config_cargs,
       label2mesh_config_params,
       label2mesh_execute,
-      label2mesh_outputs,
       label2mesh_params,
 };

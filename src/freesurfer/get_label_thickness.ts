@@ -127,14 +127,16 @@ function get_label_thickness_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GetLabelThicknessOutputs`).
  */
 function get_label_thickness_execute(
     params: GetLabelThicknessParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): GetLabelThicknessOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(GET_LABEL_THICKNESS_METADATA);
     params = execution.params(params)
     const cargs = get_label_thickness_cargs(params, execution)
     const ret = get_label_thickness_outputs(params, execution)
@@ -159,10 +161,8 @@ function get_label_thickness(
     infile: InputPathType,
     runner: Runner | null = null,
 ): GetLabelThicknessOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GET_LABEL_THICKNESS_METADATA);
     const params = get_label_thickness_params(infile)
-    return get_label_thickness_execute(params, execution);
+    return get_label_thickness_execute(params, runner);
 }
 
 
@@ -171,8 +171,6 @@ export {
       GetLabelThicknessOutputs,
       GetLabelThicknessParameters,
       get_label_thickness,
-      get_label_thickness_cargs,
       get_label_thickness_execute,
-      get_label_thickness_outputs,
       get_label_thickness_params,
 };

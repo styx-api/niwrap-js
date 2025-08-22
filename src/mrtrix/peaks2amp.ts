@@ -256,14 +256,16 @@ function peaks2amp_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Peaks2ampOutputs`).
  */
 function peaks2amp_execute(
     params: Peaks2ampParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Peaks2ampOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PEAKS2AMP_METADATA);
     params = execution.params(params)
     const cargs = peaks2amp_cargs(params, execution)
     const ret = peaks2amp_outputs(params, execution)
@@ -312,10 +314,8 @@ function peaks2amp(
     version: boolean = false,
     runner: Runner | null = null,
 ): Peaks2ampOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PEAKS2AMP_METADATA);
     const params = peaks2amp_params(directions, amplitudes, info, quiet, debug, force, nthreads, config, help, version)
-    return peaks2amp_execute(params, execution);
+    return peaks2amp_execute(params, runner);
 }
 
 
@@ -325,10 +325,7 @@ export {
       Peaks2ampOutputs,
       Peaks2ampParameters,
       peaks2amp,
-      peaks2amp_cargs,
-      peaks2amp_config_cargs,
       peaks2amp_config_params,
       peaks2amp_execute,
-      peaks2amp_outputs,
       peaks2amp_params,
 };

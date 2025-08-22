@@ -148,14 +148,16 @@ function label_probability_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelProbabilityOutputs`).
  */
 function label_probability_execute(
     params: LabelProbabilityParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelProbabilityOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_PROBABILITY_METADATA);
     params = execution.params(params)
     const cargs = label_probability_cargs(params, execution)
     const ret = label_probability_outputs(params, execution)
@@ -186,10 +188,8 @@ function label_probability(
     opt_exclude_unlabeled: boolean = false,
     runner: Runner | null = null,
 ): LabelProbabilityOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_PROBABILITY_METADATA);
     const params = label_probability_params(label_maps, probability_metric_out, opt_exclude_unlabeled)
-    return label_probability_execute(params, execution);
+    return label_probability_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       LabelProbabilityOutputs,
       LabelProbabilityParameters,
       label_probability,
-      label_probability_cargs,
       label_probability_execute,
-      label_probability_outputs,
       label_probability_params,
 };

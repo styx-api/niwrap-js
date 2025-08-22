@@ -224,14 +224,16 @@ function makevol_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakevolOutputs`).
  */
 function makevol_execute(
     params: MakevolParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakevolOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKEVOL_METADATA);
     params = execution.params(params)
     const cargs = makevol_cargs(params, execution)
     const ret = makevol_outputs(params, execution)
@@ -270,10 +272,8 @@ function makevol(
     set_method: string | null = "xyz",
     runner: Runner | null = null,
 ): MakevolOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKEVOL_METADATA);
     const params = makevol_params(filename, width, height, depth, sizex, sizey, sizez, set_method)
-    return makevol_execute(params, execution);
+    return makevol_execute(params, runner);
 }
 
 
@@ -282,8 +282,6 @@ export {
       MakevolOutputs,
       MakevolParameters,
       makevol,
-      makevol_cargs,
       makevol_execute,
-      makevol_outputs,
       makevol_params,
 };

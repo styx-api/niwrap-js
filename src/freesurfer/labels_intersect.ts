@@ -143,14 +143,16 @@ function labels_intersect_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelsIntersectOutputs`).
  */
 function labels_intersect_execute(
     params: LabelsIntersectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelsIntersectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABELS_INTERSECT_METADATA);
     params = execution.params(params)
     const cargs = labels_intersect_cargs(params, execution)
     const ret = labels_intersect_outputs(params, execution)
@@ -179,10 +181,8 @@ function labels_intersect(
     outputname: string,
     runner: Runner | null = null,
 ): LabelsIntersectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABELS_INTERSECT_METADATA);
     const params = labels_intersect_params(label1, label2, outputname)
-    return labels_intersect_execute(params, execution);
+    return labels_intersect_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       LabelsIntersectOutputs,
       LabelsIntersectParameters,
       labels_intersect,
-      labels_intersect_cargs,
       labels_intersect_execute,
-      labels_intersect_outputs,
       labels_intersect_params,
 };

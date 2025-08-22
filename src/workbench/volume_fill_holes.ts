@@ -141,14 +141,16 @@ function volume_fill_holes_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeFillHolesOutputs`).
  */
 function volume_fill_holes_execute(
     params: VolumeFillHolesParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeFillHolesOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_FILL_HOLES_METADATA);
     params = execution.params(params)
     const cargs = volume_fill_holes_cargs(params, execution)
     const ret = volume_fill_holes_outputs(params, execution)
@@ -177,10 +179,8 @@ function volume_fill_holes(
     volume_out: string,
     runner: Runner | null = null,
 ): VolumeFillHolesOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_FILL_HOLES_METADATA);
     const params = volume_fill_holes_params(volume_in, volume_out)
-    return volume_fill_holes_execute(params, execution);
+    return volume_fill_holes_execute(params, runner);
 }
 
 
@@ -189,8 +189,6 @@ export {
       VolumeFillHolesOutputs,
       VolumeFillHolesParameters,
       volume_fill_holes,
-      volume_fill_holes_cargs,
       volume_fill_holes_execute,
-      volume_fill_holes_outputs,
       volume_fill_holes_params,
 };

@@ -163,14 +163,16 @@ function possum_interpmot_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PossumInterpmotOutputs`).
  */
 function possum_interpmot_execute(
     params: PossumInterpmotParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PossumInterpmotOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(POSSUM_INTERPMOT_METADATA);
     params = execution.params(params)
     const cargs = possum_interpmot_cargs(params, execution)
     const ret = possum_interpmot_outputs(params, execution)
@@ -207,10 +209,8 @@ function possum_interpmot(
     output_file: string,
     runner: Runner | null = null,
 ): PossumInterpmotOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(POSSUM_INTERPMOT_METADATA);
     const params = possum_interpmot_params(motion_type, tr, tr_slice, nslices, nvols, custom_motion_file, output_file)
-    return possum_interpmot_execute(params, execution);
+    return possum_interpmot_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       PossumInterpmotOutputs,
       PossumInterpmotParameters,
       possum_interpmot,
-      possum_interpmot_cargs,
       possum_interpmot_execute,
-      possum_interpmot_outputs,
       possum_interpmot_params,
 };

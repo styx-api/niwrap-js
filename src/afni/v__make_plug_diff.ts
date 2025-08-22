@@ -176,14 +176,16 @@ function v__make_plug_diff_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VMakePlugDiffOutputs`).
  */
 function v__make_plug_diff_execute(
     params: VMakePlugDiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VMakePlugDiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__MAKE_PLUG_DIFF_METADATA);
     params = execution.params(params)
     const cargs = v__make_plug_diff_cargs(params, execution)
     const ret = v__make_plug_diff_outputs(params, execution)
@@ -220,10 +222,8 @@ function v__make_plug_diff(
     linux: boolean = false,
     runner: Runner | null = null,
 ): VMakePlugDiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__MAKE_PLUG_DIFF_METADATA);
     const params = v__make_plug_diff_params(vtk_dir, xm_dir, afni_src_dir, afni_bin_dir, diff_dir, comments, linux)
-    return v__make_plug_diff_execute(params, execution);
+    return v__make_plug_diff_execute(params, runner);
 }
 
 
@@ -232,8 +232,6 @@ export {
       VMakePlugDiffParameters,
       V__MAKE_PLUG_DIFF_METADATA,
       v__make_plug_diff,
-      v__make_plug_diff_cargs,
       v__make_plug_diff_execute,
-      v__make_plug_diff_outputs,
       v__make_plug_diff_params,
 };

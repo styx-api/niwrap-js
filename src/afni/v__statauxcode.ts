@@ -133,14 +133,16 @@ function v__statauxcode_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VStatauxcodeOutputs`).
  */
 function v__statauxcode_execute(
     params: VStatauxcodeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VStatauxcodeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__STATAUXCODE_METADATA);
     params = execution.params(params)
     const cargs = v__statauxcode_cargs(params, execution)
     const ret = v__statauxcode_outputs(params, execution)
@@ -165,10 +167,8 @@ function v__statauxcode(
     code: string,
     runner: Runner | null = null,
 ): VStatauxcodeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__STATAUXCODE_METADATA);
     const params = v__statauxcode_params(code)
-    return v__statauxcode_execute(params, execution);
+    return v__statauxcode_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       VStatauxcodeParameters,
       V__STATAUXCODE_METADATA,
       v__statauxcode,
-      v__statauxcode_cargs,
       v__statauxcode_execute,
-      v__statauxcode_outputs,
       v__statauxcode_params,
 };

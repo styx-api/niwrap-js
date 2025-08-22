@@ -137,14 +137,16 @@ function renormalize_subject_keep_editting_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RenormalizeSubjectKeepEdittingOutputs`).
  */
 function renormalize_subject_keep_editting_execute(
     params: RenormalizeSubjectKeepEdittingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RenormalizeSubjectKeepEdittingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RENORMALIZE_SUBJECT_KEEP_EDITTING_METADATA);
     params = execution.params(params)
     const cargs = renormalize_subject_keep_editting_cargs(params, execution)
     const ret = renormalize_subject_keep_editting_outputs(params, execution)
@@ -169,10 +171,8 @@ function renormalize_subject_keep_editting(
     placeholder_input: string | null = null,
     runner: Runner | null = null,
 ): RenormalizeSubjectKeepEdittingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RENORMALIZE_SUBJECT_KEEP_EDITTING_METADATA);
     const params = renormalize_subject_keep_editting_params(placeholder_input)
-    return renormalize_subject_keep_editting_execute(params, execution);
+    return renormalize_subject_keep_editting_execute(params, runner);
 }
 
 
@@ -181,8 +181,6 @@ export {
       RenormalizeSubjectKeepEdittingOutputs,
       RenormalizeSubjectKeepEdittingParameters,
       renormalize_subject_keep_editting,
-      renormalize_subject_keep_editting_cargs,
       renormalize_subject_keep_editting_execute,
-      renormalize_subject_keep_editting_outputs,
       renormalize_subject_keep_editting_params,
 };

@@ -308,14 +308,16 @@ function dirgen_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DirgenOutputs`).
  */
 function dirgen_execute(
     params: DirgenParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DirgenOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DIRGEN_METADATA);
     params = execution.params(params)
     const cargs = dirgen_cargs(params, execution)
     const ret = dirgen_outputs(params, execution)
@@ -376,10 +378,8 @@ function dirgen(
     version: boolean = false,
     runner: Runner | null = null,
 ): DirgenOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DIRGEN_METADATA);
     const params = dirgen_params(ndir, dirs, power, niter, restarts, unipolar, cartesian, info, quiet, debug, force, nthreads, config, help, version)
-    return dirgen_execute(params, execution);
+    return dirgen_execute(params, runner);
 }
 
 
@@ -389,10 +389,7 @@ export {
       DirgenOutputs,
       DirgenParameters,
       dirgen,
-      dirgen_cargs,
-      dirgen_config_cargs,
       dirgen_config_params,
       dirgen_execute,
-      dirgen_outputs,
       dirgen_params,
 };

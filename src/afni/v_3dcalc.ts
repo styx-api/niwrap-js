@@ -223,14 +223,16 @@ function v_3dcalc_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dcalcOutputs`).
  */
 function v_3dcalc_execute(
     params: V3dcalcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dcalcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3DCALC_METADATA);
     params = execution.params(params)
     const cargs = v_3dcalc_cargs(params, execution)
     const ret = v_3dcalc_outputs(params, execution)
@@ -273,10 +275,8 @@ function v_3dcalc(
     prefix: string | null = null,
     runner: Runner | null = null,
 ): V3dcalcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3DCALC_METADATA);
     const params = v_3dcalc_params(in_file_a, expr, in_file_b, in_file_c, other, overwrite, single_idx, start_idx, stop_idx, prefix)
-    return v_3dcalc_execute(params, execution);
+    return v_3dcalc_execute(params, runner);
 }
 
 
@@ -285,8 +285,6 @@ export {
       V3dcalcParameters,
       V_3DCALC_METADATA,
       v_3dcalc,
-      v_3dcalc_cargs,
       v_3dcalc_execute,
-      v_3dcalc_outputs,
       v_3dcalc_params,
 };

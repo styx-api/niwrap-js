@@ -180,14 +180,16 @@ function create_morph_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CreateMorphOutputs`).
  */
 function create_morph_execute(
     params: CreateMorphParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CreateMorphOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CREATE_MORPH_METADATA);
     params = execution.params(params)
     const cargs = create_morph_cargs(params, execution)
     const ret = create_morph_outputs(params, execution)
@@ -220,10 +222,8 @@ function create_morph(
     debug_coordinates: Array<number> | null = null,
     runner: Runner | null = null,
 ): CreateMorphOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CREATE_MORPH_METADATA);
     const params = create_morph_params(input_transforms, output_transform, template, subject, debug_coordinates)
-    return create_morph_execute(params, execution);
+    return create_morph_execute(params, runner);
 }
 
 
@@ -232,8 +232,6 @@ export {
       CreateMorphOutputs,
       CreateMorphParameters,
       create_morph,
-      create_morph_cargs,
       create_morph_execute,
-      create_morph_outputs,
       create_morph_params,
 };

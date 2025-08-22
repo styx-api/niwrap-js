@@ -148,14 +148,16 @@ function mri_remove_neck_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriRemoveNeckOutputs`).
  */
 function mri_remove_neck_execute(
     params: MriRemoveNeckParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriRemoveNeckOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_REMOVE_NECK_METADATA);
     params = execution.params(params)
     const cargs = mri_remove_neck_cargs(params, execution)
     const ret = mri_remove_neck_outputs(params, execution)
@@ -186,10 +188,8 @@ function mri_remove_neck(
     output_volume: string,
     runner: Runner | null = null,
 ): MriRemoveNeckOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_REMOVE_NECK_METADATA);
     const params = mri_remove_neck_params(input_volume, transform, gca, output_volume)
-    return mri_remove_neck_execute(params, execution);
+    return mri_remove_neck_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MriRemoveNeckOutputs,
       MriRemoveNeckParameters,
       mri_remove_neck,
-      mri_remove_neck_cargs,
       mri_remove_neck_execute,
-      mri_remove_neck_outputs,
       mri_remove_neck_params,
 };

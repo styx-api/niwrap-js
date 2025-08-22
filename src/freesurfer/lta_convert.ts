@@ -360,14 +360,16 @@ function lta_convert_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LtaConvertOutputs`).
  */
 function lta_convert_execute(
     params: LtaConvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LtaConvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LTA_CONVERT_METADATA);
     params = execution.params(params)
     const cargs = lta_convert_cargs(params, execution)
     const ret = lta_convert_outputs(params, execution)
@@ -432,10 +434,8 @@ function lta_convert(
     subject_name: string | null = null,
     runner: Runner | null = null,
 ): LtaConvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LTA_CONVERT_METADATA);
     const params = lta_convert_params(in_lta, in_fsl, in_mni, in_reg, in_niftyreg, in_itk, in_vox, out_lta, out_fsl, out_mni, out_reg, out_niftyreg, out_itk, out_vox, invert, ltavox2vox, ltatkreg, src_geometry, trg_geometry, trg_conform, subject_name)
-    return lta_convert_execute(params, execution);
+    return lta_convert_execute(params, runner);
 }
 
 
@@ -444,8 +444,6 @@ export {
       LtaConvertOutputs,
       LtaConvertParameters,
       lta_convert,
-      lta_convert_cargs,
       lta_convert_execute,
-      lta_convert_outputs,
       lta_convert_params,
 };

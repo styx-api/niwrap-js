@@ -245,14 +245,16 @@ function v_3d_cruiseto_afni_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dCruisetoAfniOutputs`).
  */
 function v_3d_cruiseto_afni_execute(
     params: V3dCruisetoAfniParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dCruisetoAfniOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_CRUISETO_AFNI_METADATA);
     params = execution.params(params)
     const cargs = v_3d_cruiseto_afni_cargs(params, execution)
     const ret = v_3d_cruiseto_afni_outputs(params, execution)
@@ -293,10 +295,8 @@ function v_3d_cruiseto_afni(
     h: boolean = false,
     runner: Runner | null = null,
 ): V3dCruisetoAfniOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_CRUISETO_AFNI_METADATA);
     const params = v_3d_cruiseto_afni_params(input, novolreg, noxform, setenv, trace, nomall, yesmall, help, h)
-    return v_3d_cruiseto_afni_execute(params, execution);
+    return v_3d_cruiseto_afni_execute(params, runner);
 }
 
 
@@ -306,10 +306,7 @@ export {
       V3dCruisetoAfniTraceParameters,
       V_3D_CRUISETO_AFNI_METADATA,
       v_3d_cruiseto_afni,
-      v_3d_cruiseto_afni_cargs,
       v_3d_cruiseto_afni_execute,
-      v_3d_cruiseto_afni_outputs,
       v_3d_cruiseto_afni_params,
-      v_3d_cruiseto_afni_trace_cargs,
       v_3d_cruiseto_afni_trace_params,
 };

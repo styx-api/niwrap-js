@@ -164,14 +164,16 @@ function parse_fs_lt_log_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ParseFsLtLogPyOutputs`).
  */
 function parse_fs_lt_log_py_execute(
     params: ParseFsLtLogPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ParseFsLtLogPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PARSE_FS_LT_LOG_PY_METADATA);
     params = execution.params(params)
     const cargs = parse_fs_lt_log_py_cargs(params, execution)
     const ret = parse_fs_lt_log_py_outputs(params, execution)
@@ -204,10 +206,8 @@ function parse_fs_lt_log_py(
     verbosity: number | null = null,
     runner: Runner | null = null,
 ): ParseFsLtLogPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PARSE_FS_LT_LOG_PY_METADATA);
     const params = parse_fs_lt_log_py_params(logfile, labels, show_orig, show_all_orig, verbosity)
-    return parse_fs_lt_log_py_execute(params, execution);
+    return parse_fs_lt_log_py_execute(params, runner);
 }
 
 
@@ -216,8 +216,6 @@ export {
       ParseFsLtLogPyOutputs,
       ParseFsLtLogPyParameters,
       parse_fs_lt_log_py,
-      parse_fs_lt_log_py_cargs,
       parse_fs_lt_log_py_execute,
-      parse_fs_lt_log_py_outputs,
       parse_fs_lt_log_py_params,
 };

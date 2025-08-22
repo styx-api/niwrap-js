@@ -142,14 +142,16 @@ function quantify_brainstem_structures_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `QuantifyBrainstemStructuresShOutputs`).
  */
 function quantify_brainstem_structures_sh_execute(
     params: QuantifyBrainstemStructuresShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): QuantifyBrainstemStructuresShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(QUANTIFY_BRAINSTEM_STRUCTURES_SH_METADATA);
     params = execution.params(params)
     const cargs = quantify_brainstem_structures_sh_cargs(params, execution)
     const ret = quantify_brainstem_structures_sh_outputs(params, execution)
@@ -176,10 +178,8 @@ function quantify_brainstem_structures_sh(
     subjects_directory: string | null = "/usr/local/freesurfer/subjects",
     runner: Runner | null = null,
 ): QuantifyBrainstemStructuresShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(QUANTIFY_BRAINSTEM_STRUCTURES_SH_METADATA);
     const params = quantify_brainstem_structures_sh_params(output_file, subjects_directory)
-    return quantify_brainstem_structures_sh_execute(params, execution);
+    return quantify_brainstem_structures_sh_execute(params, runner);
 }
 
 
@@ -188,8 +188,6 @@ export {
       QuantifyBrainstemStructuresShOutputs,
       QuantifyBrainstemStructuresShParameters,
       quantify_brainstem_structures_sh,
-      quantify_brainstem_structures_sh_cargs,
       quantify_brainstem_structures_sh_execute,
-      quantify_brainstem_structures_sh_outputs,
       quantify_brainstem_structures_sh_params,
 };

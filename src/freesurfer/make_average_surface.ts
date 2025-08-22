@@ -319,14 +319,16 @@ function make_average_surface_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakeAverageSurfaceOutputs`).
  */
 function make_average_surface_execute(
     params: MakeAverageSurfaceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakeAverageSurfaceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_AVERAGE_SURFACE_METADATA);
     params = execution.params(params)
     const cargs = make_average_surface_cargs(params, execution)
     const ret = make_average_surface_outputs(params, execution)
@@ -393,10 +395,8 @@ function make_average_surface(
     echo: boolean = false,
     runner: Runner | null = null,
 ): MakeAverageSurfaceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_AVERAGE_SURFACE_METADATA);
     const params = make_average_surface_params(subjects, fsgd_file, average_subject_name, subjects_dir, sd_out_dir, transform_file, icosahedron_number, surf_reg, left_hemi, right_hemi, force, annot_template, template_only, no_template_only, no_annot, no_cortex_label, annot_list, meas_list, no_surf2surf, no_symlink, version, echo)
-    return make_average_surface_execute(params, execution);
+    return make_average_surface_execute(params, runner);
 }
 
 
@@ -405,8 +405,6 @@ export {
       MakeAverageSurfaceOutputs,
       MakeAverageSurfaceParameters,
       make_average_surface,
-      make_average_surface_cargs,
       make_average_surface_execute,
-      make_average_surface_outputs,
       make_average_surface_params,
 };

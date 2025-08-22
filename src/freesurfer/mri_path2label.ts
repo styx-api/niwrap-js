@@ -225,14 +225,16 @@ function mri_path2label_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriPath2labelOutputs`).
  */
 function mri_path2label_execute(
     params: MriPath2labelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriPath2labelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_PATH2LABEL_METADATA);
     params = execution.params(params)
     const cargs = mri_path2label_cargs(params, execution)
     const ret = mri_path2label_outputs(params, execution)
@@ -277,10 +279,8 @@ function mri_path2label(
     dest_file: string | null = null,
     runner: Runner | null = null,
 ): MriPath2labelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_PATH2LABEL_METADATA);
     const params = mri_path2label_params(input_file, output_file, single, path_to_label, label_to_path, connect, fill, confillx, confill, source_file, dest_file)
-    return mri_path2label_execute(params, execution);
+    return mri_path2label_execute(params, runner);
 }
 
 
@@ -289,8 +289,6 @@ export {
       MriPath2labelOutputs,
       MriPath2labelParameters,
       mri_path2label,
-      mri_path2label_cargs,
       mri_path2label_execute,
-      mri_path2label_outputs,
       mri_path2label_params,
 };

@@ -151,14 +151,16 @@ function mri_mc_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriMcOutputs`).
  */
 function mri_mc_execute(
     params: MriMcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriMcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MC_METADATA);
     params = execution.params(params)
     const cargs = mri_mc_cargs(params, execution)
     const ret = mri_mc_outputs(params, execution)
@@ -189,10 +191,8 @@ function mri_mc(
     connectivity: number | null = 1,
     runner: Runner | null = null,
 ): MriMcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MC_METADATA);
     const params = mri_mc_params(input_volume, label_value, output_surface, connectivity)
-    return mri_mc_execute(params, execution);
+    return mri_mc_execute(params, runner);
 }
 
 
@@ -201,8 +201,6 @@ export {
       MriMcOutputs,
       MriMcParameters,
       mri_mc,
-      mri_mc_cargs,
       mri_mc_execute,
-      mri_mc_outputs,
       mri_mc_params,
 };

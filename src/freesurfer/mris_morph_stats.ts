@@ -148,14 +148,16 @@ function mris_morph_stats_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisMorphStatsOutputs`).
  */
 function mris_morph_stats_execute(
     params: MrisMorphStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisMorphStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_MORPH_STATS_METADATA);
     params = execution.params(params)
     const cargs = mris_morph_stats_cargs(params, execution)
     const ret = mris_morph_stats_outputs(params, execution)
@@ -186,10 +188,8 @@ function mris_morph_stats(
     output_name: string,
     runner: Runner | null = null,
 ): MrisMorphStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_MORPH_STATS_METADATA);
     const params = mris_morph_stats_params(subject_name, hemisphere, morphed_surface, output_name)
-    return mris_morph_stats_execute(params, execution);
+    return mris_morph_stats_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MrisMorphStatsOutputs,
       MrisMorphStatsParameters,
       mris_morph_stats,
-      mris_morph_stats_cargs,
       mris_morph_stats_execute,
-      mris_morph_stats_outputs,
       mris_morph_stats_params,
 };

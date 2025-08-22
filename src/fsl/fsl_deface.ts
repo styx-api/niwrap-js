@@ -295,14 +295,16 @@ function fsl_deface_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslDefaceOutputs`).
  */
 function fsl_deface_execute(
     params: FslDefaceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslDefaceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_DEFACE_METADATA);
     params = execution.params(params)
     const cargs = fsl_deface_cargs(params, execution)
     const ret = fsl_deface_outputs(params, execution)
@@ -351,10 +353,8 @@ function fsl_deface(
     qc_images: string | null = null,
     runner: Runner | null = null,
 ): FslDefaceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_DEFACE_METADATA);
     const params = fsl_deface_params(infile, outfile, cropped_defacing_flag, defacing_mask, cropped_struc, orig_to_std_mat, orig_to_cropped_mat, cropped_to_std_mat, shift_nud, fractional_intensity, bias_correct_flag, center_of_gravity, qc_images)
-    return fsl_deface_execute(params, execution);
+    return fsl_deface_execute(params, runner);
 }
 
 
@@ -363,8 +363,6 @@ export {
       FslDefaceOutputs,
       FslDefaceParameters,
       fsl_deface,
-      fsl_deface_cargs,
       fsl_deface_execute,
-      fsl_deface_outputs,
       fsl_deface_params,
 };

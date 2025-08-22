@@ -195,14 +195,16 @@ function tksurferfv_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TksurferfvOutputs`).
  */
 function tksurferfv_execute(
     params: TksurferfvParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TksurferfvOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TKSURFERFV_METADATA);
     params = execution.params(params)
     const cargs = tksurferfv_cargs(params, execution)
     const ret = tksurferfv_outputs(params, execution)
@@ -247,10 +249,8 @@ function tksurferfv(
     heat_scale: string | null = "min_to_max",
     runner: Runner | null = null,
 ): TksurferfvOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TKSURFERFV_METADATA);
     const params = tksurferfv_params(subject, hemi, surface, tksurfer, all_surfaces, vgl, no_vgl, no_outline, neuro_orientation, rotate_around_cursor, heat_scale)
-    return tksurferfv_execute(params, execution);
+    return tksurferfv_execute(params, runner);
 }
 
 
@@ -259,8 +259,6 @@ export {
       TksurferfvOutputs,
       TksurferfvParameters,
       tksurferfv,
-      tksurferfv_cargs,
       tksurferfv_execute,
-      tksurferfv_outputs,
       tksurferfv_params,
 };

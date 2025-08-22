@@ -138,14 +138,16 @@ function mkmnc_index_tcl_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MkmncIndexTclOutputs`).
  */
 function mkmnc_index_tcl_execute(
     params: MkmncIndexTclParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MkmncIndexTclOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MKMNC_INDEX_TCL_METADATA);
     params = execution.params(params)
     const cargs = mkmnc_index_tcl_cargs(params, execution)
     const ret = mkmnc_index_tcl_outputs(params, execution)
@@ -172,10 +174,8 @@ function mkmnc_index_tcl(
     outfile: string,
     runner: Runner | null = null,
 ): MkmncIndexTclOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MKMNC_INDEX_TCL_METADATA);
     const params = mkmnc_index_tcl_params(infile, outfile)
-    return mkmnc_index_tcl_execute(params, execution);
+    return mkmnc_index_tcl_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MkmncIndexTclOutputs,
       MkmncIndexTclParameters,
       mkmnc_index_tcl,
-      mkmnc_index_tcl_cargs,
       mkmnc_index_tcl_execute,
-      mkmnc_index_tcl_outputs,
       mkmnc_index_tcl_params,
 };

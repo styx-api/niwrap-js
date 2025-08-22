@@ -788,14 +788,16 @@ function mrinfo_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrinfoOutputs`).
  */
 function mrinfo_execute(
     params: MrinfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrinfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRINFO_METADATA);
     params = execution.params(params)
     const cargs = mrinfo_cargs(params, execution)
     const ret = mrinfo_outputs(params, execution)
@@ -904,10 +906,8 @@ function mrinfo(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrinfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRINFO_METADATA);
     const params = mrinfo_params(image, all, name, format, ndim, size, spacing, datatype, strides, offset, multiplier, transform, property, json_keyval, json_all, grad, fslgrad, bvalue_scaling, export_grad_mrtrix, export_grad_fsl, dwgrad, shell_bvalues, shell_sizes, shell_indices, export_pe_table, export_pe_eddy, petable, nodelete, info, quiet, debug, force, nthreads, config, help, version)
-    return mrinfo_execute(params, execution);
+    return mrinfo_execute(params, runner);
 }
 
 
@@ -923,20 +923,11 @@ export {
       MrinfoParameters,
       MrinfoPropertyParameters,
       mrinfo,
-      mrinfo_cargs,
-      mrinfo_config_cargs,
       mrinfo_config_params,
       mrinfo_execute,
-      mrinfo_export_grad_fsl_cargs,
-      mrinfo_export_grad_fsl_outputs,
       mrinfo_export_grad_fsl_params,
-      mrinfo_export_pe_eddy_cargs,
-      mrinfo_export_pe_eddy_outputs,
       mrinfo_export_pe_eddy_params,
-      mrinfo_fslgrad_cargs,
       mrinfo_fslgrad_params,
-      mrinfo_outputs,
       mrinfo_params,
-      mrinfo_property_cargs,
       mrinfo_property_params,
 };

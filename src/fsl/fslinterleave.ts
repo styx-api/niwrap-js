@@ -150,14 +150,16 @@ function fslinterleave_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslinterleaveOutputs`).
  */
 function fslinterleave_execute(
     params: FslinterleaveParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslinterleaveOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLINTERLEAVE_METADATA);
     params = execution.params(params)
     const cargs = fslinterleave_cargs(params, execution)
     const ret = fslinterleave_outputs(params, execution)
@@ -188,10 +190,8 @@ function fslinterleave(
     reverse_slice_order_flag: boolean = false,
     runner: Runner | null = null,
 ): FslinterleaveOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLINTERLEAVE_METADATA);
     const params = fslinterleave_params(infile1, infile2, outfile, reverse_slice_order_flag)
-    return fslinterleave_execute(params, execution);
+    return fslinterleave_execute(params, runner);
 }
 
 
@@ -200,8 +200,6 @@ export {
       FslinterleaveOutputs,
       FslinterleaveParameters,
       fslinterleave,
-      fslinterleave_cargs,
       fslinterleave_execute,
-      fslinterleave_outputs,
       fslinterleave_params,
 };

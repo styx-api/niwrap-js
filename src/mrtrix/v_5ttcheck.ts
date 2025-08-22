@@ -257,14 +257,16 @@ function v_5ttcheck_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V5ttcheckOutputs`).
  */
 function v_5ttcheck_execute(
     params: V5ttcheckParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V5ttcheckOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_5TTCHECK_METADATA);
     params = execution.params(params)
     const cargs = v_5ttcheck_cargs(params, execution)
     const ret = v_5ttcheck_outputs(params, execution)
@@ -313,10 +315,8 @@ function v_5ttcheck(
     version: boolean = false,
     runner: Runner | null = null,
 ): V5ttcheckOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_5TTCHECK_METADATA);
     const params = v_5ttcheck_params(input, voxels, info, quiet, debug, force, nthreads, config, help, version)
-    return v_5ttcheck_execute(params, execution);
+    return v_5ttcheck_execute(params, runner);
 }
 
 
@@ -326,10 +326,7 @@ export {
       V5ttcheckParameters,
       V_5TTCHECK_METADATA,
       v_5ttcheck,
-      v_5ttcheck_cargs,
-      v_5ttcheck_config_cargs,
       v_5ttcheck_config_params,
       v_5ttcheck_execute,
-      v_5ttcheck_outputs,
       v_5ttcheck_params,
 };

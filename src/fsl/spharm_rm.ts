@@ -175,14 +175,16 @@ function spharm_rm_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SpharmRmOutputs`).
  */
 function spharm_rm_execute(
     params: SpharmRmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SpharmRmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SPHARM_RM_METADATA);
     params = execution.params(params)
     const cargs = spharm_rm_cargs(params, execution)
     const ret = spharm_rm_outputs(params, execution)
@@ -215,10 +217,8 @@ function spharm_rm(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): SpharmRmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SPHARM_RM_METADATA);
     const params = spharm_rm_params(input_file, output_file, mask_file, number_of_terms, verbose_flag)
-    return spharm_rm_execute(params, execution);
+    return spharm_rm_execute(params, runner);
 }
 
 
@@ -227,8 +227,6 @@ export {
       SpharmRmOutputs,
       SpharmRmParameters,
       spharm_rm,
-      spharm_rm_cargs,
       spharm_rm_execute,
-      spharm_rm_outputs,
       spharm_rm_params,
 };

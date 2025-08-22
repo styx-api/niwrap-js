@@ -148,14 +148,16 @@ function mris_remove_variance_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisRemoveVarianceOutputs`).
  */
 function mris_remove_variance_execute(
     params: MrisRemoveVarianceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisRemoveVarianceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_REMOVE_VARIANCE_METADATA);
     params = execution.params(params)
     const cargs = mris_remove_variance_cargs(params, execution)
     const ret = mris_remove_variance_outputs(params, execution)
@@ -186,10 +188,8 @@ function mris_remove_variance(
     output_curvature_file: string,
     runner: Runner | null = null,
 ): MrisRemoveVarianceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_REMOVE_VARIANCE_METADATA);
     const params = mris_remove_variance_params(input_surface_file, curvature_file, curvature_file_to_remove, output_curvature_file)
-    return mris_remove_variance_execute(params, execution);
+    return mris_remove_variance_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MrisRemoveVarianceOutputs,
       MrisRemoveVarianceParameters,
       mris_remove_variance,
-      mris_remove_variance_cargs,
       mris_remove_variance_execute,
-      mris_remove_variance_outputs,
       mris_remove_variance_params,
 };

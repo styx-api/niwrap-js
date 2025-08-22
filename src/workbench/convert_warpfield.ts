@@ -350,14 +350,16 @@ function convert_warpfield_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertWarpfieldOutputs`).
  */
 function convert_warpfield_execute(
     params: ConvertWarpfieldParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvertWarpfieldOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVERT_WARPFIELD_METADATA);
     params = execution.params(params)
     const cargs = convert_warpfield_cargs(params, execution)
     const ret = convert_warpfield_outputs(params, execution)
@@ -400,10 +402,8 @@ function convert_warpfield(
     to_fnirt: Array<ConvertWarpfieldToFnirtParameters> | null = null,
     runner: Runner | null = null,
 ): ConvertWarpfieldOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVERT_WARPFIELD_METADATA);
     const params = convert_warpfield_params(from_world, opt_from_itk_input, from_fnirt, opt_to_world_output, opt_to_itk_output, to_fnirt)
-    return convert_warpfield_execute(params, execution);
+    return convert_warpfield_execute(params, runner);
 }
 
 
@@ -415,14 +415,9 @@ export {
       ConvertWarpfieldParameters,
       ConvertWarpfieldToFnirtParameters,
       convert_warpfield,
-      convert_warpfield_cargs,
       convert_warpfield_execute,
-      convert_warpfield_from_fnirt_cargs,
       convert_warpfield_from_fnirt_params,
-      convert_warpfield_from_world_cargs,
       convert_warpfield_from_world_params,
-      convert_warpfield_outputs,
       convert_warpfield_params,
-      convert_warpfield_to_fnirt_cargs,
       convert_warpfield_to_fnirt_params,
 };

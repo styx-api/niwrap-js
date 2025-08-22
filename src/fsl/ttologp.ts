@@ -162,14 +162,16 @@ function ttologp_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TtologpOutputs`).
  */
 function ttologp_execute(
     params: TtologpParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TtologpOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TTOLOGP_METADATA);
     params = execution.params(params)
     const cargs = ttologp_cargs(params, execution)
     const ret = ttologp_outputs(params, execution)
@@ -202,10 +204,8 @@ function ttologp(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): TtologpOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TTOLOGP_METADATA);
     const params = ttologp_params(varsfile, cbsfile, dof, outputvol, help_flag)
-    return ttologp_execute(params, execution);
+    return ttologp_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       TtologpOutputs,
       TtologpParameters,
       ttologp,
-      ttologp_cargs,
       ttologp_execute,
-      ttologp_outputs,
       ttologp_params,
 };

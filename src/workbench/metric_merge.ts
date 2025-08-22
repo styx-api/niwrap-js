@@ -306,14 +306,16 @@ function metric_merge_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricMergeOutputs`).
  */
 function metric_merge_execute(
     params: MetricMergeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricMergeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_MERGE_METADATA);
     params = execution.params(params)
     const cargs = metric_merge_cargs(params, execution)
     const ret = metric_merge_outputs(params, execution)
@@ -346,10 +348,8 @@ function metric_merge(
     metric: Array<MetricMergeMetricParameters> | null = null,
     runner: Runner | null = null,
 ): MetricMergeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_MERGE_METADATA);
     const params = metric_merge_params(metric_out, metric)
-    return metric_merge_execute(params, execution);
+    return metric_merge_execute(params, runner);
 }
 
 
@@ -361,14 +361,9 @@ export {
       MetricMergeParameters,
       MetricMergeUpToParameters,
       metric_merge,
-      metric_merge_cargs,
-      metric_merge_column_cargs,
       metric_merge_column_params,
       metric_merge_execute,
-      metric_merge_metric_cargs,
       metric_merge_metric_params,
-      metric_merge_outputs,
       metric_merge_params,
-      metric_merge_up_to_cargs,
       metric_merge_up_to_params,
 };

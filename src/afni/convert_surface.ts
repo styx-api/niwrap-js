@@ -220,14 +220,16 @@ function convert_surface_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertSurfaceOutputs`).
  */
 function convert_surface_execute(
     params: ConvertSurfaceParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvertSurfaceOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVERT_SURFACE_METADATA);
     params = execution.params(params)
     const cargs = convert_surface_cargs(params, execution)
     const ret = convert_surface_outputs(params, execution)
@@ -270,10 +272,8 @@ function convert_surface(
     native: boolean = false,
     runner: Runner | null = null,
 ): ConvertSurfaceOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVERT_SURFACE_METADATA);
     const params = convert_surface_params(input_surface, output_surface, surface_volume, transform_tlrc, mni_rai, mni_lpi, xmat_1_d, ixmat_1_d, seed, native)
-    return convert_surface_execute(params, execution);
+    return convert_surface_execute(params, runner);
 }
 
 
@@ -282,8 +282,6 @@ export {
       ConvertSurfaceOutputs,
       ConvertSurfaceParameters,
       convert_surface,
-      convert_surface_cargs,
       convert_surface_execute,
-      convert_surface_outputs,
       convert_surface_params,
 };

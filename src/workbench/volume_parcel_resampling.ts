@@ -184,14 +184,16 @@ function volume_parcel_resampling_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeParcelResamplingOutputs`).
  */
 function volume_parcel_resampling_execute(
     params: VolumeParcelResamplingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeParcelResamplingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_PARCEL_RESAMPLING_METADATA);
     params = execution.params(params)
     const cargs = volume_parcel_resampling_cargs(params, execution)
     const ret = volume_parcel_resampling_outputs(params, execution)
@@ -234,10 +236,8 @@ function volume_parcel_resampling(
     opt_subvolume_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeParcelResamplingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_PARCEL_RESAMPLING_METADATA);
     const params = volume_parcel_resampling_params(volume_in, cur_parcels, new_parcels, kernel, volume_out, opt_fix_zeros, opt_fwhm, opt_subvolume_subvol)
-    return volume_parcel_resampling_execute(params, execution);
+    return volume_parcel_resampling_execute(params, runner);
 }
 
 
@@ -246,8 +246,6 @@ export {
       VolumeParcelResamplingOutputs,
       VolumeParcelResamplingParameters,
       volume_parcel_resampling,
-      volume_parcel_resampling_cargs,
       volume_parcel_resampling_execute,
-      volume_parcel_resampling_outputs,
       volume_parcel_resampling_params,
 };

@@ -158,14 +158,16 @@ function bugr_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BugrOutputs`).
  */
 function bugr_execute(
     params: BugrParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BugrOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BUGR_METADATA);
     params = execution.params(params)
     const cargs = bugr_cargs(params, execution)
     const ret = bugr_outputs(params, execution)
@@ -196,10 +198,8 @@ function bugr(
     log_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): BugrOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BUGR_METADATA);
     const params = bugr_params(subject_name, command_line, error_message, log_file)
-    return bugr_execute(params, execution);
+    return bugr_execute(params, runner);
 }
 
 
@@ -208,8 +208,6 @@ export {
       BugrOutputs,
       BugrParameters,
       bugr,
-      bugr_cargs,
       bugr_execute,
-      bugr_outputs,
       bugr_params,
 };

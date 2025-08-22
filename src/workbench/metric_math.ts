@@ -267,14 +267,16 @@ function metric_math_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricMathOutputs`).
  */
 function metric_math_execute(
     params: MetricMathParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MetricMathOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(METRIC_MATH_METADATA);
     params = execution.params(params)
     const cargs = metric_math_cargs(params, execution)
     const ret = metric_math_outputs(params, execution)
@@ -344,10 +346,8 @@ function metric_math(
     var_: Array<MetricMathVarParameters> | null = null,
     runner: Runner | null = null,
 ): MetricMathOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(METRIC_MATH_METADATA);
     const params = metric_math_params(expression, metric_out, opt_fixnan_replace, var_)
-    return metric_math_execute(params, execution);
+    return metric_math_execute(params, runner);
 }
 
 
@@ -357,10 +357,7 @@ export {
       MetricMathParameters,
       MetricMathVarParameters,
       metric_math,
-      metric_math_cargs,
       metric_math_execute,
-      metric_math_outputs,
       metric_math_params,
-      metric_math_var_cargs,
       metric_math_var_params,
 };

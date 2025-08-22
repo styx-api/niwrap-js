@@ -138,14 +138,16 @@ function mri_compile_edits_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriCompileEditsOutputs`).
  */
 function mri_compile_edits_execute(
     params: MriCompileEditsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriCompileEditsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_COMPILE_EDITS_METADATA);
     params = execution.params(params)
     const cargs = mri_compile_edits_cargs(params, execution)
     const ret = mri_compile_edits_outputs(params, execution)
@@ -172,10 +174,8 @@ function mri_compile_edits(
     output_volume: string,
     runner: Runner | null = null,
 ): MriCompileEditsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_COMPILE_EDITS_METADATA);
     const params = mri_compile_edits_params(subject_name, output_volume)
-    return mri_compile_edits_execute(params, execution);
+    return mri_compile_edits_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       MriCompileEditsOutputs,
       MriCompileEditsParameters,
       mri_compile_edits,
-      mri_compile_edits_cargs,
       mri_compile_edits_execute,
-      mri_compile_edits_outputs,
       mri_compile_edits_params,
 };

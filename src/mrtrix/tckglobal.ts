@@ -581,14 +581,16 @@ function tckglobal_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TckglobalOutputs`).
  */
 function tckglobal_execute(
     params: TckglobalParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TckglobalOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCKGLOBAL_METADATA);
     params = execution.params(params)
     const cargs = tckglobal_cargs(params, execution)
     const ret = tckglobal_outputs(params, execution)
@@ -692,10 +694,8 @@ function tckglobal(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckglobalOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCKGLOBAL_METADATA);
     const params = tckglobal_params(source, response, tracks, grad, mask, riso, lmax, length, weight, ppot, cpot, t0, t1, niter, fod, noapo, fiso, eext, etrend, balance, density, prob, beta, lambda, info, quiet, debug, force, nthreads, config, help, version)
-    return tckglobal_execute(params, execution);
+    return tckglobal_execute(params, runner);
 }
 
 
@@ -706,12 +706,8 @@ export {
       TckglobalParameters,
       TckglobalRisoParameters,
       tckglobal,
-      tckglobal_cargs,
-      tckglobal_config_cargs,
       tckglobal_config_params,
       tckglobal_execute,
-      tckglobal_outputs,
       tckglobal_params,
-      tckglobal_riso_cargs,
       tckglobal_riso_params,
 };

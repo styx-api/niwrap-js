@@ -170,14 +170,16 @@ function isolate_labels_keeporigval_csh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `IsolateLabelsKeeporigvalCshOutputs`).
  */
 function isolate_labels_keeporigval_csh_execute(
     params: IsolateLabelsKeeporigvalCshParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): IsolateLabelsKeeporigvalCshOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ISOLATE_LABELS_KEEPORIGVAL_CSH_METADATA);
     params = execution.params(params)
     const cargs = isolate_labels_keeporigval_csh_cargs(params, execution)
     const ret = isolate_labels_keeporigval_csh_outputs(params, execution)
@@ -210,10 +212,8 @@ function isolate_labels_keeporigval_csh(
     help: boolean = false,
     runner: Runner | null = null,
 ): IsolateLabelsKeeporigvalCshOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ISOLATE_LABELS_KEEPORIGVAL_CSH_METADATA);
     const params = isolate_labels_keeporigval_csh_params(vol, outprefix, label, version, help)
-    return isolate_labels_keeporigval_csh_execute(params, execution);
+    return isolate_labels_keeporigval_csh_execute(params, runner);
 }
 
 
@@ -222,8 +222,6 @@ export {
       IsolateLabelsKeeporigvalCshOutputs,
       IsolateLabelsKeeporigvalCshParameters,
       isolate_labels_keeporigval_csh,
-      isolate_labels_keeporigval_csh_cargs,
       isolate_labels_keeporigval_csh_execute,
-      isolate_labels_keeporigval_csh_outputs,
       isolate_labels_keeporigval_csh_params,
 };

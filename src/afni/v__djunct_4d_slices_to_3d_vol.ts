@@ -135,14 +135,16 @@ function v__djunct_4d_slices_to_3d_vol_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VDjunct4dSlicesTo3dVolOutputs`).
  */
 function v__djunct_4d_slices_to_3d_vol_execute(
     params: VDjunct4dSlicesTo3dVolParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VDjunct4dSlicesTo3dVolOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__DJUNCT_4D_SLICES_TO_3D_VOL_METADATA);
     params = execution.params(params)
     const cargs = v__djunct_4d_slices_to_3d_vol_cargs(params, execution)
     const ret = v__djunct_4d_slices_to_3d_vol_outputs(params, execution)
@@ -167,10 +169,8 @@ function v__djunct_4d_slices_to_3d_vol(
     do_something: boolean = false,
     runner: Runner | null = null,
 ): VDjunct4dSlicesTo3dVolOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DJUNCT_4D_SLICES_TO_3D_VOL_METADATA);
     const params = v__djunct_4d_slices_to_3d_vol_params(do_something)
-    return v__djunct_4d_slices_to_3d_vol_execute(params, execution);
+    return v__djunct_4d_slices_to_3d_vol_execute(params, runner);
 }
 
 
@@ -179,8 +179,6 @@ export {
       VDjunct4dSlicesTo3dVolParameters,
       V__DJUNCT_4D_SLICES_TO_3D_VOL_METADATA,
       v__djunct_4d_slices_to_3d_vol,
-      v__djunct_4d_slices_to_3d_vol_cargs,
       v__djunct_4d_slices_to_3d_vol_execute,
-      v__djunct_4d_slices_to_3d_vol_outputs,
       v__djunct_4d_slices_to_3d_vol_params,
 };

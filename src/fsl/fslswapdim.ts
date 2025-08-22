@@ -157,14 +157,16 @@ function fslswapdim_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslswapdimOutputs`).
  */
 function fslswapdim_execute(
     params: FslswapdimParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslswapdimOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSLSWAPDIM_METADATA);
     params = execution.params(params)
     const cargs = fslswapdim_cargs(params, execution)
     const ret = fslswapdim_outputs(params, execution)
@@ -197,10 +199,8 @@ function fslswapdim(
     output_file: string | null = null,
     runner: Runner | null = null,
 ): FslswapdimOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSLSWAPDIM_METADATA);
     const params = fslswapdim_params(input_file, axis_a, axis_b, axis_c, output_file)
-    return fslswapdim_execute(params, execution);
+    return fslswapdim_execute(params, runner);
 }
 
 
@@ -209,8 +209,6 @@ export {
       FslswapdimOutputs,
       FslswapdimParameters,
       fslswapdim,
-      fslswapdim_cargs,
       fslswapdim_execute,
-      fslswapdim_outputs,
       fslswapdim_params,
 };

@@ -160,14 +160,16 @@ function fsl_prepare_fieldmap_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslPrepareFieldmapOutputs`).
  */
 function fsl_prepare_fieldmap_execute(
     params: FslPrepareFieldmapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslPrepareFieldmapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_PREPARE_FIELDMAP_METADATA);
     params = execution.params(params)
     const cargs = fsl_prepare_fieldmap_cargs(params, execution)
     const ret = fsl_prepare_fieldmap_outputs(params, execution)
@@ -202,10 +204,8 @@ function fsl_prepare_fieldmap(
     nocheck_flag: boolean = false,
     runner: Runner | null = null,
 ): FslPrepareFieldmapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_PREPARE_FIELDMAP_METADATA);
     const params = fsl_prepare_fieldmap_params(scanner, phase_image, magnitude_image, out_image, delta_te, nocheck_flag)
-    return fsl_prepare_fieldmap_execute(params, execution);
+    return fsl_prepare_fieldmap_execute(params, runner);
 }
 
 
@@ -214,8 +214,6 @@ export {
       FslPrepareFieldmapOutputs,
       FslPrepareFieldmapParameters,
       fsl_prepare_fieldmap,
-      fsl_prepare_fieldmap_cargs,
       fsl_prepare_fieldmap_execute,
-      fsl_prepare_fieldmap_outputs,
       fsl_prepare_fieldmap_params,
 };

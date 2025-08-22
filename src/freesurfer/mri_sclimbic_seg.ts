@@ -365,14 +365,16 @@ function mri_sclimbic_seg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSclimbicSegOutputs`).
  */
 function mri_sclimbic_seg_execute(
     params: MriSclimbicSegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSclimbicSegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SCLIMBIC_SEG_METADATA);
     params = execution.params(params)
     const cargs = mri_sclimbic_seg_cargs(params, execution)
     const ret = mri_sclimbic_seg_outputs(params, execution)
@@ -445,10 +447,8 @@ function mri_sclimbic_seg(
     nchannels: number | null = null,
     runner: Runner | null = null,
 ): MriSclimbicSegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SCLIMBIC_SEG_METADATA);
     const params = mri_sclimbic_seg_params(input_file, output_file, subjects, subjects_dir, conform, etiv, exclude_labels, keep_ac, vox_count_volumes, model_file, ctab_file, population_stats, debug, vmp, threads, tal_xfm, write_posteriors, write_volumes, write_qa_stats, preprocess_7_t, percentile, cuda_device, output_base, no_cite, nchannels)
-    return mri_sclimbic_seg_execute(params, execution);
+    return mri_sclimbic_seg_execute(params, runner);
 }
 
 
@@ -457,8 +457,6 @@ export {
       MriSclimbicSegOutputs,
       MriSclimbicSegParameters,
       mri_sclimbic_seg,
-      mri_sclimbic_seg_cargs,
       mri_sclimbic_seg_execute,
-      mri_sclimbic_seg_outputs,
       mri_sclimbic_seg_params,
 };

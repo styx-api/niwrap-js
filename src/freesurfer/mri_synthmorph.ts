@@ -265,14 +265,16 @@ function mri_synthmorph_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriSynthmorphOutputs`).
  */
 function mri_synthmorph_execute(
     params: MriSynthmorphParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriSynthmorphOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_SYNTHMORPH_METADATA);
     params = execution.params(params)
     const cargs = mri_synthmorph_cargs(params, execution)
     const ret = mri_synthmorph_outputs(params, execution)
@@ -321,10 +323,8 @@ function mri_synthmorph(
     inspect_directory: string | null = null,
     runner: Runner | null = null,
 ): MriSynthmorphOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_SYNTHMORPH_METADATA);
     const params = mri_synthmorph_params(moving_image, fixed_image, moved_output, transform_output, header_only, transformation_model, init_transform, threads, gpu_flag, smooth, extent, model_weights, inspect_directory)
-    return mri_synthmorph_execute(params, execution);
+    return mri_synthmorph_execute(params, runner);
 }
 
 
@@ -333,8 +333,6 @@ export {
       MriSynthmorphOutputs,
       MriSynthmorphParameters,
       mri_synthmorph,
-      mri_synthmorph_cargs,
       mri_synthmorph_execute,
-      mri_synthmorph_outputs,
       mri_synthmorph_params,
 };

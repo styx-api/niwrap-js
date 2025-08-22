@@ -131,14 +131,16 @@ function reinflate_subject_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ReinflateSubjectOutputs`).
  */
 function reinflate_subject_execute(
     params: ReinflateSubjectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ReinflateSubjectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(REINFLATE_SUBJECT_METADATA);
     params = execution.params(params)
     const cargs = reinflate_subject_cargs(params, execution)
     const ret = reinflate_subject_outputs(params, execution)
@@ -163,10 +165,8 @@ function reinflate_subject(
     args: string | null = null,
     runner: Runner | null = null,
 ): ReinflateSubjectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REINFLATE_SUBJECT_METADATA);
     const params = reinflate_subject_params(args)
-    return reinflate_subject_execute(params, execution);
+    return reinflate_subject_execute(params, runner);
 }
 
 
@@ -175,8 +175,6 @@ export {
       ReinflateSubjectOutputs,
       ReinflateSubjectParameters,
       reinflate_subject,
-      reinflate_subject_cargs,
       reinflate_subject_execute,
-      reinflate_subject_outputs,
       reinflate_subject_params,
 };

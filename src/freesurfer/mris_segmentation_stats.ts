@@ -148,14 +148,16 @@ function mris_segmentation_stats_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisSegmentationStatsOutputs`).
  */
 function mris_segmentation_stats_execute(
     params: MrisSegmentationStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisSegmentationStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_SEGMENTATION_STATS_METADATA);
     params = execution.params(params)
     const cargs = mris_segmentation_stats_cargs(params, execution)
     const ret = mris_segmentation_stats_outputs(params, execution)
@@ -186,10 +188,8 @@ function mris_segmentation_stats(
     roc_file: string,
     runner: Runner | null = null,
 ): MrisSegmentationStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_SEGMENTATION_STATS_METADATA);
     const params = mris_segmentation_stats_params(overlay_name, segmentation_label_name, subjects, roc_file)
-    return mris_segmentation_stats_execute(params, execution);
+    return mris_segmentation_stats_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MrisSegmentationStatsOutputs,
       MrisSegmentationStatsParameters,
       mris_segmentation_stats,
-      mris_segmentation_stats_cargs,
       mris_segmentation_stats_execute,
-      mris_segmentation_stats_outputs,
       mris_segmentation_stats_params,
 };

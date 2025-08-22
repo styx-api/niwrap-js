@@ -170,14 +170,16 @@ function create_warped_grid_image_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CreateWarpedGridImageOutputs`).
  */
 function create_warped_grid_image_execute(
     params: CreateWarpedGridImageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CreateWarpedGridImageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CREATE_WARPED_GRID_IMAGE_METADATA);
     params = execution.params(params)
     const cargs = create_warped_grid_image_cargs(params, execution)
     const ret = create_warped_grid_image_outputs(params, execution)
@@ -212,10 +214,8 @@ function create_warped_grid_image(
     grid_sigma: string | null = null,
     runner: Runner | null = null,
 ): CreateWarpedGridImageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CREATE_WARPED_GRID_IMAGE_METADATA);
     const params = create_warped_grid_image_params(image_dimension, deformation_field, output_image, directions, grid_spacing, grid_sigma)
-    return create_warped_grid_image_execute(params, execution);
+    return create_warped_grid_image_execute(params, runner);
 }
 
 
@@ -224,8 +224,6 @@ export {
       CreateWarpedGridImageOutputs,
       CreateWarpedGridImageParameters,
       create_warped_grid_image,
-      create_warped_grid_image_cargs,
       create_warped_grid_image_execute,
-      create_warped_grid_image_outputs,
       create_warped_grid_image_params,
 };

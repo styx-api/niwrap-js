@@ -267,14 +267,16 @@ function surfreg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfregOutputs`).
  */
 function surfreg_execute(
     params: SurfregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURFREG_METADATA);
     params = execution.params(params)
     const cargs = surfreg_cargs(params, execution)
     const ret = surfreg_outputs(params, execution)
@@ -329,10 +331,8 @@ function surfreg(
     threads: number | null = null,
     runner: Runner | null = null,
 ): SurfregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURFREG_METADATA);
     const params = surfreg_params(subject, target, cross_hemi, reg_lh, reg_rh, reg_both, no_annot, annot, aparc, noneg, init_reg, lta, init_from_tal, outsurf, no_set_vol_geom, threads)
-    return surfreg_execute(params, execution);
+    return surfreg_execute(params, runner);
 }
 
 
@@ -341,8 +341,6 @@ export {
       SurfregOutputs,
       SurfregParameters,
       surfreg,
-      surfreg_cargs,
       surfreg_execute,
-      surfreg_outputs,
       surfreg_params,
 };

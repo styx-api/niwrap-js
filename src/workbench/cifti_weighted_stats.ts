@@ -424,14 +424,16 @@ function cifti_weighted_stats_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiWeightedStatsOutputs`).
  */
 function cifti_weighted_stats_execute(
     params: CiftiWeightedStatsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiWeightedStatsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_WEIGHTED_STATS_METADATA);
     params = execution.params(params)
     const cargs = cifti_weighted_stats_cargs(params, execution)
     const ret = cifti_weighted_stats_outputs(params, execution)
@@ -478,10 +480,8 @@ function cifti_weighted_stats(
     opt_show_map_name: boolean = false,
     runner: Runner | null = null,
 ): CiftiWeightedStatsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_WEIGHTED_STATS_METADATA);
     const params = cifti_weighted_stats_params(cifti_in, spatial_weights, opt_cifti_weights_weight_cifti, opt_column_column, roi, opt_mean, stdev, opt_percentile_percent, opt_sum, opt_show_map_name)
-    return cifti_weighted_stats_execute(params, execution);
+    return cifti_weighted_stats_execute(params, runner);
 }
 
 
@@ -493,14 +493,9 @@ export {
       CiftiWeightedStatsSpatialWeightsParameters,
       CiftiWeightedStatsStdevParameters,
       cifti_weighted_stats,
-      cifti_weighted_stats_cargs,
       cifti_weighted_stats_execute,
-      cifti_weighted_stats_outputs,
       cifti_weighted_stats_params,
-      cifti_weighted_stats_roi_cargs,
       cifti_weighted_stats_roi_params,
-      cifti_weighted_stats_spatial_weights_cargs,
       cifti_weighted_stats_spatial_weights_params,
-      cifti_weighted_stats_stdev_cargs,
       cifti_weighted_stats_stdev_params,
 };

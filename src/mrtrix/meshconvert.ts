@@ -321,14 +321,16 @@ function meshconvert_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MeshconvertOutputs`).
  */
 function meshconvert_execute(
     params: MeshconvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MeshconvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MESHCONVERT_METADATA);
     params = execution.params(params)
     const cargs = meshconvert_cargs(params, execution)
     const ret = meshconvert_outputs(params, execution)
@@ -381,10 +383,8 @@ function meshconvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): MeshconvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MESHCONVERT_METADATA);
     const params = meshconvert_params(input, output, binary, transform, info, quiet, debug, force, nthreads, config, help, version)
-    return meshconvert_execute(params, execution);
+    return meshconvert_execute(params, runner);
 }
 
 
@@ -395,12 +395,8 @@ export {
       MeshconvertParameters,
       MeshconvertTransformParameters,
       meshconvert,
-      meshconvert_cargs,
-      meshconvert_config_cargs,
       meshconvert_config_params,
       meshconvert_execute,
-      meshconvert_outputs,
       meshconvert_params,
-      meshconvert_transform_cargs,
       meshconvert_transform_params,
 };

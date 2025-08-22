@@ -129,14 +129,16 @@ function check_mcr_sh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CheckMcrShOutputs`).
  */
 function check_mcr_sh_execute(
     params: CheckMcrShParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CheckMcrShOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CHECK_MCR_SH_METADATA);
     params = execution.params(params)
     const cargs = check_mcr_sh_cargs(params, execution)
     const ret = check_mcr_sh_outputs(params, execution)
@@ -161,10 +163,8 @@ function check_mcr_sh(
     help: boolean = false,
     runner: Runner | null = null,
 ): CheckMcrShOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CHECK_MCR_SH_METADATA);
     const params = check_mcr_sh_params(help)
-    return check_mcr_sh_execute(params, execution);
+    return check_mcr_sh_execute(params, runner);
 }
 
 
@@ -173,8 +173,6 @@ export {
       CheckMcrShOutputs,
       CheckMcrShParameters,
       check_mcr_sh,
-      check_mcr_sh_cargs,
       check_mcr_sh_execute,
-      check_mcr_sh_outputs,
       check_mcr_sh_params,
 };

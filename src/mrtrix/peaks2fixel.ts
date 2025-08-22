@@ -268,14 +268,16 @@ function peaks2fixel_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Peaks2fixelOutputs`).
  */
 function peaks2fixel_execute(
     params: Peaks2fixelParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Peaks2fixelOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PEAKS2FIXEL_METADATA);
     params = execution.params(params)
     const cargs = peaks2fixel_cargs(params, execution)
     const ret = peaks2fixel_outputs(params, execution)
@@ -326,10 +328,8 @@ function peaks2fixel(
     version: boolean = false,
     runner: Runner | null = null,
 ): Peaks2fixelOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PEAKS2FIXEL_METADATA);
     const params = peaks2fixel_params(directions, fixels, dataname, info, quiet, debug, force, nthreads, config, help, version)
-    return peaks2fixel_execute(params, execution);
+    return peaks2fixel_execute(params, runner);
 }
 
 
@@ -339,10 +339,7 @@ export {
       Peaks2fixelOutputs,
       Peaks2fixelParameters,
       peaks2fixel,
-      peaks2fixel_cargs,
-      peaks2fixel_config_cargs,
       peaks2fixel_config_params,
       peaks2fixel_execute,
-      peaks2fixel_outputs,
       peaks2fixel_params,
 };

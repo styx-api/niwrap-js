@@ -138,14 +138,16 @@ function irepifitvol_glnx64_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `IrepifitvolGlnx64Outputs`).
  */
 function irepifitvol_glnx64_execute(
     params: IrepifitvolGlnx64Parameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): IrepifitvolGlnx64Outputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IREPIFITVOL_GLNX64_METADATA);
     params = execution.params(params)
     const cargs = irepifitvol_glnx64_cargs(params, execution)
     const ret = irepifitvol_glnx64_outputs(params, execution)
@@ -172,10 +174,8 @@ function irepifitvol_glnx64(
     output_file: string,
     runner: Runner | null = null,
 ): IrepifitvolGlnx64Outputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IREPIFITVOL_GLNX64_METADATA);
     const params = irepifitvol_glnx64_params(input_file, output_file)
-    return irepifitvol_glnx64_execute(params, execution);
+    return irepifitvol_glnx64_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       IrepifitvolGlnx64Outputs,
       IrepifitvolGlnx64Parameters,
       irepifitvol_glnx64,
-      irepifitvol_glnx64_cargs,
       irepifitvol_glnx64_execute,
-      irepifitvol_glnx64_outputs,
       irepifitvol_glnx64_params,
 };

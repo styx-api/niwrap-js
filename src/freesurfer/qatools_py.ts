@@ -194,14 +194,16 @@ function qatools_py_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `QatoolsPyOutputs`).
  */
 function qatools_py_execute(
     params: QatoolsPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): QatoolsPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(QATOOLS_PY_METADATA);
     params = execution.params(params)
     const cargs = qatools_py_cargs(params, execution)
     const ret = qatools_py_outputs(params, execution)
@@ -238,10 +240,8 @@ function qatools_py(
     outlier_table: InputPathType | null = null,
     runner: Runner | null = null,
 ): QatoolsPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(QATOOLS_PY_METADATA);
     const params = qatools_py_params(subjects_dir, output_dir, subjects, screenshots, fornix, outlier, outlier_table)
-    return qatools_py_execute(params, execution);
+    return qatools_py_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       QatoolsPyOutputs,
       QatoolsPyParameters,
       qatools_py,
-      qatools_py_cargs,
       qatools_py_execute,
-      qatools_py_outputs,
       qatools_py_params,
 };

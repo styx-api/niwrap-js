@@ -123,3 +123,255 @@ export * from './mrtrix/warpconvert'
 export * from './mrtrix/warpcorrect'
 export * from './mrtrix/warpinit'
 export * from './mrtrix/warpinvert'
+import { Runner } from 'styxdefs';
+import { afdconnectivity_execute } from './mrtrix/afdconnectivity'
+import { amp2response_execute } from './mrtrix/amp2response'
+import { amp2sh_execute } from './mrtrix/amp2sh'
+import { connectome2tck_execute } from './mrtrix/connectome2tck'
+import { connectomeedit_execute } from './mrtrix/connectomeedit'
+import { connectomestats_execute } from './mrtrix/connectomestats'
+import { dcmedit_execute } from './mrtrix/dcmedit'
+import { dcminfo_execute } from './mrtrix/dcminfo'
+import { dirflip_execute } from './mrtrix/dirflip'
+import { dirgen_execute } from './mrtrix/dirgen'
+import { dirmerge_execute } from './mrtrix/dirmerge'
+import { dirorder_execute } from './mrtrix/dirorder'
+import { dirsplit_execute } from './mrtrix/dirsplit'
+import { dirstat_execute } from './mrtrix/dirstat'
+import { dwi2adc_execute } from './mrtrix/dwi2adc'
+import { dwi2fod_execute } from './mrtrix/dwi2fod'
+import { dwi2mask_execute } from './mrtrix/dwi2mask'
+import { dwi2response_execute } from './mrtrix/dwi2response'
+import { dwi2tensor_execute } from './mrtrix/dwi2tensor'
+import { dwibiascorrect_execute } from './mrtrix/dwibiascorrect'
+import { dwidenoise_execute } from './mrtrix/dwidenoise'
+import { dwiextract_execute } from './mrtrix/dwiextract'
+import { dwigradcheck_execute } from './mrtrix/dwigradcheck'
+import { fixel2peaks_execute } from './mrtrix/fixel2peaks'
+import { fixel2sh_execute } from './mrtrix/fixel2sh'
+import { fixel2tsf_execute } from './mrtrix/fixel2tsf'
+import { fixel2voxel_execute } from './mrtrix/fixel2voxel'
+import { fixelcfestats_execute } from './mrtrix/fixelcfestats'
+import { fixelconnectivity_execute } from './mrtrix/fixelconnectivity'
+import { fixelconvert_execute } from './mrtrix/fixelconvert'
+import { fixelcorrespondence_execute } from './mrtrix/fixelcorrespondence'
+import { fixelcrop_execute } from './mrtrix/fixelcrop'
+import { fixelfilter_execute } from './mrtrix/fixelfilter'
+import { fixelreorient_execute } from './mrtrix/fixelreorient'
+import { fod2dec_execute } from './mrtrix/fod2dec'
+import { fod2fixel_execute } from './mrtrix/fod2fixel'
+import { label2colour_execute } from './mrtrix/label2colour'
+import { label2mesh_execute } from './mrtrix/label2mesh'
+import { labelconvert_execute } from './mrtrix/labelconvert'
+import { labelstats_execute } from './mrtrix/labelstats'
+import { maskdump_execute } from './mrtrix/maskdump'
+import { maskfilter_execute } from './mrtrix/maskfilter'
+import { mesh2voxel_execute } from './mrtrix/mesh2voxel'
+import { meshconvert_execute } from './mrtrix/meshconvert'
+import { meshfilter_execute } from './mrtrix/meshfilter'
+import { mraverageheader_execute } from './mrtrix/mraverageheader'
+import { mrcalc_execute } from './mrtrix/mrcalc'
+import { mrcat_execute } from './mrtrix/mrcat'
+import { mrcentroid_execute } from './mrtrix/mrcentroid'
+import { mrcheckerboardmask_execute } from './mrtrix/mrcheckerboardmask'
+import { mrclusterstats_execute } from './mrtrix/mrclusterstats'
+import { mrcolour_execute } from './mrtrix/mrcolour'
+import { mrconvert_execute } from './mrtrix/mrconvert'
+import { mrdegibbs_execute } from './mrtrix/mrdegibbs'
+import { mrdump_execute } from './mrtrix/mrdump'
+import { mredit_execute } from './mrtrix/mredit'
+import { mrfilter_execute } from './mrtrix/mrfilter'
+import { mrgrid_execute } from './mrtrix/mrgrid'
+import { mrhistmatch_execute } from './mrtrix/mrhistmatch'
+import { mrhistogram_execute } from './mrtrix/mrhistogram'
+import { mrinfo_execute } from './mrtrix/mrinfo'
+import { mrmath_execute } from './mrtrix/mrmath'
+import { mrmetric_execute } from './mrtrix/mrmetric'
+import { mrregister_execute } from './mrtrix/mrregister'
+import { mrstats_execute } from './mrtrix/mrstats'
+import { mrthreshold_execute } from './mrtrix/mrthreshold'
+import { mrtransform_execute } from './mrtrix/mrtransform'
+import { mtnormalise_execute } from './mrtrix/mtnormalise'
+import { peaks2amp_execute } from './mrtrix/peaks2amp'
+import { peaks2fixel_execute } from './mrtrix/peaks2fixel'
+import { responsemean_execute } from './mrtrix/responsemean'
+import { sh2amp_execute } from './mrtrix/sh2amp'
+import { sh2peaks_execute } from './mrtrix/sh2peaks'
+import { sh2power_execute } from './mrtrix/sh2power'
+import { sh2response_execute } from './mrtrix/sh2response'
+import { shbasis_execute } from './mrtrix/shbasis'
+import { shconv_execute } from './mrtrix/shconv'
+import { tck2connectome_execute } from './mrtrix/tck2connectome'
+import { tck2fixel_execute } from './mrtrix/tck2fixel'
+import { tckconvert_execute } from './mrtrix/tckconvert'
+import { tckdfc_execute } from './mrtrix/tckdfc'
+import { tckedit_execute } from './mrtrix/tckedit'
+import { tckgen_execute } from './mrtrix/tckgen'
+import { tckglobal_execute } from './mrtrix/tckglobal'
+import { tckinfo_execute } from './mrtrix/tckinfo'
+import { tckmap_execute } from './mrtrix/tckmap'
+import { tckresample_execute } from './mrtrix/tckresample'
+import { tcksample_execute } from './mrtrix/tcksample'
+import { tcksift2_execute } from './mrtrix/tcksift2'
+import { tcksift_execute } from './mrtrix/tcksift'
+import { tckstats_execute } from './mrtrix/tckstats'
+import { tcktransform_execute } from './mrtrix/tcktransform'
+import { tensor2metric_execute } from './mrtrix/tensor2metric'
+import { transformcalc_execute } from './mrtrix/transformcalc'
+import { transformcompose_execute } from './mrtrix/transformcompose'
+import { transformconvert_execute } from './mrtrix/transformconvert'
+import { tsfdivide_execute } from './mrtrix/tsfdivide'
+import { tsfinfo_execute } from './mrtrix/tsfinfo'
+import { tsfmult_execute } from './mrtrix/tsfmult'
+import { tsfsmooth_execute } from './mrtrix/tsfsmooth'
+import { tsfthreshold_execute } from './mrtrix/tsfthreshold'
+import { tsfvalidate_execute } from './mrtrix/tsfvalidate'
+import { v_5tt2gmwmi_execute } from './mrtrix/v_5tt2gmwmi'
+import { v_5tt2vis_execute } from './mrtrix/v_5tt2vis'
+import { v_5ttcheck_execute } from './mrtrix/v_5ttcheck'
+import { v_5ttedit_execute } from './mrtrix/v_5ttedit'
+import { v_5ttgen_execute } from './mrtrix/v_5ttgen'
+import { vectorstats_execute } from './mrtrix/vectorstats'
+import { voxel2fixel_execute } from './mrtrix/voxel2fixel'
+import { voxel2mesh_execute } from './mrtrix/voxel2mesh'
+import { warp2metric_execute } from './mrtrix/warp2metric'
+import { warpconvert_execute } from './mrtrix/warpconvert'
+import { warpcorrect_execute } from './mrtrix/warpcorrect'
+import { warpinit_execute } from './mrtrix/warpinit'
+import { warpinvert_execute } from './mrtrix/warpinvert'
+
+
+/**
+ * Run a command in this package dynamically from a params object.
+ *
+ * @param params The parameters.
+ * @param runner Command runner
+ *
+ */
+function execute(
+    params: any,
+    runner: Runner | null = null,
+) {
+    return {
+        "mrtrix.5tt2gmwmi": v_5tt2gmwmi_execute,
+        "mrtrix.5tt2vis": v_5tt2vis_execute,
+        "mrtrix.5ttcheck": v_5ttcheck_execute,
+        "mrtrix.5ttedit": v_5ttedit_execute,
+        "mrtrix.5ttgen": v_5ttgen_execute,
+        "mrtrix.afdconnectivity": afdconnectivity_execute,
+        "mrtrix.amp2response": amp2response_execute,
+        "mrtrix.amp2sh": amp2sh_execute,
+        "mrtrix.connectome2tck": connectome2tck_execute,
+        "mrtrix.connectomeedit": connectomeedit_execute,
+        "mrtrix.connectomestats": connectomestats_execute,
+        "mrtrix.dcmedit": dcmedit_execute,
+        "mrtrix.dcminfo": dcminfo_execute,
+        "mrtrix.dirflip": dirflip_execute,
+        "mrtrix.dirgen": dirgen_execute,
+        "mrtrix.dirmerge": dirmerge_execute,
+        "mrtrix.dirorder": dirorder_execute,
+        "mrtrix.dirsplit": dirsplit_execute,
+        "mrtrix.dirstat": dirstat_execute,
+        "mrtrix.dwi2adc": dwi2adc_execute,
+        "mrtrix.dwi2fod": dwi2fod_execute,
+        "mrtrix.dwi2mask": dwi2mask_execute,
+        "mrtrix.dwi2response": dwi2response_execute,
+        "mrtrix.dwi2tensor": dwi2tensor_execute,
+        "mrtrix.dwibiascorrect": dwibiascorrect_execute,
+        "mrtrix.dwidenoise": dwidenoise_execute,
+        "mrtrix.dwiextract": dwiextract_execute,
+        "mrtrix.dwigradcheck": dwigradcheck_execute,
+        "mrtrix.fixel2peaks": fixel2peaks_execute,
+        "mrtrix.fixel2sh": fixel2sh_execute,
+        "mrtrix.fixel2tsf": fixel2tsf_execute,
+        "mrtrix.fixel2voxel": fixel2voxel_execute,
+        "mrtrix.fixelcfestats": fixelcfestats_execute,
+        "mrtrix.fixelconnectivity": fixelconnectivity_execute,
+        "mrtrix.fixelconvert": fixelconvert_execute,
+        "mrtrix.fixelcorrespondence": fixelcorrespondence_execute,
+        "mrtrix.fixelcrop": fixelcrop_execute,
+        "mrtrix.fixelfilter": fixelfilter_execute,
+        "mrtrix.fixelreorient": fixelreorient_execute,
+        "mrtrix.fod2dec": fod2dec_execute,
+        "mrtrix.fod2fixel": fod2fixel_execute,
+        "mrtrix.label2colour": label2colour_execute,
+        "mrtrix.label2mesh": label2mesh_execute,
+        "mrtrix.labelconvert": labelconvert_execute,
+        "mrtrix.labelstats": labelstats_execute,
+        "mrtrix.maskdump": maskdump_execute,
+        "mrtrix.maskfilter": maskfilter_execute,
+        "mrtrix.mesh2voxel": mesh2voxel_execute,
+        "mrtrix.meshconvert": meshconvert_execute,
+        "mrtrix.meshfilter": meshfilter_execute,
+        "mrtrix.mraverageheader": mraverageheader_execute,
+        "mrtrix.mrcalc": mrcalc_execute,
+        "mrtrix.mrcat": mrcat_execute,
+        "mrtrix.mrcentroid": mrcentroid_execute,
+        "mrtrix.mrcheckerboardmask": mrcheckerboardmask_execute,
+        "mrtrix.mrclusterstats": mrclusterstats_execute,
+        "mrtrix.mrcolour": mrcolour_execute,
+        "mrtrix.mrconvert": mrconvert_execute,
+        "mrtrix.mrdegibbs": mrdegibbs_execute,
+        "mrtrix.mrdump": mrdump_execute,
+        "mrtrix.mredit": mredit_execute,
+        "mrtrix.mrfilter": mrfilter_execute,
+        "mrtrix.mrgrid": mrgrid_execute,
+        "mrtrix.mrhistmatch": mrhistmatch_execute,
+        "mrtrix.mrhistogram": mrhistogram_execute,
+        "mrtrix.mrinfo": mrinfo_execute,
+        "mrtrix.mrmath": mrmath_execute,
+        "mrtrix.mrmetric": mrmetric_execute,
+        "mrtrix.mrregister": mrregister_execute,
+        "mrtrix.mrstats": mrstats_execute,
+        "mrtrix.mrthreshold": mrthreshold_execute,
+        "mrtrix.mrtransform": mrtransform_execute,
+        "mrtrix.mtnormalise": mtnormalise_execute,
+        "mrtrix.peaks2amp": peaks2amp_execute,
+        "mrtrix.peaks2fixel": peaks2fixel_execute,
+        "mrtrix.responsemean": responsemean_execute,
+        "mrtrix.sh2amp": sh2amp_execute,
+        "mrtrix.sh2peaks": sh2peaks_execute,
+        "mrtrix.sh2power": sh2power_execute,
+        "mrtrix.sh2response": sh2response_execute,
+        "mrtrix.shbasis": shbasis_execute,
+        "mrtrix.shconv": shconv_execute,
+        "mrtrix.tck2connectome": tck2connectome_execute,
+        "mrtrix.tck2fixel": tck2fixel_execute,
+        "mrtrix.tckconvert": tckconvert_execute,
+        "mrtrix.tckdfc": tckdfc_execute,
+        "mrtrix.tckedit": tckedit_execute,
+        "mrtrix.tckgen": tckgen_execute,
+        "mrtrix.tckglobal": tckglobal_execute,
+        "mrtrix.tckinfo": tckinfo_execute,
+        "mrtrix.tckmap": tckmap_execute,
+        "mrtrix.tckresample": tckresample_execute,
+        "mrtrix.tcksample": tcksample_execute,
+        "mrtrix.tcksift": tcksift_execute,
+        "mrtrix.tcksift2": tcksift2_execute,
+        "mrtrix.tckstats": tckstats_execute,
+        "mrtrix.tcktransform": tcktransform_execute,
+        "mrtrix.tensor2metric": tensor2metric_execute,
+        "mrtrix.transformcalc": transformcalc_execute,
+        "mrtrix.transformcompose": transformcompose_execute,
+        "mrtrix.transformconvert": transformconvert_execute,
+        "mrtrix.tsfdivide": tsfdivide_execute,
+        "mrtrix.tsfinfo": tsfinfo_execute,
+        "mrtrix.tsfmult": tsfmult_execute,
+        "mrtrix.tsfsmooth": tsfsmooth_execute,
+        "mrtrix.tsfthreshold": tsfthreshold_execute,
+        "mrtrix.tsfvalidate": tsfvalidate_execute,
+        "mrtrix.vectorstats": vectorstats_execute,
+        "mrtrix.voxel2fixel": voxel2fixel_execute,
+        "mrtrix.voxel2mesh": voxel2mesh_execute,
+        "mrtrix.warp2metric": warp2metric_execute,
+        "mrtrix.warpconvert": warpconvert_execute,
+        "mrtrix.warpcorrect": warpcorrect_execute,
+        "mrtrix.warpinit": warpinit_execute,
+        "mrtrix.warpinvert": warpinvert_execute,
+    }[params["@type"]](params, runner)
+}
+
+
+export {
+      execute,
+};

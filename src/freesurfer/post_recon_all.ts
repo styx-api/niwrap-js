@@ -268,14 +268,16 @@ function post_recon_all_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PostReconAllOutputs`).
  */
 function post_recon_all_execute(
     params: PostReconAllParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PostReconAllOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(POST_RECON_ALL_METADATA);
     params = execution.params(params)
     const cargs = post_recon_all_cargs(params, execution)
     const ret = post_recon_all_outputs(params, execution)
@@ -338,10 +340,8 @@ function post_recon_all(
     exit_on_error: boolean = false,
     runner: Runner | null = null,
 ): PostReconAllOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(POST_RECON_ALL_METADATA);
     const params = post_recon_all_params(subject, subfields, no_subfields, subregions, no_subregions, cvs, no_cvs, qcache, no_qcache, no_sclimbic, no_hthsu, no_synthstrip, no_synthseg, no_qastats, no_samseg, no_xhemi, no_cos7, threads, force, exit_on_error)
-    return post_recon_all_execute(params, execution);
+    return post_recon_all_execute(params, runner);
 }
 
 
@@ -350,8 +350,6 @@ export {
       PostReconAllOutputs,
       PostReconAllParameters,
       post_recon_all,
-      post_recon_all_cargs,
       post_recon_all_execute,
-      post_recon_all_outputs,
       post_recon_all_params,
 };

@@ -208,14 +208,16 @@ function defect2seg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Defect2segOutputs`).
  */
 function defect2seg_execute(
     params: Defect2segParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Defect2segOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DEFECT2SEG_METADATA);
     params = execution.params(params)
     const cargs = defect2seg_cargs(params, execution)
     const ret = defect2seg_outputs(params, execution)
@@ -256,10 +258,8 @@ function defect2seg(
     no_cortex: boolean = false,
     runner: Runner | null = null,
 ): Defect2segOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DEFECT2SEG_METADATA);
     const params = defect2seg_params(output_seg, template, left_hemisphere, right_hemisphere, subject, lh_only, rh_only, cortex, no_cortex)
-    return defect2seg_execute(params, execution);
+    return defect2seg_execute(params, runner);
 }
 
 
@@ -268,8 +268,6 @@ export {
       Defect2segOutputs,
       Defect2segParameters,
       defect2seg,
-      defect2seg_cargs,
       defect2seg_execute,
-      defect2seg_outputs,
       defect2seg_params,
 };

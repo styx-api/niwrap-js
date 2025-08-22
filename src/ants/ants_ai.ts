@@ -260,14 +260,16 @@ function ants_ai_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsAiOutputs`).
  */
 function ants_ai_execute(
     params: AntsAiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsAiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTS_AI_METADATA);
     params = execution.params(params)
     const cargs = ants_ai_cargs(params, execution)
     const ret = ants_ai_outputs(params, execution)
@@ -314,10 +316,8 @@ function ants_ai(
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,
 ): AntsAiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTS_AI_METADATA);
     const params = ants_ai_params(metric, transform, output, dimensionality, align_principal_axes, align_blobs, search_factor, translation_search_grid, convergence, masks, random_seed, verbose)
-    return ants_ai_execute(params, execution);
+    return ants_ai_execute(params, runner);
 }
 
 
@@ -326,8 +326,6 @@ export {
       AntsAiOutputs,
       AntsAiParameters,
       ants_ai,
-      ants_ai_cargs,
       ants_ai_execute,
-      ants_ai_outputs,
       ants_ai_params,
 };

@@ -236,14 +236,16 @@ function fat_proc_connec_vis_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatProcConnecVisOutputs`).
  */
 function fat_proc_connec_vis_execute(
     params: FatProcConnecVisParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatProcConnecVisOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_PROC_CONNEC_VIS_METADATA);
     params = execution.params(params)
     const cargs = fat_proc_connec_vis_cargs(params, execution)
     const ret = fat_proc_connec_vis_outputs(params, execution)
@@ -288,10 +290,8 @@ function fat_proc_connec_vis(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): FatProcConnecVisOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_PROC_CONNEC_VIS_METADATA);
     const params = fat_proc_connec_vis_params(in_rois, prefix, prefix_file, tsmoo_kpb, tsmoo_niter, iso_opt, trackid_no_or, output_tcat, output_tstat, wdir, no_clean)
-    return fat_proc_connec_vis_execute(params, execution);
+    return fat_proc_connec_vis_execute(params, runner);
 }
 
 
@@ -300,8 +300,6 @@ export {
       FatProcConnecVisOutputs,
       FatProcConnecVisParameters,
       fat_proc_connec_vis,
-      fat_proc_connec_vis_cargs,
       fat_proc_connec_vis_execute,
-      fat_proc_connec_vis_outputs,
       fat_proc_connec_vis_params,
 };

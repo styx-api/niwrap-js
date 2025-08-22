@@ -142,14 +142,16 @@ function v__no_ext_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VNoExtOutputs`).
  */
 function v__no_ext_execute(
     params: VNoExtParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VNoExtOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__NO_EXT_METADATA);
     params = execution.params(params)
     const cargs = v__no_ext_cargs(params, execution)
     const ret = v__no_ext_outputs(params, execution)
@@ -176,10 +178,8 @@ function v__no_ext(
     extensions: Array<string> | null = null,
     runner: Runner | null = null,
 ): VNoExtOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__NO_EXT_METADATA);
     const params = v__no_ext_params(inputfile, extensions)
-    return v__no_ext_execute(params, execution);
+    return v__no_ext_execute(params, runner);
 }
 
 
@@ -188,8 +188,6 @@ export {
       VNoExtParameters,
       V__NO_EXT_METADATA,
       v__no_ext,
-      v__no_ext_cargs,
       v__no_ext_execute,
-      v__no_ext_outputs,
       v__no_ext_params,
 };

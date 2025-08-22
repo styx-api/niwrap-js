@@ -319,14 +319,16 @@ function imreg_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ImregOutputs`).
  */
 function imreg_execute(
     params: ImregParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ImregOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(IMREG_METADATA);
     params = execution.params(params)
     const cargs = imreg_cargs(params, execution)
     const ret = imreg_outputs(params, execution)
@@ -389,10 +391,8 @@ function imreg(
     nofine: boolean = false,
     runner: Runner | null = null,
 ): ImregOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(IMREG_METADATA);
     const params = imreg_params(base_image, image_sequence, nowrite, prefix, suffix, start, step, flim, keepsize, quiet, debug, dprefix, bilinear, modes, mlcf, wtim, dfspace, cmass, fine, nofine)
-    return imreg_execute(params, execution);
+    return imreg_execute(params, runner);
 }
 
 
@@ -401,8 +401,6 @@ export {
       ImregOutputs,
       ImregParameters,
       imreg,
-      imreg_cargs,
       imreg_execute,
-      imreg_outputs,
       imreg_params,
 };

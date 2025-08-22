@@ -206,14 +206,16 @@ function cifti_restrict_dense_map_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiRestrictDenseMapOutputs`).
  */
 function cifti_restrict_dense_map_execute(
     params: CiftiRestrictDenseMapParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiRestrictDenseMapOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_RESTRICT_DENSE_MAP_METADATA);
     params = execution.params(params)
     const cargs = cifti_restrict_dense_map_cargs(params, execution)
     const ret = cifti_restrict_dense_map_outputs(params, execution)
@@ -254,10 +256,8 @@ function cifti_restrict_dense_map(
     opt_vol_roi_roi_vol: InputPathType | null = null,
     runner: Runner | null = null,
 ): CiftiRestrictDenseMapOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_RESTRICT_DENSE_MAP_METADATA);
     const params = cifti_restrict_dense_map_params(cifti_in, direction, cifti_out, opt_cifti_roi_roi_cifti, opt_left_roi_roi_metric, opt_right_roi_roi_metric, opt_cerebellum_roi_roi_metric, opt_vol_roi_roi_vol)
-    return cifti_restrict_dense_map_execute(params, execution);
+    return cifti_restrict_dense_map_execute(params, runner);
 }
 
 
@@ -266,8 +266,6 @@ export {
       CiftiRestrictDenseMapOutputs,
       CiftiRestrictDenseMapParameters,
       cifti_restrict_dense_map,
-      cifti_restrict_dense_map_cargs,
       cifti_restrict_dense_map_execute,
-      cifti_restrict_dense_map_outputs,
       cifti_restrict_dense_map_params,
 };

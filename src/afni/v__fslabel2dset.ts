@@ -163,14 +163,16 @@ function v__fslabel2dset_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VFslabel2dsetOutputs`).
  */
 function v__fslabel2dset_execute(
     params: VFslabel2dsetParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VFslabel2dsetOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__FSLABEL2DSET_METADATA);
     params = execution.params(params)
     const cargs = v__fslabel2dset_cargs(params, execution)
     const ret = v__fslabel2dset_outputs(params, execution)
@@ -203,10 +205,8 @@ function v__fslabel2dset(
     keep_tmp: boolean = false,
     runner: Runner | null = null,
 ): VFslabel2dsetOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__FSLABEL2DSET_METADATA);
     const params = v__fslabel2dset_params(fs_label_file, val, help, echo, keep_tmp)
-    return v__fslabel2dset_execute(params, execution);
+    return v__fslabel2dset_execute(params, runner);
 }
 
 
@@ -215,8 +215,6 @@ export {
       VFslabel2dsetParameters,
       V__FSLABEL2DSET_METADATA,
       v__fslabel2dset,
-      v__fslabel2dset_cargs,
       v__fslabel2dset_execute,
-      v__fslabel2dset_outputs,
       v__fslabel2dset_params,
 };

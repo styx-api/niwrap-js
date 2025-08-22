@@ -281,14 +281,16 @@ function run_mesh_utils_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `RunMeshUtilsOutputs`).
  */
 function run_mesh_utils_execute(
     params: RunMeshUtilsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): RunMeshUtilsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(RUN_MESH_UTILS_METADATA);
     params = execution.params(params)
     const cargs = run_mesh_utils_cargs(params, execution)
     const ret = run_mesh_utils_outputs(params, execution)
@@ -345,10 +347,8 @@ function run_mesh_utils(
     help: boolean = false,
     runner: Runner | null = null,
 ): RunMeshUtilsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(RUN_MESH_UTILS_METADATA);
     const params = run_mesh_utils_params(base_mesh, output_image, input_image, second_input_image, weighting_image_force, do_uncentre_model, do_subtract_constant_from_scalars, do_vertex_scalars_to_image_volume, base_mesh2, use_sc2, flirt_matrix, do_mesh_reg, threshold, degrees_of_freedom, inverse, verbose, help)
-    return run_mesh_utils_execute(params, execution);
+    return run_mesh_utils_execute(params, runner);
 }
 
 
@@ -357,8 +357,6 @@ export {
       RunMeshUtilsOutputs,
       RunMeshUtilsParameters,
       run_mesh_utils,
-      run_mesh_utils_cargs,
       run_mesh_utils_execute,
-      run_mesh_utils_outputs,
       run_mesh_utils_params,
 };

@@ -195,14 +195,16 @@ function cifti_roi_average_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiRoiAverageOutputs`).
  */
 function cifti_roi_average_execute(
     params: CiftiRoiAverageParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiRoiAverageOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_ROI_AVERAGE_METADATA);
     params = execution.params(params)
     const cargs = cifti_roi_average_cargs(params, execution)
     const ret = cifti_roi_average_outputs(params, execution)
@@ -241,10 +243,8 @@ function cifti_roi_average(
     opt_vol_roi_roi_vol: InputPathType | null = null,
     runner: Runner | null = null,
 ): CiftiRoiAverageOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_ROI_AVERAGE_METADATA);
     const params = cifti_roi_average_params(cifti_in, text_out, opt_cifti_roi_roi_cifti, opt_left_roi_roi_metric, opt_right_roi_roi_metric, opt_cerebellum_roi_roi_metric, opt_vol_roi_roi_vol)
-    return cifti_roi_average_execute(params, execution);
+    return cifti_roi_average_execute(params, runner);
 }
 
 
@@ -253,8 +253,6 @@ export {
       CiftiRoiAverageOutputs,
       CiftiRoiAverageParameters,
       cifti_roi_average,
-      cifti_roi_average_cargs,
       cifti_roi_average_execute,
-      cifti_roi_average_outputs,
       cifti_roi_average_params,
 };

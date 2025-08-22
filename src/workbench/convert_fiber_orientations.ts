@@ -259,14 +259,16 @@ function convert_fiber_orientations_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertFiberOrientationsOutputs`).
  */
 function convert_fiber_orientations_execute(
     params: ConvertFiberOrientationsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvertFiberOrientationsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVERT_FIBER_ORIENTATIONS_METADATA);
     params = execution.params(params)
     const cargs = convert_fiber_orientations_cargs(params, execution)
     const ret = convert_fiber_orientations_outputs(params, execution)
@@ -332,10 +334,8 @@ function convert_fiber_orientations(
     fiber: Array<ConvertFiberOrientationsFiberParameters> | null = null,
     runner: Runner | null = null,
 ): ConvertFiberOrientationsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVERT_FIBER_ORIENTATIONS_METADATA);
     const params = convert_fiber_orientations_params(label_volume, fiber_out, fiber)
-    return convert_fiber_orientations_execute(params, execution);
+    return convert_fiber_orientations_execute(params, runner);
 }
 
 
@@ -345,10 +345,7 @@ export {
       ConvertFiberOrientationsOutputs,
       ConvertFiberOrientationsParameters,
       convert_fiber_orientations,
-      convert_fiber_orientations_cargs,
       convert_fiber_orientations_execute,
-      convert_fiber_orientations_fiber_cargs,
       convert_fiber_orientations_fiber_params,
-      convert_fiber_orientations_outputs,
       convert_fiber_orientations_params,
 };

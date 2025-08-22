@@ -146,14 +146,16 @@ function polyorder_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PolyorderOutputs`).
  */
 function polyorder_execute(
     params: PolyorderParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PolyorderOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(POLYORDER_METADATA);
     params = execution.params(params)
     const cargs = polyorder_cargs(params, execution)
     const ret = polyorder_outputs(params, execution)
@@ -182,10 +184,8 @@ function polyorder(
     cutoff: number,
     runner: Runner | null = null,
 ): PolyorderOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(POLYORDER_METADATA);
     const params = polyorder_params(ntp, tr, cutoff)
-    return polyorder_execute(params, execution);
+    return polyorder_execute(params, runner);
 }
 
 
@@ -194,8 +194,6 @@ export {
       PolyorderOutputs,
       PolyorderParameters,
       polyorder,
-      polyorder_cargs,
       polyorder_execute,
-      polyorder_outputs,
       polyorder_params,
 };

@@ -163,14 +163,16 @@ function border_length_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BorderLengthOutputs`).
  */
 function border_length_execute(
     params: BorderLengthParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): BorderLengthOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(BORDER_LENGTH_METADATA);
     params = execution.params(params)
     const cargs = border_length_cargs(params, execution)
     const ret = border_length_outputs(params, execution)
@@ -207,10 +209,8 @@ function border_length(
     opt_hide_border_name: boolean = false,
     runner: Runner | null = null,
 ): BorderLengthOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(BORDER_LENGTH_METADATA);
     const params = border_length_params(border, surface, opt_corrected_areas_area_metric, opt_separate_pieces, opt_hide_border_name)
-    return border_length_execute(params, execution);
+    return border_length_execute(params, runner);
 }
 
 
@@ -219,8 +219,6 @@ export {
       BorderLengthOutputs,
       BorderLengthParameters,
       border_length,
-      border_length_cargs,
       border_length_execute,
-      border_length_outputs,
       border_length_params,
 };

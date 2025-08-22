@@ -315,14 +315,16 @@ function v__chauffeur_afni_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VChauffeurAfniOutputs`).
  */
 function v__chauffeur_afni_execute(
     params: VChauffeurAfniParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VChauffeurAfniOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__CHAUFFEUR_AFNI_METADATA);
     params = execution.params(params)
     const cargs = v__chauffeur_afni_cargs(params, execution)
     const ret = v__chauffeur_afni_outputs(params, execution)
@@ -381,10 +383,8 @@ function v__chauffeur_afni(
     version: boolean = false,
     runner: Runner | null = null,
 ): VChauffeurAfniOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__CHAUFFEUR_AFNI_METADATA);
     const params = v__chauffeur_afni_params(ulay, prefix, olay, mode_4_d, func_range, opacity, set_subbricks, montx, monty, montgap, label_mode, label_size, label_color, label_setback, no_clean, do_clean, help, version)
-    return v__chauffeur_afni_execute(params, execution);
+    return v__chauffeur_afni_execute(params, runner);
 }
 
 
@@ -393,8 +393,6 @@ export {
       VChauffeurAfniParameters,
       V__CHAUFFEUR_AFNI_METADATA,
       v__chauffeur_afni,
-      v__chauffeur_afni_cargs,
       v__chauffeur_afni_execute,
-      v__chauffeur_afni_outputs,
       v__chauffeur_afni_params,
 };

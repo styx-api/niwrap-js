@@ -322,14 +322,16 @@ function volume_extrema_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeExtremaOutputs`).
  */
 function volume_extrema_execute(
     params: VolumeExtremaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeExtremaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_EXTREMA_METADATA);
     params = execution.params(params)
     const cargs = volume_extrema_cargs(params, execution)
     const ret = volume_extrema_outputs(params, execution)
@@ -382,10 +384,8 @@ function volume_extrema(
     opt_subvolume_subvolume: string | null = null,
     runner: Runner | null = null,
 ): VolumeExtremaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_EXTREMA_METADATA);
     const params = volume_extrema_params(volume_in, distance, volume_out, presmooth, opt_roi_roi_volume, threshold, opt_sum_subvols, opt_consolidate_mode, opt_only_maxima, opt_only_minima, opt_subvolume_subvolume)
-    return volume_extrema_execute(params, execution);
+    return volume_extrema_execute(params, runner);
 }
 
 
@@ -396,12 +396,8 @@ export {
       VolumeExtremaPresmoothParameters,
       VolumeExtremaThresholdParameters,
       volume_extrema,
-      volume_extrema_cargs,
       volume_extrema_execute,
-      volume_extrema_outputs,
       volume_extrema_params,
-      volume_extrema_presmooth_cargs,
       volume_extrema_presmooth_params,
-      volume_extrema_threshold_cargs,
       volume_extrema_threshold_params,
 };

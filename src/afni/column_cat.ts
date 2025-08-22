@@ -157,14 +157,16 @@ function column_cat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ColumnCatOutputs`).
  */
 function column_cat_execute(
     params: ColumnCatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ColumnCatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(COLUMN_CAT_METADATA);
     params = execution.params(params)
     const cargs = column_cat_cargs(params, execution)
     const ret = column_cat_outputs(params, execution)
@@ -193,10 +195,8 @@ function column_cat(
     separator_string: string | null = null,
     runner: Runner | null = null,
 ): ColumnCatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(COLUMN_CAT_METADATA);
     const params = column_cat_params(input_files, line_number, separator_string)
-    return column_cat_execute(params, execution);
+    return column_cat_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       ColumnCatOutputs,
       ColumnCatParameters,
       column_cat,
-      column_cat_cargs,
       column_cat_execute,
-      column_cat_outputs,
       column_cat_params,
 };

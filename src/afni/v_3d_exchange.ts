@@ -171,14 +171,16 @@ function v_3d_exchange_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dExchangeOutputs`).
  */
 function v_3d_exchange_execute(
     params: V3dExchangeParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dExchangeOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_EXCHANGE_METADATA);
     params = execution.params(params)
     const cargs = v_3d_exchange_cargs(params, execution)
     const ret = v_3d_exchange_outputs(params, execution)
@@ -211,10 +213,8 @@ function v_3d_exchange(
     help: boolean = false,
     runner: Runner | null = null,
 ): V3dExchangeOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_EXCHANGE_METADATA);
     const params = v_3d_exchange_params(prefix, infile, mapfile, version, help)
-    return v_3d_exchange_execute(params, execution);
+    return v_3d_exchange_execute(params, runner);
 }
 
 
@@ -223,8 +223,6 @@ export {
       V3dExchangeParameters,
       V_3D_EXCHANGE_METADATA,
       v_3d_exchange,
-      v_3d_exchange_cargs,
       v_3d_exchange_execute,
-      v_3d_exchange_outputs,
       v_3d_exchange_params,
 };

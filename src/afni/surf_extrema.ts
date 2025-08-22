@@ -225,14 +225,16 @@ function surf_extrema_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfExtremaOutputs`).
  */
 function surf_extrema_execute(
     params: SurfExtremaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SurfExtremaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SURF_EXTREMA_METADATA);
     params = execution.params(params)
     const cargs = surf_extrema_cargs(params, execution)
     const ret = surf_extrema_outputs(params, execution)
@@ -271,10 +273,8 @@ function surf_extrema(
     table: string | null = null,
     runner: Runner | null = null,
 ): SurfExtremaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SURF_EXTREMA_METADATA);
     const params = surf_extrema_params(prefix, input, hood, thresh, gthresh, gscale, extype, table)
-    return surf_extrema_execute(params, execution);
+    return surf_extrema_execute(params, runner);
 }
 
 
@@ -283,8 +283,6 @@ export {
       SurfExtremaOutputs,
       SurfExtremaParameters,
       surf_extrema,
-      surf_extrema_cargs,
       surf_extrema_execute,
-      surf_extrema_outputs,
       surf_extrema_params,
 };

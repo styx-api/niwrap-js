@@ -148,14 +148,16 @@ function make_pq_script_py_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MakePqScriptPyOutputs`).
  */
 function make_pq_script_py_execute(
     params: MakePqScriptPyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MakePqScriptPyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MAKE_PQ_SCRIPT_PY_METADATA);
     params = execution.params(params)
     const cargs = make_pq_script_py_cargs(params, execution)
     const ret = make_pq_script_py_outputs(params, execution)
@@ -186,10 +188,8 @@ function make_pq_script_py(
     out_script: string,
     runner: Runner | null = null,
 ): MakePqScriptPyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MAKE_PQ_SCRIPT_PY_METADATA);
     const params = make_pq_script_py_params(dataset, brick_index, mask, out_script)
-    return make_pq_script_py_execute(params, execution);
+    return make_pq_script_py_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       MakePqScriptPyOutputs,
       MakePqScriptPyParameters,
       make_pq_script_py,
-      make_pq_script_py_cargs,
       make_pq_script_py_execute,
-      make_pq_script_py_outputs,
       make_pq_script_py_params,
 };

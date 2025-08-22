@@ -177,14 +177,16 @@ function dmri_mergepaths_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DmriMergepathsOutputs`).
  */
 function dmri_mergepaths_execute(
     params: DmriMergepathsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DmriMergepathsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DMRI_MERGEPATHS_METADATA);
     params = execution.params(params)
     const cargs = dmri_mergepaths_cargs(params, execution)
     const ret = dmri_mergepaths_outputs(params, execution)
@@ -221,10 +223,8 @@ function dmri_mergepaths(
     check_opts: boolean = false,
     runner: Runner | null = null,
 ): DmriMergepathsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DMRI_MERGEPATHS_METADATA);
     const params = dmri_mergepaths_params(input_volumes, output_volume, color_table, threshold, input_directory, debug, check_opts)
-    return dmri_mergepaths_execute(params, execution);
+    return dmri_mergepaths_execute(params, runner);
 }
 
 
@@ -233,8 +233,6 @@ export {
       DmriMergepathsOutputs,
       DmriMergepathsParameters,
       dmri_mergepaths,
-      dmri_mergepaths_cargs,
       dmri_mergepaths_execute,
-      dmri_mergepaths_outputs,
       dmri_mergepaths_params,
 };

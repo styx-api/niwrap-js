@@ -487,14 +487,16 @@ function fabber_qbold_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FabberQboldOutputs`).
  */
 function fabber_qbold_execute(
     params: FabberQboldParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FabberQboldOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FABBER_QBOLD_METADATA);
     params = execution.params(params)
     const cargs = fabber_qbold_cargs(params, execution)
     const ret = fabber_qbold_outputs(params, execution)
@@ -587,10 +589,8 @@ function fabber_qbold(
     debug: boolean = false,
     runner: Runner | null = null,
 ): FabberQboldOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FABBER_QBOLD_METADATA);
     const params = fabber_qbold_params(output_dir, method, model, data, data_n, data_order, mask, mt_n, suppdata, listmethods, listmodels, listparams, descparams, listoutputs, evaluate, evaluate_params, evaluate_nt, simple_output, overwrite, link_latest, loadmodels, dump_param_names, save_model_fit, save_residuals, save_model_extras, save_mvn, save_mean, save_std, save_var, save_zstat, save_noise_mean, save_noise_std, save_free_energy, optfile, debug)
-    return fabber_qbold_execute(params, execution);
+    return fabber_qbold_execute(params, runner);
 }
 
 
@@ -599,8 +599,6 @@ export {
       FabberQboldOutputs,
       FabberQboldParameters,
       fabber_qbold,
-      fabber_qbold_cargs,
       fabber_qbold_execute,
-      fabber_qbold_outputs,
       fabber_qbold_params,
 };

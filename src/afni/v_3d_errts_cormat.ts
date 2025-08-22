@@ -193,14 +193,16 @@ function v_3d_errts_cormat_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dErrtsCormatOutputs`).
  */
 function v_3d_errts_cormat_execute(
     params: V3dErrtsCormatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dErrtsCormatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_ERRTS_CORMAT_METADATA);
     params = execution.params(params)
     const cargs = v_3d_errts_cormat_cargs(params, execution)
     const ret = v_3d_errts_cormat_outputs(params, execution)
@@ -235,10 +237,8 @@ function v_3d_errts_cormat(
     polort: number | null = null,
     runner: Runner | null = null,
 ): V3dErrtsCormatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_ERRTS_CORMAT_METADATA);
     const params = v_3d_errts_cormat_params(dset, concat, input, mask, maxlag, polort)
-    return v_3d_errts_cormat_execute(params, execution);
+    return v_3d_errts_cormat_execute(params, runner);
 }
 
 
@@ -247,8 +247,6 @@ export {
       V3dErrtsCormatParameters,
       V_3D_ERRTS_CORMAT_METADATA,
       v_3d_errts_cormat,
-      v_3d_errts_cormat_cargs,
       v_3d_errts_cormat_execute,
-      v_3d_errts_cormat_outputs,
       v_3d_errts_cormat_params,
 };

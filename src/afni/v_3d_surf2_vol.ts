@@ -389,14 +389,16 @@ function v_3d_surf2_vol_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dSurf2VolOutputs`).
  */
 function v_3d_surf2_vol_execute(
     params: V3dSurf2VolParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dSurf2VolOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_SURF2_VOL_METADATA);
     params = execution.params(params)
     const cargs = v_3d_surf2_vol_cargs(params, execution)
     const ret = v_3d_surf2_vol_outputs(params, execution)
@@ -469,10 +471,8 @@ function v_3d_surf2_vol(
     sxyz_orient_as_gpar: boolean = false,
     runner: Runner | null = null,
 ): V3dSurf2VolOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_SURF2_VOL_METADATA);
     const params = v_3d_surf2_vol_params(spec, surface_volume, surf_a, grid_parent, map_func, prefix, surf_b, surf_xyz_1d, sdata_1d, sdata, f_steps, f_index, f_p1_fr, f_pn_fr, f_p1_mm, f_pn_mm, stop_gap, cmask, data_expr, datum, debug, dnode, dvoxel, noscale, sxyz_orient_as_gpar)
-    return v_3d_surf2_vol_execute(params, execution);
+    return v_3d_surf2_vol_execute(params, runner);
 }
 
 
@@ -481,8 +481,6 @@ export {
       V3dSurf2VolParameters,
       V_3D_SURF2_VOL_METADATA,
       v_3d_surf2_vol,
-      v_3d_surf2_vol_cargs,
       v_3d_surf2_vol_execute,
-      v_3d_surf2_vol_outputs,
       v_3d_surf2_vol_params,
 };

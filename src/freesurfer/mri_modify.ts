@@ -228,14 +228,16 @@ function mri_modify_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriModifyOutputs`).
  */
 function mri_modify_execute(
     params: MriModifyParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriModifyOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_MODIFY_METADATA);
     params = execution.params(params)
     const cargs = mri_modify_cargs(params, execution)
     const ret = mri_modify_outputs(params, execution)
@@ -286,10 +288,8 @@ function mri_modify(
     output_volume: string,
     runner: Runner | null = null,
 ): MriModifyOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_MODIFY_METADATA);
     const params = mri_modify_params(x_ras, y_ras, z_ras, cras, x_size, y_size, z_size, tr, te, ti, fa, xform, input_volume, output_volume)
-    return mri_modify_execute(params, execution);
+    return mri_modify_execute(params, runner);
 }
 
 
@@ -298,8 +298,6 @@ export {
       MriModifyOutputs,
       MriModifyParameters,
       mri_modify,
-      mri_modify_cargs,
       mri_modify_execute,
-      mri_modify_outputs,
       mri_modify_params,
 };

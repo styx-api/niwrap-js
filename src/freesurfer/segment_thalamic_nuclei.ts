@@ -138,14 +138,16 @@ function segment_thalamic_nuclei_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SegmentThalamicNucleiOutputs`).
  */
 function segment_thalamic_nuclei_execute(
     params: SegmentThalamicNucleiParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SegmentThalamicNucleiOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SEGMENT_THALAMIC_NUCLEI_METADATA);
     params = execution.params(params)
     const cargs = segment_thalamic_nuclei_cargs(params, execution)
     const ret = segment_thalamic_nuclei_outputs(params, execution)
@@ -172,10 +174,8 @@ function segment_thalamic_nuclei(
     output_dir: string,
     runner: Runner | null = null,
 ): SegmentThalamicNucleiOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SEGMENT_THALAMIC_NUCLEI_METADATA);
     const params = segment_thalamic_nuclei_params(t1_image, output_dir)
-    return segment_thalamic_nuclei_execute(params, execution);
+    return segment_thalamic_nuclei_execute(params, runner);
 }
 
 
@@ -184,8 +184,6 @@ export {
       SegmentThalamicNucleiOutputs,
       SegmentThalamicNucleiParameters,
       segment_thalamic_nuclei,
-      segment_thalamic_nuclei_cargs,
       segment_thalamic_nuclei_execute,
-      segment_thalamic_nuclei_outputs,
       segment_thalamic_nuclei_params,
 };

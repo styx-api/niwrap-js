@@ -150,14 +150,16 @@ function tbss_deproject_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TbssDeprojectOutputs`).
  */
 function tbss_deproject_execute(
     params: TbssDeprojectParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TbssDeprojectOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TBSS_DEPROJECT_METADATA);
     params = execution.params(params)
     const cargs = tbss_deproject_cargs(params, execution)
     const ret = tbss_deproject_outputs(params, execution)
@@ -186,10 +188,8 @@ function tbss_deproject(
     index_image_flag: boolean = false,
     runner: Runner | null = null,
 ): TbssDeprojectOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TBSS_DEPROJECT_METADATA);
     const params = tbss_deproject_params(skeleton_space_input_image, final_space_option, index_image_flag)
-    return tbss_deproject_execute(params, execution);
+    return tbss_deproject_execute(params, runner);
 }
 
 
@@ -198,8 +198,6 @@ export {
       TbssDeprojectOutputs,
       TbssDeprojectParameters,
       tbss_deproject,
-      tbss_deproject_cargs,
       tbss_deproject_execute,
-      tbss_deproject_outputs,
       tbss_deproject_params,
 };

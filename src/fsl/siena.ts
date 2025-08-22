@@ -250,14 +250,16 @@ function siena_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SienaOutputs`).
  */
 function siena_execute(
     params: SienaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SienaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SIENA_METADATA);
     params = execution.params(params)
     const cargs = siena_cargs(params, execution)
     const ret = siena_outputs(params, execution)
@@ -306,10 +308,8 @@ function siena(
     ventricle_mask: InputPathType | null = null,
     runner: Runner | null = null,
 ): SienaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SIENA_METADATA);
     const params = siena_params(input1, input2, output_dir, debug_flag, bet_options, two_class_seg_flag, t2_weighted_flag, standard_space_mask_flag, upper_ignore, lower_ignore, sienadiff_options, ventricle_analysis_flag, ventricle_mask)
-    return siena_execute(params, execution);
+    return siena_execute(params, runner);
 }
 
 
@@ -318,8 +318,6 @@ export {
       SienaOutputs,
       SienaParameters,
       siena,
-      siena_cargs,
       siena_execute,
-      siena_outputs,
       siena_params,
 };

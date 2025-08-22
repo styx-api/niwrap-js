@@ -140,14 +140,16 @@ function volume_label_export_table_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelExportTableOutputs`).
  */
 function volume_label_export_table_execute(
     params: VolumeLabelExportTableParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VolumeLabelExportTableOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(VOLUME_LABEL_EXPORT_TABLE_METADATA);
     params = execution.params(params)
     const cargs = volume_label_export_table_cargs(params, execution)
     const ret = volume_label_export_table_outputs(params, execution)
@@ -178,10 +180,8 @@ function volume_label_export_table(
     table_out: string,
     runner: Runner | null = null,
 ): VolumeLabelExportTableOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(VOLUME_LABEL_EXPORT_TABLE_METADATA);
     const params = volume_label_export_table_params(label_in, map, table_out)
-    return volume_label_export_table_execute(params, execution);
+    return volume_label_export_table_execute(params, runner);
 }
 
 
@@ -190,8 +190,6 @@ export {
       VolumeLabelExportTableOutputs,
       VolumeLabelExportTableParameters,
       volume_label_export_table,
-      volume_label_export_table_cargs,
       volume_label_export_table_execute,
-      volume_label_export_table_outputs,
       volume_label_export_table_params,
 };

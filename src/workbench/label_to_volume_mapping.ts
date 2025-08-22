@@ -247,14 +247,16 @@ function label_to_volume_mapping_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelToVolumeMappingOutputs`).
  */
 function label_to_volume_mapping_execute(
     params: LabelToVolumeMappingParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): LabelToVolumeMappingOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(LABEL_TO_VOLUME_MAPPING_METADATA);
     params = execution.params(params)
     const cargs = label_to_volume_mapping_cargs(params, execution)
     const ret = label_to_volume_mapping_outputs(params, execution)
@@ -291,10 +293,8 @@ function label_to_volume_mapping(
     ribbon_constrained: LabelToVolumeMappingRibbonConstrainedParameters | null = null,
     runner: Runner | null = null,
 ): LabelToVolumeMappingOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(LABEL_TO_VOLUME_MAPPING_METADATA);
     const params = label_to_volume_mapping_params(label, surface, volume_space, volume_out, opt_nearest_vertex_distance, ribbon_constrained)
-    return label_to_volume_mapping_execute(params, execution);
+    return label_to_volume_mapping_execute(params, runner);
 }
 
 
@@ -304,10 +304,7 @@ export {
       LabelToVolumeMappingParameters,
       LabelToVolumeMappingRibbonConstrainedParameters,
       label_to_volume_mapping,
-      label_to_volume_mapping_cargs,
       label_to_volume_mapping_execute,
-      label_to_volume_mapping_outputs,
       label_to_volume_mapping_params,
-      label_to_volume_mapping_ribbon_constrained_cargs,
       label_to_volume_mapping_ribbon_constrained_params,
 };

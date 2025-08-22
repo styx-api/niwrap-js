@@ -282,14 +282,16 @@ function mrcheckerboardmask_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrcheckerboardmaskOutputs`).
  */
 function mrcheckerboardmask_execute(
     params: MrcheckerboardmaskParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrcheckerboardmaskOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRCHECKERBOARDMASK_METADATA);
     params = execution.params(params)
     const cargs = mrcheckerboardmask_cargs(params, execution)
     const ret = mrcheckerboardmask_outputs(params, execution)
@@ -344,10 +346,8 @@ function mrcheckerboardmask(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrcheckerboardmaskOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRCHECKERBOARDMASK_METADATA);
     const params = mrcheckerboardmask_params(input, output, tiles, invert, nan, info, quiet, debug, force, nthreads, config, help, version)
-    return mrcheckerboardmask_execute(params, execution);
+    return mrcheckerboardmask_execute(params, runner);
 }
 
 
@@ -357,10 +357,7 @@ export {
       MrcheckerboardmaskOutputs,
       MrcheckerboardmaskParameters,
       mrcheckerboardmask,
-      mrcheckerboardmask_cargs,
-      mrcheckerboardmask_config_cargs,
       mrcheckerboardmask_config_params,
       mrcheckerboardmask_execute,
-      mrcheckerboardmask_outputs,
       mrcheckerboardmask_params,
 };

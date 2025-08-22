@@ -133,14 +133,16 @@ function create_lut_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CreateLutOutputs`).
  */
 function create_lut_execute(
     params: CreateLutParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CreateLutOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CREATE_LUT_METADATA);
     params = execution.params(params)
     const cargs = create_lut_cargs(params, execution)
     const ret = create_lut_outputs(params, execution)
@@ -165,10 +167,8 @@ function create_lut(
     output_file_root: string,
     runner: Runner | null = null,
 ): CreateLutOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CREATE_LUT_METADATA);
     const params = create_lut_params(output_file_root)
-    return create_lut_execute(params, execution);
+    return create_lut_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       CreateLutOutputs,
       CreateLutParameters,
       create_lut,
-      create_lut_cargs,
       create_lut_execute,
-      create_lut_outputs,
       create_lut_params,
 };

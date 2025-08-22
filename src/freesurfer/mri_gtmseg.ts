@@ -307,14 +307,16 @@ function mri_gtmseg_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriGtmsegOutputs`).
  */
 function mri_gtmseg_execute(
     params: MriGtmsegParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriGtmsegOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_GTMSEG_METADATA);
     params = execution.params(params)
     const cargs = mri_gtmseg_cargs(params, execution)
     const ret = mri_gtmseg_outputs(params, execution)
@@ -375,10 +377,8 @@ function mri_gtmseg(
     check_opts: boolean = false,
     runner: Runner | null = null,
 ): MriGtmsegOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_GTMSEG_METADATA);
     const params = mri_gtmseg_params(output_volume, source_subject, internal_usf, apas_file, context_annotation, subseg_wm, wm_annotation, dmax, keep_hypo, keep_cc, ctab, lhminmax, rhminmax, output_usf, threads, threads_max, threads_max_1, debug, check_opts)
-    return mri_gtmseg_execute(params, execution);
+    return mri_gtmseg_execute(params, runner);
 }
 
 
@@ -387,8 +387,6 @@ export {
       MriGtmsegOutputs,
       MriGtmsegParameters,
       mri_gtmseg,
-      mri_gtmseg_cargs,
       mri_gtmseg_execute,
-      mri_gtmseg_outputs,
       mri_gtmseg_params,
 };

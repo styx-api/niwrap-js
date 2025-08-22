@@ -143,14 +143,16 @@ function hiam_register_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `HiamRegisterOutputs`).
  */
 function hiam_register_execute(
     params: HiamRegisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): HiamRegisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(HIAM_REGISTER_METADATA);
     params = execution.params(params)
     const cargs = hiam_register_cargs(params, execution)
     const ret = hiam_register_outputs(params, execution)
@@ -179,10 +181,8 @@ function hiam_register(
     output_surface: string,
     runner: Runner | null = null,
 ): HiamRegisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(HIAM_REGISTER_METADATA);
     const params = hiam_register_params(input_surface, average_surface, output_surface)
-    return hiam_register_execute(params, execution);
+    return hiam_register_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       HiamRegisterOutputs,
       HiamRegisterParameters,
       hiam_register,
-      hiam_register_cargs,
       hiam_register_execute,
-      hiam_register_outputs,
       hiam_register_params,
 };

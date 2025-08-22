@@ -193,14 +193,16 @@ function v_1d_correlate_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dCorrelateOutputs`).
  */
 function v_1d_correlate_execute(
     params: V1dCorrelateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dCorrelateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1D_CORRELATE_METADATA);
     params = execution.params(params)
     const cargs = v_1d_correlate_cargs(params, execution)
     const ret = v_1d_correlate_outputs(params, execution)
@@ -241,10 +243,8 @@ function v_1d_correlate(
     quadrant: boolean = false,
     runner: Runner | null = null,
 ): V1dCorrelateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1D_CORRELATE_METADATA);
     const params = v_1d_correlate_params(input_files, ktaub, nboot, alpha, block, blk, pearson, spearman, quadrant)
-    return v_1d_correlate_execute(params, execution);
+    return v_1d_correlate_execute(params, runner);
 }
 
 
@@ -253,8 +253,6 @@ export {
       V1dCorrelateParameters,
       V_1D_CORRELATE_METADATA,
       v_1d_correlate,
-      v_1d_correlate_cargs,
       v_1d_correlate_execute,
-      v_1d_correlate_outputs,
       v_1d_correlate_params,
 };

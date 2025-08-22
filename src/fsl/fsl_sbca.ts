@@ -281,14 +281,16 @@ function fsl_sbca_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslSbcaOutputs`).
  */
 function fsl_sbca_execute(
     params: FslSbcaParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslSbcaOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_SBCA_METADATA);
     params = execution.params(params)
     const cargs = fsl_sbca_cargs(params, execution)
     const ret = fsl_sbca_outputs(params, execution)
@@ -345,10 +347,8 @@ function fsl_sbca(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FslSbcaOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_SBCA_METADATA);
     const params = fsl_sbca_params(infile, seed, target, out, reg_flag, conf_files, seed_data, binarise_flag, mean_flag, abs_cc_flag, order, out_seeds_flag, out_seedmask_flag, out_ttcs_flag, out_conf_flag, verbose_flag, help_flag)
-    return fsl_sbca_execute(params, execution);
+    return fsl_sbca_execute(params, runner);
 }
 
 
@@ -357,8 +357,6 @@ export {
       FslSbcaOutputs,
       FslSbcaParameters,
       fsl_sbca,
-      fsl_sbca_cargs,
       fsl_sbca_execute,
-      fsl_sbca_outputs,
       fsl_sbca_params,
 };

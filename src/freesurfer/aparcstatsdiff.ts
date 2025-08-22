@@ -162,14 +162,16 @@ function aparcstatsdiff_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AparcstatsdiffOutputs`).
  */
 function aparcstatsdiff_execute(
     params: AparcstatsdiffParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AparcstatsdiffOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(APARCSTATSDIFF_METADATA);
     params = execution.params(params)
     const cargs = aparcstatsdiff_cargs(params, execution)
     const ret = aparcstatsdiff_outputs(params, execution)
@@ -204,10 +206,8 @@ function aparcstatsdiff(
     outdir: string | null = null,
     runner: Runner | null = null,
 ): AparcstatsdiffOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(APARCSTATSDIFF_METADATA);
     const params = aparcstatsdiff_params(subj1, subj2, hemi, parc, meas, outdir)
-    return aparcstatsdiff_execute(params, execution);
+    return aparcstatsdiff_execute(params, runner);
 }
 
 
@@ -216,8 +216,6 @@ export {
       AparcstatsdiffOutputs,
       AparcstatsdiffParameters,
       aparcstatsdiff,
-      aparcstatsdiff_cargs,
       aparcstatsdiff_execute,
-      aparcstatsdiff_outputs,
       aparcstatsdiff_params,
 };

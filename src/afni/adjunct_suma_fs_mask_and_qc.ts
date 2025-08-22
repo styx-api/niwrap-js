@@ -202,14 +202,16 @@ function adjunct_suma_fs_mask_and_qc_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AdjunctSumaFsMaskAndQcOutputs`).
  */
 function adjunct_suma_fs_mask_and_qc_execute(
     params: AdjunctSumaFsMaskAndQcParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AdjunctSumaFsMaskAndQcOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADJUNCT_SUMA_FS_MASK_AND_QC_METADATA);
     params = execution.params(params)
     const cargs = adjunct_suma_fs_mask_and_qc_cargs(params, execution)
     const ret = adjunct_suma_fs_mask_and_qc_outputs(params, execution)
@@ -244,10 +246,8 @@ function adjunct_suma_fs_mask_and_qc(
     version: boolean = false,
     runner: Runner | null = null,
 ): AdjunctSumaFsMaskAndQcOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADJUNCT_SUMA_FS_MASK_AND_QC_METADATA);
     const params = adjunct_suma_fs_mask_and_qc_params(subj_id, suma_dir, no_clean, help, hview, version)
-    return adjunct_suma_fs_mask_and_qc_execute(params, execution);
+    return adjunct_suma_fs_mask_and_qc_execute(params, runner);
 }
 
 
@@ -256,8 +256,6 @@ export {
       AdjunctSumaFsMaskAndQcOutputs,
       AdjunctSumaFsMaskAndQcParameters,
       adjunct_suma_fs_mask_and_qc,
-      adjunct_suma_fs_mask_and_qc_cargs,
       adjunct_suma_fs_mask_and_qc_execute,
-      adjunct_suma_fs_mask_and_qc_outputs,
       adjunct_suma_fs_mask_and_qc_params,
 };

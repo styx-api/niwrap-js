@@ -250,14 +250,16 @@ function fat_proc_align_anat_pair_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FatProcAlignAnatPairOutputs`).
  */
 function fat_proc_align_anat_pair_execute(
     params: FatProcAlignAnatPairParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FatProcAlignAnatPairOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FAT_PROC_ALIGN_ANAT_PAIR_METADATA);
     params = execution.params(params)
     const cargs = fat_proc_align_anat_pair_cargs(params, execution)
     const ret = fat_proc_align_anat_pair_outputs(params, execution)
@@ -304,10 +306,8 @@ function fat_proc_align_anat_pair(
     no_clean: boolean = false,
     runner: Runner | null = null,
 ): FatProcAlignAnatPairOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_PROC_ALIGN_ANAT_PAIR_METADATA);
     const params = fat_proc_align_anat_pair_params(input_t1w, input_t2w, output_prefix, output_grid, out_t2w_grid, input_t2w_mask, do_ss_tmp_t1w, warp, matrix, workdir, no_cmd_out, no_clean)
-    return fat_proc_align_anat_pair_execute(params, execution);
+    return fat_proc_align_anat_pair_execute(params, runner);
 }
 
 
@@ -316,8 +316,6 @@ export {
       FatProcAlignAnatPairOutputs,
       FatProcAlignAnatPairParameters,
       fat_proc_align_anat_pair,
-      fat_proc_align_anat_pair_cargs,
       fat_proc_align_anat_pair_execute,
-      fat_proc_align_anat_pair_outputs,
       fat_proc_align_anat_pair_params,
 };

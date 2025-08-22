@@ -146,14 +146,16 @@ function mri_label_vals_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriLabelValsOutputs`).
  */
 function mri_label_vals_execute(
     params: MriLabelValsParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriLabelValsOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_LABEL_VALS_METADATA);
     params = execution.params(params)
     const cargs = mri_label_vals_cargs(params, execution)
     const ret = mri_label_vals_outputs(params, execution)
@@ -184,10 +186,8 @@ function mri_label_vals(
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): MriLabelValsOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_LABEL_VALS_METADATA);
     const params = mri_label_vals_params(volume, label_file, cras_flag, help_flag)
-    return mri_label_vals_execute(params, execution);
+    return mri_label_vals_execute(params, runner);
 }
 
 
@@ -196,8 +196,6 @@ export {
       MriLabelValsOutputs,
       MriLabelValsParameters,
       mri_label_vals,
-      mri_label_vals_cargs,
       mri_label_vals_execute,
-      mri_label_vals_outputs,
       mri_label_vals_params,
 };

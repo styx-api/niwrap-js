@@ -324,14 +324,16 @@ function cifti_math_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiMathOutputs`).
  */
 function cifti_math_execute(
     params: CiftiMathParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiMathOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_MATH_METADATA);
     params = execution.params(params)
     const cargs = cifti_math_cargs(params, execution)
     const ret = cifti_math_outputs(params, execution)
@@ -407,10 +409,8 @@ function cifti_math(
     var_: Array<CiftiMathVarParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiMathOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_MATH_METADATA);
     const params = cifti_math_params(expression, cifti_out, opt_fixnan_replace, opt_override_mapping_check, var_)
-    return cifti_math_execute(params, execution);
+    return cifti_math_execute(params, runner);
 }
 
 
@@ -421,12 +421,8 @@ export {
       CiftiMathSelectParameters,
       CiftiMathVarParameters,
       cifti_math,
-      cifti_math_cargs,
       cifti_math_execute,
-      cifti_math_outputs,
       cifti_math_params,
-      cifti_math_select_cargs,
       cifti_math_select_params,
-      cifti_math_var_cargs,
       cifti_math_var_params,
 };

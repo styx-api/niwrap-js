@@ -411,14 +411,16 @@ function mri_watershed_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriWatershedOutputs`).
  */
 function mri_watershed_execute(
     params: MriWatershedParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriWatershedOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_WATERSHED_METADATA);
     params = execution.params(params)
     const cargs = mri_watershed_cargs(params, execution)
     const ret = mri_watershed_outputs(params, execution)
@@ -503,10 +505,8 @@ function mri_watershed(
     mask_flag: boolean = false,
     runner: Runner | null = null,
 ): MriWatershedOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_WATERSHED_METADATA);
     const params = mri_watershed_params(input_volume, output_volume, weight, no_wta_flag, proba_merging, preflooding_height, no_seedpt_flag, no_ta_flag, copy_flag, atlas_flag, surf_name, usesurf_ras_flag, no_t1_analysis_flag, shrink_surface_flag, expand_surface_flag, use_watershed_flag, t1_volume, wat_temp_flag, first_temp_flag, surf_debug_flag, brain_surf_name, shrink_brain_surf, seed_point, center_brain, brain_radius, watershed_threshold, no_watershed_analysis_flag, label_flag, manual_params, xthresh, mask_flag)
-    return mri_watershed_execute(params, execution);
+    return mri_watershed_execute(params, runner);
 }
 
 
@@ -515,8 +515,6 @@ export {
       MriWatershedOutputs,
       MriWatershedParameters,
       mri_watershed,
-      mri_watershed_cargs,
       mri_watershed_execute,
-      mri_watershed_outputs,
       mri_watershed_params,
 };

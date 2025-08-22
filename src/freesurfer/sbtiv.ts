@@ -157,14 +157,16 @@ function sbtiv_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SbtivOutputs`).
  */
 function sbtiv_execute(
     params: SbtivParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SbtivOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SBTIV_METADATA);
     params = execution.params(params)
     const cargs = sbtiv_cargs(params, execution)
     const ret = sbtiv_outputs(params, execution)
@@ -193,10 +195,8 @@ function sbtiv(
     labels_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): SbtivOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SBTIV_METADATA);
     const params = sbtiv_params(input_file, output_file, labels_file)
-    return sbtiv_execute(params, execution);
+    return sbtiv_execute(params, runner);
 }
 
 
@@ -205,8 +205,6 @@ export {
       SbtivOutputs,
       SbtivParameters,
       sbtiv,
-      sbtiv_cargs,
       sbtiv_execute,
-      sbtiv_outputs,
       sbtiv_params,
 };

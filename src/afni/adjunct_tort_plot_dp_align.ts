@@ -190,14 +190,16 @@ function adjunct_tort_plot_dp_align_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AdjunctTortPlotDpAlignOutputs`).
  */
 function adjunct_tort_plot_dp_align_execute(
     params: AdjunctTortPlotDpAlignParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AdjunctTortPlotDpAlignOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADJUNCT_TORT_PLOT_DP_ALIGN_METADATA);
     params = execution.params(params)
     const cargs = adjunct_tort_plot_dp_align_cargs(params, execution)
     const ret = adjunct_tort_plot_dp_align_outputs(params, execution)
@@ -230,10 +232,8 @@ function adjunct_tort_plot_dp_align(
     no_svg: boolean = false,
     runner: Runner | null = null,
 ): AdjunctTortPlotDpAlignOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADJUNCT_TORT_PLOT_DP_ALIGN_METADATA);
     const params = adjunct_tort_plot_dp_align_params(input_file, output_prefix, enorm_max, enorm_hline, no_svg)
-    return adjunct_tort_plot_dp_align_execute(params, execution);
+    return adjunct_tort_plot_dp_align_execute(params, runner);
 }
 
 
@@ -242,8 +242,6 @@ export {
       AdjunctTortPlotDpAlignOutputs,
       AdjunctTortPlotDpAlignParameters,
       adjunct_tort_plot_dp_align,
-      adjunct_tort_plot_dp_align_cargs,
       adjunct_tort_plot_dp_align_execute,
-      adjunct_tort_plot_dp_align_outputs,
       adjunct_tort_plot_dp_align_params,
 };

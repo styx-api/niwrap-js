@@ -174,14 +174,16 @@ function v_3d_periodogram_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dPeriodogramOutputs`).
  */
 function v_3d_periodogram_execute(
     params: V3dPeriodogramParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V3dPeriodogramOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_3D_PERIODOGRAM_METADATA);
     params = execution.params(params)
     const cargs = v_3d_periodogram_cargs(params, execution)
     const ret = v_3d_periodogram_outputs(params, execution)
@@ -212,10 +214,8 @@ function v_3d_periodogram(
     nfft: number | null = null,
     runner: Runner | null = null,
 ): V3dPeriodogramOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_PERIODOGRAM_METADATA);
     const params = v_3d_periodogram_params(dataset, prefix, taper, nfft)
-    return v_3d_periodogram_execute(params, execution);
+    return v_3d_periodogram_execute(params, runner);
 }
 
 
@@ -224,8 +224,6 @@ export {
       V3dPeriodogramParameters,
       V_3D_PERIODOGRAM_METADATA,
       v_3d_periodogram,
-      v_3d_periodogram_cargs,
       v_3d_periodogram_execute,
-      v_3d_periodogram_outputs,
       v_3d_periodogram_params,
 };

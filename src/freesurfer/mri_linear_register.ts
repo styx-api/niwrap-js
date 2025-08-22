@@ -143,14 +143,16 @@ function mri_linear_register_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriLinearRegisterOutputs`).
  */
 function mri_linear_register_execute(
     params: MriLinearRegisterParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriLinearRegisterOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_LINEAR_REGISTER_METADATA);
     params = execution.params(params)
     const cargs = mri_linear_register_cargs(params, execution)
     const ret = mri_linear_register_outputs(params, execution)
@@ -179,10 +181,8 @@ function mri_linear_register(
     output_file: string,
     runner: Runner | null = null,
 ): MriLinearRegisterOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_LINEAR_REGISTER_METADATA);
     const params = mri_linear_register_params(input_brain, template, output_file)
-    return mri_linear_register_execute(params, execution);
+    return mri_linear_register_execute(params, runner);
 }
 
 
@@ -191,8 +191,6 @@ export {
       MriLinearRegisterOutputs,
       MriLinearRegisterParameters,
       mri_linear_register,
-      mri_linear_register_cargs,
       mri_linear_register_execute,
-      mri_linear_register_outputs,
       mri_linear_register_params,
 };

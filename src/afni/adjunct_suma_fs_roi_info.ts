@@ -180,14 +180,16 @@ function adjunct_suma_fs_roi_info_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AdjunctSumaFsRoiInfoOutputs`).
  */
 function adjunct_suma_fs_roi_info_execute(
     params: AdjunctSumaFsRoiInfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AdjunctSumaFsRoiInfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ADJUNCT_SUMA_FS_ROI_INFO_METADATA);
     params = execution.params(params)
     const cargs = adjunct_suma_fs_roi_info_cargs(params, execution)
     const ret = adjunct_suma_fs_roi_info_outputs(params, execution)
@@ -220,10 +222,8 @@ function adjunct_suma_fs_roi_info(
     version: boolean = false,
     runner: Runner | null = null,
 ): AdjunctSumaFsRoiInfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADJUNCT_SUMA_FS_ROI_INFO_METADATA);
     const params = adjunct_suma_fs_roi_info_params(subject_id, suma_directory, help, hview, version)
-    return adjunct_suma_fs_roi_info_execute(params, execution);
+    return adjunct_suma_fs_roi_info_execute(params, runner);
 }
 
 
@@ -232,8 +232,6 @@ export {
       AdjunctSumaFsRoiInfoOutputs,
       AdjunctSumaFsRoiInfoParameters,
       adjunct_suma_fs_roi_info,
-      adjunct_suma_fs_roi_info_cargs,
       adjunct_suma_fs_roi_info_execute,
-      adjunct_suma_fs_roi_info_outputs,
       adjunct_suma_fs_roi_info_params,
 };

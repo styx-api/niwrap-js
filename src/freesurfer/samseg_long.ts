@@ -194,14 +194,16 @@ function samseg_long_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SamsegLongOutputs`).
  */
 function samseg_long_execute(
     params: SamsegLongParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): SamsegLongOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SAMSEG_LONG_METADATA);
     params = execution.params(params)
     const cargs = samseg_long_cargs(params, execution)
     const ret = samseg_long_outputs(params, execution)
@@ -238,10 +240,8 @@ function samseg_long(
     force_update: boolean = false,
     runner: Runner | null = null,
 ): SamsegLongOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SAMSEG_LONG_METADATA);
     const params = samseg_long_params(output_dir, input_files, align_mc, align_no_mc, threads, save_posteriors, force_update)
-    return samseg_long_execute(params, execution);
+    return samseg_long_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       SamsegLongOutputs,
       SamsegLongParameters,
       samseg_long,
-      samseg_long_cargs,
       samseg_long_execute,
-      samseg_long_outputs,
       samseg_long_params,
 };

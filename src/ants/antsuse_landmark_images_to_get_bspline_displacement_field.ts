@@ -180,14 +180,16 @@ function antsuse_landmark_images_to_get_bspline_displacement_field_outputs(
  * URL: https://github.com/ANTsX/ANTs
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs`).
  */
 function antsuse_landmark_images_to_get_bspline_displacement_field_execute(
     params: AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(ANTSUSE_LANDMARK_IMAGES_TO_GET_BSPLINE_DISPLACEMENT_FIELD_METADATA);
     params = execution.params(params)
     const cargs = antsuse_landmark_images_to_get_bspline_displacement_field_cargs(params, execution)
     const ret = antsuse_landmark_images_to_get_bspline_displacement_field_outputs(params, execution)
@@ -226,10 +228,8 @@ function antsuse_landmark_images_to_get_bspline_displacement_field(
     landmark_weights: InputPathType | null = null,
     runner: Runner | null = null,
 ): AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ANTSUSE_LANDMARK_IMAGES_TO_GET_BSPLINE_DISPLACEMENT_FIELD_METADATA);
     const params = antsuse_landmark_images_to_get_bspline_displacement_field_params(fixed_image_with_labeled_landmarks, moving_image_with_labeled_landmarks, output_displacement_field, mesh_size, number_of_levels, order, enforce_stationary_boundaries, landmark_weights)
-    return antsuse_landmark_images_to_get_bspline_displacement_field_execute(params, execution);
+    return antsuse_landmark_images_to_get_bspline_displacement_field_execute(params, runner);
 }
 
 
@@ -238,8 +238,6 @@ export {
       AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs,
       AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters,
       antsuse_landmark_images_to_get_bspline_displacement_field,
-      antsuse_landmark_images_to_get_bspline_displacement_field_cargs,
       antsuse_landmark_images_to_get_bspline_displacement_field_execute,
-      antsuse_landmark_images_to_get_bspline_displacement_field_outputs,
       antsuse_landmark_images_to_get_bspline_displacement_field_params,
 };

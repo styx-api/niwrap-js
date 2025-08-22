@@ -220,14 +220,16 @@ function from3d_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `From3dOutputs`).
  */
 function from3d_execute(
     params: From3dParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): From3dOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FROM3D_METADATA);
     params = execution.params(params)
     const cargs = from3d_cargs(params, execution)
     const ret = from3d_outputs(params, execution)
@@ -270,10 +272,8 @@ function from3d(
     tlast: number | null = null,
     runner: Runner | null = null,
 ): From3dOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FROM3D_METADATA);
     const params = from3d_params(input, prefix, verbose, nsize, raw, float, zfirst, zlast, tfirst, tlast)
-    return from3d_execute(params, execution);
+    return from3d_execute(params, runner);
 }
 
 
@@ -282,8 +282,6 @@ export {
       From3dOutputs,
       From3dParameters,
       from3d,
-      from3d_cargs,
       from3d_execute,
-      from3d_outputs,
       from3d_params,
 };

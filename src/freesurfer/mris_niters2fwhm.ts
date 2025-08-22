@@ -190,14 +190,16 @@ function mris_niters2fwhm_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrisNiters2fwhmOutputs`).
  */
 function mris_niters2fwhm_execute(
     params: MrisNiters2fwhmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrisNiters2fwhmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRIS_NITERS2FWHM_METADATA);
     params = execution.params(params)
     const cargs = mris_niters2fwhm_cargs(params, execution)
     const ret = mris_niters2fwhm_outputs(params, execution)
@@ -238,10 +240,8 @@ function mris_niters2fwhm(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrisNiters2fwhmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRIS_NITERS2FWHM_METADATA);
     const params = mris_niters2fwhm_params(subject, hemi, surf, dof, niters, debug, checkopts, help, version)
-    return mris_niters2fwhm_execute(params, execution);
+    return mris_niters2fwhm_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       MrisNiters2fwhmOutputs,
       MrisNiters2fwhmParameters,
       mris_niters2fwhm,
-      mris_niters2fwhm_cargs,
       mris_niters2fwhm_execute,
-      mris_niters2fwhm_outputs,
       mris_niters2fwhm_params,
 };

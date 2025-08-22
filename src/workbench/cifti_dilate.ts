@@ -388,14 +388,16 @@ function cifti_dilate_outputs(
  * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiDilateOutputs`).
  */
 function cifti_dilate_execute(
     params: CiftiDilateParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): CiftiDilateOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CIFTI_DILATE_METADATA);
     params = execution.params(params)
     const cargs = cifti_dilate_cargs(params, execution)
     const ret = cifti_dilate_outputs(params, execution)
@@ -448,10 +450,8 @@ function cifti_dilate(
     opt_legacy_mode: boolean = false,
     runner: Runner | null = null,
 ): CiftiDilateOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CIFTI_DILATE_METADATA);
     const params = cifti_dilate_params(cifti_in, direction, surface_distance, volume_distance, cifti_out, left_surface, right_surface, cerebellum_surface, opt_bad_brainordinate_roi_roi_cifti, opt_nearest, opt_merged_volume, opt_legacy_mode)
-    return cifti_dilate_execute(params, execution);
+    return cifti_dilate_execute(params, runner);
 }
 
 
@@ -463,14 +463,9 @@ export {
       CiftiDilateParameters,
       CiftiDilateRightSurfaceParameters,
       cifti_dilate,
-      cifti_dilate_cargs,
-      cifti_dilate_cerebellum_surface_cargs,
       cifti_dilate_cerebellum_surface_params,
       cifti_dilate_execute,
-      cifti_dilate_left_surface_cargs,
       cifti_dilate_left_surface_params,
-      cifti_dilate_outputs,
       cifti_dilate_params,
-      cifti_dilate_right_surface_cargs,
       cifti_dilate_right_surface_params,
 };

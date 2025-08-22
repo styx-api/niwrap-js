@@ -453,14 +453,16 @@ function tckconvert_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `TckconvertOutputs`).
  */
 function tckconvert_execute(
     params: TckconvertParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): TckconvertOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(TCKCONVERT_METADATA);
     params = execution.params(params)
     const cargs = tckconvert_cargs(params, execution)
     const ret = tckconvert_outputs(params, execution)
@@ -535,10 +537,8 @@ function tckconvert(
     version: boolean = false,
     runner: Runner | null = null,
 ): TckconvertOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(TCKCONVERT_METADATA);
     const params = tckconvert_params(input, output, scanner2voxel, scanner2image, voxel2scanner, image2scanner, sides, increment, dec, radius, ascii, binary, info, quiet, debug, force, nthreads, config, help, version)
-    return tckconvert_execute(params, execution);
+    return tckconvert_execute(params, runner);
 }
 
 
@@ -550,14 +550,9 @@ export {
       TckconvertVariousFileParameters,
       TckconvertVariousStringParameters,
       tckconvert,
-      tckconvert_cargs,
-      tckconvert_config_cargs,
       tckconvert_config_params,
       tckconvert_execute,
-      tckconvert_outputs,
       tckconvert_params,
-      tckconvert_various_file_cargs,
       tckconvert_various_file_params,
-      tckconvert_various_string_cargs,
       tckconvert_various_string_params,
 };

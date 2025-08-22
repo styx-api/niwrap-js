@@ -133,14 +133,16 @@ function help_format_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `HelpFormatOutputs`).
  */
 function help_format_execute(
     params: HelpFormatParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): HelpFormatOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(HELP_FORMAT_METADATA);
     params = execution.params(params)
     const cargs = help_format_cargs(params, execution)
     const ret = help_format_outputs(params, execution)
@@ -165,10 +167,8 @@ function help_format(
     stdin: string,
     runner: Runner | null = null,
 ): HelpFormatOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(HELP_FORMAT_METADATA);
     const params = help_format_params(stdin)
-    return help_format_execute(params, execution);
+    return help_format_execute(params, runner);
 }
 
 
@@ -177,8 +177,6 @@ export {
       HelpFormatOutputs,
       HelpFormatParameters,
       help_format,
-      help_format_cargs,
       help_format_execute,
-      help_format_outputs,
       help_format_params,
 };

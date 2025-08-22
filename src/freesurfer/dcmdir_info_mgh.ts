@@ -166,14 +166,16 @@ function dcmdir_info_mgh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `DcmdirInfoMghOutputs`).
  */
 function dcmdir_info_mgh_execute(
     params: DcmdirInfoMghParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): DcmdirInfoMghOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(DCMDIR_INFO_MGH_METADATA);
     params = execution.params(params)
     const cargs = dcmdir_info_mgh_cargs(params, execution)
     const ret = dcmdir_info_mgh_outputs(params, execution)
@@ -206,10 +208,8 @@ function dcmdir_info_mgh(
     nopre: boolean = false,
     runner: Runner | null = null,
 ): DcmdirInfoMghOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(DCMDIR_INFO_MGH_METADATA);
     const params = dcmdir_info_mgh_params(dicomdir, unpackdir, version, help, nopre)
-    return dcmdir_info_mgh_execute(params, execution);
+    return dcmdir_info_mgh_execute(params, runner);
 }
 
 
@@ -218,8 +218,6 @@ export {
       DcmdirInfoMghOutputs,
       DcmdirInfoMghParameters,
       dcmdir_info_mgh,
-      dcmdir_info_mgh_cargs,
       dcmdir_info_mgh_execute,
-      dcmdir_info_mgh_outputs,
       dcmdir_info_mgh_params,
 };

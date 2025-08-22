@@ -176,14 +176,16 @@ function convert_xfm_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertXfmOutputs`).
  */
 function convert_xfm_execute(
     params: ConvertXfmParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): ConvertXfmOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(CONVERT_XFM_METADATA);
     params = execution.params(params)
     const cargs = convert_xfm_cargs(params, execution)
     const ret = convert_xfm_outputs(params, execution)
@@ -216,10 +218,8 @@ function convert_xfm(
     fix_scale_skew: InputPathType | null = null,
     runner: Runner | null = null,
 ): ConvertXfmOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(CONVERT_XFM_METADATA);
     const params = convert_xfm_params(in_file, out_file, invert_xfm, concat_xfm, fix_scale_skew)
-    return convert_xfm_execute(params, execution);
+    return convert_xfm_execute(params, runner);
 }
 
 
@@ -228,8 +228,6 @@ export {
       ConvertXfmOutputs,
       ConvertXfmParameters,
       convert_xfm,
-      convert_xfm_cargs,
       convert_xfm_execute,
-      convert_xfm_outputs,
       convert_xfm_params,
 };

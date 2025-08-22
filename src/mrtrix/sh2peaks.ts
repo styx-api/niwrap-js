@@ -384,14 +384,16 @@ function sh2peaks_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `Sh2peaksOutputs`).
  */
 function sh2peaks_execute(
     params: Sh2peaksParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): Sh2peaksOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(SH2PEAKS_METADATA);
     params = execution.params(params)
     const cargs = sh2peaks_cargs(params, execution)
     const ret = sh2peaks_outputs(params, execution)
@@ -457,10 +459,8 @@ function sh2peaks(
     version: boolean = false,
     runner: Runner | null = null,
 ): Sh2peaksOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(SH2PEAKS_METADATA);
     const params = sh2peaks_params(sh, output, num, direction, peaks, threshold, seeds, mask, fast, info, quiet, debug, force, nthreads, config, help, version)
-    return sh2peaks_execute(params, execution);
+    return sh2peaks_execute(params, runner);
 }
 
 
@@ -471,12 +471,8 @@ export {
       Sh2peaksOutputs,
       Sh2peaksParameters,
       sh2peaks,
-      sh2peaks_cargs,
-      sh2peaks_config_cargs,
       sh2peaks_config_params,
-      sh2peaks_direction_cargs,
       sh2peaks_direction_params,
       sh2peaks_execute,
-      sh2peaks_outputs,
       sh2peaks_params,
 };

@@ -501,14 +501,16 @@ function mri_info_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriInfoOutputs`).
  */
 function mri_info_execute(
     params: MriInfoParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MriInfoOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRI_INFO_METADATA);
     params = execution.params(params)
     const cargs = mri_info_cargs(params, execution)
     const ret = mri_info_outputs(params, execution)
@@ -635,10 +637,8 @@ function mri_info(
     in_type: string | null = null,
     runner: Runner | null = null,
 ): MriInfoOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRI_INFO_METADATA);
     const params = mri_info_params(input1, input2, conformed, conformed_to_min, is_1mm_iso, type_, tr, te, ti, fa, pedir, res, cres, rres, sres, voxvol, voxvolsum, ncols, nrows, nslices, dim, cdc, rdc, sdc, vox2ras, ras2vox, vox2ras_tkr, ras2vox_tkr, vox2ras_fsl, tkr2scanner, scanner2tkr, ras_good, cras, center, zero_cras, p0, det, dof, nframes, mid_frame, format, orientation, slicedirection, autoalign, ctab, cmds, dump, voxel_crs, entropy, output_file, orig_ras2vox, in_type)
-    return mri_info_execute(params, execution);
+    return mri_info_execute(params, runner);
 }
 
 
@@ -647,8 +647,6 @@ export {
       MriInfoOutputs,
       MriInfoParameters,
       mri_info,
-      mri_info_cargs,
       mri_info_execute,
-      mri_info_outputs,
       mri_info_params,
 };

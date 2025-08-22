@@ -198,14 +198,16 @@ function v__quiet_talkers_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VQuietTalkersOutputs`).
  */
 function v__quiet_talkers_execute(
     params: VQuietTalkersParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): VQuietTalkersOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V__QUIET_TALKERS_METADATA);
     params = execution.params(params)
     const cargs = v__quiet_talkers_cargs(params, execution)
     const ret = v__quiet_talkers_outputs(params, execution)
@@ -244,10 +246,8 @@ function v__quiet_talkers(
     quiet: boolean = false,
     runner: Runner | null = null,
 ): VQuietTalkersOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__QUIET_TALKERS_METADATA);
     const params = v__quiet_talkers_params(sudo, prog, npb_val, npb_range, pif_key, no_npb, list, quiet)
-    return v__quiet_talkers_execute(params, execution);
+    return v__quiet_talkers_execute(params, runner);
 }
 
 
@@ -256,8 +256,6 @@ export {
       VQuietTalkersParameters,
       V__QUIET_TALKERS_METADATA,
       v__quiet_talkers,
-      v__quiet_talkers_cargs,
       v__quiet_talkers_execute,
-      v__quiet_talkers_outputs,
       v__quiet_talkers_params,
 };

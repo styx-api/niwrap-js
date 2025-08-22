@@ -410,14 +410,16 @@ function pulse_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PulseOutputs`).
  */
 function pulse_execute(
     params: PulseParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PulseOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(PULSE_METADATA);
     params = execution.params(params)
     const cargs = pulse_cargs(params, execution)
     const ret = pulse_outputs(params, execution)
@@ -490,10 +492,8 @@ function pulse(
     cover: number | null = null,
     runner: Runner | null = null,
 ): PulseOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(PULSE_METADATA);
     const params = pulse_params(input_file, output_base, seq, angle, te, tr, trslc, nx, ny, dx, dy, max_g, riset, bw, numvol, numslc, slcthk, gap, zstart, slcdir, phasedir, readdir, verbose_flag, kcoord_flag, cover)
-    return pulse_execute(params, execution);
+    return pulse_execute(params, runner);
 }
 
 
@@ -502,8 +502,6 @@ export {
       PulseOutputs,
       PulseParameters,
       pulse,
-      pulse_cargs,
       pulse_execute,
-      pulse_outputs,
       pulse_params,
 };

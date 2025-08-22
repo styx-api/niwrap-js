@@ -194,14 +194,16 @@ function pointflirt_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PointflirtOutputs`).
  */
 function pointflirt_execute(
     params: PointflirtParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): PointflirtOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(POINTFLIRT_METADATA);
     params = execution.params(params)
     const cargs = pointflirt_cargs(params, execution)
     const ret = pointflirt_outputs(params, execution)
@@ -238,10 +240,8 @@ function pointflirt(
     verbose_flag: boolean = false,
     runner: Runner | null = null,
 ): PointflirtOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(POINTFLIRT_METADATA);
     const params = pointflirt_params(invol_coords, refvol_coords, out_matrix, use_vox, vol_input, vol_ref, verbose_flag)
-    return pointflirt_execute(params, execution);
+    return pointflirt_execute(params, runner);
 }
 
 
@@ -250,8 +250,6 @@ export {
       PointflirtOutputs,
       PointflirtParameters,
       pointflirt,
-      pointflirt_cargs,
       pointflirt_execute,
-      pointflirt_outputs,
       pointflirt_params,
 };

@@ -218,14 +218,16 @@ function v_1dsound_outputs(
  * URL: https://afni.nimh.nih.gov/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V1dsoundOutputs`).
  */
 function v_1dsound_execute(
     params: V1dsoundParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): V1dsoundOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(V_1DSOUND_METADATA);
     params = execution.params(params)
     const cargs = v_1dsound_cargs(params, execution)
     const ret = v_1dsound_outputs(params, execution)
@@ -270,10 +272,8 @@ function v_1dsound(
     play_option: boolean = false,
     runner: Runner | null = null,
 ): V1dsoundOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_1DSOUND_METADATA);
     const params = v_1dsound_params(tsfile, prefix, encoding_16_pcm, encoding_8_pcm, encoding_8ulaw, tper_option, fm_option, notes_option, notewave_option, despike_option, play_option)
-    return v_1dsound_execute(params, execution);
+    return v_1dsound_execute(params, runner);
 }
 
 
@@ -282,8 +282,6 @@ export {
       V1dsoundParameters,
       V_1DSOUND_METADATA,
       v_1dsound,
-      v_1dsound_cargs,
       v_1dsound_execute,
-      v_1dsound_outputs,
       v_1dsound_params,
 };

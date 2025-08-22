@@ -264,14 +264,16 @@ function mrcentroid_outputs(
  * URL: https://www.mrtrix.org/
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MrcentroidOutputs`).
  */
 function mrcentroid_execute(
     params: MrcentroidParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MrcentroidOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MRCENTROID_METADATA);
     params = execution.params(params)
     const cargs = mrcentroid_cargs(params, execution)
     const ret = mrcentroid_outputs(params, execution)
@@ -322,10 +324,8 @@ function mrcentroid(
     version: boolean = false,
     runner: Runner | null = null,
 ): MrcentroidOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MRCENTROID_METADATA);
     const params = mrcentroid_params(input, mask, voxelspace, info, quiet, debug, force, nthreads, config, help, version)
-    return mrcentroid_execute(params, execution);
+    return mrcentroid_execute(params, runner);
 }
 
 
@@ -335,10 +335,7 @@ export {
       MrcentroidOutputs,
       MrcentroidParameters,
       mrcentroid,
-      mrcentroid_cargs,
-      mrcentroid_config_cargs,
       mrcentroid_config_params,
       mrcentroid_execute,
-      mrcentroid_outputs,
       mrcentroid_params,
 };

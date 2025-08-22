@@ -268,14 +268,16 @@ function fsl_sub_mgh_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FslSubMghOutputs`).
  */
 function fsl_sub_mgh_execute(
     params: FslSubMghParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): FslSubMghOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(FSL_SUB_MGH_METADATA);
     params = execution.params(params)
     const cargs = fsl_sub_mgh_cargs(params, execution)
     const ret = fsl_sub_mgh_outputs(params, execution)
@@ -324,10 +326,8 @@ function fsl_sub_mgh(
     shell_path: string | null = null,
     runner: Runner | null = null,
 ): FslSubMghOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FSL_SUB_MGH_METADATA);
     const params = fsl_sub_mgh_params(estimated_time, queue_name, architecture, job_priority, email_address, hold_job, task_file, job_name, log_dir, mail_options, flags_in_scripts, verbose, shell_path)
-    return fsl_sub_mgh_execute(params, execution);
+    return fsl_sub_mgh_execute(params, runner);
 }
 
 
@@ -336,8 +336,6 @@ export {
       FslSubMghOutputs,
       FslSubMghParameters,
       fsl_sub_mgh,
-      fsl_sub_mgh_cargs,
       fsl_sub_mgh_execute,
-      fsl_sub_mgh_outputs,
       fsl_sub_mgh_params,
 };

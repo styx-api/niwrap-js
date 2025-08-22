@@ -168,14 +168,16 @@ function jkgcatrain_outputs(
  * URL: https://github.com/freesurfer/freesurfer
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `JkgcatrainOutputs`).
  */
 function jkgcatrain_execute(
     params: JkgcatrainParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): JkgcatrainOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(JKGCATRAIN_METADATA);
     params = execution.params(params)
     const cargs = jkgcatrain_cargs(params, execution)
     const ret = jkgcatrain_outputs(params, execution)
@@ -208,10 +210,8 @@ function jkgcatrain(
     mail_flag: boolean = false,
     runner: Runner | null = null,
 ): JkgcatrainOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(JKGCATRAIN_METADATA);
     const params = jkgcatrain_params(gca_directory, iteration_number, num_threads, no_submit, mail_flag)
-    return jkgcatrain_execute(params, execution);
+    return jkgcatrain_execute(params, runner);
 }
 
 
@@ -220,8 +220,6 @@ export {
       JkgcatrainOutputs,
       JkgcatrainParameters,
       jkgcatrain,
-      jkgcatrain_cargs,
       jkgcatrain_execute,
-      jkgcatrain_outputs,
       jkgcatrain_params,
 };

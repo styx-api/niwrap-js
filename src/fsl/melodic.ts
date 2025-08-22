@@ -622,14 +622,16 @@ function melodic_outputs(
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
  * @param params The parameters.
- * @param execution The execution object.
+ * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MelodicOutputs`).
  */
 function melodic_execute(
     params: MelodicParameters,
-    execution: Execution,
+    runner: Runner | null = null,
 ): MelodicOutputs {
+    runner = runner || getGlobalRunner();
+    const execution = runner.startExecution(MELODIC_METADATA);
     params = execution.params(params)
     const cargs = melodic_cargs(params, execution)
     const ret = melodic_outputs(params, execution)
@@ -750,10 +752,8 @@ function melodic(
     keep_meanvol: boolean = false,
     runner: Runner | null = null,
 ): MelodicOutputs {
-    runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MELODIC_METADATA);
     const params = melodic_params(input_file, output_directory, mask_file, dimensionality_reduction, generate_report, cifti_io, variance_normalization, no_masking, update_masking, no_bet, bg_threshold, dimest_technique, separate_variance_normalization, disable_migp, num_internal_eigenmaps, migp_shuffle, migp_factor, num_ics, nonlinearity, covar_weights, eps_error, eps_rank1_error, max_iters, max_restarts, mm_threshold, no_mixture_modeling, ic_components_file, mixing_matrix_file, session_modes_file, component_filter, background_image, tr_seconds, log_power_calc, time_domain_design_matrix, time_domain_t_contrast_matrix, subject_domain_design_matrix, subject_domain_t_contrast_matrix, output_unmixing_matrix, output_stats, output_pca, output_whitening, output_original_ics, output_mean_volume, version, copyright, help, debug, report_maps, keep_meanvol)
-    return melodic_execute(params, execution);
+    return melodic_execute(params, runner);
 }
 
 
@@ -762,8 +762,6 @@ export {
       MelodicOutputs,
       MelodicParameters,
       melodic,
-      melodic_cargs,
       melodic_execute,
-      melodic_outputs,
       melodic_params,
 };
