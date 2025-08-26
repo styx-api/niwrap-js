@@ -191,6 +191,8 @@ function mris_exvivo_surfaces_outputs(
 
 
 /**
+ * mris_exvivo_surfaces
+ *
  * FreeSurfer tool to position tessellation of the cortical surface at the white and gray matter surfaces, and generate relevant surface files.
  *
  * Author: FreeSurfer Developers
@@ -217,6 +219,8 @@ function mris_exvivo_surfaces_execute(
 
 
 /**
+ * mris_exvivo_surfaces
+ *
  * FreeSurfer tool to position tessellation of the cortical surface at the white and gray matter surfaces, and generate relevant surface files.
  *
  * Author: FreeSurfer Developers

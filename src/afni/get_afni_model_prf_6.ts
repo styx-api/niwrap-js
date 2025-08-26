@@ -150,6 +150,8 @@ function get_afni_model_prf_6_outputs(
 
 
 /**
+ * get_afni_model_PRF_6
+ *
  * A command to invoke AFNI's population receptive field (pRF) model.
  *
  * Author: AFNI Developers
@@ -176,6 +178,8 @@ function get_afni_model_prf_6_execute(
 
 
 /**
+ * get_afni_model_PRF_6
+ *
  * A command to invoke AFNI's population receptive field (pRF) model.
  *
  * Author: AFNI Developers

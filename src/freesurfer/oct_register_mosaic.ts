@@ -155,6 +155,8 @@ function oct_register_mosaic_outputs(
 
 
 /**
+ * oct_register_mosaic
+ *
  * Tool for registering multiple OCT (Optical Coherence Tomography) tiles or a mosaic list into a single output volume.
  *
  * Author: FreeSurfer Developers
@@ -181,6 +183,8 @@ function oct_register_mosaic_execute(
 
 
 /**
+ * oct_register_mosaic
+ *
  * Tool for registering multiple OCT (Optical Coherence Tomography) tiles or a mosaic list into a single output volume.
  *
  * Author: FreeSurfer Developers

@@ -324,6 +324,8 @@ function metric_convert_outputs(
 
 
 /**
+ * metric-convert
+ *
  * Convert metric file to fake nifti.
  *
  * The purpose of this command is to convert between metric files and nifti1 so that gifti-unaware programs can operate on the data.  You must specify exactly one of the options.
@@ -352,6 +354,8 @@ function metric_convert_execute(
 
 
 /**
+ * metric-convert
+ *
  * Convert metric file to fake nifti.
  *
  * The purpose of this command is to convert between metric files and nifti1 so that gifti-unaware programs can operate on the data.  You must specify exactly one of the options.

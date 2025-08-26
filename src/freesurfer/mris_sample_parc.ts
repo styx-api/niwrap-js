@@ -359,6 +359,8 @@ function mris_sample_parc_outputs(
 
 
 /**
+ * mris_sample_parc
+ *
  * This program samples a volumetric parcellation onto a surface.
  *
  * Author: FreeSurfer Developers
@@ -385,6 +387,8 @@ function mris_sample_parc_execute(
 
 
 /**
+ * mris_sample_parc
+ *
  * This program samples a volumetric parcellation onto a surface.
  *
  * Author: FreeSurfer Developers

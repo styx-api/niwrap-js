@@ -126,6 +126,8 @@ function v__1d_diff_mag_outputs(
 
 
 /**
+ * @1dDiffMag
+ *
  * Computes a magnitude estimate of the first differences of a 1D file.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v__1d_diff_mag_execute(
 
 
 /**
+ * @1dDiffMag
+ *
  * Computes a magnitude estimate of the first differences of a 1D file.
  *
  * Author: AFNI Developers

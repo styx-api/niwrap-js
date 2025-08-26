@@ -204,6 +204,8 @@ function std2imgcoord_outputs(
 
 
 /**
+ * std2imgcoord
+ *
  * Convert standard space coordinates to image space coordinates.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -230,6 +232,8 @@ function std2imgcoord_execute(
 
 
 /**
+ * std2imgcoord
+ *
  * Convert standard space coordinates to image space coordinates.
  *
  * Author: FMRIB Analysis Group, University of Oxford

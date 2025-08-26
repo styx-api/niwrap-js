@@ -127,6 +127,8 @@ function fslsize_outputs(
 
 
 /**
+ * fslsize
+ *
  * Tool to output the size of an image file in FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -153,6 +155,8 @@ function fslsize_execute(
 
 
 /**
+ * fslsize
+ *
  * Tool to output the size of an image file in FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

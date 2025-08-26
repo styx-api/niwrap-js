@@ -173,6 +173,8 @@ function paste_image_into_image_outputs(
 
 
 /**
+ * PasteImageIntoImage
+ *
  * Paste the input image into the input canvas image. Depending on parameters, it can replace or merge existing voxel values.
  *
  * Author: ANTs Developers
@@ -199,6 +201,8 @@ function paste_image_into_image_execute(
 
 
 /**
+ * PasteImageIntoImage
+ *
  * Paste the input image into the input canvas image. Depending on parameters, it can replace or merge existing voxel values.
  *
  * Author: ANTs Developers

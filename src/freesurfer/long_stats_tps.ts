@@ -188,6 +188,8 @@ function long_stats_tps_outputs(
 
 
 /**
+ * long_stats_tps
+ *
  * Stack results for individual time points based on longitudinal qdec table.
  *
  * Author: FreeSurfer Developers
@@ -214,6 +216,8 @@ function long_stats_tps_execute(
 
 
 /**
+ * long_stats_tps
+ *
  * Stack results for individual time points based on longitudinal qdec table.
  *
  * Author: FreeSurfer Developers

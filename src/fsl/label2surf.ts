@@ -159,6 +159,8 @@ function label2surf_outputs(
 
 
 /**
+ * label2surf
+ *
  * Transform a group of labels into a surface.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -185,6 +187,8 @@ function label2surf_execute(
 
 
 /**
+ * label2surf
+ *
  * Transform a group of labels into a surface.
  *
  * Author: FMRIB Analysis Group, University of Oxford

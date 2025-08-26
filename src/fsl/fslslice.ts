@@ -135,6 +135,8 @@ function fslslice_outputs(
 
 
 /**
+ * fslslice
+ *
  * Tool to extract all slices from a 3D volume and store as 2D images.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -161,6 +163,8 @@ function fslslice_execute(
 
 
 /**
+ * fslslice
+ *
  * Tool to extract all slices from a 3D volume and store as 2D images.
  *
  * Author: FMRIB Analysis Group, University of Oxford

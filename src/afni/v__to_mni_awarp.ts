@@ -131,6 +131,8 @@ function v__to_mni_awarp_outputs(
 
 
 /**
+ * @toMNI_Awarp
+ *
  * Transforms skull-stripped datasets to 1x1x1 mm MNI space using an affine transformation.
  *
  * Author: AFNI Developers
@@ -157,6 +159,8 @@ function v__to_mni_awarp_execute(
 
 
 /**
+ * @toMNI_Awarp
+ *
  * Transforms skull-stripped datasets to 1x1x1 mm MNI space using an affine transformation.
  *
  * Author: AFNI Developers

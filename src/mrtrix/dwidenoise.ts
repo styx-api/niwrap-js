@@ -310,6 +310,8 @@ function dwidenoise_outputs(
 
 
 /**
+ * dwidenoise
+ *
  * dMRI noise level estimation and denoising using Marchenko-Pastur PCA.
  *
  * DWI data denoising and noise map estimation by exploiting data redundancy in the PCA domain using the prior knowledge that the eigenspectrum of random covariance matrices is described by the universal Marchenko-Pastur (MP) distribution. Fitting the MP distribution to the spectrum of patch-wise signal matrices hence provides an estimator of the noise level 'sigma', as was first shown in Veraart et al. (2016) and later improved in Cordero-Grande et al. (2019). This noise level estimate then determines the optimal cut-off for PCA denoising.
@@ -350,6 +352,8 @@ function dwidenoise_execute(
 
 
 /**
+ * dwidenoise
+ *
  * dMRI noise level estimation and denoising using Marchenko-Pastur PCA.
  *
  * DWI data denoising and noise map estimation by exploiting data redundancy in the PCA domain using the prior knowledge that the eigenspectrum of random covariance matrices is described by the universal Marchenko-Pastur (MP) distribution. Fitting the MP distribution to the spectrum of patch-wise signal matrices hence provides an estimator of the noise level 'sigma', as was first shown in Veraart et al. (2016) and later improved in Cordero-Grande et al. (2019). This noise level estimate then determines the optimal cut-off for PCA denoising.

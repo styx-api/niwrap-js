@@ -307,6 +307,8 @@ function volume_extrema_outputs(
 
 
 /**
+ * volume-extrema
+ *
  * Find extrema in a volume file.
  *
  * Finds extrema in a volume file, such that no two extrema of the same type are within <distance> of each other.  The extrema are labeled as -1 for minima, 1 for maxima, 0 otherwise.  If -only-maxima or -only-minima is specified, then it will ignore extrema not of the specified type.  These options are mutually exclusive.
@@ -341,6 +343,8 @@ function volume_extrema_execute(
 
 
 /**
+ * volume-extrema
+ *
  * Find extrema in a volume file.
  *
  * Finds extrema in a volume file, such that no two extrema of the same type are within <distance> of each other.  The extrema are labeled as -1 for minima, 1 for maxima, 0 otherwise.  If -only-maxima or -only-minima is specified, then it will ignore extrema not of the specified type.  These options are mutually exclusive.

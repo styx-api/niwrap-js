@@ -277,6 +277,8 @@ function surf_fwhm_outputs(
 
 
 /**
+ * SurfFWHM
+ *
  * A program for calculating local and global FWHM.
  *
  * Author: AFNI Developers
@@ -303,6 +305,8 @@ function surf_fwhm_execute(
 
 
 /**
+ * SurfFWHM
+ *
  * A program for calculating local and global FWHM.
  *
  * Author: AFNI Developers

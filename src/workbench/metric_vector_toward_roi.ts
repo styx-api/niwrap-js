@@ -149,6 +149,8 @@ function metric_vector_toward_roi_outputs(
 
 
 /**
+ * metric-vector-toward-roi
+ *
  * Find if vectors point toward an roi.
  *
  * At each vertex, compute the vector along the start of the shortest path to the ROI.
@@ -177,6 +179,8 @@ function metric_vector_toward_roi_execute(
 
 
 /**
+ * metric-vector-toward-roi
+ *
  * Find if vectors point toward an roi.
  *
  * At each vertex, compute the vector along the start of the shortest path to the ROI.

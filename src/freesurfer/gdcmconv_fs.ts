@@ -446,6 +446,8 @@ function gdcmconv_fs_outputs(
 
 
 /**
+ * gdcmconv.fs
+ *
  * Convert a DICOM file into another DICOM file.
  *
  * Author: FreeSurfer Developers
@@ -472,6 +474,8 @@ function gdcmconv_fs_execute(
 
 
 /**
+ * gdcmconv.fs
+ *
  * Convert a DICOM file into another DICOM file.
  *
  * Author: FreeSurfer Developers

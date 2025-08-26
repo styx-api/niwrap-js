@@ -126,6 +126,8 @@ function v__check_for_afni_dset_outputs(
 
 
 /**
+ * @CheckForAfniDset
+ *
  * Check for the existence of AFNI datasets.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v__check_for_afni_dset_execute(
 
 
 /**
+ * @CheckForAfniDset
+ *
  * Check for the existence of AFNI datasets.
  *
  * Author: AFNI Developers

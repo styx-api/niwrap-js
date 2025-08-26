@@ -144,6 +144,8 @@ function v__purify_1_d_outputs(
 
 
 /**
+ * @Purify_1D
+ *
  * Purifies a series of 1D files for faster I/O into matlab.
  *
  * Author: AFNI Developers
@@ -170,6 +172,8 @@ function v__purify_1_d_execute(
 
 
 /**
+ * @Purify_1D
+ *
  * Purifies a series of 1D files for faster I/O into matlab.
  *
  * Author: AFNI Developers

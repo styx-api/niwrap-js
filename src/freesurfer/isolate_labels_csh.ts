@@ -176,6 +176,8 @@ function isolate_labels_csh_outputs(
 
 
 /**
+ * isolate_labels.csh
+ *
  * Tool to separate out a particular or all labels into individual binary files for subsequent shape analysis.
  *
  * Author: FreeSurfer Developers
@@ -202,6 +204,8 @@ function isolate_labels_csh_execute(
 
 
 /**
+ * isolate_labels.csh
+ *
  * Tool to separate out a particular or all labels into individual binary files for subsequent shape analysis.
  *
  * Author: FreeSurfer Developers

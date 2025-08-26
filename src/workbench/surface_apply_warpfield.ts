@@ -149,6 +149,8 @@ function surface_apply_warpfield_outputs(
 
 
 /**
+ * surface-apply-warpfield
+ *
  * Apply warpfield to surface file.
  *
  * NOTE: warping a surface requires the INVERSE of the warpfield used to warp the volume it lines up with.  The header of the forward warp is needed by the -fnirt option in order to correctly interpret the displacements in the fnirt warpfield.
@@ -179,6 +181,8 @@ function surface_apply_warpfield_execute(
 
 
 /**
+ * surface-apply-warpfield
+ *
  * Apply warpfield to surface file.
  *
  * NOTE: warping a surface requires the INVERSE of the warpfield used to warp the volume it lines up with.  The header of the forward warp is needed by the -fnirt option in order to correctly interpret the displacements in the fnirt warpfield.

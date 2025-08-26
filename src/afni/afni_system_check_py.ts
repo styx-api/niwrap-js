@@ -210,6 +210,8 @@ function afni_system_check_py_outputs(
 
 
 /**
+ * afni_system_check.py
+ *
  * Perform various system checks for figuring out AFNI installation issues.
  *
  * Author: AFNI Developers
@@ -236,6 +238,8 @@ function afni_system_check_py_execute(
 
 
 /**
+ * afni_system_check.py
+ *
  * Perform various system checks for figuring out AFNI installation issues.
  *
  * Author: AFNI Developers

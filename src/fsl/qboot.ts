@@ -327,6 +327,8 @@ function qboot_outputs(
 
 
 /**
+ * qboot
+ *
  * Tool for computing q-ball ODFs using bootstrap samples.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -353,6 +355,8 @@ function qboot_execute(
 
 
 /**
+ * qboot
+ *
  * Tool for computing q-ball ODFs using bootstrap samples.
  *
  * Author: FMRIB Analysis Group, University of Oxford

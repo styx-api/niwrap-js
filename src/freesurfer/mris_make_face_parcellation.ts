@@ -148,6 +148,8 @@ function mris_make_face_parcellation_outputs(
 
 
 /**
+ * mris_make_face_parcellation
+ *
  * Generates a parcellation based on which icosahedral face each vertex maps to.
  *
  * Author: FreeSurfer Developers
@@ -174,6 +176,8 @@ function mris_make_face_parcellation_execute(
 
 
 /**
+ * mris_make_face_parcellation
+ *
  * Generates a parcellation based on which icosahedral face each vertex maps to.
  *
  * Author: FreeSurfer Developers

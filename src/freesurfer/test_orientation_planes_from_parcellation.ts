@@ -138,6 +138,8 @@ function test_orientation_planes_from_parcellation_outputs(
 
 
 /**
+ * testOrientationPlanesFromParcellation
+ *
  * Tests orientation planes from a given parcellation using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -164,6 +166,8 @@ function test_orientation_planes_from_parcellation_execute(
 
 
 /**
+ * testOrientationPlanesFromParcellation
+ *
  * Tests orientation planes from a given parcellation using FreeSurfer.
  *
  * Author: FreeSurfer Developers

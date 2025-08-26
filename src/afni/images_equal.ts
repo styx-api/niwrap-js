@@ -138,6 +138,8 @@ function images_equal_outputs(
 
 
 /**
+ * images_equal
+ *
  * A simple program to test if two 2D images are identical.
  *
  * Author: AFNI Developers
@@ -164,6 +166,8 @@ function images_equal_execute(
 
 
 /**
+ * images_equal
+ *
  * A simple program to test if two 2D images are identical.
  *
  * Author: AFNI Developers

@@ -403,6 +403,8 @@ function pulse_outputs(
 
 
 /**
+ * pulse
+ *
  * Generates a pulse sequence matrix for a given digital brain image.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -429,6 +431,8 @@ function pulse_execute(
 
 
 /**
+ * pulse
+ *
  * Generates a pulse sequence matrix for a given digital brain image.
  *
  * Author: FMRIB Analysis Group, University of Oxford

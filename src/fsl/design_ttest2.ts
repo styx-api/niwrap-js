@@ -137,6 +137,8 @@ function design_ttest2_outputs(
 
 
 /**
+ * design_ttest2
+ *
  * Command for generating group mean contrasts for a two-sample t-test design.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -163,6 +165,8 @@ function design_ttest2_execute(
 
 
 /**
+ * design_ttest2
+ *
  * Command for generating group mean contrasts for a two-sample t-test design.
  *
  * Author: FMRIB Analysis Group, University of Oxford

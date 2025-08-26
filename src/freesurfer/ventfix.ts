@@ -138,6 +138,8 @@ function ventfix_outputs(
 
 
 /**
+ * ventfix
+ *
  * Tool for fixing ventricles in MRI scans.
  *
  * Author: FreeSurfer Developers
@@ -164,6 +166,8 @@ function ventfix_execute(
 
 
 /**
+ * ventfix
+ *
  * Tool for fixing ventricles in MRI scans.
  *
  * Author: FreeSurfer Developers

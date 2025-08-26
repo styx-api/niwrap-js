@@ -161,6 +161,8 @@ function jkgcatrain_outputs(
 
 
 /**
+ * jkgcatrain
+ *
  * Jackknife training of GCA using existing output from gcatrain.
  *
  * Author: FreeSurfer Developers
@@ -187,6 +189,8 @@ function jkgcatrain_execute(
 
 
 /**
+ * jkgcatrain
+ *
  * Jackknife training of GCA using existing output from gcatrain.
  *
  * Author: FreeSurfer Developers

@@ -141,6 +141,8 @@ function set_spacing_outputs(
 
 
 /**
+ * SetSpacing
+ *
  * A tool to set the spacing of an image in each dimension.
  *
  * Author: ANTs Developers
@@ -167,6 +169,8 @@ function set_spacing_execute(
 
 
 /**
+ * SetSpacing
+ *
  * A tool to set the spacing of an image in each dimension.
  *
  * Author: ANTs Developers

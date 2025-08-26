@@ -255,6 +255,8 @@ function tsfsmooth_outputs(
 
 
 /**
+ * tsfsmooth
+ *
  * Gaussian filter a track scalar file.
  *
  *
@@ -287,6 +289,8 @@ function tsfsmooth_execute(
 
 
 /**
+ * tsfsmooth
+ *
  * Gaussian filter a track scalar file.
  *
  *

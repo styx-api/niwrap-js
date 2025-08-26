@@ -135,6 +135,8 @@ function quantify_brainstem_structures_sh_outputs(
 
 
 /**
+ * quantifyBrainstemStructures.sh
+ *
  * A script to gather results from FreeSurfer brainstem processing and write them to an output file.
  *
  * Author: FreeSurfer Developers
@@ -161,6 +163,8 @@ function quantify_brainstem_structures_sh_execute(
 
 
 /**
+ * quantifyBrainstemStructures.sh
+ *
  * A script to gather results from FreeSurfer brainstem processing and write them to an output file.
  *
  * Author: FreeSurfer Developers

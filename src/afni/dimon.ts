@@ -230,6 +230,8 @@ function dimon_outputs(
 
 
 /**
+ * Dimon
+ *
  * Monitor real-time acquisition of DICOM image files.
  *
  * Author: AFNI Developers
@@ -256,6 +258,8 @@ function dimon_execute(
 
 
 /**
+ * Dimon
+ *
  * Monitor real-time acquisition of DICOM image files.
  *
  * Author: AFNI Developers

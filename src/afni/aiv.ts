@@ -170,6 +170,8 @@ function aiv_outputs(
 
 
 /**
+ * aiv
+ *
  * AFNI Image Viewer program. Shows the 2D images on the command line in an AFNI-like image viewer.
  *
  * Author: AFNI Developers
@@ -196,6 +198,8 @@ function aiv_execute(
 
 
 /**
+ * aiv
+ *
  * AFNI Image Viewer program. Shows the 2D images on the command line in an AFNI-like image viewer.
  *
  * Author: AFNI Developers

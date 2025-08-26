@@ -672,6 +672,8 @@ function mri_ca_label_outputs(
 
 
 /**
+ * mri_ca_label
+ *
  * MRI cortical annotation labeler using atlas prior (GCA).
  *
  * Author: FreeSurfer Developers
@@ -698,6 +700,8 @@ function mri_ca_label_execute(
 
 
 /**
+ * mri_ca_label
+ *
  * MRI cortical annotation labeler using atlas prior (GCA).
  *
  * Author: FreeSurfer Developers

@@ -259,6 +259,8 @@ function v_3d_unifize_outputs(
 
 
 /**
+ * 3dUnifize
+ *
  * 3dUnifize - for uniformizing image intensity
  * * The input dataset is supposed to be a T1-weighted volume, possibly already skull-stripped (e.g., via 3dSkullStrip). However, this program can be a useful step to take BEFORE 3dSkullStrip, since the latter program can fail if the input volume is strongly shaded -- 3dUnifize will (mostly) remove such shading artifacts.
  * * The output dataset has the white matter (WM) intensity approximately uniformized across space, and scaled to peak at about 1000.
@@ -292,6 +294,8 @@ function v_3d_unifize_execute(
 
 
 /**
+ * 3dUnifize
+ *
  * 3dUnifize - for uniformizing image intensity
  * * The input dataset is supposed to be a T1-weighted volume, possibly already skull-stripped (e.g., via 3dSkullStrip). However, this program can be a useful step to take BEFORE 3dSkullStrip, since the latter program can fail if the input volume is strongly shaded -- 3dUnifize will (mostly) remove such shading artifacts.
  * * The output dataset has the white matter (WM) intensity approximately uniformized across space, and scaled to peak at about 1000.

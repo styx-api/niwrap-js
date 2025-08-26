@@ -149,6 +149,8 @@ function mris_rf_train_outputs(
 
 
 /**
+ * mris_rf_train
+ *
  * Tool for training a random forest classifier using MRIS surface data.
  *
  * Author: FreeSurfer Developers
@@ -175,6 +177,8 @@ function mris_rf_train_execute(
 
 
 /**
+ * mris_rf_train
+ *
  * Tool for training a random forest classifier using MRIS surface data.
  *
  * Author: FreeSurfer Developers

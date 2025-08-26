@@ -234,6 +234,8 @@ function mri_normalize_tp2_outputs(
 
 
 /**
+ * mri_normalize_tp2
+ *
  * Normalize the input volume using control points of tp1 to help normalize tp2.
  *
  * Author: FreeSurfer Developers
@@ -260,6 +262,8 @@ function mri_normalize_tp2_execute(
 
 
 /**
+ * mri_normalize_tp2
+ *
  * Normalize the input volume using control points of tp1 to help normalize tp2.
  *
  * Author: FreeSurfer Developers

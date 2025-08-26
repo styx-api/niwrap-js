@@ -171,6 +171,8 @@ function v__skull_strip_touch_up_outputs(
 
 
 /**
+ * @SkullStrip_TouchUp
+ *
  * Helper program to touch up failed skull stripping by resampling data, allowing manual edits, and outputting corrected data.
  *
  * Author: AFNI Developers
@@ -197,6 +199,8 @@ function v__skull_strip_touch_up_execute(
 
 
 /**
+ * @SkullStrip_TouchUp
+ *
  * Helper program to touch up failed skull stripping by resampling data, allowing manual edits, and outputting corrected data.
  *
  * Author: AFNI Developers

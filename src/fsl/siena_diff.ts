@@ -177,6 +177,8 @@ function siena_diff_outputs(
 
 
 /**
+ * siena_diff
+ *
  * SIENA_diff: Analysis of longitudinal brain image differences.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -203,6 +205,8 @@ function siena_diff_execute(
 
 
 /**
+ * siena_diff
+ *
  * SIENA_diff: Analysis of longitudinal brain image differences.
  *
  * Author: FMRIB Analysis Group, University of Oxford

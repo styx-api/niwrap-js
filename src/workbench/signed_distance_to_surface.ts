@@ -149,6 +149,8 @@ function signed_distance_to_surface_outputs(
 
 
 /**
+ * signed-distance-to-surface
+ *
  * Compute signed distance from one surface to another.
  *
  * Compute the signed distance function of the reference surface at every vertex on the comparison surface.  NOTE: this relation is NOT symmetric, the line from a vertex to the closest point on the 'ref' surface (the one that defines the signed distance function) will only align with the normal of the 'ref' surface.  Valid specifiers for winding methods are as follows:
@@ -184,6 +186,8 @@ function signed_distance_to_surface_execute(
 
 
 /**
+ * signed-distance-to-surface
+ *
  * Compute signed distance from one surface to another.
  *
  * Compute the signed distance function of the reference surface at every vertex on the comparison surface.  NOTE: this relation is NOT symmetric, the line from a vertex to the closest point on the 'ref' surface (the one that defines the signed distance function) will only align with the normal of the 'ref' surface.  Valid specifiers for winding methods are as follows:

@@ -242,6 +242,8 @@ function applywarp_outputs(
 
 
 /**
+ * applywarp
+ *
  * Apply warps estimated by FNIRT (or some other software) to some image.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -268,6 +270,8 @@ function applywarp_execute(
 
 
 /**
+ * applywarp
+ *
  * Apply warps estimated by FNIRT (or some other software) to some image.
  *
  * Author: FMRIB Analysis Group, University of Oxford

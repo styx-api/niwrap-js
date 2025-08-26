@@ -161,6 +161,8 @@ function dmri_stats_ac_outputs(
 
 
 /**
+ * dmri_stats_ac
+ *
  * The tool 'dmri_stats_ac' performs statistical analysis on dMRI data.
  *
  * Author: FreeSurfer Developers
@@ -187,6 +189,8 @@ function dmri_stats_ac_execute(
 
 
 /**
+ * dmri_stats_ac
+ *
  * The tool 'dmri_stats_ac' performs statistical analysis on dMRI data.
  *
  * Author: FreeSurfer Developers

@@ -153,6 +153,8 @@ function estnoise_outputs(
 
 
 /**
+ * estnoise
+ *
  * Estimate noise in 4D fMRI data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -179,6 +181,8 @@ function estnoise_execute(
 
 
 /**
+ * estnoise
+ *
  * Estimate noise in 4D fMRI data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

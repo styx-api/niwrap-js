@@ -149,6 +149,8 @@ function label_subject_mixed_outputs(
 
 
 /**
+ * label_subject_mixed
+ *
  * Automatic labeling of brain regions using a Gaussian classifier array.
  *
  * Author: FreeSurfer Developers
@@ -175,6 +177,8 @@ function label_subject_mixed_execute(
 
 
 /**
+ * label_subject_mixed
+ *
  * Automatic labeling of brain regions using a Gaussian classifier array.
  *
  * Author: FreeSurfer Developers

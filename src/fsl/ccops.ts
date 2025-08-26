@@ -265,6 +265,8 @@ function ccops_outputs(
 
 
 /**
+ * ccops
+ *
  * ccops - Clustering of Connectomes Using Probabilistic Tractography.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -291,6 +293,8 @@ function ccops_execute(
 
 
 /**
+ * ccops
+ *
  * ccops - Clustering of Connectomes Using Probabilistic Tractography.
  *
  * Author: FMRIB Analysis Group, University of Oxford

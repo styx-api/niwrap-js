@@ -124,6 +124,8 @@ function dmri_ac_sh_outputs(
 
 
 /**
+ * dmri_ac.sh
+ *
  * A script related to diffusion MRI processing in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -150,6 +152,8 @@ function dmri_ac_sh_execute(
 
 
 /**
+ * dmri_ac.sh
+ *
  * A script related to diffusion MRI processing in FreeSurfer.
  *
  * Author: FreeSurfer Developers

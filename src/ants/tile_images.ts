@@ -141,6 +141,8 @@ function tile_images_outputs(
 
 
 /**
+ * TileImages
+ *
  * TileImages allows assembling images into a multi-dimensional array, producing a single output image. The input images must have a dimension less than or equal to the specified output image dimension.
  *
  * Author: ANTs Developers
@@ -167,6 +169,8 @@ function tile_images_execute(
 
 
 /**
+ * TileImages
+ *
  * TileImages allows assembling images into a multi-dimensional array, producing a single output image. The input images must have a dimension less than or equal to the specified output image dimension.
  *
  * Author: ANTs Developers

@@ -123,6 +123,8 @@ function sphere_subject_rh_outputs(
 
 
 /**
+ * sphere_subject-rh
+ *
  * Sphere Subject RH tool for FreeSurfer, requires valid license.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function sphere_subject_rh_execute(
 
 
 /**
+ * sphere_subject-rh
+ *
  * Sphere Subject RH tool for FreeSurfer, requires valid license.
  *
  * Author: FreeSurfer Developers

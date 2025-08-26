@@ -136,6 +136,8 @@ function mri_rigid_register_outputs(
 
 
 /**
+ * mri_rigid_register
+ *
  * Rigid registration tool for MRI volumes.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_rigid_register_execute(
 
 
 /**
+ * mri_rigid_register
+ *
  * Rigid registration tool for MRI volumes.
  *
  * Author: FreeSurfer Developers

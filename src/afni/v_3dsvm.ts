@@ -416,6 +416,8 @@ function v_3dsvm_outputs(
 
 
 /**
+ * 3dsvm
+ *
  * Support vector machine analysis of brain data using the SVM-light package.
  *
  * Author: AFNI Developers
@@ -442,6 +444,8 @@ function v_3dsvm_execute(
 
 
 /**
+ * 3dsvm
+ *
  * Support vector machine analysis of brain data using the SVM-light package.
  *
  * Author: AFNI Developers

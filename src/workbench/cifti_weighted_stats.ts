@@ -413,6 +413,8 @@ function cifti_weighted_stats_outputs(
 
 
 /**
+ * cifti-weighted-stats
+ *
  * Weighted statistics along cifti columns.
  *
  * If the mapping along column is brain models, for each column of the input, the specified operation is done on each surface and across all voxels, and the results are printed on separate lines.  For other mapping types, the operation is done on each column, and one line per map is printed.  Exactly one of -spatial-weights or -cifti-weights must be specified.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
@@ -443,6 +445,8 @@ function cifti_weighted_stats_execute(
 
 
 /**
+ * cifti-weighted-stats
+ *
  * Weighted statistics along cifti columns.
  *
  * If the mapping along column is brain models, for each column of the input, the specified operation is done on each surface and across all voxels, and the results are printed on separate lines.  For other mapping types, the operation is done on each column, and one line per map is printed.  Exactly one of -spatial-weights or -cifti-weights must be specified.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.

@@ -131,6 +131,8 @@ function medianfilter_outputs(
 
 
 /**
+ * medianfilter
+ *
  * A tool to perform 26 neighbourhood median filtering on an input image.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function medianfilter_execute(
 
 
 /**
+ * medianfilter
+ *
  * A tool to perform 26 neighbourhood median filtering on an input image.
  *
  * Author: FMRIB Analysis Group, University of Oxford

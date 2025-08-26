@@ -136,6 +136,8 @@ function compute_vox2vox_outputs(
 
 
 /**
+ * compute_vox2vox
+ *
  * Tool for computing voxel-to-voxel transformations.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function compute_vox2vox_execute(
 
 
 /**
+ * compute_vox2vox
+ *
  * Tool for computing voxel-to-voxel transformations.
  *
  * Author: FreeSurfer Developers

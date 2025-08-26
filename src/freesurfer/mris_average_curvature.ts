@@ -154,6 +154,8 @@ function mris_average_curvature_outputs(
 
 
 /**
+ * mris_average_curvature
+ *
  * This tool averages curvature data across multiple subjects and generates an output curvature file painted onto the last subject specified. It can also generate summary statistics if requested.
  *
  * Author: FreeSurfer Developers
@@ -180,6 +182,8 @@ function mris_average_curvature_execute(
 
 
 /**
+ * mris_average_curvature
+ *
  * This tool averages curvature data across multiple subjects and generates an output curvature file painted onto the last subject specified. It can also generate summary statistics if requested.
  *
  * Author: FreeSurfer Developers

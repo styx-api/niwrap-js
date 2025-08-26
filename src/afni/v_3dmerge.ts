@@ -229,6 +229,8 @@ function v_3dmerge_outputs(
 
 
 /**
+ * 3dmerge
+ *
  * 3dmerge edits and merges 3D datasets by applying various operations like thresholding, blurring, clustering, and more.
  *
  * Author: AFNI Developers
@@ -255,6 +257,8 @@ function v_3dmerge_execute(
 
 
 /**
+ * 3dmerge
+ *
  * 3dmerge edits and merges 3D datasets by applying various operations like thresholding, blurring, clustering, and more.
  *
  * Author: AFNI Developers

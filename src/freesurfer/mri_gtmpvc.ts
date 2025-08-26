@@ -729,6 +729,8 @@ function mri_gtmpvc_outputs(
 
 
 /**
+ * mri_gtmpvc
+ *
  * mri_gtmpvc performs partial volume correction on PET data using anatomical segmentation.
  *
  * Author: FreeSurfer Developers
@@ -755,6 +757,8 @@ function mri_gtmpvc_execute(
 
 
 /**
+ * mri_gtmpvc
+ *
  * mri_gtmpvc performs partial volume correction on PET data using anatomical segmentation.
  *
  * Author: FreeSurfer Developers

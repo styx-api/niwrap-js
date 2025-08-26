@@ -209,6 +209,8 @@ function stattablediff_outputs(
 
 
 /**
+ * stattablediff
+ *
  * Creates a table of the differences between two stats tables.
  *
  * Author: FreeSurfer Developers
@@ -235,6 +237,8 @@ function stattablediff_execute(
 
 
 /**
+ * stattablediff
+ *
  * Creates a table of the differences between two stats tables.
  *
  * Author: FreeSurfer Developers

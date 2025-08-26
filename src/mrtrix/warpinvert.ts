@@ -262,6 +262,8 @@ function warpinvert_outputs(
 
 
 /**
+ * warpinvert
+ *
  * Invert a non-linear warp field.
  *
  * By default, this command assumes that the input warp field is a deformation field, i.e. each voxel stores the corresponding position in the other image (in scanner space), and the calculated output warp image will also be a deformation field. If the input warp field is instead a displacment field, i.e. where each voxel stores an offset from which to sample the other image (but still in scanner space), then the -displacement option should be used; the output warp field will additionally be calculated as a displacement field in this case.
@@ -294,6 +296,8 @@ function warpinvert_execute(
 
 
 /**
+ * warpinvert
+ *
  * Invert a non-linear warp field.
  *
  * By default, this command assumes that the input warp field is a deformation field, i.e. each voxel stores the corresponding position in the other image (in scanner space), and the calculated output warp image will also be a deformation field. If the input warp field is instead a displacment field, i.e. where each voxel stores an offset from which to sample the other image (but still in scanner space), then the -displacement option should be used; the output warp field will additionally be calculated as a displacement field in this case.

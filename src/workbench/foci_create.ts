@@ -190,6 +190,8 @@ function foci_create_outputs(
 
 
 /**
+ * foci-create
+ *
  * Create a foci file.
  *
  * Creates a foci file from names, coordinates, and RGB values in a text file.  The text file must have the following format (2 lines per focus):
@@ -228,6 +230,8 @@ function foci_create_execute(
 
 
 /**
+ * foci-create
+ *
  * Create a foci file.
  *
  * Creates a foci file from names, coordinates, and RGB values in a text file.  The text file must have the following format (2 lines per focus):

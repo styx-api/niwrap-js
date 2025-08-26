@@ -125,6 +125,8 @@ function v_3drename_outputs(
 
 
 /**
+ * 3drename
+ *
  * Tool to rename AFNI datasets by changing the dataset prefix.
  *
  * Author: AFNI Developers
@@ -151,6 +153,8 @@ function v_3drename_execute(
 
 
 /**
+ * 3drename
+ *
  * Tool to rename AFNI datasets by changing the dataset prefix.
  *
  * Author: AFNI Developers

@@ -338,6 +338,8 @@ function afni_outputs(
 
 
 /**
+ * afni
+ *
  * Tool for reading in sessions of 3D datasets and visualizing them.
  *
  * Author: AFNI Developers
@@ -364,6 +366,8 @@ function afni_execute(
 
 
 /**
+ * afni
+ *
  * Tool for reading in sessions of 3D datasets and visualizing them.
  *
  * Author: AFNI Developers

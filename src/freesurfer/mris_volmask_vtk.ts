@@ -325,6 +325,8 @@ function mris_volmask_vtk_outputs(
 
 
 /**
+ * mris_volmask_vtk
+ *
  * Computes a volume mask at the resolution of the brain.mgz file, containing labels for various brain structures using surface files.
  *
  * Author: FreeSurfer Developers
@@ -351,6 +353,8 @@ function mris_volmask_vtk_execute(
 
 
 /**
+ * mris_volmask_vtk
+ *
  * Computes a volume mask at the resolution of the brain.mgz file, containing labels for various brain structures using surface files.
  *
  * Author: FreeSurfer Developers

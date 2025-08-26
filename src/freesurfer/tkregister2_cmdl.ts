@@ -722,6 +722,8 @@ function tkregister2_cmdl_outputs(
 
 
 /**
+ * tkregister2_cmdl
+ *
  * tkregister2 is a tool to assist in the manual tuning of the linear registration between two volumes, mainly for the purpose of interacting with the FreeSurfer anatomical stream.
  *
  * Author: FreeSurfer Developers
@@ -748,6 +750,8 @@ function tkregister2_cmdl_execute(
 
 
 /**
+ * tkregister2_cmdl
+ *
  * tkregister2 is a tool to assist in the manual tuning of the linear registration between two volumes, mainly for the purpose of interacting with the FreeSurfer anatomical stream.
  *
  * Author: FreeSurfer Developers

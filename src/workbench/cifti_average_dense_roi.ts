@@ -324,6 +324,8 @@ function cifti_average_dense_roi_outputs(
 
 
 /**
+ * cifti-average-dense-roi
+ *
  * Average cifti rows across subjects by roi.
  *
  * Averages rows for each map of the ROI(s), across all files.  ROI maps are treated as weighting functions, including negative values.  For efficiency, ensure that everything that is not intended to be used is zero in the ROI map.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.  If multiple non-cifti ROI files are specified, they must have the same number of columns.
@@ -352,6 +354,8 @@ function cifti_average_dense_roi_execute(
 
 
 /**
+ * cifti-average-dense-roi
+ *
  * Average cifti rows across subjects by roi.
  *
  * Averages rows for each map of the ROI(s), across all files.  ROI maps are treated as weighting functions, including negative values.  For efficiency, ensure that everything that is not intended to be used is zero in the ROI map.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.  If multiple non-cifti ROI files are specified, they must have the same number of columns.

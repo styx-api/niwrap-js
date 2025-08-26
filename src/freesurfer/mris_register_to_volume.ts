@@ -420,6 +420,8 @@ function mris_register_to_volume_outputs(
 
 
 /**
+ * mris_register_to_volume
+ *
  * Aligns cortical surfaces to a volumetric template.
  *
  * Author: FreeSurfer Developers
@@ -446,6 +448,8 @@ function mris_register_to_volume_execute(
 
 
 /**
+ * mris_register_to_volume
+ *
  * Aligns cortical surfaces to a volumetric template.
  *
  * Author: FreeSurfer Developers

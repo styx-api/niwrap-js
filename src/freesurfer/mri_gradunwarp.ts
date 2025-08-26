@@ -234,6 +234,8 @@ function mri_gradunwarp_outputs(
 
 
 /**
+ * mri_gradunwarp
+ *
  * Tool to correct gradient non-linearity distortions in MRI images.
  *
  * Author: FreeSurfer Developers
@@ -260,6 +262,8 @@ function mri_gradunwarp_execute(
 
 
 /**
+ * mri_gradunwarp
+ *
  * Tool to correct gradient non-linearity distortions in MRI images.
  *
  * Author: FreeSurfer Developers

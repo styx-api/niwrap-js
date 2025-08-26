@@ -324,6 +324,8 @@ function fat_mat2d_plot_py_outputs(
 
 
 /**
+ * fat_mat2d_plot.py
+ *
  * Plots simple matrices output from 3dNetCorr (*.netcc) and 3dTrackID (*.grid).
  *
  * Author: AFNI Developers
@@ -350,6 +352,8 @@ function fat_mat2d_plot_py_execute(
 
 
 /**
+ * fat_mat2d_plot.py
+ *
  * Plots simple matrices output from 3dNetCorr (*.netcc) and 3dTrackID (*.grid).
  *
  * Author: AFNI Developers

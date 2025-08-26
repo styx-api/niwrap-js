@@ -365,6 +365,8 @@ function ss3t_csd_beta1_outputs(
 
 
 /**
+ * ss3t_csd_beta1
+ *
  * SS3T-CSD: beta 1 implementation
  *
  * * Dhollander, T. & Connelly, A. A novel iterative approach to reap the benefits of multi-tissue CSD from just single-shell (+b=0) diffusion MRI data. Proc Intl Soc Mag Reson Med, 2016, 3010.
@@ -393,6 +395,8 @@ function ss3t_csd_beta1_execute(
 
 
 /**
+ * ss3t_csd_beta1
+ *
  * SS3T-CSD: beta 1 implementation
  *
  * * Dhollander, T. & Connelly, A. A novel iterative approach to reap the benefits of multi-tissue CSD from just single-shell (+b=0) diffusion MRI data. Proc Intl Soc Mag Reson Med, 2016, 3010.

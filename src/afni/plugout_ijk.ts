@@ -222,6 +222,8 @@ function plugout_ijk_outputs(
 
 
 /**
+ * plugout_ijk
+ *
  * Connects to AFNI and sends (i,j,k) dataset indices to control the viewpoint.
  *
  * Author: AFNI Developers
@@ -248,6 +250,8 @@ function plugout_ijk_execute(
 
 
 /**
+ * plugout_ijk
+ *
  * Connects to AFNI and sends (i,j,k) dataset indices to control the viewpoint.
  *
  * Author: AFNI Developers

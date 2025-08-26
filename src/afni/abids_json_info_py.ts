@@ -174,6 +174,8 @@ function abids_json_info_py_outputs(
 
 
 /**
+ * abids_json_info.py
+ *
  * A tool to extract information from BIDS formatted json files.
  *
  * Author: AFNI Developers
@@ -200,6 +202,8 @@ function abids_json_info_py_execute(
 
 
 /**
+ * abids_json_info.py
+ *
  * A tool to extract information from BIDS formatted json files.
  *
  * Author: AFNI Developers

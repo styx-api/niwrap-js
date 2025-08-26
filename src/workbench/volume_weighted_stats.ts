@@ -341,6 +341,8 @@ function volume_weighted_stats_outputs(
 
 
 /**
+ * volume-weighted-stats
+ *
  * Weighted spatial statistics on a volume file.
  *
  * For each subvolume of the input, a line of text is printed, resulting from the specified operation.  If -weight-volume is not specified, each voxel's volume is used.  Use -subvolume to only give output for a single subvolume.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
@@ -371,6 +373,8 @@ function volume_weighted_stats_execute(
 
 
 /**
+ * volume-weighted-stats
+ *
  * Weighted spatial statistics on a volume file.
  *
  * For each subvolume of the input, a line of text is printed, resulting from the specified operation.  If -weight-volume is not specified, each voxel's volume is used.  Use -subvolume to only give output for a single subvolume.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.

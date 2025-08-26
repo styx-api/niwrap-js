@@ -422,6 +422,8 @@ function tensor2metric_outputs(
 
 
 /**
+ * tensor2metric
+ *
  * Generate maps of tensor-derived parameters.
  *
  *
@@ -456,6 +458,8 @@ function tensor2metric_execute(
 
 
 /**
+ * tensor2metric
+ *
  * Generate maps of tensor-derived parameters.
  *
  *

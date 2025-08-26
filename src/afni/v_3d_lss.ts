@@ -203,6 +203,8 @@ function v_3d_lss_outputs(
 
 
 /**
+ * 3dLSS
+ *
  * Least-Squares-Sum (LSS) estimation tool from a -stim_times_IM matrix for multivoxel pattern classification analyses.
  *
  * Author: AFNI Developers
@@ -229,6 +231,8 @@ function v_3d_lss_execute(
 
 
 /**
+ * 3dLSS
+ *
  * Least-Squares-Sum (LSS) estimation tool from a -stim_times_IM matrix for multivoxel pattern classification analyses.
  *
  * Author: AFNI Developers

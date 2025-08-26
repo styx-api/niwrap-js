@@ -561,6 +561,8 @@ function tckglobal_outputs(
 
 
 /**
+ * tckglobal
+ *
  * Multi-Shell Multi-Tissue Global Tractography.
  *
  * This command will reconstruct the global white matter fibre tractogram that best explains the input DWI data, using a multi-tissue spherical convolution model.
@@ -600,6 +602,8 @@ function tckglobal_execute(
 
 
 /**
+ * tckglobal
+ *
  * Multi-Shell Multi-Tissue Global Tractography.
  *
  * This command will reconstruct the global white matter fibre tractogram that best explains the input DWI data, using a multi-tissue spherical convolution model.

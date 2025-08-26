@@ -197,6 +197,8 @@ function v_3d_spat_norm_outputs(
 
 
 /**
+ * 3dSpatNorm
+ *
  * An obsolete tool for spatial normalization.
  *
  * Author: AFNI Developers
@@ -223,6 +225,8 @@ function v_3d_spat_norm_execute(
 
 
 /**
+ * 3dSpatNorm
+ *
  * An obsolete tool for spatial normalization.
  *
  * Author: AFNI Developers

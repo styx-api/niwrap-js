@@ -265,6 +265,8 @@ function labelconvert_outputs(
 
 
 /**
+ * labelconvert
+ *
  * Convert a connectome node image from one lookup table to another.
  *
  * Typical usage is to convert a parcellation image provided by some other software, based on the lookup table provided by that software, to conform to a new lookup table, particularly one where the node indices increment from 1, in preparation for connectome construction; examples of such target lookup table files are provided in share//mrtrix3//labelconvert//, but can be created by the user to provide the desired node set // ordering // colours.
@@ -297,6 +299,8 @@ function labelconvert_execute(
 
 
 /**
+ * labelconvert
+ *
  * Convert a connectome node image from one lookup table to another.
  *
  * Typical usage is to convert a parcellation image provided by some other software, based on the lookup table provided by that software, to conform to a new lookup table, particularly one where the node indices increment from 1, in preparation for connectome construction; examples of such target lookup table files are provided in share//mrtrix3//labelconvert//, but can be created by the user to provide the desired node set // ordering // colours.

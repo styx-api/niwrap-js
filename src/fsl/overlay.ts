@@ -207,6 +207,8 @@ function overlay_outputs(
 
 
 /**
+ * overlay
+ *
  * Use FSL's overlay command to combine background and statistical images into one volume.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -233,6 +235,8 @@ function overlay_execute(
 
 
 /**
+ * overlay
+ *
  * Use FSL's overlay command to combine background and statistical images into one volume.
  *
  * Author: FMRIB Analysis Group, University of Oxford

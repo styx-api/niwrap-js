@@ -464,6 +464,8 @@ function run_fastsurfer_sh_outputs(
 
 
 /**
+ * run_fastsurfer.sh
+ *
  * run_fastsurfer.sh takes a T1 full head image and creates segmentation using FastSurferVINN and surfaces using recon-surf.
  *
  * @param params The parameters.
@@ -486,6 +488,8 @@ function run_fastsurfer_sh_execute(
 
 
 /**
+ * run_fastsurfer.sh
+ *
  * run_fastsurfer.sh takes a T1 full head image and creates segmentation using FastSurferVINN and surfaces using recon-surf.
  *
  * @param sid Subject ID to create directory inside SUBJECTS_DIR

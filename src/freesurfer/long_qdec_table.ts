@@ -172,6 +172,8 @@ function long_qdec_table_outputs(
 
 
 /**
+ * long_qdec_table
+ *
  * Tool to operate on longitudinal QDEC tables.
  *
  * Author: FreeSurfer Developers
@@ -198,6 +200,8 @@ function long_qdec_table_execute(
 
 
 /**
+ * long_qdec_table
+ *
  * Tool to operate on longitudinal QDEC tables.
  *
  * Author: FreeSurfer Developers

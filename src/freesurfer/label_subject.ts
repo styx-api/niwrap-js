@@ -139,6 +139,8 @@ function label_subject_outputs(
 
 
 /**
+ * label_subject
+ *
  * A tool for labeling subject MRI data in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -165,6 +167,8 @@ function label_subject_execute(
 
 
 /**
+ * label_subject
+ *
  * A tool for labeling subject MRI data in FreeSurfer.
  *
  * Author: FreeSurfer Developers

@@ -150,6 +150,8 @@ function mri_add_xform_to_header_outputs(
 
 
 /**
+ * mri_add_xform_to_header
+ *
  * Program to add specified transformation to the volume header.
  *
  * Author: FreeSurfer Developers
@@ -176,6 +178,8 @@ function mri_add_xform_to_header_execute(
 
 
 /**
+ * mri_add_xform_to_header
+ *
  * Program to add specified transformation to the volume header.
  *
  * Author: FreeSurfer Developers

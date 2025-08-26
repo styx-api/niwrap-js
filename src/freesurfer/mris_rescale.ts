@@ -131,6 +131,8 @@ function mris_rescale_outputs(
 
 
 /**
+ * mris_rescale
+ *
  * This program will rescale a surface representation.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mris_rescale_execute(
 
 
 /**
+ * mris_rescale
+ *
  * This program will rescale a surface representation.
  *
  * Author: FreeSurfer Developers

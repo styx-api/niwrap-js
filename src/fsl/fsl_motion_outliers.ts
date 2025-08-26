@@ -268,6 +268,8 @@ function fsl_motion_outliers_outputs(
 
 
 /**
+ * fsl_motion_outliers
+ *
  * FSL tool used to calculate motion outliers in 4D image data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -294,6 +296,8 @@ function fsl_motion_outliers_execute(
 
 
 /**
+ * fsl_motion_outliers
+ *
  * FSL tool used to calculate motion outliers in 4D image data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

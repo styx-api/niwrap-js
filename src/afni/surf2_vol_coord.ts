@@ -227,6 +227,8 @@ function surf2_vol_coord_outputs(
 
 
 /**
+ * Surf2VolCoord
+ *
  * Relates node indices to coordinates given x y z coordinates and returns the nodes closest to them.
  *
  * Author: AFNI Developers
@@ -253,6 +255,8 @@ function surf2_vol_coord_execute(
 
 
 /**
+ * Surf2VolCoord
+ *
  * Relates node indices to coordinates given x y z coordinates and returns the nodes closest to them.
  *
  * Author: AFNI Developers

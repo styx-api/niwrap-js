@@ -339,6 +339,8 @@ function slicer_outputs(
 
 
 /**
+ * slicer
+ *
  * the main program which takes in one or two input images and produces as many separate output pictures of slices as are requested. The basic output options (-x, -y and -z) produce single slice pictures. The more advanced options (-a, -A and -S) produce montages of various slices. slicer outputs PPM format pictures.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -365,6 +367,8 @@ function slicer_execute(
 
 
 /**
+ * slicer
+ *
  * the main program which takes in one or two input images and produces as many separate output pictures of slices as are requested. The basic output options (-x, -y and -z) produce single slice pictures. The more advanced options (-a, -A and -S) produce montages of various slices. slicer outputs PPM format pictures.
  *
  * Author: FMRIB Analysis Group, University of Oxford

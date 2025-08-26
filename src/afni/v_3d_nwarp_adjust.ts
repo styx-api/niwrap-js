@@ -158,6 +158,8 @@ function v_3d_nwarp_adjust_outputs(
 
 
 /**
+ * 3dNwarpAdjust
+ *
  * Program to adjust 3D warp datasets by composing them with the inverse of their average, optionally warping input datasets and generating an output mean dataset.
  *
  * Author: AFNI Developers
@@ -184,6 +186,8 @@ function v_3d_nwarp_adjust_execute(
 
 
 /**
+ * 3dNwarpAdjust
+ *
  * Program to adjust 3D warp datasets by composing them with the inverse of their average, optionally warping input datasets and generating an output mean dataset.
  *
  * Author: AFNI Developers

@@ -129,6 +129,8 @@ function v__afni_orient_sign_outputs(
 
 
 /**
+ * @AfniOrientSign
+ *
  * A tool within the AFNI suite to determine the orientation signs of datasets.
  *
  * Author: AFNI Developers
@@ -155,6 +157,8 @@ function v__afni_orient_sign_execute(
 
 
 /**
+ * @AfniOrientSign
+ *
  * A tool within the AFNI suite to determine the orientation signs of datasets.
  *
  * Author: AFNI Developers

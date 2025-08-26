@@ -260,6 +260,8 @@ function fixel2tsf_outputs(
 
 
 /**
+ * fixel2tsf
+ *
  * Map fixel values to a track scalar file based on an input tractogram.
  *
  * This command is useful for visualising all brain fixels (e.g. the output from fixelcfestats) in 3D.
@@ -292,6 +294,8 @@ function fixel2tsf_execute(
 
 
 /**
+ * fixel2tsf
+ *
  * Map fixel values to a track scalar file based on an input tractogram.
  *
  * This command is useful for visualising all brain fixels (e.g. the output from fixelcfestats) in 3D.

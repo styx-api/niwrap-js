@@ -220,6 +220,8 @@ function trac_preproc_outputs(
 
 
 /**
+ * trac-preproc
+ *
  * Tractography pre-processing for a single subject.
  *
  * Author: FreeSurfer Developers
@@ -246,6 +248,8 @@ function trac_preproc_execute(
 
 
 /**
+ * trac-preproc
+ *
  * Tractography pre-processing for a single subject.
  *
  * Author: FreeSurfer Developers

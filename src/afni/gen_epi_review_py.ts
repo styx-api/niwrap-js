@@ -231,6 +231,8 @@ function gen_epi_review_py_outputs(
 
 
 /**
+ * gen_epi_review.py
+ *
  * Generate an AFNI processing script to review EPI data.
  *
  * Author: AFNI Developers
@@ -257,6 +259,8 @@ function gen_epi_review_py_execute(
 
 
 /**
+ * gen_epi_review.py
+ *
  * Generate an AFNI processing script to review EPI data.
  *
  * Author: AFNI Developers

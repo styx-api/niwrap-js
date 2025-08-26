@@ -144,6 +144,8 @@ function thickdiffmap_outputs(
 
 
 /**
+ * thickdiffmap
+ *
  * Compute and analyze cortical thickness difference maps.
  *
  * Author: FreeSurfer Developers
@@ -170,6 +172,8 @@ function thickdiffmap_execute(
 
 
 /**
+ * thickdiffmap
+ *
  * Compute and analyze cortical thickness difference maps.
  *
  * Author: FreeSurfer Developers

@@ -197,6 +197,8 @@ function v_3d_mepfm_outputs(
 
 
 /**
+ * 3dMEPFM
+ *
  * Voxelwise deconvolution of Multiecho fMRI data to yield time-varying estimates of changes in transverse relaxation (DR2*) and optionally, net magnetization (DS0).
  *
  * Author: AFNI Developers
@@ -223,6 +225,8 @@ function v_3d_mepfm_execute(
 
 
 /**
+ * 3dMEPFM
+ *
  * Voxelwise deconvolution of Multiecho fMRI data to yield time-varying estimates of changes in transverse relaxation (DR2*) and optionally, net magnetization (DS0).
  *
  * Author: AFNI Developers

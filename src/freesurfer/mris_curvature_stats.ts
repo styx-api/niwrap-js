@@ -472,6 +472,8 @@ function mris_curvature_stats_outputs(
 
 
 /**
+ * mris_curvature_stats
+ *
  * Tool for calculating statistics on surface curvature values.
  *
  * Author: FreeSurfer Developers
@@ -498,6 +500,8 @@ function mris_curvature_stats_execute(
 
 
 /**
+ * mris_curvature_stats
+ *
  * Tool for calculating statistics on surface curvature values.
  *
  * Author: FreeSurfer Developers

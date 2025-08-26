@@ -126,6 +126,8 @@ function v__demo_prompt_outputs(
 
 
 /**
+ * @demo_prompt
+ *
  * Prompts user with a message and waits for acknowledgment.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v__demo_prompt_execute(
 
 
 /**
+ * @demo_prompt
+ *
  * Prompts user with a message and waits for acknowledgment.
  *
  * Author: AFNI Developers

@@ -268,6 +268,8 @@ function v__measure_erosion_thick_outputs(
 
 
 /**
+ * @measure_erosion_thick
+ *
  * Compute thickness of mask using erosion method.
  *
  * Author: AFNI Developers
@@ -294,6 +296,8 @@ function v__measure_erosion_thick_execute(
 
 
 /**
+ * @measure_erosion_thick
+ *
  * Compute thickness of mask using erosion method.
  *
  * Author: AFNI Developers

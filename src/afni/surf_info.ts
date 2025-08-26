@@ -299,6 +299,8 @@ function surf_info_outputs(
 
 
 /**
+ * SurfInfo
+ *
  * Tool to gather information about surface files.
  *
  * Author: AFNI Developers
@@ -325,6 +327,8 @@ function surf_info_execute(
 
 
 /**
+ * SurfInfo
+ *
  * Tool to gather information about surface files.
  *
  * Author: AFNI Developers

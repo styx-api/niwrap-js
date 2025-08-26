@@ -123,6 +123,8 @@ function reg2subject_outputs(
 
 
 /**
+ * reg2subject
+ *
  * Returns the name of the subject in the registration file, whether it is an LTA or register.dat file.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function reg2subject_execute(
 
 
 /**
+ * reg2subject
+ *
  * Returns the name of the subject in the registration file, whether it is an LTA or register.dat file.
  *
  * Author: FreeSurfer Developers

@@ -142,6 +142,8 @@ function surface_cut_resample_outputs(
 
 
 /**
+ * surface-cut-resample
+ *
  * Resample a cut surface.
  *
  * Resamples a surface file, given two spherical surfaces that are in register.  Barycentric resampling is used, because it is usually better for resampling surfaces, and because it is needed to figure out the new topology anyway.
@@ -170,6 +172,8 @@ function surface_cut_resample_execute(
 
 
 /**
+ * surface-cut-resample
+ *
  * Resample a cut surface.
  *
  * Resamples a surface file, given two spherical surfaces that are in register.  Barycentric resampling is used, because it is usually better for resampling surfaces, and because it is needed to figure out the new topology anyway.

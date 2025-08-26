@@ -163,6 +163,8 @@ function isolate_labels_keeporigval_csh_outputs(
 
 
 /**
+ * isolate_labels_keeporigval.csh
+ *
  * Separates out a particular or all labels into individual binary files keeping the original label values for subsequent shape analysis.
  *
  * Author: FreeSurfer Developers
@@ -189,6 +191,8 @@ function isolate_labels_keeporigval_csh_execute(
 
 
 /**
+ * isolate_labels_keeporigval.csh
+ *
  * Separates out a particular or all labels into individual binary files keeping the original label values for subsequent shape analysis.
  *
  * Author: FreeSurfer Developers

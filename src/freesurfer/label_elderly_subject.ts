@@ -145,6 +145,8 @@ function label_elderly_subject_outputs(
 
 
 /**
+ * label_elderly_subject
+ *
  * Tool for labeling brain structures in MRI images of elderly subjects using Freesurfer.
  *
  * Author: FreeSurfer Developers
@@ -171,6 +173,8 @@ function label_elderly_subject_execute(
 
 
 /**
+ * label_elderly_subject
+ *
  * Tool for labeling brain structures in MRI images of elderly subjects using Freesurfer.
  *
  * Author: FreeSurfer Developers

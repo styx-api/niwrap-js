@@ -159,6 +159,8 @@ function v__xyz_to_ijk_outputs(
 
 
 /**
+ * @xyz_to_ijk
+ *
  * Helper script to convert (x, y, z) coordinates to (i, j, k) indices for a volumetric dataset.
  *
  * Author: AFNI Developers
@@ -185,6 +187,8 @@ function v__xyz_to_ijk_execute(
 
 
 /**
+ * @xyz_to_ijk
+ *
  * Helper script to convert (x, y, z) coordinates to (i, j, k) indices for a volumetric dataset.
  *
  * Author: AFNI Developers

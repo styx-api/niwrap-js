@@ -232,6 +232,8 @@ function fat_proc_filter_dwis_outputs(
 
 
 /**
+ * fat_proc_filter_dwis
+ *
  * Filter out user-found and user-defined bad volumes from DWI data sets.
  *
  * Author: AFNI Developers
@@ -258,6 +260,8 @@ function fat_proc_filter_dwis_execute(
 
 
 /**
+ * fat_proc_filter_dwis
+ *
  * Filter out user-found and user-defined bad volumes from DWI data sets.
  *
  * Author: AFNI Developers

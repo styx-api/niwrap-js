@@ -202,6 +202,8 @@ function cifti_create_parcellated_from_template_outputs(
 
 
 /**
+ * cifti-create-parcellated-from-template
+ *
  * Match parcels to template by name.
  *
  * For each parcel name in the template mapping, find that name in an input cifti file and use its data in the output file.  All input cifti files must have a parcels mapping along <modify-direction> and matching mappings along other dimensions.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.
@@ -230,6 +232,8 @@ function cifti_create_parcellated_from_template_execute(
 
 
 /**
+ * cifti-create-parcellated-from-template
+ *
  * Match parcels to template by name.
  *
  * For each parcel name in the template mapping, find that name in an input cifti file and use its data in the output file.  All input cifti files must have a parcels mapping along <modify-direction> and matching mappings along other dimensions.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.

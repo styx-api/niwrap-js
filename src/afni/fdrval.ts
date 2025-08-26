@@ -171,6 +171,8 @@ function fdrval_outputs(
 
 
 /**
+ * fdrval
+ *
  * Computes q-values from FDR curve data stored in dataset headers.
  *
  * Author: AFNI Developers
@@ -197,6 +199,8 @@ function fdrval_execute(
 
 
 /**
+ * fdrval
+ *
  * Computes q-values from FDR curve data stored in dataset headers.
  *
  * Author: AFNI Developers

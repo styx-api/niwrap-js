@@ -149,6 +149,8 @@ function label_mask_outputs(
 
 
 /**
+ * label-mask
+ *
  * Mask a label file.
  *
  * By default, the output label is a copy of the input label, but with the 'unused' label wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.
@@ -177,6 +179,8 @@ function label_mask_execute(
 
 
 /**
+ * label-mask
+ *
  * Mask a label file.
  *
  * By default, the output label is a copy of the input label, but with the 'unused' label wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.

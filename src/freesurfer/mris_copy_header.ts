@@ -136,6 +136,8 @@ function mris_copy_header_outputs(
 
 
 /**
+ * mris_copy_header
+ *
  * Tool to copy the header from a template surface to an input surface and save as the output surface.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mris_copy_header_execute(
 
 
 /**
+ * mris_copy_header
+ *
  * Tool to copy the header from a template surface to an input surface and save as the output surface.
  *
  * Author: FreeSurfer Developers

@@ -216,6 +216,8 @@ function mri_nlfilter_outputs(
 
 
 /**
+ * mri_nlfilter
+ *
  * This program processes an image using a nonlocal filter and writes the results to an output file. It supports different filtering methods such as median, Gaussian, and mean.
  *
  * Author: FreeSurfer Developers
@@ -242,6 +244,8 @@ function mri_nlfilter_execute(
 
 
 /**
+ * mri_nlfilter
+ *
  * This program processes an image using a nonlocal filter and writes the results to an output file. It supports different filtering methods such as median, Gaussian, and mean.
  *
  * Author: FreeSurfer Developers

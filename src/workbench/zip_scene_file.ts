@@ -157,6 +157,8 @@ function zip_scene_file_outputs(
 
 
 /**
+ * zip-scene-file
+ *
  * Zip a scene file and its data files.
  *
  * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the base directory will be automatically set to the lowest level directory containing all files.  The scene file must contain only relative paths, and no data files may be outside the base directory.
@@ -185,6 +187,8 @@ function zip_scene_file_execute(
 
 
 /**
+ * zip-scene-file
+ *
  * Zip a scene file and its data files.
  *
  * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the base directory will be automatically set to the lowest level directory containing all files.  The scene file must contain only relative paths, and no data files may be outside the base directory.

@@ -191,6 +191,8 @@ function ants_landmark_based_transform_initializer_outputs(
 
 
 /**
+ * antsLandmarkBasedTransformInitializer
+ *
  * This tool initializes a transform between two images based on corresponding landmarks.
  *
  * Author: ANTs Developers
@@ -217,6 +219,8 @@ function ants_landmark_based_transform_initializer_execute(
 
 
 /**
+ * antsLandmarkBasedTransformInitializer
+ *
  * This tool initializes a transform between two images based on corresponding landmarks.
  *
  * Author: ANTs Developers

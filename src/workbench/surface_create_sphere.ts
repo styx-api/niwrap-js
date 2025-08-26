@@ -132,6 +132,8 @@ function surface_create_sphere_outputs(
 
 
 /**
+ * surface-create-sphere
+ *
  * Generate a sphere with consistent vertex areas.
  *
  * Generates a sphere by regularly dividing the triangles of an icosahedron, to come as close to the desired number of vertices as possible, and modifying it to have very similar vertex areas for all vertices.  To generate a pair of vertex-matched left and right spheres, use this command, then -surface-flip-lr to generate the other sphere, then -set-structure on each.  For example:
@@ -165,6 +167,8 @@ function surface_create_sphere_execute(
 
 
 /**
+ * surface-create-sphere
+ *
  * Generate a sphere with consistent vertex areas.
  *
  * Generates a sphere by regularly dividing the triangles of an icosahedron, to come as close to the desired number of vertices as possible, and modifying it to have very similar vertex areas for all vertices.  To generate a pair of vertex-matched left and right spheres, use this command, then -surface-flip-lr to generate the other sphere, then -set-structure on each.  For example:

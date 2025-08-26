@@ -156,6 +156,8 @@ function mri_parse_sdcmdir_outputs(
 
 
 /**
+ * mri_parse_sdcmdir
+ *
  * This program parses the Siemens DICOM files in a given directory and prints out information about each file.
  *
  * Author: FreeSurfer Developers
@@ -182,6 +184,8 @@ function mri_parse_sdcmdir_execute(
 
 
 /**
+ * mri_parse_sdcmdir
+ *
  * This program parses the Siemens DICOM files in a given directory and prints out information about each file.
  *
  * Author: FreeSurfer Developers

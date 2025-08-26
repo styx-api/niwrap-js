@@ -208,6 +208,8 @@ function mri_motion_correct2_outputs(
 
 
 /**
+ * mri_motion_correct2
+ *
  * Aligns and averages two or more volumes using minctracc for alignment and mincresample and mincaverage for resampling.
  *
  * Author: FreeSurfer Developers
@@ -234,6 +236,8 @@ function mri_motion_correct2_execute(
 
 
 /**
+ * mri_motion_correct2
+ *
  * Aligns and averages two or more volumes using minctracc for alignment and mincresample and mincaverage for resampling.
  *
  * Author: FreeSurfer Developers

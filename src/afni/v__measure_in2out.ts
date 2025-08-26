@@ -283,6 +283,8 @@ function v__measure_in2out_outputs(
 
 
 /**
+ * @measure_in2out
+ *
  * Compute thickness of mask using in2out method.
  *
  * Author: AFNI Developers
@@ -309,6 +311,8 @@ function v__measure_in2out_execute(
 
 
 /**
+ * @measure_in2out
+ *
  * Compute thickness of mask using in2out method.
  *
  * Author: AFNI Developers

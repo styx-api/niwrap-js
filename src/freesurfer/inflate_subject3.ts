@@ -125,6 +125,8 @@ function inflate_subject3_outputs(
 
 
 /**
+ * inflate_subject3
+ *
  * A tool related to subject inflation in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function inflate_subject3_execute(
 
 
 /**
+ * inflate_subject3
+ *
  * A tool related to subject inflation in FreeSurfer.
  *
  * Author: FreeSurfer Developers

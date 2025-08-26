@@ -172,6 +172,8 @@ function dmri_group_outputs(
 
 
 /**
+ * dmri_group
+ *
  * A tool to process and analyze diffusion MRI group data.
  *
  * Author: FreeSurfer Developers
@@ -198,6 +200,8 @@ function dmri_group_execute(
 
 
 /**
+ * dmri_group
+ *
  * A tool to process and analyze diffusion MRI group data.
  *
  * Author: FreeSurfer Developers

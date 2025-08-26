@@ -330,6 +330,8 @@ function topup_outputs(
 
 
 /**
+ * topup
+ *
  * topup is part of FSL and is used to estimate and correct for susceptibility-induced distortions in echo planar imaging (EPI) data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -356,6 +358,8 @@ function topup_execute(
 
 
 /**
+ * topup
+ *
  * topup is part of FSL and is used to estimate and correct for susceptibility-induced distortions in echo planar imaging (EPI) data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

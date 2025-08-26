@@ -381,6 +381,8 @@ function mri_entowm_seg_outputs(
 
 
 /**
+ * mri_entowm_seg
+ *
  * Segment white matter near gyrus ambiens entorhinal cortex using a deep learning model.
  *
  * Author: FreeSurfer Developers
@@ -407,6 +409,8 @@ function mri_entowm_seg_execute(
 
 
 /**
+ * mri_entowm_seg
+ *
  * Segment white matter near gyrus ambiens entorhinal cortex using a deep learning model.
  *
  * Author: FreeSurfer Developers

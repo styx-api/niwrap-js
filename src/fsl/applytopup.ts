@@ -180,6 +180,8 @@ function applytopup_outputs(
 
 
 /**
+ * applytopup
+ *
  * applytopup applies corrections to images using the field estimates produced by topup.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -206,6 +208,8 @@ function applytopup_execute(
 
 
 /**
+ * applytopup
+ *
  * applytopup applies corrections to images using the field estimates produced by topup.
  *
  * Author: FMRIB Analysis Group, University of Oxford

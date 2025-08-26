@@ -125,6 +125,8 @@ function mris_distance_to_label_outputs(
 
 
 /**
+ * mris_distance_to_label
+ *
  * A tool for measuring the distance between vertices on a surface and a labeled region.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function mris_distance_to_label_execute(
 
 
 /**
+ * mris_distance_to_label
+ *
  * A tool for measuring the distance between vertices on a surface and a labeled region.
  *
  * Author: FreeSurfer Developers

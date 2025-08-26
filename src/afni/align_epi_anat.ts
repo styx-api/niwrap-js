@@ -273,6 +273,8 @@ function align_epi_anat_outputs(
 
 
 /**
+ * align_epi_anat
+ *
  * Align EPI to anatomical datasets or vice versa.
  *
  * Author: AFNI Developers
@@ -299,6 +301,8 @@ function align_epi_anat_execute(
 
 
 /**
+ * align_epi_anat
+ *
  * Align EPI to anatomical datasets or vice versa.
  *
  * Author: AFNI Developers

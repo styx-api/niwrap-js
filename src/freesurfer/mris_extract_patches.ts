@@ -125,6 +125,8 @@ function mris_extract_patches_outputs(
 
 
 /**
+ * mris_extract_patches
+ *
  * A tool for extracting patches from brain surfaces.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function mris_extract_patches_execute(
 
 
 /**
+ * mris_extract_patches
+ *
  * A tool for extracting patches from brain surfaces.
  *
  * Author: FreeSurfer Developers

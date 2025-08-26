@@ -261,6 +261,8 @@ function v_3dedgedog_outputs(
 
 
 /**
+ * 3dedgedog
+ *
  * Calculate edges in an image using the Difference of Gaussians (DOG) method with extensions/tweaks of the Marr-Hildreth algorithm.
  *
  * Author: AFNI Developers
@@ -287,6 +289,8 @@ function v_3dedgedog_execute(
 
 
 /**
+ * 3dedgedog
+ *
  * Calculate edges in an image using the Difference of Gaussians (DOG) method with extensions/tweaks of the Marr-Hildreth algorithm.
  *
  * Author: AFNI Developers

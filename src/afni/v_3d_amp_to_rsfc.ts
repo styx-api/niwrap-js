@@ -205,6 +205,8 @@ function v_3d_amp_to_rsfc_outputs(
 
 
 /**
+ * 3dAmpToRSFC
+ *
  * Convert spectral amplitudes into standard RSFC parameters.
  *
  * Author: AFNI Developers
@@ -231,6 +233,8 @@ function v_3d_amp_to_rsfc_execute(
 
 
 /**
+ * 3dAmpToRSFC
+ *
  * Convert spectral amplitudes into standard RSFC parameters.
  *
  * Author: AFNI Developers

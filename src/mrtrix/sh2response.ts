@@ -282,6 +282,8 @@ function sh2response_outputs(
 
 
 /**
+ * sh2response
+ *
  * Generate an appropriate response function from the image data for spherical deconvolution.
  *
  * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
@@ -315,6 +317,8 @@ function sh2response_execute(
 
 
 /**
+ * sh2response
+ *
  * Generate an appropriate response function from the image data for spherical deconvolution.
  *
  * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 

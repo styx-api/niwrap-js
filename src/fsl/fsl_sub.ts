@@ -473,6 +473,8 @@ function fsl_sub_outputs(
 
 
 /**
+ * fsl_sub
+ *
  * FSL cluster submission tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -499,6 +501,8 @@ function fsl_sub_execute(
 
 
 /**
+ * fsl_sub
+ *
  * FSL cluster submission tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford

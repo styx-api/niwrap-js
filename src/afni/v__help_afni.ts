@@ -162,6 +162,8 @@ function v__help_afni_outputs(
 
 
 /**
+ * @help.AFNI
+ *
  * A script to retrieve and search AFNI's help page for all programs.
  *
  * Author: AFNI Developers
@@ -188,6 +190,8 @@ function v__help_afni_execute(
 
 
 /**
+ * @help.AFNI
+ *
  * A script to retrieve and search AFNI's help page for all programs.
  *
  * Author: AFNI Developers

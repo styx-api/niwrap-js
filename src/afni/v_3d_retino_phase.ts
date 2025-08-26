@@ -309,6 +309,8 @@ function v_3d_retino_phase_outputs(
 
 
 /**
+ * 3dRetinoPhase
+ *
  * Process time series from retinotopy stimuli to create phase datasets and visual field angle datasets.
  *
  * Author: AFNI Developers
@@ -335,6 +337,8 @@ function v_3d_retino_phase_execute(
 
 
 /**
+ * 3dRetinoPhase
+ *
  * Process time series from retinotopy stimuli to create phase datasets and visual field angle datasets.
  *
  * Author: AFNI Developers

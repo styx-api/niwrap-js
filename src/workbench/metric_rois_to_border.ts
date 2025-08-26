@@ -166,6 +166,8 @@ function metric_rois_to_border_outputs(
 
 
 /**
+ * metric-rois-to-border
+ *
  * Draw borders around metric rois.
  *
  * For each ROI column, finds all edges on the mesh that cross the boundary of the ROI, and draws borders through them.  By default, this is done on all columns in the input file, using the map name as the name for the border.
@@ -194,6 +196,8 @@ function metric_rois_to_border_execute(
 
 
 /**
+ * metric-rois-to-border
+ *
  * Draw borders around metric rois.
  *
  * For each ROI column, finds all edges on the mesh that cross the boundary of the ROI, and draws borders through them.  By default, this is done on all columns in the input file, using the map name as the name for the border.

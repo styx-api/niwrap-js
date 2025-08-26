@@ -151,6 +151,8 @@ function cifti_pairwise_correlation_outputs(
 
 
 /**
+ * cifti-pairwise-correlation
+ *
  * Correlate paired rows between two cifti files.
  *
  * For each row in <cifti-a>, correlate it with the same row in <cifti-b>, and put the result in the same row of <cifti-out>, which has only one column.
@@ -179,6 +181,8 @@ function cifti_pairwise_correlation_execute(
 
 
 /**
+ * cifti-pairwise-correlation
+ *
  * Correlate paired rows between two cifti files.
  *
  * For each row in <cifti-a>, correlate it with the same row in <cifti-b>, and put the result in the same row of <cifti-out>, which has only one column.

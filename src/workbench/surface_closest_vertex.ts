@@ -131,6 +131,8 @@ function surface_closest_vertex_outputs(
 
 
 /**
+ * surface-closest-vertex
+ *
  * Find closest surface vertex to coordinates.
  *
  * For each coordinate XYZ triple, find the closest vertex in the surface, and output its vertex number into a text file.  The input file should only use whitespace to separate coordinates (spaces, newlines, tabs), for instance:
@@ -162,6 +164,8 @@ function surface_closest_vertex_execute(
 
 
 /**
+ * surface-closest-vertex
+ *
  * Find closest surface vertex to coordinates.
  *
  * For each coordinate XYZ triple, find the closest vertex in the surface, and output its vertex number into a text file.  The input file should only use whitespace to separate coordinates (spaces, newlines, tabs), for instance:

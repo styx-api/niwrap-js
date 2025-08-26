@@ -168,6 +168,8 @@ function cifti_cross_correlation_outputs(
 
 
 /**
+ * cifti-cross-correlation
+ *
  * Correlate a cifti file with another cifti file.
  *
  * Correlates every row in <cifti-a> with every row in <cifti-b>.  The mapping along columns in <cifti-b> becomes the mapping along rows in the output.
@@ -200,6 +202,8 @@ function cifti_cross_correlation_execute(
 
 
 /**
+ * cifti-cross-correlation
+ *
  * Correlate a cifti file with another cifti file.
  *
  * Correlates every row in <cifti-a> with every row in <cifti-b>.  The mapping along columns in <cifti-b> becomes the mapping along rows in the output.

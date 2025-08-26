@@ -391,6 +391,8 @@ function first_utils_outputs(
 
 
 /**
+ * first_utils
+ *
  * Utilities for handling FIRST's input and output files.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -417,6 +419,8 @@ function first_utils_execute(
 
 
 /**
+ * first_utils
+ *
  * Utilities for handling FIRST's input and output files.
  *
  * Author: FMRIB Analysis Group, University of Oxford

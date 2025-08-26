@@ -405,6 +405,8 @@ function fugue_outputs(
 
 
 /**
+ * fugue
+ *
  * FMRIB's Utility for Geometric Unwarping of EPIs.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -431,6 +433,8 @@ function fugue_execute(
 
 
 /**
+ * fugue
+ *
  * FMRIB's Utility for Geometric Unwarping of EPIs.
  *
  * Author: FMRIB Analysis Group, University of Oxford

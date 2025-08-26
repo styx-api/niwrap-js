@@ -171,6 +171,8 @@ function cjpeg_outputs(
 
 
 /**
+ * cjpeg
+ *
  * Compresses an image file to a JPEG file.
  *
  * Author: AFNI Developers
@@ -197,6 +199,8 @@ function cjpeg_execute(
 
 
 /**
+ * cjpeg
+ *
  * Compresses an image file to a JPEG file.
  *
  * Author: AFNI Developers

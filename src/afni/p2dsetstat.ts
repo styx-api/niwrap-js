@@ -165,6 +165,8 @@ function p2dsetstat_outputs(
 
 
 /**
+ * p2dsetstat
+ *
  * Convert a p-value to a statistic of choice with reference to a specific dataset.
  *
  * Author: AFNI Developers
@@ -191,6 +193,8 @@ function p2dsetstat_execute(
 
 
 /**
+ * p2dsetstat
+ *
  * Convert a p-value to a statistic of choice with reference to a specific dataset.
  *
  * Author: AFNI Developers

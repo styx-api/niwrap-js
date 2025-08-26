@@ -383,6 +383,8 @@ function long_stats_slopes_outputs(
 
 
 /**
+ * long_stats_slopes
+ *
  * Computes slopes of statistics in a longitudinal study for each subject from processed results, outputting to designated directories for further analysis.
  *
  * Author: FreeSurfer Developers
@@ -409,6 +411,8 @@ function long_stats_slopes_execute(
 
 
 /**
+ * long_stats_slopes
+ *
  * Computes slopes of statistics in a longitudinal study for each subject from processed results, outputting to designated directories for further analysis.
  *
  * Author: FreeSurfer Developers

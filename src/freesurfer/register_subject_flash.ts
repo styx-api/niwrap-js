@@ -126,6 +126,8 @@ function register_subject_flash_outputs(
 
 
 /**
+ * register_subject_flash
+ *
  * Register subject using the FLASH forward model to predict intensity values.
  *
  * Author: FreeSurfer Developers
@@ -152,6 +154,8 @@ function register_subject_flash_execute(
 
 
 /**
+ * register_subject_flash
+ *
  * Register subject using the FLASH forward model to predict intensity values.
  *
  * Author: FreeSurfer Developers

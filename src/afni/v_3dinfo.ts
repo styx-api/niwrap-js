@@ -939,6 +939,8 @@ function v_3dinfo_outputs(
 
 
 /**
+ * 3dinfo
+ *
  * Prints out sort-of-useful information from a 3D dataset's header.
  *
  * Author: AFNI Developers
@@ -965,6 +967,8 @@ function v_3dinfo_execute(
 
 
 /**
+ * 3dinfo
+ *
  * Prints out sort-of-useful information from a 3D dataset's header.
  *
  * Author: AFNI Developers

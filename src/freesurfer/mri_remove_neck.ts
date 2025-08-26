@@ -141,6 +141,8 @@ function mri_remove_neck_outputs(
 
 
 /**
+ * mri_remove_neck
+ *
  * Tool for removing neck from MRI volumes.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mri_remove_neck_execute(
 
 
 /**
+ * mri_remove_neck
+ *
  * Tool for removing neck from MRI volumes.
  *
  * Author: FreeSurfer Developers

@@ -990,6 +990,8 @@ function cifti_convert_outputs(
 
 
 /**
+ * cifti-convert
+ *
  * Dump cifti matrix into other formats.
  *
  * This command is used to convert a full CIFTI matrix to/from formats that can be used by programs that don't understand CIFTI.  You must specify exactly one of -to-gifti-ext, -from-gifti-ext, -to-nifti, -from-nifti, -to-text, or -from-text.
@@ -1033,6 +1035,8 @@ function cifti_convert_execute(
 
 
 /**
+ * cifti-convert
+ *
  * Dump cifti matrix into other formats.
  *
  * This command is used to convert a full CIFTI matrix to/from formats that can be used by programs that don't understand CIFTI.  You must specify exactly one of -to-gifti-ext, -from-gifti-ext, -to-nifti, -from-nifti, -to-text, or -from-text.

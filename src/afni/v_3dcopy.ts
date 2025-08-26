@@ -150,6 +150,8 @@ function v_3dcopy_outputs(
 
 
 /**
+ * 3dcopy
+ *
  * 3dcopy copies datasets with or without altering prefixes and converting formats.
  *
  * Author: AFNI Developers
@@ -176,6 +178,8 @@ function v_3dcopy_execute(
 
 
 /**
+ * 3dcopy
+ *
  * 3dcopy copies datasets with or without altering prefixes and converting formats.
  *
  * Author: AFNI Developers

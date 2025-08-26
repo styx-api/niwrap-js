@@ -136,6 +136,8 @@ function v__djunct_dwi_selector_outputs(
 
 
 /**
+ * @djunct_dwi_selector
+ *
  * Selects DWI data and creates a representative image.
  *
  * Author: AFNI Developers
@@ -162,6 +164,8 @@ function v__djunct_dwi_selector_execute(
 
 
 /**
+ * @djunct_dwi_selector
+ *
  * Selects DWI data and creates a representative image.
  *
  * Author: AFNI Developers

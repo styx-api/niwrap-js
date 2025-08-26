@@ -1059,6 +1059,8 @@ function fslmaths_outputs(
 
 
 /**
+ * fslmaths
+ *
  * FSL utility for image arithmetic, statistics, and mathematical operations.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -1085,6 +1087,8 @@ function fslmaths_execute(
 
 
 /**
+ * fslmaths
+ *
  * FSL utility for image arithmetic, statistics, and mathematical operations.
  *
  * Author: FMRIB Analysis Group, University of Oxford

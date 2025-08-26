@@ -424,6 +424,8 @@ function v_3d_lme_outputs(
 
 
 /**
+ * 3dLME
+ *
  * AFNI Group Analysis Program with Linear Mixed-Effects Modeling Approach.
  *
  * Author: AFNI Developers
@@ -450,6 +452,8 @@ function v_3d_lme_execute(
 
 
 /**
+ * 3dLME
+ *
  * AFNI Group Analysis Program with Linear Mixed-Effects Modeling Approach.
  *
  * Author: AFNI Developers

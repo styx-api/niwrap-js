@@ -247,6 +247,8 @@ function voxel2fixel_outputs(
 
 
 /**
+ * voxel2fixel
+ *
  * Map the scalar value in each voxel to all fixels within that voxel.
  *
  * This command is designed to enable CFE-based statistical analysis to be performed on voxel-wise measures.
@@ -279,6 +281,8 @@ function voxel2fixel_execute(
 
 
 /**
+ * voxel2fixel
+ *
  * Map the scalar value in each voxel to all fixels within that voxel.
  *
  * This command is designed to enable CFE-based statistical analysis to be performed on voxel-wise measures.

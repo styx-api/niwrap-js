@@ -291,6 +291,8 @@ function halfcosbasis_outputs(
 
 
 /**
+ * halfcosbasis
+ *
  * Tool for handling half-cosine basis functions in FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -317,6 +319,8 @@ function halfcosbasis_execute(
 
 
 /**
+ * halfcosbasis
+ *
  * Tool for handling half-cosine basis functions in FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

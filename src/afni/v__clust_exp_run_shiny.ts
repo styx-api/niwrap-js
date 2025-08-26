@@ -127,6 +127,8 @@ function v__clust_exp_run_shiny_outputs(
 
 
 /**
+ * @ClustExp_run_shiny
+ *
  * Launch a shiny app that was created by ClustExp_StatParse.py.
  *
  * Author: AFNI Developers
@@ -153,6 +155,8 @@ function v__clust_exp_run_shiny_execute(
 
 
 /**
+ * @ClustExp_run_shiny
+ *
  * Launch a shiny app that was created by ClustExp_StatParse.py.
  *
  * Author: AFNI Developers

@@ -442,6 +442,8 @@ function v_3d_anova2_outputs(
 
 
 /**
+ * 3dANOVA2
+ *
  * This program performs a two-factor Analysis of Variance (ANOVA) on 3D datasets.
  *
  * Author: AFNI Developers
@@ -468,6 +470,8 @@ function v_3d_anova2_execute(
 
 
 /**
+ * 3dANOVA2
+ *
  * This program performs a two-factor Analysis of Variance (ANOVA) on 3D datasets.
  *
  * Author: AFNI Developers

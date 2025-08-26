@@ -168,6 +168,8 @@ function volume_label_to_roi_outputs(
 
 
 /**
+ * volume-label-to-roi
+ *
  * Make a volume label into an roi volume.
  *
  * For each map in <label-in>, a map is created in <volume-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
@@ -196,6 +198,8 @@ function volume_label_to_roi_execute(
 
 
 /**
+ * volume-label-to-roi
+ *
  * Make a volume label into an roi volume.
  *
  * For each map in <label-in>, a map is created in <volume-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.

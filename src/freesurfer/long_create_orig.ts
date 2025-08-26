@@ -135,6 +135,8 @@ function long_create_orig_outputs(
 
 
 /**
+ * long_create_orig
+ *
  * Maps, conforms and averages (motioncorrect) raw inputs from cross-sectional directory to base space in Freesurfer.
  *
  * Author: FreeSurfer Developers
@@ -161,6 +163,8 @@ function long_create_orig_execute(
 
 
 /**
+ * long_create_orig
+ *
  * Maps, conforms and averages (motioncorrect) raw inputs from cross-sectional directory to base space in Freesurfer.
  *
  * Author: FreeSurfer Developers

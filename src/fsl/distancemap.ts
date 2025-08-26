@@ -228,6 +228,8 @@ function distancemap_outputs(
 
 
 /**
+ * distancemap
+ *
  * A tool to calculate distance maps using FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -254,6 +256,8 @@ function distancemap_execute(
 
 
 /**
+ * distancemap
+ *
  * A tool to calculate distance maps using FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -145,6 +145,8 @@ function imgreg_4dfp_outputs(
 
 
 /**
+ * imgreg_4dfp
+ *
  * Image registration utility using 4dfp.
  *
  * Author: FreeSurfer Developers
@@ -171,6 +173,8 @@ function imgreg_4dfp_execute(
 
 
 /**
+ * imgreg_4dfp
+ *
  * Image registration utility using 4dfp.
  *
  * Author: FreeSurfer Developers

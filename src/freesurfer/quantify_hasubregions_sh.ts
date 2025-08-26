@@ -145,6 +145,8 @@ function quantify_hasubregions_sh_outputs(
 
 
 /**
+ * quantifyHAsubregions.sh
+ *
  * Tool to quantify hippocampal subregions using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -171,6 +173,8 @@ function quantify_hasubregions_sh_execute(
 
 
 /**
+ * quantifyHAsubregions.sh
+ *
  * Tool to quantify hippocampal subregions using FreeSurfer.
  *
  * Author: FreeSurfer Developers

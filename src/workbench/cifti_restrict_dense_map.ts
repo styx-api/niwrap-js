@@ -197,6 +197,8 @@ function cifti_restrict_dense_map_outputs(
 
 
 /**
+ * cifti-restrict-dense-map
+ *
  * Exclude brainordinates from a cifti file.
  *
  * Writes a modified version of <cifti-in>, where all brainordinates outside the specified roi(s) are removed from the file.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  If -cifti-roi is specified, no other -*-roi option may be specified.  If not using -cifti-roi, any -*-roi options not present will discard the relevant structure, if present in the input file.
@@ -225,6 +227,8 @@ function cifti_restrict_dense_map_execute(
 
 
 /**
+ * cifti-restrict-dense-map
+ *
  * Exclude brainordinates from a cifti file.
  *
  * Writes a modified version of <cifti-in>, where all brainordinates outside the specified roi(s) are removed from the file.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  If -cifti-roi is specified, no other -*-roi option may be specified.  If not using -cifti-roi, any -*-roi options not present will discard the relevant structure, if present in the input file.

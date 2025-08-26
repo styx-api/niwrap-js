@@ -225,6 +225,8 @@ function map_icosahedron_outputs(
 
 
 /**
+ * MapIcosahedron
+ *
  * Creates new versions of original-mesh surfaces using the mesh of an icosahedron.
  *
  * Author: AFNI Developers
@@ -251,6 +253,8 @@ function map_icosahedron_execute(
 
 
 /**
+ * MapIcosahedron
+ *
  * Creates new versions of original-mesh surfaces using the mesh of an icosahedron.
  *
  * Author: AFNI Developers

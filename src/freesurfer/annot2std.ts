@@ -304,6 +304,8 @@ function annot2std_outputs(
 
 
 /**
+ * annot2std
+ *
  * Creates an average annotation in a standard space based on transforming the annotations of the individual subjects to the standard space through the surface registration.
  *
  * Author: FreeSurfer Developers
@@ -330,6 +332,8 @@ function annot2std_execute(
 
 
 /**
+ * annot2std
+ *
  * Creates an average annotation in a standard space based on transforming the annotations of the individual subjects to the standard space through the surface registration.
  *
  * Author: FreeSurfer Developers

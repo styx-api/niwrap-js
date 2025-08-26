@@ -125,6 +125,8 @@ function mri_add_new_tp_outputs(
 
 
 /**
+ * mri_add_new_tp
+ *
  * Adds a new time point to the base/template without re-creating the base. Only the new time point needs to be run longitudinally.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function mri_add_new_tp_execute(
 
 
 /**
+ * mri_add_new_tp
+ *
  * Adds a new time point to the base/template without re-creating the base. Only the new time point needs to be run longitudinally.
  *
  * Author: FreeSurfer Developers

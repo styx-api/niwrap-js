@@ -558,6 +558,8 @@ function mri_vol2vol_outputs(
 
 
 /**
+ * mri_vol2vol
+ *
  * Resamples a volume into another field-of-view using various types of matrices (FreeSurfer, FSL, SPM, and MNI).
  *
  * Author: FreeSurfer Developers
@@ -584,6 +586,8 @@ function mri_vol2vol_execute(
 
 
 /**
+ * mri_vol2vol
+ *
  * Resamples a volume into another field-of-view using various types of matrices (FreeSurfer, FSL, SPM, and MNI).
  *
  * Author: FreeSurfer Developers

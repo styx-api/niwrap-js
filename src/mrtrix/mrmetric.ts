@@ -311,6 +311,8 @@ function mrmetric_outputs(
 
 
 /**
+ * mrmetric
+ *
  * Computes a dissimilarity metric between two images.
  *
  * Currently only the mean squared difference is fully implemented.
@@ -343,6 +345,8 @@ function mrmetric_execute(
 
 
 /**
+ * mrmetric
+ *
  * Computes a dissimilarity metric between two images.
  *
  * Currently only the mean squared difference is fully implemented.

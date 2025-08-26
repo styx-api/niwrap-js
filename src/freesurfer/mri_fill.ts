@@ -301,6 +301,8 @@ function mri_fill_outputs(
 
 
 /**
+ * mri_fill
+ *
  * Tool for creating hemispheric cutting planes and filling white matter for surface tessellation.
  *
  * Author: FreeSurfer Developers
@@ -327,6 +329,8 @@ function mri_fill_execute(
 
 
 /**
+ * mri_fill
+ *
  * Tool for creating hemispheric cutting planes and filling white matter for surface tessellation.
  *
  * Author: FreeSurfer Developers

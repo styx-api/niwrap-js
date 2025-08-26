@@ -188,6 +188,8 @@ function v__scale_volume_outputs(
 
 
 /**
+ * @ScaleVolume
+ *
  * A tool to scale the volume of datasets.
  *
  * Author: AFNI Developers
@@ -214,6 +216,8 @@ function v__scale_volume_execute(
 
 
 /**
+ * @ScaleVolume
+ *
  * A tool to scale the volume of datasets.
  *
  * Author: AFNI Developers

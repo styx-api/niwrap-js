@@ -176,6 +176,8 @@ function imcutup_outputs(
 
 
 /**
+ * imcutup
+ *
  * Breaks up larger images into smaller image files of user-defined size.
  *
  * Author: AFNI Developers
@@ -202,6 +204,8 @@ function imcutup_execute(
 
 
 /**
+ * imcutup
+ *
  * Breaks up larger images into smaller image files of user-defined size.
  *
  * Author: AFNI Developers

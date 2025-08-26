@@ -358,6 +358,8 @@ function v_3danisosmooth_outputs(
 
 
 /**
+ * 3danisosmooth
+ *
  * Smooths a dataset using an anisotropic smoothing technique.
  *
  * Author: AFNI Developers
@@ -384,6 +386,8 @@ function v_3danisosmooth_execute(
 
 
 /**
+ * 3danisosmooth
+ *
  * Smooths a dataset using an anisotropic smoothing technique.
  *
  * Author: AFNI Developers

@@ -392,6 +392,8 @@ function mris_diff_outputs(
 
 
 /**
+ * mris_diff
+ *
  * A tool for comparing differences between surface files in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -418,6 +420,8 @@ function mris_diff_execute(
 
 
 /**
+ * mris_diff
+ *
  * A tool for comparing differences between surface files in FreeSurfer.
  *
  * Author: FreeSurfer Developers

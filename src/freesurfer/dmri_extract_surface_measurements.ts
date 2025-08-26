@@ -239,6 +239,8 @@ function dmri_extract_surface_measurements_outputs(
 
 
 /**
+ * dmri_extractSurfaceMeasurements
+ *
  * A tool for extracting surface measurements from diffusion MRI data.
  *
  * Author: FreeSurfer Developers
@@ -265,6 +267,8 @@ function dmri_extract_surface_measurements_execute(
 
 
 /**
+ * dmri_extractSurfaceMeasurements
+ *
  * A tool for extracting surface measurements from diffusion MRI data.
  *
  * Author: FreeSurfer Developers

@@ -125,6 +125,8 @@ function reconbatchjobs_outputs(
 
 
 /**
+ * reconbatchjobs
+ *
  * Batch job processor for reconstruction scripts.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function reconbatchjobs_execute(
 
 
 /**
+ * reconbatchjobs
+ *
  * Batch job processor for reconstruction scripts.
  *
  * Author: FreeSurfer Developers

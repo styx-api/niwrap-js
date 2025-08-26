@@ -359,6 +359,8 @@ function bet_outputs(
 
 
 /**
+ * bet
+ *
  * Automated brain extraction tool for FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -385,6 +387,8 @@ function bet_execute(
 
 
 /**
+ * bet
+ *
  * Automated brain extraction tool for FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

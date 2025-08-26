@@ -170,6 +170,8 @@ function dmri_mergepaths_outputs(
 
 
 /**
+ * dmri_mergepaths
+ *
  * A tool for merging diffusion MRI path data.
  *
  * Author: FreeSurfer Developers
@@ -196,6 +198,8 @@ function dmri_mergepaths_execute(
 
 
 /**
+ * dmri_mergepaths
+ *
  * A tool for merging diffusion MRI path data.
  *
  * Author: FreeSurfer Developers

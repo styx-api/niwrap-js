@@ -120,6 +120,8 @@ function getfullpath_outputs(
 
 
 /**
+ * getfullpath
+ *
  * A utility to retrieve the full path of a specified file or directory.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function getfullpath_execute(
 
 
 /**
+ * getfullpath
+ *
  * A utility to retrieve the full path of a specified file or directory.
  *
  * Author: FreeSurfer Developers

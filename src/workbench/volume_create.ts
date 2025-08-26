@@ -333,6 +333,8 @@ function volume_create_outputs(
 
 
 /**
+ * volume-create
+ *
  * Create a blank volume file.
  *
  * Creates a volume file full of zeros.  Exactly one of -plumb or -sform must be specified.
@@ -361,6 +363,8 @@ function volume_create_execute(
 
 
 /**
+ * volume-create
+ *
  * Create a blank volume file.
  *
  * Creates a volume file full of zeros.  Exactly one of -plumb or -sform must be specified.

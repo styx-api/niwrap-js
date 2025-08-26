@@ -139,6 +139,8 @@ function polyorder_outputs(
 
 
 /**
+ * polyorder
+ *
  * Computes the order of polynomial regressors needed to achieve a highpass filter with the given cutoff frequency.
  *
  * Author: FreeSurfer Developers
@@ -165,6 +167,8 @@ function polyorder_execute(
 
 
 /**
+ * polyorder
+ *
  * Computes the order of polynomial regressors needed to achieve a highpass filter with the given cutoff frequency.
  *
  * Author: FreeSurfer Developers

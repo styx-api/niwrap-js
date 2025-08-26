@@ -387,6 +387,8 @@ function cifti_gradient_outputs(
 
 
 /**
+ * cifti-gradient
+ *
  * Take gradient of a cifti file.
  *
  * Performs gradient calculation on each component of the cifti file, and optionally averages the resulting gradients.  The -vectors and -average-output options may not be used together.  You must specify a surface for each surface structure in the cifti file.  The COLUMN direction should be faster, and is the direction that works on dtseries.  For dconn, you probably want ROW, unless you are using -average-output.
@@ -415,6 +417,8 @@ function cifti_gradient_execute(
 
 
 /**
+ * cifti-gradient
+ *
  * Take gradient of a cifti file.
  *
  * Performs gradient calculation on each component of the cifti file, and optionally averages the resulting gradients.  The -vectors and -average-output options may not be used together.  You must specify a surface for each surface structure in the cifti file.  The COLUMN direction should be faster, and is the direction that works on dtseries.  For dconn, you probably want ROW, unless you are using -average-output.

@@ -254,6 +254,8 @@ function fsread_annot_outputs(
 
 
 /**
+ * FSread_annot
+ *
  * Reads a FreeSurfer annotation file and outputs an equivalent ROI file and/or a colormap file for use with SUMA.
  *
  * Author: AFNI Developers
@@ -280,6 +282,8 @@ function fsread_annot_execute(
 
 
 /**
+ * FSread_annot
+ *
  * Reads a FreeSurfer annotation file and outputs an equivalent ROI file and/or a colormap file for use with SUMA.
  *
  * Author: AFNI Developers

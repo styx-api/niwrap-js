@@ -133,6 +133,8 @@ function mkima_index_tcl_outputs(
 
 
 /**
+ * mkima_index.tcl
+ *
  * A command-line tool for handling mkima index operations.
  *
  * Author: FreeSurfer Developers
@@ -159,6 +161,8 @@ function mkima_index_tcl_execute(
 
 
 /**
+ * mkima_index.tcl
+ *
  * A command-line tool for handling mkima index operations.
  *
  * Author: FreeSurfer Developers

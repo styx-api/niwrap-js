@@ -331,6 +331,8 @@ function dtifit_outputs(
 
 
 /**
+ * dtifit
+ *
  * DTIFIT - Fit a diffusion tensor model at each voxel.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -357,6 +359,8 @@ function dtifit_execute(
 
 
 /**
+ * dtifit
+ *
  * DTIFIT - Fit a diffusion tensor model at each voxel.
  *
  * Author: FMRIB Analysis Group, University of Oxford

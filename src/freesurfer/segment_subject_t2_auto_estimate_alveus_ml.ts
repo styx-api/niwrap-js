@@ -120,6 +120,8 @@ function segment_subject_t2_auto_estimate_alveus_ml_outputs(
 
 
 /**
+ * segmentSubjectT2_autoEstimateAlveusML
+ *
  * A Freesurfer tool to segment T2 subjects with automatic alveus ML estimation.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function segment_subject_t2_auto_estimate_alveus_ml_execute(
 
 
 /**
+ * segmentSubjectT2_autoEstimateAlveusML
+ *
  * A Freesurfer tool to segment T2 subjects with automatic alveus ML estimation.
  *
  * Author: FreeSurfer Developers

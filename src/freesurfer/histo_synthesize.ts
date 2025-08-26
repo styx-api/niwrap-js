@@ -136,6 +136,8 @@ function histo_synthesize_outputs(
 
 
 /**
+ * histo_synthesize
+ *
  * Tool for synthesizing histology-like volumes from MRI data.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function histo_synthesize_execute(
 
 
 /**
+ * histo_synthesize
+ *
  * Tool for synthesizing histology-like volumes from MRI data.
  *
  * Author: FreeSurfer Developers

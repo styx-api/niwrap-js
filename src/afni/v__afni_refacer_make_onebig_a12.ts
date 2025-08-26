@@ -126,6 +126,8 @@ function v__afni_refacer_make_onebig_a12_outputs(
 
 
 /**
+ * @afni_refacer_make_onebigA12
+ *
  * Script to align a single T1w dataset to the MNI template and expand it to a 'big' grid.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v__afni_refacer_make_onebig_a12_execute(
 
 
 /**
+ * @afni_refacer_make_onebigA12
+ *
  * Script to align a single T1w dataset to the MNI template and expand it to a 'big' grid.
  *
  * Author: AFNI Developers

@@ -253,6 +253,8 @@ function mri_exvivo_strip_outputs(
 
 
 /**
+ * mri_exvivo_strip
+ *
  * Tool for processing MRI volumes for ex vivo data.
  *
  * Author: FreeSurfer Developers
@@ -279,6 +281,8 @@ function mri_exvivo_strip_execute(
 
 
 /**
+ * mri_exvivo_strip
+ *
  * Tool for processing MRI volumes for ex vivo data.
  *
  * Author: FreeSurfer Developers

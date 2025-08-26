@@ -192,6 +192,8 @@ function v_1dcat_outputs(
 
 
 /**
+ * 1dcat
+ *
  * Concatenates columns of multiple 1D or TSV/CSV files.
  *
  * Author: AFNI Developers
@@ -218,6 +220,8 @@ function v_1dcat_execute(
 
 
 /**
+ * 1dcat
+ *
  * Concatenates columns of multiple 1D or TSV/CSV files.
  *
  * Author: AFNI Developers

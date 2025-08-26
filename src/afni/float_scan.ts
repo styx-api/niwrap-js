@@ -152,6 +152,8 @@ function float_scan_outputs(
 
 
 /**
+ * float_scan
+ *
  * Scans the input file of IEEE floating point numbers for illegal values: infinities and not-a-number (NaN) values.
  *
  * Author: AFNI Developers
@@ -178,6 +180,8 @@ function float_scan_execute(
 
 
 /**
+ * float_scan
+ *
  * Scans the input file of IEEE floating point numbers for illegal values: infinities and not-a-number (NaN) values.
  *
  * Author: AFNI Developers

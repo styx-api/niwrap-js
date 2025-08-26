@@ -238,6 +238,8 @@ function exvivo_hemi_proc_outputs(
 
 
 /**
+ * exvivo-hemi-proc
+ *
  * Processes whole hemisphere data for Jeans entorhinal subfield labeling project.
  *
  * Author: FreeSurfer Developers
@@ -264,6 +266,8 @@ function exvivo_hemi_proc_execute(
 
 
 /**
+ * exvivo-hemi-proc
+ *
  * Processes whole hemisphere data for Jeans entorhinal subfield labeling project.
  *
  * Author: FreeSurfer Developers

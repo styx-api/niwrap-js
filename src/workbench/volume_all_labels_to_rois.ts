@@ -137,6 +137,8 @@ function volume_all_labels_to_rois_outputs(
 
 
 /**
+ * volume-all-labels-to-rois
+ *
  * Make rois from all labels in a volume frame.
  *
  * The output volume has a frame for each label in the specified input frame, other than the ??? label, each of which contains an ROI of all voxels that are set to the corresponding label.
@@ -165,6 +167,8 @@ function volume_all_labels_to_rois_execute(
 
 
 /**
+ * volume-all-labels-to-rois
+ *
  * Make rois from all labels in a volume frame.
  *
  * The output volume has a frame for each label in the specified input frame, other than the ??? label, each of which contains an ROI of all voxels that are set to the corresponding label.

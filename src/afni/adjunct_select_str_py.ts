@@ -130,6 +130,8 @@ function adjunct_select_str_py_outputs(
 
 
 /**
+ * adjunct_select_str.py
+ *
  * A simple helper function for the fat_proc* scripts.
  *
  * Author: AFNI Developers
@@ -156,6 +158,8 @@ function adjunct_select_str_py_execute(
 
 
 /**
+ * adjunct_select_str.py
+ *
  * A simple helper function for the fat_proc* scripts.
  *
  * Author: AFNI Developers

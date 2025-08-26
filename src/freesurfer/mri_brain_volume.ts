@@ -154,6 +154,8 @@ function mri_brain_volume_outputs(
 
 
 /**
+ * mri_brain_volume
+ *
  * Tool to calculate brain volume from MRI scans.
  *
  * Author: FreeSurfer Developers
@@ -180,6 +182,8 @@ function mri_brain_volume_execute(
 
 
 /**
+ * mri_brain_volume
+ *
  * Tool to calculate brain volume from MRI scans.
  *
  * Author: FreeSurfer Developers

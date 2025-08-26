@@ -228,6 +228,8 @@ function abids_json_tool_py_outputs(
 
 
 /**
+ * abids_json_tool.py
+ *
  * This script helps to manipulate json files in various ways.
  *
  * Author: AFNI Developers
@@ -254,6 +256,8 @@ function abids_json_tool_py_execute(
 
 
 /**
+ * abids_json_tool.py
+ *
  * This script helps to manipulate json files in various ways.
  *
  * Author: AFNI Developers

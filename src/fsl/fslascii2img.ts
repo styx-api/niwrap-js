@@ -171,6 +171,8 @@ function fslascii2img_outputs(
 
 
 /**
+ * fslascii2img
+ *
  * Convert data from ASCII format to NIfTI format.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -197,6 +199,8 @@ function fslascii2img_execute(
 
 
 /**
+ * fslascii2img
+ *
  * Convert data from ASCII format to NIfTI format.
  *
  * Author: FMRIB Analysis Group, University of Oxford

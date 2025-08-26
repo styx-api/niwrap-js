@@ -265,6 +265,8 @@ function ants_apply_transforms_to_points_outputs(
 
 
 /**
+ * antsApplyTransformsToPoints
+ *
  * antsApplyTransformsToPoints, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms). It reads in a CSV file with the first D columns defining the spatial location where the spatial location is defined in physical coordinates. The CSV file should have a header row.
  *
  * Author: ANTs Developers
@@ -291,6 +293,8 @@ function ants_apply_transforms_to_points_execute(
 
 
 /**
+ * antsApplyTransformsToPoints
+ *
  * antsApplyTransformsToPoints, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms). It reads in a CSV file with the first D columns defining the spatial location where the spatial location is defined in physical coordinates. The CSV file should have a header row.
  *
  * Author: ANTs Developers

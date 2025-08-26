@@ -170,6 +170,8 @@ function v_3dnewid_outputs(
 
 
 /**
+ * 3dnewid
+ *
  * Assigns a new ID code to a dataset, ensuring internal ID codes remain unique.
  *
  * Author: AFNI Developers
@@ -196,6 +198,8 @@ function v_3dnewid_execute(
 
 
 /**
+ * 3dnewid
+ *
  * Assigns a new ID code to a dataset, ensuring internal ID codes remain unique.
  *
  * Author: AFNI Developers

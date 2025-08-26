@@ -126,6 +126,8 @@ function v__get_afni_dims_outputs(
 
 
 /**
+ * @GetAfniDims
+ *
  * A utility tool to return dimensions of AFNI dataset.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v__get_afni_dims_execute(
 
 
 /**
+ * @GetAfniDims
+ *
  * A utility tool to return dimensions of AFNI dataset.
  *
  * Author: AFNI Developers

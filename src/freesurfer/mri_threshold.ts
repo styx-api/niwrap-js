@@ -167,6 +167,8 @@ function mri_threshold_outputs(
 
 
 /**
+ * mri_threshold
+ *
  * This program will lower threshold an input volume.
  *
  * Author: FreeSurfer Developers
@@ -193,6 +195,8 @@ function mri_threshold_execute(
 
 
 /**
+ * mri_threshold
+ *
  * This program will lower threshold an input volume.
  *
  * Author: FreeSurfer Developers

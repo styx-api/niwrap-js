@@ -395,6 +395,8 @@ function dwi2tensor_outputs(
 
 
 /**
+ * dwi2tensor
+ *
  * Diffusion (kurtosis) tensor estimation.
  *
  * By default, the diffusion tensor (and optionally its kurtosis) is fitted to the log-signal in two steps: firstly, using weighted least-squares (WLS) with weights based on the empirical signal intensities; secondly, by further iterated weighted least-squares (IWLS) with weights determined by the signal predictions from the previous iteration (by default, 2 iterations will be performed). This behaviour can be altered in two ways:
@@ -446,6 +448,8 @@ function dwi2tensor_execute(
 
 
 /**
+ * dwi2tensor
+ *
  * Diffusion (kurtosis) tensor estimation.
  *
  * By default, the diffusion tensor (and optionally its kurtosis) is fitted to the log-signal in two steps: firstly, using weighted least-squares (WLS) with weights based on the empirical signal intensities; secondly, by further iterated weighted least-squares (IWLS) with weights determined by the signal predictions from the previous iteration (by default, 2 iterations will be performed). This behaviour can be altered in two ways:

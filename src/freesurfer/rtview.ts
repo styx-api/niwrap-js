@@ -253,6 +253,8 @@ function rtview_outputs(
 
 
 /**
+ * rtview
+ *
  * View FSFAST version 5 retinotopy data using the color wheel. This is a front-end for tksurfer, setting up the environment for using the color wheel.
  *
  * Author: FreeSurfer Developers
@@ -279,6 +281,8 @@ function rtview_execute(
 
 
 /**
+ * rtview
+ *
  * View FSFAST version 5 retinotopy data using the color wheel. This is a front-end for tksurfer, setting up the environment for using the color wheel.
  *
  * Author: FreeSurfer Developers

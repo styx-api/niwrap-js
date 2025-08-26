@@ -162,6 +162,8 @@ function v__spharm_examples_outputs(
 
 
 /**
+ * @Spharm.examples
+ *
  * A script to demonstrate the usage of spherical harmonics decomposition with SUMA.
  *
  * Author: AFNI Developers
@@ -188,6 +190,8 @@ function v__spharm_examples_execute(
 
 
 /**
+ * @Spharm.examples
+ *
  * A script to demonstrate the usage of spherical harmonics decomposition with SUMA.
  *
  * Author: AFNI Developers

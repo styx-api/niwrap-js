@@ -225,6 +225,8 @@ function v_3d_local_histog_outputs(
 
 
 /**
+ * 3dLocalHistog
+ *
  * This program computes a local histogram at each voxel in the input datasets.
  *
  * Author: AFNI Developers
@@ -251,6 +253,8 @@ function v_3d_local_histog_execute(
 
 
 /**
+ * 3dLocalHistog
+ *
  * This program computes a local histogram at each voxel in the input datasets.
  *
  * Author: AFNI Developers

@@ -289,6 +289,8 @@ function v_3dvolreg_outputs(
 
 
 /**
+ * 3dvolreg
+ *
  * Register input volumes to a base volume using AFNI 3dvolreg command.
  *
  * Author: AFNI Developers
@@ -315,6 +317,8 @@ function v_3dvolreg_execute(
 
 
 /**
+ * 3dvolreg
+ *
  * Register input volumes to a base volume using AFNI 3dvolreg command.
  *
  * Author: AFNI Developers

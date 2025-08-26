@@ -690,6 +690,8 @@ function mri_coreg_outputs(
 
 
 /**
+ * mri_coreg
+ *
  * mri_coreg performs a linear registration between two volumes using the method compatible with spm_coreg.
  *
  * Author: FreeSurfer Developers
@@ -716,6 +718,8 @@ function mri_coreg_execute(
 
 
 /**
+ * mri_coreg
+ *
  * mri_coreg performs a linear registration between two volumes using the method compatible with spm_coreg.
  *
  * Author: FreeSurfer Developers

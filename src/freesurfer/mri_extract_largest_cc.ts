@@ -186,6 +186,8 @@ function mri_extract_largest_cc_outputs(
 
 
 /**
+ * mri_extract_largest_CC
+ *
  * This program extracts the largest connected component of the input volume.
  *
  * Author: FreeSurfer Developers
@@ -212,6 +214,8 @@ function mri_extract_largest_cc_execute(
 
 
 /**
+ * mri_extract_largest_CC
+ *
  * This program extracts the largest connected component of the input volume.
  *
  * Author: FreeSurfer Developers

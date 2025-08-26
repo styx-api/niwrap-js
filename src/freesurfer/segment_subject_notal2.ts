@@ -129,6 +129,8 @@ function segment_subject_notal2_outputs(
 
 
 /**
+ * segment_subject_notal2
+ *
  * FreeSurfer tool for segmenting subject data using notal2 algorithm.
  *
  * Author: FreeSurfer Developers
@@ -155,6 +157,8 @@ function segment_subject_notal2_execute(
 
 
 /**
+ * segment_subject_notal2
+ *
  * FreeSurfer tool for segmenting subject data using notal2 algorithm.
  *
  * Author: FreeSurfer Developers

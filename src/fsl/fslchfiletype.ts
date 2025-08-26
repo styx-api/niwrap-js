@@ -140,6 +140,8 @@ function fslchfiletype_outputs(
 
 
 /**
+ * fslchfiletype
+ *
  * Tool to change the file type of an image file or copy it to a new file.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -166,6 +168,8 @@ function fslchfiletype_execute(
 
 
 /**
+ * fslchfiletype
+ *
  * Tool to change the file type of an image file or copy it to a new file.
  *
  * Author: FMRIB Analysis Group, University of Oxford

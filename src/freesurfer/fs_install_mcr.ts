@@ -120,6 +120,8 @@ function fs_install_mcr_outputs(
 
 
 /**
+ * fs_install_mcr
+ *
  * MCR installation tool for FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function fs_install_mcr_execute(
 
 
 /**
+ * fs_install_mcr
+ *
  * MCR installation tool for FreeSurfer.
  *
  * Author: FreeSurfer Developers

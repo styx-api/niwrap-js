@@ -159,6 +159,8 @@ function v__deblank_file_names_outputs(
 
 
 /**
+ * @DeblankFileNames
+ *
  * A script to remove blanks and other annoying characters ([], ()) from filenames.
  *
  * Author: AFNI Developers
@@ -185,6 +187,8 @@ function v__deblank_file_names_execute(
 
 
 /**
+ * @DeblankFileNames
+ *
  * A script to remove blanks and other annoying characters ([], ()) from filenames.
  *
  * Author: AFNI Developers

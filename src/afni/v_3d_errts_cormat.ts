@@ -186,6 +186,8 @@ function v_3d_errts_cormat_outputs(
 
 
 /**
+ * 3dErrtsCormat
+ *
  * Computes the correlation matrix corresponding to the residual (or error) time series in 'dset'.
  *
  * Author: AFNI Developers
@@ -212,6 +214,8 @@ function v_3d_errts_cormat_execute(
 
 
 /**
+ * 3dErrtsCormat
+ *
  * Computes the correlation matrix corresponding to the residual (or error) time series in 'dset'.
  *
  * Author: AFNI Developers

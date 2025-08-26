@@ -136,6 +136,8 @@ function adjunct_combine_str_py_outputs(
 
 
 /**
+ * adjunct_combine_str.py
+ *
  * A simple helper function for fat_proc* scripts that processes string selectors and outputs a new string selector.
  *
  * Author: AFNI Developers
@@ -162,6 +164,8 @@ function adjunct_combine_str_py_execute(
 
 
 /**
+ * adjunct_combine_str.py
+ *
  * A simple helper function for fat_proc* scripts that processes string selectors and outputs a new string selector.
  *
  * Author: AFNI Developers

@@ -125,6 +125,8 @@ function v__4_daverage_outputs(
 
 
 /**
+ * @4Daverage
+ *
  * Script for computing average 3D+time bricks using 3Dcalc.
  *
  * Author: AFNI Developers
@@ -151,6 +153,8 @@ function v__4_daverage_execute(
 
 
 /**
+ * @4Daverage
+ *
  * Script for computing average 3D+time bricks using 3Dcalc.
  *
  * Author: AFNI Developers

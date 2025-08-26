@@ -248,6 +248,8 @@ function tcktransform_outputs(
 
 
 /**
+ * tcktransform
+ *
  * Apply a spatial transformation to a tracks file.
  *
  *
@@ -280,6 +282,8 @@ function tcktransform_execute(
 
 
 /**
+ * tcktransform
+ *
  * Apply a spatial transformation to a tracks file.
  *
  *

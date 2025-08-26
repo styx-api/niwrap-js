@@ -734,6 +734,8 @@ function mrtransform_outputs(
 
 
 /**
+ * mrtransform
+ *
  * Apply spatial transformations to an image.
  *
  * If a linear transform is applied without a template image the command will modify the image header transform matrix
@@ -778,6 +780,8 @@ function mrtransform_execute(
 
 
 /**
+ * mrtransform
+ *
  * Apply spatial transformations to an image.
  *
  * If a linear transform is applied without a template image the command will modify the image header transform matrix

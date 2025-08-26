@@ -155,6 +155,8 @@ function imstack_outputs(
 
 
 /**
+ * imstack
+ *
  * Stacks up a set of 2D images into one big file (a la MGH).
  *
  * Author: AFNI Developers
@@ -181,6 +183,8 @@ function imstack_execute(
 
 
 /**
+ * imstack
+ *
  * Stacks up a set of 2D images into one big file (a la MGH).
  *
  * Author: AFNI Developers

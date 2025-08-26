@@ -207,6 +207,8 @@ function mris_register_label_map_outputs(
 
 
 /**
+ * mris_register_label_map
+ *
  * Tool for registering label maps in Freesurfer.
  *
  * Author: FreeSurfer Developers
@@ -233,6 +235,8 @@ function mris_register_label_map_execute(
 
 
 /**
+ * mris_register_label_map
+ *
  * Tool for registering label maps in Freesurfer.
  *
  * Author: FreeSurfer Developers

@@ -408,6 +408,8 @@ function maskfilter_outputs(
 
 
 /**
+ * maskfilter
+ *
  * Perform filtering operations on 3D / 4D mask images.
  *
  * The available filters are: clean, connect, dilate, erode, median.
@@ -442,6 +444,8 @@ function maskfilter_execute(
 
 
 /**
+ * maskfilter
+ *
  * Perform filtering operations on 3D / 4D mask images.
  *
  * The available filters are: clean, connect, dilate, erode, median.

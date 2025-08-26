@@ -137,6 +137,8 @@ function surface_set_coordinates_outputs(
 
 
 /**
+ * surface-set-coordinates
+ *
  * Modify coordinates of a surface.
  *
  * Takes the topology from an existing surface file, and uses values from a metric file as coordinates to construct a new surface file.
@@ -167,6 +169,8 @@ function surface_set_coordinates_execute(
 
 
 /**
+ * surface-set-coordinates
+ *
  * Modify coordinates of a surface.
  *
  * Takes the topology from an existing surface file, and uses values from a metric file as coordinates to construct a new surface file.

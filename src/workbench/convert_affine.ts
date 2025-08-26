@@ -386,6 +386,8 @@ function convert_affine_outputs(
 
 
 /**
+ * convert-affine
+ *
  * Convert an affine file between conventions.
  *
  * NIFTI world matrices can be used directly on mm coordinates via matrix multiplication, they use the NIFTI coordinate system, that is, positive X is right, positive Y is anterior, and positive Z is superior.  Note that wb_command assumes that world matrices transform source coordinates to target coordinates, while other tools may use affines that transform target coordinates to source coordinates.
@@ -418,6 +420,8 @@ function convert_affine_execute(
 
 
 /**
+ * convert-affine
+ *
  * Convert an affine file between conventions.
  *
  * NIFTI world matrices can be used directly on mm coordinates via matrix multiplication, they use the NIFTI coordinate system, that is, positive X is right, positive Y is anterior, and positive Z is superior.  Note that wb_command assumes that world matrices transform source coordinates to target coordinates, while other tools may use affines that transform target coordinates to source coordinates.

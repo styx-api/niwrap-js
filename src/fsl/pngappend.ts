@@ -125,6 +125,8 @@ function pngappend_outputs(
 
 
 /**
+ * pngappend
+ *
  * Append PNG files horizontally and/or vertically into a new PNG (or GIF) file.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -151,6 +153,8 @@ function pngappend_execute(
 
 
 /**
+ * pngappend
+ *
  * Append PNG files horizontally and/or vertically into a new PNG (or GIF) file.
  *
  * Author: FMRIB Analysis Group, University of Oxford

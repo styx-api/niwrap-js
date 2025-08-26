@@ -331,6 +331,8 @@ function run_samseg_long_outputs(
 
 
 /**
+ * run_samseg_long
+ *
  * Longitudinal image segmentation using SAMSEG.
  *
  * Author: FreeSurfer Developers
@@ -357,6 +359,8 @@ function run_samseg_long_execute(
 
 
 /**
+ * run_samseg_long
+ *
  * Longitudinal image segmentation using SAMSEG.
  *
  * Author: FreeSurfer Developers

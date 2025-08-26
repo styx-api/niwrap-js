@@ -157,6 +157,8 @@ function beta2sxa_outputs(
 
 
 /**
+ * beta2sxa
+ *
  * A script to create files for plotting in tkmedit or tksurfer based on tabular data.
  *
  * Author: FreeSurfer Developers
@@ -183,6 +185,8 @@ function beta2sxa_execute(
 
 
 /**
+ * beta2sxa
+ *
  * A script to create files for plotting in tkmedit or tksurfer based on tabular data.
  *
  * Author: FreeSurfer Developers

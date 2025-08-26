@@ -250,6 +250,8 @@ function dirorder_outputs(
 
 
 /**
+ * dirorder
+ *
  * Reorder a set of directions to ensure near-uniformity upon truncation.
  *
  * The intent of this command is to reorder a set of gradient directions such that if a scan is terminated prematurely, at any point, the acquired directions will still be close to optimally distributed on the half-sphere.
@@ -282,6 +284,8 @@ function dirorder_execute(
 
 
 /**
+ * dirorder
+ *
  * Reorder a set of directions to ensure near-uniformity upon truncation.
  *
  * The intent of this command is to reorder a set of gradient directions such that if a scan is terminated prematurely, at any point, the acquired directions will still be close to optimally distributed on the half-sphere.

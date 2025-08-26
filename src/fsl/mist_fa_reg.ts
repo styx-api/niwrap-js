@@ -141,6 +141,8 @@ function mist_fa_reg_outputs(
 
 
 /**
+ * mist_FA_reg
+ *
  * Tool for registering FA volumes to a reference T1 volume.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -167,6 +169,8 @@ function mist_fa_reg_execute(
 
 
 /**
+ * mist_FA_reg
+ *
  * Tool for registering FA volumes to a reference T1 volume.
  *
  * Author: FMRIB Analysis Group, University of Oxford

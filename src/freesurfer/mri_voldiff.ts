@@ -190,6 +190,8 @@ function mri_voldiff_outputs(
 
 
 /**
+ * mri_voldiff
+ *
  * Determines whether two volumes are different in terms of pixel data, dimension, precision, resolution, or geometry.
  *
  * Author: FreeSurfer Developers
@@ -216,6 +218,8 @@ function mri_voldiff_execute(
 
 
 /**
+ * mri_voldiff
+ *
  * Determines whether two volumes are different in terms of pixel data, dimension, precision, resolution, or geometry.
  *
  * Author: FreeSurfer Developers

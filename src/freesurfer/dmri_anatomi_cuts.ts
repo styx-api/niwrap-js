@@ -177,6 +177,8 @@ function dmri_anatomi_cuts_outputs(
 
 
 /**
+ * dmri_AnatomiCuts
+ *
  * AnatomiCuts tool for DTI fibers segmentation.
  *
  * Author: FreeSurfer Developers
@@ -203,6 +205,8 @@ function dmri_anatomi_cuts_execute(
 
 
 /**
+ * dmri_AnatomiCuts
+ *
  * AnatomiCuts tool for DTI fibers segmentation.
  *
  * Author: FreeSurfer Developers

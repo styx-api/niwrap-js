@@ -165,6 +165,8 @@ function split_parts_gpu_outputs(
 
 
 /**
+ * split_parts_gpu
+ *
  * Splits parts of data for GPU processing.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -191,6 +193,8 @@ function split_parts_gpu_execute(
 
 
 /**
+ * split_parts_gpu
+ *
  * Splits parts of data for GPU processing.
  *
  * Author: FMRIB Analysis Group, University of Oxford

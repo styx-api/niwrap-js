@@ -131,6 +131,8 @@ function segment_thalamic_nuclei_sh_outputs(
 
 
 /**
+ * segmentThalamicNuclei.sh
+ *
  * Segment the thalamic nuclei using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function segment_thalamic_nuclei_sh_execute(
 
 
 /**
+ * segmentThalamicNuclei.sh
+ *
  * Segment the thalamic nuclei using FreeSurfer.
  *
  * Author: FreeSurfer Developers

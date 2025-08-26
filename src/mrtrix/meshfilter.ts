@@ -272,6 +272,8 @@ function meshfilter_outputs(
 
 
 /**
+ * meshfilter
+ *
  * Apply filter operations to meshes.
  *
  * While this command has only one filter operation currently available, it nevertheless presents with a comparable interface to the MRtrix3 commands maskfilter and mrfilter commands.
@@ -304,6 +306,8 @@ function meshfilter_execute(
 
 
 /**
+ * meshfilter
+ *
  * Apply filter operations to meshes.
  *
  * While this command has only one filter operation currently available, it nevertheless presents with a comparable interface to the MRtrix3 commands maskfilter and mrfilter commands.

@@ -270,6 +270,8 @@ function v__simulate_motion_outputs(
 
 
 /**
+ * @simulate_motion
+ *
  * Create simulated motion time series in an EPI dataset based on the provided motion parameters and an input volume.
  *
  * Author: AFNI Developers
@@ -296,6 +298,8 @@ function v__simulate_motion_execute(
 
 
 /**
+ * @simulate_motion
+ *
  * Create simulated motion time series in an EPI dataset based on the provided motion parameters and an input volume.
  *
  * Author: AFNI Developers

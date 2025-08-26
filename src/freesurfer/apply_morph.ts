@@ -160,6 +160,8 @@ function apply_morph_outputs(
 
 
 /**
+ * applyMorph
+ *
  * A tool for applying a morph to a volume using a template and a transform.
  *
  * Author: FreeSurfer Developers
@@ -186,6 +188,8 @@ function apply_morph_execute(
 
 
 /**
+ * applyMorph
+ *
  * A tool for applying a morph to a volume using a template and a transform.
  *
  * Author: FreeSurfer Developers

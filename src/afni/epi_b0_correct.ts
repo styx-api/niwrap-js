@@ -380,6 +380,8 @@ function epi_b0_correct_outputs(
 
 
 /**
+ * epi_b0_correct
+ *
  * B0 distortion correction tool using an acquired frequency (phase) image.
  *
  * Author: AFNI Developers
@@ -406,6 +408,8 @@ function epi_b0_correct_execute(
 
 
 /**
+ * epi_b0_correct
+ *
  * B0 distortion correction tool using an acquired frequency (phase) image.
  *
  * Author: AFNI Developers

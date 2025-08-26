@@ -165,6 +165,8 @@ function fsdcmdecompress_outputs(
 
 
 /**
+ * fsdcmdecompress
+ *
  * A tool for decompressing DICOM files using GDCM or DCMTK.
  *
  * Author: FreeSurfer Developers
@@ -191,6 +193,8 @@ function fsdcmdecompress_execute(
 
 
 /**
+ * fsdcmdecompress
+ *
  * A tool for decompressing DICOM files using GDCM or DCMTK.
  *
  * Author: FreeSurfer Developers

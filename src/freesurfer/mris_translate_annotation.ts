@@ -146,6 +146,8 @@ function mris_translate_annotation_outputs(
 
 
 /**
+ * mris_translate_annotation
+ *
  * This program applies a translation table to an annotation file.
  *
  * Author: FreeSurfer Developers
@@ -172,6 +174,8 @@ function mris_translate_annotation_execute(
 
 
 /**
+ * mris_translate_annotation
+ *
  * This program applies a translation table to an annotation file.
  *
  * Author: FreeSurfer Developers

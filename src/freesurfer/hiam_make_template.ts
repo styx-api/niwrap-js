@@ -135,6 +135,8 @@ function hiam_make_template_outputs(
 
 
 /**
+ * hiam_make_template
+ *
  * This program adds a template into an average surface using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -161,6 +163,8 @@ function hiam_make_template_execute(
 
 
 /**
+ * hiam_make_template
+ *
  * This program adds a template into an average surface using FreeSurfer.
  *
  * Author: FreeSurfer Developers

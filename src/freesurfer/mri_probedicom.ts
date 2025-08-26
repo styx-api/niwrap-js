@@ -150,6 +150,8 @@ function mri_probedicom_outputs(
 
 
 /**
+ * mri_probedicom
+ *
  * Utility to probe DICOM files for information.
  *
  * Author: FreeSurfer Developers
@@ -176,6 +178,8 @@ function mri_probedicom_execute(
 
 
 /**
+ * mri_probedicom
+ *
  * Utility to probe DICOM files for information.
  *
  * Author: FreeSurfer Developers

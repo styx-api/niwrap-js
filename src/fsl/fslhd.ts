@@ -127,6 +127,8 @@ function fslhd_outputs(
 
 
 /**
+ * fslhd
+ *
  * Display header information from a NIFTI file.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -153,6 +155,8 @@ function fslhd_execute(
 
 
 /**
+ * fslhd
+ *
  * Display header information from a NIFTI file.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -129,6 +129,8 @@ function run_segment_subfields_t1_longitudinal_sh_outputs(
 
 
 /**
+ * run_SegmentSubfieldsT1Longitudinal.sh
+ *
  * Script for segmenting subfields from T1-weighted longitudinal data using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -155,6 +157,8 @@ function run_segment_subfields_t1_longitudinal_sh_execute(
 
 
 /**
+ * run_SegmentSubfieldsT1Longitudinal.sh
+ *
  * Script for segmenting subfields from T1-weighted longitudinal data using FreeSurfer.
  *
  * Author: FreeSurfer Developers

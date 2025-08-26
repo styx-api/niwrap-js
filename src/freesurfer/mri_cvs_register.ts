@@ -361,6 +361,8 @@ function mri_cvs_register_outputs(
 
 
 /**
+ * mri_cvs_register
+ *
  * Combined Volume and Surface Registration.
  *
  * Author: FreeSurfer Developers
@@ -387,6 +389,8 @@ function mri_cvs_register_execute(
 
 
 /**
+ * mri_cvs_register
+ *
  * Combined Volume and Surface Registration.
  *
  * Author: FreeSurfer Developers

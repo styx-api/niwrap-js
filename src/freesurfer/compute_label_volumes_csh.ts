@@ -222,6 +222,8 @@ function compute_label_volumes_csh_outputs(
 
 
 /**
+ * compute_label_volumes.csh
+ *
  * Computes the number of voxels and the volumes of either all or a particular label in the input label volume.
  *
  * Author: FreeSurfer Developers
@@ -248,6 +250,8 @@ function compute_label_volumes_csh_execute(
 
 
 /**
+ * compute_label_volumes.csh
+ *
  * Computes the number of voxels and the volumes of either all or a particular label in the input label volume.
  *
  * Author: FreeSurfer Developers

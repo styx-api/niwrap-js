@@ -281,6 +281,8 @@ function tcksample_outputs(
 
 
 /**
+ * tcksample
+ *
  * Sample values of an associated image along tracks.
  *
  * By default, the value of the underlying image at each point along the track is written to either an ASCII file (with all values for each track on the same line), or a track scalar file (.tsf). Alternatively, some statistic can be taken from the values along each streamline and written to a vector file.
@@ -313,6 +315,8 @@ function tcksample_execute(
 
 
 /**
+ * tcksample
+ *
  * Sample values of an associated image along tracks.
  *
  * By default, the value of the underlying image at each point along the track is written to either an ASCII file (with all values for each track on the same line), or a track scalar file (.tsf). Alternatively, some statistic can be taken from the values along each streamline and written to a vector file.

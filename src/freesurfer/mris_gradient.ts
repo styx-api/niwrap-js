@@ -136,6 +136,8 @@ function mris_gradient_outputs(
 
 
 /**
+ * mris_gradient
+ *
  * This program computes the gradient of an intensity profile of the cortical ribbon and writes the resulting measurement into a .mgz file.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mris_gradient_execute(
 
 
 /**
+ * mris_gradient
+ *
  * This program computes the gradient of an intensity profile of the cortical ribbon and writes the resulting measurement into a .mgz file.
  *
  * Author: FreeSurfer Developers

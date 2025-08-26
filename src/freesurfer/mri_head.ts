@@ -159,6 +159,8 @@ function mri_head_outputs(
 
 
 /**
+ * mri_head
+ *
  * No description.
  *
  * Author: FreeSurfer Developers
@@ -185,6 +187,8 @@ function mri_head_execute(
 
 
 /**
+ * mri_head
+ *
  * No description.
  *
  * Author: FreeSurfer Developers

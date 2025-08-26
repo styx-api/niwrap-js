@@ -311,6 +311,8 @@ function make_average_subject_outputs(
 
 
 /**
+ * make_average_subject
+ *
  * Creates an average subject by averaging surfaces, curvatures, and volumes from a set of subjects.
  *
  * Author: FreeSurfer Developers
@@ -337,6 +339,8 @@ function make_average_subject_execute(
 
 
 /**
+ * make_average_subject
+ *
  * Creates an average subject by averaging surfaces, curvatures, and volumes from a set of subjects.
  *
  * Author: FreeSurfer Developers

@@ -158,6 +158,8 @@ function texture_cooccurrence_features_outputs(
 
 
 /**
+ * TextureCooccurrenceFeatures
+ *
  * Calculates texture co-occurrence features such as Energy, Entropy, Inverse Difference Moment, Inertia, Cluster Shade, and Cluster Prominence from an input image.
  *
  * Author: ANTs Developers
@@ -184,6 +186,8 @@ function texture_cooccurrence_features_execute(
 
 
 /**
+ * TextureCooccurrenceFeatures
+ *
  * Calculates texture co-occurrence features such as Energy, Entropy, Inverse Difference Moment, Inertia, Cluster Shade, and Cluster Prominence from an input image.
  *
  * Author: ANTs Developers

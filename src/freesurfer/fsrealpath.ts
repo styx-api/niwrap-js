@@ -127,6 +127,8 @@ function fsrealpath_outputs(
 
 
 /**
+ * fsrealpath
+ *
  * Resolve symbolic links in a path.
  *
  * Author: FreeSurfer Developers
@@ -153,6 +155,8 @@ function fsrealpath_execute(
 
 
 /**
+ * fsrealpath
+ *
  * Resolve symbolic links in a path.
  *
  * Author: FreeSurfer Developers

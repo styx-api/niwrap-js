@@ -167,6 +167,8 @@ function v_3d_periodogram_outputs(
 
 
 /**
+ * 3dPeriodogram
+ *
  * Computes the periodogram of each voxel time series. The periodogram is a crude estimate of the power spectrum.
  *
  * Author: AFNI Developers
@@ -193,6 +195,8 @@ function v_3d_periodogram_execute(
 
 
 /**
+ * 3dPeriodogram
+ *
  * Computes the periodogram of each voxel time series. The periodogram is a crude estimate of the power spectrum.
  *
  * Author: AFNI Developers

@@ -193,6 +193,8 @@ function whirlgif_outputs(
 
 
 /**
+ * whirlgif
+ *
  * A quick program that reads a series of GIF files and produces a single GIF file composed of those images.
  *
  * Author: AFNI Developers
@@ -219,6 +221,8 @@ function whirlgif_execute(
 
 
 /**
+ * whirlgif
+ *
  * A quick program that reads a series of GIF files and produces a single GIF file composed of those images.
  *
  * Author: AFNI Developers

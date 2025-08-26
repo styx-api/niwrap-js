@@ -121,6 +121,8 @@ function surface_information_outputs(
 
 
 /**
+ * surface-information
+ *
  * Display information about a surface.
  *
  * Information about surface is displayed including vertices, 
@@ -150,6 +152,8 @@ function surface_information_execute(
 
 
 /**
+ * surface-information
+ *
  * Display information about a surface.
  *
  * Information about surface is displayed including vertices, 

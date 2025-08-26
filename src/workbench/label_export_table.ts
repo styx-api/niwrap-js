@@ -126,6 +126,8 @@ function label_export_table_outputs(
 
 
 /**
+ * label-export-table
+ *
  * Export label table from gifti as text.
  *
  * Takes the label table from the gifti label file, and writes it to a text format matching what is expected by -metric-label-import.
@@ -154,6 +156,8 @@ function label_export_table_execute(
 
 
 /**
+ * label-export-table
+ *
  * Export label table from gifti as text.
  *
  * Takes the label table from the gifti label file, and writes it to a text format matching what is expected by -metric-label-import.

@@ -232,6 +232,8 @@ function v__compute_oc_weights_outputs(
 
 
 /**
+ * @compute_OC_weights
+ *
  * Compute optimal combined weights dataset for multi-echo EPI data.
  *
  * Author: AFNI Developers
@@ -258,6 +260,8 @@ function v__compute_oc_weights_execute(
 
 
 /**
+ * @compute_OC_weights
+ *
  * Compute optimal combined weights dataset for multi-echo EPI data.
  *
  * Author: AFNI Developers

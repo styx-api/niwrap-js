@@ -210,6 +210,8 @@ function analyze_trace_outputs(
 
 
 /**
+ * AnalyzeTrace
+ *
  * A program to analyze SUMA (and AFNI's perhaps) stack output for functions that return with RETURN without bothering to go on the stack.
  *
  * Author: AFNI Developers
@@ -236,6 +238,8 @@ function analyze_trace_execute(
 
 
 /**
+ * AnalyzeTrace
+ *
  * A program to analyze SUMA (and AFNI's perhaps) stack output for functions that return with RETURN without bothering to go on the stack.
  *
  * Author: AFNI Developers

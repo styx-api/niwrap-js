@@ -319,6 +319,8 @@ function ants_neuroimaging_battery_outputs(
 
 
 /**
+ * antsNeuroimagingBattery
+ *
  * Align MR modalities to a common within-subject (and optional template) space.
  *
  * Author: ANTs Developers
@@ -345,6 +347,8 @@ function ants_neuroimaging_battery_execute(
 
 
 /**
+ * antsNeuroimagingBattery
+ *
  * Align MR modalities to a common within-subject (and optional template) space.
  *
  * Author: ANTs Developers

@@ -439,6 +439,8 @@ function sccan_outputs(
 
 
 /**
+ * sccan
+ *
  * A tool for sparse statistical analysis on images : scca, pscca (with options), mscca. Can also convert an imagelist/mask pair to a binary matrix image.
  *
  * Author: ANTs Developers
@@ -465,6 +467,8 @@ function sccan_execute(
 
 
 /**
+ * sccan
+ *
  * A tool for sparse statistical analysis on images : scca, pscca (with options), mscca. Can also convert an imagelist/mask pair to a binary matrix image.
  *
  * Author: ANTs Developers

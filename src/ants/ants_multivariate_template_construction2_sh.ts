@@ -126,6 +126,8 @@ function ants_multivariate_template_construction2_sh_outputs(
 
 
 /**
+ * antsMultivariateTemplateConstruction2.sh
+ *
  * The antsMultivariateTemplateConstruction2.sh script is part of the Advanced Normalization Tools (ANTs) suite. It is used for constructing multivariate templates.
  *
  * Author: ANTs Developers
@@ -152,6 +154,8 @@ function ants_multivariate_template_construction2_sh_execute(
 
 
 /**
+ * antsMultivariateTemplateConstruction2.sh
+ *
  * The antsMultivariateTemplateConstruction2.sh script is part of the Advanced Normalization Tools (ANTs) suite. It is used for constructing multivariate templates.
  *
  * Author: ANTs Developers

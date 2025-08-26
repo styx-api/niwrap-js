@@ -400,6 +400,8 @@ function tck2connectome_outputs(
 
 
 /**
+ * tck2connectome
+ *
  * Generate a connectome matrix from a streamlines file and a node parcellation image.
  *
  *
@@ -434,6 +436,8 @@ function tck2connectome_execute(
 
 
 /**
+ * tck2connectome
+ *
  * Generate a connectome matrix from a streamlines file and a node parcellation image.
  *
  *

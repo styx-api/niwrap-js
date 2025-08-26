@@ -225,6 +225,8 @@ function mris_smooth_intracortical_outputs(
 
 
 /**
+ * mris_smooth_intracortical
+ *
  * Smooths data overlaid onto cortical surface meshes using specified tangential and radial extents.
  *
  * Author: FreeSurfer Developers
@@ -251,6 +253,8 @@ function mris_smooth_intracortical_execute(
 
 
 /**
+ * mris_smooth_intracortical
+ *
  * Smooths data overlaid onto cortical surface meshes using specified tangential and radial extents.
  *
  * Author: FreeSurfer Developers

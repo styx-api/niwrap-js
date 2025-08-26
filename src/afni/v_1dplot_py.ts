@@ -462,6 +462,8 @@ function v_1dplot_py_outputs(
 
 
 /**
+ * 1dplot.py
+ *
  * This program is for making images to visualize columns of numbers from 1D text files. It uses Python, particularly matplotlib, to create plots.
  *
  * Author: AFNI Developers
@@ -488,6 +490,8 @@ function v_1dplot_py_execute(
 
 
 /**
+ * 1dplot.py
+ *
  * This program is for making images to visualize columns of numbers from 1D text files. It uses Python, particularly matplotlib, to create plots.
  *
  * Author: AFNI Developers

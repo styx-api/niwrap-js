@@ -328,6 +328,8 @@ function v_3d_tfitter_outputs(
 
 
 /**
+ * 3dTfitter
+ *
  * * At each voxel, assembles and solves a set of linear equations.
  *  ++ The matrix at each voxel may be the same or may be different.
  *  ++ This flexibility (for voxel-wise regressors) is one feature
@@ -360,6 +362,8 @@ function v_3d_tfitter_execute(
 
 
 /**
+ * 3dTfitter
+ *
  * * At each voxel, assembles and solves a set of linear equations.
  *  ++ The matrix at each voxel may be the same or may be different.
  *  ++ This flexibility (for voxel-wise regressors) is one feature

@@ -129,6 +129,8 @@ function tkmedit_outputs(
 
 
 /**
+ * tkmedit
+ *
  * tkmedit is a multi-functional imaging tool for viewing and editing surface models and volumes in FreeSurfer. It provides a GUI representation of volumetric data and facilitates modifications in the data.
  *
  * Author: FreeSurfer Developers
@@ -155,6 +157,8 @@ function tkmedit_execute(
 
 
 /**
+ * tkmedit
+ *
  * tkmedit is a multi-functional imaging tool for viewing and editing surface models and volumes in FreeSurfer. It provides a GUI representation of volumetric data and facilitates modifications in the data.
  *
  * Author: FreeSurfer Developers

@@ -290,6 +290,8 @@ function v_3dhistog_outputs(
 
 
 /**
+ * 3dhistog
+ *
  * Compute histogram of a 3D dataset.
  *
  * Author: AFNI Developers
@@ -316,6 +318,8 @@ function v_3dhistog_execute(
 
 
 /**
+ * 3dhistog
+ *
  * Compute histogram of a 3D dataset.
  *
  * Author: AFNI Developers

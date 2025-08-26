@@ -253,6 +253,8 @@ function cifti_estimate_fwhm_outputs(
 
 
 /**
+ * cifti-estimate-fwhm
+ *
  * Estimate fwhm smoothness of a cifti file.
  *
  * Estimate the smoothness of the components of the cifti file, printing the estimates to standard output.  If -merged-volume is used, all voxels are used as a single component, rather than separated by structure.
@@ -317,6 +319,8 @@ function cifti_estimate_fwhm_execute(
 
 
 /**
+ * cifti-estimate-fwhm
+ *
  * Estimate fwhm smoothness of a cifti file.
  *
  * Estimate the smoothness of the components of the cifti file, printing the estimates to standard output.  If -merged-volume is used, all voxels are used as a single component, rather than separated by structure.

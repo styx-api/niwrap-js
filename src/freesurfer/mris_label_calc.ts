@@ -153,6 +153,8 @@ function mris_label_calc_outputs(
 
 
 /**
+ * mris_label_calc
+ *
  * Tool for surface label calculations.
  *
  * Author: FreeSurfer Developers
@@ -179,6 +181,8 @@ function mris_label_calc_execute(
 
 
 /**
+ * mris_label_calc
+ *
  * Tool for surface label calculations.
  *
  * Author: FreeSurfer Developers

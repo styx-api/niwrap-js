@@ -161,6 +161,8 @@ function mri_cvs_check_outputs(
 
 
 /**
+ * mri_cvs_check
+ *
  * Checks whether the files required for mri_cvs_register all exist.
  *
  * Author: FreeSurfer Developers
@@ -187,6 +189,8 @@ function mri_cvs_check_execute(
 
 
 /**
+ * mri_cvs_check
+ *
  * Checks whether the files required for mri_cvs_register all exist.
  *
  * Author: FreeSurfer Developers

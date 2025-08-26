@@ -392,6 +392,8 @@ function cifti_create_dense_scalar_outputs(
 
 
 /**
+ * cifti-create-dense-scalar
+ *
  * Create a cifti dense scalar file.
  *
  * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti file.  Map names will be taken from one of the input files.  At least one component must be specified.
@@ -456,6 +458,8 @@ function cifti_create_dense_scalar_execute(
 
 
 /**
+ * cifti-create-dense-scalar
+ *
  * Create a cifti dense scalar file.
  *
  * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti file.  Map names will be taken from one of the input files.  At least one component must be specified.

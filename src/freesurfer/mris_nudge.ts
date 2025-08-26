@@ -146,6 +146,8 @@ function mris_nudge_outputs(
 
 
 /**
+ * mris_nudge
+ *
  * A tool to nudge vertex positions on a surface using a volume.
  *
  * Author: FreeSurfer Developers
@@ -172,6 +174,8 @@ function mris_nudge_execute(
 
 
 /**
+ * mris_nudge
+ *
  * A tool to nudge vertex positions on a surface using a volume.
  *
  * Author: FreeSurfer Developers

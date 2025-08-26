@@ -258,6 +258,8 @@ function mris_label2annot_outputs(
 
 
 /**
+ * mris_label2annot
+ *
  * Converts a set of surface labels to an annotation file.
  *
  * Author: FreeSurfer Developers
@@ -284,6 +286,8 @@ function mris_label2annot_execute(
 
 
 /**
+ * mris_label2annot
+ *
  * Converts a set of surface labels to an annotation file.
  *
  * Author: FreeSurfer Developers

@@ -176,6 +176,8 @@ function v__suma_renumber_fs_outputs(
 
 
 /**
+ * @SUMA_renumber_FS
+ *
  * This script processes FreeSurfer-generated parcellation files and produces various derived datasets and segmentation maps.
  *
  * Author: AFNI Developers
@@ -202,6 +204,8 @@ function v__suma_renumber_fs_execute(
 
 
 /**
+ * @SUMA_renumber_FS
+ *
  * This script processes FreeSurfer-generated parcellation files and produces various derived datasets and segmentation maps.
  *
  * Author: AFNI Developers

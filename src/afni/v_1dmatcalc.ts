@@ -130,6 +130,8 @@ function v_1dmatcalc_outputs(
 
 
 /**
+ * 1dmatcalc
+ *
  * A tool to evaluate space-delimited RPN (Reverse Polish Notation) matrix-valued expressions.
  *
  * Author: AFNI Developers
@@ -156,6 +158,8 @@ function v_1dmatcalc_execute(
 
 
 /**
+ * 1dmatcalc
+ *
  * A tool to evaluate space-delimited RPN (Reverse Polish Notation) matrix-valued expressions.
  *
  * Author: AFNI Developers

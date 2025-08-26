@@ -347,6 +347,8 @@ function gifti_tool_outputs(
 
 
 /**
+ * gifti_tool
+ *
  * Tool for creating, displaying, modifying, or comparing GIFTI datasets.
  *
  * Author: AFNI Developers
@@ -373,6 +375,8 @@ function gifti_tool_execute(
 
 
 /**
+ * gifti_tool
+ *
  * Tool for creating, displaying, modifying, or comparing GIFTI datasets.
  *
  * Author: AFNI Developers

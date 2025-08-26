@@ -355,6 +355,8 @@ function mris_info_outputs(
 
 
 /**
+ * mris_info
+ *
  * Prints out information about a surface file.
  *
  * Author: FreeSurfer Developers
@@ -381,6 +383,8 @@ function mris_info_execute(
 
 
 /**
+ * mris_info
+ *
  * Prints out information about a surface file.
  *
  * Author: FreeSurfer Developers

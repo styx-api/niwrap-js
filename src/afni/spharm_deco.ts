@@ -215,6 +215,8 @@ function spharm_deco_outputs(
 
 
 /**
+ * SpharmDeco
+ *
  * Spherical Harmonics Decomposition of a surface's coordinates or data.
  *
  * Author: AFNI Developers
@@ -241,6 +243,8 @@ function spharm_deco_execute(
 
 
 /**
+ * SpharmDeco
+ *
  * Spherical Harmonics Decomposition of a surface's coordinates or data.
  *
  * Author: AFNI Developers

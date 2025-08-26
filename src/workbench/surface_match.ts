@@ -131,6 +131,8 @@ function surface_match_outputs(
 
 
 /**
+ * surface-match
+ *
  * Surface match.
  *
  * The Input Surface File will be transformed so that its coordinate ranges (bounding box) match that of the Match Surface File.
@@ -159,6 +161,8 @@ function surface_match_execute(
 
 
 /**
+ * surface-match
+ *
  * Surface match.
  *
  * The Input Surface File will be transformed so that its coordinate ranges (bounding box) match that of the Match Surface File.

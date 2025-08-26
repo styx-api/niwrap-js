@@ -208,6 +208,8 @@ function v_3d_rprog_demo_outputs(
 
 
 /**
+ * 3dRprogDemo
+ *
  * Template program to help users write their own R processing routines on MRI volumes.
  *
  * Author: AFNI Developers
@@ -234,6 +236,8 @@ function v_3d_rprog_demo_execute(
 
 
 /**
+ * 3dRprogDemo
+ *
  * Template program to help users write their own R processing routines on MRI volumes.
  *
  * Author: AFNI Developers

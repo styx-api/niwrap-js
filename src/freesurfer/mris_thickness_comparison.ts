@@ -140,6 +140,8 @@ function mris_thickness_comparison_outputs(
 
 
 /**
+ * mris_thickness_comparison
+ *
  * Tool to compare cortical thickness measurements between two or more specified labels.
  *
  * Author: FreeSurfer Developers
@@ -166,6 +168,8 @@ function mris_thickness_comparison_execute(
 
 
 /**
+ * mris_thickness_comparison
+ *
  * Tool to compare cortical thickness measurements between two or more specified labels.
  *
  * Author: FreeSurfer Developers

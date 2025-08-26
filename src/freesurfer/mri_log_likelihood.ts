@@ -130,6 +130,8 @@ function mri_log_likelihood_outputs(
 
 
 /**
+ * mri_log_likelihood
+ *
  * MRI log likelihood calculation tool for brain images.
  *
  * Author: FreeSurfer Developers
@@ -156,6 +158,8 @@ function mri_log_likelihood_execute(
 
 
 /**
+ * mri_log_likelihood
+ *
  * MRI log likelihood calculation tool for brain images.
  *
  * Author: FreeSurfer Developers

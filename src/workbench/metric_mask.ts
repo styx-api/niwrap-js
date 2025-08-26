@@ -149,6 +149,8 @@ function metric_mask_outputs(
 
 
 /**
+ * metric-mask
+ *
  * Mask a metric file.
  *
  * By default, the output metric is a copy of the input metric, but with zeros wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.
@@ -177,6 +179,8 @@ function metric_mask_execute(
 
 
 /**
+ * metric-mask
+ *
  * Mask a metric file.
  *
  * By default, the output metric is a copy of the input metric, but with zeros wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.

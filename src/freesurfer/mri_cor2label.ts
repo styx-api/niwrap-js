@@ -248,6 +248,8 @@ function mri_cor2label_outputs(
 
 
 /**
+ * mri_cor2label
+ *
  * Converts values in a volume or surface overlay to a label. Designed to convert parcellation volumes stored in mri format.
  *
  * Author: FreeSurfer Developers
@@ -274,6 +276,8 @@ function mri_cor2label_execute(
 
 
 /**
+ * mri_cor2label
+ *
  * Converts values in a volume or surface overlay to a label. Designed to convert parcellation volumes stored in mri format.
  *
  * Author: FreeSurfer Developers

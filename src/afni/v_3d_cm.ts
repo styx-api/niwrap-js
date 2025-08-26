@@ -197,6 +197,8 @@ function v_3d_cm_outputs(
 
 
 /**
+ * 3dCM
+ *
  * Tool for computing the center of mass of a dataset.
  *
  * Author: AFNI Developers
@@ -223,6 +225,8 @@ function v_3d_cm_execute(
 
 
 /**
+ * 3dCM
+ *
  * Tool for computing the center of mass of a dataset.
  *
  * Author: AFNI Developers

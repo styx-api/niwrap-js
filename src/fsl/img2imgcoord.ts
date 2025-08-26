@@ -196,6 +196,8 @@ function img2imgcoord_outputs(
 
 
 /**
+ * img2imgcoord
+ *
  * Tool for transforming coordinates between images.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -222,6 +224,8 @@ function img2imgcoord_execute(
 
 
 /**
+ * img2imgcoord
+ *
  * Tool for transforming coordinates between images.
  *
  * Author: FMRIB Analysis Group, University of Oxford

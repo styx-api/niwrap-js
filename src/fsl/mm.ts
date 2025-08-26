@@ -281,6 +281,8 @@ function mm_outputs(
 
 
 /**
+ * mm
+ *
  * FSL's MM: mixture modelling.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -307,6 +309,8 @@ function mm_execute(
 
 
 /**
+ * mm
+ *
  * FSL's MM: mixture modelling.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -425,6 +425,8 @@ function drive_suma_outputs(
 
 
 /**
+ * DriveSuma
+ *
  * A program to drive suma from the command line.
  *
  * Author: AFNI Developers
@@ -451,6 +453,8 @@ function drive_suma_execute(
 
 
 /**
+ * DriveSuma
+ *
  * A program to drive suma from the command line.
  *
  * Author: AFNI Developers

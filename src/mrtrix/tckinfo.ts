@@ -239,6 +239,8 @@ function tckinfo_outputs(
 
 
 /**
+ * tckinfo
+ *
  * Print out information about a track file.
  *
  *
@@ -271,6 +273,8 @@ function tckinfo_execute(
 
 
 /**
+ * tckinfo
+ *
  * Print out information about a track file.
  *
  *

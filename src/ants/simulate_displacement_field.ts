@@ -280,6 +280,8 @@ function simulate_displacement_field_outputs(
 
 
 /**
+ * SimulateDisplacementField
+ *
  * Simulate displacement fields using various methods such as BSpline or Exponential.
  *
  * Author: ANTs Developers
@@ -306,6 +308,8 @@ function simulate_displacement_field_execute(
 
 
 /**
+ * SimulateDisplacementField
+ *
  * Simulate displacement fields using various methods such as BSpline or Exponential.
  *
  * Author: ANTs Developers

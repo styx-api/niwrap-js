@@ -134,6 +134,8 @@ function v_3dnvals_outputs(
 
 
 /**
+ * 3dnvals
+ *
  * Tool to print the number of sub-bricks in a 3D dataset.
  *
  * Author: AFNI Developers
@@ -160,6 +162,8 @@ function v_3dnvals_execute(
 
 
 /**
+ * 3dnvals
+ *
  * Tool to print the number of sub-bricks in a 3D dataset.
  *
  * Author: AFNI Developers

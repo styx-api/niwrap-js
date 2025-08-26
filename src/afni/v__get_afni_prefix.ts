@@ -129,6 +129,8 @@ function v__get_afni_prefix_outputs(
 
 
 /**
+ * @GetAfniPrefix
+ *
  * A tool to extract AFNI prefix from a given file path.
  *
  * Author: AFNI Developers
@@ -155,6 +157,8 @@ function v__get_afni_prefix_execute(
 
 
 /**
+ * @GetAfniPrefix
+ *
  * A tool to extract AFNI prefix from a given file path.
  *
  * Author: AFNI Developers

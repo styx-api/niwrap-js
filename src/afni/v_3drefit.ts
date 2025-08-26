@@ -303,6 +303,8 @@ function v_3drefit_outputs(
 
 
 /**
+ * 3drefit
+ *
  * Changes some of the information inside a 3D dataset's header.
  *
  * Author: AFNI Developers
@@ -329,6 +331,8 @@ function v_3drefit_execute(
 
 
 /**
+ * 3drefit
+ *
  * Changes some of the information inside a 3D dataset's header.
  *
  * Author: AFNI Developers

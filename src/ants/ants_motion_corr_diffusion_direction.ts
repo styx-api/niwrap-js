@@ -161,6 +161,8 @@ function ants_motion_corr_diffusion_direction_outputs(
 
 
 /**
+ * antsMotionCorrDiffusionDirection
+ *
  * This tool adjusts the diffusion scheme for motion correction.
  *
  * Author: ANTs Developers
@@ -187,6 +189,8 @@ function ants_motion_corr_diffusion_direction_execute(
 
 
 /**
+ * antsMotionCorrDiffusionDirection
+ *
  * This tool adjusts the diffusion scheme for motion correction.
  *
  * Author: ANTs Developers

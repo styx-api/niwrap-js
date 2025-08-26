@@ -131,6 +131,8 @@ function fs_spmreg_glnxa64_outputs(
 
 
 /**
+ * fs_spmreg.glnxa64
+ *
  * fs_spmreg is a tool for registration using SPM within FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function fs_spmreg_glnxa64_execute(
 
 
 /**
+ * fs_spmreg.glnxa64
+ *
  * fs_spmreg is a tool for registration using SPM within FreeSurfer.
  *
  * Author: FreeSurfer Developers

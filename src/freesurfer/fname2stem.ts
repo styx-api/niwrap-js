@@ -120,6 +120,8 @@ function fname2stem_outputs(
 
 
 /**
+ * fname2stem
+ *
  * Converts the name of a file to a stem. Example: f.mgh, f.nii, f.nii.gz would return f.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function fname2stem_execute(
 
 
 /**
+ * fname2stem
+ *
  * Converts the name of a file to a stem. Example: f.mgh, f.nii, f.nii.gz would return f.
  *
  * Author: FreeSurfer Developers

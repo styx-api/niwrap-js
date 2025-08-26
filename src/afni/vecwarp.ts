@@ -190,6 +190,8 @@ function vecwarp_outputs(
 
 
 /**
+ * Vecwarp
+ *
  * Transforms (warps) a list of 3-vectors into another list of 3-vectors according to the specified options.
  *
  * Author: AFNI Developers
@@ -216,6 +218,8 @@ function vecwarp_execute(
 
 
 /**
+ * Vecwarp
+ *
  * Transforms (warps) a list of 3-vectors into another list of 3-vectors according to the specified options.
  *
  * Author: AFNI Developers

@@ -136,6 +136,8 @@ function first_roi_slicesdir_outputs(
 
 
 /**
+ * first_roi_slicesdir
+ *
  * A utility for generating slice directories for FIRST-ROI.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -162,6 +164,8 @@ function first_roi_slicesdir_execute(
 
 
 /**
+ * first_roi_slicesdir
+ *
  * A utility for generating slice directories for FIRST-ROI.
  *
  * Author: FMRIB Analysis Group, University of Oxford

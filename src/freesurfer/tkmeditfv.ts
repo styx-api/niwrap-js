@@ -404,6 +404,8 @@ function tkmeditfv_outputs(
 
 
 /**
+ * tkmeditfv
+ *
  * A wrapper script to run Freeview with arguments similar to tkmedit, providing both functionalities.
  *
  * Author: FreeSurfer Developers
@@ -430,6 +432,8 @@ function tkmeditfv_execute(
 
 
 /**
+ * tkmeditfv
+ *
  * A wrapper script to run Freeview with arguments similar to tkmedit, providing both functionalities.
  *
  * Author: FreeSurfer Developers

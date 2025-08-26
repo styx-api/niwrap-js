@@ -358,6 +358,8 @@ function mri_sclimbic_seg_outputs(
 
 
 /**
+ * mri_sclimbic_seg
+ *
  * Segment subcortical limbic structures using Freesurfer.
  *
  * Author: FreeSurfer Developers
@@ -384,6 +386,8 @@ function mri_sclimbic_seg_execute(
 
 
 /**
+ * mri_sclimbic_seg
+ *
  * Segment subcortical limbic structures using Freesurfer.
  *
  * Author: FreeSurfer Developers

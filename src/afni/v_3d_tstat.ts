@@ -587,6 +587,8 @@ function v_3d_tstat_outputs(
 
 
 /**
+ * 3dTstat
+ *
  * Compute voxel-wise statistics using AFNI 3dTstat command.
  *
  * Author: AFNI Developers
@@ -613,6 +615,8 @@ function v_3d_tstat_execute(
 
 
 /**
+ * 3dTstat
+ *
  * Compute voxel-wise statistics using AFNI 3dTstat command.
  *
  * Author: AFNI Developers

@@ -294,6 +294,8 @@ function mris_volmask_outputs(
 
 
 /**
+ * mris_volmask
+ *
  * Computes a volume mask, at the same resolution as the <subject>/mri/brain.mgz. The volume mask contains 4 values: LH_WM (default 10), LH_GM (default 100), RH_WM (default 20), RH_GM (default 200).
  *
  * Author: FreeSurfer Developers
@@ -320,6 +322,8 @@ function mris_volmask_execute(
 
 
 /**
+ * mris_volmask
+ *
  * Computes a volume mask, at the same resolution as the <subject>/mri/brain.mgz. The volume mask contains 4 values: LH_WM (default 10), LH_GM (default 100), RH_WM (default 20), RH_GM (default 200).
  *
  * Author: FreeSurfer Developers

@@ -9615,6 +9615,8 @@ function c2d_outputs(
 
 
 /**
+ * c2d
+ *
  * c2d is a command-line tool for medical image processing.
  *
  * Author: Convert3D Developers
@@ -9641,6 +9643,8 @@ function c2d_execute(
 
 
 /**
+ * c2d
+ *
  * c2d is a command-line tool for medical image processing.
  *
  * Author: Convert3D Developers

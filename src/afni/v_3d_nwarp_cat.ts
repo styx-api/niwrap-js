@@ -209,6 +209,8 @@ function v_3d_nwarp_cat_outputs(
 
 
 /**
+ * 3dNwarpCat
+ *
  * Catenates (composes) 3D warps defined on a grid or via a matrix.
  *
  * Author: AFNI Developers
@@ -235,6 +237,8 @@ function v_3d_nwarp_cat_execute(
 
 
 /**
+ * 3dNwarpCat
+ *
  * Catenates (composes) 3D warps defined on a grid or via a matrix.
  *
  * Author: AFNI Developers

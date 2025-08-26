@@ -190,6 +190,8 @@ function inspec_outputs(
 
 
 /**
+ * inspec
+ *
  * Outputs information found from specfile.
  *
  * Author: AFNI Developers
@@ -216,6 +218,8 @@ function inspec_execute(
 
 
 /**
+ * inspec
+ *
  * Outputs information found from specfile.
  *
  * Author: AFNI Developers

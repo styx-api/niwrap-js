@@ -131,6 +131,8 @@ function mp_diffpow_outputs(
 
 
 /**
+ * mp_diffpow
+ *
  * Generates a file with specific motion parameter calculations useful for accounting for 'spin history' effects and other variations not accounted for by motion correction.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function mp_diffpow_execute(
 
 
 /**
+ * mp_diffpow
+ *
  * Generates a file with specific motion parameter calculations useful for accounting for 'spin history' effects and other variations not accounted for by motion correction.
  *
  * Author: FMRIB Analysis Group, University of Oxford

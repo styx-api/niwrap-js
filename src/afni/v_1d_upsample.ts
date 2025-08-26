@@ -138,6 +138,8 @@ function v_1d_upsample_outputs(
 
 
 /**
+ * 1dUpsample
+ *
  * Upsamples a 1D time series to a finer time grid.
  *
  * Author: AFNI Developers
@@ -164,6 +166,8 @@ function v_1d_upsample_execute(
 
 
 /**
+ * 1dUpsample
+ *
  * Upsamples a 1D time series to a finer time grid.
  *
  * Author: AFNI Developers

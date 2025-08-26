@@ -132,6 +132,8 @@ function surface_normals_outputs(
 
 
 /**
+ * surface-normals
+ *
  * Output vertex normals as metric file.
  *
  * Computes the normal vectors of the surface file, and outputs them as a 3 column metric file.
@@ -160,6 +162,8 @@ function surface_normals_execute(
 
 
 /**
+ * surface-normals
+ *
  * Output vertex normals as metric file.
  *
  * Computes the normal vectors of the surface file, and outputs them as a 3 column metric file.

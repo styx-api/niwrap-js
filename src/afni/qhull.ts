@@ -276,6 +276,8 @@ function qhull_outputs(
 
 
 /**
+ * qhull
+ *
  * Tool to compute convex hulls and related structures.
  *
  * Author: AFNI Developers
@@ -302,6 +304,8 @@ function qhull_execute(
 
 
 /**
+ * qhull
+ *
  * Tool to compute convex hulls and related structures.
  *
  * Author: AFNI Developers

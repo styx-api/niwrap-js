@@ -194,6 +194,8 @@ function fslmerge_outputs(
 
 
 /**
+ * fslmerge
+ *
  * FSL tool to concatenate images in various dimensions.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -220,6 +222,8 @@ function fslmerge_execute(
 
 
 /**
+ * fslmerge
+ *
  * FSL tool to concatenate images in various dimensions.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -123,6 +123,8 @@ function run_qdec_glm_outputs(
 
 
 /**
+ * run-qdec-glm
+ *
  * QDEC GLM (General Linear Model) execution tool for statistical analysis.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function run_qdec_glm_execute(
 
 
 /**
+ * run-qdec-glm
+ *
  * QDEC GLM (General Linear Model) execution tool for statistical analysis.
  *
  * Author: FreeSurfer Developers

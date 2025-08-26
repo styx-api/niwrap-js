@@ -132,6 +132,8 @@ function reinflate_subject_rh_outputs(
 
 
 /**
+ * reinflate_subject-rh
+ *
  * A tool for reinflating the cortical surfaces for a given subject in FreeSurfer, specifically for the right hemisphere.
  *
  * Author: FreeSurfer Developers
@@ -158,6 +160,8 @@ function reinflate_subject_rh_execute(
 
 
 /**
+ * reinflate_subject-rh
+ *
  * A tool for reinflating the cortical surfaces for a given subject in FreeSurfer, specifically for the right hemisphere.
  *
  * Author: FreeSurfer Developers

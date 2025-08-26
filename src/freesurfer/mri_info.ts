@@ -494,6 +494,8 @@ function mri_info_outputs(
 
 
 /**
+ * mri_info
+ *
  * Tool to extract metadata from MRI volumes.
  *
  * Author: FreeSurfer Developers
@@ -520,6 +522,8 @@ function mri_info_execute(
 
 
 /**
+ * mri_info
+ *
  * Tool to extract metadata from MRI volumes.
  *
  * Author: FreeSurfer Developers

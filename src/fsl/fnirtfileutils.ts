@@ -244,6 +244,8 @@ function fnirtfileutils_outputs(
 
 
 /**
+ * fnirtfileutils
+ *
  * FNIRT file utilities for FSL - Converts FNIRT warp field coefficients to other formats.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -270,6 +272,8 @@ function fnirtfileutils_execute(
 
 
 /**
+ * fnirtfileutils
+ *
  * FNIRT file utilities for FSL - Converts FNIRT warp field coefficients to other formats.
  *
  * Author: FMRIB Analysis Group, University of Oxford

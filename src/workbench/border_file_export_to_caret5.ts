@@ -179,6 +179,8 @@ function border_file_export_to_caret5_outputs(
 
 
 /**
+ * border-file-export-to-caret5
+ *
  * Export border file to caret5 file format.
  *
  * A Workbench border file may contain borders for multiple structures and borders that are both projected and unprojected.  It also contains a color table for the borders. 
@@ -217,6 +219,8 @@ function border_file_export_to_caret5_execute(
 
 
 /**
+ * border-file-export-to-caret5
+ *
  * Export border file to caret5 file format.
  *
  * A Workbench border file may contain borders for multiple structures and borders that are both projected and unprojected.  It also contains a color table for the borders. 

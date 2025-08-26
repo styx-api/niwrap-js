@@ -274,6 +274,8 @@ function volume_tfce_outputs(
 
 
 /**
+ * volume-tfce
+ *
  * Do tfce on a volume file.
  *
  * This command does not do any statistical analysis.  Please use something like PALM if you are just trying to do statistics on your data.
@@ -310,6 +312,8 @@ function volume_tfce_execute(
 
 
 /**
+ * volume-tfce
+ *
  * Do tfce on a volume file.
  *
  * This command does not do any statistical analysis.  Please use something like PALM if you are just trying to do statistics on your data.

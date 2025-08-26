@@ -256,6 +256,8 @@ function v_3d_fdr_outputs(
 
 
 /**
+ * 3dFDR
+ *
  * A tool for applying False Discovery Rate (FDR) thresholding to voxelwise statistics in 3D functional datasets.
  *
  * Author: AFNI Developers
@@ -282,6 +284,8 @@ function v_3d_fdr_execute(
 
 
 /**
+ * 3dFDR
+ *
  * A tool for applying False Discovery Rate (FDR) thresholding to voxelwise statistics in 3D functional datasets.
  *
  * Author: AFNI Developers

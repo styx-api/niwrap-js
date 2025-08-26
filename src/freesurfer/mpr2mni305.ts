@@ -120,6 +120,8 @@ function mpr2mni305_outputs(
 
 
 /**
+ * mpr2mni305
+ *
  * Tool for transforming MPRAGE dataset to MNI305 coordinate space.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function mpr2mni305_execute(
 
 
 /**
+ * mpr2mni305
+ *
  * Tool for transforming MPRAGE dataset to MNI305 coordinate space.
  *
  * Author: FreeSurfer Developers

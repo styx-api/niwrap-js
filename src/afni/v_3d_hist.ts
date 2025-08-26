@@ -333,6 +333,8 @@ function v_3d_hist_outputs(
 
 
 /**
+ * 3dHist
+ *
  * Computes histograms using functions for generating priors.
  *
  * Author: AFNI Developers
@@ -359,6 +361,8 @@ function v_3d_hist_execute(
 
 
 /**
+ * 3dHist
+ *
  * Computes histograms using functions for generating priors.
  *
  * Author: AFNI Developers

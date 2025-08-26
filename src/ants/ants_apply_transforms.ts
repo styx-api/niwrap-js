@@ -1185,6 +1185,8 @@ function ants_apply_transforms_outputs(
 
 
 /**
+ * antsApplyTransforms
+ *
  * antsApplyTransforms, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms).
  *
  * Author: ANTs Developers
@@ -1211,6 +1213,8 @@ function ants_apply_transforms_execute(
 
 
 /**
+ * antsApplyTransforms
+ *
  * antsApplyTransforms, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms).
  *
  * Author: ANTs Developers

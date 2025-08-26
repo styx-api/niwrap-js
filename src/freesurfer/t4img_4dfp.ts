@@ -140,6 +140,8 @@ function t4img_4dfp_outputs(
 
 
 /**
+ * t4img_4dfp
+ *
  * Transforms a 4dfp image using a specified t4 file.
  *
  * Author: FreeSurfer Developers
@@ -166,6 +168,8 @@ function t4img_4dfp_execute(
 
 
 /**
+ * t4img_4dfp
+ *
  * Transforms a 4dfp image using a specified t4 file.
  *
  * Author: FreeSurfer Developers

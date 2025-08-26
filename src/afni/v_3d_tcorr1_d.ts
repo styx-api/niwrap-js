@@ -180,6 +180,8 @@ function v_3d_tcorr1_d_outputs(
 
 
 /**
+ * 3dTcorr1D
+ *
  * Computes the correlation coefficient between each voxel time series in the input 3D+time dataset.
  *
  * Author: AFNI Developers
@@ -206,6 +208,8 @@ function v_3d_tcorr1_d_execute(
 
 
 /**
+ * 3dTcorr1D
+ *
  * Computes the correlation coefficient between each voxel time series in the input 3D+time dataset.
  *
  * Author: AFNI Developers

@@ -229,6 +229,8 @@ function fat_proc_connec_vis_outputs(
 
 
 /**
+ * fat_proc_connec_vis
+ *
  * This program is for visualizing the volumetric output of tracking, mainly for the '-dump_rois ...' from 3dTrackID. It creates surface-ized views of the separate white matter connection maps (WMCs) which can be viewed simultaneously in 3D with SUMA.
  *
  * Author: AFNI Developers
@@ -255,6 +257,8 @@ function fat_proc_connec_vis_execute(
 
 
 /**
+ * fat_proc_connec_vis
+ *
  * This program is for visualizing the volumetric output of tracking, mainly for the '-dump_rois ...' from 3dTrackID. It creates surface-ized views of the separate white matter connection maps (WMCs) which can be viewed simultaneously in 3D with SUMA.
  *
  * Author: AFNI Developers

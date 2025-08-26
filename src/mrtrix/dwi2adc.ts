@@ -313,6 +313,8 @@ function dwi2adc_outputs(
 
 
 /**
+ * dwi2adc
+ *
  * Convert mean dwi (trace-weighted) images to mean ADC maps.
  *
  *
@@ -345,6 +347,8 @@ function dwi2adc_execute(
 
 
 /**
+ * dwi2adc
+ *
  * Convert mean dwi (trace-weighted) images to mean ADC maps.
  *
  *

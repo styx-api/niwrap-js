@@ -145,6 +145,8 @@ function mri_aparc2wmseg_outputs(
 
 
 /**
+ * mri_aparc2wmseg
+ *
  * A tool to convert aparc+aseg.mgz annotations into a white matter segmentation file.
  *
  * Author: FreeSurfer Developers
@@ -171,6 +173,8 @@ function mri_aparc2wmseg_execute(
 
 
 /**
+ * mri_aparc2wmseg
+ *
  * A tool to convert aparc+aseg.mgz annotations into a white matter segmentation file.
  *
  * Author: FreeSurfer Developers

@@ -467,6 +467,8 @@ function amp2sh_outputs(
 
 
 /**
+ * amp2sh
+ *
  * Convert a set of amplitudes (defined along a set of corresponding directions) to their spherical harmonic representation.
  *
  * The spherical harmonic decomposition is calculated by least-squares linear fitting to the amplitude data.
@@ -504,6 +506,8 @@ function amp2sh_execute(
 
 
 /**
+ * amp2sh
+ *
  * Convert a set of amplitudes (defined along a set of corresponding directions) to their spherical harmonic representation.
  *
  * The spherical harmonic decomposition is calculated by least-squares linear fitting to the amplitude data.

@@ -218,6 +218,8 @@ function t4imgs_4dfp_outputs(
 
 
 /**
+ * t4imgs_4dfp
+ *
  * Freesurfer tool for transforming images according to a specified T4 file.
  *
  * Author: FreeSurfer Developers
@@ -244,6 +246,8 @@ function t4imgs_4dfp_execute(
 
 
 /**
+ * t4imgs_4dfp
+ *
  * Freesurfer tool for transforming images according to a specified T4 file.
  *
  * Author: FreeSurfer Developers

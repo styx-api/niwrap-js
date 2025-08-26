@@ -131,6 +131,8 @@ function mri_reduce_outputs(
 
 
 /**
+ * mri_reduce
+ *
  * A tool to reduce MRI file dimensions.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mri_reduce_execute(
 
 
 /**
+ * mri_reduce
+ *
  * A tool to reduce MRI file dimensions.
  *
  * Author: FreeSurfer Developers

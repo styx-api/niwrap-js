@@ -295,6 +295,8 @@ function surf_measures_outputs(
 
 
 /**
+ * SurfMeasures
+ *
  * Compute measures from surface dataset(s).
  *
  * Author: AFNI Developers
@@ -321,6 +323,8 @@ function surf_measures_execute(
 
 
 /**
+ * SurfMeasures
+ *
  * Compute measures from surface dataset(s).
  *
  * Author: AFNI Developers

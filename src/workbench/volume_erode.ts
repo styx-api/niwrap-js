@@ -161,6 +161,8 @@ function volume_erode_outputs(
 
 
 /**
+ * volume-erode
+ *
  * Erode a volume file.
  *
  * Around each voxel with a value of zero, set surrounding voxels to zero.  The surrounding voxels are all face neighbors and all voxels within the specified distance (center to center).
@@ -189,6 +191,8 @@ function volume_erode_execute(
 
 
 /**
+ * volume-erode
+ *
  * Erode a volume file.
  *
  * Around each voxel with a value of zero, set surrounding voxels to zero.  The surrounding voxels are all face neighbors and all voxels within the specified distance (center to center).

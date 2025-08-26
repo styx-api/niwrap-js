@@ -364,6 +364,8 @@ function v_3drotate_outputs(
 
 
 /**
+ * 3drotate
+ *
  * Rotates and/or translates all bricks from an AFNI dataset.
  *
  * Author: AFNI Developers
@@ -390,6 +392,8 @@ function v_3drotate_execute(
 
 
 /**
+ * 3drotate
+ *
  * Rotates and/or translates all bricks from an AFNI dataset.
  *
  * Author: AFNI Developers

@@ -141,6 +141,8 @@ function make_pq_script_py_outputs(
 
 
 /**
+ * make_pq_script.py
+ *
  * Creates a script to compute p-value and q-value curves.
  *
  * Author: AFNI Developers
@@ -167,6 +169,8 @@ function make_pq_script_py_execute(
 
 
 /**
+ * make_pq_script.py
+ *
  * Creates a script to compute p-value and q-value curves.
  *
  * Author: AFNI Developers

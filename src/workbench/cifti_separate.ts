@@ -625,6 +625,8 @@ function cifti_separate_outputs(
 
 
 /**
+ * cifti-separate
+ *
  * Write a cifti structure as metric, label or volume.
  *
  * For dtseries, dscalar, and dlabel, use COLUMN for <direction>, and if you have a symmetric dconn, COLUMN is more efficient.
@@ -691,6 +693,8 @@ function cifti_separate_execute(
 
 
 /**
+ * cifti-separate
+ *
  * Write a cifti structure as metric, label or volume.
  *
  * For dtseries, dscalar, and dlabel, use COLUMN for <direction>, and if you have a symmetric dconn, COLUMN is more efficient.

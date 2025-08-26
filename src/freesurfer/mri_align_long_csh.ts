@@ -131,6 +131,8 @@ function mri_align_long_csh_outputs(
 
 
 /**
+ * mri_align_long.csh
+ *
  * Aligns all longitudinal norm and aseg files to the base space in FreeSurfer processing.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mri_align_long_csh_execute(
 
 
 /**
+ * mri_align_long.csh
+ *
  * Aligns all longitudinal norm and aseg files to the base space in FreeSurfer processing.
  *
  * Author: FreeSurfer Developers

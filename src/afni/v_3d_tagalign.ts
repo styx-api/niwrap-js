@@ -250,6 +250,8 @@ function v_3d_tagalign_outputs(
 
 
 /**
+ * 3dTagalign
+ *
  * Rotates/translates dataset 'dset' to be aligned with the master using the tagsets embedded in their .HEAD files.
  *
  * Author: AFNI Developers
@@ -276,6 +278,8 @@ function v_3d_tagalign_execute(
 
 
 /**
+ * 3dTagalign
+ *
  * Rotates/translates dataset 'dset' to be aligned with the master using the tagsets embedded in their .HEAD files.
  *
  * Author: AFNI Developers

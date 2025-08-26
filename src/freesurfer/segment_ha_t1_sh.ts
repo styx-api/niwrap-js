@@ -162,6 +162,8 @@ function segment_ha_t1_sh_outputs(
 
 
 /**
+ * segmentHA_T1.sh
+ *
  * Tool for hippocampal/amygdalar subfield segmentation.
  *
  * Author: FreeSurfer Developers
@@ -188,6 +190,8 @@ function segment_ha_t1_sh_execute(
 
 
 /**
+ * segmentHA_T1.sh
+ *
  * Tool for hippocampal/amygdalar subfield segmentation.
  *
  * Author: FreeSurfer Developers

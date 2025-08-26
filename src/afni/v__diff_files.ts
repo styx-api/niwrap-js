@@ -203,6 +203,8 @@ function v__diff_files_outputs(
 
 
 /**
+ * @diff.files
+ *
  * Show file differences (between specified files and those in another directory).
  *
  * Author: AFNI Developers
@@ -229,6 +231,8 @@ function v__diff_files_execute(
 
 
 /**
+ * @diff.files
+ *
  * Show file differences (between specified files and those in another directory).
  *
  * Author: AFNI Developers

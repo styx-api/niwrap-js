@@ -305,6 +305,8 @@ function reg_feat2anat_outputs(
 
 
 /**
+ * reg-feat2anat
+ *
  * Registers FSL-Feat example_func to FreeSurfer anatomical data.
  *
  * Author: FreeSurfer Developers
@@ -331,6 +333,8 @@ function reg_feat2anat_execute(
 
 
 /**
+ * reg-feat2anat
+ *
  * Registers FSL-Feat example_func to FreeSurfer anatomical data.
  *
  * Author: FreeSurfer Developers

@@ -145,6 +145,8 @@ function dtistudio_fiberto_segments_outputs(
 
 
 /**
+ * DTIStudioFibertoSegments
+ *
  * Convert a DTIStudio Fiber file to a SUMA segment file.
  *
  * Author: AFNI Developers
@@ -171,6 +173,8 @@ function dtistudio_fiberto_segments_execute(
 
 
 /**
+ * DTIStudioFibertoSegments
+ *
  * Convert a DTIStudio Fiber file to a SUMA segment file.
  *
  * Author: AFNI Developers

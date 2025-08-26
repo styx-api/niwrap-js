@@ -126,6 +126,8 @@ function v__statauxcode_outputs(
 
 
 /**
+ * @statauxcode
+ *
  * Returns the name or number of a statistics code based on specified mappings.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v__statauxcode_execute(
 
 
 /**
+ * @statauxcode
+ *
  * Returns the name or number of a statistics code based on specified mappings.
  *
  * Author: AFNI Developers

@@ -136,6 +136,8 @@ function unconfound_outputs(
 
 
 /**
+ * unconfound
+ *
  * Removing confounds from 4D fMRI data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -162,6 +164,8 @@ function unconfound_execute(
 
 
 /**
+ * unconfound
+ *
  * Removing confounds from 4D fMRI data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -130,6 +130,8 @@ function fix_subject_rh_outputs(
 
 
 /**
+ * fix_subject-rh
+ *
  * A tool from FreeSurfer that performs operations on the right hemisphere data within a specified directory.
  *
  * Author: FreeSurfer Developers
@@ -156,6 +158,8 @@ function fix_subject_rh_execute(
 
 
 /**
+ * fix_subject-rh
+ *
  * A tool from FreeSurfer that performs operations on the right hemisphere data within a specified directory.
  *
  * Author: FreeSurfer Developers

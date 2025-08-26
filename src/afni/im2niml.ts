@@ -126,6 +126,8 @@ function im2niml_outputs(
 
 
 /**
+ * im2niml
+ *
  * Converts the input image(s) to a text-based NIML element and writes the result to stdout.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function im2niml_execute(
 
 
 /**
+ * im2niml
+ *
  * Converts the input image(s) to a text-based NIML element and writes the result to stdout.
  *
  * Author: AFNI Developers

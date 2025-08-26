@@ -217,6 +217,8 @@ function v_3d_dwuncert_outputs(
 
 
 /**
+ * 3dDWUncert
+ *
  * Use jackknifing to estimate uncertainty of DTI parameters, important for probabilistic tractography.
  *
  * Author: AFNI Developers
@@ -243,6 +245,8 @@ function v_3d_dwuncert_execute(
 
 
 /**
+ * 3dDWUncert
+ *
  * Use jackknifing to estimate uncertainty of DTI parameters, important for probabilistic tractography.
  *
  * Author: AFNI Developers

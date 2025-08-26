@@ -156,6 +156,8 @@ function fslsmoothfill_outputs(
 
 
 /**
+ * fslsmoothfill
+ *
  * Smoothfill is a tool designed to fill in holes in images by smoothly interpolating the pixel values.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -182,6 +184,8 @@ function fslsmoothfill_execute(
 
 
 /**
+ * fslsmoothfill
+ *
  * Smoothfill is a tool designed to fill in holes in images by smoothly interpolating the pixel values.
  *
  * Author: FMRIB Analysis Group, University of Oxford

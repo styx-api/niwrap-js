@@ -154,6 +154,8 @@ function map_all_labels_lh_outputs(
 
 
 /**
+ * map_all_labels-lh
+ *
  * Paints output onto a subject's left hemisphere using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -180,6 +182,8 @@ function map_all_labels_lh_execute(
 
 
 /**
+ * map_all_labels-lh
+ *
  * Paints output onto a subject's left hemisphere using FreeSurfer.
  *
  * Author: FreeSurfer Developers

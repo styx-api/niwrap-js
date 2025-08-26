@@ -261,6 +261,8 @@ function fsl_sub_mgh_outputs(
 
 
 /**
+ * fsl_sub_mgh
+ *
  * Wrapper for job control system such as SGE, modified for compatibility with the PBS queueing system.
  *
  * Author: FreeSurfer Developers
@@ -287,6 +289,8 @@ function fsl_sub_mgh_execute(
 
 
 /**
+ * fsl_sub_mgh
+ *
  * Wrapper for job control system such as SGE, modified for compatibility with the PBS queueing system.
  *
  * Author: FreeSurfer Developers

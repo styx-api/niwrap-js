@@ -143,6 +143,8 @@ function tbss_deproject_outputs(
 
 
 /**
+ * tbss_deproject
+ *
  * Tool to deproject images from skeleton space to final space.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -169,6 +171,8 @@ function tbss_deproject_execute(
 
 
 /**
+ * tbss_deproject
+ *
  * Tool to deproject images from skeleton space to final space.
  *
  * Author: FMRIB Analysis Group, University of Oxford

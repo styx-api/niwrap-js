@@ -136,6 +136,8 @@ function mri_evaluate_morph_outputs(
 
 
 /**
+ * mri_evaluate_morph
+ *
  * This program computes the overlap of a set of segmentations for a given morph using an xform file.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_evaluate_morph_execute(
 
 
 /**
+ * mri_evaluate_morph
+ *
  * This program computes the overlap of a set of segmentations for a given morph using an xform file.
  *
  * Author: FreeSurfer Developers

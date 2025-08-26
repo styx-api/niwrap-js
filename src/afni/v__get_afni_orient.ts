@@ -133,6 +133,8 @@ function v__get_afni_orient_outputs(
 
 
 /**
+ * @GetAfniOrient
+ *
  * Returns the orient code of AFNI datasets.
  *
  * Author: AFNI Developers
@@ -159,6 +161,8 @@ function v__get_afni_orient_execute(
 
 
 /**
+ * @GetAfniOrient
+ *
  * Returns the orient code of AFNI datasets.
  *
  * Author: AFNI Developers

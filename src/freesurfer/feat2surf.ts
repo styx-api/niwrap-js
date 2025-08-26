@@ -237,6 +237,8 @@ function feat2surf_outputs(
 
 
 /**
+ * feat2surf
+ *
  * Resamples Feat statistics onto the surface of the subject and onto a stereo-taxic surface atlas.
  *
  * Author: FreeSurfer Developers
@@ -263,6 +265,8 @@ function feat2surf_execute(
 
 
 /**
+ * feat2surf
+ *
  * Resamples Feat statistics onto the surface of the subject and onto a stereo-taxic surface atlas.
  *
  * Author: FreeSurfer Developers

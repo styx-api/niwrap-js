@@ -227,6 +227,8 @@ function trac_paths_outputs(
 
 
 /**
+ * trac-paths
+ *
  * Tractography for a single subject.
  *
  * Author: FreeSurfer Developers
@@ -253,6 +255,8 @@ function trac_paths_execute(
 
 
 /**
+ * trac-paths
+ *
  * Tractography for a single subject.
  *
  * Author: FreeSurfer Developers

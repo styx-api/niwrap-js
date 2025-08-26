@@ -198,6 +198,8 @@ function samp_bias_outputs(
 
 
 /**
+ * SampBias
+ *
  * SampBias is a tool for sampling bias resultant segments between paired nodes on anatomical surfaces.
  *
  * Author: AFNI Developers
@@ -224,6 +226,8 @@ function samp_bias_execute(
 
 
 /**
+ * SampBias
+ *
  * SampBias is a tool for sampling bias resultant segments between paired nodes on anatomical surfaces.
  *
  * Author: AFNI Developers

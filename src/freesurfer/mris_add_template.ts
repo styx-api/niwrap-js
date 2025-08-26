@@ -130,6 +130,8 @@ function mris_add_template_outputs(
 
 
 /**
+ * mris_add_template
+ *
  * This tool has been removed from the current version of FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -156,6 +158,8 @@ function mris_add_template_execute(
 
 
 /**
+ * mris_add_template
+ *
  * This tool has been removed from the current version of FreeSurfer.
  *
  * Author: FreeSurfer Developers

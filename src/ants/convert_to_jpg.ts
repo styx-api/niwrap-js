@@ -131,6 +131,8 @@ function convert_to_jpg_outputs(
 
 
 /**
+ * ConvertToJpg
+ *
  * A tool to convert NIfTI images to JPG format.
  *
  * Author: ANTs Developers
@@ -157,6 +159,8 @@ function convert_to_jpg_execute(
 
 
 /**
+ * ConvertToJpg
+ *
  * A tool to convert NIfTI images to JPG format.
  *
  * Author: ANTs Developers

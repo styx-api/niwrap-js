@@ -123,6 +123,8 @@ function list_otl_labels_outputs(
 
 
 /**
+ * list_otl_labels
+ *
  * Tool for listing labels in an imaging file.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function list_otl_labels_execute(
 
 
 /**
+ * list_otl_labels
+ *
  * Tool for listing labels in an imaging file.
  *
  * Author: FreeSurfer Developers

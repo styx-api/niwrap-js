@@ -131,6 +131,8 @@ function remove_talairach_outputs(
 
 
 /**
+ * remove_talairach
+ *
  * A tool for removing the Talairach transformation from a volume.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function remove_talairach_execute(
 
 
 /**
+ * remove_talairach
+ *
  * A tool for removing the Talairach transformation from a volume.
  *
  * Author: FreeSurfer Developers

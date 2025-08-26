@@ -438,6 +438,8 @@ function v_3d_warp_drive_outputs(
 
 
 /**
+ * 3dWarpDrive
+ *
  * Warp a dataset to match another one (the base) using an affine transformation.
  *
  * Author: AFNI Developers
@@ -464,6 +466,8 @@ function v_3d_warp_drive_execute(
 
 
 /**
+ * 3dWarpDrive
+ *
  * Warp a dataset to match another one (the base) using an affine transformation.
  *
  * Author: AFNI Developers

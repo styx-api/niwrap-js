@@ -377,6 +377,8 @@ function volume_set_space_outputs(
 
 
 /**
+ * volume-set-space
+ *
  * Change volume space information.
  *
  * Writes a copy of the volume file, with the spacing information changed as specified.  No reordering of the voxel data occurs, see -volume-reorient to change the volume indexing order and reorder the voxels to match.  Exactly one of -plumb, -sform, or -file must be specified.
@@ -405,6 +407,8 @@ function volume_set_space_execute(
 
 
 /**
+ * volume-set-space
+ *
  * Change volume space information.
  *
  * Writes a copy of the volume file, with the spacing information changed as specified.  No reordering of the voxel data occurs, see -volume-reorient to change the volume indexing order and reorder the voxels to match.  Exactly one of -plumb, -sform, or -file must be specified.

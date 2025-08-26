@@ -120,6 +120,8 @@ function invfeatreg_outputs(
 
 
 /**
+ * invfeatreg
+ *
  * Inverse warp image using FNIRT.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -146,6 +148,8 @@ function invfeatreg_execute(
 
 
 /**
+ * invfeatreg
+ *
  * Inverse warp image using FNIRT.
  *
  * Author: FMRIB Analysis Group, University of Oxford

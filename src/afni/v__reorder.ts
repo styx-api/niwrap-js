@@ -169,6 +169,8 @@ function v__reorder_outputs(
 
 
 /**
+ * @Reorder
+ *
  * Reorder sub-bricks of a dataset based on event mapping. Works similarly to the Reorder plugin.
  *
  * Author: AFNI Developers
@@ -195,6 +197,8 @@ function v__reorder_execute(
 
 
 /**
+ * @Reorder
+ *
  * Reorder sub-bricks of a dataset based on event mapping. Works similarly to the Reorder plugin.
  *
  * Author: AFNI Developers

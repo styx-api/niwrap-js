@@ -123,6 +123,8 @@ function apqc_make_html_outputs(
 
 
 /**
+ * apqc_make_html
+ *
  * Tool to generate HTML reports.
  *
  * Author: AFNI Developers
@@ -149,6 +151,8 @@ function apqc_make_html_execute(
 
 
 /**
+ * apqc_make_html
+ *
  * Tool to generate HTML reports.
  *
  * Author: AFNI Developers

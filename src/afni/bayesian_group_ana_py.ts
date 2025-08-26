@@ -265,6 +265,8 @@ function bayesian_group_ana_py_outputs(
 
 
 /**
+ * BayesianGroupAna.py
+ *
  * This program conducts Bayesian Group Analysis (BGA) on a list of regions of interest (ROIs). Compared to the conventional univariate GLM, BGA pools and shares the information across the ROIs in a multilevel system.
  *
  * Author: AFNI Developers
@@ -291,6 +293,8 @@ function bayesian_group_ana_py_execute(
 
 
 /**
+ * BayesianGroupAna.py
+ *
  * This program conducts Bayesian Group Analysis (BGA) on a list of regions of interest (ROIs). Compared to the conventional univariate GLM, BGA pools and shares the information across the ROIs in a multilevel system.
  *
  * Author: AFNI Developers

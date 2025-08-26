@@ -141,6 +141,8 @@ function cat_matvec_outputs(
 
 
 /**
+ * cat_matvec
+ *
  * Catenates 3D rotation+shift matrix+vector transformations.
  *
  * Author: AFNI Developers
@@ -167,6 +169,8 @@ function cat_matvec_execute(
 
 
 /**
+ * cat_matvec
+ *
  * Catenates 3D rotation+shift matrix+vector transformations.
  *
  * Author: AFNI Developers

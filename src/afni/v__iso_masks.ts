@@ -132,6 +132,8 @@ function v__iso_masks_outputs(
 
 
 /**
+ * @IsoMasks
+ *
  * Creates isosurfaces from isovolume envelopes.
  *
  * Author: AFNI Developers
@@ -158,6 +160,8 @@ function v__iso_masks_execute(
 
 
 /**
+ * @IsoMasks
+ *
  * Creates isosurfaces from isovolume envelopes.
  *
  * Author: AFNI Developers

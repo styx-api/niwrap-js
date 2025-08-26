@@ -241,6 +241,8 @@ function v_3d_autobox_outputs(
 
 
 /**
+ * 3dAutobox
+ *
  * Computes size of a box that fits around the volume. Can also be used to crop the volume to that box.
  *
  * Author: AFNI Developers
@@ -267,6 +269,8 @@ function v_3d_autobox_execute(
 
 
 /**
+ * 3dAutobox
+ *
  * Computes size of a box that fits around the volume. Can also be used to crop the volume to that box.
  *
  * Author: AFNI Developers

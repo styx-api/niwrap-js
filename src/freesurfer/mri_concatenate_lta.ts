@@ -217,6 +217,8 @@ function mri_concatenate_lta_outputs(
 
 
 /**
+ * mri_concatenate_lta
+ *
  * Concatenates two consecutive LTA transformations into one overall transformation, Out = LTA2*LTA1.
  *
  * Author: FreeSurfer Developers
@@ -243,6 +245,8 @@ function mri_concatenate_lta_execute(
 
 
 /**
+ * mri_concatenate_lta
+ *
  * Concatenates two consecutive LTA transformations into one overall transformation, Out = LTA2*LTA1.
  *
  * Author: FreeSurfer Developers

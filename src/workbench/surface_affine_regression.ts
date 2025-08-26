@@ -131,6 +131,8 @@ function surface_affine_regression_outputs(
 
 
 /**
+ * surface-affine-regression
+ *
  * Regress the affine transform between surfaces on the same mesh.
  *
  * Use linear regression to compute an affine that minimizes the sum of squares of the coordinate differences between the target surface and the warped source surface.  Note that this has a bias to shrink the surface that is being warped.  The output is written as a NIFTI 'world' matrix, see -convert-affine to convert it for use in other software.
@@ -159,6 +161,8 @@ function surface_affine_regression_execute(
 
 
 /**
+ * surface-affine-regression
+ *
  * Regress the affine transform between surfaces on the same mesh.
  *
  * Use linear regression to compute an affine that minimizes the sum of squares of the coordinate differences between the target surface and the warped source surface.  Note that this has a bias to shrink the surface that is being warped.  The output is written as a NIFTI 'world' matrix, see -convert-affine to convert it for use in other software.

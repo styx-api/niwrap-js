@@ -276,6 +276,8 @@ function v_3d_bandpass_outputs(
 
 
 /**
+ * 3dBandpass
+ *
  * Program to lowpass and/or highpass each voxel time series in a dataset, offering more/different options than Fourier.
  *
  * Author: AFNI Developers
@@ -302,6 +304,8 @@ function v_3d_bandpass_execute(
 
 
 /**
+ * 3dBandpass
+ *
  * Program to lowpass and/or highpass each voxel time series in a dataset, offering more/different options than Fourier.
  *
  * Author: AFNI Developers

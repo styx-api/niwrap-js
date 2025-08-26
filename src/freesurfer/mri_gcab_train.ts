@@ -124,6 +124,8 @@ function mri_gcab_train_outputs(
 
 
 /**
+ * mri_gcab_train
+ *
  * Previously used command in FreeSurfer for training with Gaussian Classifier Atlas-based (GCAB) modeling; has been removed in the current version.
  *
  * Author: FreeSurfer Developers
@@ -150,6 +152,8 @@ function mri_gcab_train_execute(
 
 
 /**
+ * mri_gcab_train
+ *
  * Previously used command in FreeSurfer for training with Gaussian Classifier Atlas-based (GCAB) modeling; has been removed in the current version.
  *
  * Author: FreeSurfer Developers

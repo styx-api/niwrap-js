@@ -189,6 +189,8 @@ function samsegmesh2surf_outputs(
 
 
 /**
+ * samsegmesh2surf
+ *
  * Generate Freesurfer surface from a SAMSEG atlas mesh file and generate priors at each vertex as overlay MRI volume.
  *
  * Author: FreeSurfer Developers
@@ -215,6 +217,8 @@ function samsegmesh2surf_execute(
 
 
 /**
+ * samsegmesh2surf
+ *
  * Generate Freesurfer surface from a SAMSEG atlas mesh file and generate priors at each vertex as overlay MRI volume.
  *
  * Author: FreeSurfer Developers

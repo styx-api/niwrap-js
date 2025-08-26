@@ -474,6 +474,8 @@ function scene_capture_image_outputs(
 
 
 /**
+ * scene-capture-image
+ *
  * Offscreen rendering of scene to an image file.
  *
  * ----------------------------------------------------------------------
@@ -536,6 +538,8 @@ function scene_capture_image_execute(
 
 
 /**
+ * scene-capture-image
+ *
  * Offscreen rendering of scene to an image file.
  *
  * ----------------------------------------------------------------------

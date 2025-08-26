@@ -286,6 +286,8 @@ function metric_regression_outputs(
 
 
 /**
+ * metric-regression
+ *
  * Regress spatial map out of a metric file.
  *
  * For each regressor, its mean across the surface is subtracted from its data.  Each input map is then regressed against these, and a constant term.  The resulting regressed slopes of all regressors specified with -remove are multiplied with their respective regressor maps, and these are subtracted from the input map.
@@ -314,6 +316,8 @@ function metric_regression_execute(
 
 
 /**
+ * metric-regression
+ *
  * Regress spatial map out of a metric file.
  *
  * For each regressor, its mean across the surface is subtracted from its data.  Each input map is then regressed against these, and a constant term.  The resulting regressed slopes of all regressors specified with -remove are multiplied with their respective regressor maps, and these are subtracted from the input map.

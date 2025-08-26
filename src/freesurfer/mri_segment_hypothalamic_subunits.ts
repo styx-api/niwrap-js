@@ -258,6 +258,8 @@ function mri_segment_hypothalamic_subunits_outputs(
 
 
 /**
+ * mri_segment_hypothalamic_subunits
+ *
  * This module segments hypothalamic subunits and can be run in two modes: on FreeSurfer subjects or on any T1-weighted scan(s) of approximately 1mm resolution.
  *
  * Author: FreeSurfer Developers
@@ -284,6 +286,8 @@ function mri_segment_hypothalamic_subunits_execute(
 
 
 /**
+ * mri_segment_hypothalamic_subunits
+ *
  * This module segments hypothalamic subunits and can be run in two modes: on FreeSurfer subjects or on any T1-weighted scan(s) of approximately 1mm resolution.
  *
  * Author: FreeSurfer Developers

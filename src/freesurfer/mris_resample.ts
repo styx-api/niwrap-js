@@ -182,6 +182,8 @@ function mris_resample_outputs(
 
 
 /**
+ * mris_resample
+ *
  * Resample cortical surfaces in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -208,6 +210,8 @@ function mris_resample_execute(
 
 
 /**
+ * mris_resample
+ *
  * Resample cortical surfaces in FreeSurfer.
  *
  * Author: FreeSurfer Developers

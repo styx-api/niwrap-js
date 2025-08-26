@@ -169,6 +169,8 @@ function v_4dfptoanalyze_outputs(
 
 
 /**
+ * 4dfptoanalyze
+ *
  * Converts 4dfp formatted files to Analyze format.
  *
  * Author: FreeSurfer Developers
@@ -195,6 +197,8 @@ function v_4dfptoanalyze_execute(
 
 
 /**
+ * 4dfptoanalyze
+ *
  * Converts 4dfp formatted files to Analyze format.
  *
  * Author: FreeSurfer Developers

@@ -237,6 +237,8 @@ function fat_proc_map_to_dti_outputs(
 
 
 /**
+ * fat_proc_map_to_dti
+ *
  * A program for mapping data sets into DWI space, suitable for aligning anatomical ROI maps or EPI data to a DWI reference volume.
  *
  * Author: AFNI Developers
@@ -263,6 +265,8 @@ function fat_proc_map_to_dti_execute(
 
 
 /**
+ * fat_proc_map_to_dti
+ *
  * A program for mapping data sets into DWI space, suitable for aligning anatomical ROI maps or EPI data to a DWI reference volume.
  *
  * Author: AFNI Developers

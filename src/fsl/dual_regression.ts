@@ -178,6 +178,8 @@ function dual_regression_outputs(
 
 
 /**
+ * dual_regression
+ *
  * Dual regression algorithm to investigate group-ICA results.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -204,6 +206,8 @@ function dual_regression_execute(
 
 
 /**
+ * dual_regression
+ *
  * Dual regression algorithm to investigate group-ICA results.
  *
  * Author: FMRIB Analysis Group, University of Oxford

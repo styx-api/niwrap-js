@@ -200,6 +200,8 @@ function aseg2feat_outputs(
 
 
 /**
+ * aseg2feat
+ *
  * Resamples the FreeSurfer automatic subcortical segmentation (aseg) to the FEAT functional space.
  *
  * Author: FreeSurfer Developers
@@ -226,6 +228,8 @@ function aseg2feat_execute(
 
 
 /**
+ * aseg2feat
+ *
  * Resamples the FreeSurfer automatic subcortical segmentation (aseg) to the FEAT functional space.
  *
  * Author: FreeSurfer Developers

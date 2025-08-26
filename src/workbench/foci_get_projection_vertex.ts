@@ -149,6 +149,8 @@ function foci_get_projection_vertex_outputs(
 
 
 /**
+ * foci-get-projection-vertex
+ *
  * Get projection vertex for foci.
  *
  * For each focus, a column is created in <metric-out>, and the vertex with the most influence on its projection is assigned a value of 1 in that column, with all other vertices 0.  If -name is used, only one focus will be used.
@@ -177,6 +179,8 @@ function foci_get_projection_vertex_execute(
 
 
 /**
+ * foci-get-projection-vertex
+ *
  * Get projection vertex for foci.
  *
  * For each focus, a column is created in <metric-out>, and the vertex with the most influence on its projection is assigned a value of 1 in that column, with all other vertices 0.  If -name is used, only one focus will be used.

@@ -160,6 +160,8 @@ function mri_paint_outputs(
 
 
 /**
+ * mri_paint
+ *
  * This program will paint average Talairach stats onto a surface.
  *
  * Author: FreeSurfer Developers
@@ -186,6 +188,8 @@ function mri_paint_execute(
 
 
 /**
+ * mri_paint
+ *
  * This program will paint average Talairach stats onto a surface.
  *
  * Author: FreeSurfer Developers

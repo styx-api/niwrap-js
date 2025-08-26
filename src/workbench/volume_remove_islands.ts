@@ -132,6 +132,8 @@ function volume_remove_islands_outputs(
 
 
 /**
+ * volume-remove-islands
+ *
  * Remove islands from an roi volume.
  *
  * Finds all face-connected parts of the ROI, and zeros out all but the largest one.
@@ -160,6 +162,8 @@ function volume_remove_islands_execute(
 
 
 /**
+ * volume-remove-islands
+ *
  * Remove islands from an roi volume.
  *
  * Finds all face-connected parts of the ROI, and zeros out all but the largest one.

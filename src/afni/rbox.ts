@@ -297,6 +297,8 @@ function rbox_outputs(
 
 
 /**
+ * rbox
+ *
  * Generate various point distributions. Default is random in cube.
  *
  * Author: AFNI Developers
@@ -323,6 +325,8 @@ function rbox_execute(
 
 
 /**
+ * rbox
+ *
  * Generate various point distributions. Default is random in cube.
  *
  * Author: AFNI Developers

@@ -239,6 +239,8 @@ function v_3d_local_bistat_outputs(
 
 
 /**
+ * 3dLocalBistat
+ *
  * Compute statistics between 2 datasets at each voxel based on a local neighborhood.
  *
  * Author: AFNI Developers
@@ -265,6 +267,8 @@ function v_3d_local_bistat_execute(
 
 
 /**
+ * 3dLocalBistat
+ *
  * Compute statistics between 2 datasets at each voxel based on a local neighborhood.
  *
  * Author: AFNI Developers

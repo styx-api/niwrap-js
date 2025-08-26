@@ -239,6 +239,8 @@ function mris_register_to_label_outputs(
 
 
 /**
+ * mris_register_to_label
+ *
  * Register a surface to a volume using a label.
  *
  * Author: FreeSurfer Developers
@@ -265,6 +267,8 @@ function mris_register_to_label_execute(
 
 
 /**
+ * mris_register_to_label
+ *
  * Register a surface to a volume using a label.
  *
  * Author: FreeSurfer Developers

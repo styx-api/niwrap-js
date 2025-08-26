@@ -159,6 +159,8 @@ function dcmdir_info_mgh_outputs(
 
 
 /**
+ * dcmdir-info-mgh
+ *
  * Scans a DICOM directory and extracts information about each series.
  *
  * Author: FreeSurfer Developers
@@ -185,6 +187,8 @@ function dcmdir_info_mgh_execute(
 
 
 /**
+ * dcmdir-info-mgh
+ *
  * Scans a DICOM directory and extracts information about each series.
  *
  * Author: FreeSurfer Developers

@@ -323,6 +323,8 @@ function cifti_export_dense_mapping_outputs(
 
 
 /**
+ * cifti-export-dense-mapping
+ *
  * Write index to element mapping as text.
  *
  * This command produces text files that describe the mapping from cifti indices to surface vertices or voxels.  All indices are zero-based.  The default format for -surface is lines of the form:
@@ -393,6 +395,8 @@ function cifti_export_dense_mapping_execute(
 
 
 /**
+ * cifti-export-dense-mapping
+ *
  * Write index to element mapping as text.
  *
  * This command produces text files that describe the mapping from cifti indices to surface vertices or voxels.  All indices are zero-based.  The default format for -surface is lines of the form:

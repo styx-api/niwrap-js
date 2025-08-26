@@ -300,6 +300,8 @@ function v_3d_reg_ana_outputs(
 
 
 /**
+ * 3dRegAna
+ *
  * Multiple linear regression analysis for AFNI datasets.
  *
  * Author: AFNI Developers
@@ -326,6 +328,8 @@ function v_3d_reg_ana_execute(
 
 
 /**
+ * 3dRegAna
+ *
  * Multiple linear regression analysis for AFNI datasets.
  *
  * Author: AFNI Developers

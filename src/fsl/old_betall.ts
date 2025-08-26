@@ -136,6 +136,8 @@ function old_betall_outputs(
 
 
 /**
+ * old_betall
+ *
  * Automated brain extraction tool for FSL involving both T1 and T2 images.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -162,6 +164,8 @@ function old_betall_execute(
 
 
 /**
+ * old_betall
+ *
  * Automated brain extraction tool for FSL involving both T1 and T2 images.
  *
  * Author: FMRIB Analysis Group, University of Oxford

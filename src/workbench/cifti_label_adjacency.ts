@@ -168,6 +168,8 @@ function cifti_label_adjacency_outputs(
 
 
 /**
+ * cifti-label-adjacency
+ *
  * Make adjacency matrix of a cifti label file.
  *
  * Find face-adjacent voxels and connected vertices that have different label values, and count them for each pair.  Put the resulting counts into a parcellated connectivity file, with the diagonal being zero.  This gives a rough estimate of how long or expansive the border between two labels is.
@@ -196,6 +198,8 @@ function cifti_label_adjacency_execute(
 
 
 /**
+ * cifti-label-adjacency
+ *
  * Make adjacency matrix of a cifti label file.
  *
  * Find face-adjacent voxels and connected vertices that have different label values, and count them for each pair.  Put the resulting counts into a parcellated connectivity file, with the diagonal being zero.  This gives a rough estimate of how long or expansive the border between two labels is.

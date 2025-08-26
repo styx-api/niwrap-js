@@ -169,6 +169,8 @@ function sfim_outputs(
 
 
 /**
+ * sfim
+ *
  * Stepwise Functional IMages.
  *
  * Author: AFNI Developers
@@ -195,6 +197,8 @@ function sfim_execute(
 
 
 /**
+ * sfim
+ *
  * Stepwise Functional IMages.
  *
  * Author: AFNI Developers

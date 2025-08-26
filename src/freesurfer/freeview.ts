@@ -124,6 +124,8 @@ function freeview_outputs(
 
 
 /**
+ * freeview
+ *
  * Freeview is a 3D/2D brain visualization tool.
  *
  * Author: FreeSurfer Developers
@@ -150,6 +152,8 @@ function freeview_execute(
 
 
 /**
+ * freeview
+ *
  * Freeview is a 3D/2D brain visualization tool.
  *
  * Author: FreeSurfer Developers

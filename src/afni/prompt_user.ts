@@ -147,6 +147,8 @@ function prompt_user_outputs(
 
 
 /**
+ * prompt_user
+ *
  * Tool that prompts a window requesting user input with a custom message.
  *
  * Author: AFNI Developers
@@ -173,6 +175,8 @@ function prompt_user_execute(
 
 
 /**
+ * prompt_user
+ *
  * Tool that prompts a window requesting user input with a custom message.
  *
  * Author: AFNI Developers

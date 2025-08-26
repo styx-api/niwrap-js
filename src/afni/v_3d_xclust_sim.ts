@@ -292,6 +292,8 @@ function v_3d_xclust_sim_outputs(
 
 
 /**
+ * 3dXClustSim
+ *
  * ETAC processing tool to find cluster figure of merit (FOM) thresholds.
  *
  * Author: AFNI Developers
@@ -318,6 +320,8 @@ function v_3d_xclust_sim_execute(
 
 
 /**
+ * 3dXClustSim
+ *
  * ETAC processing tool to find cluster figure of merit (FOM) thresholds.
  *
  * Author: AFNI Developers

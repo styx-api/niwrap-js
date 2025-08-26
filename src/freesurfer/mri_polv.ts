@@ -137,6 +137,8 @@ function mri_polv_outputs(
 
 
 /**
+ * mri_polv
+ *
  * Calculate an image specifying the plane of least variance at each point in the input image.
  *
  * Author: FreeSurfer Developers
@@ -163,6 +165,8 @@ function mri_polv_execute(
 
 
 /**
+ * mri_polv
+ *
  * Calculate an image specifying the plane of least variance at each point in the input image.
  *
  * Author: FreeSurfer Developers

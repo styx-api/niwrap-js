@@ -120,6 +120,8 @@ function csvprint_outputs(
 
 
 /**
+ * csvprint
+ *
  * Command-line tool for printing CSV files.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function csvprint_execute(
 
 
 /**
+ * csvprint
+ *
  * Command-line tool for printing CSV files.
  *
  * Author: FreeSurfer Developers

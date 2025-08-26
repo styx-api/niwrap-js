@@ -131,6 +131,8 @@ function mri_motion_correct_outputs(
 
 
 /**
+ * mri_motion_correct
+ *
  * Tool for correcting motion in MRI scans.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mri_motion_correct_execute(
 
 
 /**
+ * mri_motion_correct
+ *
  * Tool for correcting motion in MRI scans.
  *
  * Author: FreeSurfer Developers

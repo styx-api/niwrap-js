@@ -358,6 +358,8 @@ function mris_ca_train_outputs(
 
 
 /**
+ * mris_ca_train
+ *
  * Creates a cortical parcellation atlas file based on one or more annotated subjects using probabilistic information.
  *
  * Author: FreeSurfer Developers
@@ -384,6 +386,8 @@ function mris_ca_train_execute(
 
 
 /**
+ * mris_ca_train
+ *
  * Creates a cortical parcellation atlas file based on one or more annotated subjects using probabilistic information.
  *
  * Author: FreeSurfer Developers

@@ -131,6 +131,8 @@ function minc2seqinfo_outputs(
 
 
 /**
+ * minc2seqinfo
+ *
  * Tool for extracting sequence information from MINC files.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function minc2seqinfo_execute(
 
 
 /**
+ * minc2seqinfo
+ *
  * Tool for extracting sequence information from MINC files.
  *
  * Author: FreeSurfer Developers

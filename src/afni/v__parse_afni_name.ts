@@ -141,6 +141,8 @@ function v__parse_afni_name_outputs(
 
 
 /**
+ * @parse_afni_name
+ *
  * A script to parse an AFNI name, outputting the path, prefix, view, and sub-brick selection string.
  *
  * Author: AFNI Developers
@@ -167,6 +169,8 @@ function v__parse_afni_name_execute(
 
 
 /**
+ * @parse_afni_name
+ *
  * A script to parse an AFNI name, outputting the path, prefix, view, and sub-brick selection string.
  *
  * Author: AFNI Developers

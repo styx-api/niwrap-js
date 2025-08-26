@@ -279,6 +279,8 @@ function mrmath_outputs(
 
 
 /**
+ * mrmath
+ *
  * Compute summary statistic on image intensities either across images, or along a specified axis of a single image.
  *
  * Supported operations are:
@@ -315,6 +317,8 @@ function mrmath_execute(
 
 
 /**
+ * mrmath
+ *
  * Compute summary statistic on image intensities either across images, or along a specified axis of a single image.
  *
  * Supported operations are:

@@ -155,6 +155,8 @@ function pairreg_outputs(
 
 
 /**
+ * pairreg
+ *
  * Pairwise registration tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -181,6 +183,8 @@ function pairreg_execute(
 
 
 /**
+ * pairreg
+ *
  * Pairwise registration tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford

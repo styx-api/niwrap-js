@@ -209,6 +209,8 @@ function bbmask_outputs(
 
 
 /**
+ * bbmask
+ *
  * Tool to create a volume with a smaller field of view by creating a bounding box that encompasses a mask.
  *
  * Author: FreeSurfer Developers
@@ -235,6 +237,8 @@ function bbmask_execute(
 
 
 /**
+ * bbmask
+ *
  * Tool to create a volume with a smaller field of view by creating a bounding box that encompasses a mask.
  *
  * Author: FreeSurfer Developers

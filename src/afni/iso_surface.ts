@@ -279,6 +279,8 @@ function iso_surface_outputs(
 
 
 /**
+ * IsoSurface
+ *
  * A program to perform isosurface extraction from a volume.
  *
  * Author: AFNI Developers
@@ -305,6 +307,8 @@ function iso_surface_execute(
 
 
 /**
+ * IsoSurface
+ *
  * A program to perform isosurface extraction from a volume.
  *
  * Author: AFNI Developers

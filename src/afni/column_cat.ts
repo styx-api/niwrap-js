@@ -150,6 +150,8 @@ function column_cat_outputs(
 
 
 /**
+ * column_cat
+ *
  * Catenate files horizontally. Each line of output is the concatenation of each current line from the input files, all on the same line, separated by a space or a user-defined separator.
  *
  * Author: AFNI Developers
@@ -176,6 +178,8 @@ function column_cat_execute(
 
 
 /**
+ * column_cat
+ *
  * Catenate files horizontally. Each line of output is the concatenation of each current line from the input files, all on the same line, separated by a space or a user-defined separator.
  *
  * Author: AFNI Developers

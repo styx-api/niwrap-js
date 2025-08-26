@@ -298,6 +298,8 @@ function convex_hull_outputs(
 
 
 /**
+ * ConvexHull
+ *
  * A program to find the convex hull, or perform a Delaunay triangulation of a set of points.
  *
  * Author: AFNI Developers
@@ -324,6 +326,8 @@ function convex_hull_execute(
 
 
 /**
+ * ConvexHull
+ *
  * A program to find the convex hull, or perform a Delaunay triangulation of a set of points.
  *
  * Author: AFNI Developers

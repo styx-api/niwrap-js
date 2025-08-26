@@ -131,6 +131,8 @@ function basil_var_outputs(
 
 
 /**
+ * basil_var
+ *
  * Variance calculator for BASIL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function basil_var_execute(
 
 
 /**
+ * basil_var
+ *
  * Variance calculator for BASIL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

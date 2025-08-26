@@ -160,6 +160,8 @@ function abids_tool_outputs(
 
 
 /**
+ * abids_tool
+ *
  * A tool to work with BIDS formatted datasets created with dcm2niix_afni or dcm2niix, mainly to pull information from the matching JSON file and refit the input dataset using 3drefit.
  *
  * Author: AFNI Developers
@@ -186,6 +188,8 @@ function abids_tool_execute(
 
 
 /**
+ * abids_tool
+ *
  * A tool to work with BIDS formatted datasets created with dcm2niix_afni or dcm2niix, mainly to pull information from the matching JSON file and refit the input dataset using 3drefit.
  *
  * Author: AFNI Developers

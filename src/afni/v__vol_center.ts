@@ -135,6 +135,8 @@ function v__vol_center_outputs(
 
 
 /**
+ * @VolCenter
+ *
  * Tool to return the center of volume for a given dataset.
  *
  * Author: AFNI Developers
@@ -161,6 +163,8 @@ function v__vol_center_execute(
 
 
 /**
+ * @VolCenter
+ *
  * Tool to return the center of volume for a given dataset.
  *
  * Author: AFNI Developers

@@ -120,6 +120,8 @@ function tbss_1_preproc_outputs(
 
 
 /**
+ * tbss_1_preproc
+ *
  * TBSS (Tract-Based Spatial Statistics) - Step 1: Preprocessing.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -146,6 +148,8 @@ function tbss_1_preproc_execute(
 
 
 /**
+ * tbss_1_preproc
+ *
  * TBSS (Tract-Based Spatial Statistics) - Step 1: Preprocessing.
  *
  * Author: FMRIB Analysis Group, University of Oxford

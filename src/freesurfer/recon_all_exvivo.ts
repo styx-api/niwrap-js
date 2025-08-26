@@ -142,6 +142,8 @@ function recon_all_exvivo_outputs(
 
 
 /**
+ * recon-all-exvivo
+ *
  * A script to perform an ex vivo reconstruction with FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -168,6 +170,8 @@ function recon_all_exvivo_execute(
 
 
 /**
+ * recon-all-exvivo
+ *
  * A script to perform an ex vivo reconstruction with FreeSurfer.
  *
  * Author: FreeSurfer Developers

@@ -168,6 +168,8 @@ function surface_geodesic_distance_outputs(
 
 
 /**
+ * surface-geodesic-distance
+ *
  * Compute geodesic distance from one vertex to the entire surface.
  *
  * Unless -limit is specified, computes the geodesic distance from the specified vertex to all others.  The result is output as a single column metric file, with a value of -1 for vertices that the distance was not computed for.
@@ -200,6 +202,8 @@ function surface_geodesic_distance_execute(
 
 
 /**
+ * surface-geodesic-distance
+ *
  * Compute geodesic distance from one vertex to the entire surface.
  *
  * Unless -limit is specified, computes the geodesic distance from the specified vertex to all others.  The result is output as a single column metric file, with a value of -1 for vertices that the distance was not computed for.

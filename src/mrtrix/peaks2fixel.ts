@@ -255,6 +255,8 @@ function peaks2fixel_outputs(
 
 
 /**
+ * peaks2fixel
+ *
  * Convert peak directions image to a fixel directory.
  *
  *
@@ -287,6 +289,8 @@ function peaks2fixel_execute(
 
 
 /**
+ * peaks2fixel
+ *
  * Convert peak directions image to a fixel directory.
  *
  *

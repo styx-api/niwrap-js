@@ -245,6 +245,8 @@ function spmregister_outputs(
 
 
 /**
+ * spmregister
+ *
  * Registers a volume to its FreeSurfer anatomical using SPM's spm_coreg.
  *
  * Author: FreeSurfer Developers
@@ -271,6 +273,8 @@ function spmregister_execute(
 
 
 /**
+ * spmregister
+ *
  * Registers a volume to its FreeSurfer anatomical using SPM's spm_coreg.
  *
  * Author: FreeSurfer Developers

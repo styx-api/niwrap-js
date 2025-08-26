@@ -131,6 +131,8 @@ function v__to_rai_outputs(
 
 
 /**
+ * @ToRAI
+ *
  * Tool to change the ORIENT coordinates to RAI.
  *
  * Author: AFNI Developers
@@ -157,6 +159,8 @@ function v__to_rai_execute(
 
 
 /**
+ * @ToRAI
+ *
  * Tool to change the ORIENT coordinates to RAI.
  *
  * Author: AFNI Developers

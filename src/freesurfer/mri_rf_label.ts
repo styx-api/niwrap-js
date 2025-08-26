@@ -530,6 +530,8 @@ function mri_rf_label_outputs(
 
 
 /**
+ * mri_rf_label
+ *
  * MRI automatic tissue labeling using a Gaussian Classifier Atlas (GCA).
  *
  * Author: FreeSurfer Developers
@@ -556,6 +558,8 @@ function mri_rf_label_execute(
 
 
 /**
+ * mri_rf_label
+ *
  * MRI automatic tissue labeling using a Gaussian Classifier Atlas (GCA).
  *
  * Author: FreeSurfer Developers

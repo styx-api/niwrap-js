@@ -166,6 +166,8 @@ function gauss_4dfp_outputs(
 
 
 /**
+ * gauss_4dfp
+ *
  * Applies a Gaussian filter to 4dfp or conc input files.
  *
  * Author: FreeSurfer Developers
@@ -192,6 +194,8 @@ function gauss_4dfp_execute(
 
 
 /**
+ * gauss_4dfp
+ *
  * Applies a Gaussian filter to 4dfp or conc input files.
  *
  * Author: FreeSurfer Developers

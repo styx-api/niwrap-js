@@ -154,6 +154,8 @@ function v__grayplot_outputs(
 
 
 /**
+ * @grayplot
+ *
  * Script to read files from an afni_proc.py results directory and produce a grayplot from the errts dataset(s), combined with a motion magnitude indicator graph.
  *
  * Author: AFNI Developers
@@ -180,6 +182,8 @@ function v__grayplot_execute(
 
 
 /**
+ * @grayplot
+ *
  * Script to read files from an afni_proc.py results directory and produce a grayplot from the errts dataset(s), combined with a motion magnitude indicator graph.
  *
  * Author: AFNI Developers

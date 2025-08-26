@@ -237,6 +237,8 @@ function fnirt_outputs(
 
 
 /**
+ * fnirt
+ *
  * FSL non-linear registration.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -263,6 +265,8 @@ function fnirt_execute(
 
 
 /**
+ * fnirt
+ *
  * FSL non-linear registration.
  *
  * Author: FMRIB Analysis Group, University of Oxford

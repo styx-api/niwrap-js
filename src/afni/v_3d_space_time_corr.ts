@@ -188,6 +188,8 @@ function v_3d_space_time_corr_outputs(
 
 
 /**
+ * 3dSpaceTimeCorr
+ *
  * Calculates correlation coefficients between two 4D datasets using space+time patterns.
  *
  * Author: AFNI Developers
@@ -214,6 +216,8 @@ function v_3d_space_time_corr_execute(
 
 
 /**
+ * 3dSpaceTimeCorr
+ *
  * Calculates correlation coefficients between two 4D datasets using space+time patterns.
  *
  * Author: AFNI Developers

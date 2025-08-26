@@ -255,6 +255,8 @@ function compare_surfaces_outputs(
 
 
 /**
+ * CompareSurfaces
+ *
  * Calculates distance at each node in Surface 1 (S1) to Surface 2 (S2) along the local surface normal at each node in S1. Superseded by SurfToSurf.
  *
  * Author: AFNI Developers
@@ -281,6 +283,8 @@ function compare_surfaces_execute(
 
 
 /**
+ * CompareSurfaces
+ *
  * Calculates distance at each node in Surface 1 (S1) to Surface 2 (S2) along the local surface normal at each node in S1. Superseded by SurfToSurf.
  *
  * Author: AFNI Developers

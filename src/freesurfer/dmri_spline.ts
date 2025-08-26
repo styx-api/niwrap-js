@@ -214,6 +214,8 @@ function dmri_spline_outputs(
 
 
 /**
+ * dmri_spline
+ *
  * Tool for interpolating and analyzing splines within a defined mask.
  *
  * Author: FreeSurfer Developers
@@ -240,6 +242,8 @@ function dmri_spline_execute(
 
 
 /**
+ * dmri_spline
+ *
  * Tool for interpolating and analyzing splines within a defined mask.
  *
  * Author: FreeSurfer Developers

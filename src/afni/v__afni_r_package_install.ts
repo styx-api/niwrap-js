@@ -180,6 +180,8 @@ function v__afni_r_package_install_outputs(
 
 
 /**
+ * @afni_R_package_install
+ *
  * Helper script to install R packages for various afni-ish purposes.
  *
  * Author: AFNI Developers
@@ -206,6 +208,8 @@ function v__afni_r_package_install_execute(
 
 
 /**
+ * @afni_R_package_install
+ *
  * Helper script to install R packages for various afni-ish purposes.
  *
  * Author: AFNI Developers

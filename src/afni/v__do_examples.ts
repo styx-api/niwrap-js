@@ -128,6 +128,8 @@ function v__do_examples_outputs(
 
 
 /**
+ * @DO.examples
+ *
  * A script to illustrate the use of Displayable Objects in SUMA.
  *
  * Author: AFNI Developers
@@ -154,6 +156,8 @@ function v__do_examples_execute(
 
 
 /**
+ * @DO.examples
+ *
  * A script to illustrate the use of Displayable Objects in SUMA.
  *
  * Author: AFNI Developers

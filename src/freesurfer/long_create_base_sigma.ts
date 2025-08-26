@@ -125,6 +125,8 @@ function long_create_base_sigma_outputs(
 
 
 /**
+ * long_create_base_sigma
+ *
  * Performs a joint normalization and atlas renormalization at a specific sigma smoothing level. This is usually done as part of the base stream but can be performed to add files for a different sigma level to an existing base.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function long_create_base_sigma_execute(
 
 
 /**
+ * long_create_base_sigma
+ *
  * Performs a joint normalization and atlas renormalization at a specific sigma smoothing level. This is usually done as part of the base stream but can be performed to add files for a different sigma level to an existing base.
  *
  * Author: FreeSurfer Developers

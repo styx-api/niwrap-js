@@ -153,6 +153,8 @@ function mri_ribbon_outputs(
 
 
 /**
+ * mri_ribbon
+ *
  * MRI Ribbon tool to create ribbon volumes from surface files.
  *
  * Author: FreeSurfer Developers
@@ -179,6 +181,8 @@ function mri_ribbon_execute(
 
 
 /**
+ * mri_ribbon
+ *
  * MRI Ribbon tool to create ribbon volumes from surface files.
  *
  * Author: FreeSurfer Developers

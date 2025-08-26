@@ -166,6 +166,8 @@ function smoothest_outputs(
 
 
 /**
+ * smoothest
+ *
  * Tool to estimate smoothness of data from FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -192,6 +194,8 @@ function smoothest_execute(
 
 
 /**
+ * smoothest
+ *
  * Tool to estimate smoothness of data from FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -150,6 +150,8 @@ function set_structure_outputs(
 
 
 /**
+ * set-structure
+ *
  * Set structure of a data file.
  *
  * The existing file is modified and rewritten to the same filename.  Valid values for the structure name are:
@@ -233,6 +235,8 @@ function set_structure_execute(
 
 
 /**
+ * set-structure
+ *
  * Set structure of a data file.
  *
  * The existing file is modified and rewritten to the same filename.  Valid values for the structure name are:

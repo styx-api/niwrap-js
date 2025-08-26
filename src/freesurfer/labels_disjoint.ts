@@ -136,6 +136,8 @@ function labels_disjoint_outputs(
 
 
 /**
+ * labels_disjoint
+ *
  * Subtracts one label file from another, effectively creating a label that represents label1 minus label2.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function labels_disjoint_execute(
 
 
 /**
+ * labels_disjoint
+ *
  * Subtracts one label file from another, effectively creating a label that represents label1 minus label2.
  *
  * Author: FreeSurfer Developers

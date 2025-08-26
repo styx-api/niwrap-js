@@ -221,6 +221,8 @@ function wmedits2surf_outputs(
 
 
 /**
+ * wmedits2surf
+ *
  * Computes binary maps of surface locations where the wm.mgz has been edited. Creates files for each hemisphere for each type of edit.
  *
  * Author: FreeSurfer Developers
@@ -247,6 +249,8 @@ function wmedits2surf_execute(
 
 
 /**
+ * wmedits2surf
+ *
  * Computes binary maps of surface locations where the wm.mgz has been edited. Creates files for each hemisphere for each type of edit.
  *
  * Author: FreeSurfer Developers

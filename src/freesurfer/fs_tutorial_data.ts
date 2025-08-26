@@ -130,6 +130,8 @@ function fs_tutorial_data_outputs(
 
 
 /**
+ * fs_tutorial_data
+ *
  * Tool to download and install FreeSurfer tutorial data.
  *
  * Author: FreeSurfer Developers
@@ -156,6 +158,8 @@ function fs_tutorial_data_execute(
 
 
 /**
+ * fs_tutorial_data
+ *
  * Tool to download and install FreeSurfer tutorial data.
  *
  * Author: FreeSurfer Developers

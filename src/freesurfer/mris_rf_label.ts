@@ -154,6 +154,8 @@ function mris_rf_label_outputs(
 
 
 /**
+ * mris_rf_label
+ *
  * A tool for labeling regions of a surface using random forest classification.
  *
  * Author: FreeSurfer Developers
@@ -180,6 +182,8 @@ function mris_rf_label_execute(
 
 
 /**
+ * mris_rf_label
+ *
  * A tool for labeling regions of a surface using random forest classification.
  *
  * Author: FreeSurfer Developers

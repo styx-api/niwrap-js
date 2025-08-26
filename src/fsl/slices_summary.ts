@@ -182,6 +182,8 @@ function slices_summary_outputs(
 
 
 /**
+ * slices_summary
+ *
  * Generate summary PNG images for 4D neuroimaging data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -208,6 +210,8 @@ function slices_summary_execute(
 
 
 /**
+ * slices_summary
+ *
  * Generate summary PNG images for 4D neuroimaging data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

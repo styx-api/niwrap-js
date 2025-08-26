@@ -521,6 +521,8 @@ function cifti_palette_outputs(
 
 
 /**
+ * cifti-palette
+ *
  * Set palette on a cifti file.
  *
  * NOTE: The output file must be a different file than the input file.
@@ -621,6 +623,8 @@ function cifti_palette_execute(
 
 
 /**
+ * cifti-palette
+ *
  * Set palette on a cifti file.
  *
  * NOTE: The output file must be a different file than the input file.

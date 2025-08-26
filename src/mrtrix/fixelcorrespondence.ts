@@ -259,6 +259,8 @@ function fixelcorrespondence_outputs(
 
 
 /**
+ * fixelcorrespondence
+ *
  * Obtain fixel-fixel correpondence between a subject fixel image and a template fixel mask.
  *
  * It is assumed that the subject image has already been spatially normalised and is aligned with the template. The output fixel image will have the same fixels (and directions) of the template.
@@ -291,6 +293,8 @@ function fixelcorrespondence_execute(
 
 
 /**
+ * fixelcorrespondence
+ *
  * Obtain fixel-fixel correpondence between a subject fixel image and a template fixel mask.
  *
  * It is assumed that the subject image has already been spatially normalised and is aligned with the template. The output fixel image will have the same fixels (and directions) of the template.

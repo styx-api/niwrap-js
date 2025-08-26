@@ -217,6 +217,8 @@ function v_3d_mse_outputs(
 
 
 /**
+ * 3dMSE
+ *
  * Computes voxelwise multi-scale entropy.
  *
  * Author: AFNI Developers
@@ -243,6 +245,8 @@ function v_3d_mse_execute(
 
 
 /**
+ * 3dMSE
+ *
  * Computes voxelwise multi-scale entropy.
  *
  * Author: AFNI Developers

@@ -406,6 +406,8 @@ function fabber_asl_outputs(
 
 
 /**
+ * fabber_asl
+ *
  * Fabber is a tool for automated model fitting of time series data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -432,6 +434,8 @@ function fabber_asl_execute(
 
 
 /**
+ * fabber_asl
+ *
  * Fabber is a tool for automated model fitting of time series data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

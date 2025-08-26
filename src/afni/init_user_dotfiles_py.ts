@@ -269,6 +269,8 @@ function init_user_dotfiles_py_outputs(
 
 
 /**
+ * init_user_dotfiles.py
+ *
  * Initialize or evaluate user dot files (.cshrc, .bashrc, ...) for system settings.
  *
  * Author: AFNI Developers
@@ -295,6 +297,8 @@ function init_user_dotfiles_py_execute(
 
 
 /**
+ * init_user_dotfiles.py
+ *
  * Initialize or evaluate user dot files (.cshrc, .bashrc, ...) for system settings.
  *
  * Author: AFNI Developers

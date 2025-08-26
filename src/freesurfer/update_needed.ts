@@ -134,6 +134,8 @@ function update_needed_outputs(
 
 
 /**
+ * UpdateNeeded
+ *
  * A command-line tool to update a target file based on one or more source files.
  *
  * Author: FreeSurfer Developers
@@ -160,6 +162,8 @@ function update_needed_execute(
 
 
 /**
+ * UpdateNeeded
+ *
  * A command-line tool to update a target file based on one or more source files.
  *
  * Author: FreeSurfer Developers

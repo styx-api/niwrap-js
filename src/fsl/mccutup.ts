@@ -162,6 +162,8 @@ function mccutup_outputs(
 
 
 /**
+ * mccutup
+ *
  * FSL mccutup tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -188,6 +190,8 @@ function mccutup_execute(
 
 
 /**
+ * mccutup
+ *
  * FSL mccutup tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford

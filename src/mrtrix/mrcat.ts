@@ -272,6 +272,8 @@ function mrcat_outputs(
 
 
 /**
+ * mrcat
+ *
  * Concatenate several images into one.
  *
  *
@@ -304,6 +306,8 @@ function mrcat_execute(
 
 
 /**
+ * mrcat
+ *
  * Concatenate several images into one.
  *
  *

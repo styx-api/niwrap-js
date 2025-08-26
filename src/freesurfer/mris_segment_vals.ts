@@ -160,6 +160,8 @@ function mris_segment_vals_outputs(
 
 
 /**
+ * mris_segment_vals
+ *
  * This program segments an input val file into connected components.
  *
  * Author: FreeSurfer Developers
@@ -186,6 +188,8 @@ function mris_segment_vals_execute(
 
 
 /**
+ * mris_segment_vals
+ *
  * This program segments an input val file into connected components.
  *
  * Author: FreeSurfer Developers

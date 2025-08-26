@@ -164,6 +164,8 @@ function mris_defects_pointset_outputs(
 
 
 /**
+ * mris_defects_pointset
+ *
  * Produces a pointset file containing the locations of each topological defect in a surface.
  *
  * Author: FreeSurfer Developers
@@ -190,6 +192,8 @@ function mris_defects_pointset_execute(
 
 
 /**
+ * mris_defects_pointset
+ *
  * Produces a pointset file containing the locations of each topological defect in a surface.
  *
  * Author: FreeSurfer Developers

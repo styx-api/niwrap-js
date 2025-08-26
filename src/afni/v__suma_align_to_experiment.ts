@@ -323,6 +323,8 @@ function v__suma_align_to_experiment_outputs(
 
 
 /**
+ * @SUMA_AlignToExperiment
+ *
  * Creates a version of Surface Anatomy that is registered to Experiment Anatomy.
  *
  * Author: AFNI Developers
@@ -349,6 +351,8 @@ function v__suma_align_to_experiment_execute(
 
 
 /**
+ * @SUMA_AlignToExperiment
+ *
  * Creates a version of Surface Anatomy that is registered to Experiment Anatomy.
  *
  * Author: AFNI Developers

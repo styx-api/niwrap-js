@@ -202,6 +202,8 @@ function mri_rf_long_train_outputs(
 
 
 /**
+ * mri_rf_long_train
+ *
  * Trains GCA data with multiple subjects for FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -228,6 +230,8 @@ function mri_rf_long_train_execute(
 
 
 /**
+ * mri_rf_long_train
+ *
  * Trains GCA data with multiple subjects for FreeSurfer.
  *
  * Author: FreeSurfer Developers

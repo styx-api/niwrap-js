@@ -159,6 +159,8 @@ function v_1dnorm_outputs(
 
 
 /**
+ * 1dnorm
+ *
  * Normalize columns of a 1D file (AFNI ASCII list of numbers).
  *
  * Author: AFNI Developers
@@ -185,6 +187,8 @@ function v_1dnorm_execute(
 
 
 /**
+ * 1dnorm
+ *
  * Normalize columns of a 1D file (AFNI ASCII list of numbers).
  *
  * Author: AFNI Developers

@@ -199,6 +199,8 @@ function run_first_outputs(
 
 
 /**
+ * run_first
+ *
  * A tool to run FSL's FIRST for subcortical segmentation.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -225,6 +227,8 @@ function run_first_execute(
 
 
 /**
+ * run_first
+ *
  * A tool to run FSL's FIRST for subcortical segmentation.
  *
  * Author: FMRIB Analysis Group, University of Oxford

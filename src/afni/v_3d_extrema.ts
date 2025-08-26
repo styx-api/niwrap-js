@@ -299,6 +299,8 @@ function v_3d_extrema_outputs(
 
 
 /**
+ * 3dExtrema
+ *
  * Find local extrema (minima or maxima) in 3D datasets.
  *
  * Author: AFNI Developers
@@ -325,6 +327,8 @@ function v_3d_extrema_execute(
 
 
 /**
+ * 3dExtrema
+ *
  * Find local extrema (minima or maxima) in 3D datasets.
  *
  * Author: AFNI Developers

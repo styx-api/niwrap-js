@@ -325,6 +325,8 @@ function v_3d_localstat_outputs(
 
 
 /**
+ * 3dLocalstat
+ *
  * This program computes statistics at each voxel, based on a local neighborhood of that voxel.
  *
  * Author: AFNI Developers
@@ -351,6 +353,8 @@ function v_3d_localstat_execute(
 
 
 /**
+ * 3dLocalstat
+ *
  * This program computes statistics at each voxel, based on a local neighborhood of that voxel.
  *
  * Author: AFNI Developers

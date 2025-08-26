@@ -169,6 +169,8 @@ function mris_extract_values_outputs(
 
 
 /**
+ * mris_extract_values
+ *
  * Extracts values from surface, overlay, and annotation files and outputs them to a CSV file.
  *
  * Author: FreeSurfer Developers
@@ -195,6 +197,8 @@ function mris_extract_values_execute(
 
 
 /**
+ * mris_extract_values
+ *
  * Extracts values from surface, overlay, and annotation files and outputs them to a CSV file.
  *
  * Author: FreeSurfer Developers

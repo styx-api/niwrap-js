@@ -553,6 +553,8 @@ function reg_f3d_outputs(
 
 
 /**
+ * reg_f3d
+ *
  * Fast Free-Form Deformation algorithm for non-rigid registration based on Rueckert's 99 TMI work.
  *
  * Author: NiftyReg Developers
@@ -579,6 +581,8 @@ function reg_f3d_execute(
 
 
 /**
+ * reg_f3d
+ *
  * Fast Free-Form Deformation algorithm for non-rigid registration based on Rueckert's 99 TMI work.
  *
  * Author: NiftyReg Developers

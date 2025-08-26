@@ -288,6 +288,8 @@ function ants_joint_fusion_outputs(
 
 
 /**
+ * antsJointFusion
+ *
  * antsJointFusion is an image fusion algorithm developed by Hongzhi Wang and Paul Yushkevich. This implementation is based on Paul's original ITK-style implementation and Brian's ANTsR implementation. The original label fusion framework was extended to accommodate intensities.
  *
  * Author: ANTs Developers
@@ -314,6 +316,8 @@ function ants_joint_fusion_execute(
 
 
 /**
+ * antsJointFusion
+ *
  * antsJointFusion is an image fusion algorithm developed by Hongzhi Wang and Paul Yushkevich. This implementation is based on Paul's original ITK-style implementation and Brian's ANTsR implementation. The original label fusion framework was extended to accommodate intensities.
  *
  * Author: ANTs Developers

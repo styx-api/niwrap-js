@@ -141,6 +141,8 @@ function hist2prob_outputs(
 
 
 /**
+ * hist2prob
+ *
  * Converts a histogram image to a probability map based on specified thresholds.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -167,6 +169,8 @@ function hist2prob_execute(
 
 
 /**
+ * hist2prob
+ *
  * Converts a histogram image to a probability map based on specified thresholds.
  *
  * Author: FMRIB Analysis Group, University of Oxford

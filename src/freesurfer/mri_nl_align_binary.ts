@@ -136,6 +136,8 @@ function mri_nl_align_binary_outputs(
 
 
 /**
+ * mri_nl_align_binary
+ *
  * Non-linear alignment tool for MRI data.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_nl_align_binary_execute(
 
 
 /**
+ * mri_nl_align_binary
+ *
  * Non-linear alignment tool for MRI data.
  *
  * Author: FreeSurfer Developers

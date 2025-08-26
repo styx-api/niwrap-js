@@ -157,6 +157,8 @@ function v_3d_compare_affine_outputs(
 
 
 /**
+ * 3dCompareAffine
+ *
  * Compares two (or more) affine spatial transformations on a dataset and outputs measurements of their differences in spatial displacements.
  *
  * Author: AFNI Developers
@@ -183,6 +185,8 @@ function v_3d_compare_affine_execute(
 
 
 /**
+ * 3dCompareAffine
+ *
  * Compares two (or more) affine spatial transformations on a dataset and outputs measurements of their differences in spatial displacements.
  *
  * Author: AFNI Developers

@@ -271,6 +271,8 @@ function groupstats_outputs(
 
 
 /**
+ * groupstats
+ *
  * A script for comprehensive group analysis on both maps and ROI results within FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -297,6 +299,8 @@ function groupstats_execute(
 
 
 /**
+ * groupstats
+ *
  * A script for comprehensive group analysis on both maps and ROI results within FreeSurfer.
  *
  * Author: FreeSurfer Developers

@@ -456,6 +456,8 @@ function file_tool_outputs(
 
 
 /**
+ * file_tool
+ *
  * Program to display or modify sections of a file.
  *
  * Author: AFNI Developers
@@ -482,6 +484,8 @@ function file_tool_execute(
 
 
 /**
+ * file_tool
+ *
  * Program to display or modify sections of a file.
  *
  * Author: AFNI Developers

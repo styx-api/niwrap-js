@@ -289,6 +289,8 @@ function make_bianca_mask_outputs(
 
 
 /**
+ * make_bianca_mask
+ *
  * A script for generating BIANCA masks.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -315,6 +317,8 @@ function make_bianca_mask_execute(
 
 
 /**
+ * make_bianca_mask
+ *
  * A script for generating BIANCA masks.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -165,6 +165,8 @@ function histo_register_block_outputs(
 
 
 /**
+ * histo_register_block
+ *
  * A tool to align a histological slice with a block face image.
  *
  * Author: FreeSurfer Developers
@@ -191,6 +193,8 @@ function histo_register_block_execute(
 
 
 /**
+ * histo_register_block
+ *
  * A tool to align a histological slice with a block face image.
  *
  * Author: FreeSurfer Developers

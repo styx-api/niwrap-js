@@ -314,6 +314,8 @@ function fat_proc_axialize_anat_outputs(
 
 
 /**
+ * fat_proc_axialize_anat
+ *
  * Helps align the major axes of an anatomical volume to those of the volumetric field of view.
  *
  * Author: AFNI Developers
@@ -340,6 +342,8 @@ function fat_proc_axialize_anat_execute(
 
 
 /**
+ * fat_proc_axialize_anat
+ *
  * Helps align the major axes of an anatomical volume to those of the volumetric field of view.
  *
  * Author: AFNI Developers

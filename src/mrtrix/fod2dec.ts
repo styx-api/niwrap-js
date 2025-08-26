@@ -320,6 +320,8 @@ function fod2dec_outputs(
 
 
 /**
+ * fod2dec
+ *
  * Generate FOD-based DEC maps, with optional panchromatic sharpening and/or luminance/perception correction.
  *
  * By default, the FOD-based DEC is weighted by the integral of the FOD. To weight by another scalar map, use the -contrast option. This option can also be used for panchromatic sharpening, e.g., by supplying a T1 (or other sensible) anatomical volume with a higher spatial resolution.
@@ -354,6 +356,8 @@ function fod2dec_execute(
 
 
 /**
+ * fod2dec
+ *
  * Generate FOD-based DEC maps, with optional panchromatic sharpening and/or luminance/perception correction.
  *
  * By default, the FOD-based DEC is weighted by the integral of the FOD. To weight by another scalar map, use the -contrast option. This option can also be used for panchromatic sharpening, e.g., by supplying a T1 (or other sensible) anatomical volume with a higher spatial resolution.

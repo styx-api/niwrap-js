@@ -341,6 +341,8 @@ function rbbr_outputs(
 
 
 /**
+ * rbbr
+ *
  * Robust version of bbregister.
  *
  * Author: FreeSurfer Developers
@@ -367,6 +369,8 @@ function rbbr_execute(
 
 
 /**
+ * rbbr
+ *
  * Robust version of bbregister.
  *
  * Author: FreeSurfer Developers

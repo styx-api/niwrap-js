@@ -157,6 +157,8 @@ function dmri_save_histograms_outputs(
 
 
 /**
+ * dmri_saveHistograms
+ *
  * A tool to save histograms from diffusion MRI tractography data.
  *
  * Author: FreeSurfer Developers
@@ -183,6 +185,8 @@ function dmri_save_histograms_execute(
 
 
 /**
+ * dmri_saveHistograms
+ *
  * A tool to save histograms from diffusion MRI tractography data.
  *
  * Author: FreeSurfer Developers

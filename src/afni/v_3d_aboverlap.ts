@@ -146,6 +146,8 @@ function v_3d_aboverlap_outputs(
 
 
 /**
+ * 3dABoverlap
+ *
  * Counts various metrics about how the automasks of datasets A and B overlap or don't overlap.
  *
  * Author: AFNI Developers
@@ -172,6 +174,8 @@ function v_3d_aboverlap_execute(
 
 
 /**
+ * 3dABoverlap
+ *
  * Counts various metrics about how the automasks of datasets A and B overlap or don't overlap.
  *
  * Author: AFNI Developers

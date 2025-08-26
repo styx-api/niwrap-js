@@ -356,6 +356,8 @@ function possum_outputs(
 
 
 /**
+ * possum
+ *
  * Positron emission tomography (PET) simulation tool as part of FSL suite.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -382,6 +384,8 @@ function possum_execute(
 
 
 /**
+ * possum
+ *
  * Positron emission tomography (PET) simulation tool as part of FSL suite.
  *
  * Author: FMRIB Analysis Group, University of Oxford

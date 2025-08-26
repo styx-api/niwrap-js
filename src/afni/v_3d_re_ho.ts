@@ -291,6 +291,8 @@ function v_3d_re_ho_outputs(
 
 
 /**
+ * 3dReHo
+ *
  * 3dReHo calculates Kendall's W per voxel using neighborhood voxels from 4D time series data set.
  *
  * Author: AFNI Developers
@@ -317,6 +319,8 @@ function v_3d_re_ho_execute(
 
 
 /**
+ * 3dReHo
+ *
  * 3dReHo calculates Kendall's W per voxel using neighborhood voxels from 4D time series data set.
  *
  * Author: AFNI Developers

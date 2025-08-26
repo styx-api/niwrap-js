@@ -193,6 +193,8 @@ function mkxsubjreg_outputs(
 
 
 /**
+ * mkxsubjreg
+ *
  * Creates a new registration matrix that maps from the functional volume of the source subject to the orig of the target subject through the talairach transform.
  *
  * Author: FreeSurfer Developers
@@ -219,6 +221,8 @@ function mkxsubjreg_execute(
 
 
 /**
+ * mkxsubjreg
+ *
  * Creates a new registration matrix that maps from the functional volume of the source subject to the orig of the target subject through the talairach transform.
  *
  * Author: FreeSurfer Developers

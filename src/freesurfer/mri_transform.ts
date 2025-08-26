@@ -155,6 +155,8 @@ function mri_transform_outputs(
 
 
 /**
+ * mri_transform
+ *
  * Applies a linear transform to an MRI volume and writes out the result.
  *
  * Author: FreeSurfer Developers
@@ -181,6 +183,8 @@ function mri_transform_execute(
 
 
 /**
+ * mri_transform
+ *
  * Applies a linear transform to an MRI volume and writes out the result.
  *
  * Author: FreeSurfer Developers

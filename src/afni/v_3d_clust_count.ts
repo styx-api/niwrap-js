@@ -162,6 +162,8 @@ function v_3d_clust_count_outputs(
 
 
 /**
+ * 3dClustCount
+ *
  * This program takes as input 1 or more datasets, thresholds them at various levels, and counts up the number of clusters of various sizes.
  *
  * Author: AFNI Developers
@@ -188,6 +190,8 @@ function v_3d_clust_count_execute(
 
 
 /**
+ * 3dClustCount
+ *
  * This program takes as input 1 or more datasets, thresholds them at various levels, and counts up the number of clusters of various sizes.
  *
  * Author: AFNI Developers

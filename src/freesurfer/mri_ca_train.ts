@@ -255,6 +255,8 @@ function mri_ca_train_outputs(
 
 
 /**
+ * mri_ca_train
+ *
  * Trains GCA data with multiple subjects using provided segmentation volumes and other configuration.
  *
  * Author: FreeSurfer Developers
@@ -281,6 +283,8 @@ function mri_ca_train_execute(
 
 
 /**
+ * mri_ca_train
+ *
  * Trains GCA data with multiple subjects using provided segmentation volumes and other configuration.
  *
  * Author: FreeSurfer Developers

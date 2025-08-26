@@ -259,6 +259,8 @@ function v_3d_icc_outputs(
 
 
 /**
+ * 3dICC
+ *
  * AFNI Program for IntraClass Correlatin (ICC) Analysis.
  *
  * Author: AFNI Developers
@@ -285,6 +287,8 @@ function v_3d_icc_execute(
 
 
 /**
+ * 3dICC
+ *
  * AFNI Program for IntraClass Correlatin (ICC) Analysis.
  *
  * Author: AFNI Developers

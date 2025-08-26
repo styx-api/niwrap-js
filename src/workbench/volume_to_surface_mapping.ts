@@ -564,6 +564,8 @@ function volume_to_surface_mapping_outputs(
 
 
 /**
+ * volume-to-surface-mapping
+ *
  * Map volume to surface.
  *
  * You must specify exactly one mapping method.  Enclosing voxel uses the value from the voxel the vertex lies inside, while trilinear does a 3D linear interpolation based on the voxels immediately on each side of the vertex's position.
@@ -596,6 +598,8 @@ function volume_to_surface_mapping_execute(
 
 
 /**
+ * volume-to-surface-mapping
+ *
  * Map volume to surface.
  *
  * You must specify exactly one mapping method.  Enclosing voxel uses the value from the voxel the vertex lies inside, while trilinear does a 3D linear interpolation based on the voxels immediately on each side of the vertex's position.

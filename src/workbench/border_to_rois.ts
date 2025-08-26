@@ -163,6 +163,8 @@ function border_to_rois_outputs(
 
 
 /**
+ * border-to-rois
+ *
  * Make metric rois from borders.
  *
  * By default, draws ROIs inside all borders in the border file, as separate metric columns.
@@ -191,6 +193,8 @@ function border_to_rois_execute(
 
 
 /**
+ * border-to-rois
+ *
  * Make metric rois from borders.
  *
  * By default, draws ROIs inside all borders in the border file, as separate metric columns.

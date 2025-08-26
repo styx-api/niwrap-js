@@ -160,6 +160,8 @@ function make_cortex_label_outputs(
 
 
 /**
+ * make_cortex_label
+ *
  * A tool to create cortical labels.
  *
  * Author: FreeSurfer Developers
@@ -186,6 +188,8 @@ function make_cortex_label_execute(
 
 
 /**
+ * make_cortex_label
+ *
  * A tool to create cortical labels.
  *
  * Author: FreeSurfer Developers

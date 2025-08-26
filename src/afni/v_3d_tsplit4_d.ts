@@ -153,6 +153,8 @@ function v_3d_tsplit4_d_outputs(
 
 
 /**
+ * 3dTsplit4D
+ *
  * Convert a 3D+time dataset into multiple 3D single-brick files.
  *
  * Author: AFNI Developers
@@ -179,6 +181,8 @@ function v_3d_tsplit4_d_execute(
 
 
 /**
+ * 3dTsplit4D
+ *
  * Convert a 3D+time dataset into multiple 3D single-brick files.
  *
  * Author: AFNI Developers

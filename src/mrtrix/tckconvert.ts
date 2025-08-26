@@ -434,6 +434,8 @@ function tckconvert_outputs(
 
 
 /**
+ * tckconvert
+ *
  * Convert between different track file formats.
  *
  * The program currently supports MRtrix .tck files (input/output), ascii text files (input/output), VTK polydata files (input/output), and RenderMan RIB (export only).
@@ -472,6 +474,8 @@ function tckconvert_execute(
 
 
 /**
+ * tckconvert
+ *
  * Convert between different track file formats.
  *
  * The program currently supports MRtrix .tck files (input/output), ascii text files (input/output), VTK polydata files (input/output), and RenderMan RIB (export only).

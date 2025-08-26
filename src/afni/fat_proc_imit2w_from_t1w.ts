@@ -214,6 +214,8 @@ function fat_proc_imit2w_from_t1w_outputs(
 
 
 /**
+ * fat_proc_imit2w_from_t1w
+ *
  * Process T1w anatomical images to generate an imitation T2w-contrast image.
  *
  * Author: AFNI Developers
@@ -240,6 +242,8 @@ function fat_proc_imit2w_from_t1w_execute(
 
 
 /**
+ * fat_proc_imit2w_from_t1w
+ *
  * Process T1w anatomical images to generate an imitation T2w-contrast image.
  *
  * Author: AFNI Developers

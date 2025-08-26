@@ -184,6 +184,8 @@ function cblumwmgyri_outputs(
 
 
 /**
+ * cblumwmgyri
+ *
  * Segments cerebellar white matter into gyral and core components using geometrical constraints.
  *
  * Author: FreeSurfer Developers
@@ -210,6 +212,8 @@ function cblumwmgyri_execute(
 
 
 /**
+ * cblumwmgyri
+ *
  * Segments cerebellar white matter into gyral and core components using geometrical constraints.
  *
  * Author: FreeSurfer Developers

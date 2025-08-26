@@ -203,6 +203,8 @@ function fslroi_outputs(
 
 
 /**
+ * fslroi
+ *
  * Extracts a region of interest (ROI) from an image.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -229,6 +231,8 @@ function fslroi_execute(
 
 
 /**
+ * fslroi
+ *
  * Extracts a region of interest (ROI) from an image.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -131,6 +131,8 @@ function mri_train_outputs(
 
 
 /**
+ * mri_train
+ *
  * Tool for training with MRI data in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mri_train_execute(
 
 
 /**
+ * mri_train
+ *
  * Tool for training with MRI data in FreeSurfer.
  *
  * Author: FreeSurfer Developers

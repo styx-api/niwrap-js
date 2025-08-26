@@ -400,6 +400,8 @@ function fsl_histogram_outputs(
 
 
 /**
+ * fsl_histogram
+ *
  * Histogram plotting tool for FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -426,6 +428,8 @@ function fsl_histogram_execute(
 
 
 /**
+ * fsl_histogram
+ *
  * Histogram plotting tool for FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

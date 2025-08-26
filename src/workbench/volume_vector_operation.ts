@@ -170,6 +170,8 @@ function volume_vector_operation_outputs(
 
 
 /**
+ * volume-vector-operation
+ *
  * Do a vector operation on volume files.
  *
  * Does a vector operation on two volume files (that must have a multiple of 3 subvolumes).  Either of the inputs may have multiple vectors (more than 3 subvolumes), but not both (at least one must have exactly 3 subvolumes).  The -magnitude and -normalize-output options may not be specified together, or with the DOT operation.  The <operation> parameter must be one of the following:
@@ -203,6 +205,8 @@ function volume_vector_operation_execute(
 
 
 /**
+ * volume-vector-operation
+ *
  * Do a vector operation on volume files.
  *
  * Does a vector operation on two volume files (that must have a multiple of 3 subvolumes).  Either of the inputs may have multiple vectors (more than 3 subvolumes), but not both (at least one must have exactly 3 subvolumes).  The -magnitude and -normalize-output options may not be specified together, or with the DOT operation.  The <operation> parameter must be one of the following:

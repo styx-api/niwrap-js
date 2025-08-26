@@ -135,6 +135,8 @@ function get_afni_model_prf_outputs(
 
 
 /**
+ * get_afni_model_PRF
+ *
  * A tool to get AFNI model parameters assuming a PRF framework.
  *
  * Author: AFNI Developers
@@ -161,6 +163,8 @@ function get_afni_model_prf_execute(
 
 
 /**
+ * get_afni_model_PRF
+ *
  * A tool to get AFNI model parameters assuming a PRF framework.
  *
  * Author: AFNI Developers

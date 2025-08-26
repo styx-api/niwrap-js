@@ -224,6 +224,8 @@ function volume_stats_outputs(
 
 
 /**
+ * volume-stats
+ *
  * Spatial statistics on a volume file.
  *
  * For each subvolume of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  Use -subvolume to only give output for a single subvolume.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -reduce or -percentile must be specified.
@@ -272,6 +274,8 @@ function volume_stats_execute(
 
 
 /**
+ * volume-stats
+ *
  * Spatial statistics on a volume file.
  *
  * For each subvolume of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  Use -subvolume to only give output for a single subvolume.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -reduce or -percentile must be specified.

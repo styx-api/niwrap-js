@@ -253,6 +253,8 @@ function v_1d_tool_py_outputs(
 
 
 /**
+ * 1d_tool.py
+ *
  * A tool for manipulating and evaluating 1D files.
  *
  * Author: AFNI Developers
@@ -279,6 +281,8 @@ function v_1d_tool_py_execute(
 
 
 /**
+ * 1d_tool.py
+ *
  * A tool for manipulating and evaluating 1D files.
  *
  * Author: AFNI Developers

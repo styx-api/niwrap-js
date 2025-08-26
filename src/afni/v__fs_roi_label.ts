@@ -220,6 +220,8 @@ function v__fs_roi_label_outputs(
 
 
 /**
+ * @FS_roi_label
+ *
  * Tool to get labels associated with FreeSurfer's parcellation and annotation files.
  *
  * Author: AFNI Developers
@@ -246,6 +248,8 @@ function v__fs_roi_label_execute(
 
 
 /**
+ * @FS_roi_label
+ *
  * Tool to get labels associated with FreeSurfer's parcellation and annotation files.
  *
  * Author: AFNI Developers

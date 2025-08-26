@@ -354,6 +354,8 @@ function v_3d_brick_stat_outputs(
 
 
 /**
+ * 3dBrickStat
+ *
  * Compute voxel statistics of an input dataset.
  *
  * Author: AFNI Developers
@@ -380,6 +382,8 @@ function v_3d_brick_stat_execute(
 
 
 /**
+ * 3dBrickStat
+ *
  * Compute voxel statistics of an input dataset.
  *
  * Author: AFNI Developers

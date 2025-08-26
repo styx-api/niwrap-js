@@ -243,6 +243,8 @@ function v_3d_tsgen_outputs(
 
 
 /**
+ * 3dTSgen
+ *
  * This program generates an AFNI 3d+time data set based on user-specified signal and noise models for each voxel.
  *
  * Author: AFNI Developers
@@ -269,6 +271,8 @@ function v_3d_tsgen_execute(
 
 
 /**
+ * 3dTSgen
+ *
  * This program generates an AFNI 3d+time data set based on user-specified signal and noise models for each voxel.
  *
  * Author: AFNI Developers

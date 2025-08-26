@@ -272,6 +272,8 @@ function mri_seghead_outputs(
 
 
 /**
+ * mri_seghead
+ *
  * Binarizes an input volume to identify the head's voxels.
  *
  * Author: FreeSurfer Developers
@@ -298,6 +300,8 @@ function mri_seghead_execute(
 
 
 /**
+ * mri_seghead
+ *
  * Binarizes an input volume to identify the head's voxels.
  *
  * Author: FreeSurfer Developers

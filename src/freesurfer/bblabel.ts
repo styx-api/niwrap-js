@@ -228,6 +228,8 @@ function bblabel_outputs(
 
 
 /**
+ * bblabel
+ *
  * Applies a bounding box to a label, copying only the label points within the specified box to the output.
  *
  * Author: FreeSurfer Developers
@@ -254,6 +256,8 @@ function bblabel_execute(
 
 
 /**
+ * bblabel
+ *
  * Applies a bounding box to a label, copying only the label points within the specified box to the output.
  *
  * Author: FreeSurfer Developers

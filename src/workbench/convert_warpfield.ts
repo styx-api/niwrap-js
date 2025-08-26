@@ -335,6 +335,8 @@ function convert_warpfield_outputs(
 
 
 /**
+ * convert-warpfield
+ *
  * Convert a warpfield between conventions.
  *
  * NIFTI world warpfields can be used directly on mm coordinates via sampling the three subvolumes at the coordinate and adding the sampled values to the coordinate vector.  They use the NIFTI coordinate system, that is, X is left to right, Y is posterior to anterior, and Z is inferior to superior.
@@ -369,6 +371,8 @@ function convert_warpfield_execute(
 
 
 /**
+ * convert-warpfield
+ *
  * Convert a warpfield between conventions.
  *
  * NIFTI world warpfields can be used directly on mm coordinates via sampling the three subvolumes at the coordinate and adding the sampled values to the coordinate vector.  They use the NIFTI coordinate system, that is, X is left to right, Y is posterior to anterior, and Z is inferior to superior.

@@ -141,6 +141,8 @@ function mris_compute_layer_intensities_outputs(
 
 
 /**
+ * mris_compute_layer_intensities
+ *
  * Computes intensity overlays for specified cortical layers based on input volumes and surfaces.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mris_compute_layer_intensities_execute(
 
 
 /**
+ * mris_compute_layer_intensities
+ *
  * Computes intensity overlays for specified cortical layers based on input volumes and surfaces.
  *
  * Author: FreeSurfer Developers

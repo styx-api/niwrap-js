@@ -221,6 +221,8 @@ function mri_modify_outputs(
 
 
 /**
+ * mri_modify
+ *
  * Tool for modifying MRI image headers.
  *
  * Author: FreeSurfer Developers
@@ -247,6 +249,8 @@ function mri_modify_execute(
 
 
 /**
+ * mri_modify
+ *
  * Tool for modifying MRI image headers.
  *
  * Author: FreeSurfer Developers

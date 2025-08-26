@@ -260,6 +260,8 @@ function v_1dgen_arma11_outputs(
 
 
 /**
+ * 1dgenARMA11
+ *
  * Program to generate an ARMA(1,1) time series, for simulation studies. Results are written to stdout.
  *
  * Author: AFNI Developers
@@ -286,6 +288,8 @@ function v_1dgen_arma11_execute(
 
 
 /**
+ * 1dgenARMA11
+ *
  * Program to generate an ARMA(1,1) time series, for simulation studies. Results are written to stdout.
  *
  * Author: AFNI Developers

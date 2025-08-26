@@ -324,6 +324,8 @@ function cifti_average_roi_correlation_outputs(
 
 
 /**
+ * cifti-average-roi-correlation
+ *
  * Correlate roi average with all rows then average across subjects.
  *
  * Averages rows for each map of the ROI(s), takes the correlation of each ROI average to the rest of the rows in the same file, applies the fisher small z transform, then averages the results across all files.  ROIs are always treated as weighting functions, including negative values.  For efficiency, ensure that everything that is not intended to be used is zero in the ROI map.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.  If multiple non-cifti ROI files are specified, they must have the same number of columns.
@@ -352,6 +354,8 @@ function cifti_average_roi_correlation_execute(
 
 
 /**
+ * cifti-average-roi-correlation
+ *
  * Correlate roi average with all rows then average across subjects.
  *
  * Averages rows for each map of the ROI(s), takes the correlation of each ROI average to the rest of the rows in the same file, applies the fisher small z transform, then averages the results across all files.  ROIs are always treated as weighting functions, including negative values.  For efficiency, ensure that everything that is not intended to be used is zero in the ROI map.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.  If multiple non-cifti ROI files are specified, they must have the same number of columns.

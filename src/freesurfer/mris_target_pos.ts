@@ -230,6 +230,8 @@ function mris_target_pos_outputs(
 
 
 /**
+ * mris_target_pos
+ *
  * Tool for setting target positions of a surface using input imaging data and other parameters.
  *
  * Author: FreeSurfer Developers
@@ -256,6 +258,8 @@ function mris_target_pos_execute(
 
 
 /**
+ * mris_target_pos
+ *
  * Tool for setting target positions of a surface using input imaging data and other parameters.
  *
  * Author: FreeSurfer Developers

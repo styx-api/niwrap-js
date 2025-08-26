@@ -245,6 +245,8 @@ function v__align_centers_outputs(
 
 
 /**
+ * @Align_Centers
+ *
  * Moves the center of a dataset (DSET) to the center of a base volume (BASE) and optionally creates a transform matrix.
  *
  * Author: AFNI Developers
@@ -271,6 +273,8 @@ function v__align_centers_execute(
 
 
 /**
+ * @Align_Centers
+ *
  * Moves the center of a dataset (DSET) to the center of a base volume (BASE) and optionally creates a transform matrix.
  *
  * Author: AFNI Developers

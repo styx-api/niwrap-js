@@ -168,6 +168,8 @@ function cifti_label_to_roi_outputs(
 
 
 /**
+ * cifti-label-to-roi
+ *
  * Make a cifti label into an roi.
  *
  * For each map in <label-in>, a map is created in <scalar-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
@@ -196,6 +198,8 @@ function cifti_label_to_roi_execute(
 
 
 /**
+ * cifti-label-to-roi
+ *
  * Make a cifti label into an roi.
  *
  * For each map in <label-in>, a map is created in <scalar-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.

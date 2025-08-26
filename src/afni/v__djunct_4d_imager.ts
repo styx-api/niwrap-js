@@ -175,6 +175,8 @@ function v__djunct_4d_imager_outputs(
 
 
 /**
+ * @djunct_4d_imager
+ *
  * The program is useful for viewing the same slice across the 'time' dimension of a 4D data set.
  *
  * Author: AFNI Developers
@@ -201,6 +203,8 @@ function v__djunct_4d_imager_execute(
 
 
 /**
+ * @djunct_4d_imager
+ *
  * The program is useful for viewing the same slice across the 'time' dimension of a 4D data set.
  *
  * Author: AFNI Developers

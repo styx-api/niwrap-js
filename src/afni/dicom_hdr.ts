@@ -188,6 +188,8 @@ function dicom_hdr_outputs(
 
 
 /**
+ * dicom_hdr
+ *
  * A tool to print DICOM file information to stdout.
  *
  * Author: AFNI Developers
@@ -214,6 +216,8 @@ function dicom_hdr_execute(
 
 
 /**
+ * dicom_hdr
+ *
  * A tool to print DICOM file information to stdout.
  *
  * Author: AFNI Developers

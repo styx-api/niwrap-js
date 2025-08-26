@@ -144,6 +144,8 @@ function connectedcomp_outputs(
 
 
 /**
+ * connectedcomp
+ *
  * Connected component analysis tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -170,6 +172,8 @@ function connectedcomp_execute(
 
 
 /**
+ * connectedcomp
+ *
  * Connected component analysis tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford

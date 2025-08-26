@@ -161,6 +161,8 @@ function dicom_hinfo_outputs(
 
 
 /**
+ * dicom_hinfo
+ *
  * Prints selected information from one or more DICOM files to stdout.
  *
  * Author: AFNI Developers
@@ -187,6 +189,8 @@ function dicom_hinfo_execute(
 
 
 /**
+ * dicom_hinfo
+ *
  * Prints selected information from one or more DICOM files to stdout.
  *
  * Author: AFNI Developers

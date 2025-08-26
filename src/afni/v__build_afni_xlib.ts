@@ -155,6 +155,8 @@ function v__build_afni_xlib_outputs(
 
 
 /**
+ * @build_afni_Xlib
+ *
  * Compile and install lesstif, openmotif, and/or libXt.
  *
  * Author: AFNI Developers
@@ -181,6 +183,8 @@ function v__build_afni_xlib_execute(
 
 
 /**
+ * @build_afni_Xlib
+ *
  * Compile and install lesstif, openmotif, and/or libXt.
  *
  * Author: AFNI Developers

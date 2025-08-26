@@ -291,6 +291,8 @@ function metric_tfce_outputs(
 
 
 /**
+ * metric-tfce
+ *
  * Do tfce on a metric file.
  *
  * This command does not do any statistical analysis.  Please use something like PALM if you are just trying to do statistics on your data.
@@ -329,6 +331,8 @@ function metric_tfce_execute(
 
 
 /**
+ * metric-tfce
+ *
  * Do tfce on a metric file.
  *
  * This command does not do any statistical analysis.  Please use something like PALM if you are just trying to do statistics on your data.

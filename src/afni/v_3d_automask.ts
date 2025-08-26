@@ -200,6 +200,8 @@ function v_3d_automask_outputs(
 
 
 /**
+ * 3dAutomask
+ *
  * Create a brain-only mask of the image using AFNI 3dAutomask command.
  *
  * Author: AFNI Developers
@@ -226,6 +228,8 @@ function v_3d_automask_execute(
 
 
 /**
+ * 3dAutomask
+ *
  * Create a brain-only mask of the image using AFNI 3dAutomask command.
  *
  * Author: AFNI Developers

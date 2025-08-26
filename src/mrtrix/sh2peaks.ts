@@ -368,6 +368,8 @@ function sh2peaks_outputs(
 
 
 /**
+ * sh2peaks
+ *
  * Extract the peaks of a spherical harmonic function in each voxel.
  *
  * Peaks of the spherical harmonic function in each voxel are located by commencing a Newton search along each of a set of pre-specified directions
@@ -403,6 +405,8 @@ function sh2peaks_execute(
 
 
 /**
+ * sh2peaks
+ *
  * Extract the peaks of a spherical harmonic function in each voxel.
  *
  * Peaks of the spherical harmonic function in each voxel are located by commencing a Newton search along each of a set of pre-specified directions

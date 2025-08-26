@@ -224,6 +224,8 @@ function metric_stats_outputs(
 
 
 /**
+ * metric-stats
+ *
  * Spatial statistics on a metric file.
  *
  * For each column of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -reduce or -percentile must be specified.
@@ -272,6 +274,8 @@ function metric_stats_execute(
 
 
 /**
+ * metric-stats
+ *
  * Spatial statistics on a metric file.
  *
  * For each column of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -reduce or -percentile must be specified.

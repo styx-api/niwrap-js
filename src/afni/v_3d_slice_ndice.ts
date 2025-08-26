@@ -174,6 +174,8 @@ function v_3d_slice_ndice_outputs(
 
 
 /**
+ * 3dSliceNDice
+ *
  * Calculates the Dice coefficient between two volumes on a slice-by-slice basis.
  *
  * Author: AFNI Developers
@@ -200,6 +202,8 @@ function v_3d_slice_ndice_execute(
 
 
 /**
+ * 3dSliceNDice
+ *
  * Calculates the Dice coefficient between two volumes on a slice-by-slice basis.
  *
  * Author: AFNI Developers

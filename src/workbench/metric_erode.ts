@@ -178,6 +178,8 @@ function metric_erode_outputs(
 
 
 /**
+ * metric-erode
+ *
  * Erode a metric file.
  *
  * Around each vertex with a value of zero, set surrounding vertices to zero.  The surrounding vertices are all immediate neighbors and all vertices within the specified distance.
@@ -208,6 +210,8 @@ function metric_erode_execute(
 
 
 /**
+ * metric-erode
+ *
  * Erode a metric file.
  *
  * Around each vertex with a value of zero, set surrounding vertices to zero.  The surrounding vertices are all immediate neighbors and all vertices within the specified distance.

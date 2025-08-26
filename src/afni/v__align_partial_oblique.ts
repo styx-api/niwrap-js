@@ -211,6 +211,8 @@ function v__align_partial_oblique_outputs(
 
 
 /**
+ * @align_partial_oblique
+ *
  * A script to align a full coverage T1 weighted non-oblique dataset to match a partial coverage T1 weighted non-oblique dataset. Alignment is done with a rotation and shift (6 parameters) transform only.
  *
  * Author: AFNI Developers
@@ -237,6 +239,8 @@ function v__align_partial_oblique_execute(
 
 
 /**
+ * @align_partial_oblique
+ *
  * A script to align a full coverage T1 weighted non-oblique dataset to match a partial coverage T1 weighted non-oblique dataset. Alignment is done with a rotation and shift (6 parameters) transform only.
  *
  * Author: AFNI Developers

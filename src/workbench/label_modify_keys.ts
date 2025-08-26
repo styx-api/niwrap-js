@@ -149,6 +149,8 @@ function label_modify_keys_outputs(
 
 
 /**
+ * label-modify-keys
+ *
  * Change key values in a label file.
  *
  * <remap-file> should have lines of the form 'oldkey newkey', like so:
@@ -183,6 +185,8 @@ function label_modify_keys_execute(
 
 
 /**
+ * label-modify-keys
+ *
  * Change key values in a label file.
  *
  * <remap-file> should have lines of the form 'oldkey newkey', like so:

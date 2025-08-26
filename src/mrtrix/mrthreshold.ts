@@ -354,6 +354,8 @@ function mrthreshold_outputs(
 
 
 /**
+ * mrthreshold
+ *
  * Create bitwise image by thresholding image intensity.
  *
  * The threshold value to be applied can be determined in one of a number of ways:
@@ -399,6 +401,8 @@ function mrthreshold_execute(
 
 
 /**
+ * mrthreshold
+ *
  * Create bitwise image by thresholding image intensity.
  *
  * The threshold value to be applied can be determined in one of a number of ways:

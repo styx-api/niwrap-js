@@ -148,6 +148,8 @@ function mris_multiscale_stats_outputs(
 
 
 /**
+ * mris_multiscale_stats
+ *
  * Compute the autocorrelation function of a curvature file using multiscale statistical techniques.
  *
  * Author: FreeSurfer Developers
@@ -174,6 +176,8 @@ function mris_multiscale_stats_execute(
 
 
 /**
+ * mris_multiscale_stats
+ *
  * Compute the autocorrelation function of a curvature file using multiscale statistical techniques.
  *
  * Author: FreeSurfer Developers

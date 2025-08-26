@@ -167,6 +167,8 @@ function mri_brainvol_stats_outputs(
 
 
 /**
+ * mri_brainvol_stats
+ *
  * Tool for computing brain volume statistics with FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -193,6 +195,8 @@ function mri_brainvol_stats_execute(
 
 
 /**
+ * mri_brainvol_stats
+ *
  * Tool for computing brain volume statistics with FreeSurfer.
  *
  * Author: FreeSurfer Developers

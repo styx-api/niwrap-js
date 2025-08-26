@@ -513,6 +513,8 @@ function mri_fwhm_outputs(
 
 
 /**
+ * mri_fwhm
+ *
  * FreeSurfer program to estimate the global Gaussian smoothness of a multi-frame, volume-based data set.
  *
  * Author: FreeSurfer Developers
@@ -539,6 +541,8 @@ function mri_fwhm_execute(
 
 
 /**
+ * mri_fwhm
+ *
  * FreeSurfer program to estimate the global Gaussian smoothness of a multi-frame, volume-based data set.
  *
  * Author: FreeSurfer Developers

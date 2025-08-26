@@ -174,6 +174,8 @@ function v_3d_tcat_outputs(
 
 
 /**
+ * 3dTcat
+ *
  * Concatenate sub-bricks from input datasets into one big 3D+time dataset.
  * TODO Replace InputMultiPath in_files with Traits.List, if possible. Current version adds extra whitespace.
  *
@@ -201,6 +203,8 @@ function v_3d_tcat_execute(
 
 
 /**
+ * 3dTcat
+ *
  * Concatenate sub-bricks from input datasets into one big 3D+time dataset.
  * TODO Replace InputMultiPath in_files with Traits.List, if possible. Current version adds extra whitespace.
  *

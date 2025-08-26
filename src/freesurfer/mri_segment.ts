@@ -470,6 +470,8 @@ function mri_segment_outputs(
 
 
 /**
+ * mri_segment
+ *
  * Segments white matter from the input volume.
  *
  * Author: FreeSurfer Developers
@@ -496,6 +498,8 @@ function mri_segment_execute(
 
 
 /**
+ * mri_segment
+ *
  * Segments white matter from the input volume.
  *
  * Author: FreeSurfer Developers

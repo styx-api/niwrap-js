@@ -412,6 +412,8 @@ function cluster_outputs(
 
 
 /**
+ * cluster
+ *
  * Uses FSL cluster to perform clustering on statistical output.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -438,6 +440,8 @@ function cluster_execute(
 
 
 /**
+ * cluster
+ *
  * Uses FSL cluster to perform clustering on statistical output.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -139,6 +139,8 @@ function cifti_label_probability_outputs(
 
 
 /**
+ * cifti-label-probability
+ *
  * Find frequency of cifti labels.
  *
  * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that vertex/voxel, divided by the number of input maps.
@@ -167,6 +169,8 @@ function cifti_label_probability_execute(
 
 
 /**
+ * cifti-label-probability
+ *
  * Find frequency of cifti labels.
  *
  * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that vertex/voxel, divided by the number of input maps.

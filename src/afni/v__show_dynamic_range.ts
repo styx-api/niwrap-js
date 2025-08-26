@@ -131,6 +131,8 @@ function v__show_dynamic_range_outputs(
 
 
 /**
+ * @ShowDynamicRange
+ *
  * The script checks the dynamic range of the time series data at locations inside the brain.
  *
  * Author: AFNI Developers
@@ -157,6 +159,8 @@ function v__show_dynamic_range_execute(
 
 
 /**
+ * @ShowDynamicRange
+ *
  * The script checks the dynamic range of the time series data at locations inside the brain.
  *
  * Author: AFNI Developers

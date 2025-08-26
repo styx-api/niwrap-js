@@ -144,6 +144,8 @@ function ants_denoise_image_fs_outputs(
 
 
 /**
+ * AntsDenoiseImageFs
+ *
  * Denoises an image with a spatially adaptive filter. This program wraps the AntsDenoiseImage utility available in the ANTs package.
  *
  * Author: FreeSurfer Developers
@@ -170,6 +172,8 @@ function ants_denoise_image_fs_execute(
 
 
 /**
+ * AntsDenoiseImageFs
+ *
  * Denoises an image with a spatially adaptive filter. This program wraps the AntsDenoiseImage utility available in the ANTs package.
  *
  * Author: FreeSurfer Developers

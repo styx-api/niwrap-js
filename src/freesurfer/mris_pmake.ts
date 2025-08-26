@@ -253,6 +253,8 @@ function mris_pmake_outputs(
 
 
 /**
+ * mris_pmake
+ *
  * Calculates paths and related costs on FreeSurfer surfaces based on an edge cost and Dijkstra's algorithm.
  *
  * Author: FreeSurfer Developers
@@ -279,6 +281,8 @@ function mris_pmake_execute(
 
 
 /**
+ * mris_pmake
+ *
  * Calculates paths and related costs on FreeSurfer surfaces based on an edge cost and Dijkstra's algorithm.
  *
  * Author: FreeSurfer Developers

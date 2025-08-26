@@ -120,6 +120,8 @@ function fslinfo_outputs(
 
 
 /**
+ * fslinfo
+ *
  * Display information about NIFTI-1 image file.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -146,6 +148,8 @@ function fslinfo_execute(
 
 
 /**
+ * fslinfo
+ *
  * Display information about NIFTI-1 image file.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -120,6 +120,8 @@ function tal_qc_azs_outputs(
 
 
 /**
+ * tal_QC_AZS
+ *
  * A tool that processes a logfile.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function tal_qc_azs_execute(
 
 
 /**
+ * tal_QC_AZS
+ *
  * A tool that processes a logfile.
  *
  * Author: FreeSurfer Developers

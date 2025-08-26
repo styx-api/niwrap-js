@@ -244,6 +244,8 @@ function shbasis_outputs(
 
 
 /**
+ * shbasis
+ *
  * Examine the values in spherical harmonic images to estimate (and optionally change) the SH basis used.
  *
  * In previous versions of MRtrix, the convention used for storing spherical harmonic coefficients was a non-orthonormal basis (the m!=0 coefficients were a factor of sqrt(2) too large). This error has been rectified in newer versions of MRtrix, but will cause issues if processing SH data that was generated using an older version of MRtrix (or vice-versa).
@@ -283,6 +285,8 @@ function shbasis_execute(
 
 
 /**
+ * shbasis
+ *
  * Examine the values in spherical harmonic images to estimate (and optionally change) the SH basis used.
  *
  * In previous versions of MRtrix, the convention used for storing spherical harmonic coefficients was a non-orthonormal basis (the m!=0 coefficients were a factor of sqrt(2) too large). This error has been rectified in newer versions of MRtrix, but will cause issues if processing SH data that was generated using an older version of MRtrix (or vice-versa).

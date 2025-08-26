@@ -130,6 +130,8 @@ function mri_linear_align_outputs(
 
 
 /**
+ * mri_linear_align
+ *
  * MRI Linear Alignment Tool for Freesurfer.
  *
  * Author: FreeSurfer Developers
@@ -156,6 +158,8 @@ function mri_linear_align_execute(
 
 
 /**
+ * mri_linear_align
+ *
  * MRI Linear Alignment Tool for Freesurfer.
  *
  * Author: FreeSurfer Developers

@@ -440,6 +440,8 @@ function ants_atropos_n4_sh_outputs(
 
 
 /**
+ * antsAtroposN4.sh
+ *
  * antsAtroposN4.sh iterates between N4 <-> Atropos to improve segmentation results.
  *
  * Author: ANTs Developers
@@ -466,6 +468,8 @@ function ants_atropos_n4_sh_execute(
 
 
 /**
+ * antsAtroposN4.sh
+ *
  * antsAtroposN4.sh iterates between N4 <-> Atropos to improve segmentation results.
  *
  * Author: ANTs Developers

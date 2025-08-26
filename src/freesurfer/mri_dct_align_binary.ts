@@ -136,6 +136,8 @@ function mri_dct_align_binary_outputs(
 
 
 /**
+ * mri_dct_align_binary
+ *
  * A binary tool for aligning MRI images using DCT.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_dct_align_binary_execute(
 
 
 /**
+ * mri_dct_align_binary
+ *
  * A binary tool for aligning MRI images using DCT.
  *
  * Author: FreeSurfer Developers

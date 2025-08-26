@@ -205,6 +205,8 @@ function metric_estimate_fwhm_outputs(
 
 
 /**
+ * metric-estimate-fwhm
+ *
  * Estimate fwhm smoothness of a metric file.
  *
  * Estimates the smoothness of the metric columns, printing the estimates to standard output.  These estimates ignore variation in vertex spacing.
@@ -233,6 +235,8 @@ function metric_estimate_fwhm_execute(
 
 
 /**
+ * metric-estimate-fwhm
+ *
  * Estimate fwhm smoothness of a metric file.
  *
  * Estimates the smoothness of the metric columns, printing the estimates to standard output.  These estimates ignore variation in vertex spacing.

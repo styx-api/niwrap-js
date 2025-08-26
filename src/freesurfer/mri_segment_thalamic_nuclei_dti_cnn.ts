@@ -230,6 +230,8 @@ function mri_segment_thalamic_nuclei_dti_cnn_outputs(
 
 
 /**
+ * mri_segment_thalamic_nuclei_dti_cnn
+ *
  * Thalamic segmentation tool providing 0.7mm isotropic thalamus segmentation from registered T1, FA, and V1 volumes.
  *
  * Author: FreeSurfer Developers
@@ -256,6 +258,8 @@ function mri_segment_thalamic_nuclei_dti_cnn_execute(
 
 
 /**
+ * mri_segment_thalamic_nuclei_dti_cnn
+ *
  * Thalamic segmentation tool providing 0.7mm isotropic thalamus segmentation from registered T1, FA, and V1 volumes.
  *
  * Author: FreeSurfer Developers

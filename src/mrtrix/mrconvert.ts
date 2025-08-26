@@ -1141,6 +1141,8 @@ function mrconvert_outputs(
 
 
 /**
+ * mrconvert
+ *
  * Perform conversion between different file types and optionally extract a subset of the input image.
  *
  * If used correctly, this program can be a very useful workhorse. In addition to converting images between different formats, it can be used to extract specific studies from a data set, extract a specific region of interest, or flip the images. Some of the possible operations are described in more detail below.
@@ -1185,6 +1187,8 @@ function mrconvert_execute(
 
 
 /**
+ * mrconvert
+ *
  * Perform conversion between different file types and optionally extract a subset of the input image.
  *
  * If used correctly, this program can be a very useful workhorse. In addition to converting images between different formats, it can be used to extract specific studies from a data set, extract a specific region of interest, or flip the images. Some of the possible operations are described in more detail below.

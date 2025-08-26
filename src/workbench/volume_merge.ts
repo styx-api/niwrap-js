@@ -293,6 +293,8 @@ function volume_merge_outputs(
 
 
 /**
+ * volume-merge
+ *
  * Merge volume files into a new file.
  *
  * Takes one or more volume files and constructs a new volume file by concatenating subvolumes from them.  The input volume files must have the same volume space.
@@ -325,6 +327,8 @@ function volume_merge_execute(
 
 
 /**
+ * volume-merge
+ *
  * Merge volume files into a new file.
  *
  * Takes one or more volume files and constructs a new volume file by concatenating subvolumes from them.  The input volume files must have the same volume space.

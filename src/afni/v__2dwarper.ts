@@ -126,6 +126,8 @@ function v__2dwarper_outputs(
 
 
 /**
+ * @2dwarper
+ *
  * 2D image warping tool.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v__2dwarper_execute(
 
 
 /**
+ * @2dwarper
+ *
  * 2D image warping tool.
  *
  * Author: AFNI Developers

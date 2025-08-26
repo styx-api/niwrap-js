@@ -435,6 +435,8 @@ function sh2amp_outputs(
 
 
 /**
+ * sh2amp
+ *
  * Evaluate the amplitude of an image of spherical harmonic functions along specified directions.
  *
  * The input image should consist of a 4D or 5D image, with SH coefficients along the 4th dimension according to the convention below. If 4D (or size 1 along the 5th dimension), the program expects to be provided with a single shell of directions. If 5D, each set of coefficients along the 5th dimension is understood to correspond to a different shell.
@@ -480,6 +482,8 @@ function sh2amp_execute(
 
 
 /**
+ * sh2amp
+ *
  * Evaluate the amplitude of an image of spherical harmonic functions along specified directions.
  *
  * The input image should consist of a 4D or 5D image, with SH coefficients along the 4th dimension according to the convention below. If 4D (or size 1 along the 5th dimension), the program expects to be provided with a single shell of directions. If 5D, each set of coefficients along the 5th dimension is understood to correspond to a different shell.

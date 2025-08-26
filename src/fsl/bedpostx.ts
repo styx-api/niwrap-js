@@ -210,6 +210,8 @@ function bedpostx_outputs(
 
 
 /**
+ * bedpostx
+ *
  * Bayesian Estimation of Diffusion Parameters Obtained using Sampling Techniques (BEDPOST) for modeling multiple fibers per voxel.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -236,6 +238,8 @@ function bedpostx_execute(
 
 
 /**
+ * bedpostx
+ *
  * Bayesian Estimation of Diffusion Parameters Obtained using Sampling Techniques (BEDPOST) for modeling multiple fibers per voxel.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -190,6 +190,8 @@ function trk_tools_outputs(
 
 
 /**
+ * trk_tools
+ *
  * Tool for processing TRK files.
  *
  * Author: FreeSurfer Developers
@@ -216,6 +218,8 @@ function trk_tools_execute(
 
 
 /**
+ * trk_tools
+ *
  * Tool for processing TRK files.
  *
  * Author: FreeSurfer Developers

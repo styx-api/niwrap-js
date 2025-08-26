@@ -141,6 +141,8 @@ function tbss_2_reg_outputs(
 
 
 /**
+ * tbss_2_reg
+ *
  * TBSS utility for target selection and registration for Tract-Based Spatial Statistics (TBSS) analysis.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -167,6 +169,8 @@ function tbss_2_reg_execute(
 
 
 /**
+ * tbss_2_reg
+ *
  * TBSS utility for target selection and registration for Tract-Based Spatial Statistics (TBSS) analysis.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -243,6 +243,8 @@ function peaks2amp_outputs(
 
 
 /**
+ * peaks2amp
+ *
  * Extract amplitudes from a peak directions image.
  *
  *
@@ -275,6 +277,8 @@ function peaks2amp_execute(
 
 
 /**
+ * peaks2amp
+ *
  * Extract amplitudes from a peak directions image.
  *
  *

@@ -228,6 +228,8 @@ function v__dice_metric_outputs(
 
 
 /**
+ * @DiceMetric
+ *
  * Computes Dice Metric between BASE and each of the DSET volumes.
  *
  * Author: AFNI Developers
@@ -254,6 +256,8 @@ function v__dice_metric_execute(
 
 
 /**
+ * @DiceMetric
+ *
  * Computes Dice Metric between BASE and each of the DSET volumes.
  *
  * Author: AFNI Developers

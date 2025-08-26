@@ -278,6 +278,8 @@ function v_3d_allineate_outputs(
 
 
 /**
+ * 3dAllineate
+ *
  * Program to align one dataset (the 'source') to a 'base' dataset using an affine (matrix) transformation of space.
  *
  * Author: AFNI Developers
@@ -304,6 +306,8 @@ function v_3d_allineate_execute(
 
 
 /**
+ * 3dAllineate
+ *
  * Program to align one dataset (the 'source') to a 'base' dataset using an affine (matrix) transformation of space.
  *
  * Author: AFNI Developers

@@ -137,6 +137,8 @@ function cifti_all_labels_to_rois_outputs(
 
 
 /**
+ * cifti-all-labels-to-rois
+ *
  * Make rois from all labels in a cifti label map.
  *
  * The output cifti file is a dscalar file with a column (map) for each label in the specified input map, other than the ??? label, each of which contains a binary ROI of all brainordinates that are set to the corresponding label.
@@ -167,6 +169,8 @@ function cifti_all_labels_to_rois_execute(
 
 
 /**
+ * cifti-all-labels-to-rois
+ *
  * Make rois from all labels in a cifti label map.
  *
  * The output cifti file is a dscalar file with a column (map) for each label in the specified input map, other than the ??? label, each of which contains a binary ROI of all brainordinates that are set to the corresponding label.

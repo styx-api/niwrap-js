@@ -131,6 +131,8 @@ function volume_label_export_table_outputs(
 
 
 /**
+ * volume-label-export-table
+ *
  * Export label table from volume as text.
  *
  * Takes the label table from the volume label map, and writes it to a text format matching what is expected by -volume-label-import.
@@ -159,6 +161,8 @@ function volume_label_export_table_execute(
 
 
 /**
+ * volume-label-export-table
+ *
  * Export label table from volume as text.
  *
  * Takes the label table from the volume label map, and writes it to a text format matching what is expected by -volume-label-import.

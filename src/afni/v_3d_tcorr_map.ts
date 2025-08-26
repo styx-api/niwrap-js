@@ -302,6 +302,8 @@ function v_3d_tcorr_map_outputs(
 
 
 /**
+ * 3dTcorrMap
+ *
  * AFNI program to compute correlation maps of input time series data.
  *
  * Author: AFNI Developers
@@ -328,6 +330,8 @@ function v_3d_tcorr_map_execute(
 
 
 /**
+ * 3dTcorrMap
+ *
  * AFNI program to compute correlation maps of input time series data.
  *
  * Author: AFNI Developers

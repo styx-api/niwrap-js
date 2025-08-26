@@ -140,6 +140,8 @@ function mri_make_bem_surfaces_outputs(
 
 
 /**
+ * mri_make_bem_surfaces
+ *
  * Tool to create Boundary Element Method (BEM) surfaces.
  *
  * Author: FreeSurfer Developers
@@ -166,6 +168,8 @@ function mri_make_bem_surfaces_execute(
 
 
 /**
+ * mri_make_bem_surfaces
+ *
  * Tool to create Boundary Element Method (BEM) surfaces.
  *
  * Author: FreeSurfer Developers

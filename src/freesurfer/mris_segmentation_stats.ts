@@ -141,6 +141,8 @@ function mris_segmentation_stats_outputs(
 
 
 /**
+ * mris_segmentation_stats
+ *
  * Tool for calculating segmentation statistics.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mris_segmentation_stats_execute(
 
 
 /**
+ * mris_segmentation_stats
+ *
  * Tool for calculating segmentation statistics.
  *
  * Author: FreeSurfer Developers

@@ -237,6 +237,8 @@ function pctsurfcon_outputs(
 
 
 /**
+ * pctsurfcon
+ *
  * Compute surface-wise gray/white matter contrast.
  *
  * Author: FreeSurfer Developers
@@ -263,6 +265,8 @@ function pctsurfcon_execute(
 
 
 /**
+ * pctsurfcon
+ *
  * Compute surface-wise gray/white matter contrast.
  *
  * Author: FreeSurfer Developers

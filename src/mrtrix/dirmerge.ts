@@ -260,6 +260,8 @@ function dirmerge_outputs(
 
 
 /**
+ * dirmerge
+ *
  * Splice / merge multiple sets of directions in such a way as to maintain near-optimality upon truncation.
  *
  *
@@ -292,6 +294,8 @@ function dirmerge_execute(
 
 
 /**
+ * dirmerge
+ *
  * Splice / merge multiple sets of directions in such a way as to maintain near-optimality upon truncation.
  *
  *

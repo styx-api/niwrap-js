@@ -469,6 +469,8 @@ function swe_outputs(
 
 
 /**
+ * swe
+ *
  * SwE (summary statistics and voxelwise statistical analyses tool for FSL).
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -495,6 +497,8 @@ function swe_execute(
 
 
 /**
+ * swe
+ *
  * SwE (summary statistics and voxelwise statistical analyses tool for FSL).
  *
  * Author: FMRIB Analysis Group, University of Oxford

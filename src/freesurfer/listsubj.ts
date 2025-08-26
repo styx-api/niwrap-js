@@ -183,6 +183,8 @@ function listsubj_outputs(
 
 
 /**
+ * listsubj
+ *
  * List subject IDs in SUBJECT_DIR.
  *
  * Author: FreeSurfer Developers
@@ -209,6 +211,8 @@ function listsubj_execute(
 
 
 /**
+ * listsubj
+ *
  * List subject IDs in SUBJECT_DIR.
  *
  * Author: FreeSurfer Developers

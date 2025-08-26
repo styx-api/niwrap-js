@@ -211,6 +211,8 @@ function v_3d_toutcount_outputs(
 
 
 /**
+ * 3dToutcount
+ *
  * Calculates the number of 'outliers' in a 3D+time dataset at each time point.
  *
  * Author: AFNI Developers
@@ -237,6 +239,8 @@ function v_3d_toutcount_execute(
 
 
 /**
+ * 3dToutcount
+ *
  * Calculates the number of 'outliers' in a 3D+time dataset at each time point.
  *
  * Author: AFNI Developers

@@ -120,6 +120,8 @@ function morph_subject_outputs(
 
 
 /**
+ * morph_subject
+ *
  * A morphological processing tool for Freesurfer subjects. The specific operations and options are not documented in the available help text.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function morph_subject_execute(
 
 
 /**
+ * morph_subject
+ *
  * A morphological processing tool for Freesurfer subjects. The specific operations and options are not documented in the available help text.
  *
  * Author: FreeSurfer Developers

@@ -126,6 +126,8 @@ function create_lut_outputs(
 
 
 /**
+ * create_lut
+ *
  * A tool to create lookup tables.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -152,6 +154,8 @@ function create_lut_execute(
 
 
 /**
+ * create_lut
+ *
  * A tool to create lookup tables.
  *
  * Author: FMRIB Analysis Group, University of Oxford

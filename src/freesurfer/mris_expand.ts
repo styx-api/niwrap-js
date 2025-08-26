@@ -179,6 +179,8 @@ function mris_expand_outputs(
 
 
 /**
+ * mris_expand
+ *
  * Expand a given surface by a specified distance.
  *
  * Author: FreeSurfer Developers
@@ -205,6 +207,8 @@ function mris_expand_execute(
 
 
 /**
+ * mris_expand
+ *
  * Expand a given surface by a specified distance.
  *
  * Author: FreeSurfer Developers

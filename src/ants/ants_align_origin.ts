@@ -157,6 +157,8 @@ function ants_align_origin_outputs(
 
 
 /**
+ * antsAlignOrigin
+ *
  * antsAlignOrigin, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms).
  *
  * Author: ANTs Developers
@@ -183,6 +185,8 @@ function ants_align_origin_execute(
 
 
 /**
+ * antsAlignOrigin
+ *
  * antsAlignOrigin, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms).
  *
  * Author: ANTs Developers

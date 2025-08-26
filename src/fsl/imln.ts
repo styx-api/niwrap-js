@@ -131,6 +131,8 @@ function imln_outputs(
 
 
 /**
+ * imln
+ *
  * Creates a link (called file2) to file1.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function imln_execute(
 
 
 /**
+ * imln
+ *
  * Creates a link (called file2) to file1.
  *
  * Author: FMRIB Analysis Group, University of Oxford

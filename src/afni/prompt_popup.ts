@@ -183,6 +183,8 @@ function prompt_popup_outputs(
 
 
 /**
+ * prompt_popup
+ *
  * A command-line tool that pops up a window prompting user interaction with a message and buttons.
  *
  * Author: AFNI Developers
@@ -209,6 +211,8 @@ function prompt_popup_execute(
 
 
 /**
+ * prompt_popup
+ *
  * A command-line tool that pops up a window prompting user interaction with a message and buttons.
  *
  * Author: AFNI Developers

@@ -421,6 +421,8 @@ function scale_to_map_outputs(
 
 
 /**
+ * ScaleToMap
+ *
  * Tool to scale values to a color map.
  *
  * Author: AFNI Developers
@@ -447,6 +449,8 @@ function scale_to_map_execute(
 
 
 /**
+ * ScaleToMap
+ *
  * Tool to scale values to a color map.
  *
  * Author: AFNI Developers

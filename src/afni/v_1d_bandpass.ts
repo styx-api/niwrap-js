@@ -168,6 +168,8 @@ function v_1d_bandpass_outputs(
 
 
 /**
+ * 1dBandpass
+ *
  * Bandpass filtering of time series data in AFNI *.1D files.
  *
  * Author: AFNI Developers
@@ -194,6 +196,8 @@ function v_1d_bandpass_execute(
 
 
 /**
+ * 1dBandpass
+ *
  * Bandpass filtering of time series data in AFNI *.1D files.
  *
  * Author: AFNI Developers

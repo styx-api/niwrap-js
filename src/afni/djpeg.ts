@@ -171,6 +171,8 @@ function djpeg_outputs(
 
 
 /**
+ * djpeg
+ *
  * Decompress a JPEG file to an image file.
  *
  * Author: AFNI Developers
@@ -197,6 +199,8 @@ function djpeg_execute(
 
 
 /**
+ * djpeg
+ *
  * Decompress a JPEG file to an image file.
  *
  * Author: AFNI Developers

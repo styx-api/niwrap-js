@@ -166,6 +166,8 @@ function fs_time_outputs(
 
 
 /**
+ * fs_time
+ *
  * A frontend for the unix /usr/bin/time program to track resource usage by a process.
  *
  * Author: FreeSurfer Developers
@@ -192,6 +194,8 @@ function fs_time_execute(
 
 
 /**
+ * fs_time
+ *
  * A frontend for the unix /usr/bin/time program to track resource usage by a process.
  *
  * Author: FreeSurfer Developers

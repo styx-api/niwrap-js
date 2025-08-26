@@ -160,6 +160,8 @@ function imrotate_outputs(
 
 
 /**
+ * imrotate
+ *
  * Shifts and rotates an image.
  *
  * Author: AFNI Developers
@@ -186,6 +188,8 @@ function imrotate_execute(
 
 
 /**
+ * imrotate
+ *
  * Shifts and rotates an image.
  *
  * Author: AFNI Developers

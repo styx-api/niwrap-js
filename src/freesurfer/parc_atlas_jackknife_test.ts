@@ -235,6 +235,8 @@ function parc_atlas_jackknife_test_outputs(
 
 
 /**
+ * parc_atlas_jackknife_test
+ *
  * Tool for conducting a jackknife accuracy test using FreeSurfer atlases.
  *
  * Author: FreeSurfer Developers
@@ -261,6 +263,8 @@ function parc_atlas_jackknife_test_execute(
 
 
 /**
+ * parc_atlas_jackknife_test
+ *
  * Tool for conducting a jackknife accuracy test using FreeSurfer atlases.
  *
  * Author: FreeSurfer Developers

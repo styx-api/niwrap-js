@@ -234,6 +234,8 @@ function dmri_motion_outputs(
 
 
 /**
+ * dmri_motion
+ *
  * A tool for calculating motion measures from DWI scans.
  *
  * Author: FreeSurfer Developers
@@ -260,6 +262,8 @@ function dmri_motion_execute(
 
 
 /**
+ * dmri_motion
+ *
  * A tool for calculating motion measures from DWI scans.
  *
  * Author: FreeSurfer Developers

@@ -136,6 +136,8 @@ function morph_tables_lh_outputs(
 
 
 /**
+ * morph_tables-lh
+ *
  * Morphological analysis tool for left hemisphere in Freesurfer.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function morph_tables_lh_execute(
 
 
 /**
+ * morph_tables-lh
+ *
  * Morphological analysis tool for left hemisphere in Freesurfer.
  *
  * Author: FreeSurfer Developers

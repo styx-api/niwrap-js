@@ -330,6 +330,8 @@ function v_1d_rplot_outputs(
 
 
 /**
+ * 1dRplot
+ *
  * Program for plotting a 1D file.
  *
  * Author: AFNI Developers
@@ -356,6 +358,8 @@ function v_1d_rplot_execute(
 
 
 /**
+ * 1dRplot
+ *
  * Program for plotting a 1D file.
  *
  * Author: AFNI Developers

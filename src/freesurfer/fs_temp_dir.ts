@@ -140,6 +140,8 @@ function fs_temp_dir_outputs(
 
 
 /**
+ * fs_temp_dir
+ *
  * Generates and creates an empty temporary directory.
  *
  * Author: FreeSurfer Developers
@@ -166,6 +168,8 @@ function fs_temp_dir_execute(
 
 
 /**
+ * fs_temp_dir
+ *
  * Generates and creates an empty temporary directory.
  *
  * Author: FreeSurfer Developers

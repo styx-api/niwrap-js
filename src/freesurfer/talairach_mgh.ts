@@ -131,6 +131,8 @@ function talairach_mgh_outputs(
 
 
 /**
+ * talairach_mgh
+ *
  * A tool for aligning brain volume with Talairach reference brain.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function talairach_mgh_execute(
 
 
 /**
+ * talairach_mgh
+ *
  * A tool for aligning brain volume with Talairach reference brain.
  *
  * Author: FreeSurfer Developers

@@ -532,6 +532,8 @@ function dmri_paths_outputs(
 
 
 /**
+ * dmri_paths
+ *
  * Tool for diffusion MRI path analysis.
  *
  * Author: FreeSurfer Developers
@@ -558,6 +560,8 @@ function dmri_paths_execute(
 
 
 /**
+ * dmri_paths
+ *
  * Tool for diffusion MRI path analysis.
  *
  * Author: FreeSurfer Developers

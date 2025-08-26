@@ -211,6 +211,8 @@ function afni_proc_py_outputs(
 
 
 /**
+ * afni_proc.py
+ *
  * Generate a tcsh script for an AFNI single subject processing stream.
  *
  * Author: AFNI Developers
@@ -237,6 +239,8 @@ function afni_proc_py_execute(
 
 
 /**
+ * afni_proc.py
+ *
  * Generate a tcsh script for an AFNI single subject processing stream.
  *
  * Author: AFNI Developers

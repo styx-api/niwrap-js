@@ -179,6 +179,8 @@ function wbsparse_merge_dense_outputs(
 
 
 /**
+ * wbsparse-merge-dense
+ *
  * Merge wbsparse files along dense dimension.
  *
  * The input wbsparse files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
@@ -207,6 +209,8 @@ function wbsparse_merge_dense_execute(
 
 
 /**
+ * wbsparse-merge-dense
+ *
  * Merge wbsparse files along dense dimension.
  *
  * The input wbsparse files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.

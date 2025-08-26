@@ -384,6 +384,8 @@ function mri_diff_outputs(
 
 
 /**
+ * mri_diff
+ *
  * Determines whether two volumes differ based on dimensions, resolutions, acquisition parameters, geometry, precision, and pixel data.
  *
  * Author: FreeSurfer Developers
@@ -410,6 +412,8 @@ function mri_diff_execute(
 
 
 /**
+ * mri_diff
+ *
  * Determines whether two volumes differ based on dimensions, resolutions, acquisition parameters, geometry, precision, and pixel data.
  *
  * Author: FreeSurfer Developers

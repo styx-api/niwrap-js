@@ -122,6 +122,8 @@ function adjunct_calc_mont_dims_py_outputs(
 
 
 /**
+ * adjunct_calc_mont_dims.py
+ *
  * A helper function for the fat_proc* scripts.
  *
  * Author: AFNI Developers
@@ -148,6 +150,8 @@ function adjunct_calc_mont_dims_py_execute(
 
 
 /**
+ * adjunct_calc_mont_dims.py
+ *
  * A helper function for the fat_proc* scripts.
  *
  * Author: AFNI Developers

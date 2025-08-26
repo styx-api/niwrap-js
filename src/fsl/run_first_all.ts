@@ -201,6 +201,8 @@ function run_first_all_outputs(
 
 
 /**
+ * run_first_all
+ *
  * FIRST - FMRIB's Integrated Registration and Segmentation Tool for subcortical brain structures.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -227,6 +229,8 @@ function run_first_all_execute(
 
 
 /**
+ * run_first_all
+ *
  * FIRST - FMRIB's Integrated Registration and Segmentation Tool for subcortical brain structures.
  *
  * Author: FMRIB Analysis Group, University of Oxford

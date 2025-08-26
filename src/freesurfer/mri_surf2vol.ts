@@ -440,6 +440,8 @@ function mri_surf2vol_outputs(
 
 
 /**
+ * mri_surf2vol
+ *
  * Resamples a surface into a volume using one of two methods.
  *
  * Author: FreeSurfer Developers
@@ -466,6 +468,8 @@ function mri_surf2vol_execute(
 
 
 /**
+ * mri_surf2vol
+ *
  * Resamples a surface into a volume using one of two methods.
  *
  * Author: FreeSurfer Developers

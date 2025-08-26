@@ -165,6 +165,8 @@ function mris_transmantle_dysplasia_paths_outputs(
 
 
 /**
+ * mris_transmantle_dysplasia_paths
+ *
  * Tool for transmantle dysplasia path computation.
  *
  * Author: FreeSurfer Developers
@@ -191,6 +193,8 @@ function mris_transmantle_dysplasia_paths_execute(
 
 
 /**
+ * mris_transmantle_dysplasia_paths
+ *
  * Tool for transmantle dysplasia path computation.
  *
  * Author: FreeSurfer Developers

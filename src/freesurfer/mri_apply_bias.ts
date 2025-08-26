@@ -136,6 +136,8 @@ function mri_apply_bias_outputs(
 
 
 /**
+ * mri_apply_bias
+ *
  * A tool for applying a bias volume to an input volume to produce an output volume.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_apply_bias_execute(
 
 
 /**
+ * mri_apply_bias
+ *
  * A tool for applying a bias volume to an input volume to produce an output volume.
  *
  * Author: FreeSurfer Developers

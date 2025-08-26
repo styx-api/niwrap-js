@@ -196,6 +196,8 @@ function mri_synthstrip_outputs(
 
 
 /**
+ * mri_synthstrip
+ *
  * Robust, universal skull-stripping for brain images of any type.
  *
  * Author: FreeSurfer Developers
@@ -222,6 +224,8 @@ function mri_synthstrip_execute(
 
 
 /**
+ * mri_synthstrip
+ *
  * Robust, universal skull-stripping for brain images of any type.
  *
  * Author: FreeSurfer Developers

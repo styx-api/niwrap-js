@@ -187,6 +187,8 @@ function v_3dfractionize_outputs(
 
 
 /**
+ * 3dfractionize
+ *
  * For each voxel in the output dataset, computes the fraction of it that is occupied by nonzero voxels from the input.
  *
  * Author: AFNI Developers
@@ -213,6 +215,8 @@ function v_3dfractionize_execute(
 
 
 /**
+ * 3dfractionize
+ *
  * For each voxel in the output dataset, computes the fraction of it that is occupied by nonzero voxels from the input.
  *
  * Author: AFNI Developers

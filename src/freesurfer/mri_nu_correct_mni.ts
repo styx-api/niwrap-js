@@ -235,6 +235,8 @@ function mri_nu_correct_mni_outputs(
 
 
 /**
+ * mri_nu_correct.mni
+ *
  * Wrapper for nu_correct, used for correcting intensity non-uniformity (bias fields).
  *
  * Author: FreeSurfer Developers
@@ -261,6 +263,8 @@ function mri_nu_correct_mni_execute(
 
 
 /**
+ * mri_nu_correct.mni
+ *
  * Wrapper for nu_correct, used for correcting intensity non-uniformity (bias fields).
  *
  * Author: FreeSurfer Developers

@@ -205,6 +205,8 @@ function mris_inflate_outputs(
 
 
 /**
+ * mris_inflate
+ *
  * Cortical surface inflation tool.
  *
  * Author: FreeSurfer Developers
@@ -231,6 +233,8 @@ function mris_inflate_execute(
 
 
 /**
+ * mris_inflate
+ *
  * Cortical surface inflation tool.
  *
  * Author: FreeSurfer Developers

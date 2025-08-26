@@ -256,6 +256,8 @@ function v_3d_tshift_outputs(
 
 
 /**
+ * 3dTshift
+ *
  * Shifts voxel time series from input so that separate slices are aligned to the same temporal origin.
  *
  * Author: AFNI Developers
@@ -282,6 +284,8 @@ function v_3d_tshift_execute(
 
 
 /**
+ * 3dTshift
+ *
  * Shifts voxel time series from input so that separate slices are aligned to the same temporal origin.
  *
  * Author: AFNI Developers

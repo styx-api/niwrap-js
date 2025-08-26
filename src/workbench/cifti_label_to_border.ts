@@ -247,6 +247,8 @@ function cifti_label_to_border_outputs(
 
 
 /**
+ * cifti-label-to-border
+ *
  * Draw borders around cifti labels.
  *
  * For each surface, takes the labels on the matching structure and draws borders around the labels.  Use -column to only draw borders around one label map.
@@ -275,6 +277,8 @@ function cifti_label_to_border_execute(
 
 
 /**
+ * cifti-label-to-border
+ *
  * Draw borders around cifti labels.
  *
  * For each surface, takes the labels on the matching structure and draws borders around the labels.  Use -column to only draw borders around one label map.

@@ -187,6 +187,8 @@ function qatools_py_outputs(
 
 
 /**
+ * qatools.py
+ *
  * A tool to compute quality metrics from Freesurfer 6.0 analysis results.
  *
  * Author: FreeSurfer Developers
@@ -213,6 +215,8 @@ function qatools_py_execute(
 
 
 /**
+ * qatools.py
+ *
  * A tool to compute quality metrics from Freesurfer 6.0 analysis results.
  *
  * Author: FreeSurfer Developers

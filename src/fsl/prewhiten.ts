@@ -138,6 +138,8 @@ function prewhiten_outputs(
 
 
 /**
+ * prewhiten
+ *
  * Prewhitening tool for FEAT directories.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -164,6 +166,8 @@ function prewhiten_execute(
 
 
 /**
+ * prewhiten
+ *
  * Prewhitening tool for FEAT directories.
  *
  * Author: FMRIB Analysis Group, University of Oxford

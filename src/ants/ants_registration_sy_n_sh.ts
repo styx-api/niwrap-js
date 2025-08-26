@@ -324,6 +324,8 @@ function ants_registration_sy_n_sh_outputs(
 
 
 /**
+ * antsRegistrationSyN.sh
+ *
  * Script for simplified symmetric image registration using ANTs.
  *
  * Author: ANTs Developers
@@ -350,6 +352,8 @@ function ants_registration_sy_n_sh_execute(
 
 
 /**
+ * antsRegistrationSyN.sh
+ *
  * Script for simplified symmetric image registration using ANTs.
  *
  * Author: ANTs Developers

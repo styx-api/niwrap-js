@@ -126,6 +126,8 @@ function v__is_oblique_outputs(
 
 
 /**
+ * @isOblique
+ *
  * Determine if a file is oblique or plumb.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v__is_oblique_execute(
 
 
 /**
+ * @isOblique
+ *
  * Determine if a file is oblique or plumb.
  *
  * Author: AFNI Developers

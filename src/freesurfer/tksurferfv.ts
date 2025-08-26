@@ -188,6 +188,8 @@ function tksurferfv_outputs(
 
 
 /**
+ * tksurferfv
+ *
  * A script that runs freeview with arguments similar to tksurfer.
  *
  * Author: FreeSurfer Developers
@@ -214,6 +216,8 @@ function tksurferfv_execute(
 
 
 /**
+ * tksurferfv
+ *
  * A script that runs freeview with arguments similar to tksurfer.
  *
  * Author: FreeSurfer Developers

@@ -652,6 +652,8 @@ function dwi2fod_outputs(
 
 
 /**
+ * dwi2fod
+ *
  * Estimate fibre orientation distributions from diffusion data using spherical deconvolution.
  *
  * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 
@@ -691,6 +693,8 @@ function dwi2fod_execute(
 
 
 /**
+ * dwi2fod
+ *
  * Estimate fibre orientation distributions from diffusion data using spherical deconvolution.
  *
  * The spherical harmonic coefficients are stored according the conventions described the main documentation, which can be found at the following link: 

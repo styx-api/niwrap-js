@@ -125,6 +125,8 @@ function mri_strip_subject_info_outputs(
 
 
 /**
+ * mri_strip_subject_info
+ *
  * A tool to strip subject information from MRI data files.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function mri_strip_subject_info_execute(
 
 
 /**
+ * mri_strip_subject_info
+ *
  * A tool to strip subject information from MRI data files.
  *
  * Author: FreeSurfer Developers

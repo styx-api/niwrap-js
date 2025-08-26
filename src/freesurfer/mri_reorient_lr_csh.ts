@@ -172,6 +172,8 @@ function mri_reorient_lr_csh_outputs(
 
 
 /**
+ * mri_reorient_LR.csh
+ *
  * A script to reorient MRI volumes from left-right orientation.
  *
  * Author: FreeSurfer Developers
@@ -198,6 +200,8 @@ function mri_reorient_lr_csh_execute(
 
 
 /**
+ * mri_reorient_LR.csh
+ *
  * A script to reorient MRI volumes from left-right orientation.
  *
  * Author: FreeSurfer Developers

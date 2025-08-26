@@ -159,6 +159,8 @@ function resample_image_outputs(
 
 
 /**
+ * ResampleImage
+ *
  * ResampleImage is a tool used to resample images to specified sizes and spacings, using various interpolation methods and pixel types.
  *
  * Author: ANTs Developers
@@ -185,6 +187,8 @@ function resample_image_execute(
 
 
 /**
+ * ResampleImage
+ *
  * ResampleImage is a tool used to resample images to specified sizes and spacings, using various interpolation methods and pixel types.
  *
  * Author: ANTs Developers

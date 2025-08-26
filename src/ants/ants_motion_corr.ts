@@ -308,6 +308,8 @@ function ants_motion_corr_outputs(
 
 
 /**
+ * antsMotionCorr
+ *
  * ANTS Motion Correction application to perform motion correction on 4D time series data.
  *
  * Author: ANTs Developers
@@ -334,6 +336,8 @@ function ants_motion_corr_execute(
 
 
 /**
+ * antsMotionCorr
+ *
  * ANTS Motion Correction application to perform motion correction on 4D time series data.
  *
  * Author: ANTs Developers

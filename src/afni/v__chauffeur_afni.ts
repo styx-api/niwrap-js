@@ -308,6 +308,8 @@ function v__chauffeur_afni_outputs(
 
 
 /**
+ * @chauffeur_afni
+ *
  * Automated QC snapshots generator in AFNI.
  *
  * Author: AFNI Developers
@@ -334,6 +336,8 @@ function v__chauffeur_afni_execute(
 
 
 /**
+ * @chauffeur_afni
+ *
  * Automated QC snapshots generator in AFNI.
  *
  * Author: AFNI Developers

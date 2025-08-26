@@ -169,6 +169,8 @@ function v_3d_wilcoxon_outputs(
 
 
 /**
+ * 3dWilcoxon
+ *
  * Nonparametric Wilcoxon signed-rank test for paired comparisons of two samples.
  *
  * Author: AFNI Developers
@@ -195,6 +197,8 @@ function v_3d_wilcoxon_execute(
 
 
 /**
+ * 3dWilcoxon
+ *
  * Nonparametric Wilcoxon signed-rank test for paired comparisons of two samples.
  *
  * Author: AFNI Developers

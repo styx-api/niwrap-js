@@ -175,6 +175,8 @@ function metric_label_import_outputs(
 
 
 /**
+ * metric-label-import
+ *
  * Import a gifti label file from a metric file.
  *
  * Creates a gifti label file from a metric file with label-like values.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):
@@ -211,6 +213,8 @@ function metric_label_import_execute(
 
 
 /**
+ * metric-label-import
+ *
  * Import a gifti label file from a metric file.
  *
  * Creates a gifti label file from a metric file with label-like values.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):

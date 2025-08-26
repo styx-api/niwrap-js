@@ -136,6 +136,8 @@ function labels_union_outputs(
 
 
 /**
+ * labels_union
+ *
  * Utility to create the union of two label files.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function labels_union_execute(
 
 
 /**
+ * labels_union
+ *
  * Utility to create the union of two label files.
  *
  * Author: FreeSurfer Developers

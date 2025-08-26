@@ -360,6 +360,8 @@ function fslstats_outputs(
 
 
 /**
+ * fslstats
+ *
  * FSL tool for calculating statistics on image data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -386,6 +388,8 @@ function fslstats_execute(
 
 
 /**
+ * fslstats
+ *
  * FSL tool for calculating statistics on image data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

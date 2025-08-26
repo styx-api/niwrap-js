@@ -317,6 +317,8 @@ function file_convert_outputs(
 
 
 /**
+ * file-convert
+ *
  * Change version of file format.
  *
  * You may only specify one top-level option.
@@ -345,6 +347,8 @@ function file_convert_execute(
 
 
 /**
+ * file-convert
+ *
  * Change version of file format.
  *
  * You may only specify one top-level option.

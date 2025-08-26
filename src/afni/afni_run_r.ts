@@ -125,6 +125,8 @@ function afni_run_r_outputs(
 
 
 /**
+ * afni_run_R
+ *
  * Run an R script with the specified arguments.
  *
  * Author: AFNI Developers
@@ -151,6 +153,8 @@ function afni_run_r_execute(
 
 
 /**
+ * afni_run_R
+ *
  * Run an R script with the specified arguments.
  *
  * Author: AFNI Developers

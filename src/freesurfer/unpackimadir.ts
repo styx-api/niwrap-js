@@ -131,6 +131,8 @@ function unpackimadir_outputs(
 
 
 /**
+ * unpackimadir
+ *
  * Unpack image directories.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function unpackimadir_execute(
 
 
 /**
+ * unpackimadir
+ *
  * Unpack image directories.
  *
  * Author: FreeSurfer Developers

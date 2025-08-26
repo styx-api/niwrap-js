@@ -174,6 +174,8 @@ function dmri_project_end_points_outputs(
 
 
 /**
+ * dmri_projectEndPoints
+ *
  * A tool for projecting the endpoints of streamlines onto cortical surfaces, producing overlay files for visualization.
  *
  * Author: FreeSurfer Developers
@@ -200,6 +202,8 @@ function dmri_project_end_points_execute(
 
 
 /**
+ * dmri_projectEndPoints
+ *
  * A tool for projecting the endpoints of streamlines onto cortical surfaces, producing overlay files for visualization.
  *
  * Author: FreeSurfer Developers

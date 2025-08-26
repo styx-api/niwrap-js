@@ -153,6 +153,8 @@ function afni_batch_r_outputs(
 
 
 /**
+ * AFNI_Batch_R
+ *
  * Batch mode for executing R scripts in the AFNI environment.
  *
  * Author: AFNI Developers
@@ -179,6 +181,8 @@ function afni_batch_r_execute(
 
 
 /**
+ * AFNI_Batch_R
+ *
  * Batch mode for executing R scripts in the AFNI environment.
  *
  * Author: AFNI Developers

@@ -132,6 +132,8 @@ function volume_fill_holes_outputs(
 
 
 /**
+ * volume-fill-holes
+ *
  * Fill holes in an roi volume.
  *
  * Finds all face-connected parts that are not included in the ROI, and fills all but the largest one with ones.
@@ -160,6 +162,8 @@ function volume_fill_holes_execute(
 
 
 /**
+ * volume-fill-holes
+ *
  * Fill holes in an roi volume.
  *
  * Finds all face-connected parts that are not included in the ROI, and fills all but the largest one with ones.

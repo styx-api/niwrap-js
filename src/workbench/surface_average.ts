@@ -226,6 +226,8 @@ function surface_average_outputs(
 
 
 /**
+ * surface-average
+ *
  * Average surface files together.
  *
  * The 3D sample standard deviation is computed as 'sqrt(sum(squaredlength(xyz - mean(xyz)))/(n - 1))'.
@@ -258,6 +260,8 @@ function surface_average_execute(
 
 
 /**
+ * surface-average
+ *
  * Average surface files together.
  *
  * The 3D sample standard deviation is computed as 'sqrt(sum(squaredlength(xyz - mean(xyz)))/(n - 1))'.

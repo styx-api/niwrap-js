@@ -289,6 +289,8 @@ function find_variance_lines_outputs(
 
 
 /**
+ * find_variance_lines
+ *
  * Look for bars of high variance that might suggest scanner interference in EPI datasets.
  *
  * Author: AFNI Developers
@@ -315,6 +317,8 @@ function find_variance_lines_execute(
 
 
 /**
+ * find_variance_lines
+ *
  * Look for bars of high variance that might suggest scanner interference in EPI datasets.
  *
  * Author: AFNI Developers

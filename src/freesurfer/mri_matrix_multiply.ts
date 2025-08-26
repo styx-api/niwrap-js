@@ -182,6 +182,8 @@ function mri_matrix_multiply_outputs(
 
 
 /**
+ * mri_matrix_multiply
+ *
  * Command-line tool for multiplying and manipulating MRI transformation matrices.
  *
  * Author: FreeSurfer Developers
@@ -208,6 +210,8 @@ function mri_matrix_multiply_execute(
 
 
 /**
+ * mri_matrix_multiply
+ *
  * Command-line tool for multiplying and manipulating MRI transformation matrices.
  *
  * Author: FreeSurfer Developers

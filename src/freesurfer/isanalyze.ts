@@ -120,6 +120,8 @@ function isanalyze_outputs(
 
 
 /**
+ * isanalyze
+ *
  * A tool to analyze and process IS files.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function isanalyze_execute(
 
 
 /**
+ * isanalyze
+ *
  * A tool to analyze and process IS files.
  *
  * Author: FreeSurfer Developers

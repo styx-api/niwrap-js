@@ -140,6 +140,8 @@ function quantify_thalamic_nuclei_sh_outputs(
 
 
 /**
+ * quantifyThalamicNuclei.sh
+ *
  * Command-line tool to quantify thalamic nuclei using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -166,6 +168,8 @@ function quantify_thalamic_nuclei_sh_execute(
 
 
 /**
+ * quantifyThalamicNuclei.sh
+ *
  * Command-line tool to quantify thalamic nuclei using FreeSurfer.
  *
  * Author: FreeSurfer Developers

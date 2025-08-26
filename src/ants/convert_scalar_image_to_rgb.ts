@@ -200,6 +200,8 @@ function convert_scalar_image_to_rgb_outputs(
 
 
 /**
+ * ConvertScalarImageToRGB
+ *
  * Converts a scalar image to an RGB image using specified parameters. Supports multiple colormap options and customization.
  *
  * Author: ANTs Developers
@@ -226,6 +228,8 @@ function convert_scalar_image_to_rgb_execute(
 
 
 /**
+ * ConvertScalarImageToRGB
+ *
  * Converts a scalar image to an RGB image using specified parameters. Supports multiple colormap options and customization.
  *
  * Author: ANTs Developers

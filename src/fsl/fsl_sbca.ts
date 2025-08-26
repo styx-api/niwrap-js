@@ -274,6 +274,8 @@ function fsl_sbca_outputs(
 
 
 /**
+ * fsl_sbca
+ *
  * Performs seed-based correlation analysis on FMRI data using either a single seed coordinate or a seed mask.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -300,6 +302,8 @@ function fsl_sbca_execute(
 
 
 /**
+ * fsl_sbca
+ *
  * Performs seed-based correlation analysis on FMRI data using either a single seed coordinate or a seed mask.
  *
  * Author: FMRIB Analysis Group, University of Oxford

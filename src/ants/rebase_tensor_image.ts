@@ -150,6 +150,8 @@ function rebase_tensor_image_outputs(
 
 
 /**
+ * RebaseTensorImage
+ *
  * Rebase Tensor Image using specified dimensionality and method.
  *
  * Author: ANTs Developers
@@ -176,6 +178,8 @@ function rebase_tensor_image_execute(
 
 
 /**
+ * RebaseTensorImage
+ *
  * Rebase Tensor Image using specified dimensionality and method.
  *
  * Author: ANTs Developers

@@ -192,6 +192,8 @@ function dcmsplit_outputs(
 
 
 /**
+ * dcmsplit
+ *
  * Splits DICOM files into separate folders based on a unique identifier (UID).
  *
  * Author: FreeSurfer Developers
@@ -218,6 +220,8 @@ function dcmsplit_execute(
 
 
 /**
+ * dcmsplit
+ *
  * Splits DICOM files into separate folders based on a unique identifier (UID).
  *
  * Author: FreeSurfer Developers

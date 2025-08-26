@@ -126,6 +126,8 @@ function scene_file_relocate_outputs(
 
 
 /**
+ * scene-file-relocate
+ *
  * Recreate scene file in new location.
  *
  * Scene files contain internal relative paths, such that moving or copying a scene file will cause it to lose track of the files it refers to.  This command makes a modified copy of the scene file, changing the relative paths to refer to the new relative locations of the files.
@@ -154,6 +156,8 @@ function scene_file_relocate_execute(
 
 
 /**
+ * scene-file-relocate
+ *
  * Recreate scene file in new location.
  *
  * Scene files contain internal relative paths, such that moving or copying a scene file will cause it to lose track of the files it refers to.  This command makes a modified copy of the scene file, changing the relative paths to refer to the new relative locations of the files.

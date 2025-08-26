@@ -140,6 +140,8 @@ function v_3dvolreg_afni_outputs(
 
 
 /**
+ * 3dvolreg.afni
+ *
  * AFNI program for volume registration.
  *
  * Author: FreeSurfer Developers
@@ -166,6 +168,8 @@ function v_3dvolreg_afni_execute(
 
 
 /**
+ * 3dvolreg.afni
+ *
  * AFNI program for volume registration.
  *
  * Author: FreeSurfer Developers

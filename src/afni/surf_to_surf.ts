@@ -258,6 +258,8 @@ function surf_to_surf_outputs(
 
 
 /**
+ * SurfToSurf
+ *
  * Interpolate data from one surface to another.
  *
  * Author: AFNI Developers
@@ -284,6 +286,8 @@ function surf_to_surf_execute(
 
 
 /**
+ * SurfToSurf
+ *
  * Interpolate data from one surface to another.
  *
  * Author: AFNI Developers

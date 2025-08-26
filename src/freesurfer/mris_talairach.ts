@@ -120,6 +120,8 @@ function mris_talairach_outputs(
 
 
 /**
+ * mris_talairach
+ *
  * Transforms an MRI surface into Talairach space.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function mris_talairach_execute(
 
 
 /**
+ * mris_talairach
+ *
  * Transforms an MRI surface into Talairach space.
  *
  * Author: FreeSurfer Developers

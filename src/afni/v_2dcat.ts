@@ -379,6 +379,8 @@ function v_2dcat_outputs(
 
 
 /**
+ * 2dcat
+ *
  * Puts a set of images into an image matrix montage of NX by NY images.
  *
  * Author: AFNI Developers
@@ -405,6 +407,8 @@ function v_2dcat_execute(
 
 
 /**
+ * 2dcat
+ *
  * Puts a set of images into an image matrix montage of NX by NY images.
  *
  * Author: AFNI Developers

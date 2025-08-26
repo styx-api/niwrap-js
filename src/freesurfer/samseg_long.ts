@@ -187,6 +187,8 @@ function samseg_long_outputs(
 
 
 /**
+ * samseg-long
+ *
  * Longitudinal analysis tool using SAMSEG in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -213,6 +215,8 @@ function samseg_long_execute(
 
 
 /**
+ * samseg-long
+ *
  * Longitudinal analysis tool using SAMSEG in FreeSurfer.
  *
  * Author: FreeSurfer Developers

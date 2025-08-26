@@ -184,6 +184,8 @@ function v_3d_dteig_outputs(
 
 
 /**
+ * 3dDTeig
+ *
  * Computes eigenvalues and eigenvectors for an input dataset of tensors.
  *
  * Author: AFNI Developers
@@ -210,6 +212,8 @@ function v_3d_dteig_execute(
 
 
 /**
+ * 3dDTeig
+ *
  * Computes eigenvalues and eigenvectors for an input dataset of tensors.
  *
  * Author: AFNI Developers

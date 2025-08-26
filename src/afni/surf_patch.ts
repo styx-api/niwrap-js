@@ -301,6 +301,8 @@ function surf_patch_outputs(
 
 
 /**
+ * SurfPatch
+ *
  * Creates a patch of surface formed by nodes in a nodefile and optionally calculates the volume between the same patch on two isotopic surfaces.
  *
  * Author: AFNI Developers
@@ -327,6 +329,8 @@ function surf_patch_execute(
 
 
 /**
+ * SurfPatch
+ *
  * Creates a patch of surface formed by nodes in a nodefile and optionally calculates the volume between the same patch on two isotopic surfaces.
  *
  * Author: AFNI Developers

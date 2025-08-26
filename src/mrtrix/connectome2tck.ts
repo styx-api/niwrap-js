@@ -323,6 +323,8 @@ function connectome2tck_outputs(
 
 
 /**
+ * connectome2tck
+ *
  * Extract streamlines from a tractogram based on their assignment to parcellated nodes.
  *
  * The compulsory input file "assignments_in" should contain a text file where there is one row for each streamline, and each row contains a list of numbers corresponding to the parcels to which that streamline was assigned (most typically there will be two entries per streamline, one for each endpoint; but this is not strictly a requirement). This file will most typically be generated using the tck2connectome command with the -out_assignments option.
@@ -355,6 +357,8 @@ function connectome2tck_execute(
 
 
 /**
+ * connectome2tck
+ *
  * Extract streamlines from a tractogram based on their assignment to parcellated nodes.
  *
  * The compulsory input file "assignments_in" should contain a text file where there is one row for each streamline, and each row contains a list of numbers corresponding to the parcels to which that streamline was assigned (most typically there will be two entries per streamline, one for each endpoint; but this is not strictly a requirement). This file will most typically be generated using the tck2connectome command with the -out_assignments option.

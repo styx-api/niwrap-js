@@ -440,6 +440,8 @@ function fabber_t1_outputs(
 
 
 /**
+ * fabber_t1
+ *
  * Fabber is a tool for performing model-based analysis of fMRI data, using advanced Bayesian inference techniques.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -466,6 +468,8 @@ function fabber_t1_execute(
 
 
 /**
+ * fabber_t1
+ *
  * Fabber is a tool for performing model-based analysis of fMRI data, using advanced Bayesian inference techniques.
  *
  * Author: FMRIB Analysis Group, University of Oxford

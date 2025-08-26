@@ -131,6 +131,8 @@ function mri_compute_bias_outputs(
 
 
 /**
+ * mri_compute_bias
+ *
  * Compute bias correction volumes for the given subjects and outputs the result to a specified volume.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mri_compute_bias_execute(
 
 
 /**
+ * mri_compute_bias
+ *
  * Compute bias correction volumes for the given subjects and outputs the result to a specified volume.
  *
  * Author: FreeSurfer Developers

@@ -254,6 +254,8 @@ function mri_3d_photo_recon_outputs(
 
 
 /**
+ * mri_3d_photo_recon
+ *
  * Code for 3D photo reconstruction (Tregidgo, et al., MICCAI 2020).
  *
  * Author: FreeSurfer Developers
@@ -280,6 +282,8 @@ function mri_3d_photo_recon_execute(
 
 
 /**
+ * mri_3d_photo_recon
+ *
  * Code for 3D photo reconstruction (Tregidgo, et al., MICCAI 2020).
  *
  * Author: FreeSurfer Developers

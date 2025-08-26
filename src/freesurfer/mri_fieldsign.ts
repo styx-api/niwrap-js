@@ -338,6 +338,8 @@ function mri_fieldsign_outputs(
 
 
 /**
+ * mri_fieldsign
+ *
  * Field Sign Mapping Tool from FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -364,6 +366,8 @@ function mri_fieldsign_execute(
 
 
 /**
+ * mri_fieldsign
+ *
  * Field Sign Mapping Tool from FreeSurfer.
  *
  * Author: FreeSurfer Developers

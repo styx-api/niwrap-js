@@ -120,6 +120,8 @@ function imrm_outputs(
 
 
 /**
+ * imrm
+ *
  * Remove specified image files.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -146,6 +148,8 @@ function imrm_execute(
 
 
 /**
+ * imrm
+ *
  * Remove specified image files.
  *
  * Author: FMRIB Analysis Group, University of Oxford

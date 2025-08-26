@@ -131,6 +131,8 @@ function concat_bvars_outputs(
 
 
 /**
+ * concat_bvars
+ *
  * Concatenate multiple .bvars files into a single .bvars file.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function concat_bvars_execute(
 
 
 /**
+ * concat_bvars
+ *
  * Concatenate multiple .bvars files into a single .bvars file.
  *
  * Author: FMRIB Analysis Group, University of Oxford

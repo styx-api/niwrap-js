@@ -294,6 +294,8 @@ function mris_ca_label_outputs(
 
 
 /**
+ * mris_ca_label
+ *
  * Produces an annotation file in which each cortical surface vertex is assigned a neuroanatomical label using a previously-prepared atlas file.
  *
  * Author: FreeSurfer Developers
@@ -320,6 +322,8 @@ function mris_ca_label_execute(
 
 
 /**
+ * mris_ca_label
+ *
  * Produces an annotation file in which each cortical surface vertex is assigned a neuroanatomical label using a previously-prepared atlas file.
  *
  * Author: FreeSurfer Developers

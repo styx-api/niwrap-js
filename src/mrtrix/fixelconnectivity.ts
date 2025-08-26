@@ -284,6 +284,8 @@ function fixelconnectivity_outputs(
 
 
 /**
+ * fixelconnectivity
+ *
  * Generate a fixel-fixel connectivity matrix.
  *
  * This command will generate a directory containing three images, which encodes the fixel-fixel connectivity matrix. Documentation regarding this format and how to use it will come in the future.
@@ -316,6 +318,8 @@ function fixelconnectivity_execute(
 
 
 /**
+ * fixelconnectivity
+ *
  * Generate a fixel-fixel connectivity matrix.
  *
  * This command will generate a directory containing three images, which encodes the fixel-fixel connectivity matrix. Documentation regarding this format and how to use it will come in the future.

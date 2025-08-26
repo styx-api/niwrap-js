@@ -126,6 +126,8 @@ function stem2fname_outputs(
 
 
 /**
+ * stem2fname
+ *
  * Determines the full filename with extension for a given file stem by checking various formats.
  *
  * Author: FreeSurfer Developers
@@ -152,6 +154,8 @@ function stem2fname_execute(
 
 
 /**
+ * stem2fname
+ *
  * Determines the full filename with extension for a given file stem by checking various formats.
  *
  * Author: FreeSurfer Developers

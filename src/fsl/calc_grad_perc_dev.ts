@@ -145,6 +145,8 @@ function calc_grad_perc_dev_outputs(
 
 
 /**
+ * calc_grad_perc_dev
+ *
  * Compute the gradient percent deviation based on a full warp image from gradient_unwarp.py.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -171,6 +173,8 @@ function calc_grad_perc_dev_execute(
 
 
 /**
+ * calc_grad_perc_dev
+ *
  * Compute the gradient percent deviation based on a full warp image from gradient_unwarp.py.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -130,6 +130,8 @@ function mris_init_global_tractography_outputs(
 
 
 /**
+ * mris_init_global_tractography
+ *
  * Initializes global tractography for a given subject and parcellation.
  *
  * Author: FreeSurfer Developers
@@ -156,6 +158,8 @@ function mris_init_global_tractography_execute(
 
 
 /**
+ * mris_init_global_tractography
+ *
  * Initializes global tractography for a given subject and parcellation.
  *
  * Author: FreeSurfer Developers

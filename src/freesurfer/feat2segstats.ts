@@ -298,6 +298,8 @@ function feat2segstats_outputs(
 
 
 /**
+ * feat2segstats
+ *
  * Computes segmentation summaries and stores output in featdir/freesurfer/segstats/segvol/statname.dat.
  *
  * Author: FreeSurfer Developers
@@ -324,6 +326,8 @@ function feat2segstats_execute(
 
 
 /**
+ * feat2segstats
+ *
  * Computes segmentation summaries and stores output in featdir/freesurfer/segstats/segvol/statname.dat.
  *
  * Author: FreeSurfer Developers

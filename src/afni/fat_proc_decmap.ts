@@ -251,6 +251,8 @@ function fat_proc_decmap_outputs(
 
 
 /**
+ * fat_proc_decmap
+ *
  * This program makes a directionally encoded color (DEC) map for DTI results.
  *
  * Author: AFNI Developers
@@ -277,6 +279,8 @@ function fat_proc_decmap_execute(
 
 
 /**
+ * fat_proc_decmap
+ *
  * This program makes a directionally encoded color (DEC) map for DTI results.
  *
  * Author: AFNI Developers

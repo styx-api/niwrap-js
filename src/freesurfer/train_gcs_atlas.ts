@@ -246,6 +246,8 @@ function train_gcs_atlas_outputs(
 
 
 /**
+ * train-gcs-atlas
+ *
  * Script to train a surface-based gaussian classifier for cortical surface parcellation.
  *
  * Author: FreeSurfer Developers
@@ -272,6 +274,8 @@ function train_gcs_atlas_execute(
 
 
 /**
+ * train-gcs-atlas
+ *
  * Script to train a surface-based gaussian classifier for cortical surface parcellation.
  *
  * Author: FreeSurfer Developers

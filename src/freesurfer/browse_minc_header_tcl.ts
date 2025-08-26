@@ -120,6 +120,8 @@ function browse_minc_header_tcl_outputs(
 
 
 /**
+ * browse-minc-header.tcl
+ *
  * A tool for browsing MINC file headers, likely part of the FreeSurfer package.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function browse_minc_header_tcl_execute(
 
 
 /**
+ * browse-minc-header.tcl
+ *
  * A tool for browsing MINC file headers, likely part of the FreeSurfer package.
  *
  * Author: FreeSurfer Developers

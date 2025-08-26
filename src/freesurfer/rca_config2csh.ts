@@ -123,6 +123,8 @@ function rca_config2csh_outputs(
 
 
 /**
+ * rca-config2csh
+ *
  * rca-config2csh is a utility to convert configuration files into C-shell syntax.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function rca_config2csh_execute(
 
 
 /**
+ * rca-config2csh
+ *
  * rca-config2csh is a utility to convert configuration files into C-shell syntax.
  *
  * Author: FreeSurfer Developers

@@ -163,6 +163,8 @@ function v__noisy_skull_strip_outputs(
 
 
 /**
+ * @NoisySkullStrip
+ *
  * Strips the skull of anatomical datasets with low SNR.
  *
  * Author: AFNI Developers
@@ -189,6 +191,8 @@ function v__noisy_skull_strip_execute(
 
 
 /**
+ * @NoisySkullStrip
+ *
  * Strips the skull of anatomical datasets with low SNR.
  *
  * Author: AFNI Developers

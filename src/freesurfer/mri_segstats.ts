@@ -732,6 +732,8 @@ function mri_segstats_outputs(
 
 
 /**
+ * mri_segstats
+ *
  * Calculates measures and stats derived from brain segmentation data.
  *
  * Author: FreeSurfer Developers
@@ -758,6 +760,8 @@ function mri_segstats_execute(
 
 
 /**
+ * mri_segstats
+ *
  * Calculates measures and stats derived from brain segmentation data.
  *
  * Author: FreeSurfer Developers

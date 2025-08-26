@@ -255,6 +255,8 @@ function label2colour_outputs(
 
 
 /**
+ * label2colour
+ *
  * Convert a parcellated image (where values are node indices) into a colour image.
  *
  * Many software packages handle this colouring internally within their viewer program; this binary explicitly converts a parcellation image into a colour image that should be viewable in any software.
@@ -287,6 +289,8 @@ function label2colour_execute(
 
 
 /**
+ * label2colour
+ *
  * Convert a parcellated image (where values are node indices) into a colour image.
  *
  * Many software packages handle this colouring internally within their viewer program; this binary explicitly converts a parcellation image into a colour image that should be viewable in any software.

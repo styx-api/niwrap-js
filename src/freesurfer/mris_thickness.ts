@@ -179,6 +179,8 @@ function mris_thickness_outputs(
 
 
 /**
+ * mris_thickness
+ *
  * Measures the thickness of the cortical surface.
  *
  * Author: FreeSurfer Developers
@@ -205,6 +207,8 @@ function mris_thickness_execute(
 
 
 /**
+ * mris_thickness
+ *
  * Measures the thickness of the cortical surface.
  *
  * Author: FreeSurfer Developers

@@ -129,6 +129,8 @@ function feat_model_outputs(
 
 
 /**
+ * feat_model
+ *
  * Generate design matrices for use by FEAT.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -155,6 +157,8 @@ function feat_model_execute(
 
 
 /**
+ * feat_model
+ *
  * Generate design matrices for use by FEAT.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -339,6 +339,8 @@ function tckstats_outputs(
 
 
 /**
+ * tckstats
+ *
  * Calculate statistics on streamlines lengths.
  *
  *
@@ -371,6 +373,8 @@ function tckstats_execute(
 
 
 /**
+ * tckstats
+ *
  * Calculate statistics on streamlines lengths.
  *
  *

@@ -188,6 +188,8 @@ function v__suma_acknowledge_outputs(
 
 
 /**
+ * @suma_acknowledge
+ *
  * Demo script to create a graph dataset to show names of individuals and groups, potentially useful for acknowledgements in a talk.
  *
  * Author: AFNI Developers
@@ -214,6 +216,8 @@ function v__suma_acknowledge_execute(
 
 
 /**
+ * @suma_acknowledge
+ *
  * Demo script to create a graph dataset to show names of individuals and groups, potentially useful for acknowledgements in a talk.
  *
  * Author: AFNI Developers

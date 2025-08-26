@@ -160,6 +160,8 @@ function mris_watershed_outputs(
 
 
 /**
+ * mris_watershed
+ *
  * This program computes the watershed transform on the surface of an intensity gradient and writes the resulting measurement into a .annot file.
  *
  * Author: FreeSurfer Developers
@@ -186,6 +188,8 @@ function mris_watershed_execute(
 
 
 /**
+ * mris_watershed
+ *
  * This program computes the watershed transform on the surface of an intensity gradient and writes the resulting measurement into a .annot file.
  *
  * Author: FreeSurfer Developers

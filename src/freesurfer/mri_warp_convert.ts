@@ -284,6 +284,8 @@ function mri_warp_convert_outputs(
 
 
 /**
+ * mri_warp_convert
+ *
  * This program converts non-linear deformation field warp file formats.
  *
  * Author: FreeSurfer Developers
@@ -310,6 +312,8 @@ function mri_warp_convert_execute(
 
 
 /**
+ * mri_warp_convert
+ *
  * This program converts non-linear deformation field warp file formats.
  *
  * Author: FreeSurfer Developers

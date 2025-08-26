@@ -307,6 +307,8 @@ function v__atlasize_outputs(
 
 
 /**
+ * @Atlasize
+ *
  * Script to turn a volumetric dataset into an AFNI atlas.
  *
  * Author: AFNI Developers
@@ -333,6 +335,8 @@ function v__atlasize_execute(
 
 
 /**
+ * @Atlasize
+ *
  * Script to turn a volumetric dataset into an AFNI atlas.
  *
  * Author: AFNI Developers

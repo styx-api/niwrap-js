@@ -248,6 +248,8 @@ function fixelcrop_outputs(
 
 
 /**
+ * fixelcrop
+ *
  * Crop/remove fixels from sparse fixel image using a binary fixel mask.
  *
  * The mask must be input as a fixel data file the same dimensions as the fixel data file(s) to be cropped.
@@ -280,6 +282,8 @@ function fixelcrop_execute(
 
 
 /**
+ * fixelcrop
+ *
  * Crop/remove fixels from sparse fixel image using a binary fixel mask.
  *
  * The mask must be input as a fixel data file the same dimensions as the fixel data file(s) to be cropped.

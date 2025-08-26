@@ -139,6 +139,8 @@ function mri_label_vals_outputs(
 
 
 /**
+ * mri_label_vals
+ *
  * Extract values at label coordinates from a volume.
  *
  * Author: FreeSurfer Developers
@@ -165,6 +167,8 @@ function mri_label_vals_execute(
 
 
 /**
+ * mri_label_vals
+ *
  * Extract values at label coordinates from a volume.
  *
  * Author: FreeSurfer Developers

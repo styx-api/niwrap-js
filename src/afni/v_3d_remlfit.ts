@@ -283,6 +283,8 @@ function v_3d_remlfit_outputs(
 
 
 /**
+ * 3dREMLfit
+ *
  * Generalized least squares time series fit, with REML estimation of the temporal auto-correlation structure.
  *
  * Author: AFNI Developers
@@ -309,6 +311,8 @@ function v_3d_remlfit_execute(
 
 
 /**
+ * 3dREMLfit
+ *
  * Generalized least squares time series fit, with REML estimation of the temporal auto-correlation structure.
  *
  * Author: AFNI Developers

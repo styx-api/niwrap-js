@@ -626,6 +626,8 @@ function v_3d_anova3_outputs(
 
 
 /**
+ * 3dANOVA3
+ *
  * Performs three-factor ANOVA on 3D data sets.
  *
  * Author: AFNI Developers
@@ -652,6 +654,8 @@ function v_3d_anova3_execute(
 
 
 /**
+ * 3dANOVA3
+ *
  * Performs three-factor ANOVA on 3D data sets.
  *
  * Author: AFNI Developers

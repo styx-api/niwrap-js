@@ -380,6 +380,8 @@ function v__sswarper_outputs(
 
 
 /**
+ * @SSwarper
+ *
  * Dual purposes for processing a given subject's anatomical volume: skull-strip the brain and calculate the warp to a reference template/standard space.
  *
  * Author: AFNI Developers
@@ -406,6 +408,8 @@ function v__sswarper_execute(
 
 
 /**
+ * @SSwarper
+ *
  * Dual purposes for processing a given subject's anatomical volume: skull-strip the brain and calculate the warp to a reference template/standard space.
  *
  * Author: AFNI Developers

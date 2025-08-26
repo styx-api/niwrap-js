@@ -657,6 +657,8 @@ function mri_robust_register_outputs(
 
 
 /**
+ * mri_robust_register
+ *
  * Inverse consistent registration of two volumes using robust and standard cost functions.
  *
  * Author: FreeSurfer Developers
@@ -683,6 +685,8 @@ function mri_robust_register_execute(
 
 
 /**
+ * mri_robust_register
+ *
  * Inverse consistent registration of two volumes using robust and standard cost functions.
  *
  * Author: FreeSurfer Developers

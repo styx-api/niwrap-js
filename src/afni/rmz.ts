@@ -146,6 +146,8 @@ function rmz_outputs(
 
 
 /**
+ * rmz
+ *
  * Zeros out files before removing them.
  *
  * Author: AFNI Developers
@@ -172,6 +174,8 @@ function rmz_execute(
 
 
 /**
+ * rmz
+ *
  * Zeros out files before removing them.
  *
  * Author: AFNI Developers

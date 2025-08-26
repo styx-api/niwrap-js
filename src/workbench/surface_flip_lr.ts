@@ -132,6 +132,8 @@ function surface_flip_lr_outputs(
 
 
 /**
+ * surface-flip-lr
+ *
  * Mirror a surface through the yz plane.
  *
  * This command negates the x coordinate of each vertex, and flips the surface normals, so that you have a surface of opposite handedness with the same features and vertex correspondence, with normals consistent with the original surface.  That is, if the input surface has normals facing outward, the output surface will also have normals facing outward.
@@ -160,6 +162,8 @@ function surface_flip_lr_execute(
 
 
 /**
+ * surface-flip-lr
+ *
  * Mirror a surface through the yz plane.
  *
  * This command negates the x coordinate of each vertex, and flips the surface normals, so that you have a surface of opposite handedness with the same features and vertex correspondence, with normals consistent with the original surface.  That is, if the input surface has normals facing outward, the output surface will also have normals facing outward.

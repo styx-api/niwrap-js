@@ -152,6 +152,8 @@ function meanval_outputs(
 
 
 /**
+ * meanval
+ *
  * Tool to calculate the mean value of an image within a mask.
  *
  * Author: FreeSurfer Developers
@@ -178,6 +180,8 @@ function meanval_execute(
 
 
 /**
+ * meanval
+ *
  * Tool to calculate the mean value of an image within a mask.
  *
  * Author: FreeSurfer Developers

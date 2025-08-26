@@ -126,6 +126,8 @@ function metadata_remove_provenance_outputs(
 
 
 /**
+ * metadata-remove-provenance
+ *
  * Remove provenance information from file metadata.
  *
  * Removes the provenance metadata fields added by workbench during processing.
@@ -154,6 +156,8 @@ function metadata_remove_provenance_execute(
 
 
 /**
+ * metadata-remove-provenance
+ *
  * Remove provenance information from file metadata.
  *
  * Removes the provenance metadata fields added by workbench during processing.

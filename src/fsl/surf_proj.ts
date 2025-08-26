@@ -234,6 +234,8 @@ function surf_proj_outputs(
 
 
 /**
+ * surf_proj
+ *
  * Projects data onto a surface mesh using specified parameters.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -260,6 +262,8 @@ function surf_proj_execute(
 
 
 /**
+ * surf_proj
+ *
  * Projects data onto a surface mesh using specified parameters.
  *
  * Author: FMRIB Analysis Group, University of Oxford

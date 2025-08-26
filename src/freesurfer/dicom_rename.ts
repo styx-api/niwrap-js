@@ -151,6 +151,8 @@ function dicom_rename_outputs(
 
 
 /**
+ * dicom-rename
+ *
  * Copies dicom file(s) to new path with more meaningful names.
  *
  * Author: FreeSurfer Developers
@@ -177,6 +179,8 @@ function dicom_rename_execute(
 
 
 /**
+ * dicom-rename
+ *
  * Copies dicom file(s) to new path with more meaningful names.
  *
  * Author: FreeSurfer Developers

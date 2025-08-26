@@ -135,6 +135,8 @@ function fslpspec_outputs(
 
 
 /**
+ * fslpspec
+ *
  * Estimate the power spectrum of 4D fMRI time series data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -161,6 +163,8 @@ function fslpspec_execute(
 
 
 /**
+ * fslpspec
+ *
  * Estimate the power spectrum of 4D fMRI time series data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

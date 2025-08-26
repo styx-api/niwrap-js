@@ -284,6 +284,8 @@ function mrcolour_outputs(
 
 
 /**
+ * mrcolour
+ *
  * Apply a colour map to an image.
  *
  * Under typical usage, this command will receive as input ad 3D greyscale image, and output a 4D image with 3 volumes corresponding to red-green-blue components; other use cases are possible, and are described in more detail below.
@@ -318,6 +320,8 @@ function mrcolour_execute(
 
 
 /**
+ * mrcolour
+ *
  * Apply a colour map to an image.
  *
  * Under typical usage, this command will receive as input ad 3D greyscale image, and output a 4D image with 3 volumes corresponding to red-green-blue components; other use cases are possible, and are described in more detail below.

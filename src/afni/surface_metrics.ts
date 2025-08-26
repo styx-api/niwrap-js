@@ -297,6 +297,8 @@ function surface_metrics_outputs(
 
 
 /**
+ * SurfaceMetrics
+ *
  * Outputs information about a surface's mesh.
  *
  * Author: AFNI Developers
@@ -323,6 +325,8 @@ function surface_metrics_execute(
 
 
 /**
+ * SurfaceMetrics
+ *
  * Outputs information about a surface's mesh.
  *
  * Author: AFNI Developers

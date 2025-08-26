@@ -203,6 +203,8 @@ function anatomical_average_outputs(
 
 
 /**
+ * AnatomicalAverage
+ *
  * Tool to create an anatomical average of input brain images.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -229,6 +231,8 @@ function anatomical_average_execute(
 
 
 /**
+ * AnatomicalAverage
+ *
  * Tool to create an anatomical average of input brain images.
  *
  * Author: FMRIB Analysis Group, University of Oxford

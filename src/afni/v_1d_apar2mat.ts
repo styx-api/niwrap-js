@@ -175,6 +175,8 @@ function v_1d_apar2mat_outputs(
 
 
 /**
+ * 1dApar2mat
+ *
  * Computes the affine transformation matrix from the set of 3dAllineate parameters.
  *
  * Author: AFNI Developers
@@ -201,6 +203,8 @@ function v_1d_apar2mat_execute(
 
 
 /**
+ * 1dApar2mat
+ *
  * Computes the affine transformation matrix from the set of 3dAllineate parameters.
  *
  * Author: AFNI Developers

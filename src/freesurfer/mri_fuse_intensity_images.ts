@@ -141,6 +141,8 @@ function mri_fuse_intensity_images_outputs(
 
 
 /**
+ * mri_fuse_intensity_images
+ *
  * Fuses intensity images based on given transforms.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mri_fuse_intensity_images_execute(
 
 
 /**
+ * mri_fuse_intensity_images
+ *
  * Fuses intensity images based on given transforms.
  *
  * Author: FreeSurfer Developers

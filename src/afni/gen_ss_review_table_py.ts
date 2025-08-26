@@ -257,6 +257,8 @@ function gen_ss_review_table_py_outputs(
 
 
 /**
+ * gen_ss_review_table.py
+ *
  * Generate a table from ss_review_basic output files.
  *
  * Author: AFNI Developers
@@ -283,6 +285,8 @@ function gen_ss_review_table_py_execute(
 
 
 /**
+ * gen_ss_review_table.py
+ *
  * Generate a table from ss_review_basic output files.
  *
  * Author: AFNI Developers

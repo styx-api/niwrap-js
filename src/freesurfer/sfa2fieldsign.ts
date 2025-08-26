@@ -243,6 +243,8 @@ function sfa2fieldsign_outputs(
 
 
 /**
+ * sfa2fieldsign
+ *
  * Computes fieldsign map from sfa-sess output. Masks the angle volumes and samples them to the surface.
  *
  * Author: FreeSurfer Developers
@@ -269,6 +271,8 @@ function sfa2fieldsign_execute(
 
 
 /**
+ * sfa2fieldsign
+ *
  * Computes fieldsign map from sfa-sess output. Masks the angle volumes and samples them to the surface.
  *
  * Author: FreeSurfer Developers

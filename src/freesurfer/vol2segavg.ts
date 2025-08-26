@@ -255,6 +255,8 @@ function vol2segavg_outputs(
 
 
 /**
+ * vol2segavg
+ *
  * Computes the average of a volume inside a given segment of a segmentation resampling the input volume to the segmentation space.
  *
  * Author: FreeSurfer Developers
@@ -281,6 +283,8 @@ function vol2segavg_execute(
 
 
 /**
+ * vol2segavg
+ *
  * Computes the average of a volume inside a given segment of a segmentation resampling the input volume to the segmentation space.
  *
  * Author: FreeSurfer Developers

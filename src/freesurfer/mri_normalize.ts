@@ -470,6 +470,8 @@ function mri_normalize_outputs(
 
 
 /**
+ * mri_normalize
+ *
  * Normalize the white-matter, optionally based on control points. The input volume is converted into a new volume where white matter image values all range around 110.
  *
  * Author: FreeSurfer Developers
@@ -496,6 +498,8 @@ function mri_normalize_execute(
 
 
 /**
+ * mri_normalize
+ *
  * Normalize the white-matter, optionally based on control points. The input volume is converted into a new volume where white matter image values all range around 110.
  *
  * Author: FreeSurfer Developers

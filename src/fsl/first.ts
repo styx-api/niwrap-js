@@ -250,6 +250,8 @@ function first_outputs(
 
 
 /**
+ * first
+ *
  * A command-line tool for segmenting subcortical structures in MRI images using models and transformations.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -276,6 +278,8 @@ function first_execute(
 
 
 /**
+ * first
+ *
  * A command-line tool for segmenting subcortical structures in MRI images using models and transformations.
  *
  * Author: FMRIB Analysis Group, University of Oxford

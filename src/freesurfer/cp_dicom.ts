@@ -138,6 +138,8 @@ function cp_dicom_outputs(
 
 
 /**
+ * cp-dicom
+ *
  * Copies DICOM files into separate directories for each series based on DICOM headers.
  *
  * Author: FreeSurfer Developers
@@ -164,6 +166,8 @@ function cp_dicom_execute(
 
 
 /**
+ * cp-dicom
+ *
  * Copies DICOM files into separate directories for each series based on DICOM headers.
  *
  * Author: FreeSurfer Developers

@@ -206,6 +206,8 @@ function v_3d_intracranial_outputs(
 
 
 /**
+ * 3dIntracranial
+ *
  * Performs automatic segmentation of intracranial region.
  *
  * Author: AFNI Developers
@@ -232,6 +234,8 @@ function v_3d_intracranial_execute(
 
 
 /**
+ * 3dIntracranial
+ *
  * Performs automatic segmentation of intracranial region.
  *
  * Author: AFNI Developers

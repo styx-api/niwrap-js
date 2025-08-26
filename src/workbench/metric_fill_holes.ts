@@ -149,6 +149,8 @@ function metric_fill_holes_outputs(
 
 
 /**
+ * metric-fill-holes
+ *
  * Fill holes in an roi metric.
  *
  * Finds all connected areas that are not included in the ROI, and writes ones into all but the largest one, in terms of surface area.
@@ -177,6 +179,8 @@ function metric_fill_holes_execute(
 
 
 /**
+ * metric-fill-holes
+ *
  * Fill holes in an roi metric.
  *
  * Finds all connected areas that are not included in the ROI, and writes ones into all but the largest one, in terms of surface area.

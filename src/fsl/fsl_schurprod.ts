@@ -190,6 +190,8 @@ function fsl_schurprod_outputs(
 
 
 /**
+ * fsl_schurprod
+ *
  * Generates element-wise matrix products or product of matrices against vectors from 4D data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -216,6 +218,8 @@ function fsl_schurprod_execute(
 
 
 /**
+ * fsl_schurprod
+ *
  * Generates element-wise matrix products or product of matrices against vectors from 4D data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

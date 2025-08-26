@@ -131,6 +131,8 @@ function cifti_label_export_table_outputs(
 
 
 /**
+ * cifti-label-export-table
+ *
  * Export label table from cifti as text.
  *
  * Takes the label table from the cifti label map, and writes it to a text format matching what is expected by -cifti-label-import.
@@ -159,6 +161,8 @@ function cifti_label_export_table_execute(
 
 
 /**
+ * cifti-label-export-table
+ *
  * Export label table from cifti as text.
  *
  * Takes the label table from the cifti label map, and writes it to a text format matching what is expected by -cifti-label-import.

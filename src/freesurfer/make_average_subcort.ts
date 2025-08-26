@@ -134,6 +134,8 @@ function make_average_subcort_outputs(
 
 
 /**
+ * make_average_subcort
+ *
  * This creates an average subcortical mask for the given input subjects, intended for use in subcortical analysis in FSFAST to exclude cortical voxels.
  *
  * Author: FreeSurfer Developers
@@ -160,6 +162,8 @@ function make_average_subcort_execute(
 
 
 /**
+ * make_average_subcort
+ *
  * This creates an average subcortical mask for the given input subjects, intended for use in subcortical analysis in FSFAST to exclude cortical voxels.
  *
  * Author: FreeSurfer Developers

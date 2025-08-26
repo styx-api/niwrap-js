@@ -474,6 +474,8 @@ function mri_ms_fitparms_outputs(
 
 
 /**
+ * mri_ms_fitparms
+ *
  * Tool for estimating T1 and PD values from FLASH images and applying transformations.
  *
  * Author: FreeSurfer Developers
@@ -500,6 +502,8 @@ function mri_ms_fitparms_execute(
 
 
 /**
+ * mri_ms_fitparms
+ *
  * Tool for estimating T1 and PD values from FLASH images and applying transformations.
  *
  * Author: FreeSurfer Developers

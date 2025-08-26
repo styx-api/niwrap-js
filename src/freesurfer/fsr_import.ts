@@ -213,6 +213,8 @@ function fsr_import_outputs(
 
 
 /**
+ * fsr-import
+ *
  * Copies/converts data into a directory structure for samseg-expected format.
  *
  * Author: FreeSurfer Developers
@@ -239,6 +241,8 @@ function fsr_import_execute(
 
 
 /**
+ * fsr-import
+ *
  * Copies/converts data into a directory structure for samseg-expected format.
  *
  * Author: FreeSurfer Developers

@@ -266,6 +266,8 @@ function surface_distortion_outputs(
 
 
 /**
+ * surface-distortion
+ *
  * Measure distortion between surfaces.
  *
  * This command, when not using -caret5-method, -edge-method, or -local-affine-method, is equivalent to using -surface-vertex-areas on each surface, smoothing both output metrics with the GEO_GAUSS_EQUAL method on the surface they came from if -smooth is specified, and then using the formula 'ln(distorted/reference)/ln(2)' on the smoothed results.
@@ -300,6 +302,8 @@ function surface_distortion_execute(
 
 
 /**
+ * surface-distortion
+ *
  * Measure distortion between surfaces.
  *
  * This command, when not using -caret5-method, -edge-method, or -local-affine-method, is equivalent to using -surface-vertex-areas on each surface, smoothing both output metrics with the GEO_GAUSS_EQUAL method on the surface they came from if -smooth is specified, and then using the formula 'ln(distorted/reference)/ln(2)' on the smoothed results.

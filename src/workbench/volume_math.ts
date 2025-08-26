@@ -221,6 +221,8 @@ function volume_math_outputs(
 
 
 /**
+ * volume-math
+ *
  * Evaluate expression on volume files.
  *
  * This command evaluates <expression> at each voxel independently.  There must be at least one -var option (to get the volume space from), even if the <name> specified in it isn't used in <expression>.  All volumes must have the same volume space.  Filenames are not valid in <expression>, use a variable name and a -var option with matching <name> to specify an input file.  If the -subvolume option is given to any -var option, only one subvolume is used from that file.  If -repeat is specified, the file must either have only one subvolume, or have the -subvolume option specified.  All files that don't use -repeat must have the same number of subvolumes requested to be used.  The format of <expression> is as follows:
@@ -286,6 +288,8 @@ function volume_math_execute(
 
 
 /**
+ * volume-math
+ *
  * Evaluate expression on volume files.
  *
  * This command evaluates <expression> at each voxel independently.  There must be at least one -var option (to get the volume space from), even if the <name> specified in it isn't used in <expression>.  All volumes must have the same volume space.  Filenames are not valid in <expression>, use a variable name and a -var option with matching <name> to specify an input file.  If the -subvolume option is given to any -var option, only one subvolume is used from that file.  If -repeat is specified, the file must either have only one subvolume, or have the -subvolume option specified.  All files that don't use -repeat must have the same number of subvolumes requested to be used.  The format of <expression> is as follows:

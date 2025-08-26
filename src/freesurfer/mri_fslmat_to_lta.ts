@@ -141,6 +141,8 @@ function mri_fslmat_to_lta_outputs(
 
 
 /**
+ * mri_fslmat_to_lta
+ *
  * This program creates the LTA transformation file using information from the src and target volumes and an FSL matrix file.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mri_fslmat_to_lta_execute(
 
 
 /**
+ * mri_fslmat_to_lta
+ *
  * This program creates the LTA transformation file using information from the src and target volumes and an FSL matrix file.
  *
  * Author: FreeSurfer Developers

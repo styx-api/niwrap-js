@@ -312,6 +312,8 @@ function vol2subfield_outputs(
 
 
 /**
+ * vol2subfield
+ *
  * A tool for integrating arbitrary volumes with volumes that share a RAS space with the orig volume in the FreeSurfer mri folder.
  *
  * Author: FreeSurfer Developers
@@ -338,6 +340,8 @@ function vol2subfield_execute(
 
 
 /**
+ * vol2subfield
+ *
  * A tool for integrating arbitrary volumes with volumes that share a RAS space with the orig volume in the FreeSurfer mri folder.
  *
  * Author: FreeSurfer Developers

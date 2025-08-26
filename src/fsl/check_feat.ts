@@ -136,6 +136,8 @@ function check_feat_outputs(
 
 
 /**
+ * checkFEAT
+ *
  * Perform checks on FEAT analysis results.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -162,6 +164,8 @@ function check_feat_execute(
 
 
 /**
+ * checkFEAT
+ *
  * Perform checks on FEAT analysis results.
  *
  * Author: FMRIB Analysis Group, University of Oxford

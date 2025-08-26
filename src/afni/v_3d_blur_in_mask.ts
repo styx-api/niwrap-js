@@ -215,6 +215,8 @@ function v_3d_blur_in_mask_outputs(
 
 
 /**
+ * 3dBlurInMask
+ *
  * Blurs a dataset spatially inside a mask.
  *
  * Author: AFNI Developers
@@ -241,6 +243,8 @@ function v_3d_blur_in_mask_execute(
 
 
 /**
+ * 3dBlurInMask
+ *
  * Blurs a dataset spatially inside a mask.
  *
  * Author: AFNI Developers

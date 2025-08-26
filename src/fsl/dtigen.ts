@@ -193,6 +193,8 @@ function dtigen_outputs(
 
 
 /**
+ * dtigen
+ *
  * Generate diffusion data using tensor model.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -219,6 +221,8 @@ function dtigen_execute(
 
 
 /**
+ * dtigen
+ *
  * Generate diffusion data using tensor model.
  *
  * Author: FMRIB Analysis Group, University of Oxford

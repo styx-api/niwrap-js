@@ -199,6 +199,8 @@ function bedpostx_mgh_outputs(
 
 
 /**
+ * bedpostx_mgh
+ *
  * A modified version of FSL's bedpostx compatible with PBS queueing system for parallel computation.
  *
  * Author: FreeSurfer Developers
@@ -225,6 +227,8 @@ function bedpostx_mgh_execute(
 
 
 /**
+ * bedpostx_mgh
+ *
  * A modified version of FSL's bedpostx compatible with PBS queueing system for parallel computation.
  *
  * Author: FreeSurfer Developers

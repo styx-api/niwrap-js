@@ -427,6 +427,8 @@ function fabber_dwi_outputs(
 
 
 /**
+ * fabber_dwi
+ *
  * Fabber diffusion-weighted imaging tool for model-based analysis using forward models and different inference methods.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -453,6 +455,8 @@ function fabber_dwi_execute(
 
 
 /**
+ * fabber_dwi
+ *
  * Fabber diffusion-weighted imaging tool for model-based analysis using forward models and different inference methods.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -286,6 +286,8 @@ function mraverageheader_outputs(
 
 
 /**
+ * mraverageheader
+ *
  * Calculate the average (unbiased) coordinate space of all input images.
  *
  *
@@ -318,6 +320,8 @@ function mraverageheader_execute(
 
 
 /**
+ * mraverageheader
+ *
  * Calculate the average (unbiased) coordinate space of all input images.
  *
  *

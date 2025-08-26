@@ -201,6 +201,8 @@ function mri_compute_seg_overlap_outputs(
 
 
 /**
+ * mri_compute_seg_overlap
+ *
  * Compute coefficients of overlap between segmentation volumes.
  *
  * Author: FreeSurfer Developers
@@ -227,6 +229,8 @@ function mri_compute_seg_overlap_execute(
 
 
 /**
+ * mri_compute_seg_overlap
+ *
  * Compute coefficients of overlap between segmentation volumes.
  *
  * Author: FreeSurfer Developers

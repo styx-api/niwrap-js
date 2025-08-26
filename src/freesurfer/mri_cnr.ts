@@ -182,6 +182,8 @@ function mri_cnr_outputs(
 
 
 /**
+ * mri_cnr
+ *
  * Compute the gray/white/csf contrast-to-noise ratio for volumes using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -208,6 +210,8 @@ function mri_cnr_execute(
 
 
 /**
+ * mri_cnr
+ *
  * Compute the gray/white/csf contrast-to-noise ratio for volumes using FreeSurfer.
  *
  * Author: FreeSurfer Developers

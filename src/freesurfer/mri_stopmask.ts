@@ -223,6 +223,8 @@ function mri_stopmask_outputs(
 
 
 /**
+ * mri_stopmask
+ *
  * This program creates a mask used to stop the search for the maximum gradient in mris_place_surface, preventing the surface from wandering into areas it should not.
  *
  * Author: FreeSurfer Developers
@@ -249,6 +251,8 @@ function mri_stopmask_execute(
 
 
 /**
+ * mri_stopmask
+ *
  * This program creates a mask used to stop the search for the maximum gradient in mris_place_surface, preventing the surface from wandering into areas it should not.
  *
  * Author: FreeSurfer Developers

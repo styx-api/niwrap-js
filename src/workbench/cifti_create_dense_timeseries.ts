@@ -416,6 +416,8 @@ function cifti_create_dense_timeseries_outputs(
 
 
 /**
+ * cifti-create-dense-timeseries
+ *
  * Create a cifti dense timeseries.
  *
  * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti.  At least one component must be specified.
@@ -487,6 +489,8 @@ function cifti_create_dense_timeseries_execute(
 
 
 /**
+ * cifti-create-dense-timeseries
+ *
  * Create a cifti dense timeseries.
  *
  * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti.  At least one component must be specified.

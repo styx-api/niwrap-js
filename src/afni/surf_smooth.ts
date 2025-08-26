@@ -295,6 +295,8 @@ function surf_smooth_outputs(
 
 
 /**
+ * SurfSmooth
+ *
  * Tool for smoothing data on surfaces using various methods.
  *
  * Author: AFNI Developers
@@ -321,6 +323,8 @@ function surf_smooth_execute(
 
 
 /**
+ * SurfSmooth
+ *
  * Tool for smoothing data on surfaces using various methods.
  *
  * Author: AFNI Developers

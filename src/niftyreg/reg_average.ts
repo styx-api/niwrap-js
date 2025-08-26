@@ -131,6 +131,8 @@ function reg_average_outputs(
 
 
 /**
+ * reg_average
+ *
  * Command line program to average either images or affine transformations.
  *
  * Author: NiftyReg Developers
@@ -157,6 +159,8 @@ function reg_average_execute(
 
 
 /**
+ * reg_average
+ *
  * Command line program to average either images or affine transformations.
  *
  * Author: NiftyReg Developers

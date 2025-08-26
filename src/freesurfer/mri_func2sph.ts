@@ -195,6 +195,8 @@ function mri_func2sph_outputs(
 
 
 /**
+ * mri-func2sph
+ *
  * Maps functional data from volume space to spherical surface space.
  *
  * Author: FreeSurfer Developers
@@ -221,6 +223,8 @@ function mri_func2sph_execute(
 
 
 /**
+ * mri-func2sph
+ *
  * Maps functional data from volume space to spherical surface space.
  *
  * Author: FreeSurfer Developers

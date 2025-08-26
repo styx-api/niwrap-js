@@ -330,6 +330,8 @@ function convert_dset_outputs(
 
 
 /**
+ * ConvertDset
+ *
  * Converts a surface dataset from one format to another.
  *
  * Author: AFNI Developers
@@ -356,6 +358,8 @@ function convert_dset_execute(
 
 
 /**
+ * ConvertDset
+ *
  * Converts a surface dataset from one format to another.
  *
  * Author: AFNI Developers

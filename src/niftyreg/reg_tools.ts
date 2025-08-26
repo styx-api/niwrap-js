@@ -256,6 +256,8 @@ function reg_tools_outputs(
 
 
 /**
+ * reg_tools
+ *
  * A versatile tool for manipulating and processing medical images.
  *
  * Author: NiftyReg Developers
@@ -282,6 +284,8 @@ function reg_tools_execute(
 
 
 /**
+ * reg_tools
+ *
  * A versatile tool for manipulating and processing medical images.
  *
  * Author: NiftyReg Developers

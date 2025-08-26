@@ -192,6 +192,8 @@ function stat_normalize_outputs(
 
 
 /**
+ * stat_normalize
+ *
  * This program will convert and average a sequence of volume-based statistics in Talairach space.
  *
  * Author: FreeSurfer Developers
@@ -218,6 +220,8 @@ function stat_normalize_execute(
 
 
 /**
+ * stat_normalize
+ *
  * This program will convert and average a sequence of volume-based statistics in Talairach space.
  *
  * Author: FreeSurfer Developers

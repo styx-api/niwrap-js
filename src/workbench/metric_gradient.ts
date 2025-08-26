@@ -305,6 +305,8 @@ function metric_gradient_outputs(
 
 
 /**
+ * metric-gradient
+ *
  * Surface gradient of a metric file.
  *
  * At each vertex, the immediate neighbors are unfolded onto a plane tangent to the surface at the vertex (specifically, perpendicular to the normal).  The gradient is computed using a regression between the unfolded positions of the vertices and their values.  The gradient is then given by the slopes of the regression, and reconstructed as a 3D gradient vector.  By default, takes the gradient of all columns, with no presmoothing, across the whole surface, without averaging the normals of the surface among neighbors.
@@ -341,6 +343,8 @@ function metric_gradient_execute(
 
 
 /**
+ * metric-gradient
+ *
  * Surface gradient of a metric file.
  *
  * At each vertex, the immediate neighbors are unfolded onto a plane tangent to the surface at the vertex (specifically, perpendicular to the normal).  The gradient is computed using a regression between the unfolded positions of the vertices and their values.  The gradient is then given by the slopes of the regression, and reconstructed as a 3D gradient vector.  By default, takes the gradient of all columns, with no presmoothing, across the whole surface, without averaging the normals of the surface among neighbors.

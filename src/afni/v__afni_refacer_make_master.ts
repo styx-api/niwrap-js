@@ -126,6 +126,8 @@ function v__afni_refacer_make_master_outputs(
 
 
 /**
+ * @afni_refacer_make_master
+ *
  * This script makes a new mask/shell dataset for use with @afni_refacer_run by averaging 'faces' (non-brain tissue) from input datasets.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v__afni_refacer_make_master_execute(
 
 
 /**
+ * @afni_refacer_make_master
+ *
  * This script makes a new mask/shell dataset for use with @afni_refacer_run by averaging 'faces' (non-brain tissue) from input datasets.
  *
  * Author: AFNI Developers

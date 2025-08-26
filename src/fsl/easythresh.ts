@@ -158,6 +158,8 @@ function easythresh_outputs(
 
 
 /**
+ * easythresh
+ *
  * Cluster-based statistical thresholding tool from FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -184,6 +186,8 @@ function easythresh_execute(
 
 
 /**
+ * easythresh
+ *
  * Cluster-based statistical thresholding tool from FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

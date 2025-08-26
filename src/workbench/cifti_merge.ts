@@ -317,6 +317,8 @@ function cifti_merge_outputs(
 
 
 /**
+ * cifti-merge
+ *
  * Merge or split on series, scalar, or label dimensions.
  *
  * Given input CIFTI files for which mappings along the selected direction are the same type, all either series, scalars, or labels, and the other dimensions are index-compatible, this command concatenates the data in the specified indices/ranges along the selected direction (by default, on typical 2D cifti, concatenate horizontally, so rows become longer).  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.
@@ -349,6 +351,8 @@ function cifti_merge_execute(
 
 
 /**
+ * cifti-merge
+ *
  * Merge or split on series, scalar, or label dimensions.
  *
  * Given input CIFTI files for which mappings along the selected direction are the same type, all either series, scalars, or labels, and the other dimensions are index-compatible, this command concatenates the data in the specified indices/ranges along the selected direction (by default, on typical 2D cifti, concatenate horizontally, so rows become longer).  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.

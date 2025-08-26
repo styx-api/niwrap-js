@@ -185,6 +185,8 @@ function v_3d_tnorm_outputs(
 
 
 /**
+ * 3dTnorm
+ *
  * Normalizes each voxel time series by multiplicative scaling.
  *
  * Author: AFNI Developers
@@ -211,6 +213,8 @@ function v_3d_tnorm_execute(
 
 
 /**
+ * 3dTnorm
+ *
  * Normalizes each voxel time series by multiplicative scaling.
  *
  * Author: AFNI Developers

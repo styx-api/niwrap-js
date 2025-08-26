@@ -131,6 +131,8 @@ function fsl_fix_text_outputs(
 
 
 /**
+ * fslFixText
+ *
  * Ensures standard UNIX line endings in the output text file.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function fsl_fix_text_execute(
 
 
 /**
+ * fslFixText
+ *
  * Ensures standard UNIX line endings in the output text file.
  *
  * Author: FMRIB Analysis Group, University of Oxford

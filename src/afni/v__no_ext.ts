@@ -135,6 +135,8 @@ function v__no_ext_outputs(
 
 
 /**
+ * @NoExt
+ *
  * Tool for removing specified extensions from filenames.
  *
  * Author: AFNI Developers
@@ -161,6 +163,8 @@ function v__no_ext_execute(
 
 
 /**
+ * @NoExt
+ *
  * Tool for removing specified extensions from filenames.
  *
  * Author: AFNI Developers

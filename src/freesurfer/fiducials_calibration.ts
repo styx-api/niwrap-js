@@ -124,6 +124,8 @@ function fiducials_calibration_outputs(
 
 
 /**
+ * fiducials_calibration
+ *
  * A tool used for calibrating fiducials.
  *
  * Author: FreeSurfer Developers
@@ -150,6 +152,8 @@ function fiducials_calibration_execute(
 
 
 /**
+ * fiducials_calibration
+ *
  * A tool used for calibrating fiducials.
  *
  * Author: FreeSurfer Developers

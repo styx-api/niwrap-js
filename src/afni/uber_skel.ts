@@ -207,6 +207,8 @@ function uber_skel_outputs(
 
 
 /**
+ * uber_skel
+ *
  * Sample uber processing program for initializing user and control variables, with options for both GUI and non-GUI modes.
  *
  * Author: AFNI Developers
@@ -233,6 +235,8 @@ function uber_skel_execute(
 
 
 /**
+ * uber_skel
+ *
  * Sample uber processing program for initializing user and control variables, with options for both GUI and non-GUI modes.
  *
  * Author: AFNI Developers

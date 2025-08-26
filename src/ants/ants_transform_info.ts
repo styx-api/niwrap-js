@@ -129,6 +129,8 @@ function ants_transform_info_outputs(
 
 
 /**
+ * antsTransformInfo
+ *
  * Provide information about an ITK transform file.
  *
  * Author: ANTs Developers
@@ -155,6 +157,8 @@ function ants_transform_info_execute(
 
 
 /**
+ * antsTransformInfo
+ *
  * Provide information about an ITK transform file.
  *
  * Author: ANTs Developers

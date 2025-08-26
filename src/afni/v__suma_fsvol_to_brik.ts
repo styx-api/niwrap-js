@@ -136,6 +136,8 @@ function v__suma_fsvol_to_brik_outputs(
 
 
 /**
+ * @SUMA_FSvolToBRIK
+ *
  * A script to convert COR- or .mgz files from FreeSurfer to BRIK format.
  *
  * Author: AFNI Developers
@@ -162,6 +164,8 @@ function v__suma_fsvol_to_brik_execute(
 
 
 /**
+ * @SUMA_FSvolToBRIK
+ *
  * A script to convert COR- or .mgz files from FreeSurfer to BRIK format.
  *
  * Author: AFNI Developers

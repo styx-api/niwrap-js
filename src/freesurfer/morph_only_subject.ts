@@ -124,6 +124,8 @@ function morph_only_subject_outputs(
 
 
 /**
+ * morph_only_subject
+ *
  * A placeholder descriptor for morph_only_subject tool as help content is unavailable.
  *
  * Author: FreeSurfer Developers
@@ -150,6 +152,8 @@ function morph_only_subject_execute(
 
 
 /**
+ * morph_only_subject
+ *
  * A placeholder descriptor for morph_only_subject tool as help content is unavailable.
  *
  * Author: FreeSurfer Developers

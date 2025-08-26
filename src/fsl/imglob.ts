@@ -134,6 +134,8 @@ function imglob_outputs(
 
 
 /**
+ * imglob
+ *
  * Tool for generating image lists with specific extensions.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -160,6 +162,8 @@ function imglob_execute(
 
 
 /**
+ * imglob
+ *
  * Tool for generating image lists with specific extensions.
  *
  * Author: FMRIB Analysis Group, University of Oxford

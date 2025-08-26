@@ -130,6 +130,8 @@ function mri_validate_skull_stripped_outputs(
 
 
 /**
+ * mri_validate_skull_stripped
+ *
  * Tool to validate skull stripped MRI images.
  *
  * Author: FreeSurfer Developers
@@ -156,6 +158,8 @@ function mri_validate_skull_stripped_execute(
 
 
 /**
+ * mri_validate_skull_stripped
+ *
  * Tool to validate skull stripped MRI images.
  *
  * Author: FreeSurfer Developers

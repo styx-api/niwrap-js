@@ -127,6 +127,8 @@ function fatcat_matplot_outputs(
 
 
 /**
+ * FATCAT_matplot
+ *
  * Launch a shiny app to visualize .netcc and/or .grid files.
  *
  * Author: AFNI Developers
@@ -153,6 +155,8 @@ function fatcat_matplot_execute(
 
 
 /**
+ * FATCAT_matplot
+ *
  * Launch a shiny app to visualize .netcc and/or .grid files.
  *
  * Author: AFNI Developers

@@ -202,6 +202,8 @@ function tfim_outputs(
 
 
 /**
+ * tfim
+ *
  * MCW TFIM: t-tests on sets of functional images.
  *
  * Author: AFNI Developers
@@ -228,6 +230,8 @@ function tfim_execute(
 
 
 /**
+ * tfim
+ *
  * MCW TFIM: t-tests on sets of functional images.
  *
  * Author: AFNI Developers

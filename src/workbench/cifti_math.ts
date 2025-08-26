@@ -274,6 +274,8 @@ function cifti_math_outputs(
 
 
 /**
+ * cifti-math
+ *
  * Evaluate expression on cifti files.
  *
  * This command evaluates <expression> at each matrix element independently.  There must be at least one -var option (to get the output layout from), even if the <name> specified in it isn't used in <expression>.
@@ -343,6 +345,8 @@ function cifti_math_execute(
 
 
 /**
+ * cifti-math
+ *
  * Evaluate expression on cifti files.
  *
  * This command evaluates <expression> at each matrix element independently.  There must be at least one -var option (to get the output layout from), even if the <name> specified in it isn't used in <expression>.

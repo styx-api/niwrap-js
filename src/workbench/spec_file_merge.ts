@@ -131,6 +131,8 @@ function spec_file_merge_outputs(
 
 
 /**
+ * spec-file-merge
+ *
  * Merge two spec files into one.
  *
  * The output spec file contains every file that is in either of the input spec files.
@@ -159,6 +161,8 @@ function spec_file_merge_execute(
 
 
 /**
+ * spec-file-merge
+ *
  * Merge two spec files into one.
  *
  * The output spec file contains every file that is in either of the input spec files.

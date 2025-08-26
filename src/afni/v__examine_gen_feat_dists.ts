@@ -209,6 +209,8 @@ function v__examine_gen_feat_dists_outputs(
 
 
 /**
+ * @ExamineGenFeatDists
+ *
  * Examine histograms produced by 3dGenFeatDists.
  *
  * Author: AFNI Developers
@@ -235,6 +237,8 @@ function v__examine_gen_feat_dists_execute(
 
 
 /**
+ * @ExamineGenFeatDists
+ *
  * Examine histograms produced by 3dGenFeatDists.
  *
  * Author: AFNI Developers

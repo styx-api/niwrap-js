@@ -255,6 +255,8 @@ function fixel2sh_outputs(
 
 
 /**
+ * fixel2sh
+ *
  * Convert a fixel-based sparse-data image into an spherical harmonic image.
  *
  * This command generates spherical harmonic data from fixels that can be visualised using the ODF tool in MRview. The output ODF lobes are scaled according to the values in the input fixel image.
@@ -290,6 +292,8 @@ function fixel2sh_execute(
 
 
 /**
+ * fixel2sh
+ *
  * Convert a fixel-based sparse-data image into an spherical harmonic image.
  *
  * This command generates spherical harmonic data from fixels that can be visualised using the ODF tool in MRview. The output ODF lobes are scaled according to the values in the input fixel image.

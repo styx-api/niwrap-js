@@ -156,6 +156,8 @@ function possum_sum_outputs(
 
 
 /**
+ * possum_sum
+ *
  * Sum of output signals from multiple possum processors.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -182,6 +184,8 @@ function possum_sum_execute(
 
 
 /**
+ * possum_sum
+ *
  * Sum of output signals from multiple possum processors.
  *
  * Author: FMRIB Analysis Group, University of Oxford

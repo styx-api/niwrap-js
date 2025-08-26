@@ -180,6 +180,8 @@ function v_3d_lrflip_outputs(
 
 
 /**
+ * 3dLRflip
+ *
  * Flips the rows of a dataset along one of the three axes to correct dataset direction labeling errors.
  *
  * Author: AFNI Developers
@@ -206,6 +208,8 @@ function v_3d_lrflip_execute(
 
 
 /**
+ * 3dLRflip
+ *
  * Flips the rows of a dataset along one of the three axes to correct dataset direction labeling errors.
  *
  * Author: AFNI Developers

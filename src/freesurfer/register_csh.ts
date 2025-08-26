@@ -140,6 +140,8 @@ function register_csh_outputs(
 
 
 /**
+ * register.csh
+ *
  * A script for registering MRI images.
  *
  * Author: FreeSurfer Developers
@@ -166,6 +168,8 @@ function register_csh_execute(
 
 
 /**
+ * register.csh
+ *
  * A script for registering MRI images.
  *
  * Author: FreeSurfer Developers

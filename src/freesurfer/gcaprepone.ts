@@ -161,6 +161,8 @@ function gcaprepone_outputs(
 
 
 /**
+ * gcaprepone
+ *
  * Tool for preparing FreeSurfer subjects for use with group-wise template generation.
  *
  * Author: FreeSurfer Developers
@@ -187,6 +189,8 @@ function gcaprepone_execute(
 
 
 /**
+ * gcaprepone
+ *
  * Tool for preparing FreeSurfer subjects for use with group-wise template generation.
  *
  * Author: FreeSurfer Developers

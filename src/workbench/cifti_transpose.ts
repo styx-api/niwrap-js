@@ -144,6 +144,8 @@ function cifti_transpose_outputs(
 
 
 /**
+ * cifti-transpose
+ *
  * Transpose a cifti file.
  *
  * The input must be a 2-dimensional cifti file.  The output is a cifti file where every row in the input is a column in the output.
@@ -172,6 +174,8 @@ function cifti_transpose_execute(
 
 
 /**
+ * cifti-transpose
+ *
  * Transpose a cifti file.
  *
  * The input must be a 2-dimensional cifti file.  The output is a cifti file where every row in the input is a column in the output.

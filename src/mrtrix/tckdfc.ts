@@ -369,6 +369,8 @@ function tckdfc_outputs(
 
 
 /**
+ * tckdfc
+ *
  * Perform the Track-Weighted Dynamic Functional Connectivity (TW-dFC) method.
  *
  * This command generates a Track-Weighted Image (TWI), where the contribution from each streamline to the image is the Pearson correlation between the fMRI time series at the streamline endpoints.
@@ -409,6 +411,8 @@ function tckdfc_execute(
 
 
 /**
+ * tckdfc
+ *
  * Perform the Track-Weighted Dynamic Functional Connectivity (TW-dFC) method.
  *
  * This command generates a Track-Weighted Image (TWI), where the contribution from each streamline to the image is the Pearson correlation between the fMRI time series at the streamline endpoints.

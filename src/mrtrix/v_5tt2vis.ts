@@ -315,6 +315,8 @@ function v_5tt2vis_outputs(
 
 
 /**
+ * 5tt2vis
+ *
  * Generate an image for visualisation purposes from an ACT 5TT segmented anatomical image.
  *
  *
@@ -347,6 +349,8 @@ function v_5tt2vis_execute(
 
 
 /**
+ * 5tt2vis
+ *
  * Generate an image for visualisation purposes from an ACT 5TT segmented anatomical image.
  *
  *

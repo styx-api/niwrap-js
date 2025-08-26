@@ -215,6 +215,8 @@ function convert_fiber_orientations_outputs(
 
 
 /**
+ * convert-fiber-orientations
+ *
  * Convert bingham parameter volumes to fiber orientation file.
  *
  * Takes precomputed bingham parameters from volume files and converts them to the format workbench uses for display.  The <label-volume> argument must be a label volume, where the labels use these strings:
@@ -278,6 +280,8 @@ function convert_fiber_orientations_execute(
 
 
 /**
+ * convert-fiber-orientations
+ *
  * Convert bingham parameter volumes to fiber orientation file.
  *
  * Takes precomputed bingham parameters from volume files and converts them to the format workbench uses for display.  The <label-volume> argument must be a label volume, where the labels use these strings:

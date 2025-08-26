@@ -244,6 +244,8 @@ function v_5ttcheck_outputs(
 
 
 /**
+ * 5ttcheck
+ *
  * Thoroughly check that one or more images conform to the expected ACT five-tissue-type (5TT) format.
  *
  *
@@ -276,6 +278,8 @@ function v_5ttcheck_execute(
 
 
 /**
+ * 5ttcheck
+ *
  * Thoroughly check that one or more images conform to the expected ACT five-tissue-type (5TT) format.
  *
  *

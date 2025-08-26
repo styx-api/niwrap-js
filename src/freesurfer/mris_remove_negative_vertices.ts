@@ -136,6 +136,8 @@ function mris_remove_negative_vertices_outputs(
 
 
 /**
+ * mris_remove_negative_vertices
+ *
  * This program adds a template into an average surface.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mris_remove_negative_vertices_execute(
 
 
 /**
+ * mris_remove_negative_vertices
+ *
  * This program adds a template into an average surface.
  *
  * Author: FreeSurfer Developers

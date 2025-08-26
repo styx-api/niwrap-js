@@ -143,6 +143,8 @@ function v_3d_convolve_outputs(
 
 
 /**
+ * 3dConvolve
+ *
  * 3dConvolve is no longer supported in AFNI.
  *
  * Author: AFNI Developers
@@ -169,6 +171,8 @@ function v_3d_convolve_execute(
 
 
 /**
+ * 3dConvolve
+ *
  * 3dConvolve is no longer supported in AFNI.
  *
  * Author: AFNI Developers

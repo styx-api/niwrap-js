@@ -142,6 +142,8 @@ function apsearch_outputs(
 
 
 /**
+ * apsearch
+ *
  * A tool for searching applications.
  *
  * Author: AFNI Developers
@@ -168,6 +170,8 @@ function apsearch_execute(
 
 
 /**
+ * apsearch
+ *
  * A tool for searching applications.
  *
  * Author: AFNI Developers

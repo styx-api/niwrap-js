@@ -206,6 +206,8 @@ function v_3d_tsort_outputs(
 
 
 /**
+ * 3dTsort
+ *
  * Sorts each voxel in a dataset and produces a new dataset.
  *
  * Author: AFNI Developers
@@ -232,6 +234,8 @@ function v_3d_tsort_execute(
 
 
 /**
+ * 3dTsort
+ *
  * Sorts each voxel in a dataset and produces a new dataset.
  *
  * Author: AFNI Developers

@@ -189,6 +189,8 @@ function v_3d_diff_outputs(
 
 
 /**
+ * 3dDiff
+ *
  * A program to examine element-wise differences between two images.
  *
  * Author: AFNI Developers
@@ -215,6 +217,8 @@ function v_3d_diff_execute(
 
 
 /**
+ * 3dDiff
+ *
  * A program to examine element-wise differences between two images.
  *
  * Author: AFNI Developers

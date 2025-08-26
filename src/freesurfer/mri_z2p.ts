@@ -256,6 +256,8 @@ function mri_z2p_outputs(
 
 
 /**
+ * mri_z2p
+ *
  * Converts Z-statistic volumes to P-value volumes.
  *
  * Author: FreeSurfer Developers
@@ -282,6 +284,8 @@ function mri_z2p_execute(
 
 
 /**
+ * mri_z2p
+ *
  * Converts Z-statistic volumes to P-value volumes.
  *
  * Author: FreeSurfer Developers

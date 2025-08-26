@@ -150,6 +150,8 @@ function image_math_outputs(
 
 
 /**
+ * ImageMath
+ *
  * A versatile tool for performing various mathematical and manipulation operations on images.
  *
  * Author: ANTs Developers
@@ -176,6 +178,8 @@ function image_math_execute(
 
 
 /**
+ * ImageMath
+ *
  * A versatile tool for performing various mathematical and manipulation operations on images.
  *
  * Author: ANTs Developers

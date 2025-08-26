@@ -173,6 +173,8 @@ function defect_seg_outputs(
 
 
 /**
+ * defect-seg
+ *
  * This program creates some files that allows the user to visualize and evaluate the surface defects that were automatically detected and fixed by the topology correction program.
  *
  * Author: FreeSurfer Developers
@@ -199,6 +201,8 @@ function defect_seg_execute(
 
 
 /**
+ * defect-seg
+ *
  * This program creates some files that allows the user to visualize and evaluate the surface defects that were automatically detected and fixed by the topology correction program.
  *
  * Author: FreeSurfer Developers

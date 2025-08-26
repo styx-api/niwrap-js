@@ -131,6 +131,8 @@ function possum_plot_outputs(
 
 
 /**
+ * possum_plot
+ *
  * Tool for plotting results from POSSUM simulations in FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function possum_plot_execute(
 
 
 /**
+ * possum_plot
+ *
  * Tool for plotting results from POSSUM simulations in FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

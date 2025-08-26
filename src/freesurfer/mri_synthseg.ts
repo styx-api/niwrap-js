@@ -256,6 +256,8 @@ function mri_synthseg_outputs(
 
 
 /**
+ * mri_synthseg
+ *
  * SynthSeg is a tool for brain image segmentation.
  *
  * Author: FreeSurfer Developers
@@ -282,6 +284,8 @@ function mri_synthseg_execute(
 
 
 /**
+ * mri_synthseg
+ *
  * SynthSeg is a tool for brain image segmentation.
  *
  * Author: FreeSurfer Developers

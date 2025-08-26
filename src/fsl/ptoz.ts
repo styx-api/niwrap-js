@@ -139,6 +139,8 @@ function ptoz_outputs(
 
 
 /**
+ * ptoz
+ *
  * Convert p-values to z-values.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -165,6 +167,8 @@ function ptoz_execute(
 
 
 /**
+ * ptoz
+ *
  * Convert p-values to z-values.
  *
  * Author: FMRIB Analysis Group, University of Oxford

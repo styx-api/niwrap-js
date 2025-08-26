@@ -198,6 +198,8 @@ function swi_preprocess_outputs(
 
 
 /**
+ * swi_preprocess
+ *
  * Pre-process the Susceptibility-weighted images and write out nifti files for feeding into PRELUDE (Phase Unwrapping Library of FSL).
  *
  * Author: FreeSurfer Developers
@@ -224,6 +226,8 @@ function swi_preprocess_execute(
 
 
 /**
+ * swi_preprocess
+ *
  * Pre-process the Susceptibility-weighted images and write out nifti files for feeding into PRELUDE (Phase Unwrapping Library of FSL).
  *
  * Author: FreeSurfer Developers

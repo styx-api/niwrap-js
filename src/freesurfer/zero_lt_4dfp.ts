@@ -152,6 +152,8 @@ function zero_lt_4dfp_outputs(
 
 
 /**
+ * zero_lt_4dfp
+ *
  * A tool to process 4dfp image files by zeroing values less than a given float threshold.
  *
  * Author: FreeSurfer Developers
@@ -178,6 +180,8 @@ function zero_lt_4dfp_execute(
 
 
 /**
+ * zero_lt_4dfp
+ *
  * A tool to process 4dfp image files by zeroing values less than a given float threshold.
  *
  * Author: FreeSurfer Developers

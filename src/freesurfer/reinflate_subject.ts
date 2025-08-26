@@ -124,6 +124,8 @@ function reinflate_subject_outputs(
 
 
 /**
+ * reinflate_subject
+ *
  * Tool for reinflating brain surfaces.
  *
  * Author: FreeSurfer Developers
@@ -150,6 +152,8 @@ function reinflate_subject_execute(
 
 
 /**
+ * reinflate_subject
+ *
  * Tool for reinflating brain surfaces.
  *
  * Author: FreeSurfer Developers

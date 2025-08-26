@@ -184,6 +184,8 @@ function robustfov_outputs(
 
 
 /**
+ * robustfov
+ *
  * Reduce FOV of image to remove lower head and neck.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -210,6 +212,8 @@ function robustfov_execute(
 
 
 /**
+ * robustfov
+ *
  * Reduce FOV of image to remove lower head and neck.
  *
  * Author: FMRIB Analysis Group, University of Oxford

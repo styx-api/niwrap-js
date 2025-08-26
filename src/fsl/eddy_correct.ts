@@ -144,6 +144,8 @@ function eddy_correct_outputs(
 
 
 /**
+ * eddy_correct
+ *
  * Eddy current correction tool for FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -170,6 +172,8 @@ function eddy_correct_execute(
 
 
 /**
+ * eddy_correct
+ *
  * Eddy current correction tool for FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

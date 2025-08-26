@@ -145,6 +145,8 @@ function mri_ca_tissue_parms_outputs(
 
 
 /**
+ * mri_ca_tissue_parms
+ *
  * Tool for computing tissue parameters in canonical space.
  *
  * Author: FreeSurfer Developers
@@ -171,6 +173,8 @@ function mri_ca_tissue_parms_execute(
 
 
 /**
+ * mri_ca_tissue_parms
+ *
  * Tool for computing tissue parameters in canonical space.
  *
  * Author: FreeSurfer Developers

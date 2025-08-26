@@ -293,6 +293,8 @@ function metric_merge_outputs(
 
 
 /**
+ * metric-merge
+ *
  * Merge metric files into a new file.
  *
  * Takes one or more metric files and constructs a new metric file by concatenating columns from them.  The input metric files must have the same number of vertices and same structure.
@@ -325,6 +327,8 @@ function metric_merge_execute(
 
 
 /**
+ * metric-merge
+ *
  * Merge metric files into a new file.
  *
  * Takes one or more metric files and constructs a new metric file by concatenating columns from them.  The input metric files must have the same number of vertices and same structure.

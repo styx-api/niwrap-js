@@ -181,6 +181,8 @@ function eddy_combine_outputs(
 
 
 /**
+ * eddy_combine
+ *
  * Combines diffusion data sets with opposite phase encoding directions for use with FSL's EDDY.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -207,6 +209,8 @@ function eddy_combine_execute(
 
 
 /**
+ * eddy_combine
+ *
  * Combines diffusion data sets with opposite phase encoding directions for use with FSL's EDDY.
  *
  * Author: FMRIB Analysis Group, University of Oxford

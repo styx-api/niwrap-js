@@ -330,6 +330,8 @@ function warp2metric_outputs(
 
 
 /**
+ * warp2metric
+ *
  * Compute fixel-wise or voxel-wise metrics from a 4D deformation field.
  *
  *
@@ -362,6 +364,8 @@ function warp2metric_execute(
 
 
 /**
+ * warp2metric
+ *
  * Compute fixel-wise or voxel-wise metrics from a 4D deformation field.
  *
  *

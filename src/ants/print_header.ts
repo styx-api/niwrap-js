@@ -135,6 +135,8 @@ function print_header_outputs(
 
 
 /**
+ * PrintHeader
+ *
  * A utility to print header information from an image file.
  *
  * Author: ANTs Developers
@@ -161,6 +163,8 @@ function print_header_execute(
 
 
 /**
+ * PrintHeader
+ *
  * A utility to print header information from an image file.
  *
  * Author: ANTs Developers

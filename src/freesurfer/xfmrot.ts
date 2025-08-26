@@ -140,6 +140,8 @@ function xfmrot_outputs(
 
 
 /**
+ * xfmrot
+ *
  * Tool to apply a transformation defined in a transform file to an input vector file.
  *
  * Author: FreeSurfer Developers
@@ -166,6 +168,8 @@ function xfmrot_execute(
 
 
 /**
+ * xfmrot
+ *
  * Tool to apply a transformation defined in a transform file to an input vector file.
  *
  * Author: FreeSurfer Developers

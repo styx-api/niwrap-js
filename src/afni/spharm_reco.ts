@@ -195,6 +195,8 @@ function spharm_reco_outputs(
 
 
 /**
+ * SpharmReco
+ *
  * Spherical Harmonics Reconstruction from a set of harmonics and their corresponding coefficients.
  *
  * Author: AFNI Developers
@@ -221,6 +223,8 @@ function spharm_reco_execute(
 
 
 /**
+ * SpharmReco
+ *
  * Spherical Harmonics Reconstruction from a set of harmonics and their corresponding coefficients.
  *
  * Author: AFNI Developers

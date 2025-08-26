@@ -120,6 +120,8 @@ function segment_monkey_outputs(
 
 
 /**
+ * segment_monkey
+ *
  * A tool for segmenting images using specified control points.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function segment_monkey_execute(
 
 
 /**
+ * segment_monkey
+ *
  * A tool for segmenting images using specified control points.
  *
  * Author: FreeSurfer Developers

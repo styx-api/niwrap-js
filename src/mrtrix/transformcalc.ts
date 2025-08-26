@@ -248,6 +248,8 @@ function transformcalc_outputs(
 
 
 /**
+ * transformcalc
+ *
  * Perform calculations on linear transformation matrices.
  *
  *
@@ -280,6 +282,8 @@ function transformcalc_execute(
 
 
 /**
+ * transformcalc
+ *
  * Perform calculations on linear transformation matrices.
  *
  *

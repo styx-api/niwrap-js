@@ -284,6 +284,8 @@ function fixel2voxel_outputs(
 
 
 /**
+ * fixel2voxel
+ *
  * Convert a fixel-based sparse-data image into some form of scalar image.
  *
  * Fixel data can be reduced to voxel data in a number of ways:
@@ -329,6 +331,8 @@ function fixel2voxel_execute(
 
 
 /**
+ * fixel2voxel
+ *
  * Convert a fixel-based sparse-data image into some form of scalar image.
  *
  * Fixel data can be reduced to voxel data in a number of ways:

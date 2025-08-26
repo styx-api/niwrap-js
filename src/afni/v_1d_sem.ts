@@ -267,6 +267,8 @@ function v_1d_sem_outputs(
 
 
 /**
+ * 1dSEM
+ *
  * Computes path coefficients for connection matrix in Structural Equation Modeling (SEM).
  *
  * Author: AFNI Developers
@@ -293,6 +295,8 @@ function v_1d_sem_execute(
 
 
 /**
+ * 1dSEM
+ *
  * Computes path coefficients for connection matrix in Structural Equation Modeling (SEM).
  *
  * Author: AFNI Developers

@@ -132,6 +132,8 @@ function surface_vertex_areas_outputs(
 
 
 /**
+ * surface-vertex-areas
+ *
  * Measure surface area each vertex is responsible for.
  *
  * Each vertex gets one third of the area of each triangle it is a part of.  Units are mm^2.
@@ -160,6 +162,8 @@ function surface_vertex_areas_execute(
 
 
 /**
+ * surface-vertex-areas
+ *
  * Measure surface area each vertex is responsible for.
  *
  * Each vertex gets one third of the area of each triangle it is a part of.  Units are mm^2.

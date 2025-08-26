@@ -163,6 +163,8 @@ function multiply_images_outputs(
 
 
 /**
+ * MultiplyImages
+ *
  * Multiply 2 images; 2nd image file may also be floating point numerical value, and program will act accordingly -- i.e. read as a number. Program handles vector and tensor images as well.
  *
  * Author: ANTs Developers
@@ -189,6 +191,8 @@ function multiply_images_execute(
 
 
 /**
+ * MultiplyImages
+ *
  * Multiply 2 images; 2nd image file may also be floating point numerical value, and program will act accordingly -- i.e. read as a number. Program handles vector and tensor images as well.
  *
  * Author: ANTs Developers

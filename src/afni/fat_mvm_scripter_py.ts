@@ -255,6 +255,8 @@ function fat_mvm_scripter_py_outputs(
 
 
 /**
+ * fat_mvm_scripter.py
+ *
  * Automated tool to create command scripts for 3dMVM statistical modeling.
  *
  * Author: AFNI Developers
@@ -281,6 +283,8 @@ function fat_mvm_scripter_py_execute(
 
 
 /**
+ * fat_mvm_scripter.py
+ *
  * Automated tool to create command scripts for 3dMVM statistical modeling.
  *
  * Author: AFNI Developers

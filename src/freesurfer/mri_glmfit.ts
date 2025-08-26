@@ -836,6 +836,8 @@ function mri_glmfit_outputs(
 
 
 /**
+ * mri_glmfit
+ *
  * Performs general linear model (GLM) analysis in the volume or the surface.
  *
  * Author: FreeSurfer Developers
@@ -862,6 +864,8 @@ function mri_glmfit_execute(
 
 
 /**
+ * mri_glmfit
+ *
  * Performs general linear model (GLM) analysis in the volume or the surface.
  *
  * Author: FreeSurfer Developers

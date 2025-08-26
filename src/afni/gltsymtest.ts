@@ -132,6 +132,8 @@ function gltsymtest_outputs(
 
 
 /**
+ * GLTsymtest
+ *
  * A tool to test the validity of '-gltsym' strings for use with 3dDeconvolve or 3dREMLfit.
  *
  * Author: AFNI Developers
@@ -158,6 +160,8 @@ function gltsymtest_execute(
 
 
 /**
+ * GLTsymtest
+ *
  * A tool to test the validity of '-gltsym' strings for use with 3dDeconvolve or 3dREMLfit.
  *
  * Author: AFNI Developers

@@ -252,6 +252,8 @@ function v_3d_tsmooth_outputs(
 
 
 /**
+ * 3dTsmooth
+ *
  * Smooths each voxel time series in a 3D+time dataset and produces as output a new 3D+time dataset (e.g., lowpass filter in time).
  *
  * Author: AFNI Developers
@@ -278,6 +280,8 @@ function v_3d_tsmooth_execute(
 
 
 /**
+ * 3dTsmooth
+ *
  * Smooths each voxel time series in a 3D+time dataset and produces as output a new 3D+time dataset (e.g., lowpass filter in time).
  *
  * Author: AFNI Developers

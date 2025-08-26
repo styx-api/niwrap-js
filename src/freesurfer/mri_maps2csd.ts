@@ -229,6 +229,8 @@ function mri_maps2csd_outputs(
 
 
 /**
+ * mri_maps2csd
+ *
  * Tool to create CSD files and PDFs from input maps and apply them.
  *
  * Author: FreeSurfer Developers
@@ -255,6 +257,8 @@ function mri_maps2csd_execute(
 
 
 /**
+ * mri_maps2csd
+ *
  * Tool to create CSD files and PDFs from input maps and apply them.
  *
  * Author: FreeSurfer Developers

@@ -223,6 +223,8 @@ function metric_dilate_outputs(
 
 
 /**
+ * metric-dilate
+ *
  * Dilate a metric file.
  *
  * For all metric vertices that are designated as bad, if they neighbor a non-bad vertex with data or are within the specified distance of such a vertex, replace the value with a distance-based weighted average of nearby non-bad vertices that have data, otherwise set the value to zero.  No matter how small <distance> is, dilation will always use at least the immediate neighbor vertices.  If -nearest is specified, it will use the value from the closest non-bad vertex with data within range instead of a weighted average.
@@ -257,6 +259,8 @@ function metric_dilate_execute(
 
 
 /**
+ * metric-dilate
+ *
  * Dilate a metric file.
  *
  * For all metric vertices that are designated as bad, if they neighbor a non-bad vertex with data or are within the specified distance of such a vertex, replace the value with a distance-based weighted average of nearby non-bad vertices that have data, otherwise set the value to zero.  No matter how small <distance> is, dilation will always use at least the immediate neighbor vertices.  If -nearest is specified, it will use the value from the closest non-bad vertex with data within range instead of a weighted average.

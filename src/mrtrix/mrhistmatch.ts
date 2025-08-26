@@ -289,6 +289,8 @@ function mrhistmatch_outputs(
 
 
 /**
+ * mrhistmatch
+ *
  * Modify the intensities of one image to match the histogram of another.
  *
  *
@@ -322,6 +324,8 @@ function mrhistmatch_execute(
 
 
 /**
+ * mrhistmatch
+ *
  * Modify the intensities of one image to match the histogram of another.
  *
  *

@@ -126,6 +126,8 @@ function v_3d_conformist_outputs(
 
 
 /**
+ * 3dConformist
+ *
  * Program to conform a collection of datasets to the same size by zero padding.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v_3d_conformist_execute(
 
 
 /**
+ * 3dConformist
+ *
  * Program to conform a collection of datasets to the same size by zero padding.
  *
  * Author: AFNI Developers

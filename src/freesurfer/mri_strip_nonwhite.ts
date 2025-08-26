@@ -141,6 +141,8 @@ function mri_strip_nonwhite_outputs(
 
 
 /**
+ * mri_strip_nonwhite
+ *
  * Tool for processing MRI images, transforming volumetric data using provided transformation and template files.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mri_strip_nonwhite_execute(
 
 
 /**
+ * mri_strip_nonwhite
+ *
  * Tool for processing MRI images, transforming volumetric data using provided transformation and template files.
  *
  * Author: FreeSurfer Developers

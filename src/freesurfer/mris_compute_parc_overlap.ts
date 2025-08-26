@@ -264,6 +264,8 @@ function mris_compute_parc_overlap_outputs(
 
 
 /**
+ * mris_compute_parc_overlap
+ *
  * Compares two parcellated (annotated or labeled) surfaces and computes an overall Dice coefficient and mean minimum distances (mm).
  *
  * Author: FreeSurfer Developers
@@ -290,6 +292,8 @@ function mris_compute_parc_overlap_execute(
 
 
 /**
+ * mris_compute_parc_overlap
+ *
  * Compares two parcellated (annotated or labeled) surfaces and computes an overall Dice coefficient and mean minimum distances (mm).
  *
  * Author: FreeSurfer Developers

@@ -125,6 +125,8 @@ function mri_correct_segmentations_outputs(
 
 
 /**
+ * mri_correct_segmentations
+ *
  * Tool for correcting automated infant segmentations.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function mri_correct_segmentations_execute(
 
 
 /**
+ * mri_correct_segmentations
+ *
  * Tool for correcting automated infant segmentations.
  *
  * Author: FreeSurfer Developers

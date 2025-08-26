@@ -144,6 +144,8 @@ function mri_refine_seg_outputs(
 
 
 /**
+ * mri_refine_seg
+ *
  * Refines a messy segmentation by recoding stray voxels.
  *
  * Author: FreeSurfer Developers
@@ -170,6 +172,8 @@ function mri_refine_seg_execute(
 
 
 /**
+ * mri_refine_seg
+ *
  * Refines a messy segmentation by recoding stray voxels.
  *
  * Author: FreeSurfer Developers

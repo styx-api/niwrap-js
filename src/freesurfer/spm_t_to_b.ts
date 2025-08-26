@@ -125,6 +125,8 @@ function spm_t_to_b_outputs(
 
 
 /**
+ * spm_t_to_b
+ *
  * Converts SPM format to Bshort format.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function spm_t_to_b_execute(
 
 
 /**
+ * spm_t_to_b
+ *
  * Converts SPM format to Bshort format.
  *
  * Author: FreeSurfer Developers

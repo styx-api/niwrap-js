@@ -529,6 +529,8 @@ function to3d_outputs(
 
 
 /**
+ * to3d
+ *
  * Creates 3D datasets for use with AFNI from 2D image files.
  *
  * Author: AFNI Developers
@@ -555,6 +557,8 @@ function to3d_execute(
 
 
 /**
+ * to3d
+ *
  * Creates 3D datasets for use with AFNI from 2D image files.
  *
  * Author: AFNI Developers

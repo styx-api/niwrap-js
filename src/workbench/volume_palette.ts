@@ -510,6 +510,8 @@ function volume_palette_outputs(
 
 
 /**
+ * volume-palette
+ *
  * Set the palette of a volume file.
  *
  * The original volume file is overwritten with the modified version.  By default, all columns of the volume file are adjusted to the new settings, use the -subvolume option to change only one subvolume.  Mapping settings not specified in options will be taken from the first subvolume.  The <mode> argument must be one of the following:
@@ -608,6 +610,8 @@ function volume_palette_execute(
 
 
 /**
+ * volume-palette
+ *
  * Set the palette of a volume file.
  *
  * The original volume file is overwritten with the modified version.  By default, all columns of the volume file are adjusted to the new settings, use the -subvolume option to change only one subvolume.  Mapping settings not specified in options will be taken from the first subvolume.  The <mode> argument must be one of the following:

@@ -298,6 +298,8 @@ function fsl_regfilt_outputs(
 
 
 /**
+ * fsl_regfilt
+ *
  * Data de-noising by regressing out part of a design matrix using simple OLS regression on 4D images.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -324,6 +326,8 @@ function fsl_regfilt_execute(
 
 
 /**
+ * fsl_regfilt
+ *
  * Data de-noising by regressing out part of a design matrix using simple OLS regression on 4D images.
  *
  * Author: FMRIB Analysis Group, University of Oxford

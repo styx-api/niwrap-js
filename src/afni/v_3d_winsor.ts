@@ -222,6 +222,8 @@ function v_3d_winsor_outputs(
 
 
 /**
+ * 3dWinsor
+ *
  * Apply a 3D 'Winsorizing' filter to a short-valued dataset.
  *
  * Author: AFNI Developers
@@ -248,6 +250,8 @@ function v_3d_winsor_execute(
 
 
 /**
+ * 3dWinsor
+ *
  * Apply a 3D 'Winsorizing' filter to a short-valued dataset.
  *
  * Author: AFNI Developers

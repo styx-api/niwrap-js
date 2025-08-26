@@ -158,6 +158,8 @@ function volume_distortion_outputs(
 
 
 /**
+ * volume-distortion
+ *
  * Calculate volume warpfield distortion.
  *
  * Calculates isotropic and anisotropic distortions in the volume warpfield.  At each voxel, the gradient of the absolute warpfield is computed to obtain the local affine transforms for each voxel (jacobian matrices), and strain tensors are derived from them.  The isotropic component (volumetric expansion ratio) is the product of the three principal strains.  The default measure ('elongation') for the anisotropic component is the largest principal strain divided by the smallest.
@@ -188,6 +190,8 @@ function volume_distortion_execute(
 
 
 /**
+ * volume-distortion
+ *
  * Calculate volume warpfield distortion.
  *
  * Calculates isotropic and anisotropic distortions in the volume warpfield.  At each voxel, the gradient of the absolute warpfield is computed to obtain the local affine transforms for each voxel (jacobian matrices), and strain tensors are derived from them.  The isotropic component (volumetric expansion ratio) is the product of the three principal strains.  The default measure ('elongation') for the anisotropic component is the largest principal strain divided by the smallest.

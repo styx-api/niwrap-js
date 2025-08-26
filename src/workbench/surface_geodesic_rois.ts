@@ -190,6 +190,8 @@ function surface_geodesic_rois_outputs(
 
 
 /**
+ * surface-geodesic-rois
+ *
  * Draw geodesic limited rois at vertices.
  *
  * For each vertex in the list file, a column in the output metric is created, and an ROI around that vertex is drawn in that column.  Each metric column will have zeros outside the geodesic distance spacified by <limit>, and by default will have a value of 1.0 inside it.  If the -gaussian option is specified, the values inside the ROI will instead form a gaussian with the specified value of sigma, normalized so that the sum of the nonzero values in the metric column is 1.0.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
@@ -218,6 +220,8 @@ function surface_geodesic_rois_execute(
 
 
 /**
+ * surface-geodesic-rois
+ *
  * Draw geodesic limited rois at vertices.
  *
  * For each vertex in the list file, a column in the output metric is created, and an ROI around that vertex is drawn in that column.  Each metric column will have zeros outside the geodesic distance spacified by <limit>, and by default will have a value of 1.0 inside it.  If the -gaussian option is specified, the values inside the ROI will instead form a gaussian with the specified value of sigma, normalized so that the sum of the nonzero values in the metric column is 1.0.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.

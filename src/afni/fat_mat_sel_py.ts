@@ -363,6 +363,8 @@ function fat_mat_sel_py_outputs(
 
 
 /**
+ * fat_mat_sel.py
+ *
  * Perform simple matrix plotting operations from outputs of FATCAT programs 3dNetCorr and 3dTrackID.
  *
  * Author: AFNI Developers
@@ -389,6 +391,8 @@ function fat_mat_sel_py_execute(
 
 
 /**
+ * fat_mat_sel.py
+ *
  * Perform simple matrix plotting operations from outputs of FATCAT programs 3dNetCorr and 3dTrackID.
  *
  * Author: AFNI Developers

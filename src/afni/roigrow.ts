@@ -195,6 +195,8 @@ function roigrow_outputs(
 
 
 /**
+ * ROIgrow
+ *
  * A program to expand an ROI on the surface.
  *
  * Author: AFNI Developers
@@ -221,6 +223,8 @@ function roigrow_execute(
 
 
 /**
+ * ROIgrow
+ *
  * A program to expand an ROI on the surface.
  *
  * Author: AFNI Developers

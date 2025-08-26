@@ -133,6 +133,8 @@ function border_export_color_table_outputs(
 
 
 /**
+ * border-export-color-table
+ *
  * Write border names and colors as text.
  *
  * Takes the names and colors of each border, and writes it to the same format as -metric-label-import expects.  By default, the borders are colored by border name, specify -class-colors to color them by class instead.  The key values start at 1 and follow the order of the borders in the file.
@@ -161,6 +163,8 @@ function border_export_color_table_execute(
 
 
 /**
+ * border-export-color-table
+ *
  * Write border names and colors as text.
  *
  * Takes the names and colors of each border, and writes it to the same format as -metric-label-import expects.  By default, the borders are colored by border name, specify -class-colors to color them by class instead.  The key values start at 1 and follow the order of the borders in the file.

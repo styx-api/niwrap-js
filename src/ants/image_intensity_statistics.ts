@@ -140,6 +140,8 @@ function image_intensity_statistics_outputs(
 
 
 /**
+ * ImageIntensityStatistics
+ *
  * This tool computes intensity statistics of an input image, optionally given a label image.
  *
  * Author: ANTs Developers
@@ -166,6 +168,8 @@ function image_intensity_statistics_execute(
 
 
 /**
+ * ImageIntensityStatistics
+ *
  * This tool computes intensity statistics of an input image, optionally given a label image.
  *
  * Author: ANTs Developers

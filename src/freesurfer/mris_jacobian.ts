@@ -157,6 +157,8 @@ function mris_jacobian_outputs(
 
 
 /**
+ * mris_jacobian
+ *
  * This program computes the Jacobian of a surface mapping.
  *
  * Author: FreeSurfer Developers
@@ -183,6 +185,8 @@ function mris_jacobian_execute(
 
 
 /**
+ * mris_jacobian
+ *
  * This program computes the Jacobian of a surface mapping.
  *
  * Author: FreeSurfer Developers

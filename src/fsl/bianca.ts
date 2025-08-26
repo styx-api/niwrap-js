@@ -257,6 +257,8 @@ function bianca_outputs(
 
 
 /**
+ * bianca
+ *
  * BIANCA: Brain Intensity AbNormality Classification Algorithm.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -283,6 +285,8 @@ function bianca_execute(
 
 
 /**
+ * bianca
+ *
  * BIANCA: Brain Intensity AbNormality Classification Algorithm.
  *
  * Author: FMRIB Analysis Group, University of Oxford

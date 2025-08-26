@@ -247,6 +247,8 @@ function mris_make_template_outputs(
 
 
 /**
+ * mris_make_template
+ *
  * This program will add a template into an average surface.
  *
  * Author: FreeSurfer Developers
@@ -273,6 +275,8 @@ function mris_make_template_execute(
 
 
 /**
+ * mris_make_template
+ *
  * This program will add a template into an average surface.
  *
  * Author: FreeSurfer Developers

@@ -229,6 +229,8 @@ function plugout_tt_outputs(
 
 
 /**
+ * plugout_tt
+ *
  * This program connects to AFNI and receives notification whenever the user changes Talairach coordinates.
  *
  * Author: AFNI Developers
@@ -255,6 +257,8 @@ function plugout_tt_execute(
 
 
 /**
+ * plugout_tt
+ *
  * This program connects to AFNI and receives notification whenever the user changes Talairach coordinates.
  *
  * Author: AFNI Developers

@@ -139,6 +139,8 @@ function v_3dto_xdataset_outputs(
 
 
 /**
+ * 3dtoXdataset
+ *
  * Convert input datasets to the format needed for 3dClustSimX.
  *
  * Author: AFNI Developers
@@ -165,6 +167,8 @@ function v_3dto_xdataset_execute(
 
 
 /**
+ * 3dtoXdataset
+ *
  * Convert input datasets to the format needed for 3dClustSimX.
  *
  * Author: AFNI Developers

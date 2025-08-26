@@ -293,6 +293,8 @@ function mrhistogram_outputs(
 
 
 /**
+ * mrhistogram
+ *
  * Generate a histogram of image intensities.
  *
  *
@@ -325,6 +327,8 @@ function mrhistogram_execute(
 
 
 /**
+ * mrhistogram
+ *
  * Generate a histogram of image intensities.
  *
  *

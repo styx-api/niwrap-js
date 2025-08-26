@@ -249,6 +249,8 @@ function reg_aladin_outputs(
 
 
 /**
+ * reg_aladin
+ *
  * Block Matching algorithm for global registration based on "Reconstructing a 3D structure from serial histological sections", Image and Vision Computing, 2001.
  *
  * Author: NiftyReg Developers
@@ -275,6 +277,8 @@ function reg_aladin_execute(
 
 
 /**
+ * reg_aladin
+ *
  * Block Matching algorithm for global registration based on "Reconstructing a 3D structure from serial histological sections", Image and Vision Computing, 2001.
  *
  * Author: NiftyReg Developers

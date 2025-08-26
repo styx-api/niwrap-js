@@ -371,6 +371,8 @@ function adjunct_apqc_tsnr_general_outputs(
 
 
 /**
+ * adjunct_apqc_tsnr_general
+ *
  * An adjunct program for making TSNR plots for APQC.
  *
  * Author: AFNI Developers
@@ -397,6 +399,8 @@ function adjunct_apqc_tsnr_general_execute(
 
 
 /**
+ * adjunct_apqc_tsnr_general
+ *
  * An adjunct program for making TSNR plots for APQC.
  *
  * Author: AFNI Developers

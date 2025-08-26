@@ -287,6 +287,8 @@ function scene_file_merge_outputs(
 
 
 /**
+ * scene-file-merge
+ *
  * Rearrange scenes into a new file.
  *
  * Takes one or more scene files and constructs a new scene file by concatenating specified scenes from them.
@@ -319,6 +321,8 @@ function scene_file_merge_execute(
 
 
 /**
+ * scene-file-merge
+ *
  * Rearrange scenes into a new file.
  *
  * Takes one or more scene files and constructs a new scene file by concatenating specified scenes from them.

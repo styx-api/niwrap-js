@@ -205,6 +205,8 @@ function tractstats2table_outputs(
 
 
 /**
+ * tractstats2table
+ *
  * Converts a track overall stats file created by tracula into a table used for group statistics.
  *
  * Author: FreeSurfer Developers
@@ -231,6 +233,8 @@ function tractstats2table_execute(
 
 
 /**
+ * tractstats2table
+ *
  * Converts a track overall stats file created by tracula into a table used for group statistics.
  *
  * Author: FreeSurfer Developers

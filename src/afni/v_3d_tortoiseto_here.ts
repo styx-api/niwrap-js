@@ -170,6 +170,8 @@ function v_3d_tortoiseto_here_outputs(
 
 
 /**
+ * 3dTORTOISEtoHere
+ *
  * Convert standard TORTOISE DTs (diagonal-first format) to standard AFNI (lower triangular, row-wise) format.
  *
  * Author: AFNI Developers
@@ -196,6 +198,8 @@ function v_3d_tortoiseto_here_execute(
 
 
 /**
+ * 3dTORTOISEtoHere
+ *
  * Convert standard TORTOISE DTs (diagonal-first format) to standard AFNI (lower triangular, row-wise) format.
  *
  * Author: AFNI Developers

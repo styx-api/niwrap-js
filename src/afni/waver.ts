@@ -365,6 +365,8 @@ function waver_outputs(
 
 
 /**
+ * waver
+ *
  * Creates an ideal waveform timeseries file.
  *
  * Author: AFNI Developers
@@ -391,6 +393,8 @@ function waver_execute(
 
 
 /**
+ * waver
+ *
  * Creates an ideal waveform timeseries file.
  *
  * Author: AFNI Developers

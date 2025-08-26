@@ -153,6 +153,8 @@ function deface_subject_outputs(
 
 
 /**
+ * deface_subject
+ *
  * Tool for defacing MRI images to anonymize patient data.
  *
  * Author: FreeSurfer Developers
@@ -179,6 +181,8 @@ function deface_subject_execute(
 
 
 /**
+ * deface_subject
+ *
  * Tool for defacing MRI images to anonymize patient data.
  *
  * Author: FreeSurfer Developers

@@ -234,6 +234,8 @@ function v_3ddot_outputs(
 
 
 /**
+ * 3ddot
+ *
  * Computes correlation coefficients between sub-brick pairs.
  *
  * Author: AFNI Developers
@@ -260,6 +262,8 @@ function v_3ddot_execute(
 
 
 /**
+ * 3ddot
+ *
  * Computes correlation coefficients between sub-brick pairs.
  *
  * Author: AFNI Developers

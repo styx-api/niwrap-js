@@ -173,6 +173,8 @@ function volume_parcel_resampling_generic_outputs(
 
 
 /**
+ * volume-parcel-resampling-generic
+ *
  * Smooth and resample volume parcels from different volume space.
  *
  * Smooths and resamples the region inside each label in cur-parcels to the region of the same label name in new-parcels.  Any voxels in the output label region but outside the input label region will be extrapolated from nearby data.  The -fix-zeros option causes the smoothing to not use an input value if it is zero, but still write a smoothed value to the voxel, and after smoothing is complete, it will check for any remaining values of zero, and fill them in with extrapolated values.  The output volume will use the volume space of new-parcels, which does not need to be in the same volume space as the input.
@@ -201,6 +203,8 @@ function volume_parcel_resampling_generic_execute(
 
 
 /**
+ * volume-parcel-resampling-generic
+ *
  * Smooth and resample volume parcels from different volume space.
  *
  * Smooths and resamples the region inside each label in cur-parcels to the region of the same label name in new-parcels.  Any voxels in the output label region but outside the input label region will be extrapolated from nearby data.  The -fix-zeros option causes the smoothing to not use an input value if it is zero, but still write a smoothed value to the voxel, and after smoothing is complete, it will check for any remaining values of zero, and fill them in with extrapolated values.  The output volume will use the volume space of new-parcels, which does not need to be in the same volume space as the input.

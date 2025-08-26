@@ -252,6 +252,8 @@ function v_3dmask_tool_outputs(
 
 
 /**
+ * 3dmask_tool
+ *
  * 3dmask_tool - for combining/dilating/eroding/filling masks.
  *
  * Author: AFNI Developers
@@ -278,6 +280,8 @@ function v_3dmask_tool_execute(
 
 
 /**
+ * 3dmask_tool
+ *
  * 3dmask_tool - for combining/dilating/eroding/filling masks.
  *
  * Author: AFNI Developers

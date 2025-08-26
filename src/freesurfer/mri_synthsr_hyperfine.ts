@@ -164,6 +164,8 @@ function mri_synthsr_hyperfine_outputs(
 
 
 /**
+ * mri_synthsr_hyperfine
+ *
  * Implementation of SynthSR that generates a synthetic 1mm MP-RAGE from a pair of T1-T2 standard Hyperfine scans (1.5x1.5x5mm axial).
  *
  * Author: FreeSurfer Developers
@@ -190,6 +192,8 @@ function mri_synthsr_hyperfine_execute(
 
 
 /**
+ * mri_synthsr_hyperfine
+ *
  * Implementation of SynthSR that generates a synthetic 1mm MP-RAGE from a pair of T1-T2 standard Hyperfine scans (1.5x1.5x5mm axial).
  *
  * Author: FreeSurfer Developers

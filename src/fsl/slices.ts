@@ -165,6 +165,8 @@ function slices_outputs(
 
 
 /**
+ * slices
+ *
  * Generate a set of slices from an image, possibly with some scaling and intensity range options, and save as a GIF.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -191,6 +193,8 @@ function slices_execute(
 
 
 /**
+ * slices
+ *
  * Generate a set of slices from an image, possibly with some scaling and intensity range options, and save as a GIF.
  *
  * Author: FMRIB Analysis Group, University of Oxford

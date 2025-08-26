@@ -125,6 +125,8 @@ function immv_outputs(
 
 
 /**
+ * immv
+ *
  * Moves images from one file or directory to another.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -151,6 +153,8 @@ function immv_execute(
 
 
 /**
+ * immv
+ *
  * Moves images from one file or directory to another.
  *
  * Author: FMRIB Analysis Group, University of Oxford

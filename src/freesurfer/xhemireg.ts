@@ -222,6 +222,8 @@ function xhemireg_outputs(
 
 
 /**
+ * xhemireg
+ *
  * Tool for hemisphere registration in neuroimaging.
  *
  * Author: FreeSurfer Developers
@@ -248,6 +250,8 @@ function xhemireg_execute(
 
 
 /**
+ * xhemireg
+ *
  * Tool for hemisphere registration in neuroimaging.
  *
  * Author: FreeSurfer Developers

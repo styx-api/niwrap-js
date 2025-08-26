@@ -181,6 +181,8 @@ function sigloss_outputs(
 
 
 /**
+ * sigloss
+ *
  * Estimates signal loss from a field map (in rad/s).
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -207,6 +209,8 @@ function sigloss_execute(
 
 
 /**
+ * sigloss
+ *
  * Estimates signal loss from a field map (in rad/s).
  *
  * Author: FMRIB Analysis Group, University of Oxford

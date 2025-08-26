@@ -146,6 +146,8 @@ function v_3d_sharpen_outputs(
 
 
 /**
+ * 3dSharpen
+ *
  * Applies a simple 3D sharpening filter to the positive values in the #0 volume of the input dataset, and writes out a new dataset.
  *
  * Author: AFNI Developers
@@ -172,6 +174,8 @@ function v_3d_sharpen_execute(
 
 
 /**
+ * 3dSharpen
+ *
  * Applies a simple 3D sharpening filter to the positive values in the #0 volume of the input dataset, and writes out a new dataset.
  *
  * Author: AFNI Developers

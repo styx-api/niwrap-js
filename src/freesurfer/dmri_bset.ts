@@ -232,6 +232,8 @@ function dmri_bset_outputs(
 
 
 /**
+ * dmri_bset
+ *
  * This tool extracts a subset of volumes, b-values, and gradient directions from a diffusion MRI data set.
  *
  * Author: FreeSurfer Developers
@@ -258,6 +260,8 @@ function dmri_bset_execute(
 
 
 /**
+ * dmri_bset
+ *
  * This tool extracts a subset of volumes, b-values, and gradient directions from a diffusion MRI data set.
  *
  * Author: FreeSurfer Developers

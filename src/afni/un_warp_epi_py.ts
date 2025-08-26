@@ -162,6 +162,8 @@ function un_warp_epi_py_outputs(
 
 
 /**
+ * unWarpEPI.py
+ *
  * Routine to unwarp EPI data set using another data set with opposite polarity.
  *
  * Author: AFNI Developers
@@ -188,6 +190,8 @@ function un_warp_epi_py_execute(
 
 
 /**
+ * unWarpEPI.py
+ *
  * Routine to unwarp EPI data set using another data set with opposite polarity.
  *
  * Author: AFNI Developers

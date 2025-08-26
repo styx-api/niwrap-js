@@ -195,6 +195,8 @@ function v_1dfft_outputs(
 
 
 /**
+ * 1dfft
+ *
  * Compute the absolute value of the FFT of input columns from an AFNI 1D file.
  *
  * Author: AFNI Developers
@@ -221,6 +223,8 @@ function v_1dfft_execute(
 
 
 /**
+ * 1dfft
+ *
  * Compute the absolute value of the FFT of input columns from an AFNI 1D file.
  *
  * Author: AFNI Developers

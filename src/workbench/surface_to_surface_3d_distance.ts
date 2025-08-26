@@ -154,6 +154,8 @@ function surface_to_surface_3d_distance_outputs(
 
 
 /**
+ * surface-to-surface-3d-distance
+ *
  * Compute distance between corresponding vertices.
  *
  * Computes the vector difference between the vertices of each surface with the same index, as (comp - ref), and output the magnitudes, and optionally the displacement vectors.
@@ -182,6 +184,8 @@ function surface_to_surface_3d_distance_execute(
 
 
 /**
+ * surface-to-surface-3d-distance
+ *
  * Compute distance between corresponding vertices.
  *
  * Computes the vector difference between the vertices of each surface with the same index, as (comp - ref), and output the magnitudes, and optionally the displacement vectors.

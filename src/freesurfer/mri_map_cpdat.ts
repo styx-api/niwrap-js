@@ -185,6 +185,8 @@ function mri_map_cpdat_outputs(
 
 
 /**
+ * mri_map_cpdat
+ *
  * Maps a control.dat file to a different space using an LTA.
  *
  * Author: FreeSurfer Developers
@@ -211,6 +213,8 @@ function mri_map_cpdat_execute(
 
 
 /**
+ * mri_map_cpdat
+ *
  * Maps a control.dat file to a different space using an LTA.
  *
  * Author: FreeSurfer Developers

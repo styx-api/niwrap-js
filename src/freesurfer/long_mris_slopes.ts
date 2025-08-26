@@ -457,6 +457,8 @@ function long_mris_slopes_outputs(
 
 
 /**
+ * long_mris_slopes
+ *
  * Computes slope maps (e.g., of thickness) in a longitudinal study using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -483,6 +485,8 @@ function long_mris_slopes_execute(
 
 
 /**
+ * long_mris_slopes
+ *
  * Computes slope maps (e.g., of thickness) in a longitudinal study using FreeSurfer.
  *
  * Author: FreeSurfer Developers

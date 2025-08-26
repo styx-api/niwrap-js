@@ -135,6 +135,8 @@ function match_smoothing_outputs(
 
 
 /**
+ * match_smoothing
+ *
  * Computes the smoothing sigma needed to be applied to structural data to match a given functional data smoothing level.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -161,6 +163,8 @@ function match_smoothing_execute(
 
 
 /**
+ * match_smoothing
+ *
  * Computes the smoothing sigma needed to be applied to structural data to match a given functional data smoothing level.
  *
  * Author: FMRIB Analysis Group, University of Oxford

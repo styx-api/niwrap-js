@@ -136,6 +136,8 @@ function mri_linear_register_outputs(
 
 
 /**
+ * mri_linear_register
+ *
  * A tool for linear registration of MRI brain images to a template.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_linear_register_execute(
 
 
 /**
+ * mri_linear_register
+ *
  * A tool for linear registration of MRI brain images to a template.
  *
  * Author: FreeSurfer Developers

@@ -135,6 +135,8 @@ function make_exvivo_filled_outputs(
 
 
 /**
+ * make_exvivo_filled
+ *
  * A command-line tool for generating filled ex vivo brain images.
  *
  * Author: FreeSurfer Developers
@@ -161,6 +163,8 @@ function make_exvivo_filled_execute(
 
 
 /**
+ * make_exvivo_filled
+ *
  * A command-line tool for generating filled ex vivo brain images.
  *
  * Author: FreeSurfer Developers

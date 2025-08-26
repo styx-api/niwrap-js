@@ -494,6 +494,8 @@ function optseq2_outputs(
 
 
 /**
+ * optseq2
+ *
  * Optseq2 is a tool for automatically scheduling events for rapid-presentation event-related (RPER) fMRI experiments.
  *
  * Author: FreeSurfer Developers
@@ -520,6 +522,8 @@ function optseq2_execute(
 
 
 /**
+ * optseq2
+ *
  * Optseq2 is a tool for automatically scheduling events for rapid-presentation event-related (RPER) fMRI experiments.
  *
  * Author: FreeSurfer Developers

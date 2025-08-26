@@ -362,6 +362,8 @@ function v_3d_clusterize_outputs(
 
 
 /**
+ * 3dClusterize
+ *
  * A tool for voxelwise thresholding and clusterizing of datasets.
  *
  * Author: AFNI Developers
@@ -388,6 +390,8 @@ function v_3d_clusterize_execute(
 
 
 /**
+ * 3dClusterize
+ *
  * A tool for voxelwise thresholding and clusterizing of datasets.
  *
  * Author: AFNI Developers

@@ -192,6 +192,8 @@ function susan_outputs(
 
 
 /**
+ * susan
+ *
  * Non-linear noise reduction filtering tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -218,6 +220,8 @@ function susan_execute(
 
 
 /**
+ * susan
+ *
  * Non-linear noise reduction filtering tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford

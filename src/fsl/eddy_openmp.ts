@@ -557,6 +557,8 @@ function eddy_openmp_outputs(
 
 
 /**
+ * eddy_openmp
+ *
  * A tool for correcting eddy currents and movements in diffusion data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -583,6 +585,8 @@ function eddy_openmp_execute(
 
 
 /**
+ * eddy_openmp
+ *
  * A tool for correcting eddy currents and movements in diffusion data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

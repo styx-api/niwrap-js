@@ -151,6 +151,8 @@ function map_all_labels_outputs(
 
 
 /**
+ * map_all_labels
+ *
  * Tool for mapping labels onto subject surfaces.
  *
  * Author: FreeSurfer Developers
@@ -177,6 +179,8 @@ function map_all_labels_execute(
 
 
 /**
+ * map_all_labels
+ *
  * Tool for mapping labels onto subject surfaces.
  *
  * Author: FreeSurfer Developers

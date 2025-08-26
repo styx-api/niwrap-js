@@ -185,6 +185,8 @@ function v_3daxialize_outputs(
 
 
 /**
+ * 3daxialize
+ *
  * Read and write dataset as new dataset with data brick oriented as axial slices.
  *
  * Author: AFNI Developers
@@ -211,6 +213,8 @@ function v_3daxialize_execute(
 
 
 /**
+ * 3daxialize
+ *
  * Read and write dataset as new dataset with data brick oriented as axial slices.
  *
  * Author: AFNI Developers

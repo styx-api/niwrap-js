@@ -305,6 +305,8 @@ function volume_dilate_outputs(
 
 
 /**
+ * volume-dilate
+ *
  * Dilate a volume file.
  *
  * For all voxels that are designated as bad, if they neighbor a non-bad voxel with data or are within the specified distance of such a voxel, replace the value in the bad voxel with a value calculated from nearby non-bad voxels that have data, otherwise set the value to zero.  No matter how small <distance> is, dilation will always use at least the face neighbor voxels.
@@ -342,6 +344,8 @@ function volume_dilate_execute(
 
 
 /**
+ * volume-dilate
+ *
  * Dilate a volume file.
  *
  * For all voxels that are designated as bad, if they neighbor a non-bad voxel with data or are within the specified distance of such a voxel, replace the value in the bad voxel with a value calculated from nearby non-bad voxels that have data, otherwise set the value to zero.  No matter how small <distance> is, dilation will always use at least the face neighbor voxels.

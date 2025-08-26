@@ -294,6 +294,8 @@ function aparcstats2table_outputs(
 
 
 /**
+ * aparcstats2table
+ *
  * Converts a cortical stats file into a table format with subjects as rows and parcellations as columns.
  *
  * Author: FreeSurfer Developers
@@ -320,6 +322,8 @@ function aparcstats2table_execute(
 
 
 /**
+ * aparcstats2table
+ *
  * Converts a cortical stats file into a table format with subjects as rows and parcellations as columns.
  *
  * Author: FreeSurfer Developers

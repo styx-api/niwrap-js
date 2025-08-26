@@ -180,6 +180,8 @@ function v_3d_tto1_d_outputs(
 
 
 /**
+ * 3dTto1D
+ *
  * Collapse a 4D time series to a 1D time series.
  *
  * Author: AFNI Developers
@@ -206,6 +208,8 @@ function v_3d_tto1_d_execute(
 
 
 /**
+ * 3dTto1D
+ *
  * Collapse a 4D time series to a 1D time series.
  *
  * Author: AFNI Developers

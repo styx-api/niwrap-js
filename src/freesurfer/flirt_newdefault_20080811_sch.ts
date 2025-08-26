@@ -141,6 +141,8 @@ function flirt_newdefault_20080811_sch_outputs(
 
 
 /**
+ * flirt.newdefault.20080811.sch
+ *
  * FLIRT (FMRIB's Linear Image Registration Tool) new default configuration script.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function flirt_newdefault_20080811_sch_execute(
 
 
 /**
+ * flirt.newdefault.20080811.sch
+ *
  * FLIRT (FMRIB's Linear Image Registration Tool) new default configuration script.
  *
  * Author: FreeSurfer Developers

@@ -137,6 +137,8 @@ function surface_wedge_volume_outputs(
 
 
 /**
+ * surface-wedge-volume
+ *
  * Measure per-vertex volume between surfaces.
  *
  * Compute the volume of each vertex's area from one surface to another.  The surfaces must have vertex correspondence, and have consistent triangle orientation.
@@ -165,6 +167,8 @@ function surface_wedge_volume_execute(
 
 
 /**
+ * surface-wedge-volume
+ *
  * Measure per-vertex volume between surfaces.
  *
  * Compute the volume of each vertex's area from one surface to another.  The surfaces must have vertex correspondence, and have consistent triangle orientation.

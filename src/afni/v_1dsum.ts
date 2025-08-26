@@ -171,6 +171,8 @@ function v_1dsum_outputs(
 
 
 /**
+ * 1dsum
+ *
  * Sum or average columns of ASCII files with numbers arranged in rows and columns.
  *
  * Author: AFNI Developers
@@ -197,6 +199,8 @@ function v_1dsum_execute(
 
 
 /**
+ * 1dsum
+ *
  * Sum or average columns of ASCII files with numbers arranged in rows and columns.
  *
  * Author: AFNI Developers

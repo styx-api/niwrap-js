@@ -127,6 +127,8 @@ function brec_outputs(
 
 
 /**
+ * brec
+ *
  * A description for brec tool could not be retrieved.
  *
  * Author: FreeSurfer Developers
@@ -153,6 +155,8 @@ function brec_execute(
 
 
 /**
+ * brec
+ *
  * A description for brec tool could not be retrieved.
  *
  * Author: FreeSurfer Developers

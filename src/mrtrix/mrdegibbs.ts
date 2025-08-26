@@ -303,6 +303,8 @@ function mrdegibbs_outputs(
 
 
 /**
+ * mrdegibbs
+ *
  * Remove Gibbs Ringing Artifacts.
  *
  * This application attempts to remove Gibbs ringing artefacts from MRI images using the method of local subvoxel-shifts proposed by Kellner et al. (see reference below for details).
@@ -339,6 +341,8 @@ function mrdegibbs_execute(
 
 
 /**
+ * mrdegibbs
+ *
  * Remove Gibbs Ringing Artifacts.
  *
  * This application attempts to remove Gibbs ringing artefacts from MRI images using the method of local subvoxel-shifts proposed by Kellner et al. (see reference below for details).

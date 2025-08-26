@@ -183,6 +183,8 @@ function mris_niters2fwhm_outputs(
 
 
 /**
+ * mris_niters2fwhm
+ *
  * Convert number of iterations to full width at half maximum (FWHM) for surface.
  *
  * Author: FreeSurfer Developers
@@ -209,6 +211,8 @@ function mris_niters2fwhm_execute(
 
 
 /**
+ * mris_niters2fwhm
+ *
  * Convert number of iterations to full width at half maximum (FWHM) for surface.
  *
  * Author: FreeSurfer Developers

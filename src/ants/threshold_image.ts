@@ -199,6 +199,8 @@ function threshold_image_outputs(
 
 
 /**
+ * ThresholdImage
+ *
  * Image thresholding utility that applies different thresholding techniques to an input image. It can use fixed thresholds, Otsu method, or K-means for thresholding.
  *
  * Author: ANTs Developers
@@ -225,6 +227,8 @@ function threshold_image_execute(
 
 
 /**
+ * ThresholdImage
+ *
  * Image thresholding utility that applies different thresholding techniques to an input image. It can use fixed thresholds, Otsu method, or K-means for thresholding.
  *
  * Author: ANTs Developers

@@ -305,6 +305,8 @@ function v__clip_volume_outputs(
 
 
 /**
+ * @clip_volume
+ *
  * A tool to clip regions of a volume in various ways, such as above/below certain coordinates or within a specified box.
  *
  * Author: AFNI Developers
@@ -331,6 +333,8 @@ function v__clip_volume_execute(
 
 
 /**
+ * @clip_volume
+ *
  * A tool to clip regions of a volume in various ways, such as above/below certain coordinates or within a specified box.
  *
  * Author: AFNI Developers

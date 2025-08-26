@@ -365,6 +365,8 @@ function asegstats2table_outputs(
 
 
 /**
+ * asegstats2table
+ *
  * Converts a subcortical stats file created by recon-all and/or mri_segstats (e.g., aseg.stats) into a table.
  *
  * Author: FreeSurfer Developers
@@ -391,6 +393,8 @@ function asegstats2table_execute(
 
 
 /**
+ * asegstats2table
+ *
  * Converts a subcortical stats file created by recon-all and/or mri_segstats (e.g., aseg.stats) into a table.
  *
  * Author: FreeSurfer Developers

@@ -194,6 +194,8 @@ function v_3dresample_outputs(
 
 
 /**
+ * 3dresample
+ *
  * Resample or reorient an image using AFNI 3dresample command.
  *
  * Author: AFNI Developers
@@ -220,6 +222,8 @@ function v_3dresample_execute(
 
 
 /**
+ * 3dresample
+ *
  * Resample or reorient an image using AFNI 3dresample command.
  *
  * Author: AFNI Developers

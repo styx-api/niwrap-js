@@ -183,6 +183,8 @@ function v_3d_attribute_outputs(
 
 
 /**
+ * 3dAttribute
+ *
  * Prints the value of the attribute 'aname' from the header of the dataset 'dset'.
  *
  * Author: AFNI Developers
@@ -209,6 +211,8 @@ function v_3d_attribute_execute(
 
 
 /**
+ * 3dAttribute
+ *
  * Prints the value of the attribute 'aname' from the header of the dataset 'dset'.
  *
  * Author: AFNI Developers

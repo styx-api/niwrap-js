@@ -131,6 +131,8 @@ function mri_topologycorrection_outputs(
 
 
 /**
+ * mri_topologycorrection
+ *
  * Corrects the topology of segmented MRI images.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mri_topologycorrection_execute(
 
 
 /**
+ * mri_topologycorrection
+ *
  * Corrects the topology of segmented MRI images.
  *
  * Author: FreeSurfer Developers

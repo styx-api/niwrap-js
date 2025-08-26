@@ -250,6 +250,8 @@ function sh2power_outputs(
 
 
 /**
+ * sh2power
+ *
  * Compute the total power of a spherical harmonics image.
  *
  * This command computes the sum of squared SH coefficients, which equals the mean-squared amplitude of the spherical function it represents.
@@ -285,6 +287,8 @@ function sh2power_execute(
 
 
 /**
+ * sh2power
+ *
  * Compute the total power of a spherical harmonics image.
  *
  * This command computes the sum of squared SH coefficients, which equals the mean-squared amplitude of the spherical function it represents.

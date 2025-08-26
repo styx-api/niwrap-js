@@ -157,6 +157,8 @@ function parse_fs_lt_log_py_outputs(
 
 
 /**
+ * parse_fs_lt_log.py
+ *
  * Parses FreeSurfer labeltable log file and retrieves labeltable indices.
  *
  * Author: AFNI Developers
@@ -183,6 +185,8 @@ function parse_fs_lt_log_py_execute(
 
 
 /**
+ * parse_fs_lt_log.py
+ *
  * Parses FreeSurfer labeltable log file and retrieves labeltable indices.
  *
  * Author: AFNI Developers

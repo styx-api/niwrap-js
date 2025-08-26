@@ -187,6 +187,8 @@ function fat_mvm_prep_outputs(
 
 
 /**
+ * fat_mvm_prep
+ *
  * Combine FATCAT output with CSV data for statistical modeling.
  *
  * Author: AFNI Developers
@@ -213,6 +215,8 @@ function fat_mvm_prep_execute(
 
 
 /**
+ * fat_mvm_prep
+ *
  * Combine FATCAT output with CSV data for statistical modeling.
  *
  * Author: AFNI Developers

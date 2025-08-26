@@ -175,6 +175,8 @@ function wpng_outputs(
 
 
 /**
+ * wpng
+ *
  * Simple PGM/PPM/PAM to PNG Converter.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -201,6 +203,8 @@ function wpng_execute(
 
 
 /**
+ * wpng
+ *
  * Simple PGM/PPM/PAM to PNG Converter.
  *
  * Author: FMRIB Analysis Group, University of Oxford

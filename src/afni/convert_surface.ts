@@ -213,6 +213,8 @@ function convert_surface_outputs(
 
 
 /**
+ * ConvertSurface
+ *
  * Reads in a surface and writes it out in another format. Only fields pertinent to SUMA are preserved.
  *
  * Author: AFNI Developers
@@ -239,6 +241,8 @@ function convert_surface_execute(
 
 
 /**
+ * ConvertSurface
+ *
  * Reads in a surface and writes it out in another format. Only fields pertinent to SUMA are preserved.
  *
  * Author: AFNI Developers

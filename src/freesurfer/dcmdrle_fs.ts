@@ -356,6 +356,8 @@ function dcmdrle_fs_outputs(
 
 
 /**
+ * dcmdrle.fs
+ *
  * Decodes RLE-compressed DICOM files.
  *
  * Author: FreeSurfer Developers
@@ -382,6 +384,8 @@ function dcmdrle_fs_execute(
 
 
 /**
+ * dcmdrle.fs
+ *
  * Decodes RLE-compressed DICOM files.
  *
  * Author: FreeSurfer Developers

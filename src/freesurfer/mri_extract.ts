@@ -152,6 +152,8 @@ function mri_extract_outputs(
 
 
 /**
+ * mri_extract
+ *
  * MRI data extraction tool for FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -178,6 +180,8 @@ function mri_extract_execute(
 
 
 /**
+ * mri_extract
+ *
  * MRI data extraction tool for FreeSurfer.
  *
  * Author: FreeSurfer Developers

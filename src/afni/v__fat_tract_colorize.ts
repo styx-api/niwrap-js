@@ -194,6 +194,8 @@ function v__fat_tract_colorize_outputs(
 
 
 /**
+ * @fat_tract_colorize
+ *
  * Visualize tractographic output from 3dTrackID, particularly in probabilistic mode.
  *
  * Author: AFNI Developers
@@ -220,6 +222,8 @@ function v__fat_tract_colorize_execute(
 
 
 /**
+ * @fat_tract_colorize
+ *
  * Visualize tractographic output from 3dTrackID, particularly in probabilistic mode.
  *
  * Author: AFNI Developers

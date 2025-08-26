@@ -248,6 +248,8 @@ function signal2image_outputs(
 
 
 /**
+ * signal2image
+ *
  * A tool for converting MR signal data to images using specified k-space coordinates and pulse sequences.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -274,6 +276,8 @@ function signal2image_execute(
 
 
 /**
+ * signal2image
+ *
  * A tool for converting MR signal data to images using specified k-space coordinates and pulse sequences.
  *
  * Author: FMRIB Analysis Group, University of Oxford

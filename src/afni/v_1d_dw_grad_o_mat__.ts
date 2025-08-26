@@ -311,6 +311,8 @@ function v_1d_dw_grad_o_mat___outputs(
 
 
 /**
+ * 1dDW_Grad_o_Mat++
+ *
  * Manipulation of diffusion-weighted (DW) gradient vector files, b-value files, and b- or g-matrices with various input and output configurations.
  *
  * Author: AFNI Developers
@@ -337,6 +339,8 @@ function v_1d_dw_grad_o_mat___execute(
 
 
 /**
+ * 1dDW_Grad_o_Mat++
+ *
  * Manipulation of diffusion-weighted (DW) gradient vector files, b-value files, and b- or g-matrices with various input and output configurations.
  *
  * Author: AFNI Developers

@@ -262,6 +262,8 @@ function voxel2mesh_outputs(
 
 
 /**
+ * voxel2mesh
+ *
  * Generate a surface mesh representation from a voxel image.
  *
  * This command utilises the Marching Cubes algorithm to generate a polygonal surface that represents the isocontour(s) of the input image at a particular intensity. By default, an appropriate threshold will be determined automatically from the input image, however the intensity value of the isocontour(s) can instead be set manually using the -threhsold option.
@@ -296,6 +298,8 @@ function voxel2mesh_execute(
 
 
 /**
+ * voxel2mesh
+ *
  * Generate a surface mesh representation from a voxel image.
  *
  * This command utilises the Marching Cubes algorithm to generate a polygonal surface that represents the isocontour(s) of the input image at a particular intensity. By default, an appropriate threshold will be determined automatically from the input image, however the intensity value of the isocontour(s) can instead be set manually using the -threhsold option.

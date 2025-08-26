@@ -185,6 +185,8 @@ function v_3d_tqual_outputs(
 
 
 /**
+ * 3dTqual
+ *
  * Computes a quality index for each sub-brick in a 3D+time dataset.
  *
  * Author: AFNI Developers
@@ -211,6 +213,8 @@ function v_3d_tqual_execute(
 
 
 /**
+ * 3dTqual
+ *
  * Computes a quality index for each sub-brick in a 3D+time dataset.
  *
  * Author: AFNI Developers

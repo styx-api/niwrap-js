@@ -269,6 +269,8 @@ function v_3dfim__outputs(
 
 
 /**
+ * 3dfim+
+ *
  * Program to calculate the cross-correlation of an ideal reference waveform with the measured FMRI time series for each voxel.
  *
  * Author: AFNI Developers
@@ -295,6 +297,8 @@ function v_3dfim__execute(
 
 
 /**
+ * 3dfim+
+ *
  * Program to calculate the cross-correlation of an ideal reference waveform with the measured FMRI time series for each voxel.
  *
  * Author: AFNI Developers

@@ -165,6 +165,8 @@ function surf_retino_map_outputs(
 
 
 /**
+ * SurfRetinoMap
+ *
  * Tool for retinotopic mapping on cortical surfaces.
  *
  * Author: AFNI Developers
@@ -191,6 +193,8 @@ function surf_retino_map_execute(
 
 
 /**
+ * SurfRetinoMap
+ *
  * Tool for retinotopic mapping on cortical surfaces.
  *
  * Author: AFNI Developers

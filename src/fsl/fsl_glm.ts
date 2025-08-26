@@ -431,6 +431,8 @@ function fsl_glm_outputs(
 
 
 /**
+ * fsl_glm
+ *
  * Simple GLM allowing temporal or spatial regression on either text data or images.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -457,6 +459,8 @@ function fsl_glm_execute(
 
 
 /**
+ * fsl_glm
+ *
  * Simple GLM allowing temporal or spatial regression on either text data or images.
  *
  * Author: FMRIB Analysis Group, University of Oxford

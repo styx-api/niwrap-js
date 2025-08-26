@@ -127,6 +127,8 @@ function mri_or_outputs(
 
 
 /**
+ * mri_or
+ *
  * Performs a logical voxel-wise OR on a series of volumes.
  *
  * Author: FreeSurfer Developers
@@ -153,6 +155,8 @@ function mri_or_execute(
 
 
 /**
+ * mri_or
+ *
  * Performs a logical voxel-wise OR on a series of volumes.
  *
  * Author: FreeSurfer Developers

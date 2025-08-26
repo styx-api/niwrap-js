@@ -162,6 +162,8 @@ function fsl_ents_outputs(
 
 
 /**
+ * fsl_ents
+ *
  * Extract component time series from a MELODIC .ica directory.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -188,6 +190,8 @@ function fsl_ents_execute(
 
 
 /**
+ * fsl_ents
+ *
  * Extract component time series from a MELODIC .ica directory.
  *
  * Author: FMRIB Analysis Group, University of Oxford

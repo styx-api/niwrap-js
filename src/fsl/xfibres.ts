@@ -374,6 +374,8 @@ function xfibres_outputs(
 
 
 /**
+ * xfibres
+ *
  * Part of FSL - estimates diffusion parameters for multiple fibres per voxel.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -400,6 +402,8 @@ function xfibres_execute(
 
 
 /**
+ * xfibres
+ *
  * Part of FSL - estimates diffusion parameters for multiple fibres per voxel.
  *
  * Author: FMRIB Analysis Group, University of Oxford

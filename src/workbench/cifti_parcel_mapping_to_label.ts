@@ -142,6 +142,8 @@ function cifti_parcel_mapping_to_label_outputs(
 
 
 /**
+ * cifti-parcel-mapping-to-label
+ *
  * Create dlabel from parcellated file.
  *
  * This command will output a dlabel file, useful for doing the same parcellation to another dense file.
@@ -172,6 +174,8 @@ function cifti_parcel_mapping_to_label_execute(
 
 
 /**
+ * cifti-parcel-mapping-to-label
+ *
  * Create dlabel from parcellated file.
  *
  * This command will output a dlabel file, useful for doing the same parcellation to another dense file.

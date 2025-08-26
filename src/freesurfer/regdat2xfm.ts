@@ -125,6 +125,8 @@ function regdat2xfm_outputs(
 
 
 /**
+ * regdat2xfm
+ *
  * This tool has been removed from the current version of FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function regdat2xfm_execute(
 
 
 /**
+ * regdat2xfm
+ *
  * This tool has been removed from the current version of FreeSurfer.
  *
  * Author: FreeSurfer Developers

@@ -322,6 +322,8 @@ function scene_file_update_outputs(
 
 
 /**
+ * scene-file-update
+ *
  * Update scene file.
  *
  * This command will update a scene for specific changes in data files.
@@ -359,6 +361,8 @@ function scene_file_update_execute(
 
 
 /**
+ * scene-file-update
+ *
  * Update scene file.
  *
  * This command will update a scene for specific changes in data files.

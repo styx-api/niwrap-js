@@ -331,6 +331,8 @@ function dmri_pathstats_outputs(
 
 
 /**
+ * dmri_pathstats
+ *
  * Compute path statistics for diffusion MRI data based on input .trk file and optional various measures.
  *
  * Author: FreeSurfer Developers
@@ -357,6 +359,8 @@ function dmri_pathstats_execute(
 
 
 /**
+ * dmri_pathstats
+ *
  * Compute path statistics for diffusion MRI data based on input .trk file and optional various measures.
  *
  * Author: FreeSurfer Developers

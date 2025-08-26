@@ -126,6 +126,8 @@ function fname2ext_outputs(
 
 
 /**
+ * fname2ext
+ *
  * Converts the name of a file to its extension.
  *
  * Author: FreeSurfer Developers
@@ -152,6 +154,8 @@ function fname2ext_execute(
 
 
 /**
+ * fname2ext
+ *
  * Converts the name of a file to its extension.
  *
  * Author: FreeSurfer Developers

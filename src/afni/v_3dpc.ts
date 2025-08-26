@@ -269,6 +269,8 @@ function v_3dpc_outputs(
 
 
 /**
+ * 3dpc
+ *
  * Principal Component Analysis of 3D Datasets.
  *
  * Author: AFNI Developers
@@ -295,6 +297,8 @@ function v_3dpc_execute(
 
 
 /**
+ * 3dpc
+ *
  * Principal Component Analysis of 3D Datasets.
  *
  * Author: AFNI Developers

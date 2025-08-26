@@ -230,6 +230,8 @@ function serial_helper_outputs(
 
 
 /**
+ * serial_helper
+ *
  * Passes motion parameters from socket to serial port.
  *
  * Author: AFNI Developers
@@ -256,6 +258,8 @@ function serial_helper_execute(
 
 
 /**
+ * serial_helper
+ *
  * Passes motion parameters from socket to serial port.
  *
  * Author: AFNI Developers

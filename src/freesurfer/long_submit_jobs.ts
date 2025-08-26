@@ -367,6 +367,8 @@ function long_submit_jobs_outputs(
 
 
 /**
+ * long_submit_jobs
+ *
  * Submits longitudinal processing jobs to the NMR cluster (seychelles or launchpad).
  *
  * Author: FreeSurfer Developers
@@ -393,6 +395,8 @@ function long_submit_jobs_execute(
 
 
 /**
+ * long_submit_jobs
+ *
  * Submits longitudinal processing jobs to the NMR cluster (seychelles or launchpad).
  *
  * Author: FreeSurfer Developers

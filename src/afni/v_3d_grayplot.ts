@@ -252,6 +252,8 @@ function v_3d_grayplot_outputs(
 
 
 /**
+ * 3dGrayplot
+ *
  * Make a grayplot from a 3D+time dataset, like a carpet plot. Result is saved to a PNG image.
  *
  * Author: AFNI Developers
@@ -278,6 +280,8 @@ function v_3d_grayplot_execute(
 
 
 /**
+ * 3dGrayplot
+ *
  * Make a grayplot from a 3D+time dataset, like a carpet plot. Result is saved to a PNG image.
  *
  * Author: AFNI Developers

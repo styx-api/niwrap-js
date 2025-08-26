@@ -385,6 +385,8 @@ function avw2fsl_outputs(
 
 
 /**
+ * avw2fsl
+ *
  * Processing script to copy files and directories.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -411,6 +413,8 @@ function avw2fsl_execute(
 
 
 /**
+ * avw2fsl
+ *
  * Processing script to copy files and directories.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -171,6 +171,8 @@ function bianca_overlap_measures_outputs(
 
 
 /**
+ * bianca_overlap_measures
+ *
  * BIANCA overlap measures script for FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -197,6 +199,8 @@ function bianca_overlap_measures_execute(
 
 
 /**
+ * bianca_overlap_measures
+ *
  * BIANCA overlap measures script for FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

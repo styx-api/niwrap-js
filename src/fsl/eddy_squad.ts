@@ -169,6 +169,8 @@ function eddy_squad_outputs(
 
 
 /**
+ * eddy_squad
+ *
  * Study-wise QC for dMRI data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -195,6 +197,8 @@ function eddy_squad_execute(
 
 
 /**
+ * eddy_squad
+ *
  * Study-wise QC for dMRI data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

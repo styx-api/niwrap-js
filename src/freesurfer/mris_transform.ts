@@ -167,6 +167,8 @@ function mris_transform_outputs(
 
 
 /**
+ * mris_transform
+ *
  * A tool to transform surfaces from one space to another using image transforms.
  *
  * Author: FreeSurfer Developers
@@ -193,6 +195,8 @@ function mris_transform_execute(
 
 
 /**
+ * mris_transform
+ *
  * A tool to transform surfaces from one space to another using image transforms.
  *
  * Author: FreeSurfer Developers

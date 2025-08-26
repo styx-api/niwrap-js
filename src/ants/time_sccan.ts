@@ -420,6 +420,8 @@ function time_sccan_outputs(
 
 
 /**
+ * TimeSCCAN
+ *
  * A tool for sparse statistical analysis on connectivity within a subject.
  *
  * Author: ANTs Developers
@@ -446,6 +448,8 @@ function time_sccan_execute(
 
 
 /**
+ * TimeSCCAN
+ *
  * A tool for sparse statistical analysis on connectivity within a subject.
  *
  * Author: ANTs Developers

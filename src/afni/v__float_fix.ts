@@ -120,6 +120,8 @@ function v__float_fix_outputs(
 
 
 /**
+ * @float_fix
+ *
  * Check whether the input files have any IEEE floating point numbers for illegal values: infinities and not-a-number (NaN) values.
  *
  * Author: AFNI Developers
@@ -146,6 +148,8 @@ function v__float_fix_execute(
 
 
 /**
+ * @float_fix
+ *
  * Check whether the input files have any IEEE floating point numbers for illegal values: infinities and not-a-number (NaN) values.
  *
  * Author: AFNI Developers

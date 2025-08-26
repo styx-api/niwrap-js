@@ -272,6 +272,8 @@ function v_3d_polyfit_outputs(
 
 
 /**
+ * 3dPolyfit
+ *
  * Fits a polynomial in space to the input dataset and outputs that fitted dataset. You can also add your own basis datasets to the fitting mix.
  *
  * Author: AFNI Developers
@@ -298,6 +300,8 @@ function v_3d_polyfit_execute(
 
 
 /**
+ * 3dPolyfit
+ *
  * Fits a polynomial in space to the input dataset and outputs that fitted dataset. You can also add your own basis datasets to the fitting mix.
  *
  * Author: AFNI Developers

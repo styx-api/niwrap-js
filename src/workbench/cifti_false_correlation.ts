@@ -342,6 +342,8 @@ function cifti_false_correlation_outputs(
 
 
 /**
+ * cifti-false-correlation
+ *
  * Compare correlation locally and across/through sulci/gyri.
  *
  * For each vertex, compute the average correlation within a range of geodesic distances that don't cross a sulcus/gyrus, and the correlation to the closest vertex crossing a sulcus/gyrus.  A vertex is considered to cross a sulcus/gyrus if the 3D distance is less than a third of the geodesic distance.  The output file contains the ratio between these correlations, and some additional maps to help explain the ratio.
@@ -370,6 +372,8 @@ function cifti_false_correlation_execute(
 
 
 /**
+ * cifti-false-correlation
+ *
  * Compare correlation locally and across/through sulci/gyri.
  *
  * For each vertex, compute the average correlation within a range of geodesic distances that don't cross a sulcus/gyrus, and the correlation to the closest vertex crossing a sulcus/gyrus.  A vertex is considered to cross a sulcus/gyrus if the 3D distance is less than a third of the geodesic distance.  The output file contains the ratio between these correlations, and some additional maps to help explain the ratio.

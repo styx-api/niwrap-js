@@ -168,6 +168,8 @@ function volume_parcel_smoothing_outputs(
 
 
 /**
+ * volume-parcel-smoothing
+ *
  * Smooth parcels in a volume separately.
  *
  * The volume is smoothed within each label in the label volume using data only from within the label.  Equivalent to running volume smoothing with ROIs matching each label separately, then adding the resulting volumes, but faster.
@@ -196,6 +198,8 @@ function volume_parcel_smoothing_execute(
 
 
 /**
+ * volume-parcel-smoothing
+ *
  * Smooth parcels in a volume separately.
  *
  * The volume is smoothed within each label in the label volume using data only from within the label.  Equivalent to running volume smoothing with ROIs matching each label separately, then adding the resulting volumes, but faster.

@@ -378,6 +378,8 @@ function v_3d_group_in_corr_outputs(
 
 
 /**
+ * 3dGroupInCorr
+ *
  * Functional connectivity analysis in group of subjects.
  *
  * Author: AFNI Developers
@@ -404,6 +406,8 @@ function v_3d_group_in_corr_execute(
 
 
 /**
+ * 3dGroupInCorr
+ *
  * Functional connectivity analysis in group of subjects.
  *
  * Author: AFNI Developers

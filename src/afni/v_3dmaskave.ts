@@ -168,6 +168,8 @@ function v_3dmaskave_outputs(
 
 
 /**
+ * 3dmaskave
+ *
  * Computes average of all voxels in the input dataset which satisfy the criterion in the options list.
  *
  * Author: AFNI Developers
@@ -194,6 +196,8 @@ function v_3dmaskave_execute(
 
 
 /**
+ * 3dmaskave
+ *
  * Computes average of all voxels in the input dataset which satisfy the criterion in the options list.
  *
  * Author: AFNI Developers

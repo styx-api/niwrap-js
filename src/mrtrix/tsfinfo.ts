@@ -251,6 +251,8 @@ function tsfinfo_outputs(
 
 
 /**
+ * tsfinfo
+ *
  * Print out information about a track scalar file.
  *
  *
@@ -283,6 +285,8 @@ function tsfinfo_execute(
 
 
 /**
+ * tsfinfo
+ *
  * Print out information about a track scalar file.
  *
  *

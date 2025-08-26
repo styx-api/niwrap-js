@@ -183,6 +183,8 @@ function v__electro_grid_outputs(
 
 
 /**
+ * @ElectroGrid
+ *
  * Creates a mesh representation of an electrode grid for use with SUMA.
  *
  * Author: AFNI Developers
@@ -209,6 +211,8 @@ function v__electro_grid_execute(
 
 
 /**
+ * @ElectroGrid
+ *
  * Creates a mesh representation of an electrode grid for use with SUMA.
  *
  * Author: AFNI Developers

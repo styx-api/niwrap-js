@@ -257,6 +257,8 @@ function mrisp_paint_outputs(
 
 
 /**
+ * mrisp_paint
+ *
  * A tool for extracting arrays from a surface-registration template file and sampling them onto a surface mesh.
  *
  * Author: FreeSurfer Developers
@@ -283,6 +285,8 @@ function mrisp_paint_execute(
 
 
 /**
+ * mrisp_paint
+ *
  * A tool for extracting arrays from a surface-registration template file and sampling them onto a surface mesh.
  *
  * Author: FreeSurfer Developers

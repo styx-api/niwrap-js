@@ -257,6 +257,8 @@ function non_local_super_resolution_outputs(
 
 
 /**
+ * NonLocalSuperResolution
+ *
  * Non-local super resolution described in the papers by JV Manjon et al., focusing on MRI superresolution using self-similarity and image priors.
  *
  * Author: ANTs Developers
@@ -283,6 +285,8 @@ function non_local_super_resolution_execute(
 
 
 /**
+ * NonLocalSuperResolution
+ *
  * Non-local super resolution described in the papers by JV Manjon et al., focusing on MRI superresolution using self-similarity and image priors.
  *
  * Author: ANTs Developers

@@ -131,6 +131,8 @@ function fslval_outputs(
 
 
 /**
+ * fslval
+ *
  * Tool for printing out header information from NIfTI image files.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function fslval_execute(
 
 
 /**
+ * fslval
+ *
  * Tool for printing out header information from NIfTI image files.
  *
  * Author: FMRIB Analysis Group, University of Oxford

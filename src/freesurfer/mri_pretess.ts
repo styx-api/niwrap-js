@@ -181,6 +181,8 @@ function mri_pretess_outputs(
 
 
 /**
+ * mri_pretess
+ *
  * Tool to modify WM segmentation so that all neighbors of WM voxels have a common face.
  *
  * Author: FreeSurfer Developers
@@ -207,6 +209,8 @@ function mri_pretess_execute(
 
 
 /**
+ * mri_pretess
+ *
  * Tool to modify WM segmentation so that all neighbors of WM voxels have a common face.
  *
  * Author: FreeSurfer Developers

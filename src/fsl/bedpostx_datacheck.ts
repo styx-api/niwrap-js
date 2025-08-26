@@ -120,6 +120,8 @@ function bedpostx_datacheck_outputs(
 
 
 /**
+ * bedpostx_datacheck
+ *
  * Check the data directory for BEDPOSTX compatibility.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -146,6 +148,8 @@ function bedpostx_datacheck_execute(
 
 
 /**
+ * bedpostx_datacheck
+ *
  * Check the data directory for BEDPOSTX compatibility.
  *
  * Author: FMRIB Analysis Group, University of Oxford

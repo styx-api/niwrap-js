@@ -178,6 +178,8 @@ function v_3d_synthesize_outputs(
 
 
 /**
+ * 3dSynthesize
+ *
  * Reads a '-cbucket' dataset and a '.xmat.1D' matrix from 3dDeconvolve, and synthesizes a fit dataset using selected sub-bricks and matrix columns.
  *
  * Author: AFNI Developers
@@ -204,6 +206,8 @@ function v_3d_synthesize_execute(
 
 
 /**
+ * 3dSynthesize
+ *
  * Reads a '-cbucket' dataset and a '.xmat.1D' matrix from 3dDeconvolve, and synthesizes a fit dataset using selected sub-bricks and matrix columns.
  *
  * Author: AFNI Developers

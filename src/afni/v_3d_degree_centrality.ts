@@ -205,6 +205,8 @@ function v_3d_degree_centrality_outputs(
 
 
 /**
+ * 3dDegreeCentrality
+ *
  * Computes voxelwise weighted and binary degree centrality and stores the result in a new 3D bucket dataset as floats to preserve their values. Degree centrality reflects the strength and extent of the correlation of a voxel with every other voxel in the brain. .
  *
  * Author: AFNI Developers
@@ -231,6 +233,8 @@ function v_3d_degree_centrality_execute(
 
 
 /**
+ * 3dDegreeCentrality
+ *
  * Computes voxelwise weighted and binary degree centrality and stores the result in a new 3D bucket dataset as floats to preserve their values. Degree centrality reflects the strength and extent of the correlation of a voxel with every other voxel in the brain. .
  *
  * Author: AFNI Developers

@@ -193,6 +193,8 @@ function gps_outputs(
 
 
 /**
+ * gps
+ *
  * Generate set of diffusion gradient directions.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -219,6 +221,8 @@ function gps_execute(
 
 
 /**
+ * gps
+ *
  * Generate set of diffusion gradient directions.
  *
  * Author: FMRIB Analysis Group, University of Oxford

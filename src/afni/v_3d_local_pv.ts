@@ -241,6 +241,8 @@ function v_3d_local_pv_outputs(
 
 
 /**
+ * 3dLocalPV
+ *
  * Computes the Singular Value Decomposition (SVD) of the time series from a neighborhood of each voxel in a 3D+time dataset, which serves as a smoothing method for the dataset.
  *
  * Author: AFNI Developers
@@ -267,6 +269,8 @@ function v_3d_local_pv_execute(
 
 
 /**
+ * 3dLocalPV
+ *
  * Computes the Singular Value Decomposition (SVD) of the time series from a neighborhood of each voxel in a 3D+time dataset, which serves as a smoothing method for the dataset.
  *
  * Author: AFNI Developers

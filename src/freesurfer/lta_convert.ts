@@ -353,6 +353,8 @@ function lta_convert_outputs(
 
 
 /**
+ * lta_convert
+ *
  * This program converts between different linear transform formats.
  *
  * Author: FreeSurfer Developers
@@ -379,6 +381,8 @@ function lta_convert_execute(
 
 
 /**
+ * lta_convert
+ *
  * This program converts between different linear transform formats.
  *
  * Author: FreeSurfer Developers

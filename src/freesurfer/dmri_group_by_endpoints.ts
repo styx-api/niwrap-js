@@ -139,6 +139,8 @@ function dmri_group_by_endpoints_outputs(
 
 
 /**
+ * dmri_groupByEndpoints
+ *
  * A tool to group streamlines by their endpoints using diffusion MRI data.
  *
  * Author: FreeSurfer Developers
@@ -165,6 +167,8 @@ function dmri_group_by_endpoints_execute(
 
 
 /**
+ * dmri_groupByEndpoints
+ *
  * A tool to group streamlines by their endpoints using diffusion MRI data.
  *
  * Author: FreeSurfer Developers

@@ -167,6 +167,8 @@ function mni152reg_outputs(
 
 
 /**
+ * mni152reg
+ *
  * Registers the FreeSurfer subject to the FSL MNI 152 brain to create a tkregister-style registration matrix.
  *
  * Author: FreeSurfer Developers
@@ -193,6 +195,8 @@ function mni152reg_execute(
 
 
 /**
+ * mni152reg
+ *
  * Registers the FreeSurfer subject to the FSL MNI 152 brain to create a tkregister-style registration matrix.
  *
  * Author: FreeSurfer Developers

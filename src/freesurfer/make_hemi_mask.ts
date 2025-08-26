@@ -136,6 +136,8 @@ function make_hemi_mask_outputs(
 
 
 /**
+ * make_hemi_mask
+ *
  * Generates a hemisphere mask by registering input to the left/right reversed version using mri_robust_register, then keeps only the selected hemisphere.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function make_hemi_mask_execute(
 
 
 /**
+ * make_hemi_mask
+ *
  * Generates a hemisphere mask by registering input to the left/right reversed version using mri_robust_register, then keeps only the selected hemisphere.
  *
  * Author: FreeSurfer Developers

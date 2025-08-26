@@ -195,6 +195,8 @@ function v_3d_dtto_noisy_dwi_outputs(
 
 
 /**
+ * 3dDTtoNoisyDWI
+ *
  * Generate a synthetic set of DWI measures with a given SNR from an AFNI-style DT file and a set of gradients. This can be useful for simulations and testing.
  *
  * Author: AFNI Developers
@@ -221,6 +223,8 @@ function v_3d_dtto_noisy_dwi_execute(
 
 
 /**
+ * 3dDTtoNoisyDWI
+ *
  * Generate a synthetic set of DWI measures with a given SNR from an AFNI-style DT file and a set of gradients. This can be useful for simulations and testing.
  *
  * Author: AFNI Developers

@@ -285,6 +285,8 @@ function cifti_correlation_outputs(
 
 
 /**
+ * cifti-correlation
+ *
  * Generate correlation of rows in a cifti file.
  *
  * For each row (or each row inside an roi if -roi-override is specified), correlate to all other rows.  The -cifti-roi suboption to -roi-override may not be specified with any other -*-roi suboption, but you may specify the other -*-roi suboptions together.
@@ -317,6 +319,8 @@ function cifti_correlation_execute(
 
 
 /**
+ * cifti-correlation
+ *
  * Generate correlation of rows in a cifti file.
  *
  * For each row (or each row inside an roi if -roi-override is specified), correlate to all other rows.  The -cifti-roi suboption to -roi-override may not be specified with any other -*-roi suboption, but you may specify the other -*-roi suboptions together.

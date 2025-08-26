@@ -260,6 +260,8 @@ function plugout_drive_outputs(
 
 
 /**
+ * plugout_drive
+ *
  * This program connects to AFNI and sends commands that the user specifies interactively or on command line over to AFNI to be executed.
  *
  * Author: AFNI Developers
@@ -286,6 +288,8 @@ function plugout_drive_execute(
 
 
 /**
+ * plugout_drive
+ *
  * This program connects to AFNI and sends commands that the user specifies interactively or on command line over to AFNI to be executed.
  *
  * Author: AFNI Developers

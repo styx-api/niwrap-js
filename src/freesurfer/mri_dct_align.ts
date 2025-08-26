@@ -136,6 +136,8 @@ function mri_dct_align_outputs(
 
 
 /**
+ * mri_dct_align
+ *
  * MRI DCT alignment tool from FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_dct_align_execute(
 
 
 /**
+ * mri_dct_align
+ *
  * MRI DCT alignment tool from FreeSurfer.
  *
  * Author: FreeSurfer Developers

@@ -126,6 +126,8 @@ function v__np_outputs(
 
 
 /**
+ * @np
+ *
  * Finds an appropriate new prefix to use, given the files you already have in your directory. It automatically creates a valid prefix when you are repeatedly running similar commands but do not want to delete previous output.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v__np_execute(
 
 
 /**
+ * @np
+ *
  * Finds an appropriate new prefix to use, given the files you already have in your directory. It automatically creates a valid prefix when you are repeatedly running similar commands but do not want to delete previous output.
  *
  * Author: AFNI Developers

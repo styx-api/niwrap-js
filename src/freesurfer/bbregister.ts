@@ -271,6 +271,8 @@ function bbregister_outputs(
 
 
 /**
+ * bbregister
+ *
  * Performs within-subject, cross-modal registration using a boundary-based cost function.
  *
  * Author: FreeSurfer Developers
@@ -297,6 +299,8 @@ function bbregister_execute(
 
 
 /**
+ * bbregister
+ *
  * Performs within-subject, cross-modal registration using a boundary-based cost function.
  *
  * Author: FreeSurfer Developers

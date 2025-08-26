@@ -162,6 +162,8 @@ function mri_gcut_outputs(
 
 
 /**
+ * mri_gcut
+ *
  * Skull stripping algorithm based on graph cuts.
  *
  * Author: FreeSurfer Developers
@@ -188,6 +190,8 @@ function mri_gcut_execute(
 
 
 /**
+ * mri_gcut
+ *
  * Skull stripping algorithm based on graph cuts.
  *
  * Author: FreeSurfer Developers

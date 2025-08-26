@@ -216,6 +216,8 @@ function tbss_skeleton_outputs(
 
 
 /**
+ * tbss_skeleton
+ *
  * A tool for defining a 'skeleton' of white matter tracts in the brain to help compare them across subjects.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -242,6 +244,8 @@ function tbss_skeleton_execute(
 
 
 /**
+ * tbss_skeleton
+ *
  * A tool for defining a 'skeleton' of white matter tracts in the brain to help compare them across subjects.
  *
  * Author: FMRIB Analysis Group, University of Oxford

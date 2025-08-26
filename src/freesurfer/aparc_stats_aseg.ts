@@ -311,6 +311,8 @@ function aparc_stats_aseg_outputs(
 
 
 /**
+ * aparc_stats_aseg
+ *
  * This program runs mris_ca_label, mris_anatomical_stats and mri_aparc2aseg.
  *
  * Author: FreeSurfer Developers
@@ -337,6 +339,8 @@ function aparc_stats_aseg_execute(
 
 
 /**
+ * aparc_stats_aseg
+ *
  * This program runs mris_ca_label, mris_anatomical_stats and mri_aparc2aseg.
  *
  * Author: FreeSurfer Developers

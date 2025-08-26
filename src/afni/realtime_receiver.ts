@@ -244,6 +244,8 @@ function realtime_receiver_outputs(
 
 
 /**
+ * realtime_receiver
+ *
  * Program to receive and display real-time plugin data from AFNI.
  *
  * Author: AFNI Developers
@@ -270,6 +272,8 @@ function realtime_receiver_execute(
 
 
 /**
+ * realtime_receiver
+ *
  * Program to receive and display real-time plugin data from AFNI.
  *
  * Author: AFNI Developers

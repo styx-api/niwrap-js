@@ -269,6 +269,8 @@ function mrcheckerboardmask_outputs(
 
 
 /**
+ * mrcheckerboardmask
+ *
  * Create bitwise checkerboard image.
  *
  *
@@ -301,6 +303,8 @@ function mrcheckerboardmask_execute(
 
 
 /**
+ * mrcheckerboardmask
+ *
  * Create bitwise checkerboard image.
  *
  *

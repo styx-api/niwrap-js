@@ -307,6 +307,8 @@ function cifti_extrema_outputs(
 
 
 /**
+ * cifti-extrema
+ *
  * Find extrema in a cifti file.
  *
  * Finds spatial locations in a cifti file that have more extreme values than all nearby locations in the same component (surface or volume structure).  The input cifti file must have a brain models mapping along the specified direction.  COLUMN is the direction that works on dtseries and dscalar.  For dconn, if it is symmetric use COLUMN, otherwise use ROW.
@@ -335,6 +337,8 @@ function cifti_extrema_execute(
 
 
 /**
+ * cifti-extrema
+ *
  * Find extrema in a cifti file.
  *
  * Finds spatial locations in a cifti file that have more extreme values than all nearby locations in the same component (surface or volume structure).  The input cifti file must have a brain models mapping along the specified direction.  COLUMN is the direction that works on dtseries and dscalar.  For dconn, if it is symmetric use COLUMN, otherwise use ROW.

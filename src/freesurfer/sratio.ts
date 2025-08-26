@@ -150,6 +150,8 @@ function sratio_outputs(
 
 
 /**
+ * sratio
+ *
  * Tool to compute ratio A/B if A>B, -B/A if B>A, with options for absolute computation and threshold masking.
  *
  * Author: FreeSurfer Developers
@@ -176,6 +178,8 @@ function sratio_execute(
 
 
 /**
+ * sratio
+ *
  * Tool to compute ratio A/B if A>B, -B/A if B>A, with options for absolute computation and threshold masking.
  *
  * Author: FreeSurfer Developers

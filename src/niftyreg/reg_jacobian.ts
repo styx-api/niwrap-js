@@ -211,6 +211,8 @@ function reg_jacobian_outputs(
 
 
 /**
+ * reg_jacobian
+ *
  * Tool to compute the Jacobian determinant map from a deformation field or control point lattice.
  *
  * Author: NiftyReg Developers
@@ -237,6 +239,8 @@ function reg_jacobian_execute(
 
 
 /**
+ * reg_jacobian
+ *
  * Tool to compute the Jacobian determinant map from a deformation field or control point lattice.
  *
  * Author: NiftyReg Developers

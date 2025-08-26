@@ -184,6 +184,8 @@ function mris_distance_transform_outputs(
 
 
 /**
+ * mris_distance_transform
+ *
  * Computes the distance transform of a label on the surface.
  *
  * Author: FreeSurfer Developers
@@ -210,6 +212,8 @@ function mris_distance_transform_execute(
 
 
 /**
+ * mris_distance_transform
+ *
  * Computes the distance transform of a label on the surface.
  *
  * Author: FreeSurfer Developers

@@ -153,6 +153,8 @@ function mris_shrinkwrap_outputs(
 
 
 /**
+ * mris_shrinkwrap
+ *
  * Generate shrink-wrapped tessellations of the input volume.
  *
  * Author: FreeSurfer Developers
@@ -179,6 +181,8 @@ function mris_shrinkwrap_execute(
 
 
 /**
+ * mris_shrinkwrap
+ *
  * Generate shrink-wrapped tessellations of the input volume.
  *
  * Author: FreeSurfer Developers

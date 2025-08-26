@@ -130,6 +130,8 @@ function mris_interpolate_warp_outputs(
 
 
 /**
+ * mris_interpolate_warp
+ *
  * Interpolate warp on cortical surfaces.
  *
  * Author: FreeSurfer Developers
@@ -156,6 +158,8 @@ function mris_interpolate_warp_execute(
 
 
 /**
+ * mris_interpolate_warp
+ *
  * Interpolate warp on cortical surfaces.
  *
  * Author: FreeSurfer Developers

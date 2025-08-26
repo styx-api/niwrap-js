@@ -170,6 +170,8 @@ function strblast_outputs(
 
 
 /**
+ * strblast
+ *
  * Finds exact copies of the target string in each of the input files, and replaces all characters with some junk string.
  *
  * Author: AFNI Developers
@@ -196,6 +198,8 @@ function strblast_execute(
 
 
 /**
+ * strblast
+ *
  * Finds exact copies of the target string in each of the input files, and replaces all characters with some junk string.
  *
  * Author: AFNI Developers

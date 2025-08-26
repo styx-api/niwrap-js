@@ -267,6 +267,8 @@ function mris_curvature_outputs(
 
 
 /**
+ * mris_curvature
+ *
  * Compute the second fundamental form of a cortical surface to generate mean and Gaussian curvature.
  *
  * Author: FreeSurfer Developers
@@ -293,6 +295,8 @@ function mris_curvature_execute(
 
 
 /**
+ * mris_curvature
+ *
  * Compute the second fundamental form of a cortical surface to generate mean and Gaussian curvature.
  *
  * Author: FreeSurfer Developers

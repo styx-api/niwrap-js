@@ -141,6 +141,8 @@ function mris_remove_variance_outputs(
 
 
 /**
+ * mris_remove_variance
+ *
  * This program removes the linear component of the variance accounted for by one curvature vector from another.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mris_remove_variance_execute(
 
 
 /**
+ * mris_remove_variance
+ *
  * This program removes the linear component of the variance accounted for by one curvature vector from another.
  *
  * Author: FreeSurfer Developers

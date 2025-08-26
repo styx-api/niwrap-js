@@ -197,6 +197,8 @@ function ants_n4_bias_field_correction_fs_outputs(
 
 
 /**
+ * AntsN4BiasFieldCorrectionFs
+ *
  * Runs N4 (nonparameteric, nonuniform normalization) retrospective bias correction on an image. This program wraps the AntsN4BiasFieldCorrection utility available in the ANTs package.
  *
  * Author: FreeSurfer Developers
@@ -223,6 +225,8 @@ function ants_n4_bias_field_correction_fs_execute(
 
 
 /**
+ * AntsN4BiasFieldCorrectionFs
+ *
  * Runs N4 (nonparameteric, nonuniform normalization) retrospective bias correction on an image. This program wraps the AntsN4BiasFieldCorrection utility available in the ANTs package.
  *
  * Author: FreeSurfer Developers

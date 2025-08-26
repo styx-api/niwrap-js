@@ -131,6 +131,8 @@ function fiducials_correction_outputs(
 
 
 /**
+ * fiducials_correction
+ *
  * A tool for correcting fiducial markers in imaging data. Note: This command has dependency issues with the Qt platform plugin 'xcb'. Ensure dependencies are properly configured.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function fiducials_correction_execute(
 
 
 /**
+ * fiducials_correction
+ *
  * A tool for correcting fiducial markers in imaging data. Note: This command has dependency issues with the Qt platform plugin 'xcb'. Ensure dependencies are properly configured.
  *
  * Author: FreeSurfer Developers

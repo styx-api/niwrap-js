@@ -177,6 +177,8 @@ function surf_localstat_outputs(
 
 
 /**
+ * SurfLocalstat
+ *
  * Compute local statistics on a surface mesh.
  *
  * Author: AFNI Developers
@@ -203,6 +205,8 @@ function surf_localstat_execute(
 
 
 /**
+ * SurfLocalstat
+ *
  * Compute local statistics on a surface mesh.
  *
  * Author: AFNI Developers

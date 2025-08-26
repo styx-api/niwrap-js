@@ -162,6 +162,8 @@ function v_3dmatcalc_outputs(
 
 
 /**
+ * 3dmatcalc
+ *
  * Apply a matrix to a dataset, voxel-by-voxel, to produce a new dataset.
  *
  * Author: AFNI Developers
@@ -188,6 +190,8 @@ function v_3dmatcalc_execute(
 
 
 /**
+ * 3dmatcalc
+ *
  * Apply a matrix to a dataset, voxel-by-voxel, to produce a new dataset.
  *
  * Author: AFNI Developers

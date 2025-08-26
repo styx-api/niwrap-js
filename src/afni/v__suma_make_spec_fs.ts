@@ -274,6 +274,8 @@ function v__suma_make_spec_fs_outputs(
 
 
 /**
+ * @SUMA_Make_Spec_FS
+ *
  * Prepare for surface viewing in SUMA.
  *
  * Author: AFNI Developers
@@ -300,6 +302,8 @@ function v__suma_make_spec_fs_execute(
 
 
 /**
+ * @SUMA_Make_Spec_FS
+ *
  * Prepare for surface viewing in SUMA.
  *
  * Author: AFNI Developers

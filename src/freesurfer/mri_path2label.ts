@@ -218,6 +218,8 @@ function mri_path2label_outputs(
 
 
 /**
+ * mri_path2label
+ *
  * Converts a path file to a label or a label file to a path file.
  *
  * Author: FreeSurfer Developers
@@ -244,6 +246,8 @@ function mri_path2label_execute(
 
 
 /**
+ * mri_path2label
+ *
  * Converts a path file to a label or a label file to a path file.
  *
  * Author: FreeSurfer Developers

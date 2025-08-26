@@ -320,6 +320,8 @@ function foci_resample_outputs(
 
 
 /**
+ * foci-resample
+ *
  * Project foci to a different surface.
  *
  * Unprojects foci from the <current-surf> for the structure, then projects them to <new-surf>.  If the foci have meaningful distances above or below the surface, use anatomical surfaces.  If the foci should be on the surface, use registered spheres and the options -discard-distance-from-surface and -restore-xyz.
@@ -348,6 +350,8 @@ function foci_resample_execute(
 
 
 /**
+ * foci-resample
+ *
  * Project foci to a different surface.
  *
  * Unprojects foci from the <current-surf> for the structure, then projects them to <new-surf>.  If the foci have meaningful distances above or below the surface, use anatomical surfaces.  If the foci should be on the surface, use registered spheres and the options -discard-distance-from-surface and -restore-xyz.

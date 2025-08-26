@@ -306,6 +306,8 @@ function metric_resample_outputs(
 
 
 /**
+ * metric-resample
+ *
  * Resample a metric file to a different mesh.
  *
  * Resamples a metric file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
@@ -346,6 +348,8 @@ function metric_resample_execute(
 
 
 /**
+ * metric-resample
+ *
  * Resample a metric file to a different mesh.
  *
  * Resamples a metric file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.

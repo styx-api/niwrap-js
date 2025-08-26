@@ -1223,6 +1223,8 @@ function dwi2response_outputs(
 
 
 /**
+ * dwi2response
+ *
  * Estimate response function(s) for spherical deconvolution.
  * dwi2response offers different algorithms for performing various types of response function estimation. The name of the algorithm must appear as the first argument on the command-line after â€˜dwi2responseâ€™. The subsequent arguments and options depend on the particular algorithm being invoked.
  * Each algorithm available has its own help page, including necessary references; e.g. to see the help page of the 'fa' algorithm, type 'dwi2response fa'.
@@ -1251,6 +1253,8 @@ function dwi2response_execute(
 
 
 /**
+ * dwi2response
+ *
  * Estimate response function(s) for spherical deconvolution.
  * dwi2response offers different algorithms for performing various types of response function estimation. The name of the algorithm must appear as the first argument on the command-line after â€˜dwi2responseâ€™. The subsequent arguments and options depend on the particular algorithm being invoked.
  * Each algorithm available has its own help page, including necessary references; e.g. to see the help page of the 'fa' algorithm, type 'dwi2response fa'.

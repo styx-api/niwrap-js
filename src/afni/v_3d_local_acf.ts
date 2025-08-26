@@ -165,6 +165,8 @@ function v_3d_local_acf_outputs(
 
 
 /**
+ * 3dLocalACF
+ *
  * Estimate the spatial AutoCorrelation Function (ACF) locally in a neighborhood around each voxel.
  *
  * Author: AFNI Developers
@@ -191,6 +193,8 @@ function v_3d_local_acf_execute(
 
 
 /**
+ * 3dLocalACF
+ *
  * Estimate the spatial AutoCorrelation Function (ACF) locally in a neighborhood around each voxel.
  *
  * Author: AFNI Developers

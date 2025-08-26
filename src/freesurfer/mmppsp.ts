@@ -215,6 +215,8 @@ function mmppsp_outputs(
 
 
 /**
+ * mmppsp
+ *
  * MultiModal Posterior Probability Surface Placement.
  *
  * Author: FreeSurfer Developers
@@ -241,6 +243,8 @@ function mmppsp_execute(
 
 
 /**
+ * mmppsp
+ *
  * MultiModal Posterior Probability Surface Placement.
  *
  * Author: FreeSurfer Developers

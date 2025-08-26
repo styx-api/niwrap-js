@@ -217,6 +217,8 @@ function fat_proc_convert_dcm_anat_outputs(
 
 
 /**
+ * fat_proc_convert_dcm_anat
+ *
  * Converts an anatomical dataset from DICOM files into a volume, specifically designed to fit in line with other processing such as DTI analysis.
  *
  * Author: AFNI Developers
@@ -243,6 +245,8 @@ function fat_proc_convert_dcm_anat_execute(
 
 
 /**
+ * fat_proc_convert_dcm_anat
+ *
  * Converts an anatomical dataset from DICOM files into a volume, specifically designed to fit in line with other processing such as DTI analysis.
  *
  * Author: AFNI Developers

@@ -216,6 +216,8 @@ function convert_matrix4_to_workbench_sparse_outputs(
 
 
 /**
+ * convert-matrix4-to-workbench-sparse
+ *
  * Convert a 3-file matrix4 to a workbench sparse file.
  *
  * Converts the matrix 4 output of probtrackx to workbench sparse file format.  Exactly one of -surface-seeds and -volume-seeds must be specified.
@@ -244,6 +246,8 @@ function convert_matrix4_to_workbench_sparse_execute(
 
 
 /**
+ * convert-matrix4-to-workbench-sparse
+ *
  * Convert a 3-file matrix4 to a workbench sparse file.
  *
  * Converts the matrix 4 output of probtrackx to workbench sparse file format.  Exactly one of -surface-seeds and -volume-seeds must be specified.

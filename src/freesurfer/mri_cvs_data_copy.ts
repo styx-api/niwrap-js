@@ -153,6 +153,8 @@ function mri_cvs_data_copy_outputs(
 
 
 /**
+ * mri_cvs_data_copy
+ *
  * Packs and copies files that are required for mri_cvs_register.
  *
  * Author: FreeSurfer Developers
@@ -179,6 +181,8 @@ function mri_cvs_data_copy_execute(
 
 
 /**
+ * mri_cvs_data_copy
+ *
  * Packs and copies files that are required for mri_cvs_register.
  *
  * Author: FreeSurfer Developers

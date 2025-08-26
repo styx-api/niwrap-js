@@ -132,6 +132,8 @@ function fslcpgeom_outputs(
 
 
 /**
+ * fslcpgeom
+ *
  * FSL tool to copy image geometry from one file to another.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -158,6 +160,8 @@ function fslcpgeom_execute(
 
 
 /**
+ * fslcpgeom
+ *
  * FSL tool to copy image geometry from one file to another.
  *
  * Author: FMRIB Analysis Group, University of Oxford

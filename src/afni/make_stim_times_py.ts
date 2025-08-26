@@ -234,6 +234,8 @@ function make_stim_times_py_outputs(
 
 
 /**
+ * make_stim_times.py
+ *
  * Convert a set of 0/1 stim files into a set of stim_times files, or convert real-valued files into those for use with -stim_times_AM2.
  *
  * Author: AFNI Developers
@@ -260,6 +262,8 @@ function make_stim_times_py_execute(
 
 
 /**
+ * make_stim_times.py
+ *
  * Convert a set of 0/1 stim files into a set of stim_times files, or convert real-valued files into those for use with -stim_times_AM2.
  *
  * Author: AFNI Developers

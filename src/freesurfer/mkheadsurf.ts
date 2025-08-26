@@ -398,6 +398,8 @@ function mkheadsurf_outputs(
 
 
 /**
+ * mkheadsurf
+ *
  * Segment and create a surface representation of the head for visualization and further processing.
  *
  * Author: FreeSurfer Developers
@@ -424,6 +426,8 @@ function mkheadsurf_execute(
 
 
 /**
+ * mkheadsurf
+ *
  * Segment and create a surface representation of the head for visualization and further processing.
  *
  * Author: FreeSurfer Developers

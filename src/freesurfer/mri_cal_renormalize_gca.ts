@@ -146,6 +146,8 @@ function mri_cal_renormalize_gca_outputs(
 
 
 /**
+ * mri_cal_renormalize_gca
+ *
  * Tool for atlas renormalization in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -172,6 +174,8 @@ function mri_cal_renormalize_gca_execute(
 
 
 /**
+ * mri_cal_renormalize_gca
+ *
  * Tool for atlas renormalization in FreeSurfer.
  *
  * Author: FreeSurfer Developers

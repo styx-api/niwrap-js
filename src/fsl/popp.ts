@@ -474,6 +474,8 @@ function popp_outputs(
 
 
 /**
+ * popp
+ *
  * Physiological data processing tool of FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -500,6 +502,8 @@ function popp_execute(
 
 
 /**
+ * popp
+ *
  * Physiological data processing tool of FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

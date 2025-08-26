@@ -244,6 +244,8 @@ function v__afni_refacer_run_outputs(
 
 
 /**
+ * @afni_refacer_run
+ *
  * This script re-faces one input dataset, using a master shell dataset to write over the subject's 'face' region.
  *
  * Author: AFNI Developers
@@ -270,6 +272,8 @@ function v__afni_refacer_run_execute(
 
 
 /**
+ * @afni_refacer_run
+ *
  * This script re-faces one input dataset, using a master shell dataset to write over the subject's 'face' region.
  *
  * Author: AFNI Developers

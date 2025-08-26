@@ -173,6 +173,8 @@ function adjunct_suma_fs_roi_info_outputs(
 
 
 /**
+ * adjunct_suma_fs_roi_info
+ *
  * Script for making ROI stats for the SUMA/ directory created by @SUMA_Make_Spec_FS after running FreeSurfer's recon-all.
  *
  * Author: AFNI Developers
@@ -199,6 +201,8 @@ function adjunct_suma_fs_roi_info_execute(
 
 
 /**
+ * adjunct_suma_fs_roi_info
+ *
  * Script for making ROI stats for the SUMA/ directory created by @SUMA_Make_Spec_FS after running FreeSurfer's recon-all.
  *
  * Author: AFNI Developers

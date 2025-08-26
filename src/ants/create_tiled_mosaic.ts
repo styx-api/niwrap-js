@@ -257,6 +257,8 @@ function create_tiled_mosaic_outputs(
 
 
 /**
+ * CreateTiledMosaic
+ *
  * Render a 3-D image volume with optional Rgb overlay.
  *
  * Author: ANTs Developers
@@ -283,6 +285,8 @@ function create_tiled_mosaic_execute(
 
 
 /**
+ * CreateTiledMosaic
+ *
  * Render a 3-D image volume with optional Rgb overlay.
  *
  * Author: ANTs Developers

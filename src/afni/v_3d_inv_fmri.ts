@@ -235,6 +235,8 @@ function v_3d_inv_fmri_outputs(
 
 
 /**
+ * 3dInvFMRI
+ *
  * Program to compute stimulus time series, given a 3D+time dataset and an activation map (the inverse of the usual FMRI analysis problem).
  *
  * Author: AFNI Developers
@@ -261,6 +263,8 @@ function v_3d_inv_fmri_execute(
 
 
 /**
+ * 3dInvFMRI
+ *
  * Program to compute stimulus time series, given a 3D+time dataset and an activation map (the inverse of the usual FMRI analysis problem).
  *
  * Author: AFNI Developers

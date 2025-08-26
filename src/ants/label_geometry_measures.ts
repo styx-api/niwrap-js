@@ -149,6 +149,8 @@ function label_geometry_measures_outputs(
 
 
 /**
+ * LabelGeometryMeasures
+ *
  * This tool computes various geometry measures on a label image, optionally using an intensity image, and outputs the results to a CSV file.
  *
  * Author: ANTs Developers
@@ -175,6 +177,8 @@ function label_geometry_measures_execute(
 
 
 /**
+ * LabelGeometryMeasures
+ *
  * This tool computes various geometry measures on a label image, optionally using an intensity image, and outputs the results to a CSV file.
  *
  * Author: ANTs Developers

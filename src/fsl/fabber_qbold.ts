@@ -480,6 +480,8 @@ function fabber_qbold_outputs(
 
 
 /**
+ * fabber_qbold
+ *
  * Fabber - a flexible BaYesian modeling framework for FMRI and MRI analysis.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -506,6 +508,8 @@ function fabber_qbold_execute(
 
 
 /**
+ * fabber_qbold
+ *
  * Fabber - a flexible BaYesian modeling framework for FMRI and MRI analysis.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -611,6 +611,8 @@ function uber_subject_py_outputs(
 
 
 /**
+ * uber_subject.py
+ *
  * Graphical interface to afni_proc.py.
  *
  * Author: AFNI Developers
@@ -637,6 +639,8 @@ function uber_subject_py_execute(
 
 
 /**
+ * uber_subject.py
+ *
  * Graphical interface to afni_proc.py.
  *
  * Author: AFNI Developers

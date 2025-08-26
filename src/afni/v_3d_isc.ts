@@ -217,6 +217,8 @@ function v_3d_isc_outputs(
 
 
 /**
+ * 3dISC
+ *
  * Program for Voxelwise Inter-Subject Correlation (ISC) Analysis using linear mixed-effects modeling.
  *
  * Author: AFNI Developers
@@ -243,6 +245,8 @@ function v_3d_isc_execute(
 
 
 /**
+ * 3dISC
+ *
  * Program for Voxelwise Inter-Subject Correlation (ISC) Analysis using linear mixed-effects modeling.
  *
  * Author: AFNI Developers

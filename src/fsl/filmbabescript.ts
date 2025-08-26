@@ -125,6 +125,8 @@ function filmbabescript_outputs(
 
 
 /**
+ * filmbabescript
+ *
  * A tool/script for processing FEAT directories and FLOBs directories.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -151,6 +153,8 @@ function filmbabescript_execute(
 
 
 /**
+ * filmbabescript
+ *
  * A tool/script for processing FEAT directories and FLOBs directories.
  *
  * Author: FMRIB Analysis Group, University of Oxford

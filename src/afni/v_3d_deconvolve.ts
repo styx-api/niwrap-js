@@ -302,6 +302,8 @@ function v_3d_deconvolve_outputs(
 
 
 /**
+ * 3dDeconvolve
+ *
  * Program to calculate the deconvolution of a measurement 3D+time dataset with a specified input stimulus time series.
  *
  * Author: AFNI Developers
@@ -328,6 +330,8 @@ function v_3d_deconvolve_execute(
 
 
 /**
+ * 3dDeconvolve
+ *
  * Program to calculate the deconvolution of a measurement 3D+time dataset with a specified input stimulus time series.
  *
  * Author: AFNI Developers

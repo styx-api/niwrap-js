@@ -127,6 +127,8 @@ function v_4swap_outputs(
 
 
 /**
+ * 4swap
+ *
  * Swaps byte quadruples on the listed files.
  *
  * Author: AFNI Developers
@@ -153,6 +155,8 @@ function v_4swap_execute(
 
 
 /**
+ * 4swap
+ *
  * Swaps byte quadruples on the listed files.
  *
  * Author: AFNI Developers

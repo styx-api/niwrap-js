@@ -288,6 +288,8 @@ function b0calc_outputs(
 
 
 /**
+ * b0calc
+ *
  * B0 field calculation program.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -314,6 +316,8 @@ function b0calc_execute(
 
 
 /**
+ * b0calc
+ *
  * B0 field calculation program.
  *
  * Author: FMRIB Analysis Group, University of Oxford

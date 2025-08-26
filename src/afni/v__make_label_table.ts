@@ -502,6 +502,8 @@ function v__make_label_table_outputs(
 
 
 /**
+ * @MakeLabelTable
+ *
  * Script used to create, modify, and transform label tables.
  *
  * Author: AFNI Developers
@@ -528,6 +530,8 @@ function v__make_label_table_execute(
 
 
 /**
+ * @MakeLabelTable
+ *
  * Script used to create, modify, and transform label tables.
  *
  * Author: AFNI Developers

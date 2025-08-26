@@ -145,6 +145,8 @@ function siena_cal_outputs(
 
 
 /**
+ * siena_cal
+ *
  * SIENA is part of FSL (FMRIB Software Library), which performs a two-timepoint brain volume change analysis.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -171,6 +173,8 @@ function siena_cal_execute(
 
 
 /**
+ * siena_cal
+ *
  * SIENA is part of FSL (FMRIB Software Library), which performs a two-timepoint brain volume change analysis.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -145,6 +145,8 @@ function v_3d_tfilter_outputs(
 
 
 /**
+ * 3dTfilter
+ *
  * 3dTfilter filters the time series in each voxel according to the user-specified filter functions.
  *
  * Author: AFNI Developers
@@ -171,6 +173,8 @@ function v_3d_tfilter_execute(
 
 
 /**
+ * 3dTfilter
+ *
  * 3dTfilter filters the time series in each voxel according to the user-specified filter functions.
  *
  * Author: AFNI Developers

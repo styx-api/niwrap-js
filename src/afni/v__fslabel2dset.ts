@@ -156,6 +156,8 @@ function v__fslabel2dset_outputs(
 
 
 /**
+ * @FSlabel2dset
+ *
  * A script to convert a FreeSurfer ASCII label file into a SUMA dataset and a SUMA ROI.
  *
  * Author: AFNI Developers
@@ -182,6 +184,8 @@ function v__fslabel2dset_execute(
 
 
 /**
+ * @FSlabel2dset
+ *
  * A script to convert a FreeSurfer ASCII label file into a SUMA dataset and a SUMA ROI.
  *
  * Author: AFNI Developers

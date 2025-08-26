@@ -141,6 +141,8 @@ function mri_hires_register_outputs(
 
 
 /**
+ * mri_hires_register
+ *
  * A tool for high-resolution registration for Freesurfer images.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mri_hires_register_execute(
 
 
 /**
+ * mri_hires_register
+ *
  * A tool for high-resolution registration for Freesurfer images.
  *
  * Author: FreeSurfer Developers

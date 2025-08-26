@@ -141,6 +141,8 @@ function mri_deface_outputs(
 
 
 /**
+ * mri_deface
+ *
  * MRI Deface utility for removing facial features from MRI images.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mri_deface_execute(
 
 
 /**
+ * mri_deface
+ *
  * MRI Deface utility for removing facial features from MRI images.
  *
  * Author: FreeSurfer Developers

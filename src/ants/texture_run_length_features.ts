@@ -203,6 +203,8 @@ function texture_run_length_features_outputs(
 
 
 /**
+ * TextureRunLengthFeatures
+ *
  * A tool to calculate texture run length features on an input image.
  *
  * Author: ANTs Developers
@@ -229,6 +231,8 @@ function texture_run_length_features_execute(
 
 
 /**
+ * TextureRunLengthFeatures
+ *
  * A tool to calculate texture run length features on an input image.
  *
  * Author: ANTs Developers

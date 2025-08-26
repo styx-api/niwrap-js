@@ -166,6 +166,8 @@ function v_3d_friedman_outputs(
 
 
 /**
+ * 3dFriedman
+ *
  * Performs nonparametric Friedman test for randomized complete block design experiments.
  *
  * Author: AFNI Developers
@@ -192,6 +194,8 @@ function v_3d_friedman_execute(
 
 
 /**
+ * 3dFriedman
+ *
  * Performs nonparametric Friedman test for randomized complete block design experiments.
  *
  * Author: AFNI Developers

@@ -148,6 +148,8 @@ function mris_compute_acorr_outputs(
 
 
 /**
+ * mris_compute_acorr
+ *
  * Compute the autocorrelation function of a curvature file on a spherical surface.
  *
  * Author: FreeSurfer Developers
@@ -174,6 +176,8 @@ function mris_compute_acorr_execute(
 
 
 /**
+ * mris_compute_acorr
+ *
  * Compute the autocorrelation function of a curvature file on a spherical surface.
  *
  * Author: FreeSurfer Developers

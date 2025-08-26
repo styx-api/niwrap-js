@@ -227,6 +227,8 @@ function test_tutorials_sh_outputs(
 
 
 /**
+ * test_tutorials.sh
+ *
  * A script to run various tutorial commands, with options for skipping GUI components and focusing on specific tutorials.
  *
  * Author: FreeSurfer Developers
@@ -253,6 +255,8 @@ function test_tutorials_sh_execute(
 
 
 /**
+ * test_tutorials.sh
+ *
  * A script to run various tutorial commands, with options for skipping GUI components and focusing on specific tutorials.
  *
  * Author: FreeSurfer Developers

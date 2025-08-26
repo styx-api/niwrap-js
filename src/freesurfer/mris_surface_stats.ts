@@ -282,6 +282,8 @@ function mris_surface_stats_outputs(
 
 
 /**
+ * mris_surface_stats
+ *
  * Computes the group-wise mean and standard deviation of thickness differences at every vertex of the template surface.
  *
  * Author: FreeSurfer Developers
@@ -308,6 +310,8 @@ function mris_surface_stats_execute(
 
 
 /**
+ * mris_surface_stats
+ *
  * Computes the group-wise mean and standard deviation of thickness differences at every vertex of the template surface.
  *
  * Author: FreeSurfer Developers

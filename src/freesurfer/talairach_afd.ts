@@ -170,6 +170,8 @@ function talairach_afd_outputs(
 
 
 /**
+ * talairach_afd
+ *
  * Detects Talairach alignment failures.
  *
  * Author: FreeSurfer Developers
@@ -196,6 +198,8 @@ function talairach_afd_execute(
 
 
 /**
+ * talairach_afd
+ *
  * Detects Talairach alignment failures.
  *
  * Author: FreeSurfer Developers

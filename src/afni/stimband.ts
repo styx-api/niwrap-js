@@ -181,6 +181,8 @@ function stimband_outputs(
 
 
 /**
+ * stimband
+ *
  * Determines frequency band covering at least 90% of the 'power' (|FFT|^2) of stimulus columns from X.nocensor.xmat.1D files.
  *
  * Author: AFNI Developers
@@ -207,6 +209,8 @@ function stimband_execute(
 
 
 /**
+ * stimband
+ *
  * Determines frequency band covering at least 90% of the 'power' (|FFT|^2) of stimulus columns from X.nocensor.xmat.1D files.
  *
  * Author: AFNI Developers

@@ -290,6 +290,8 @@ function mba_outputs(
 
 
 /**
+ * MBA
+ *
  * Matrix-Based Analysis Program through Bayesian Multilevel Modeling.
  *
  * Author: AFNI Developers
@@ -316,6 +318,8 @@ function mba_execute(
 
 
 /**
+ * MBA
+ *
  * Matrix-Based Analysis Program through Bayesian Multilevel Modeling.
  *
  * Author: AFNI Developers

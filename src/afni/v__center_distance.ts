@@ -134,6 +134,8 @@ function v__center_distance_outputs(
 
 
 /**
+ * @Center_Distance
+ *
  * Tool to calculate the distance between the centers of two datasets.
  *
  * Author: AFNI Developers
@@ -160,6 +162,8 @@ function v__center_distance_execute(
 
 
 /**
+ * @Center_Distance
+ *
  * Tool to calculate the distance between the centers of two datasets.
  *
  * Author: AFNI Developers

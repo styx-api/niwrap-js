@@ -250,6 +250,8 @@ function label2mesh_outputs(
 
 
 /**
+ * label2mesh
+ *
  * Generate meshes from a label image.
  *
  *
@@ -282,6 +284,8 @@ function label2mesh_execute(
 
 
 /**
+ * label2mesh
+ *
  * Generate meshes from a label image.
  *
  *

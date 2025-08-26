@@ -412,6 +412,8 @@ function fabber_dualecho_outputs(
 
 
 /**
+ * fabber_dualecho
+ *
  * FMRIB's Advanced Bayesian Estimation and Inference tool for FMRI analysis.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -438,6 +440,8 @@ function fabber_dualecho_execute(
 
 
 /**
+ * fabber_dualecho
+ *
  * FMRIB's Advanced Bayesian Estimation and Inference tool for FMRI analysis.
  *
  * Author: FMRIB Analysis Group, University of Oxford

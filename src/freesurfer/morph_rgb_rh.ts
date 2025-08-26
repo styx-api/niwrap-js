@@ -123,6 +123,8 @@ function morph_rgb_rh_outputs(
 
 
 /**
+ * morph_rgb-rh
+ *
  * Morphs RGB values onto a FreeSurfer right hemisphere surface.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function morph_rgb_rh_execute(
 
 
 /**
+ * morph_rgb-rh
+ *
  * Morphs RGB values onto a FreeSurfer right hemisphere surface.
  *
  * Author: FreeSurfer Developers

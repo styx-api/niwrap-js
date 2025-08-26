@@ -203,6 +203,8 @@ function mri_sph2surf_outputs(
 
 
 /**
+ * mri-sph2surf
+ *
  * Converts spherical functional data to surface data in the FreeSurfer processing pipeline.
  *
  * Author: FreeSurfer Developers
@@ -229,6 +231,8 @@ function mri_sph2surf_execute(
 
 
 /**
+ * mri-sph2surf
+ *
  * Converts spherical functional data to surface data in the FreeSurfer processing pipeline.
  *
  * Author: FreeSurfer Developers

@@ -146,6 +146,8 @@ function v_3d_afnito_niml_outputs(
 
 
 /**
+ * 3dAFNItoNIML
+ *
  * Dumps AFNI dataset header information to stdout in NIML format. Mostly for debugging and testing purposes!.
  *
  * Author: AFNI Developers
@@ -172,6 +174,8 @@ function v_3d_afnito_niml_execute(
 
 
 /**
+ * 3dAFNItoNIML
+ *
  * Dumps AFNI dataset header information to stdout in NIML format. Mostly for debugging and testing purposes!.
  *
  * Author: AFNI Developers

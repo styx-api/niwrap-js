@@ -439,6 +439,8 @@ function filmbabe_outputs(
 
 
 /**
+ * filmbabe
+ *
  * FILM with MCMC-based Bayesian Analysis for fMRI.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -465,6 +467,8 @@ function filmbabe_execute(
 
 
 /**
+ * filmbabe
+ *
  * FILM with MCMC-based Bayesian Analysis for fMRI.
  *
  * Author: FMRIB Analysis Group, University of Oxford

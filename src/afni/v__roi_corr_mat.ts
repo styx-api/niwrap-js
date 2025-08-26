@@ -209,6 +209,8 @@ function v__roi_corr_mat_outputs(
 
 
 /**
+ * @ROI_Corr_Mat
+ *
  * Script to produce an NxN ROI correlation matrix of N ROIs.
  *
  * Author: AFNI Developers
@@ -235,6 +237,8 @@ function v__roi_corr_mat_execute(
 
 
 /**
+ * @ROI_Corr_Mat
+ *
  * Script to produce an NxN ROI correlation matrix of N ROIs.
  *
  * Author: AFNI Developers

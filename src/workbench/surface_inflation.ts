@@ -157,6 +157,8 @@ function surface_inflation_outputs(
 
 
 /**
+ * surface-inflation
+ *
  * Surface inflation.
  *
  * Inflate a surface by performing cycles that consist of smoothing  followed by inflation (to correct shrinkage caused by smoothing).
@@ -185,6 +187,8 @@ function surface_inflation_execute(
 
 
 /**
+ * surface-inflation
+ *
  * Surface inflation.
  *
  * Inflate a surface by performing cycles that consist of smoothing  followed by inflation (to correct shrinkage caused by smoothing).

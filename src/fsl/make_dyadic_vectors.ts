@@ -154,6 +154,8 @@ function make_dyadic_vectors_outputs(
 
 
 /**
+ * make_dyadic_vectors
+ *
  * Generate dyadic vectors from theta and phi volumes.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -180,6 +182,8 @@ function make_dyadic_vectors_execute(
 
 
 /**
+ * make_dyadic_vectors
+ *
  * Generate dyadic vectors from theta and phi volumes.
  *
  * Author: FMRIB Analysis Group, University of Oxford

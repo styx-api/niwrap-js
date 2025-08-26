@@ -130,6 +130,8 @@ function renormalize_subject_keep_editting_outputs(
 
 
 /**
+ * renormalize_subject_keep_editting
+ *
  * A placeholder for the renormalize_subject_keep_editting tool, details not available.
  *
  * Author: FreeSurfer Developers
@@ -156,6 +158,8 @@ function renormalize_subject_keep_editting_execute(
 
 
 /**
+ * renormalize_subject_keep_editting
+ *
  * A placeholder for the renormalize_subject_keep_editting tool, details not available.
  *
  * Author: FreeSurfer Developers

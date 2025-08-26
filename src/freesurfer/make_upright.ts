@@ -136,6 +136,8 @@ function make_upright_outputs(
 
 
 /**
+ * make_upright
+ *
  * Registers MRI input to the left/right reversed version using mri_robust_register and making use of the half-way space, resulting in an upright, forward facing head position.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function make_upright_execute(
 
 
 /**
+ * make_upright
+ *
  * Registers MRI input to the left/right reversed version using mri_robust_register and making use of the half-way space, resulting in an upright, forward facing head position.
  *
  * Author: FreeSurfer Developers

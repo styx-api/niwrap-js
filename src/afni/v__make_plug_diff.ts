@@ -169,6 +169,8 @@ function v__make_plug_diff_outputs(
 
 
 /**
+ * @make_plug_diff
+ *
  * Compiles AFNI's diffusion plugin.
  *
  * Author: AFNI Developers
@@ -195,6 +197,8 @@ function v__make_plug_diff_execute(
 
 
 /**
+ * @make_plug_diff
+ *
  * Compiles AFNI's diffusion plugin.
  *
  * Author: AFNI Developers

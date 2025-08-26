@@ -311,6 +311,8 @@ function make_folding_atlas_outputs(
 
 
 /**
+ * make_folding_atlas
+ *
  * Script to iteratively create a cortical folding atlas.
  *
  * Author: FreeSurfer Developers
@@ -337,6 +339,8 @@ function make_folding_atlas_execute(
 
 
 /**
+ * make_folding_atlas
+ *
  * Script to iteratively create a cortical folding atlas.
  *
  * Author: FreeSurfer Developers

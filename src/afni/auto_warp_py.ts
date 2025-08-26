@@ -418,6 +418,8 @@ function auto_warp_py_outputs(
 
 
 /**
+ * auto_warp.py
+ *
  * Nonlinear registration tool.
  *
  * Author: AFNI Developers
@@ -444,6 +446,8 @@ function auto_warp_py_execute(
 
 
 /**
+ * auto_warp.py
+ *
  * Nonlinear registration tool.
  *
  * Author: AFNI Developers

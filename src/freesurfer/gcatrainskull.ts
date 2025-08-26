@@ -123,6 +123,8 @@ function gcatrainskull_outputs(
 
 
 /**
+ * gcatrainskull
+ *
  * GCA train skull stripping tool.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function gcatrainskull_execute(
 
 
 /**
+ * gcatrainskull
+ *
  * GCA train skull stripping tool.
  *
  * Author: FreeSurfer Developers

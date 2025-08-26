@@ -159,6 +159,8 @@ function mri_stats2seg_outputs(
 
 
 /**
+ * mri_stats2seg
+ *
  * A command-line tool for converting MRI statistical maps to segmented volume.
  *
  * Author: FreeSurfer Developers
@@ -185,6 +187,8 @@ function mri_stats2seg_execute(
 
 
 /**
+ * mri_stats2seg
+ *
  * A command-line tool for converting MRI statistical maps to segmented volume.
  *
  * Author: FreeSurfer Developers

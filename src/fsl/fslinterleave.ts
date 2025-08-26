@@ -143,6 +143,8 @@ function fslinterleave_outputs(
 
 
 /**
+ * fslinterleave
+ *
  * Interleaves two input images slice-by-slice to produce an output image.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -169,6 +171,8 @@ function fslinterleave_execute(
 
 
 /**
+ * fslinterleave
+ *
  * Interleaves two input images slice-by-slice to produce an output image.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -148,6 +148,8 @@ function v_3d_overlap_outputs(
 
 
 /**
+ * 3dOverlap
+ *
  * Counts the number of voxels that are nonzero in all input datasets.
  *
  * Author: AFNI Developers
@@ -174,6 +176,8 @@ function v_3d_overlap_execute(
 
 
 /**
+ * 3dOverlap
+ *
  * Counts the number of voxels that are nonzero in all input datasets.
  *
  * Author: AFNI Developers

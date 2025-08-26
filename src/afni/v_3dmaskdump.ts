@@ -329,6 +329,8 @@ function v_3dmaskdump_outputs(
 
 
 /**
+ * 3dmaskdump
+ *
  * Outputs voxel values from AFNI datasets satisfying mask criteria to an ASCII file.
  *
  * Author: AFNI Developers
@@ -355,6 +357,8 @@ function v_3dmaskdump_execute(
 
 
 /**
+ * 3dmaskdump
+ *
  * Outputs voxel values from AFNI datasets satisfying mask criteria to an ASCII file.
  *
  * Author: AFNI Developers

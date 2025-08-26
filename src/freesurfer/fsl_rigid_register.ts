@@ -343,6 +343,8 @@ function fsl_rigid_register_outputs(
 
 
 /**
+ * fsl_rigid_register
+ *
  * A front-end tool for FSL's FLIRT that computes a rigid registration matrix and resamples the input volume to the reference volume.
  *
  * Author: FreeSurfer Developers
@@ -369,6 +371,8 @@ function fsl_rigid_register_execute(
 
 
 /**
+ * fsl_rigid_register
+ *
  * A front-end tool for FSL's FLIRT that computes a rigid registration matrix and resamples the input volume to the reference volume.
  *
  * Author: FreeSurfer Developers

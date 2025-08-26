@@ -200,6 +200,8 @@ function volume_estimate_fwhm_outputs(
 
 
 /**
+ * volume-estimate-fwhm
+ *
  * Estimate fwhm smoothness of a volume.
  *
  * Estimates the smoothness of the input volume in X, Y, and Z directions separately, printing the estimates to standard output, in mm as FWHM.  If -subvolume or -whole-file are not specified, each subvolume is estimated and displayed separately.
@@ -228,6 +230,8 @@ function volume_estimate_fwhm_execute(
 
 
 /**
+ * volume-estimate-fwhm
+ *
  * Estimate fwhm smoothness of a volume.
  *
  * Estimates the smoothness of the input volume in X, Y, and Z directions separately, printing the estimates to standard output, in mm as FWHM.  If -subvolume or -whole-file are not specified, each subvolume is estimated and displayed separately.

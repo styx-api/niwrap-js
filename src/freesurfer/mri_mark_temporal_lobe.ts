@@ -148,6 +148,8 @@ function mri_mark_temporal_lobe_outputs(
 
 
 /**
+ * mri_mark_temporal_lobe
+ *
  * A tool for marking the temporal lobe in MRI images.
  *
  * Author: FreeSurfer Developers
@@ -174,6 +176,8 @@ function mri_mark_temporal_lobe_execute(
 
 
 /**
+ * mri_mark_temporal_lobe
+ *
  * A tool for marking the temporal lobe in MRI images.
  *
  * Author: FreeSurfer Developers

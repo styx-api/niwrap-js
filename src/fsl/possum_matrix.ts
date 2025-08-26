@@ -178,6 +178,8 @@ function possum_matrix_outputs(
 
 
 /**
+ * possum_matrix
+ *
  * Event matrix generator for POSSUM simulation in FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -204,6 +206,8 @@ function possum_matrix_execute(
 
 
 /**
+ * possum_matrix
+ *
  * Event matrix generator for POSSUM simulation in FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

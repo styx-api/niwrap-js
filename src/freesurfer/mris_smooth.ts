@@ -239,6 +239,8 @@ function mris_smooth_outputs(
 
 
 /**
+ * mris_smooth
+ *
  * This program smooths the tessellation of a cortical surface and writes out the mean curvature and area files.
  *
  * Author: FreeSurfer Developers
@@ -265,6 +267,8 @@ function mris_smooth_execute(
 
 
 /**
+ * mris_smooth
+ *
  * This program smooths the tessellation of a cortical surface and writes out the mean curvature and area files.
  *
  * Author: FreeSurfer Developers

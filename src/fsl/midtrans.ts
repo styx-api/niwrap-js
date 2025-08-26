@@ -170,6 +170,8 @@ function midtrans_outputs(
 
 
 /**
+ * midtrans
+ *
  * Calculate the midpoint transform from a series of input transforms.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -196,6 +198,8 @@ function midtrans_execute(
 
 
 /**
+ * midtrans
+ *
  * Calculate the midpoint transform from a series of input transforms.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -312,6 +312,8 @@ function metric_extrema_outputs(
 
 
 /**
+ * metric-extrema
+ *
  * Find extrema in a metric file.
  *
  * Finds extrema in a metric file, such that no two extrema of the same type are within <distance> of each other.  The extrema are labeled as -1 for minima, 1 for maxima, 0 otherwise.  If -only-maxima or -only-minima is specified, then it will ignore extrema not of the specified type.  These options are mutually exclusive.
@@ -348,6 +350,8 @@ function metric_extrema_execute(
 
 
 /**
+ * metric-extrema
+ *
  * Find extrema in a metric file.
  *
  * Finds extrema in a metric file, such that no two extrema of the same type are within <distance> of each other.  The extrema are labeled as -1 for minima, 1 for maxima, 0 otherwise.  If -only-maxima or -only-minima is specified, then it will ignore extrema not of the specified type.  These options are mutually exclusive.

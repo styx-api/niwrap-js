@@ -167,6 +167,8 @@ function mksubjdirs_outputs(
 
 
 /**
+ * mksubjdirs
+ *
  * A command-line tool to create subject directories.
  *
  * Author: FreeSurfer Developers
@@ -193,6 +195,8 @@ function mksubjdirs_execute(
 
 
 /**
+ * mksubjdirs
+ *
  * A command-line tool to create subject directories.
  *
  * Author: FreeSurfer Developers

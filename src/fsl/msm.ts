@@ -284,6 +284,8 @@ function msm_outputs(
 
 
 /**
+ * msm
+ *
  * MSM (Multimodal Surface Matching) is a tool for aligning brain surface scans based on their cortical folding patterns or functional/structural data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -310,6 +312,8 @@ function msm_execute(
 
 
 /**
+ * msm
+ *
  * MSM (Multimodal Surface Matching) is a tool for aligning brain surface scans based on their cortical folding patterns or functional/structural data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

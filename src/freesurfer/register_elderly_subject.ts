@@ -169,6 +169,8 @@ function register_elderly_subject_outputs(
 
 
 /**
+ * register_elderly_subject
+ *
  * Tool for registering MRI images of elderly subjects using Freesurfer's mri_em_register.
  *
  * Author: FreeSurfer Developers
@@ -195,6 +197,8 @@ function register_elderly_subject_execute(
 
 
 /**
+ * register_elderly_subject
+ *
  * Tool for registering MRI images of elderly subjects using Freesurfer's mri_em_register.
  *
  * Author: FreeSurfer Developers

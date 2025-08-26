@@ -221,6 +221,8 @@ function metric_math_outputs(
 
 
 /**
+ * metric-math
+ *
  * Evaluate expression on metric files.
  *
  * This command evaluates <expression> at each surface vertex independently.  There must be at least one -var option (to get the structure, number of vertices, and number of columns from), even if the <name> specified in it isn't used in <expression>.  All metrics must have the same number of vertices.  Filenames are not valid in <expression>, use a variable name and a -var option with matching <name> to specify an input file.  If the -column option is given to any -var option, only one column is used from that file.  If -repeat is specified, the file must either have only one column, or have the -column option specified.  All files that don't use -repeat must have the same number of columns requested to be used.  The format of <expression> is as follows:
@@ -286,6 +288,8 @@ function metric_math_execute(
 
 
 /**
+ * metric-math
+ *
  * Evaluate expression on metric files.
  *
  * This command evaluates <expression> at each surface vertex independently.  There must be at least one -var option (to get the structure, number of vertices, and number of columns from), even if the <name> specified in it isn't used in <expression>.  All metrics must have the same number of vertices.  Filenames are not valid in <expression>, use a variable name and a -var option with matching <name> to specify an input file.  If the -column option is given to any -var option, only one column is used from that file.  If -repeat is specified, the file must either have only one column, or have the -column option specified.  All files that don't use -repeat must have the same number of columns requested to be used.  The format of <expression> is as follows:

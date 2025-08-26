@@ -195,6 +195,8 @@ function v_3d_anhist_outputs(
 
 
 /**
+ * 3dAnhist
+ *
  * Tool to analyze histogram peaks in a T1-weighted high-res brain image dataset.
  *
  * Author: AFNI Developers
@@ -221,6 +223,8 @@ function v_3d_anhist_execute(
 
 
 /**
+ * 3dAnhist
+ *
  * Tool to analyze histogram peaks in a T1-weighted high-res brain image dataset.
  *
  * Author: AFNI Developers

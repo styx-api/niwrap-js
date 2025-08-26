@@ -126,6 +126,8 @@ function imdump_outputs(
 
 
 /**
+ * imdump
+ *
  * Prints out nonzero pixels in an image.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function imdump_execute(
 
 
 /**
+ * imdump
+ *
  * Prints out nonzero pixels in an image.
  *
  * Author: AFNI Developers

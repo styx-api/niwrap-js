@@ -136,6 +136,8 @@ function mri_relabel_hypointensities_outputs(
 
 
 /**
+ * mri_relabel_hypointensities
+ *
  * Tool for relabeling hypointensities in FreeSurfer's aseg files.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_relabel_hypointensities_execute(
 
 
 /**
+ * mri_relabel_hypointensities
+ *
  * Tool for relabeling hypointensities in FreeSurfer's aseg files.
  *
  * Author: FreeSurfer Developers

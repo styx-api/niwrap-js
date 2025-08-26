@@ -1232,6 +1232,8 @@ function mrregister_outputs(
 
 
 /**
+ * mrregister
+ *
  * Register two images together using a symmetric rigid, affine or non-linear transformation model.
  *
  * By default this application will perform an affine, followed by non-linear registration.
@@ -1271,6 +1273,8 @@ function mrregister_execute(
 
 
 /**
+ * mrregister
+ *
  * Register two images together using a symmetric rigid, affine or non-linear transformation model.
  *
  * By default this application will perform an affine, followed by non-linear registration.

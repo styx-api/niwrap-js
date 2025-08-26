@@ -168,6 +168,8 @@ function flip_4dfp_outputs(
 
 
 /**
+ * flip_4dfp
+ *
  * A tool to flip 4dfp images along specified axes.
  *
  * Author: FreeSurfer Developers
@@ -194,6 +196,8 @@ function flip_4dfp_execute(
 
 
 /**
+ * flip_4dfp
+ *
  * A tool to flip 4dfp images along specified axes.
  *
  * Author: FreeSurfer Developers

@@ -256,6 +256,8 @@ function count_outputs(
 
 
 /**
+ * count
+ *
  * Numbered copies generator with custom format support and random sequence options.
  *
  * Author: AFNI Developers
@@ -282,6 +284,8 @@ function count_execute(
 
 
 /**
+ * count
+ *
  * Numbered copies generator with custom format support and random sequence options.
  *
  * Author: AFNI Developers

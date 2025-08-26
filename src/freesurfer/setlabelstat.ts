@@ -152,6 +152,8 @@ function setlabelstat_outputs(
 
 
 /**
+ * setlabelstat
+ *
  * Replaces the stat values in a label file with the single stat value supplied on the command-line.
  *
  * Author: FreeSurfer Developers
@@ -178,6 +180,8 @@ function setlabelstat_execute(
 
 
 /**
+ * setlabelstat
+ *
  * Replaces the stat values in a label file with the single stat value supplied on the command-line.
  *
  * Author: FreeSurfer Developers

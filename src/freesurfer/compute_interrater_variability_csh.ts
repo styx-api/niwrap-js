@@ -169,6 +169,8 @@ function compute_interrater_variability_csh_outputs(
 
 
 /**
+ * compute_interrater_variability.csh
+ *
  * Computes the interrater variability between label volumes from different raters or time points using several metrics.
  *
  * Author: FreeSurfer Developers
@@ -195,6 +197,8 @@ function compute_interrater_variability_csh_execute(
 
 
 /**
+ * compute_interrater_variability.csh
+ *
  * Computes the interrater variability between label volumes from different raters or time points using several metrics.
  *
  * Author: FreeSurfer Developers

@@ -165,6 +165,8 @@ function predict_v1_sh_outputs(
 
 
 /**
+ * predict_v1.sh
+ *
  * A script for predicting brain images using registration.
  *
  * Author: FreeSurfer Developers
@@ -191,6 +193,8 @@ function predict_v1_sh_execute(
 
 
 /**
+ * predict_v1.sh
+ *
  * A script for predicting brain images using registration.
  *
  * Author: FreeSurfer Developers

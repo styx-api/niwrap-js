@@ -126,6 +126,8 @@ function help_format_outputs(
 
 
 /**
+ * help_format
+ *
  * Formats text by converting URLs into HTML hyperlinks.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function help_format_execute(
 
 
 /**
+ * help_format
+ *
  * Formats text by converting URLs into HTML hyperlinks.
  *
  * Author: AFNI Developers

@@ -204,6 +204,8 @@ function swap_voxelwise_outputs(
 
 
 /**
+ * swap_voxelwise
+ *
  * Reordering of vectors with direction preservation.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -230,6 +232,8 @@ function swap_voxelwise_execute(
 
 
 /**
+ * swap_voxelwise
+ *
  * Reordering of vectors with direction preservation.
  *
  * Author: FMRIB Analysis Group, University of Oxford

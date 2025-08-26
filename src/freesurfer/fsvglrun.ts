@@ -155,6 +155,8 @@ function fsvglrun_outputs(
 
 
 /**
+ * fsvglrun
+ *
  * A tool to execute a command, replacing the shell with the specified program, typically used within FreeSurfer environment.
  *
  * Author: FreeSurfer Developers
@@ -181,6 +183,8 @@ function fsvglrun_execute(
 
 
 /**
+ * fsvglrun
+ *
  * A tool to execute a command, replacing the shell with the specified program, typically used within FreeSurfer environment.
  *
  * Author: FreeSurfer Developers

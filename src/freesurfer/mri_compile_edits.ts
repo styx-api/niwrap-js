@@ -131,6 +131,8 @@ function mri_compile_edits_outputs(
 
 
 /**
+ * mri_compile_edits
+ *
  * Program to create a single volume showing all the volumetric edits made to a subject.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mri_compile_edits_execute(
 
 
 /**
+ * mri_compile_edits
+ *
  * Program to create a single volume showing all the volumetric edits made to a subject.
  *
  * Author: FreeSurfer Developers

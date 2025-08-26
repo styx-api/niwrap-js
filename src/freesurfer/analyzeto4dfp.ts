@@ -172,6 +172,8 @@ function analyzeto4dfp_outputs(
 
 
 /**
+ * analyzeto4dfp
+ *
  * Convert ANALYZE image format to 4dfp format with various options.
  *
  * Author: FreeSurfer Developers
@@ -198,6 +200,8 @@ function analyzeto4dfp_execute(
 
 
 /**
+ * analyzeto4dfp
+ *
  * Convert ANALYZE image format to 4dfp format with various options.
  *
  * Author: FreeSurfer Developers

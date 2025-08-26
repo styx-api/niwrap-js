@@ -120,6 +120,8 @@ function fslnvols_outputs(
 
 
 /**
+ * fslnvols
+ *
  * Retrieve the number of volumes in a 4D NIfTI file.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -146,6 +148,8 @@ function fslnvols_execute(
 
 
 /**
+ * fslnvols
+ *
  * Retrieve the number of volumes in a 4D NIfTI file.
  *
  * Author: FMRIB Analysis Group, University of Oxford

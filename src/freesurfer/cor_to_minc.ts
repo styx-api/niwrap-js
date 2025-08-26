@@ -131,6 +131,8 @@ function cor_to_minc_outputs(
 
 
 /**
+ * cor_to_minc
+ *
  * Converts a directory of COR files to a MINC file.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function cor_to_minc_execute(
 
 
 /**
+ * cor_to_minc
+ *
  * Converts a directory of COR files to a MINC file.
  *
  * Author: FreeSurfer Developers

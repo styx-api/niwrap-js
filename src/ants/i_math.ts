@@ -150,6 +150,8 @@ function i_math_outputs(
 
 
 /**
+ * iMath
+ *
  * iMath is a tool for performing various image mathematical operations on medical images, specifically supporting operations on 2D, 3D, and 4D data.
  *
  * Author: ANTs Developers
@@ -176,6 +178,8 @@ function i_math_execute(
 
 
 /**
+ * iMath
+ *
  * iMath is a tool for performing various image mathematical operations on medical images, specifically supporting operations on 2D, 3D, and 4D data.
  *
  * Author: ANTs Developers

@@ -124,6 +124,8 @@ function afni_check_omp_outputs(
 
 
 /**
+ * afni_check_omp
+ *
  * Tool to check the OpenMP multi-threading environment for AFNI.
  *
  * Author: AFNI Developers
@@ -150,6 +152,8 @@ function afni_check_omp_execute(
 
 
 /**
+ * afni_check_omp
+ *
  * Tool to check the OpenMP multi-threading environment for AFNI.
  *
  * Author: AFNI Developers

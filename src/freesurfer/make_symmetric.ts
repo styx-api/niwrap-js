@@ -146,6 +146,8 @@ function make_symmetric_outputs(
 
 
 /**
+ * make_symmetric
+ *
  * Registers an input image to its left/right reversed version using mri_robust_register in a half-way space and mirrors the selected hemisphere.
  *
  * Author: FreeSurfer Developers
@@ -172,6 +174,8 @@ function make_symmetric_execute(
 
 
 /**
+ * make_symmetric
+ *
  * Registers an input image to its left/right reversed version using mri_robust_register in a half-way space and mirrors the selected hemisphere.
  *
  * Author: FreeSurfer Developers

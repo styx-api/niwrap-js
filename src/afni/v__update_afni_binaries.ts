@@ -318,6 +318,8 @@ function v__update_afni_binaries_outputs(
 
 
 /**
+ * @update.afni.binaries
+ *
  * Install or update AFNI binaries.
  *
  * Author: AFNI Developers
@@ -344,6 +346,8 @@ function v__update_afni_binaries_execute(
 
 
 /**
+ * @update.afni.binaries
+ *
  * Install or update AFNI binaries.
  *
  * Author: AFNI Developers

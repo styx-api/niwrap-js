@@ -243,6 +243,8 @@ function v_3d_roistats_outputs(
 
 
 /**
+ * 3dROIstats
+ *
  * Display statistics over masked regions.
  *
  * Author: AFNI Developers
@@ -269,6 +271,8 @@ function v_3d_roistats_execute(
 
 
 /**
+ * 3dROIstats
+ *
  * Display statistics over masked regions.
  *
  * Author: AFNI Developers

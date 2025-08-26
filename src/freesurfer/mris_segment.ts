@@ -136,6 +136,8 @@ function mris_segment_outputs(
 
 
 /**
+ * mris_segment
+ *
  * A command-line tool for segmenting surfaces in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mris_segment_execute(
 
 
 /**
+ * mris_segment
+ *
  * A command-line tool for segmenting surfaces in FreeSurfer.
  *
  * Author: FreeSurfer Developers

@@ -223,6 +223,8 @@ function afni_open_outputs(
 
 
 /**
+ * afni_open
+ *
  * A program to open various AFNI/SUMA files.
  *
  * Author: AFNI Developers
@@ -249,6 +251,8 @@ function afni_open_execute(
 
 
 /**
+ * afni_open
+ *
  * A program to open various AFNI/SUMA files.
  *
  * Author: AFNI Developers

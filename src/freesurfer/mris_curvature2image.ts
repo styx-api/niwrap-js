@@ -189,6 +189,8 @@ function mris_curvature2image_outputs(
 
 
 /**
+ * mris_curvature2image
+ *
  * Tool to convert surface curvature data to an image using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -215,6 +217,8 @@ function mris_curvature2image_execute(
 
 
 /**
+ * mris_curvature2image
+ *
  * Tool to convert surface curvature data to an image using FreeSurfer.
  *
  * Author: FreeSurfer Developers

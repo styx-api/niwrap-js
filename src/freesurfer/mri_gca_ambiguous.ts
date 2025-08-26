@@ -131,6 +131,8 @@ function mri_gca_ambiguous_outputs(
 
 
 /**
+ * mri_gca_ambiguous
+ *
  * This program computes an ambiguity measure across a GCA and outputs an MR image of it.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mri_gca_ambiguous_execute(
 
 
 /**
+ * mri_gca_ambiguous
+ *
  * This program computes an ambiguity measure across a GCA and outputs an MR image of it.
  *
  * Author: FreeSurfer Developers

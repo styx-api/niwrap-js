@@ -213,6 +213,8 @@ function eddy_quad_outputs(
 
 
 /**
+ * eddy_quad
+ *
  * QUality Assessment for DMRI.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -239,6 +241,8 @@ function eddy_quad_execute(
 
 
 /**
+ * eddy_quad
+ *
  * QUality Assessment for DMRI.
  *
  * Author: FMRIB Analysis Group, University of Oxford

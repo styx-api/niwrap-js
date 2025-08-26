@@ -207,6 +207,8 @@ function mri_compute_overlap_outputs(
 
 
 /**
+ * mri_compute_overlap
+ *
  * Computes three different types of overlap measures for labels in input volumes.
  *
  * Author: FreeSurfer Developers
@@ -233,6 +235,8 @@ function mri_compute_overlap_execute(
 
 
 /**
+ * mri_compute_overlap
+ *
  * Computes three different types of overlap measures for labels in input volumes.
  *
  * Author: FreeSurfer Developers

@@ -178,6 +178,8 @@ function label_erode_outputs(
 
 
 /**
+ * label-erode
+ *
  * Erode a label file.
  *
  * Around each vertex that is unlabeled, set surrounding vertices to unlabeled.  The surrounding vertices are all immediate neighbors and all vertices within the specified distance.
@@ -208,6 +210,8 @@ function label_erode_execute(
 
 
 /**
+ * label-erode
+ *
  * Erode a label file.
  *
  * Around each vertex that is unlabeled, set surrounding vertices to unlabeled.  The surrounding vertices are all immediate neighbors and all vertices within the specified distance.

@@ -266,6 +266,8 @@ function v_3d_nwarp_apply_outputs(
 
 
 /**
+ * 3dNwarpApply
+ *
  * Program to apply a nonlinear 3D warp saved from 3dQwarp (or 3dNwarpCat, etc.) to a 3D dataset, to produce a warped version of the source dataset.
  *
  * Author: AFNI Developers
@@ -292,6 +294,8 @@ function v_3d_nwarp_apply_execute(
 
 
 /**
+ * 3dNwarpApply
+ *
  * Program to apply a nonlinear 3D warp saved from 3dQwarp (or 3dNwarpCat, etc.) to a 3D dataset, to produce a warped version of the source dataset.
  *
  * Author: AFNI Developers

@@ -135,6 +135,8 @@ function ccalc_outputs(
 
 
 /**
+ * ccalc
+ *
  * Command line calculator with formatted output options.
  *
  * Author: AFNI Developers
@@ -161,6 +163,8 @@ function ccalc_execute(
 
 
 /**
+ * ccalc
+ *
  * Command line calculator with formatted output options.
  *
  * Author: AFNI Developers

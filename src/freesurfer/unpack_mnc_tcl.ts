@@ -152,6 +152,8 @@ function unpack_mnc_tcl_outputs(
 
 
 /**
+ * unpack_mnc.tcl
+ *
  * A tool for unpacking MINC format images.
  *
  * Author: FreeSurfer Developers
@@ -178,6 +180,8 @@ function unpack_mnc_tcl_execute(
 
 
 /**
+ * unpack_mnc.tcl
+ *
  * A tool for unpacking MINC format images.
  *
  * Author: FreeSurfer Developers

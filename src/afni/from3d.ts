@@ -213,6 +213,8 @@ function from3d_outputs(
 
 
 /**
+ * from3d
+ *
  * Extract 2D image files from a 3D AFNI dataset.
  *
  * Author: AFNI Developers
@@ -239,6 +241,8 @@ function from3d_execute(
 
 
 /**
+ * from3d
+ *
  * Extract 2D image files from a 3D AFNI dataset.
  *
  * Author: AFNI Developers

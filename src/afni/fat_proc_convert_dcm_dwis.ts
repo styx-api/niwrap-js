@@ -287,6 +287,8 @@ function fat_proc_convert_dcm_dwis_outputs(
 
 
 /**
+ * fat_proc_convert_dcm_dwis
+ *
  * Convert sets of DWIs in DICOM format into 'nicer' volume+grad format, reorient volumetric data, and glue together multiple sessions/directories of data.
  *
  * Author: AFNI Developers
@@ -313,6 +315,8 @@ function fat_proc_convert_dcm_dwis_execute(
 
 
 /**
+ * fat_proc_convert_dcm_dwis
+ *
  * Convert sets of DWIs in DICOM format into 'nicer' volume+grad format, reorient volumetric data, and glue together multiple sessions/directories of data.
  *
  * Author: AFNI Developers

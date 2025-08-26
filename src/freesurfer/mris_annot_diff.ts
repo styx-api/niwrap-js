@@ -139,6 +139,8 @@ function mris_annot_diff_outputs(
 
 
 /**
+ * mris_annot_diff
+ *
  * Compare two surface annotation files. The program works with .annot only.
  *
  * Author: FreeSurfer Developers
@@ -165,6 +167,8 @@ function mris_annot_diff_execute(
 
 
 /**
+ * mris_annot_diff
+ *
  * Compare two surface annotation files. The program works with .annot only.
  *
  * Author: FreeSurfer Developers

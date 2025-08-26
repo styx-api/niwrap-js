@@ -312,6 +312,8 @@ function make_average_surface_outputs(
 
 
 /**
+ * make_average_surface
+ *
  * Creates average surfaces and curvatures from a set of subjects.
  *
  * Author: FreeSurfer Developers
@@ -338,6 +340,8 @@ function make_average_surface_execute(
 
 
 /**
+ * make_average_surface
+ *
  * Creates average surfaces and curvatures from a set of subjects.
  *
  * Author: FreeSurfer Developers

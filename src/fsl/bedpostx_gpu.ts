@@ -223,6 +223,8 @@ function bedpostx_gpu_outputs(
 
 
 /**
+ * bedpostx_gpu
+ *
  * Probabilistic tractography and diffusion MRI fitting tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -249,6 +251,8 @@ function bedpostx_gpu_execute(
 
 
 /**
+ * bedpostx_gpu
+ *
  * Probabilistic tractography and diffusion MRI fitting tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford

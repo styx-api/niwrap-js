@@ -277,6 +277,8 @@ function fsl_anat_outputs(
 
 
 /**
+ * fsl_anat
+ *
  * A wrapper for FSL tools to process anatomical scans.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -303,6 +305,8 @@ function fsl_anat_execute(
 
 
 /**
+ * fsl_anat
+ *
  * A wrapper for FSL tools to process anatomical scans.
  *
  * Author: FMRIB Analysis Group, University of Oxford

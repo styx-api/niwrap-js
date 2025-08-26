@@ -151,6 +151,8 @@ function bugr_outputs(
 
 
 /**
+ * bugr
+ *
  * Utility for generating and reporting FreeSurfer bugs.
  *
  * Author: FreeSurfer Developers
@@ -177,6 +179,8 @@ function bugr_execute(
 
 
 /**
+ * bugr
+ *
  * Utility for generating and reporting FreeSurfer bugs.
  *
  * Author: FreeSurfer Developers

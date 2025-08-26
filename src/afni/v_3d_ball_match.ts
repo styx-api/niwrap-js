@@ -171,6 +171,8 @@ function v_3d_ball_match_outputs(
 
 
 /**
+ * 3dBallMatch
+ *
  * A tool to find a good match between a ball (filled sphere) of the given radius and a dataset to determine a crude approximate center of the brain quickly.
  *
  * Author: AFNI Developers
@@ -197,6 +199,8 @@ function v_3d_ball_match_execute(
 
 
 /**
+ * 3dBallMatch
+ *
  * A tool to find a good match between a ball (filled sphere) of the given radius and a dataset to determine a crude approximate center of the brain quickly.
  *
  * Author: AFNI Developers

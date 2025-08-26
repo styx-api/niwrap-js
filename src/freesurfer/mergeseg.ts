@@ -187,6 +187,8 @@ function mergeseg_outputs(
 
 
 /**
+ * mergeseg
+ *
  * Merges one segmentation into another, replacing the source voxels with those from the merge segmentation where non-zero.
  *
  * Author: FreeSurfer Developers
@@ -213,6 +215,8 @@ function mergeseg_execute(
 
 
 /**
+ * mergeseg
+ *
  * Merges one segmentation into another, replacing the source voxels with those from the merge segmentation where non-zero.
  *
  * Author: FreeSurfer Developers

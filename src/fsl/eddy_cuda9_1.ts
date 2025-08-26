@@ -557,6 +557,8 @@ function eddy_cuda9_1_outputs(
 
 
 /**
+ * eddy_cuda9.1
+ *
  * A tool for correcting eddy currents and movements in diffusion data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -583,6 +585,8 @@ function eddy_cuda9_1_execute(
 
 
 /**
+ * eddy_cuda9.1
+ *
  * A tool for correcting eddy currents and movements in diffusion data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

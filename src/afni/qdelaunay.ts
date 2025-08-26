@@ -424,6 +424,8 @@ function qdelaunay_outputs(
 
 
 /**
+ * qdelaunay
+ *
  * Compute the Delaunay triangulation using Qhull.
  *
  * Author: AFNI Developers
@@ -450,6 +452,8 @@ function qdelaunay_execute(
 
 
 /**
+ * qdelaunay
+ *
  * Compute the Delaunay triangulation using Qhull.
  *
  * Author: AFNI Developers

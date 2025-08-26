@@ -132,6 +132,8 @@ function ifh2hdr_outputs(
 
 
 /**
+ * ifh2hdr
+ *
  * Tool for converting IFH (Interfile Header) to HDR (Header) format in 4dfp (Four-Dimensional Functional Image) file format.
  *
  * Author: FreeSurfer Developers
@@ -158,6 +160,8 @@ function ifh2hdr_execute(
 
 
 /**
+ * ifh2hdr
+ *
  * Tool for converting IFH (Interfile Header) to HDR (Header) format in 4dfp (Four-Dimensional Functional Image) file format.
  *
  * Author: FreeSurfer Developers

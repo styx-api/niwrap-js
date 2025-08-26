@@ -224,6 +224,8 @@ function cifti_stats_outputs(
 
 
 /**
+ * cifti-stats
+ *
  * Statistics along cifti columns.
  *
  * For each column of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  If -roi is specified without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Use -column to only give output for a single data column.  Exactly one of -reduce or -percentile must be specified.
@@ -272,6 +274,8 @@ function cifti_stats_execute(
 
 
 /**
+ * cifti-stats
+ *
  * Statistics along cifti columns.
  *
  * For each column of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  If -roi is specified without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Use -column to only give output for a single data column.  Exactly one of -reduce or -percentile must be specified.

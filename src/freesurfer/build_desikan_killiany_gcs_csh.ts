@@ -120,6 +120,8 @@ function build_desikan_killiany_gcs_csh_outputs(
 
 
 /**
+ * build_desikan_killiany_gcs.csh
+ *
  * Tool to build Desikan-Killiany cortical parcellation in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function build_desikan_killiany_gcs_csh_execute(
 
 
 /**
+ * build_desikan_killiany_gcs.csh
+ *
  * Tool to build Desikan-Killiany cortical parcellation in FreeSurfer.
  *
  * Author: FreeSurfer Developers

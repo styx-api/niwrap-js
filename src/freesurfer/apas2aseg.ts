@@ -157,6 +157,8 @@ function apas2aseg_outputs(
 
 
 /**
+ * apas2aseg
+ *
  * Converts aparc+aseg.mgz into aseg.mgz-like format by replacing specific cortical segmentations.
  *
  * Author: FreeSurfer Developers
@@ -183,6 +185,8 @@ function apas2aseg_execute(
 
 
 /**
+ * apas2aseg
+ *
  * Converts aparc+aseg.mgz into aseg.mgz-like format by replacing specific cortical segmentations.
  *
  * Author: FreeSurfer Developers

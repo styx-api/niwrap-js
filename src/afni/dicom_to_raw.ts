@@ -126,6 +126,8 @@ function dicom_to_raw_outputs(
 
 
 /**
+ * dicom_to_raw
+ *
  * Reads images from DICOM file and writes them to raw file(s).
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function dicom_to_raw_execute(
 
 
 /**
+ * dicom_to_raw
+ *
  * Reads images from DICOM file and writes them to raw file(s).
  *
  * Author: AFNI Developers

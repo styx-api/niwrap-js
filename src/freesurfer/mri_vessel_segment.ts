@@ -160,6 +160,8 @@ function mri_vessel_segment_outputs(
 
 
 /**
+ * mri_vessel_segment
+ *
  * MRI vessel segmentation tool.
  *
  * Author: FreeSurfer Developers
@@ -186,6 +188,8 @@ function mri_vessel_segment_execute(
 
 
 /**
+ * mri_vessel_segment
+ *
  * MRI vessel segmentation tool.
  *
  * Author: FreeSurfer Developers

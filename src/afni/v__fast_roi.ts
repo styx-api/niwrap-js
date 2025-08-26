@@ -206,6 +206,8 @@ function v__fast_roi_outputs(
 
 
 /**
+ * @fast_roi
+ *
  * Creates Atlas-based ROI masked in ANAT's original space. The script executes rapidly for realtime fMRI applications.
  *
  * Author: AFNI Developers
@@ -232,6 +234,8 @@ function v__fast_roi_execute(
 
 
 /**
+ * @fast_roi
+ *
  * Creates Atlas-based ROI masked in ANAT's original space. The script executes rapidly for realtime fMRI applications.
  *
  * Author: AFNI Developers

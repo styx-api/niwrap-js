@@ -120,6 +120,8 @@ function adjunct_simplify_cost_outputs(
 
 
 /**
+ * adjunct_simplify_cost
+ *
  * Simplifies a cost function name by removing the '+' and anything following it.
  *
  * Author: AFNI Developers
@@ -146,6 +148,8 @@ function adjunct_simplify_cost_execute(
 
 
 /**
+ * adjunct_simplify_cost
+ *
  * Simplifies a cost function name by removing the '+' and anything following it.
  *
  * Author: AFNI Developers

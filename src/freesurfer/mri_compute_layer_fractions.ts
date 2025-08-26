@@ -252,6 +252,8 @@ function mri_compute_layer_fractions_outputs(
 
 
 /**
+ * mri_compute_layer_fractions
+ *
  * This program computes volumetric partial volume fractions from laminar surfaces using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -278,6 +280,8 @@ function mri_compute_layer_fractions_execute(
 
 
 /**
+ * mri_compute_layer_fractions
+ *
  * This program computes volumetric partial volume fractions from laminar surfaces using FreeSurfer.
  *
  * Author: FreeSurfer Developers

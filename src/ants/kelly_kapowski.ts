@@ -333,6 +333,8 @@ function kelly_kapowski_outputs(
 
 
 /**
+ * KellyKapowski
+ *
  * DiReCT is a registration based estimate of cortical thickness. It was published in S. R. Das, B. B. Avants, M. Grossman, and J. C. Gee, Registration based cortical thickness measurement, Neuroimage 2009, 45:867--879.
  *
  * Author: ANTs Developers
@@ -359,6 +361,8 @@ function kelly_kapowski_execute(
 
 
 /**
+ * KellyKapowski
+ *
  * DiReCT is a registration based estimate of cortical thickness. It was published in S. R. Das, B. B. Avants, M. Grossman, and J. C. Gee, Registration based cortical thickness measurement, Neuroimage 2009, 45:867--879.
  *
  * Author: ANTs Developers

@@ -162,6 +162,8 @@ function v_3d_rank_outputs(
 
 
 /**
+ * 3dRank
+ *
  * Replaces voxel values by their rank in the set of values collected over all voxels in all input datasets.
  *
  * Author: AFNI Developers
@@ -188,6 +190,8 @@ function v_3d_rank_execute(
 
 
 /**
+ * 3dRank
+ *
  * Replaces voxel values by their rank in the set of values collected over all voxels in all input datasets.
  *
  * Author: AFNI Developers

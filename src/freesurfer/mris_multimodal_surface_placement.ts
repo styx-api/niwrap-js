@@ -246,6 +246,8 @@ function mris_multimodal_surface_placement_outputs(
 
 
 /**
+ * mris_multimodal_surface_placement
+ *
  * FreeSurfer command for multimodal surface placement.
  *
  * Author: FreeSurfer Developers
@@ -272,6 +274,8 @@ function mris_multimodal_surface_placement_execute(
 
 
 /**
+ * mris_multimodal_surface_placement
+ *
  * FreeSurfer command for multimodal surface placement.
  *
  * Author: FreeSurfer Developers

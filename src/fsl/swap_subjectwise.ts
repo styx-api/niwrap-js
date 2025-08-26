@@ -181,6 +181,8 @@ function swap_subjectwise_outputs(
 
 
 /**
+ * swap_subjectwise
+ *
  * Reordering of the dyadic vectors and fsamples according to average inter-subject modal orientations.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -207,6 +209,8 @@ function swap_subjectwise_execute(
 
 
 /**
+ * swap_subjectwise
+ *
  * Reordering of the dyadic vectors and fsamples according to average inter-subject modal orientations.
  *
  * Author: FMRIB Analysis Group, University of Oxford

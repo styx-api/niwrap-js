@@ -139,6 +139,8 @@ function v_24swap_outputs(
 
 
 /**
+ * 24swap
+ *
  * Swaps bytes pairs and/or quadruples on the files listed.
  *
  * Author: AFNI Developers
@@ -165,6 +167,8 @@ function v_24swap_execute(
 
 
 /**
+ * 24swap
+ *
  * Swaps bytes pairs and/or quadruples on the files listed.
  *
  * Author: AFNI Developers

@@ -146,6 +146,8 @@ function nicat_outputs(
 
 
 /**
+ * nicat
+ *
  * Copies stdin to the NIML stream, which will be opened for writing.
  *
  * Author: AFNI Developers
@@ -172,6 +174,8 @@ function nicat_execute(
 
 
 /**
+ * nicat
+ *
  * Copies stdin to the NIML stream, which will be opened for writing.
  *
  * Author: AFNI Developers

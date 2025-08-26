@@ -228,6 +228,8 @@ function v_3d_fft_outputs(
 
 
 /**
+ * 3dFFT
+ *
  * Performs the FFT of the input dataset in 3 directions (x, y, z) and produces the output dataset.
  *
  * Author: AFNI Developers
@@ -254,6 +256,8 @@ function v_3d_fft_execute(
 
 
 /**
+ * 3dFFT
+ *
  * Performs the FFT of the input dataset in 3 directions (x, y, z) and produces the output dataset.
  *
  * Author: AFNI Developers

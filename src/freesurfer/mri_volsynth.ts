@@ -602,6 +602,8 @@ function mri_volsynth_outputs(
 
 
 /**
+ * mri_volsynth
+ *
  * Synthesizes a volume with specified geometry and probability distribution function.
  *
  * Author: FreeSurfer Developers
@@ -628,6 +630,8 @@ function mri_volsynth_execute(
 
 
 /**
+ * mri_volsynth
+ *
  * Synthesizes a volume with specified geometry and probability distribution function.
  *
  * Author: FreeSurfer Developers

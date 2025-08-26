@@ -150,6 +150,8 @@ function v_1d_flag_motion_outputs(
 
 
 /**
+ * 1dFlagMotion
+ *
  * Produces a list of time points with excessive motion relative to the previous time point.
  *
  * Author: AFNI Developers
@@ -176,6 +178,8 @@ function v_1d_flag_motion_execute(
 
 
 /**
+ * 1dFlagMotion
+ *
  * Produces a list of time points with excessive motion relative to the previous time point.
  *
  * Author: AFNI Developers

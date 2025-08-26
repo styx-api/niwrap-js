@@ -267,6 +267,8 @@ function mris_anatomical_stats_outputs(
 
 
 /**
+ * mris_anatomical_stats
+ *
  * This program computes a number of anatomical properties.
  *
  * Author: FreeSurfer Developers
@@ -293,6 +295,8 @@ function mris_anatomical_stats_execute(
 
 
 /**
+ * mris_anatomical_stats
+ *
  * This program computes a number of anatomical properties.
  *
  * Author: FreeSurfer Developers

@@ -141,6 +141,8 @@ function mri_label_histo_outputs(
 
 
 /**
+ * mri_label_histo
+ *
  * Tool for creating a histogram of voxel values within a specified label.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mri_label_histo_execute(
 
 
 /**
+ * mri_label_histo
+ *
  * Tool for creating a histogram of voxel values within a specified label.
  *
  * Author: FreeSurfer Developers

@@ -367,6 +367,8 @@ function dmri_train_outputs(
 
 
 /**
+ * dmri_train
+ *
  * DMRI training tool for processing diffusion MRI data in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -393,6 +395,8 @@ function dmri_train_execute(
 
 
 /**
+ * dmri_train
+ *
  * DMRI training tool for processing diffusion MRI data in FreeSurfer.
  *
  * Author: FreeSurfer Developers

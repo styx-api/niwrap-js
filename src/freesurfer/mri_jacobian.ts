@@ -223,6 +223,8 @@ function mri_jacobian_outputs(
 
 
 /**
+ * mri_jacobian
+ *
  * Compute the Jacobian of a morph with FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -249,6 +251,8 @@ function mri_jacobian_execute(
 
 
 /**
+ * mri_jacobian
+ *
  * Compute the Jacobian of a morph with FreeSurfer.
  *
  * Author: FreeSurfer Developers

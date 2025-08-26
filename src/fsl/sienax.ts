@@ -231,6 +231,8 @@ function sienax_outputs(
 
 
 /**
+ * sienax
+ *
  * A tool to estimate brain tissue volume from a single MR image and to compare it to an external standard.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -257,6 +259,8 @@ function sienax_execute(
 
 
 /**
+ * sienax
+ *
  * A tool to estimate brain tissue volume from a single MR image and to compare it to an external standard.
  *
  * Author: FMRIB Analysis Group, University of Oxford

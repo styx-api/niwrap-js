@@ -338,6 +338,8 @@ function v_3d_rsfc_outputs(
 
 
 /**
+ * 3dRSFC
+ *
  * Program to calculate common resting state functional connectivity (RSFC) parameters.
  *
  * Author: AFNI Developers
@@ -364,6 +366,8 @@ function v_3d_rsfc_execute(
 
 
 /**
+ * 3dRSFC
+ *
  * Program to calculate common resting state functional connectivity (RSFC) parameters.
  *
  * Author: AFNI Developers

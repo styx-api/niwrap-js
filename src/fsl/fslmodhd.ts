@@ -130,6 +130,8 @@ function fslmodhd_outputs(
 
 
 /**
+ * fslmodhd
+ *
  * A tool for modifying header information of NIfTI images.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -156,6 +158,8 @@ function fslmodhd_execute(
 
 
 /**
+ * fslmodhd
+ *
  * A tool for modifying header information of NIfTI images.
  *
  * Author: FMRIB Analysis Group, University of Oxford

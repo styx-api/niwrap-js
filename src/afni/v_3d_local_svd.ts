@@ -193,6 +193,8 @@ function v_3d_local_svd_outputs(
 
 
 /**
+ * 3dLocalSVD
+ *
  * Computes the SVD of time series from a neighborhood of each voxel.
  *
  * Author: AFNI Developers
@@ -219,6 +221,8 @@ function v_3d_local_svd_execute(
 
 
 /**
+ * 3dLocalSVD
+ *
  * Computes the SVD of time series from a neighborhood of each voxel.
  *
  * Author: AFNI Developers

@@ -126,6 +126,8 @@ function backend_average_roi_correlation_outputs(
 
 
 /**
+ * backend-average-roi-correlation
+ *
  * Connectome db backend command for cifti average roi correlation.
  *
  * This command is probably not the one you are looking for, try -cifti-average-roi-correlation.  It takes the list of cifti files to average from standard input, and writes its output as little endian, 32-bit integer of row size followed by the row as 32-bit floats.
@@ -154,6 +156,8 @@ function backend_average_roi_correlation_execute(
 
 
 /**
+ * backend-average-roi-correlation
+ *
  * Connectome db backend command for cifti average roi correlation.
  *
  * This command is probably not the one you are looking for, try -cifti-average-roi-correlation.  It takes the list of cifti files to average from standard input, and writes its output as little endian, 32-bit integer of row size followed by the row as 32-bit floats.

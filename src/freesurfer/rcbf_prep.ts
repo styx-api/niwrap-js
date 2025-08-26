@@ -195,6 +195,8 @@ function rcbf_prep_outputs(
 
 
 /**
+ * rcbf-prep
+ *
  * Performs integration of rCBF as produced by Siemens scanners with FreeSurfer analysis in preparation for group analysis.
  *
  * Author: FreeSurfer Developers
@@ -221,6 +223,8 @@ function rcbf_prep_execute(
 
 
 /**
+ * rcbf-prep
+ *
  * Performs integration of rCBF as produced by Siemens scanners with FreeSurfer analysis in preparation for group analysis.
  *
  * Author: FreeSurfer Developers

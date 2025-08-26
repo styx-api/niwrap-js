@@ -204,6 +204,8 @@ function quickspec_sl_outputs(
 
 
 /**
+ * quickspecSL
+ *
  * This program makes a *.spec file after a set of intermediate surfaces have been generated with SurfLayers. It can also make a *.spec file that relates inflated surfaces to anatomically-correct surfaces.
  *
  * Author: AFNI Developers
@@ -230,6 +232,8 @@ function quickspec_sl_execute(
 
 
 /**
+ * quickspecSL
+ *
  * This program makes a *.spec file after a set of intermediate surfaces have been generated with SurfLayers. It can also make a *.spec file that relates inflated surfaces to anatomically-correct surfaces.
  *
  * Author: AFNI Developers

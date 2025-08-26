@@ -508,6 +508,8 @@ function cifti_create_dense_from_template_outputs(
 
 
 /**
+ * cifti-create-dense-from-template
+ *
  * Create cifti with matching dense map.
  *
  * This command helps you make a new dscalar, dtseries, or dlabel cifti file that matches the brainordinate space used in another cifti file.  The template file must have the desired brainordinate space in the mapping along the column direction (for dtseries, dscalar, dlabel, and symmetric dconn this is always the case).  All input cifti files must have a brain models mapping along column and use the same volume space and/or surface vertex count as the template for structures that they contain.  If any input files contain label data, then input files with non-label data are not allowed, and the -series option may not be used.
@@ -581,6 +583,8 @@ function cifti_create_dense_from_template_execute(
 
 
 /**
+ * cifti-create-dense-from-template
+ *
  * Create cifti with matching dense map.
  *
  * This command helps you make a new dscalar, dtseries, or dlabel cifti file that matches the brainordinate space used in another cifti file.  The template file must have the desired brainordinate space in the mapping along the column direction (for dtseries, dscalar, dlabel, and symmetric dconn this is always the case).  All input cifti files must have a brain models mapping along column and use the same volume space and/or surface vertex count as the template for structures that they contain.  If any input files contain label data, then input files with non-label data are not allowed, and the -series option may not be used.

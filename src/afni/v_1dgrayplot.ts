@@ -172,6 +172,8 @@ function v_1dgrayplot_outputs(
 
 
 /**
+ * 1dgrayplot
+ *
  * Graphs the columns of a *.1D type time series file to the screen in grayscale.
  *
  * Author: AFNI Developers
@@ -198,6 +200,8 @@ function v_1dgrayplot_execute(
 
 
 /**
+ * 1dgrayplot
+ *
  * Graphs the columns of a *.1D type time series file to the screen in grayscale.
  *
  * Author: AFNI Developers

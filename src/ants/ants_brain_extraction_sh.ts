@@ -275,6 +275,8 @@ function ants_brain_extraction_sh_outputs(
 
 
 /**
+ * antsBrainExtraction.sh
+ *
  * antsBrainExtraction.sh performs template-based brain extraction.
  *
  * Author: ANTs Developers
@@ -301,6 +303,8 @@ function ants_brain_extraction_sh_execute(
 
 
 /**
+ * antsBrainExtraction.sh
+ *
  * antsBrainExtraction.sh performs template-based brain extraction.
  *
  * Author: ANTs Developers

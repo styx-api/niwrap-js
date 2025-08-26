@@ -150,6 +150,8 @@ function reregister_subject_mixed_outputs(
 
 
 /**
+ * reregister_subject_mixed
+ *
  * Tool for re-registering a subject's MRI volumes using Freesurfer.
  *
  * Author: FreeSurfer Developers
@@ -176,6 +178,8 @@ function reregister_subject_mixed_execute(
 
 
 /**
+ * reregister_subject_mixed
+ *
  * Tool for re-registering a subject's MRI volumes using Freesurfer.
  *
  * Author: FreeSurfer Developers

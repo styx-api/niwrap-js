@@ -181,6 +181,8 @@ function xcorr_outputs(
 
 
 /**
+ * xcorr
+ *
  * Computes the voxel-for-voxel correlation coefficient between two volumes.
  *
  * Author: FreeSurfer Developers
@@ -207,6 +209,8 @@ function xcorr_execute(
 
 
 /**
+ * xcorr
+ *
  * Computes the voxel-for-voxel correlation coefficient between two volumes.
  *
  * Author: FreeSurfer Developers

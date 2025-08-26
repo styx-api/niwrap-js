@@ -136,6 +136,8 @@ function mris_sphere_outputs(
 
 
 /**
+ * mris_sphere
+ *
  * This program will add a template into an average surface.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mris_sphere_execute(
 
 
 /**
+ * mris_sphere
+ *
  * This program will add a template into an average surface.
  *
  * Author: FreeSurfer Developers

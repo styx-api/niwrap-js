@@ -127,6 +127,8 @@ function v_3d_entropy_outputs(
 
 
 /**
+ * 3dEntropy
+ *
  * Computes entropy for a 3D dataset.
  *
  * Author: AFNI Developers
@@ -153,6 +155,8 @@ function v_3d_entropy_execute(
 
 
 /**
+ * 3dEntropy
+ *
  * Computes entropy for a 3D dataset.
  *
  * Author: AFNI Developers

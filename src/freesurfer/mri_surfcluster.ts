@@ -599,6 +599,8 @@ function mri_surfcluster_outputs(
 
 
 /**
+ * mri_surfcluster
+ *
  * A tool for clustering vertices on a cortical surface based on intensity values.
  *
  * Author: FreeSurfer Developers
@@ -625,6 +627,8 @@ function mri_surfcluster_execute(
 
 
 /**
+ * mri_surfcluster
+ *
  * A tool for clustering vertices on a cortical surface based on intensity values.
  *
  * Author: FreeSurfer Developers

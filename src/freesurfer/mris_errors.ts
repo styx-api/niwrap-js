@@ -120,6 +120,8 @@ function mris_errors_outputs(
 
 
 /**
+ * mris_errors
+ *
  * This program will unfold an MRI on the surface of an ellipsoid.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function mris_errors_execute(
 
 
 /**
+ * mris_errors
+ *
  * This program will unfold an MRI on the surface of an ellipsoid.
  *
  * Author: FreeSurfer Developers

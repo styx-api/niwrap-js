@@ -510,6 +510,8 @@ function metric_palette_outputs(
 
 
 /**
+ * metric-palette
+ *
  * Set the palette of a metric file.
  *
  * The original metric file is overwritten with the modified version.  By default, all columns of the metric file are adjusted to the new settings, use the -column option to change only one column.  Mapping settings not specified in options will be taken from the first column.  The <mode> argument must be one of the following:
@@ -608,6 +610,8 @@ function metric_palette_execute(
 
 
 /**
+ * metric-palette
+ *
  * Set the palette of a metric file.
  *
  * The original metric file is overwritten with the modified version.  By default, all columns of the metric file are adjusted to the new settings, use the -column option to change only one column.  Mapping settings not specified in options will be taken from the first column.  The <mode> argument must be one of the following:

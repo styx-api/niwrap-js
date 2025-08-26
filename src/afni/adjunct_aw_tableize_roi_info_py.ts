@@ -151,6 +151,8 @@ function adjunct_aw_tableize_roi_info_py_outputs(
 
 
 /**
+ * adjunct_aw_tableize_roi_info.py
+ *
  * A simple helper function for the fat_proc scripts that generates a text file containing ROI count/size information based on provided atlases and masks.
  *
  * Author: AFNI Developers
@@ -177,6 +179,8 @@ function adjunct_aw_tableize_roi_info_py_execute(
 
 
 /**
+ * adjunct_aw_tableize_roi_info.py
+ *
  * A simple helper function for the fat_proc scripts that generates a text file containing ROI count/size information based on provided atlases and masks.
  *
  * Author: AFNI Developers

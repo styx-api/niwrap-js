@@ -611,6 +611,8 @@ function fixelcfestats_outputs(
 
 
 /**
+ * fixelcfestats
+ *
  * Fixel-based analysis using connectivity-based fixel enhancement and non-parametric permutation testing.
  *
  * Unlike previous versions of this command, where a whole-brain tractogram file would be provided as input in order to generate the fixel-fixel connectivity matrix and smooth fixel data, this version expects to be provided with the directory path to a pre-calculated fixel-fixel connectivity matrix (likely generated using the MRtrix3 command fixelconnectivity), and for the input fixel data to have already been smoothed (likely using the MRtrix3 command fixelfilter).
@@ -653,6 +655,8 @@ function fixelcfestats_execute(
 
 
 /**
+ * fixelcfestats
+ *
  * Fixel-based analysis using connectivity-based fixel enhancement and non-parametric permutation testing.
  *
  * Unlike previous versions of this command, where a whole-brain tractogram file would be provided as input in order to generate the fixel-fixel connectivity matrix and smooth fixel data, this version expects to be provided with the directory path to a pre-calculated fixel-fixel connectivity matrix (likely generated using the MRtrix3 command fixelconnectivity), and for the input fixel data to have already been smoothed (likely using the MRtrix3 command fixelfilter).

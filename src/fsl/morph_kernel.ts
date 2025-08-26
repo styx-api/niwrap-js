@@ -131,6 +131,8 @@ function morph_kernel_outputs(
 
 
 /**
+ * morph_kernel
+ *
  * Tool to generate morphological kernels.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function morph_kernel_execute(
 
 
 /**
+ * morph_kernel
+ *
  * Tool to generate morphological kernels.
  *
  * Author: FMRIB Analysis Group, University of Oxford

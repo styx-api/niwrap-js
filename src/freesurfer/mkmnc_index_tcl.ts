@@ -131,6 +131,8 @@ function mkmnc_index_tcl_outputs(
 
 
 /**
+ * mkmnc_index.tcl
+ *
  * A tool for creating MINC indices.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mkmnc_index_tcl_execute(
 
 
 /**
+ * mkmnc_index.tcl
+ *
  * A tool for creating MINC indices.
  *
  * Author: FreeSurfer Developers

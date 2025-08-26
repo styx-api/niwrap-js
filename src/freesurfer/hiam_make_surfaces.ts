@@ -125,6 +125,8 @@ function hiam_make_surfaces_outputs(
 
 
 /**
+ * hiam_make_surfaces
+ *
  * Surface creation tool for specified brain structures.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function hiam_make_surfaces_execute(
 
 
 /**
+ * hiam_make_surfaces
+ *
  * Surface creation tool for specified brain structures.
  *
  * Author: FreeSurfer Developers

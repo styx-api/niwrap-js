@@ -148,6 +148,8 @@ function tbss_fill_outputs(
 
 
 /**
+ * tbss_fill
+ *
  * Tool for filling skeletonized FA images in TBSS.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -174,6 +176,8 @@ function tbss_fill_execute(
 
 
 /**
+ * tbss_fill
+ *
  * Tool for filling skeletonized FA images in TBSS.
  *
  * Author: FMRIB Analysis Group, University of Oxford

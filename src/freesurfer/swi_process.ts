@@ -232,6 +232,8 @@ function swi_process_outputs(
 
 
 /**
+ * swi_process
+ *
  * Process the Susceptibility-weighted images. Ensure the inputs are post-phase unwrapping using PRELUDE.
  *
  * Author: FreeSurfer Developers
@@ -258,6 +260,8 @@ function swi_process_execute(
 
 
 /**
+ * swi_process
+ *
  * Process the Susceptibility-weighted images. Ensure the inputs are post-phase unwrapping using PRELUDE.
  *
  * Author: FreeSurfer Developers

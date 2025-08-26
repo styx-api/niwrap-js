@@ -394,6 +394,8 @@ function cifti_parcellate_outputs(
 
 
 /**
+ * cifti-parcellate
+ *
  * Parcellate a cifti file.
  *
  * Each label (other than the unlabeled key) in the cifti label file will be treated as a parcel, and all rows or columns of data within the parcel are averaged together to form the parcel's output row or column.  If -legacy-mode is specified, parcels will be defined as the overlap between a label and the data, with no errors for missing data vertices or voxels, and empty parcels discarded.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  For dtseries or dscalar, use COLUMN.  If you are parcellating a dconn in both directions, parcellating by ROW first will use much less memory.
@@ -445,6 +447,8 @@ function cifti_parcellate_execute(
 
 
 /**
+ * cifti-parcellate
+ *
  * Parcellate a cifti file.
  *
  * Each label (other than the unlabeled key) in the cifti label file will be treated as a parcel, and all rows or columns of data within the parcel are averaged together to form the parcel's output row or column.  If -legacy-mode is specified, parcels will be defined as the overlap between a label and the data, with no errors for missing data vertices or voxels, and empty parcels discarded.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  For dtseries or dscalar, use COLUMN.  If you are parcellating a dconn in both directions, parcellating by ROW first will use much less memory.

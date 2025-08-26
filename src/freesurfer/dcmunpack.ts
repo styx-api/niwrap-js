@@ -467,6 +467,8 @@ function dcmunpack_outputs(
 
 
 /**
+ * dcmunpack
+ *
  * Sorts and converts a directory of DICOM files (Siemens, GE, Philips) into an output hierarchy with nifti (nii), mgh, mgz, or analyze output formats.
  *
  * Author: FreeSurfer Developers
@@ -493,6 +495,8 @@ function dcmunpack_execute(
 
 
 /**
+ * dcmunpack
+ *
  * Sorts and converts a directory of DICOM files (Siemens, GE, Philips) into an output hierarchy with nifti (nii), mgh, mgz, or analyze output formats.
  *
  * Author: FreeSurfer Developers

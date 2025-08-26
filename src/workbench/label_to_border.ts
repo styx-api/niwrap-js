@@ -161,6 +161,8 @@ function label_to_border_outputs(
 
 
 /**
+ * label-to-border
+ *
  * Draw borders around labels.
  *
  * For each label, finds all edges on the mesh that cross the boundary of the label, and draws borders through them.  By default, this is done on all columns in the input file, using the map name as the class name for the border.
@@ -189,6 +191,8 @@ function label_to_border_execute(
 
 
 /**
+ * label-to-border
+ *
  * Draw borders around labels.
  *
  * For each label, finds all edges on the mesh that cross the boundary of the label, and draws borders through them.  By default, this is done on all columns in the input file, using the map name as the class name for the border.

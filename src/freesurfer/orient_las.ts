@@ -138,6 +138,8 @@ function orient_las_outputs(
 
 
 /**
+ * orientLAS
+ *
  * Convert image to LAS orientation.
  *
  * Author: FreeSurfer Developers
@@ -164,6 +166,8 @@ function orient_las_execute(
 
 
 /**
+ * orientLAS
+ *
  * Convert image to LAS orientation.
  *
  * Author: FreeSurfer Developers

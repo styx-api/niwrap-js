@@ -153,6 +153,8 @@ function mri_morphology_outputs(
 
 
 /**
+ * mri_morphology
+ *
  * MRI Morphology Tool - performs various morphological operations on a volume.
  *
  * Author: FreeSurfer Developers
@@ -179,6 +181,8 @@ function mri_morphology_execute(
 
 
 /**
+ * mri_morphology
+ *
  * MRI Morphology Tool - performs various morphological operations on a volume.
  *
  * Author: FreeSurfer Developers

@@ -325,6 +325,8 @@ function cifti_change_mapping_outputs(
 
 
 /**
+ * cifti-change-mapping
+ *
  * Convert to scalar, copy mapping, etc.
  *
  * Take an existing cifti file and change one of the mappings.  Exactly one of -series, -scalar, or -from-cifti must be specified.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.
@@ -360,6 +362,8 @@ function cifti_change_mapping_execute(
 
 
 /**
+ * cifti-change-mapping
+ *
  * Convert to scalar, copy mapping, etc.
  *
  * Take an existing cifti file and change one of the mappings.  Exactly one of -series, -scalar, or -from-cifti must be specified.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.

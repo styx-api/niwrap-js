@@ -171,6 +171,8 @@ function mris_compute_overlap_outputs(
 
 
 /**
+ * mris_compute_overlap
+ *
  * Tool to compute the overlap between two or more labels on a cortical surface.
  *
  * Author: FreeSurfer Developers
@@ -197,6 +199,8 @@ function mris_compute_overlap_execute(
 
 
 /**
+ * mris_compute_overlap
+ *
  * Tool to compute the overlap between two or more labels on a cortical surface.
  *
  * Author: FreeSurfer Developers

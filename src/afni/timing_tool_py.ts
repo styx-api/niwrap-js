@@ -329,6 +329,8 @@ function timing_tool_py_outputs(
 
 
 /**
+ * timing_tool.py
+ *
  * Tool for manipulating and evaluating stimulus timing files.
  *
  * Author: AFNI Developers
@@ -355,6 +357,8 @@ function timing_tool_py_execute(
 
 
 /**
+ * timing_tool.py
+ *
  * Tool for manipulating and evaluating stimulus timing files.
  *
  * Author: AFNI Developers

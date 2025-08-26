@@ -212,6 +212,8 @@ function slow_surf_clustsim_py_outputs(
 
 
 /**
+ * slow_surf_clustsim.py
+ *
  * Generate a tcsh script to run clustsim on surface.
  *
  * Author: AFNI Developers
@@ -238,6 +240,8 @@ function slow_surf_clustsim_py_execute(
 
 
 /**
+ * slow_surf_clustsim.py
+ *
  * Generate a tcsh script to run clustsim on surface.
  *
  * Author: AFNI Developers

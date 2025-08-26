@@ -407,6 +407,8 @@ function mri_ca_normalize_outputs(
 
 
 /**
+ * mri_ca_normalize
+ *
  * This program creates a normalized volume using the brain volume and an input gca file.
  *
  * Author: FreeSurfer Developers
@@ -433,6 +435,8 @@ function mri_ca_normalize_execute(
 
 
 /**
+ * mri_ca_normalize
+ *
  * This program creates a normalized volume using the brain volume and an input gca file.
  *
  * Author: FreeSurfer Developers

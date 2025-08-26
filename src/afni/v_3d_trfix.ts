@@ -178,6 +178,8 @@ function v_3d_trfix_outputs(
 
 
 /**
+ * 3dTRfix
+ *
  * Re-sample dataset with irregular time grid to regular time grid via linear interpolation.
  *
  * Author: AFNI Developers
@@ -204,6 +206,8 @@ function v_3d_trfix_execute(
 
 
 /**
+ * 3dTRfix
+ *
  * Re-sample dataset with irregular time grid to regular time grid via linear interpolation.
  *
  * Author: AFNI Developers

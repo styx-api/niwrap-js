@@ -210,6 +210,8 @@ function plugout_tta_outputs(
 
 
 /**
+ * plugout_tta
+ *
  * Connects to AFNI and receives notification whenever the user changes Talairach coordinates, then drives Netscape to display the closest figures from the Talairach-Tournoux atlas.
  *
  * Author: AFNI Developers
@@ -236,6 +238,8 @@ function plugout_tta_execute(
 
 
 /**
+ * plugout_tta
+ *
  * Connects to AFNI and receives notification whenever the user changes Talairach coordinates, then drives Netscape to display the closest figures from the Talairach-Tournoux atlas.
  *
  * Author: AFNI Developers

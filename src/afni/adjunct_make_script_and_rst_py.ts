@@ -170,6 +170,8 @@ function adjunct_make_script_and_rst_py_outputs(
 
 
 /**
+ * adjunct_make_script_and_rst.py
+ *
  * Program to take a script with some special markup and turn it into both an RST page and a script for the online Sphinx documentation.
  *
  * Author: AFNI Developers
@@ -196,6 +198,8 @@ function adjunct_make_script_and_rst_py_execute(
 
 
 /**
+ * adjunct_make_script_and_rst.py
+ *
  * Program to take a script with some special markup and turn it into both an RST page and a script for the online Sphinx documentation.
  *
  * Author: AFNI Developers

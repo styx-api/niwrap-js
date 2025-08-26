@@ -226,6 +226,8 @@ function roi2dataset_outputs(
 
 
 /**
+ * ROI2dataset
+ *
  * Transforms a series of ROI files to a node dataset.
  *
  * Author: AFNI Developers
@@ -252,6 +254,8 @@ function roi2dataset_execute(
 
 
 /**
+ * ROI2dataset
+ *
  * Transforms a series of ROI files to a node dataset.
  *
  * Author: AFNI Developers

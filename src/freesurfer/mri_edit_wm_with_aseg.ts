@@ -236,6 +236,8 @@ function mri_edit_wm_with_aseg_outputs(
 
 
 /**
+ * mri_edit_wm_with_aseg
+ *
  * A tool for editing white matter with anatomical segmentation.
  *
  * Author: FreeSurfer Developers
@@ -262,6 +264,8 @@ function mri_edit_wm_with_aseg_execute(
 
 
 /**
+ * mri_edit_wm_with_aseg
+ *
  * A tool for editing white matter with anatomical segmentation.
  *
  * Author: FreeSurfer Developers

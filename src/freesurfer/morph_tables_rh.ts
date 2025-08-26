@@ -127,6 +127,8 @@ function morph_tables_rh_outputs(
 
 
 /**
+ * morph_tables-rh
+ *
  * A tool from Freesurfer associated with morphological tables for the right hemisphere.
  *
  * Author: FreeSurfer Developers
@@ -153,6 +155,8 @@ function morph_tables_rh_execute(
 
 
 /**
+ * morph_tables-rh
+ *
  * A tool from Freesurfer associated with morphological tables for the right hemisphere.
  *
  * Author: FreeSurfer Developers

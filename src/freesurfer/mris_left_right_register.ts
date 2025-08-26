@@ -146,6 +146,8 @@ function mris_left_right_register_outputs(
 
 
 /**
+ * mris_left_right_register
+ *
  * Register left and right hemisphere spherical surfaces.
  *
  * Author: FreeSurfer Developers
@@ -172,6 +174,8 @@ function mris_left_right_register_execute(
 
 
 /**
+ * mris_left_right_register
+ *
  * Register left and right hemisphere spherical surfaces.
  *
  * Author: FreeSurfer Developers

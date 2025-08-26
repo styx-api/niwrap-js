@@ -138,6 +138,8 @@ function foci_list_coords_outputs(
 
 
 /**
+ * foci-list-coords
+ *
  * Output foci coordinates in a text file.
  *
  * Output the coordinates for every focus in the foci file, and optionally the focus names in a second text file.
@@ -166,6 +168,8 @@ function foci_list_coords_execute(
 
 
 /**
+ * foci-list-coords
+ *
  * Output foci coordinates in a text file.
  *
  * Output the coordinates for every focus in the foci file, and optionally the focus names in a second text file.

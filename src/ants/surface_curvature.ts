@@ -141,6 +141,8 @@ function surface_curvature_outputs(
 
 
 /**
+ * SurfaceCurvature
+ *
  * The Shape Operator for Differential Analysis of Images. It can operate on binary or gray scale images with various modes to see different effects.
  *
  * Author: ANTs Developers
@@ -167,6 +169,8 @@ function surface_curvature_execute(
 
 
 /**
+ * SurfaceCurvature
+ *
  * The Shape Operator for Differential Analysis of Images. It can operate on binary or gray scale images with various modes to see different effects.
  *
  * Author: ANTs Developers

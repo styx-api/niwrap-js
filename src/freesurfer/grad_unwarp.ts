@@ -208,6 +208,8 @@ function grad_unwarp_outputs(
 
 
 /**
+ * grad_unwarp
+ *
  * Convert, dewarp, and resample DICOM files to MGH files.
  *
  * Author: FreeSurfer Developers
@@ -234,6 +236,8 @@ function grad_unwarp_execute(
 
 
 /**
+ * grad_unwarp
+ *
  * Convert, dewarp, and resample DICOM files to MGH files.
  *
  * Author: FreeSurfer Developers

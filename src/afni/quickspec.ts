@@ -192,6 +192,8 @@ function quickspec_outputs(
 
 
 /**
+ * quickspec
+ *
  * A quick and dirty way of loading a surface into SUMA or command line programs using a spec file.
  *
  * Author: AFNI Developers
@@ -218,6 +220,8 @@ function quickspec_execute(
 
 
 /**
+ * quickspec
+ *
  * A quick and dirty way of loading a surface into SUMA or command line programs using a spec file.
  *
  * Author: AFNI Developers

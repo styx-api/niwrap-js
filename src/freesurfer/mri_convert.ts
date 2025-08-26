@@ -290,6 +290,8 @@ function mri_convert_outputs(
 
 
 /**
+ * mri_convert
+ *
  * A general purpose utility for converting between different file formats supported by FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -316,6 +318,8 @@ function mri_convert_execute(
 
 
 /**
+ * mri_convert
+ *
  * A general purpose utility for converting between different file formats supported by FreeSurfer.
  *
  * Author: FreeSurfer Developers

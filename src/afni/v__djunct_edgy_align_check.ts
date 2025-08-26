@@ -319,6 +319,8 @@ function v__djunct_edgy_align_check_outputs(
 
 
 /**
+ * @djunct_edgy_align_check
+ *
  * Helper script for various tasks, heavily modeled on RW Cox's '@snapshot_volreg' script.
  *
  * Author: AFNI Developers
@@ -345,6 +347,8 @@ function v__djunct_edgy_align_check_execute(
 
 
 /**
+ * @djunct_edgy_align_check
+ *
  * Helper script for various tasks, heavily modeled on RW Cox's '@snapshot_volreg' script.
  *
  * Author: AFNI Developers

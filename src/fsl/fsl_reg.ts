@@ -181,6 +181,8 @@ function fsl_reg_outputs(
 
 
 /**
+ * fsl_reg
+ *
  * Image registration using FSL tools.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -207,6 +209,8 @@ function fsl_reg_execute(
 
 
 /**
+ * fsl_reg
+ *
  * Image registration using FSL tools.
  *
  * Author: FMRIB Analysis Group, University of Oxford

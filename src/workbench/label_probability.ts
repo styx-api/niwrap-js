@@ -139,6 +139,8 @@ function label_probability_outputs(
 
 
 /**
+ * label-probability
+ *
  * Find frequency of surface labels.
  *
  * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that vertex, divided by the number of input maps.
@@ -167,6 +169,8 @@ function label_probability_execute(
 
 
 /**
+ * label-probability
+ *
  * Find frequency of surface labels.
  *
  * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that vertex, divided by the number of input maps.

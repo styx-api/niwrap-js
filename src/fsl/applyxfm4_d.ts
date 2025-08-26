@@ -179,6 +179,8 @@ function applyxfm4_d_outputs(
 
 
 /**
+ * applyxfm4D
+ *
  * Applies 4D transformation matrices to 4D volumes.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -205,6 +207,8 @@ function applyxfm4_d_execute(
 
 
 /**
+ * applyxfm4D
+ *
  * Applies 4D transformation matrices to 4D volumes.
  *
  * Author: FMRIB Analysis Group, University of Oxford

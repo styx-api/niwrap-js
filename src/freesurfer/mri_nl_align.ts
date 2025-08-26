@@ -641,6 +641,8 @@ function mri_nl_align_outputs(
 
 
 /**
+ * mri_nl_align
+ *
  * mri_nl_align aligns two images using nonlinear registration.
  *
  * Author: FreeSurfer Developers
@@ -667,6 +669,8 @@ function mri_nl_align_execute(
 
 
 /**
+ * mri_nl_align
+ *
  * mri_nl_align aligns two images using nonlinear registration.
  *
  * Author: FreeSurfer Developers

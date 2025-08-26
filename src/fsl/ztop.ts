@@ -143,6 +143,8 @@ function ztop_outputs(
 
 
 /**
+ * ztop
+ *
  * Converts a z-score to a p-value.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -169,6 +171,8 @@ function ztop_execute(
 
 
 /**
+ * ztop
+ *
  * Converts a z-score to a p-value.
  *
  * Author: FMRIB Analysis Group, University of Oxford

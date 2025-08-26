@@ -156,6 +156,8 @@ function surface_curvature_outputs(
 
 
 /**
+ * surface-curvature
+ *
  * Calculate curvature of surface.
  *
  * Compute the curvature of the surface, using the method from:
@@ -186,6 +188,8 @@ function surface_curvature_execute(
 
 
 /**
+ * surface-curvature
+ *
  * Calculate curvature of surface.
  *
  * Compute the curvature of the surface, using the method from:

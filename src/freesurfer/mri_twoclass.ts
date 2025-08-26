@@ -165,6 +165,8 @@ function mri_twoclass_outputs(
 
 
 /**
+ * mri_twoclass
+ *
  * Compute cross-subject statistics of two sets of labels.
  *
  * Author: FreeSurfer Developers
@@ -191,6 +193,8 @@ function mri_twoclass_execute(
 
 
 /**
+ * mri_twoclass
+ *
  * Compute cross-subject statistics of two sets of labels.
  *
  * Author: FreeSurfer Developers

@@ -252,6 +252,8 @@ function mri_vol2label_outputs(
 
 
 /**
+ * mri_vol2label
+ *
  * Converts values in a volume or surface overlay to a label using specified parameters.
  *
  * Author: FreeSurfer Developers
@@ -278,6 +280,8 @@ function mri_vol2label_execute(
 
 
 /**
+ * mri_vol2label
+ *
  * Converts values in a volume or surface overlay to a label using specified parameters.
  *
  * Author: FreeSurfer Developers

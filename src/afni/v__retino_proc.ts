@@ -558,6 +558,8 @@ function v__retino_proc_outputs(
 
 
 /**
+ * @RetinoProc
+ *
  * A script to process retinotopic FMRI data, using AFNI's 3dRetinoPhase and SurfRetinMap.
  *
  * Author: AFNI Developers
@@ -584,6 +586,8 @@ function v__retino_proc_execute(
 
 
 /**
+ * @RetinoProc
+ *
  * A script to process retinotopic FMRI data, using AFNI's 3dRetinoPhase and SurfRetinMap.
  *
  * Author: AFNI Developers

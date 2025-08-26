@@ -243,6 +243,8 @@ function mri_easyreg_outputs(
 
 
 /**
+ * mri_easyreg
+ *
  * EasyReg: deep learning registration simple and easy.
  *
  * Author: FreeSurfer Developers
@@ -269,6 +271,8 @@ function mri_easyreg_execute(
 
 
 /**
+ * mri_easyreg
+ *
  * EasyReg: deep learning registration simple and easy.
  *
  * Author: FreeSurfer Developers

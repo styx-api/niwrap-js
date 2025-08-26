@@ -202,6 +202,8 @@ function metric_reduce_outputs(
 
 
 /**
+ * metric-reduce
+ *
  * Perform reduction operation across metric columns.
  *
  * For each surface vertex, takes the data across columns as a vector, and performs the specified reduction on it, putting the result into the single output column at that vertex.  The reduction operators are as follows:
@@ -248,6 +250,8 @@ function metric_reduce_execute(
 
 
 /**
+ * metric-reduce
+ *
  * Perform reduction operation across metric columns.
  *
  * For each surface vertex, takes the data across columns as a vector, and performs the specified reduction on it, putting the result into the single output column at that vertex.  The reduction operators are as follows:

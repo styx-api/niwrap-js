@@ -288,6 +288,8 @@ function fsl_deface_outputs(
 
 
 /**
+ * fsl_deface
+ *
  * Tool to deface a structural T1w image.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -314,6 +316,8 @@ function fsl_deface_execute(
 
 
 /**
+ * fsl_deface
+ *
  * Tool to deface a structural T1w image.
  *
  * Author: FMRIB Analysis Group, University of Oxford

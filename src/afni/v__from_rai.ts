@@ -131,6 +131,8 @@ function v__from_rai_outputs(
 
 
 /**
+ * @FromRAI
+ *
  * Changes the RAI coordinates to the specified orientation.
  *
  * Author: AFNI Developers
@@ -157,6 +159,8 @@ function v__from_rai_execute(
 
 
 /**
+ * @FromRAI
+ *
  * Changes the RAI coordinates to the specified orientation.
  *
  * Author: AFNI Developers

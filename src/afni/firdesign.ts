@@ -166,6 +166,8 @@ function firdesign_outputs(
 
 
 /**
+ * FIRdesign
+ *
  * Uses the Remez algorithm to calculate the FIR filter weights for a bandpass filter; results are written to stdout in an unadorned (no header) column of numbers.
  *
  * Author: AFNI Developers
@@ -192,6 +194,8 @@ function firdesign_execute(
 
 
 /**
+ * FIRdesign
+ *
  * Uses the Remez algorithm to calculate the FIR filter weights for a bandpass filter; results are written to stdout in an unadorned (no header) column of numbers.
  *
  * Author: AFNI Developers

@@ -283,6 +283,8 @@ function epi_reg_outputs(
 
 
 /**
+ * epi_reg
+ *
  * Runs FSL epi_reg script for simultaneous coregistration and fieldmap unwarping.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -309,6 +311,8 @@ function epi_reg_execute(
 
 
 /**
+ * epi_reg
+ *
  * Runs FSL epi_reg script for simultaneous coregistration and fieldmap unwarping.
  *
  * Author: FMRIB Analysis Group, University of Oxford

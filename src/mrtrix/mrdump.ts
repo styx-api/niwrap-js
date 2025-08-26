@@ -259,6 +259,8 @@ function mrdump_outputs(
 
 
 /**
+ * mrdump
+ *
  * Print out the values within an image.
  *
  * If no destination file is specified, the voxel locations will be printed to stdout.
@@ -291,6 +293,8 @@ function mrdump_execute(
 
 
 /**
+ * mrdump
+ *
  * Print out the values within an image.
  *
  * If no destination file is specified, the voxel locations will be printed to stdout.

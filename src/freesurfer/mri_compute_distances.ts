@@ -136,6 +136,8 @@ function mri_compute_distances_outputs(
 
 
 /**
+ * mri_compute_distances
+ *
  * A tool to compute distances between source and target images.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_compute_distances_execute(
 
 
 /**
+ * mri_compute_distances
+ *
  * A tool to compute distances between source and target images.
  *
  * Author: FreeSurfer Developers

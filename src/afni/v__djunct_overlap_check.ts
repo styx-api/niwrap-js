@@ -344,6 +344,8 @@ function v__djunct_overlap_check_outputs(
 
 
 /**
+ * @djunct_overlap_check
+ *
  * A helper script for visualizing overlap between datasets in AFNI.
  *
  * Author: AFNI Developers
@@ -370,6 +372,8 @@ function v__djunct_overlap_check_execute(
 
 
 /**
+ * @djunct_overlap_check
+ *
  * A helper script for visualizing overlap between datasets in AFNI.
  *
  * Author: AFNI Developers

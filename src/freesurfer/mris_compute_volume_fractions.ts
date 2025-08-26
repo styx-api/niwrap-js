@@ -167,6 +167,8 @@ function mris_compute_volume_fractions_outputs(
 
 
 /**
+ * mris_compute_volume_fractions
+ *
  * Computes volume fractions based on a given surface and volume.
  *
  * Author: FreeSurfer Developers
@@ -193,6 +195,8 @@ function mris_compute_volume_fractions_execute(
 
 
 /**
+ * mris_compute_volume_fractions
+ *
  * Computes volume fractions based on a given surface and volume.
  *
  * Author: FreeSurfer Developers

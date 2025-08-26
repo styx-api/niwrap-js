@@ -142,6 +142,8 @@ function surface_smoothing_outputs(
 
 
 /**
+ * surface-smoothing
+ *
  * Surface smoothing.
  *
  * Smooths a surface by averaging vertex coordinates with those of the neighboring vertices.
@@ -170,6 +172,8 @@ function surface_smoothing_execute(
 
 
 /**
+ * surface-smoothing
+ *
  * Surface smoothing.
  *
  * Smooths a surface by averaging vertex coordinates with those of the neighboring vertices.

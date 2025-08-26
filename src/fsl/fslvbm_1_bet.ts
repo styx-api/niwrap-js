@@ -138,6 +138,8 @@ function fslvbm_1_bet_outputs(
 
 
 /**
+ * fslvbm_1_bet
+ *
  * Brain extraction for VBM using FSL BET.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -164,6 +166,8 @@ function fslvbm_1_bet_execute(
 
 
 /**
+ * fslvbm_1_bet
+ *
  * Brain extraction for VBM using FSL BET.
  *
  * Author: FMRIB Analysis Group, University of Oxford

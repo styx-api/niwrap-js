@@ -139,6 +139,8 @@ function rmsdiff_outputs(
 
 
 /**
+ * rmsdiff
+ *
  * Outputs RMS deviation between matrices (in mm).
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -165,6 +167,8 @@ function rmsdiff_execute(
 
 
 /**
+ * rmsdiff
+ *
  * Outputs RMS deviation between matrices (in mm).
  *
  * Author: FMRIB Analysis Group, University of Oxford

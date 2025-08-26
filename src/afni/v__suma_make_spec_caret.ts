@@ -184,6 +184,8 @@ function v__suma_make_spec_caret_outputs(
 
 
 /**
+ * @SUMA_Make_Spec_Caret
+ *
  * Prepare surfaces for viewing in SUMA, tested with Caret-5.2 surfaces.
  *
  * Author: AFNI Developers
@@ -210,6 +212,8 @@ function v__suma_make_spec_caret_execute(
 
 
 /**
+ * @SUMA_Make_Spec_Caret
+ *
  * Prepare surfaces for viewing in SUMA, tested with Caret-5.2 surfaces.
  *
  * Author: AFNI Developers

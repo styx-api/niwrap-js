@@ -192,6 +192,8 @@ function dmri_forrest_outputs(
 
 
 /**
+ * dmri_forrest
+ *
  * dmri_forrest is a tool for processing diffusion MRI data using a random forest-based method.
  *
  * Author: FreeSurfer Developers
@@ -218,6 +220,8 @@ function dmri_forrest_execute(
 
 
 /**
+ * dmri_forrest
+ *
  * dmri_forrest is a tool for processing diffusion MRI data using a random forest-based method.
  *
  * Author: FreeSurfer Developers

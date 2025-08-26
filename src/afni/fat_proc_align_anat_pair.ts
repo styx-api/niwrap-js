@@ -243,6 +243,8 @@ function fat_proc_align_anat_pair_outputs(
 
 
 /**
+ * fat_proc_align_anat_pair
+ *
  * A tool for aligning a T1w anatomical image to a T2w anatomical image using solid-body parameters (translation and rotation).
  *
  * Author: AFNI Developers
@@ -269,6 +271,8 @@ function fat_proc_align_anat_pair_execute(
 
 
 /**
+ * fat_proc_align_anat_pair
+ *
  * A tool for aligning a T1w anatomical image to a T2w anatomical image using solid-body parameters (translation and rotation).
  *
  * Author: AFNI Developers

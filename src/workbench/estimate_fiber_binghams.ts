@@ -177,6 +177,8 @@ function estimate_fiber_binghams_outputs(
 
 
 /**
+ * estimate-fiber-binghams
+ *
  * Estimate fiber orientation distributions from bedpostx samples.
  *
  * This command does an estimation of a bingham distribution for each fiber orientation in each voxel which is labeled a structure identifier.  These labelings come from the <label-volume> argument, which must have labels that match the following strings:
@@ -239,6 +241,8 @@ function estimate_fiber_binghams_execute(
 
 
 /**
+ * estimate-fiber-binghams
+ *
  * Estimate fiber orientation distributions from bedpostx samples.
  *
  * This command does an estimation of a bingham distribution for each fiber orientation in each voxel which is labeled a structure identifier.  These labelings come from the <label-volume> argument, which must have labels that match the following strings:

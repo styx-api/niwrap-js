@@ -321,6 +321,8 @@ function v_3_droimaker_outputs(
 
 
 /**
+ * 3DROIMaker
+ *
  * Create a labelled set of ROIs from input data, useful in combining functional and tractographic/structural data.
  *
  * Author: AFNI Developers
@@ -347,6 +349,8 @@ function v_3_droimaker_execute(
 
 
 /**
+ * 3DROIMaker
+ *
  * Create a labelled set of ROIs from input data, useful in combining functional and tractographic/structural data.
  *
  * Author: AFNI Developers

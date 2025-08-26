@@ -126,6 +126,8 @@ function v__get_afni_id_outputs(
 
 
 /**
+ * @GetAfniID
+ *
  * Returns the unique identifier of a dataset.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v__get_afni_id_execute(
 
 
 /**
+ * @GetAfniID
+ *
  * Returns the unique identifier of a dataset.
  *
  * Author: AFNI Developers

@@ -187,6 +187,8 @@ function pointflirt_outputs(
 
 
 /**
+ * pointflirt
+ *
  * A tool to align point coordinates between volumes and compute affine transformation matrices.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -213,6 +215,8 @@ function pointflirt_execute(
 
 
 /**
+ * pointflirt
+ *
  * A tool to align point coordinates between volumes and compute affine transformation matrices.
  *
  * Author: FMRIB Analysis Group, University of Oxford

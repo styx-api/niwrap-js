@@ -120,6 +120,8 @@ function isnifti_outputs(
 
 
 /**
+ * isnifti
+ *
  * A simple tool to check if a file is a NIfTI image.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function isnifti_execute(
 
 
 /**
+ * isnifti
+ *
  * A simple tool to check if a file is a NIfTI image.
  *
  * Author: FreeSurfer Developers

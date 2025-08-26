@@ -241,6 +241,8 @@ function surf_layers_outputs(
 
 
 /**
+ * SurfLayers
+ *
  * Compute intermediate equi-distant surfaces between two boundary surfaces.
  *
  * Author: AFNI Developers
@@ -267,6 +269,8 @@ function surf_layers_execute(
 
 
 /**
+ * SurfLayers
+ *
  * Compute intermediate equi-distant surfaces between two boundary surfaces.
  *
  * Author: AFNI Developers

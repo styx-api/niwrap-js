@@ -169,6 +169,8 @@ function add_noise_to_image_outputs(
 
 
 /**
+ * AddNoiseToImage
+ *
  * Add various types of noise to an image.
  *
  * Author: ANTs Developers
@@ -195,6 +197,8 @@ function add_noise_to_image_execute(
 
 
 /**
+ * AddNoiseToImage
+ *
  * Add various types of noise to an image.
  *
  * Author: ANTs Developers

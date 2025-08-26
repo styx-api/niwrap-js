@@ -157,6 +157,8 @@ function balloon_outputs(
 
 
 /**
+ * balloon
+ *
  * Simulation of haemodynamic response using the balloon model. Based on the theoretical model proposed by Buxton et al. (1998).
  *
  * Author: AFNI Developers
@@ -183,6 +185,8 @@ function balloon_execute(
 
 
 /**
+ * balloon
+ *
  * Simulation of haemodynamic response using the balloon model. Based on the theoretical model proposed by Buxton et al. (1998).
  *
  * Author: AFNI Developers

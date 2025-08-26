@@ -129,6 +129,8 @@ function talairach2_outputs(
 
 
 /**
+ * talairach2
+ *
  * Tool for processing and converting talairach transformation files.
  *
  * Author: FreeSurfer Developers
@@ -155,6 +157,8 @@ function talairach2_execute(
 
 
 /**
+ * talairach2
+ *
  * Tool for processing and converting talairach transformation files.
  *
  * Author: FreeSurfer Developers

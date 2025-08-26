@@ -120,6 +120,8 @@ function check_subject_outputs(
 
 
 /**
+ * check_subject
+ *
  * Checks a subject directory for the existence of a surf directory.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function check_subject_execute(
 
 
 /**
+ * check_subject
+ *
  * Checks a subject directory for the existence of a surf directory.
  *
  * Author: FreeSurfer Developers

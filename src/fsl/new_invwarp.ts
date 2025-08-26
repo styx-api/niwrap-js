@@ -204,6 +204,8 @@ function new_invwarp_outputs(
 
 
 /**
+ * new_invwarp
+ *
  * Inverse warp tool from FSL suite.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -230,6 +232,8 @@ function new_invwarp_execute(
 
 
 /**
+ * new_invwarp
+ *
  * Inverse warp tool from FSL suite.
  *
  * Author: FMRIB Analysis Group, University of Oxford

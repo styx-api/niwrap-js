@@ -186,6 +186,8 @@ function v_1d_correlate_outputs(
 
 
 /**
+ * 1dCorrelate
+ *
  * 1dCorrelate calculates the correlation coefficients between columns of input 1D files along with confidence intervals via a bootstrap procedure.
  *
  * Author: AFNI Developers
@@ -212,6 +214,8 @@ function v_1d_correlate_execute(
 
 
 /**
+ * 1dCorrelate
+ *
  * 1dCorrelate calculates the correlation coefficients between columns of input 1D files along with confidence intervals via a bootstrap procedure.
  *
  * Author: AFNI Developers

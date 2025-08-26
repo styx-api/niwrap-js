@@ -120,6 +120,8 @@ function v__surf_smooth_heat_07_examples_outputs(
 
 
 /**
+ * @SurfSmooth.HEAT_07.examples
+ *
  * A script to illustrate controlled blurring of data on the surface.
  *
  * Author: AFNI Developers
@@ -146,6 +148,8 @@ function v__surf_smooth_heat_07_examples_execute(
 
 
 /**
+ * @SurfSmooth.HEAT_07.examples
+ *
  * A script to illustrate controlled blurring of data on the surface.
  *
  * Author: AFNI Developers

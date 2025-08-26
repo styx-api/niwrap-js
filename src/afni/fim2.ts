@@ -380,6 +380,8 @@ function fim2_outputs(
 
 
 /**
+ * fim2
+ *
  * Functional Imaging Mapping Tool.
  *
  * Author: AFNI Developers
@@ -406,6 +408,8 @@ function fim2_execute(
 
 
 /**
+ * fim2
+ *
  * Functional Imaging Mapping Tool.
  *
  * Author: AFNI Developers

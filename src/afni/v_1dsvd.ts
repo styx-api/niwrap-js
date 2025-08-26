@@ -201,6 +201,8 @@ function v_1dsvd_outputs(
 
 
 /**
+ * 1dsvd
+ *
  * Computes SVD of the matrix formed by the 1D file(s) and outputs the result on stdout.
  *
  * Author: AFNI Developers
@@ -227,6 +229,8 @@ function v_1dsvd_execute(
 
 
 /**
+ * 1dsvd
+ *
  * Computes SVD of the matrix formed by the 1D file(s) and outputs the result on stdout.
  *
  * Author: AFNI Developers

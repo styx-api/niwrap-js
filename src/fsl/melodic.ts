@@ -615,6 +615,8 @@ function melodic_outputs(
 
 
 /**
+ * melodic
+ *
  * Multivariate Exploratory Linear Optimised Decomposition into Independent Components.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -641,6 +643,8 @@ function melodic_execute(
 
 
 /**
+ * melodic
+ *
  * Multivariate Exploratory Linear Optimised Decomposition into Independent Components.
  *
  * Author: FMRIB Analysis Group, University of Oxford

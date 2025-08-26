@@ -181,6 +181,8 @@ function map_track_id_outputs(
 
 
 /**
+ * map_TrackID
+ *
  * Maps the track file (*.trk) output of 3dTrackID to another space using the 1Dmatrix_save info of 3dAllineate.
  *
  * Author: AFNI Developers
@@ -207,6 +209,8 @@ function map_track_id_execute(
 
 
 /**
+ * map_TrackID
+ *
  * Maps the track file (*.trk) output of 3dTrackID to another space using the 1Dmatrix_save info of 3dAllineate.
  *
  * Author: AFNI Developers

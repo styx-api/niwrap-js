@@ -336,6 +336,8 @@ function make_color_map_outputs(
 
 
 /**
+ * MakeColorMap
+ *
  * Utility for creating and modifying colormaps with various formats and fiducial points.
  *
  * Author: AFNI Developers
@@ -362,6 +364,8 @@ function make_color_map_execute(
 
 
 /**
+ * MakeColorMap
+ *
  * Utility for creating and modifying colormaps with various formats and fiducial points.
  *
  * Author: AFNI Developers

@@ -722,6 +722,8 @@ function mri_em_register_outputs(
 
 
 /**
+ * mri_em_register
+ *
  * This program creates a transform in lta format.
  *
  * Author: FreeSurfer Developers
@@ -748,6 +750,8 @@ function mri_em_register_execute(
 
 
 /**
+ * mri_em_register
+ *
  * This program creates a transform in lta format.
  *
  * Author: FreeSurfer Developers

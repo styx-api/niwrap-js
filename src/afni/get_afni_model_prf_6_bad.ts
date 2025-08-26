@@ -145,6 +145,8 @@ function get_afni_model_prf_6_bad_outputs(
 
 
 /**
+ * get_afni_model_PRF_6_BAD
+ *
  * Command line tool for obtaining AFNI pRF model.
  *
  * Author: AFNI Developers
@@ -171,6 +173,8 @@ function get_afni_model_prf_6_bad_execute(
 
 
 /**
+ * get_afni_model_PRF_6_BAD
+ *
  * Command line tool for obtaining AFNI pRF model.
  *
  * Author: AFNI Developers

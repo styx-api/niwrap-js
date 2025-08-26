@@ -200,6 +200,8 @@ function surf_qual_outputs(
 
 
 /**
+ * SurfQual
+ *
  * A program to check the quality of surfaces.
  *
  * Author: AFNI Developers
@@ -226,6 +228,8 @@ function surf_qual_execute(
 
 
 /**
+ * SurfQual
+ *
  * A program to check the quality of surfaces.
  *
  * Author: AFNI Developers

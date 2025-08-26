@@ -202,6 +202,8 @@ function volume_reduce_outputs(
 
 
 /**
+ * volume-reduce
+ *
  * Perform reduction operation across subvolumes.
  *
  * For each voxel, takes the data across subvolumes as a vector, and performs the specified reduction on it, putting the result into the single output volume at that voxel.  The reduction operators are as follows:
@@ -248,6 +250,8 @@ function volume_reduce_execute(
 
 
 /**
+ * volume-reduce
+ *
  * Perform reduction operation across subvolumes.
  *
  * For each voxel, takes the data across subvolumes as a vector, and performs the specified reduction on it, putting the result into the single output volume at that voxel.  The reduction operators are as follows:

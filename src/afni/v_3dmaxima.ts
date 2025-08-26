@@ -284,6 +284,8 @@ function v_3dmaxima_outputs(
 
 
 /**
+ * 3dmaxima
+ *
  * Locate extrema in a functional dataset.
  *
  * Author: AFNI Developers
@@ -310,6 +312,8 @@ function v_3dmaxima_execute(
 
 
 /**
+ * 3dmaxima
+ *
  * Locate extrema in a functional dataset.
  *
  * Author: AFNI Developers

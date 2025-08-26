@@ -325,6 +325,8 @@ function mri_annotation2label_outputs(
 
 
 /**
+ * mri_annotation2label
+ *
  * Convert an annotation into multiple label files or into a segmentation volume.
  *
  * Author: FreeSurfer Developers
@@ -351,6 +353,8 @@ function mri_annotation2label_execute(
 
 
 /**
+ * mri_annotation2label
+ *
  * Convert an annotation into multiple label files or into a segmentation volume.
  *
  * Author: FreeSurfer Developers

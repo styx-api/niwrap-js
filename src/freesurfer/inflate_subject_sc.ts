@@ -140,6 +140,8 @@ function inflate_subject_sc_outputs(
 
 
 /**
+ * inflate_subject_sc
+ *
  * Inferred description: Tool for inflating subject surfaces, specific details unavailable.
  *
  * Author: FreeSurfer Developers
@@ -166,6 +168,8 @@ function inflate_subject_sc_execute(
 
 
 /**
+ * inflate_subject_sc
+ *
  * Inferred description: Tool for inflating subject surfaces, specific details unavailable.
  *
  * Author: FreeSurfer Developers

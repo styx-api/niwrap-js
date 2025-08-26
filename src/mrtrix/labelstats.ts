@@ -251,6 +251,8 @@ function labelstats_outputs(
 
 
 /**
+ * labelstats
+ *
  * Compute statistics of parcels within a label image.
  *
  *
@@ -283,6 +285,8 @@ function labelstats_execute(
 
 
 /**
+ * labelstats
+ *
  * Compute statistics of parcels within a label image.
  *
  *

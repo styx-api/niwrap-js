@@ -182,6 +182,8 @@ function wm_anat_snr_outputs(
 
 
 /**
+ * wm-anat-snr
+ *
  * Measures the anatomical SNR in white matter (WM) for quality assurance (QA). This is an experimental metric.
  *
  * Author: FreeSurfer Developers
@@ -208,6 +210,8 @@ function wm_anat_snr_execute(
 
 
 /**
+ * wm-anat-snr
+ *
  * Measures the anatomical SNR in white matter (WM) for quality assurance (QA). This is an experimental metric.
  *
  * Author: FreeSurfer Developers

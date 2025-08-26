@@ -429,6 +429,8 @@ function fslregister_outputs(
 
 
 /**
+ * fslregister
+ *
  * Registers a volume to its FreeSurfer anatomical using FSL's FLIRT and creates a FreeSurfer register.dat file.
  *
  * Author: FreeSurfer Developers
@@ -455,6 +457,8 @@ function fslregister_execute(
 
 
 /**
+ * fslregister
+ *
  * Registers a volume to its FreeSurfer anatomical using FSL's FLIRT and creates a FreeSurfer register.dat file.
  *
  * Author: FreeSurfer Developers

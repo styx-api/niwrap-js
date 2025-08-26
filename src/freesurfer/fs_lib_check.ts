@@ -143,6 +143,8 @@ function fs_lib_check_outputs(
 
 
 /**
+ * fs_lib_check
+ *
  * Checks if the operating system has the necessary system libraries required to run FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -169,6 +171,8 @@ function fs_lib_check_execute(
 
 
 /**
+ * fs_lib_check
+ *
  * Checks if the operating system has the necessary system libraries required to run FreeSurfer.
  *
  * Author: FreeSurfer Developers

@@ -181,6 +181,8 @@ function v_3d_median_filter_outputs(
 
 
 /**
+ * 3dMedianFilter
+ *
  * Computes the median in a spherical neighborhood around each point in the input to produce the output.
  *
  * Author: AFNI Developers
@@ -207,6 +209,8 @@ function v_3d_median_filter_execute(
 
 
 /**
+ * 3dMedianFilter
+ *
  * Computes the median in a spherical neighborhood around each point in the input to produce the output.
  *
  * Author: AFNI Developers

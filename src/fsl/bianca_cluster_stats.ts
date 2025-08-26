@@ -139,6 +139,8 @@ function bianca_cluster_stats_outputs(
 
 
 /**
+ * bianca_cluster_stats
+ *
  * Calculate number of clusters and WMH volume in a BIANCA output map.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -165,6 +167,8 @@ function bianca_cluster_stats_execute(
 
 
 /**
+ * bianca_cluster_stats
+ *
  * Calculate number of clusters and WMH volume in a BIANCA output map.
  *
  * Author: FMRIB Analysis Group, University of Oxford

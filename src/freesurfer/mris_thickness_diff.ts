@@ -263,6 +263,8 @@ function mris_thickness_diff_outputs(
 
 
 /**
+ * mris_thickness_diff
+ *
  * Computes the difference of two surface data sets defined on two surface meshes.
  *
  * Author: FreeSurfer Developers
@@ -289,6 +291,8 @@ function mris_thickness_diff_execute(
 
 
 /**
+ * mris_thickness_diff
+ *
  * Computes the difference of two surface data sets defined on two surface meshes.
  *
  * Author: FreeSurfer Developers

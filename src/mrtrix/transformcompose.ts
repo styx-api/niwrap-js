@@ -335,6 +335,8 @@ function transformcompose_outputs(
 
 
 /**
+ * transformcompose
+ *
  * Compose any number of linear transformations and/or warps into a single transformation.
  *
  * Any linear transforms must be supplied as a 4x4 matrix in a text file (e.g. as per the output of mrregister). Any warp fields must be supplied as a 4D image representing a deformation field (e.g. as output from mrrregister -nl_warp).
@@ -371,6 +373,8 @@ function transformcompose_execute(
 
 
 /**
+ * transformcompose
+ *
  * Compose any number of linear transformations and/or warps into a single transformation.
  *
  * Any linear transforms must be supplied as a 4x4 matrix in a text file (e.g. as per the output of mrregister). Any warp fields must be supplied as a 4D image representing a deformation field (e.g. as output from mrrregister -nl_warp).

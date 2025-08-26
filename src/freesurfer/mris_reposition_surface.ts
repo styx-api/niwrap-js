@@ -189,6 +189,8 @@ function mris_reposition_surface_outputs(
 
 
 /**
+ * mris_reposition_surface
+ *
  * Reposition a surface based on the given control points (in JSON format).
  *
  * Author: FreeSurfer Developers
@@ -215,6 +217,8 @@ function mris_reposition_surface_execute(
 
 
 /**
+ * mris_reposition_surface
+ *
  * Reposition a surface based on the given control points (in JSON format).
  *
  * Author: FreeSurfer Developers

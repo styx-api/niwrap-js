@@ -235,6 +235,8 @@ function v_3d_brain_voyagerto_afni_outputs(
 
 
 /**
+ * 3dBRAIN_VOYAGERtoAFNI
+ *
  * Converts a BrainVoyager vmr dataset to AFNI's BRIK format based on information from BrainVoyager's website.
  *
  * Author: AFNI Developers
@@ -261,6 +263,8 @@ function v_3d_brain_voyagerto_afni_execute(
 
 
 /**
+ * 3dBRAIN_VOYAGERtoAFNI
+ *
  * Converts a BrainVoyager vmr dataset to AFNI's BRIK format based on information from BrainVoyager's website.
  *
  * Author: AFNI Developers

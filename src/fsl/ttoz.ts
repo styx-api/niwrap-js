@@ -155,6 +155,8 @@ function ttoz_outputs(
 
 
 /**
+ * ttoz
+ *
  * Tool to convert a T-statistic image to a Z-statistic image.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -181,6 +183,8 @@ function ttoz_execute(
 
 
 /**
+ * ttoz
+ *
  * Tool to convert a T-statistic image to a Z-statistic image.
  *
  * Author: FMRIB Analysis Group, University of Oxford

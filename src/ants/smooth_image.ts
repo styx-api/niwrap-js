@@ -159,6 +159,8 @@ function smooth_image_outputs(
 
 
 /**
+ * SmoothImage
+ *
  * SmoothImage allows smoothing of images with adjustable sigma values, offering optional median filtering functionality.
  *
  * Author: ANTs Developers
@@ -185,6 +187,8 @@ function smooth_image_execute(
 
 
 /**
+ * SmoothImage
+ *
  * SmoothImage allows smoothing of images with adjustable sigma values, offering optional median filtering functionality.
  *
  * Author: ANTs Developers

@@ -158,6 +158,8 @@ function slicesdir_outputs(
 
 
 /**
+ * slicesdir
+ *
  * slicesdir generates a directory containing orthogonal slices through a set of images.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -184,6 +186,8 @@ function slicesdir_execute(
 
 
 /**
+ * slicesdir
+ *
  * slicesdir generates a directory containing orthogonal slices through a set of images.
  *
  * Author: FMRIB Analysis Group, University of Oxford

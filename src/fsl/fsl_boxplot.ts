@@ -216,6 +216,8 @@ function fsl_boxplot_outputs(
 
 
 /**
+ * fsl_boxplot
+ *
  * Tool for creating boxplot images from ASCII text matrices.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -242,6 +244,8 @@ function fsl_boxplot_execute(
 
 
 /**
+ * fsl_boxplot
+ *
  * Tool for creating boxplot images from ASCII text matrices.
  *
  * Author: FMRIB Analysis Group, University of Oxford

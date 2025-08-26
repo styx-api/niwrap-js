@@ -231,6 +231,8 @@ function samseg2recon_outputs(
 
 
 /**
+ * samseg2recon
+ *
  * Creates and populates a subjects directory for use with recon-all from SAMSEG outputs.
  *
  * Author: FreeSurfer Developers
@@ -257,6 +259,8 @@ function samseg2recon_execute(
 
 
 /**
+ * samseg2recon
+ *
  * Creates and populates a subjects directory for use with recon-all from SAMSEG outputs.
  *
  * Author: FreeSurfer Developers

@@ -422,6 +422,8 @@ function v_3d_pfm_outputs(
 
 
 /**
+ * 3dPFM
+ *
  * Program for identifying brief BOLD events in fMRI time series using Paradigm Free Mapping.
  *
  * Author: AFNI Developers
@@ -448,6 +450,8 @@ function v_3d_pfm_execute(
 
 
 /**
+ * 3dPFM
+ *
  * Program for identifying brief BOLD events in fMRI time series using Paradigm Free Mapping.
  *
  * Author: AFNI Developers

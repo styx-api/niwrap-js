@@ -414,6 +414,8 @@ function dwibiascorrect_outputs(
 
 
 /**
+ * dwibiascorrect
+ *
  * Perform B1 field inhomogeneity correction for a DWI volume series using either ANTs or FSL.
  *
  * Author: MRTrix3 Developers
@@ -440,6 +442,8 @@ function dwibiascorrect_execute(
 
 
 /**
+ * dwibiascorrect
+ *
  * Perform B1 field inhomogeneity correction for a DWI volume series using either ANTs or FSL.
  *
  * Author: MRTrix3 Developers

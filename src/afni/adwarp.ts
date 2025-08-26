@@ -216,6 +216,8 @@ function adwarp_outputs(
 
 
 /**
+ * adwarp
+ *
  * Resamples a 'data parent' dataset to the grid defined by an 'anat parent' dataset.
  *
  * Author: AFNI Developers
@@ -242,6 +244,8 @@ function adwarp_execute(
 
 
 /**
+ * adwarp
+ *
  * Resamples a 'data parent' dataset to the grid defined by an 'anat parent' dataset.
  *
  * Author: AFNI Developers

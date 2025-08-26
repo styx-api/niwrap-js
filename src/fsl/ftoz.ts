@@ -155,6 +155,8 @@ function ftoz_outputs(
 
 
 /**
+ * ftoz
+ *
  * Convert F-statistics to Z-scores.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -181,6 +183,8 @@ function ftoz_execute(
 
 
 /**
+ * ftoz
+ *
  * Convert F-statistics to Z-scores.
  *
  * Author: FMRIB Analysis Group, University of Oxford

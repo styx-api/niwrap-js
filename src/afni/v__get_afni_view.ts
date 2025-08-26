@@ -126,6 +126,8 @@ function v__get_afni_view_outputs(
 
 
 /**
+ * @GetAfniView
+ *
  * A tool to retrieve the AFNI view of a given dataset name.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v__get_afni_view_execute(
 
 
 /**
+ * @GetAfniView
+ *
  * A tool to retrieve the AFNI view of a given dataset name.
  *
  * Author: AFNI Developers

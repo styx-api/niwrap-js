@@ -465,6 +465,8 @@ function fslvbm_3_proc_outputs(
 
 
 /**
+ * fslvbm_3_proc
+ *
  * Pipeline for voxel-based morphometry analysis using FSL tools.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -491,6 +493,8 @@ function fslvbm_3_proc_execute(
 
 
 /**
+ * fslvbm_3_proc
+ *
  * Pipeline for voxel-based morphometry analysis using FSL tools.
  *
  * Author: FMRIB Analysis Group, University of Oxford

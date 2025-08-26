@@ -189,6 +189,8 @@ function v__roi_decluster_outputs(
 
 
 /**
+ * @ROI_decluster
+ *
  * Script to remove small clusters or standalone voxels from an ROI/atlas dataset.
  *
  * Author: AFNI Developers
@@ -215,6 +217,8 @@ function v__roi_decluster_execute(
 
 
 /**
+ * @ROI_decluster
+ *
  * Script to remove small clusters or standalone voxels from an ROI/atlas dataset.
  *
  * Author: AFNI Developers

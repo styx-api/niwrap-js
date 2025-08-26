@@ -495,6 +495,8 @@ function v__animal_warper_outputs(
 
 
 /**
+ * @animal_warper
+ *
  * Align a subject structural dataset to a template and perform several post-alignment operations.
  *
  * Author: AFNI Developers
@@ -521,6 +523,8 @@ function v__animal_warper_execute(
 
 
 /**
+ * @animal_warper
+ *
  * Align a subject structural dataset to a template and perform several post-alignment operations.
  *
  * Author: AFNI Developers

@@ -242,6 +242,8 @@ function v_3d_gen_feature_dist_outputs(
 
 
 /**
+ * 3dGenFeatureDist
+ *
  * 3dGenFeatureDist produces histogram volume (hives) from input data.
  *
  * Author: AFNI Developers
@@ -268,6 +270,8 @@ function v_3d_gen_feature_dist_execute(
 
 
 /**
+ * 3dGenFeatureDist
+ *
  * 3dGenFeatureDist produces histogram volume (hives) from input data.
  *
  * Author: AFNI Developers

@@ -153,6 +153,8 @@ function v__suma_make_spec_sf_outputs(
 
 
 /**
+ * @SUMA_Make_Spec_SF
+ *
  * Prepare for surface viewing in SUMA.
  *
  * Author: AFNI Developers
@@ -179,6 +181,8 @@ function v__suma_make_spec_sf_execute(
 
 
 /**
+ * @SUMA_Make_Spec_SF
+ *
  * Prepare for surface viewing in SUMA.
  *
  * Author: AFNI Developers

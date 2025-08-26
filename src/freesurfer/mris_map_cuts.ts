@@ -125,6 +125,8 @@ function mris_map_cuts_outputs(
 
 
 /**
+ * mris_map_cuts
+ *
  * Tool for mapping cortical surface data onto cuts.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function mris_map_cuts_execute(
 
 
 /**
+ * mris_map_cuts
+ *
  * Tool for mapping cortical surface data onto cuts.
  *
  * Author: FreeSurfer Developers

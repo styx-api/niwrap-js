@@ -180,6 +180,8 @@ function v_3d_afnito_nifti_outputs(
 
 
 /**
+ * 3dAFNItoNIFTI
+ *
  * Converts an AFNI dataset to a NIfTI-1.1 file.
  *
  * Author: AFNI Developers
@@ -206,6 +208,8 @@ function v_3d_afnito_nifti_execute(
 
 
 /**
+ * 3dAFNItoNIFTI
+ *
  * Converts an AFNI dataset to a NIfTI-1.1 file.
  *
  * Author: AFNI Developers

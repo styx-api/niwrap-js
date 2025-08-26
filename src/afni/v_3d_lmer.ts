@@ -342,6 +342,8 @@ function v_3d_lmer_outputs(
 
 
 /**
+ * 3dLMEr
+ *
  * Program for Voxelwise Linear Mixed-Effects (LME) Analysis.
  *
  * Author: AFNI Developers
@@ -368,6 +370,8 @@ function v_3d_lmer_execute(
 
 
 /**
+ * 3dLMEr
+ *
  * Program for Voxelwise Linear Mixed-Effects (LME) Analysis.
  *
  * Author: AFNI Developers

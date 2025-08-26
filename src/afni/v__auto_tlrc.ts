@@ -478,6 +478,8 @@ function v__auto_tlrc_outputs(
 
 
 /**
+ * @auto_tlrc
+ *
  * A script to transform an anatomical dataset to align with some standard space template and to apply the same TLRC transform obtained with @auto_tlrc in Usage 1 mode to other datasets.
  *
  * Author: AFNI Developers
@@ -504,6 +506,8 @@ function v__auto_tlrc_execute(
 
 
 /**
+ * @auto_tlrc
+ *
  * A script to transform an anatomical dataset to align with some standard space template and to apply the same TLRC transform obtained with @auto_tlrc in Usage 1 mode to other datasets.
  *
  * Author: AFNI Developers

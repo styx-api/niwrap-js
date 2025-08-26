@@ -136,6 +136,8 @@ function segment_ha_t2_sh_outputs(
 
 
 /**
+ * segmentHA_T2.sh
+ *
  * Segments hippocampal and amygdala structures from T2-weighted MRI images using the FreeSurfer suite.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function segment_ha_t2_sh_execute(
 
 
 /**
+ * segmentHA_T2.sh
+ *
  * Segments hippocampal and amygdala structures from T2-weighted MRI images using the FreeSurfer suite.
  *
  * Author: FreeSurfer Developers

@@ -246,6 +246,8 @@ function mri_funcvits_outputs(
 
 
 /**
+ * mri-funcvits
+ *
  * Tool for functional volume to surface conversion in neuroimaging analysis.
  *
  * Author: FreeSurfer Developers
@@ -272,6 +274,8 @@ function mri_funcvits_execute(
 
 
 /**
+ * mri-funcvits
+ *
  * Tool for functional volume to surface conversion in neuroimaging analysis.
  *
  * Author: FreeSurfer Developers

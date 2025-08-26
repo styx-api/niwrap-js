@@ -167,6 +167,8 @@ function mri_create_t2combined_outputs(
 
 
 /**
+ * mri_create_t2combined
+ *
  * Utility to combine two or three T2* 7T partial-brain volumes into one volume, retaining resolution and registered to the MPRAGE anatomical.
  *
  * Author: FreeSurfer Developers
@@ -193,6 +195,8 @@ function mri_create_t2combined_execute(
 
 
 /**
+ * mri_create_t2combined
+ *
  * Utility to combine two or three T2* 7T partial-brain volumes into one volume, retaining resolution and registered to the MPRAGE anatomical.
  *
  * Author: FreeSurfer Developers

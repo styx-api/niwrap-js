@@ -150,6 +150,8 @@ function surface_based_smoothing_outputs(
 
 
 /**
+ * SurfaceBasedSmoothing
+ *
  * Surface-based smoothing applied to ImageToSmooth using a geodesic neighbourhood defined by sigma and the surface image.
  *
  * Author: ANTs Developers
@@ -176,6 +178,8 @@ function surface_based_smoothing_execute(
 
 
 /**
+ * SurfaceBasedSmoothing
+ *
  * Surface-based smoothing applied to ImageToSmooth using a geodesic neighbourhood defined by sigma and the surface image.
  *
  * Author: ANTs Developers

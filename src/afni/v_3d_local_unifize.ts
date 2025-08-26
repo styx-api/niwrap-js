@@ -208,6 +208,8 @@ function v_3d_local_unifize_outputs(
 
 
 /**
+ * 3dLocalUnifize
+ *
  * This program generates a 'unifized' output volume by estimating the median in the local neighborhood of each voxel and using that to scale each voxel's brightness.
  *
  * Author: AFNI Developers
@@ -234,6 +236,8 @@ function v_3d_local_unifize_execute(
 
 
 /**
+ * 3dLocalUnifize
+ *
  * This program generates a 'unifized' output volume by estimating the median in the local neighborhood of each voxel and using that to scale each voxel's brightness.
  *
  * Author: AFNI Developers

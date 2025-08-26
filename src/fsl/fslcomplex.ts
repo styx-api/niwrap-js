@@ -154,6 +154,8 @@ function fslcomplex_outputs(
 
 
 /**
+ * fslcomplex
+ *
  * Tool for manipulating complex-valued MR data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -180,6 +182,8 @@ function fslcomplex_execute(
 
 
 /**
+ * fslcomplex
+ *
  * Tool for manipulating complex-valued MR data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

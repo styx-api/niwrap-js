@@ -153,6 +153,8 @@ function extract_region_from_image_by_mask_outputs(
 
 
 /**
+ * ExtractRegionFromImageByMask
+ *
  * Extract a sub-region from an image using the bounding box from a label image, with an optional padding radius.
  *
  * Author: ANTs Developers
@@ -179,6 +181,8 @@ function extract_region_from_image_by_mask_execute(
 
 
 /**
+ * ExtractRegionFromImageByMask
+ *
  * Extract a sub-region from an image using the bounding box from a label image, with an optional padding radius.
  *
  * Author: ANTs Developers

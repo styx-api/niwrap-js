@@ -760,6 +760,8 @@ function recon_all_outputs(
 
 
 /**
+ * recon-all
+ *
  * Performs all, or any part of, the FreeSurfer cortical reconstruction process.
  *
  * Author: FreeSurfer Developers
@@ -786,6 +788,8 @@ function recon_all_execute(
 
 
 /**
+ * recon-all
+ *
  * Performs all, or any part of, the FreeSurfer cortical reconstruction process.
  *
  * Author: FreeSurfer Developers

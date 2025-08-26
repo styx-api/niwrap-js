@@ -181,6 +181,8 @@ function v_3d_getrow_outputs(
 
 
 /**
+ * 3dGetrow
+ *
  * Program to extract 1 row from a dataset and write it as a .1D file.
  *
  * Author: AFNI Developers
@@ -207,6 +209,8 @@ function v_3d_getrow_execute(
 
 
 /**
+ * 3dGetrow
+ *
  * Program to extract 1 row from a dataset and write it as a .1D file.
  *
  * Author: AFNI Developers

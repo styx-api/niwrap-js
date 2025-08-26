@@ -124,6 +124,8 @@ function fix_subject_outputs(
 
 
 /**
+ * fix_subject
+ *
  * Tool to fix subjects in FreeSurfer, encountered errors due to incorrect path handling.
  *
  * Author: FreeSurfer Developers
@@ -150,6 +152,8 @@ function fix_subject_execute(
 
 
 /**
+ * fix_subject
+ *
  * Tool to fix subjects in FreeSurfer, encountered errors due to incorrect path handling.
  *
  * Author: FreeSurfer Developers

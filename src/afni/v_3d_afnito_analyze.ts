@@ -165,6 +165,8 @@ function v_3d_afnito_analyze_outputs(
 
 
 /**
+ * 3dAFNItoANALYZE
+ *
  * Writes AFNI dataset to ANALYZE 7.5 format .hdr/.img file pairs.
  *
  * Author: AFNI Developers
@@ -191,6 +193,8 @@ function v_3d_afnito_analyze_execute(
 
 
 /**
+ * 3dAFNItoANALYZE
+ *
  * Writes AFNI dataset to ANALYZE 7.5 format .hdr/.img file pairs.
  *
  * Author: AFNI Developers

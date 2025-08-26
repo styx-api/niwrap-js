@@ -124,6 +124,8 @@ function uber_proc_py_outputs(
 
 
 /**
+ * uber_proc.py
+ *
  * Uber processing tool - work in progress.
  *
  * Author: AFNI Developers
@@ -150,6 +152,8 @@ function uber_proc_py_execute(
 
 
 /**
+ * uber_proc.py
+ *
  * Uber processing tool - work in progress.
  *
  * Author: AFNI Developers

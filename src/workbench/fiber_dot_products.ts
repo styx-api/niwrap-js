@@ -157,6 +157,8 @@ function fiber_dot_products_outputs(
 
 
 /**
+ * fiber-dot-products
+ *
  * Compute dot products of fiber orientations with surface normals.
  *
  * For each vertex, this command finds the closest fiber population that satisfies the <direction> test, and computes the absolute value of the dot product of the surface normal and the normalized mean direction of each fiber.  The <direction> test must be one of INSIDE, OUTSIDE, or ANY, which causes the command to only use fiber populations that are inside the surface, outside the surface, or to not care which direction it is from the surface.  Each fiber population is output in a separate metric column.
@@ -185,6 +187,8 @@ function fiber_dot_products_execute(
 
 
 /**
+ * fiber-dot-products
+ *
  * Compute dot products of fiber orientations with surface normals.
  *
  * For each vertex, this command finds the closest fiber population that satisfies the <direction> test, and computes the absolute value of the dot product of the surface normal and the normalized mean direction of each fiber.  The <direction> test must be one of INSIDE, OUTSIDE, or ANY, which causes the command to only use fiber populations that are inside the surface, outside the surface, or to not care which direction it is from the surface.  Each fiber population is output in a separate metric column.

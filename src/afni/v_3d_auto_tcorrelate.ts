@@ -245,6 +245,8 @@ function v_3d_auto_tcorrelate_outputs(
 
 
 /**
+ * 3dAutoTcorrelate
+ *
  * Computes the correlation coefficient between the time series of each pair of voxels in the input dataset.
  *
  * Author: AFNI Developers
@@ -271,6 +273,8 @@ function v_3d_auto_tcorrelate_execute(
 
 
 /**
+ * 3dAutoTcorrelate
+ *
  * Computes the correlation coefficient between the time series of each pair of voxels in the input dataset.
  *
  * Author: AFNI Developers

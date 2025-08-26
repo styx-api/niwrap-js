@@ -141,6 +141,8 @@ function v__find_afni_dset_path_outputs(
 
 
 /**
+ * @FindAfniDsetPath
+ *
  * Searches various AFNI directories for a specified dataset and returns its path.
  *
  * Author: AFNI Developers
@@ -167,6 +169,8 @@ function v__find_afni_dset_path_execute(
 
 
 /**
+ * @FindAfniDsetPath
+ *
  * Searches various AFNI directories for a specified dataset and returns its path.
  *
  * Author: AFNI Developers

@@ -188,6 +188,8 @@ function fixup_mni_paths_outputs(
 
 
 /**
+ * fixup_mni_paths
+ *
  * A utility for patching MNI tools to ensure correct paths are used.
  *
  * Author: FreeSurfer Developers
@@ -214,6 +216,8 @@ function fixup_mni_paths_execute(
 
 
 /**
+ * fixup_mni_paths
+ *
  * A utility for patching MNI tools to ensure correct paths are used.
  *
  * Author: FreeSurfer Developers

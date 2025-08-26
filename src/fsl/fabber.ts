@@ -546,6 +546,8 @@ function fabber_outputs(
 
 
 /**
+ * fabber
+ *
  * Fabber is a tool for model-based Bayesian analysis of time-series data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -572,6 +574,8 @@ function fabber_execute(
 
 
 /**
+ * fabber
+ *
  * Fabber is a tool for model-based Bayesian analysis of time-series data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

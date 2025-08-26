@@ -143,6 +143,8 @@ function mri_copy_params_outputs(
 
 
 /**
+ * mri_copy_params
+ *
  * A tool to replace the volume parameters of an input volume with those of a template volume.
  *
  * Author: FreeSurfer Developers
@@ -169,6 +171,8 @@ function mri_copy_params_execute(
 
 
 /**
+ * mri_copy_params
+ *
  * A tool to replace the volume parameters of an input volume with those of a template volume.
  *
  * Author: FreeSurfer Developers

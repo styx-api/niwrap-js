@@ -191,6 +191,8 @@ function mri_extract_label_outputs(
 
 
 /**
+ * mri_extract_label
+ *
  * Extracts a set of labeled voxels from an image.
  *
  * Author: FreeSurfer Developers
@@ -217,6 +219,8 @@ function mri_extract_label_execute(
 
 
 /**
+ * mri_extract_label
+ *
  * Extracts a set of labeled voxels from an image.
  *
  * Author: FreeSurfer Developers

@@ -193,6 +193,8 @@ function first_flirt_outputs(
 
 
 /**
+ * first_flirt
+ *
  * FLIRT-based image registration tool with additional options for brain extraction and weighting masks.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -219,6 +221,8 @@ function first_flirt_execute(
 
 
 /**
+ * first_flirt
+ *
  * FLIRT-based image registration tool with additional options for brain extraction and weighting masks.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -214,6 +214,8 @@ function create_signed_distance_volume_outputs(
 
 
 /**
+ * create-signed-distance-volume
+ *
  * Create signed distance volume from surface.
  *
  * Computes the signed distance function of the surface.  Exact distance is calculated by finding the closest point on any surface triangle to the center of the voxel.  Approximate distance is calculated starting with these distances, using dijkstra's method with a neighborhood of voxels.  Specifying too small of an exact distance may produce unexpected results.  Valid specifiers for winding methods are as follows:
@@ -249,6 +251,8 @@ function create_signed_distance_volume_execute(
 
 
 /**
+ * create-signed-distance-volume
+ *
  * Create signed distance volume from surface.
  *
  * Computes the signed distance function of the surface.  Exact distance is calculated by finding the closest point on any surface triangle to the center of the voxel.  Approximate distance is calculated starting with these distances, using dijkstra's method with a neighborhood of voxels.  Specifying too small of an exact distance may produce unexpected results.  Valid specifiers for winding methods are as follows:

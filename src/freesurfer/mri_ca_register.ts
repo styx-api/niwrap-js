@@ -508,6 +508,8 @@ function mri_ca_register_outputs(
 
 
 /**
+ * mri_ca_register
+ *
  * Generates a multi-dimensional talairach transform from a gca file and talairach.lta file.
  *
  * Author: FreeSurfer Developers
@@ -534,6 +536,8 @@ function mri_ca_register_execute(
 
 
 /**
+ * mri_ca_register
+ *
  * Generates a multi-dimensional talairach transform from a gca file and talairach.lta file.
  *
  * Author: FreeSurfer Developers

@@ -396,6 +396,8 @@ function denoise_image_outputs(
 
 
 /**
+ * DenoiseImage
+ *
  * Denoise an image using a spatially adaptive filter originally described in J. V. Manjon, P. Coupe, Luis Marti-Bonmati, D. L. Collins, and M. Robles. Adaptive Non-Local Means Denoising of MR Images With Spatially Varying Noise Levels, Journal of Magnetic Resonance Imaging, 31:192-203, June 2010.
  *
  * Author: ANTs Developers
@@ -422,6 +424,8 @@ function denoise_image_execute(
 
 
 /**
+ * DenoiseImage
+ *
  * Denoise an image using a spatially adaptive filter originally described in J. V. Manjon, P. Coupe, Luis Marti-Bonmati, D. L. Collins, and M. Robles. Adaptive Non-Local Means Denoising of MR Images With Spatially Varying Noise Levels, Journal of Magnetic Resonance Imaging, 31:192-203, June 2010.
  *
  * Author: ANTs Developers

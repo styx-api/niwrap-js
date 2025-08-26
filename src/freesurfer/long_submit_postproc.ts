@@ -198,6 +198,8 @@ function long_submit_postproc_outputs(
 
 
 /**
+ * long_submit_postproc
+ *
  * Submits jobs to the cluster (either seychelles or launchpad at NMR) for longitudinal post-processing.
  *
  * Author: FreeSurfer Developers
@@ -224,6 +226,8 @@ function long_submit_postproc_execute(
 
 
 /**
+ * long_submit_postproc
+ *
  * Submits jobs to the cluster (either seychelles or launchpad at NMR) for longitudinal post-processing.
  *
  * Author: FreeSurfer Developers

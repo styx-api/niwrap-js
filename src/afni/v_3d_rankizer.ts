@@ -172,6 +172,8 @@ function v_3d_rankizer_outputs(
 
 
 /**
+ * 3dRankizer
+ *
  * Tool to rank each voxel as sorted into increasing value. Ties get the average rank.
  *
  * Author: AFNI Developers
@@ -198,6 +200,8 @@ function v_3d_rankizer_execute(
 
 
 /**
+ * 3dRankizer
+ *
  * Tool to rank each voxel as sorted into increasing value. Ties get the average rank.
  *
  * Author: AFNI Developers

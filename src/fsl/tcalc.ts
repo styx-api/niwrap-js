@@ -282,6 +282,8 @@ function tcalc_outputs(
 
 
 /**
+ * tcalc
+ *
  * Resample a 4D phantom for theoretical calculations.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -308,6 +310,8 @@ function tcalc_execute(
 
 
 /**
+ * tcalc
+ *
  * Resample a 4D phantom for theoretical calculations.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -216,6 +216,8 @@ function v_3dcalc_outputs(
 
 
 /**
+ * 3dcalc
+ *
  * AFNI's calculator program.
  *
  * Author: AFNI Developers
@@ -242,6 +244,8 @@ function v_3dcalc_execute(
 
 
 /**
+ * 3dcalc
+ *
  * AFNI's calculator program.
  *
  * Author: AFNI Developers

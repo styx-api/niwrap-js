@@ -135,6 +135,8 @@ function v_1dtranspose_outputs(
 
 
 /**
+ * 1dtranspose
+ *
  * Transpose an AFNI *.1D file (ASCII list of numbers arranged in columns).
  *
  * Author: AFNI Developers
@@ -161,6 +163,8 @@ function v_1dtranspose_execute(
 
 
 /**
+ * 1dtranspose
+ *
  * Transpose an AFNI *.1D file (ASCII list of numbers arranged in columns).
  *
  * Author: AFNI Developers

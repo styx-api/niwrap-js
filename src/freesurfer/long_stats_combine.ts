@@ -197,6 +197,8 @@ function long_stats_combine_outputs(
 
 
 /**
+ * long_stats_combine
+ *
  * Adds columns from stats into longitudinal qdec table, using longitudinally processed results.
  *
  * Author: FreeSurfer Developers
@@ -223,6 +225,8 @@ function long_stats_combine_execute(
 
 
 /**
+ * long_stats_combine
+ *
  * Adds columns from stats into longitudinal qdec table, using longitudinally processed results.
  *
  * Author: FreeSurfer Developers

@@ -190,6 +190,8 @@ function surf_mesh_outputs(
 
 
 /**
+ * SurfMesh
+ *
  * Surface mesh manipulation tool.
  *
  * Author: AFNI Developers
@@ -216,6 +218,8 @@ function surf_mesh_execute(
 
 
 /**
+ * SurfMesh
+ *
  * Surface mesh manipulation tool.
  *
  * Author: AFNI Developers

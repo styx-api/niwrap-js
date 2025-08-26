@@ -242,6 +242,8 @@ function fslorient_outputs(
 
 
 /**
+ * fslorient
+ *
  * FSL tool to manipulate NIfTI header orientation information.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -268,6 +270,8 @@ function fslorient_execute(
 
 
 /**
+ * fslorient
+ *
  * FSL tool to manipulate NIfTI header orientation information.
  *
  * Author: FMRIB Analysis Group, University of Oxford

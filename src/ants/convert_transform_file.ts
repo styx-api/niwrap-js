@@ -158,6 +158,8 @@ function convert_transform_file_outputs(
 
 
 /**
+ * ConvertTransformFile
+ *
  * Utility to read in a transform file (presumed to be in binary format) and output it in various formats. Default output is legacy human-readable text format. Without any options, the output filename extension must be .txt or .tfm to signify a text-formatted transform file.
  *
  * Author: ANTs Developers
@@ -184,6 +186,8 @@ function convert_transform_file_execute(
 
 
 /**
+ * ConvertTransformFile
+ *
  * Utility to read in a transform file (presumed to be in binary format) and output it in various formats. Default output is legacy human-readable text format. Without any options, the output filename extension must be .txt or .tfm to signify a text-formatted transform file.
  *
  * Author: ANTs Developers

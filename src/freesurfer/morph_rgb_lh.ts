@@ -123,6 +123,8 @@ function morph_rgb_lh_outputs(
 
 
 /**
+ * morph_rgb-lh
+ *
  * Tool for working with and generating RGB images of morphometric data for the left hemisphere in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function morph_rgb_lh_execute(
 
 
 /**
+ * morph_rgb-lh
+ *
  * Tool for working with and generating RGB images of morphometric data for the left hemisphere in FreeSurfer.
  *
  * Author: FreeSurfer Developers

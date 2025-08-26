@@ -123,6 +123,8 @@ function sphere_subject_lh_outputs(
 
 
 /**
+ * sphere_subject-lh
+ *
  * Tool for processing spherical representations in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function sphere_subject_lh_execute(
 
 
 /**
+ * sphere_subject-lh
+ *
  * Tool for processing spherical representations in FreeSurfer.
  *
  * Author: FreeSurfer Developers

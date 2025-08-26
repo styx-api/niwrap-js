@@ -160,6 +160,8 @@ function mri_compute_change_map_outputs(
 
 
 /**
+ * mri_compute_change_map
+ *
  * Compute the change map between two MRI volumes.
  *
  * Author: FreeSurfer Developers
@@ -186,6 +188,8 @@ function mri_compute_change_map_execute(
 
 
 /**
+ * mri_compute_change_map
+ *
  * Compute the change map between two MRI volumes.
  *
  * Author: FreeSurfer Developers

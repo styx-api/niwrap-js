@@ -1374,6 +1374,8 @@ function tckgen_outputs(
 
 
 /**
+ * tckgen
+ *
  * Perform streamlines tractography.
  *
  * By default, tckgen produces a fixed number of streamlines, by attempting to seed from new random locations until the target number of streamlines have been selected (in other words, after all inclusion & exclusion criteria have been applied), or the maximum number of seeds has been exceeded (by default, this is 1000 x the desired number of selected streamlines). Use the -select and/or -seeds options to modify as required. See also the Seeding options section for alternative seeding strategies.
@@ -1455,6 +1457,8 @@ function tckgen_execute(
 
 
 /**
+ * tckgen
+ *
  * Perform streamlines tractography.
  *
  * By default, tckgen produces a fixed number of streamlines, by attempting to seed from new random locations until the target number of streamlines have been selected (in other words, after all inclusion & exclusion criteria have been applied), or the maximum number of seeds has been exceeded (by default, this is 1000 x the desired number of selected streamlines). Use the -select and/or -seeds options to modify as required. See also the Seeding options section for alternative seeding strategies.

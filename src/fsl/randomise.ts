@@ -413,6 +413,8 @@ function randomise_outputs(
 
 
 /**
+ * randomise
+ *
  * FSL Randomise: feeds the 4D projected FA data into GLM modelling and thresholding in order to find voxels which correlate with your model.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -439,6 +441,8 @@ function randomise_execute(
 
 
 /**
+ * randomise
+ *
  * FSL Randomise: feeds the 4D projected FA data into GLM modelling and thresholding in order to find voxels which correlate with your model.
  *
  * Author: FMRIB Analysis Group, University of Oxford

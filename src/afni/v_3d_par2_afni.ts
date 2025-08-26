@@ -194,6 +194,8 @@ function v_3d_par2_afni_outputs(
 
 
 /**
+ * 3dPAR2AFNI
+ *
  * Convert Philips PAR/REC files to AFNI's BRIK/HEAD, NIfTI, or ANALYZE format.
  *
  * Author: AFNI Developers
@@ -220,6 +222,8 @@ function v_3d_par2_afni_execute(
 
 
 /**
+ * 3dPAR2AFNI
+ *
  * Convert Philips PAR/REC files to AFNI's BRIK/HEAD, NIfTI, or ANALYZE format.
  *
  * Author: AFNI Developers

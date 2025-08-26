@@ -140,6 +140,8 @@ function mris_profile_clustering_outputs(
 
 
 /**
+ * mris_profileClustering
+ *
  * A tool from Freesurfer for clustering based on profile data.
  *
  * Author: FreeSurfer Developers
@@ -166,6 +168,8 @@ function mris_profile_clustering_execute(
 
 
 /**
+ * mris_profileClustering
+ *
  * A tool from Freesurfer for clustering based on profile data.
  *
  * Author: FreeSurfer Developers

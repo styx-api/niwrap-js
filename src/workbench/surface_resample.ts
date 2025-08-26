@@ -270,6 +270,8 @@ function surface_resample_outputs(
 
 
 /**
+ * surface-resample
+ *
  * Resample a surface to a different mesh.
  *
  * Resamples a surface file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.  This method is not generally recommended for surface resampling, but is provided for completeness.
@@ -310,6 +312,8 @@ function surface_resample_execute(
 
 
 /**
+ * surface-resample
+ *
  * Resample a surface to a different mesh.
  *
  * Resamples a surface file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.  This method is not generally recommended for surface resampling, but is provided for completeness.

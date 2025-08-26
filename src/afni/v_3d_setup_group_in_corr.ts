@@ -208,6 +208,8 @@ function v_3d_setup_group_in_corr_outputs(
 
 
 /**
+ * 3dSetupGroupInCorr
+ *
  * Pre-process a collection of AFNI 3D+time datasets for use with Group InstaCorr.
  *
  * Author: AFNI Developers
@@ -234,6 +236,8 @@ function v_3d_setup_group_in_corr_execute(
 
 
 /**
+ * 3dSetupGroupInCorr
+ *
  * Pre-process a collection of AFNI 3D+time datasets for use with Group InstaCorr.
  *
  * Author: AFNI Developers

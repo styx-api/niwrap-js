@@ -141,6 +141,8 @@ function label2flat_outputs(
 
 
 /**
+ * label2flat
+ *
  * A tool used in FreeSurfer to process labeling and patch files.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function label2flat_execute(
 
 
 /**
+ * label2flat
+ *
  * A tool used in FreeSurfer to process labeling and patch files.
  *
  * Author: FreeSurfer Developers

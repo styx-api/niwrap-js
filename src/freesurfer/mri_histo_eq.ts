@@ -125,6 +125,8 @@ function mri_histo_eq_outputs(
 
 
 /**
+ * mri_histo_eq
+ *
  * MRI histogram equalization tool from Freesurfer.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function mri_histo_eq_execute(
 
 
 /**
+ * mri_histo_eq
+ *
  * MRI histogram equalization tool from Freesurfer.
  *
  * Author: FreeSurfer Developers

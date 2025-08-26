@@ -309,6 +309,8 @@ function surf2vol_outputs(
 
 
 /**
+ * surf2vol
+ *
  * Diffuse surface deformation to volumes using surface and MRI data.
  *
  * Author: FreeSurfer Developers
@@ -335,6 +337,8 @@ function surf2vol_execute(
 
 
 /**
+ * surf2vol
+ *
  * Diffuse surface deformation to volumes using surface and MRI data.
  *
  * Author: FreeSurfer Developers

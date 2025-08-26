@@ -131,6 +131,8 @@ function sliceanimate_outputs(
 
 
 /**
+ * sliceanimate
+ *
  * A tool for animating slices of an image using whirlgif.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function sliceanimate_execute(
 
 
 /**
+ * sliceanimate
+ *
  * A tool for animating slices of an image using whirlgif.
  *
  * Author: FMRIB Analysis Group, University of Oxford

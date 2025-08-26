@@ -250,6 +250,8 @@ function pvmfit_outputs(
 
 
 /**
+ * pvmfit
+ *
  * Fits diffusion models to multishell DWI data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -276,6 +278,8 @@ function pvmfit_execute(
 
 
 /**
+ * pvmfit
+ *
  * Fits diffusion models to multishell DWI data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -447,6 +447,8 @@ function reg_transform_outputs(
 
 
 /**
+ * reg_transform
+ *
  * Tool for performing various transformation operations on medical images including control point to deformation conversion, composition of transformations, and converting between deformation and displacement fields.
  *
  * Author: NiftyReg Developers
@@ -473,6 +475,8 @@ function reg_transform_execute(
 
 
 /**
+ * reg_transform
+ *
  * Tool for performing various transformation operations on medical images including control point to deformation conversion, composition of transformations, and converting between deformation and displacement fields.
  *
  * Author: NiftyReg Developers

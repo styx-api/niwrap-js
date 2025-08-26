@@ -304,6 +304,8 @@ function amp2response_outputs(
 
 
 /**
+ * amp2response
+ *
  * Estimate response function coefficients based on the DWI signal in single-fibre voxels.
  *
  * This command uses the image data from all selected single-fibre voxels concurrently, rather than simply averaging their individual spherical harmonic coefficients. It also ensures that the response function is non-negative, and monotonic (i.e. its amplitude must increase from the fibre direction out to the orthogonal plane).
@@ -338,6 +340,8 @@ function amp2response_execute(
 
 
 /**
+ * amp2response
+ *
  * Estimate response function coefficients based on the DWI signal in single-fibre voxels.
  *
  * This command uses the image data from all selected single-fibre voxels concurrently, rather than simply averaging their individual spherical harmonic coefficients. It also ensures that the response function is non-negative, and monotonic (i.e. its amplitude must increase from the fibre direction out to the orthogonal plane).

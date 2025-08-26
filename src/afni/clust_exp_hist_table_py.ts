@@ -160,6 +160,8 @@ function clust_exp_hist_table_py_outputs(
 
 
 /**
+ * ClustExp_HistTable.py
+ *
  * Script to extract the data table from history of datasets from 3dttest++, 3dMVM, or 3dLME.
  *
  * Author: AFNI Developers
@@ -186,6 +188,8 @@ function clust_exp_hist_table_py_execute(
 
 
 /**
+ * ClustExp_HistTable.py
+ *
  * Script to extract the data table from history of datasets from 3dttest++, 3dMVM, or 3dLME.
  *
  * Author: AFNI Developers

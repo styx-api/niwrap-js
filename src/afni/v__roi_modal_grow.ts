@@ -185,6 +185,8 @@ function v__roi_modal_grow_outputs(
 
 
 /**
+ * @ROI_modal_grow
+ *
  * Script to grow a set of regions in a volumetric dataset using modal smoothing.
  *
  * Author: AFNI Developers
@@ -211,6 +213,8 @@ function v__roi_modal_grow_execute(
 
 
 /**
+ * @ROI_modal_grow
+ *
  * Script to grow a set of regions in a volumetric dataset using modal smoothing.
  *
  * Author: AFNI Developers

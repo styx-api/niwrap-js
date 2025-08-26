@@ -140,6 +140,8 @@ function v_3d_detrend_outputs(
 
 
 /**
+ * 3dDetrend
+ *
  * This program removes components from voxel time series using linear least squares.
  *
  * Author: AFNI Developers
@@ -166,6 +168,8 @@ function v_3d_detrend_execute(
 
 
 /**
+ * 3dDetrend
+ *
  * This program removes components from voxel time series using linear least squares.
  *
  * Author: AFNI Developers

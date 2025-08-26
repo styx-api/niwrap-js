@@ -136,6 +136,8 @@ function histo_compute_joint_density_outputs(
 
 
 /**
+ * histo_compute_joint_density
+ *
  * A tool to compute the joint density of two volumes.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function histo_compute_joint_density_execute(
 
 
 /**
+ * histo_compute_joint_density
+ *
  * A tool to compute the joint density of two volumes.
  *
  * Author: FreeSurfer Developers

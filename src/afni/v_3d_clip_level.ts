@@ -151,6 +151,8 @@ function v_3d_clip_level_outputs(
 
 
 /**
+ * 3dClipLevel
+ *
  * Estimates the value at which to clip the anatomical dataset so that background regions are set to zero.
  *
  * Author: AFNI Developers
@@ -177,6 +179,8 @@ function v_3d_clip_level_execute(
 
 
 /**
+ * 3dClipLevel
+ *
  * Estimates the value at which to clip the anatomical dataset so that background regions are set to zero.
  *
  * Author: AFNI Developers

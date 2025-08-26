@@ -157,6 +157,8 @@ function v__command_globb_outputs(
 
 
 /**
+ * @CommandGlobb
+ *
  * A command-line tool to execute a specified program command line on a list of input bricks.
  *
  * Author: AFNI Developers
@@ -183,6 +185,8 @@ function v__command_globb_execute(
 
 
 /**
+ * @CommandGlobb
+ *
  * A command-line tool to execute a specified program command line on a list of input bricks.
  *
  * Author: AFNI Developers

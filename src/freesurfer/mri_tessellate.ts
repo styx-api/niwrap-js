@@ -162,6 +162,8 @@ function mri_tessellate_outputs(
 
 
 /**
+ * mri_tessellate
+ *
  * This program creates a surface by tessellating a given input volume.
  *
  * Author: FreeSurfer Developers
@@ -188,6 +190,8 @@ function mri_tessellate_execute(
 
 
 /**
+ * mri_tessellate
+ *
  * This program creates a surface by tessellating a given input volume.
  *
  * Author: FreeSurfer Developers

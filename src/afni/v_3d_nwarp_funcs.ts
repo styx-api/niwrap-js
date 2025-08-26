@@ -165,6 +165,8 @@ function v_3d_nwarp_funcs_outputs(
 
 
 /**
+ * 3dNwarpFuncs
+ *
  * Compute functions of 3D warp displacements, such as bulk volume change, shear energy, and vorticity energy.
  *
  * Author: AFNI Developers
@@ -191,6 +193,8 @@ function v_3d_nwarp_funcs_execute(
 
 
 /**
+ * 3dNwarpFuncs
+ *
  * Compute functions of 3D warp displacements, such as bulk volume change, shear energy, and vorticity energy.
  *
  * Author: AFNI Developers

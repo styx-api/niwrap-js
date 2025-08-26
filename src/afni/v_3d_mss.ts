@@ -301,6 +301,8 @@ function v_3d_mss_outputs(
 
 
 /**
+ * 3dMSS
+ *
  * Voxelwise Multilevel Smoothing Spline (MSS) Analysis.
  *
  * Author: AFNI Developers
@@ -327,6 +329,8 @@ function v_3d_mss_execute(
 
 
 /**
+ * 3dMSS
+ *
  * Voxelwise Multilevel Smoothing Spline (MSS) Analysis.
  *
  * Author: AFNI Developers

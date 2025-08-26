@@ -209,6 +209,8 @@ function surf2surf_outputs(
 
 
 /**
+ * surf2surf
+ *
  * Conversions between surface formats and/or conventions.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -235,6 +237,8 @@ function surf2surf_execute(
 
 
 /**
+ * surf2surf
+ *
  * Conversions between surface formats and/or conventions.
  *
  * Author: FMRIB Analysis Group, University of Oxford

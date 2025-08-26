@@ -148,6 +148,8 @@ function pointset2label_outputs(
 
 
 /**
+ * pointset2label
+ *
  * Tool for applying waypoint labels to a volume.
  *
  * Author: FreeSurfer Developers
@@ -174,6 +176,8 @@ function pointset2label_execute(
 
 
 /**
+ * pointset2label
+ *
  * Tool for applying waypoint labels to a volume.
  *
  * Author: FreeSurfer Developers

@@ -131,6 +131,8 @@ function mris_reverse_outputs(
 
 
 /**
+ * mris_reverse
+ *
  * This tool reverses a cortical surface.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mris_reverse_execute(
 
 
 /**
+ * mris_reverse
+ *
  * This tool reverses a cortical surface.
  *
  * Author: FreeSurfer Developers

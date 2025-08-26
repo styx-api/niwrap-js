@@ -530,6 +530,8 @@ function mrfilter_outputs(
 
 
 /**
+ * mrfilter
+ *
  * Perform filtering operations on 3D / 4D MR images.
  *
  * The available filters are: fft, gradient, median, smooth, normalise, zclean.
@@ -566,6 +568,8 @@ function mrfilter_execute(
 
 
 /**
+ * mrfilter
+ *
  * Perform filtering operations on 3D / 4D MR images.
  *
  * The available filters are: fft, gradient, median, smooth, normalise, zclean.

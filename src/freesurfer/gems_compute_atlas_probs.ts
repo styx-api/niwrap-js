@@ -265,6 +265,8 @@ function gems_compute_atlas_probs_outputs(
 
 
 /**
+ * gems_compute_atlas_probs
+ *
  * Tool to compute atlas probabilities using SAMSEG results.
  *
  * Author: FreeSurfer Developers
@@ -291,6 +293,8 @@ function gems_compute_atlas_probs_execute(
 
 
 /**
+ * gems_compute_atlas_probs
+ *
  * Tool to compute atlas probabilities using SAMSEG results.
  *
  * Author: FreeSurfer Developers

@@ -136,6 +136,8 @@ function v__afni_run_me_outputs(
 
 
 /**
+ * @afni.run.me
+ *
  * A tool to execute a specific command.
  *
  * Author: AFNI Developers
@@ -162,6 +164,8 @@ function v__afni_run_me_execute(
 
 
 /**
+ * @afni.run.me
+ *
  * A tool to execute a specific command.
  *
  * Author: AFNI Developers

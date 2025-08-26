@@ -238,6 +238,8 @@ function v_3d_cruiseto_afni_outputs(
 
 
 /**
+ * 3dCRUISEtoAFNI
+ *
  * Converts a CRUISE dataset defined by a header in OpenDX format.
  *
  * Author: AFNI Developers
@@ -264,6 +266,8 @@ function v_3d_cruiseto_afni_execute(
 
 
 /**
+ * 3dCRUISEtoAFNI
+ *
  * Converts a CRUISE dataset defined by a header in OpenDX format.
  *
  * Author: AFNI Developers

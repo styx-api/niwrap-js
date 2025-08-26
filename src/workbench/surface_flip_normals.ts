@@ -132,6 +132,8 @@ function surface_flip_normals_outputs(
 
 
 /**
+ * surface-flip-normals
+ *
  * Flip all tiles on a surface.
  *
  * Flips all triangles on a surface, resulting in surface normals being flipped the other direction (inward vs outward).  If you transform a surface with an affine that has negative determinant, or a warpfield that similarly flips the surface, you may end up with a surface that has normals pointing inwards, which may have display problems.  Using this command will solve that problem.
@@ -160,6 +162,8 @@ function surface_flip_normals_execute(
 
 
 /**
+ * surface-flip-normals
+ *
  * Flip all tiles on a surface.
  *
  * Flips all triangles on a surface, resulting in surface normals being flipped the other direction (inward vs outward).  If you transform a surface with an affine that has negative determinant, or a warpfield that similarly flips the surface, you may end up with a surface that has normals pointing inwards, which may have display problems.  Using this command will solve that problem.

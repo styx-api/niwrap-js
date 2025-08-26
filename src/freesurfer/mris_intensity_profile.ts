@@ -256,6 +256,8 @@ function mris_intensity_profile_outputs(
 
 
 /**
+ * mris_intensity_profile
+ *
  * This program computes the intensity profile of the cortical ribbon and writes the resulting measurement into a 'curvature' file.
  *
  * Author: FreeSurfer Developers
@@ -282,6 +284,8 @@ function mris_intensity_profile_execute(
 
 
 /**
+ * mris_intensity_profile
+ *
  * This program computes the intensity profile of the cortical ribbon and writes the resulting measurement into a 'curvature' file.
  *
  * Author: FreeSurfer Developers

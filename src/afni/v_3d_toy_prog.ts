@@ -234,6 +234,8 @@ function v_3d_toy_prog_outputs(
 
 
 /**
+ * 3dToyProg
+ *
  * A program to illustrate dataset creation and manipulation in C using AFNI's API.
  *
  * Author: AFNI Developers
@@ -260,6 +262,8 @@ function v_3d_toy_prog_execute(
 
 
 /**
+ * 3dToyProg
+ *
  * A program to illustrate dataset creation and manipulation in C using AFNI's API.
  *
  * Author: AFNI Developers

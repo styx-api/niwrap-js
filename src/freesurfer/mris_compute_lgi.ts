@@ -179,6 +179,8 @@ function mris_compute_lgi_outputs(
 
 
 /**
+ * mris_compute_lgi
+ *
  * Computes local measurements of gyrification at thousands of points over the entire cortical surface.
  *
  * Author: FreeSurfer Developers
@@ -205,6 +207,8 @@ function mris_compute_lgi_execute(
 
 
 /**
+ * mris_compute_lgi
+ *
  * Computes local measurements of gyrification at thousands of points over the entire cortical surface.
  *
  * Author: FreeSurfer Developers

@@ -183,6 +183,8 @@ function featregapply_outputs(
 
 
 /**
+ * featregapply
+ *
  * Apply registration from FEAT analysis to other images.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -209,6 +211,8 @@ function featregapply_execute(
 
 
 /**
+ * featregapply
+ *
  * Apply registration from FEAT analysis to other images.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -151,6 +151,8 @@ function talairach_outputs(
 
 
 /**
+ * talairach
+ *
  * Front-end for MINC's mritotal to compute the Talairach transform mapping the input volume to the MNI305.
  *
  * Author: FreeSurfer Developers
@@ -177,6 +179,8 @@ function talairach_execute(
 
 
 /**
+ * talairach
+ *
  * Front-end for MINC's mritotal to compute the Talairach transform mapping the input volume to the MNI305.
  *
  * Author: FreeSurfer Developers

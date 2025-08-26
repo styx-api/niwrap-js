@@ -267,6 +267,8 @@ function v_3d_mean_outputs(
 
 
 /**
+ * 3dMean
+ *
  * Takes the voxel-by-voxel mean of all input datasets; designed to be faster than 3dcalc.
  *
  * Author: AFNI Developers
@@ -293,6 +295,8 @@ function v_3d_mean_execute(
 
 
 /**
+ * 3dMean
+ *
  * Takes the voxel-by-voxel mean of all input datasets; designed to be faster than 3dcalc.
  *
  * Author: AFNI Developers

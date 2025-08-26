@@ -141,6 +141,8 @@ function mris_deform_outputs(
 
 
 /**
+ * mris_deform
+ *
  * A tool for deforming surface meshes using volumetric information from an auxiliary volume.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mris_deform_execute(
 
 
 /**
+ * mris_deform
+ *
  * A tool for deforming surface meshes using volumetric information from an auxiliary volume.
  *
  * Author: FreeSurfer Developers

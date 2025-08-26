@@ -178,6 +178,8 @@ function lesion_filling_outputs(
 
 
 /**
+ * lesion_filling
+ *
  * Lesion filling tool as part of FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -204,6 +206,8 @@ function lesion_filling_execute(
 
 
 /**
+ * lesion_filling
+ *
  * Lesion filling tool as part of FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -382,6 +382,8 @@ function cifti_smoothing_outputs(
 
 
 /**
+ * cifti-smoothing
+ *
  * Smooth a cifti file.
  *
  * The input cifti file must have a brain models mapping on the chosen dimension, columns for .dtseries, and either for .dconn.  By default, data in different structures is smoothed independently (i.e., "parcel constrained" smoothing), so volume structures that touch do not smooth across this boundary.  Specify -merged-volume to ignore these boundaries.  Surface smoothing uses the GEO_GAUSS_AREA smoothing method.
@@ -414,6 +416,8 @@ function cifti_smoothing_execute(
 
 
 /**
+ * cifti-smoothing
+ *
  * Smooth a cifti file.
  *
  * The input cifti file must have a brain models mapping on the chosen dimension, columns for .dtseries, and either for .dconn.  By default, data in different structures is smoothed independently (i.e., "parcel constrained" smoothing), so volume structures that touch do not smooth across this boundary.  Specify -merged-volume to ignore these boundaries.  Surface smoothing uses the GEO_GAUSS_AREA smoothing method.

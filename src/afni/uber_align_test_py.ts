@@ -200,6 +200,8 @@ function uber_align_test_py_outputs(
 
 
 /**
+ * uber_align_test.py
+ *
  * Generate script to test anatomical/EPI alignment.
  *
  * Author: AFNI Developers
@@ -226,6 +228,8 @@ function uber_align_test_py_execute(
 
 
 /**
+ * uber_align_test.py
+ *
  * Generate script to test anatomical/EPI alignment.
  *
  * Author: AFNI Developers

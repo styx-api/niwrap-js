@@ -146,6 +146,8 @@ function mris_ca_deform_outputs(
 
 
 /**
+ * mris_ca_deform
+ *
  * Deforms a surface to match it to a volumetric map of cortical labels.
  *
  * Author: FreeSurfer Developers
@@ -172,6 +174,8 @@ function mris_ca_deform_execute(
 
 
 /**
+ * mris_ca_deform
+ *
  * Deforms a surface to match it to a volumetric map of cortical labels.
  *
  * Author: FreeSurfer Developers

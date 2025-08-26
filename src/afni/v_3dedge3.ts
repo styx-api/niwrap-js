@@ -200,6 +200,8 @@ function v_3dedge3_outputs(
 
 
 /**
+ * 3dedge3
+ *
  * Does 3D Edge detection using the library 3DEdge.
  *
  * Author: AFNI Developers
@@ -226,6 +228,8 @@ function v_3dedge3_execute(
 
 
 /**
+ * 3dedge3
+ *
  * Does 3D Edge detection using the library 3DEdge.
  *
  * Author: AFNI Developers

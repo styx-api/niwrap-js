@@ -124,6 +124,8 @@ function fs_print_help_outputs(
 
 
 /**
+ * fsPrintHelp
+ *
  * fsPrintHelp - A tool that attempts to provide help documentation for FreeSurfer commands.
  *
  * Author: FreeSurfer Developers
@@ -150,6 +152,8 @@ function fs_print_help_execute(
 
 
 /**
+ * fsPrintHelp
+ *
  * fsPrintHelp - A tool that attempts to provide help documentation for FreeSurfer commands.
  *
  * Author: FreeSurfer Developers

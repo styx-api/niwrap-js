@@ -196,6 +196,8 @@ function meica_py_outputs(
 
 
 /**
+ * meica.py
+ *
  * Multi-Echo Independent Component Analysis for fMRI denoising.
  *
  * Author: AFNI Developers
@@ -222,6 +224,8 @@ function meica_py_execute(
 
 
 /**
+ * meica.py
+ *
  * Multi-Echo Independent Component Analysis for fMRI denoising.
  *
  * Author: AFNI Developers

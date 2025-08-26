@@ -174,6 +174,8 @@ function image_set_statistics_outputs(
 
 
 /**
+ * ImageSetStatistics
+ *
  * ImageSetStatistics computes statistics from a set of images. The whichstat option defines the type of statistic to compute, ranging from median to similarity-weighted metrics.
  *
  * Author: ANTs Developers
@@ -200,6 +202,8 @@ function image_set_statistics_execute(
 
 
 /**
+ * ImageSetStatistics
+ *
  * ImageSetStatistics computes statistics from a set of images. The whichstat option defines the type of statistic to compute, ranging from median to similarity-weighted metrics.
  *
  * Author: ANTs Developers

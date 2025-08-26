@@ -152,6 +152,8 @@ function border_length_outputs(
 
 
 /**
+ * border-length
+ *
  * Report length of borders.
  *
  * For each border, print its length along the surface, in mm.  If a border has multiple parts, their lengths are summed before printing, unless -separate-pieces is specified.
@@ -182,6 +184,8 @@ function border_length_execute(
 
 
 /**
+ * border-length
+ *
  * Report length of borders.
  *
  * For each border, print its length along the surface, in mm.  If a border has multiple parts, their lengths are summed before printing, unless -separate-pieces is specified.

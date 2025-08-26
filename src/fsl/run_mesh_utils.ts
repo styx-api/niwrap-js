@@ -274,6 +274,8 @@ function run_mesh_utils_outputs(
 
 
 /**
+ * run_mesh_utils
+ *
  * A tool for various mesh operations as part of FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -300,6 +302,8 @@ function run_mesh_utils_execute(
 
 
 /**
+ * run_mesh_utils
+ *
  * A tool for various mesh operations as part of FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

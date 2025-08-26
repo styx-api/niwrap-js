@@ -175,6 +175,8 @@ function volume_smoothing_outputs(
 
 
 /**
+ * volume-smoothing
+ *
  * Smooth a volume file.
  *
  * Gaussian smoothing for volumes.  By default, smooths all subvolumes with no ROI, if ROI is given, only positive voxels in the ROI volume have their values used, and all other voxels are set to zero.  Smoothing a non-orthogonal volume will be significantly slower, because the operation cannot be separated into 1-dimensional smoothings without distorting the kernel shape.
@@ -205,6 +207,8 @@ function volume_smoothing_execute(
 
 
 /**
+ * volume-smoothing
+ *
  * Smooth a volume file.
  *
  * Gaussian smoothing for volumes.  By default, smooths all subvolumes with no ROI, if ROI is given, only positive voxels in the ROI volume have their values used, and all other voxels are set to zero.  Smoothing a non-orthogonal volume will be significantly slower, because the operation cannot be separated into 1-dimensional smoothings without distorting the kernel shape.

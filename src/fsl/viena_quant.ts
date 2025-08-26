@@ -136,6 +136,8 @@ function viena_quant_outputs(
 
 
 /**
+ * viena_quant
+ *
  * Automated brain ventricle quantification tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -162,6 +164,8 @@ function viena_quant_execute(
 
 
 /**
+ * viena_quant
+ *
  * Automated brain ventricle quantification tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford

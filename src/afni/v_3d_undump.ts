@@ -281,6 +281,8 @@ function v_3d_undump_outputs(
 
 
 /**
+ * 3dUndump
+ *
  * Assembles a 3D dataset from an ASCII list of coordinates and optionally values.
  *
  * Author: AFNI Developers
@@ -307,6 +309,8 @@ function v_3d_undump_execute(
 
 
 /**
+ * 3dUndump
+ *
  * Assembles a 3D dataset from an ASCII list of coordinates and optionally values.
  *
  * Author: AFNI Developers

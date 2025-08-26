@@ -426,6 +426,8 @@ function tcksift_outputs(
 
 
 /**
+ * tcksift
+ *
  * Filter a whole-brain fibre-tracking data set such that the streamline densities match the FOD lobe integrals.
  *
  *
@@ -458,6 +460,8 @@ function tcksift_execute(
 
 
 /**
+ * tcksift
+ *
  * Filter a whole-brain fibre-tracking data set such that the streamline densities match the FOD lobe integrals.
  *
  *

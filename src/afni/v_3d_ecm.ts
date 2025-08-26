@@ -297,6 +297,8 @@ function v_3d_ecm_outputs(
 
 
 /**
+ * 3dECM
+ *
  * Performs degree centrality on a dataset using a given maskfile via the 3dECM command.
  *
  * Author: AFNI Developers
@@ -323,6 +325,8 @@ function v_3d_ecm_execute(
 
 
 /**
+ * 3dECM
+ *
  * Performs degree centrality on a dataset using a given maskfile via the 3dECM command.
  *
  * Author: AFNI Developers

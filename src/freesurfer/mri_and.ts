@@ -120,6 +120,8 @@ function mri_and_outputs(
 
 
 /**
+ * mri_and
+ *
  * Performs a logical voxel-wise AND on a series of volumes.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function mri_and_execute(
 
 
 /**
+ * mri_and
+ *
  * Performs a logical voxel-wise AND on a series of volumes.
  *
  * Author: FreeSurfer Developers

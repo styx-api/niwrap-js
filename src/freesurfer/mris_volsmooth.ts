@@ -260,6 +260,8 @@ function mris_volsmooth_outputs(
 
 
 /**
+ * mris_volsmooth
+ *
  * Performs surface-based smoothing inside a volume by sampling a volume to a surface, smoothing on the surface, then replacing the surface voxels in the volume with values that were smoothed.
  *
  * Author: FreeSurfer Developers
@@ -286,6 +288,8 @@ function mris_volsmooth_execute(
 
 
 /**
+ * mris_volsmooth
+ *
  * Performs surface-based smoothing inside a volume by sampling a volume to a surface, smoothing on the surface, then replacing the surface voxels in the volume with values that were smoothed.
  *
  * Author: FreeSurfer Developers

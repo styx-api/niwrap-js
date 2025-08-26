@@ -196,6 +196,8 @@ function export_gcam_outputs(
 
 
 /**
+ * exportGcam
+ *
  * A tool for exporting GCAM (Geodesic Coordinate-based Anatomic Mapping) morphs.
  *
  * Author: FreeSurfer Developers
@@ -222,6 +224,8 @@ function export_gcam_execute(
 
 
 /**
+ * exportGcam
+ *
  * A tool for exporting GCAM (Geodesic Coordinate-based Anatomic Mapping) morphs.
  *
  * Author: FreeSurfer Developers

@@ -330,6 +330,8 @@ function atropos_outputs(
 
 
 /**
+ * Atropos
+ *
  * Atropos is a finite mixture modeling (FMM) segmentation approach that allows for prior constraints including a prior label image, prior probability images, and/or an MRF prior to enforce spatial smoothing of the labels.
  *
  * Author: ANTs Developers
@@ -356,6 +358,8 @@ function atropos_execute(
 
 
 /**
+ * Atropos
+ *
  * Atropos is a finite mixture modeling (FMM) segmentation approach that allows for prior constraints including a prior label image, prior probability images, and/or an MRF prior to enforce spatial smoothing of the labels.
  *
  * Author: ANTs Developers

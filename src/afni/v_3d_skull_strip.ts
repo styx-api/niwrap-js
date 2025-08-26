@@ -152,6 +152,8 @@ function v_3d_skull_strip_outputs(
 
 
 /**
+ * 3dSkullStrip
+ *
  * A program to extract the brain from surrounding tissue from MRI T1-weighted images.
  *
  * Author: AFNI Developers
@@ -178,6 +180,8 @@ function v_3d_skull_strip_execute(
 
 
 /**
+ * 3dSkullStrip
+ *
  * A program to extract the brain from surrounding tissue from MRI T1-weighted images.
  *
  * Author: AFNI Developers

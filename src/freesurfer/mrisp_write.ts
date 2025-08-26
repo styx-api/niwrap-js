@@ -222,6 +222,8 @@ function mrisp_write_outputs(
 
 
 /**
+ * mrisp_write
+ *
  * This tool converts a surface overlay on a sphere into spherical coordinates.
  *
  * Author: FreeSurfer Developers
@@ -248,6 +250,8 @@ function mrisp_write_execute(
 
 
 /**
+ * mrisp_write
+ *
  * This tool converts a surface overlay on a sphere into spherical coordinates.
  *
  * Author: FreeSurfer Developers

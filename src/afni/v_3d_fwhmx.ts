@@ -240,6 +240,8 @@ function v_3d_fwhmx_outputs(
 
 
 /**
+ * 3dFWHMx
+ *
  * Compute Full Width at Half Maximum (FWHM) for FMRI datasets using AutoCorrelation Function (ACF).
  *
  * Author: AFNI Developers
@@ -266,6 +268,8 @@ function v_3d_fwhmx_execute(
 
 
 /**
+ * 3dFWHMx
+ *
  * Compute Full Width at Half Maximum (FWHM) for FMRI datasets using AutoCorrelation Function (ACF).
  *
  * Author: AFNI Developers

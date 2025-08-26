@@ -120,6 +120,8 @@ function unpackimadir2_outputs(
 
 
 /**
+ * unpackimadir2
+ *
  * Tool to unpack image directories, from FreeSurfer suite.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function unpackimadir2_execute(
 
 
 /**
+ * unpackimadir2
+ *
  * Tool to unpack image directories, from FreeSurfer suite.
  *
  * Author: FreeSurfer Developers

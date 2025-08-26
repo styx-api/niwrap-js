@@ -170,6 +170,8 @@ function mris_simulate_atrophy_outputs(
 
 
 /**
+ * mris_simulate_atrophy
+ *
  * Simulate atrophy on brain structures.
  *
  * Author: FreeSurfer Developers
@@ -196,6 +198,8 @@ function mris_simulate_atrophy_execute(
 
 
 /**
+ * mris_simulate_atrophy
+ *
  * Simulate atrophy on brain structures.
  *
  * Author: FreeSurfer Developers

@@ -150,6 +150,8 @@ function mri_distance_transform_outputs(
 
 
 /**
+ * mri_distance_transform
+ *
  * Tool to compute distance transforms on MRI volumes.
  *
  * Author: FreeSurfer Developers
@@ -176,6 +178,8 @@ function mri_distance_transform_execute(
 
 
 /**
+ * mri_distance_transform
+ *
  * Tool to compute distance transforms on MRI volumes.
  *
  * Author: FreeSurfer Developers

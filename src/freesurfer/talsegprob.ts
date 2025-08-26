@@ -305,6 +305,8 @@ function talsegprob_outputs(
 
 
 /**
+ * talsegprob
+ *
  * Tool to create a binary probability volume from aseg.mgz based on segmentation numbers, resliced to talirach/MNI305/fsaverage space.
  *
  * Author: FreeSurfer Developers
@@ -331,6 +333,8 @@ function talsegprob_execute(
 
 
 /**
+ * talsegprob
+ *
  * Tool to create a binary probability volume from aseg.mgz based on segmentation numbers, resliced to talirach/MNI305/fsaverage space.
  *
  * Author: FreeSurfer Developers

@@ -131,6 +131,8 @@ function unpack_ima1_tcl_outputs(
 
 
 /**
+ * unpack_ima1.tcl
+ *
  * A tool for unpacking images using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function unpack_ima1_tcl_execute(
 
 
 /**
+ * unpack_ima1.tcl
+ *
  * A tool for unpacking images using FreeSurfer.
  *
  * Author: FreeSurfer Developers

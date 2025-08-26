@@ -298,6 +298,8 @@ function xmat_tool_py_outputs(
 
 
 /**
+ * xmat_tool.py
+ *
  * A tool for evaluating an AFNI X-matrix.
  *
  * Author: AFNI Developers
@@ -324,6 +326,8 @@ function xmat_tool_py_execute(
 
 
 /**
+ * xmat_tool.py
+ *
  * A tool for evaluating an AFNI X-matrix.
  *
  * Author: AFNI Developers

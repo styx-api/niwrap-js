@@ -230,6 +230,8 @@ function v_3d_multi_thresh_outputs(
 
 
 /**
+ * 3dMultiThresh
+ *
  * Program to apply a multi-threshold (mthresh) dataset to an input dataset.
  *
  * Author: AFNI Developers
@@ -256,6 +258,8 @@ function v_3d_multi_thresh_execute(
 
 
 /**
+ * 3dMultiThresh
+ *
  * Program to apply a multi-threshold (mthresh) dataset to an input dataset.
  *
  * Author: AFNI Developers

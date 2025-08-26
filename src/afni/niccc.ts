@@ -223,6 +223,8 @@ function niccc_outputs(
 
 
 /**
+ * niccc
+ *
  * A program for conducting certain NIML tests on input from streamspec and write the results to stderr.
  *
  * Author: AFNI Developers
@@ -249,6 +251,8 @@ function niccc_execute(
 
 
 /**
+ * niccc
+ *
  * A program for conducting certain NIML tests on input from streamspec and write the results to stderr.
  *
  * Author: AFNI Developers

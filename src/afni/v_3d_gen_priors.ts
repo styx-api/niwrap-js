@@ -389,6 +389,8 @@ function v_3d_gen_priors_outputs(
 
 
 /**
+ * 3dGenPriors
+ *
  * Produces classification priors based on voxel signatures.
  *
  * Author: AFNI Developers
@@ -415,6 +417,8 @@ function v_3d_gen_priors_execute(
 
 
 /**
+ * 3dGenPriors
+ *
  * Produces classification priors based on voxel signatures.
  *
  * Author: AFNI Developers

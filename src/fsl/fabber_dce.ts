@@ -427,6 +427,8 @@ function fabber_dce_outputs(
 
 
 /**
+ * fabber_dce
+ *
  * Fabber DCE analysis tool for model-based analysis of dynamic contrast-enhanced imaging data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -453,6 +455,8 @@ function fabber_dce_execute(
 
 
 /**
+ * fabber_dce
+ *
  * Fabber DCE analysis tool for model-based analysis of dynamic contrast-enhanced imaging data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

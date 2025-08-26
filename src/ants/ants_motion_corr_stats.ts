@@ -195,6 +195,8 @@ function ants_motion_corr_stats_outputs(
 
 
 /**
+ * antsMotionCorrStats
+ *
  * Create summary measures of the parameters that are output by antsMotionCorr. Currently only works for linear transforms. Outputs the mean and max displacements for the voxels within a provided mask, at each time point. By default the displacements are relative to the reference space, but the framewise option may be used to provide displacements between consecutive time points.
  *
  * Author: ANTs Developers
@@ -221,6 +223,8 @@ function ants_motion_corr_stats_execute(
 
 
 /**
+ * antsMotionCorrStats
+ *
  * Create summary measures of the parameters that are output by antsMotionCorr. Currently only works for linear transforms. Outputs the mean and max displacements for the voxels within a provided mask, at each time point. By default the displacements are relative to the reference space, but the framewise option may be used to provide displacements between consecutive time points.
  *
  * Author: ANTs Developers

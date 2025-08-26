@@ -682,6 +682,8 @@ function mris_make_surfaces_outputs(
 
 
 /**
+ * mris_make_surfaces
+ *
  * Positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface, generating surface files along with a curvature file and a surface file for cortical thickness.
  *
  * Author: FreeSurfer Developers
@@ -708,6 +710,8 @@ function mris_make_surfaces_execute(
 
 
 /**
+ * mris_make_surfaces
+ *
  * Positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface, generating surface files along with a curvature file and a surface file for cortical thickness.
  *
  * Author: FreeSurfer Developers

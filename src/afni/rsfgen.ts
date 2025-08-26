@@ -254,6 +254,8 @@ function rsfgen_outputs(
 
 
 /**
+ * RSFgen
+ *
  * Program to generate random stimulus functions.
  *
  * Author: AFNI Developers
@@ -280,6 +282,8 @@ function rsfgen_execute(
 
 
 /**
+ * RSFgen
+ *
  * Program to generate random stimulus functions.
  *
  * Author: AFNI Developers

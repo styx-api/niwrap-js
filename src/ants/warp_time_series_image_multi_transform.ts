@@ -158,6 +158,8 @@ function warp_time_series_image_multi_transform_outputs(
 
 
 /**
+ * WarpTimeSeriesImageMultiTransform
+ *
  * WarpTimeSeriesImageMultiTransform is a tool used to apply a series of transformations to a time series image, either forward or reverse, using affine transforms and warps.
  *
  * Author: ANTs Developers
@@ -184,6 +186,8 @@ function warp_time_series_image_multi_transform_execute(
 
 
 /**
+ * WarpTimeSeriesImageMultiTransform
+ *
  * WarpTimeSeriesImageMultiTransform is a tool used to apply a series of transformations to a time series image, either forward or reverse, using affine transforms and warps.
  *
  * Author: ANTs Developers

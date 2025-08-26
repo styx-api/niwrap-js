@@ -146,6 +146,8 @@ function simple_syn_registration_outputs(
 
 
 /**
+ * simpleSynRegistration
+ *
  * A simple SyN registration tool.
  *
  * Author: ANTs Developers
@@ -172,6 +174,8 @@ function simple_syn_registration_execute(
 
 
 /**
+ * simpleSynRegistration
+ *
  * A simple SyN registration tool.
  *
  * Author: ANTs Developers

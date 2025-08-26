@@ -150,6 +150,8 @@ function v__script_check_outputs(
 
 
 /**
+ * @ScriptCheck
+ *
  * Checks scripts for improperly terminated lines and optionally cleans them.
  *
  * Author: AFNI Developers
@@ -176,6 +178,8 @@ function v__script_check_execute(
 
 
 /**
+ * @ScriptCheck
+ *
  * Checks scripts for improperly terminated lines and optionally cleans them.
  *
  * Author: AFNI Developers

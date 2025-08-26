@@ -265,6 +265,8 @@ function convert_matrix4_to_matrix2_outputs(
 
 
 /**
+ * convert-matrix4-to-matrix2
+ *
  * Generates a matrix2 cifti from matrix4 wbsparse.
  *
  * This command makes a cifti file from the fiber counts in a matrix4 wbsparse file, and optionally a second cifti file from the distances.  Note that while the total count is stored exactly, the per-fiber counts are stored as approximate fractions, so the output of -individual-fibers will contain nonintegers.
@@ -293,6 +295,8 @@ function convert_matrix4_to_matrix2_execute(
 
 
 /**
+ * convert-matrix4-to-matrix2
+ *
  * Generates a matrix2 cifti from matrix4 wbsparse.
  *
  * This command makes a cifti file from the fiber counts in a matrix4 wbsparse file, and optionally a second cifti file from the distances.  Note that while the total count is stored exactly, the per-fiber counts are stored as approximate fractions, so the output of -individual-fibers will contain nonintegers.

@@ -150,6 +150,8 @@ function fslswapdim_outputs(
 
 
 /**
+ * fslswapdim
+ *
  * Swap dimensions of an image volume.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -176,6 +178,8 @@ function fslswapdim_execute(
 
 
 /**
+ * fslswapdim
+ *
  * Swap dimensions of an image volume.
  *
  * Author: FMRIB Analysis Group, University of Oxford

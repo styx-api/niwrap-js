@@ -138,6 +138,8 @@ function quick_alpha_vals_py_outputs(
 
 
 /**
+ * quick.alpha.vals.py
+ *
  * Generate an alpha table from slow_surf_clustsim.py results.
  *
  * Author: AFNI Developers
@@ -164,6 +166,8 @@ function quick_alpha_vals_py_execute(
 
 
 /**
+ * quick.alpha.vals.py
+ *
  * Generate an alpha table from slow_surf_clustsim.py results.
  *
  * Author: AFNI Developers

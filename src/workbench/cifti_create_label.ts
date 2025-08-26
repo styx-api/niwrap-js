@@ -380,6 +380,8 @@ function cifti_create_label_outputs(
 
 
 /**
+ * cifti-create-label
+ *
  * Create a cifti label file.
  *
  * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti.  At least one component must be specified.
@@ -444,6 +446,8 @@ function cifti_create_label_execute(
 
 
 /**
+ * cifti-create-label
+ *
  * Create a cifti label file.
  *
  * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti.  At least one component must be specified.

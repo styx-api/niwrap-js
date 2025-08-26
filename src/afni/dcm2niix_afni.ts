@@ -437,6 +437,8 @@ function dcm2niix_afni_outputs(
 
 
 /**
+ * dcm2niix_afni
+ *
  * DICOM to NIfTI converter optimized for AFNI.
  *
  * Author: AFNI Developers
@@ -463,6 +465,8 @@ function dcm2niix_afni_execute(
 
 
 /**
+ * dcm2niix_afni
+ *
  * DICOM to NIfTI converter optimized for AFNI.
  *
  * Author: AFNI Developers

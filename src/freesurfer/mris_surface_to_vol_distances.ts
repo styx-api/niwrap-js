@@ -141,6 +141,8 @@ function mris_surface_to_vol_distances_outputs(
 
 
 /**
+ * mris_surface_to_vol_distances
+ *
  * Tool from FreeSurfer to calculate surface-to-volume distances.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mris_surface_to_vol_distances_execute(
 
 
 /**
+ * mris_surface_to_vol_distances
+ *
  * Tool from FreeSurfer to calculate surface-to-volume distances.
  *
  * Author: FreeSurfer Developers

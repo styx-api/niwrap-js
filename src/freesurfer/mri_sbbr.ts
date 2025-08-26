@@ -366,6 +366,8 @@ function mri_sbbr_outputs(
 
 
 /**
+ * mri_sbbr
+ *
  * Special implementation of boundary-based registration for a single slice.
  *
  * Author: FreeSurfer Developers
@@ -392,6 +394,8 @@ function mri_sbbr_execute(
 
 
 /**
+ * mri_sbbr
+ *
  * Special implementation of boundary-based registration for a single slice.
  *
  * Author: FreeSurfer Developers

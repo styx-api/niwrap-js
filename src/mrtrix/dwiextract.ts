@@ -650,6 +650,8 @@ function dwiextract_outputs(
 
 
 /**
+ * dwiextract
+ *
  * Extract diffusion-weighted volumes, b=0 volumes, or certain shells from a DWI dataset.
  *
  *
@@ -682,6 +684,8 @@ function dwiextract_execute(
 
 
 /**
+ * dwiextract
+ *
  * Extract diffusion-weighted volumes, b=0 volumes, or certain shells from a DWI dataset.
  *
  *

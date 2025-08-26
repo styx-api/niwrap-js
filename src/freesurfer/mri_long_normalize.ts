@@ -222,6 +222,8 @@ function mri_long_normalize_outputs(
 
 
 /**
+ * mri_long_normalize
+ *
  * Tool to normalize the white-matter of MRI volumes, optionally based on control points.
  *
  * Author: FreeSurfer Developers
@@ -248,6 +250,8 @@ function mri_long_normalize_execute(
 
 
 /**
+ * mri_long_normalize
+ *
  * Tool to normalize the white-matter of MRI volumes, optionally based on control points.
  *
  * Author: FreeSurfer Developers

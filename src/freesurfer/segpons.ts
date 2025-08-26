@@ -174,6 +174,8 @@ function segpons_outputs(
 
 
 /**
+ * segpons
+ *
  * Approximate segmentation of pons using MNI152 space registration.
  *
  * Author: FreeSurfer Developers
@@ -200,6 +202,8 @@ function segpons_execute(
 
 
 /**
+ * segpons
+ *
  * Approximate segmentation of pons using MNI152 space registration.
  *
  * Author: FreeSurfer Developers

@@ -269,6 +269,8 @@ function mri_exvivo_norm_outputs(
 
 
 /**
+ * mri_exvivo_norm
+ *
  * MRI Ex Vivo Normalization Tool.
  *
  * Author: FreeSurfer Developers
@@ -295,6 +297,8 @@ function mri_exvivo_norm_execute(
 
 
 /**
+ * mri_exvivo_norm
+ *
  * MRI Ex Vivo Normalization Tool.
  *
  * Author: FreeSurfer Developers

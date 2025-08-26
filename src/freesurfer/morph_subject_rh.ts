@@ -123,6 +123,8 @@ function morph_subject_rh_outputs(
 
 
 /**
+ * morph_subject-rh
+ *
  * A tool for morphing the right hemisphere of subject data in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function morph_subject_rh_execute(
 
 
 /**
+ * morph_subject-rh
+ *
  * A tool for morphing the right hemisphere of subject data in FreeSurfer.
  *
  * Author: FreeSurfer Developers

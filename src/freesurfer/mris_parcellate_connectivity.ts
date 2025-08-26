@@ -148,6 +148,8 @@ function mris_parcellate_connectivity_outputs(
 
 
 /**
+ * mris_parcellate_connectivity
+ *
  * A tool to parcellate brain connectivity using surface and correlation data.
  *
  * Author: FreeSurfer Developers
@@ -174,6 +176,8 @@ function mris_parcellate_connectivity_execute(
 
 
 /**
+ * mris_parcellate_connectivity
+ *
  * A tool to parcellate brain connectivity using surface and correlation data.
  *
  * Author: FreeSurfer Developers

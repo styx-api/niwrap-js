@@ -177,6 +177,8 @@ function fs_check_version_outputs(
 
 
 /**
+ * fs-check-version
+ *
  * Script to manage which version of FreeSurfer can be used to analyze data ensuring consistency with the desired version.
  *
  * Author: FreeSurfer Developers
@@ -203,6 +205,8 @@ function fs_check_version_execute(
 
 
 /**
+ * fs-check-version
+ *
  * Script to manage which version of FreeSurfer can be used to analyze data ensuring consistency with the desired version.
  *
  * Author: FreeSurfer Developers

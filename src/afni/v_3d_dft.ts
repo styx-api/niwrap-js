@@ -184,6 +184,8 @@ function v_3d_dft_outputs(
 
 
 /**
+ * 3dDFT
+ *
  * Performs Discrete Fourier Transform (DFT) along the time axis of a complex- or float-valued dataset.
  *
  * Author: AFNI Developers
@@ -210,6 +212,8 @@ function v_3d_dft_execute(
 
 
 /**
+ * 3dDFT
+ *
  * Performs Discrete Fourier Transform (DFT) along the time axis of a complex- or float-valued dataset.
  *
  * Author: AFNI Developers

@@ -158,6 +158,8 @@ function mris_mef_surfaces_outputs(
 
 
 /**
+ * mris_mef_surfaces
+ *
  * Positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface and generates surface files for these surfaces. Also generates 'curvature' file for cortical thickness and a surface file approximating layer IV of the cortical sheet.
  *
  * Author: FreeSurfer Developers
@@ -184,6 +186,8 @@ function mris_mef_surfaces_execute(
 
 
 /**
+ * mris_mef_surfaces
+ *
  * Positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface and generates surface files for these surfaces. Also generates 'curvature' file for cortical thickness and a surface file approximating layer IV of the cortical sheet.
  *
  * Author: FreeSurfer Developers

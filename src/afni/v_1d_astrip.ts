@@ -126,6 +126,8 @@ function v_1d_astrip_outputs(
 
 
 /**
+ * 1dAstrip
+ *
  * Strips non-numeric characters from a file.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v_1d_astrip_execute(
 
 
 /**
+ * 1dAstrip
+ *
  * Strips non-numeric characters from a file.
  *
  * Author: AFNI Developers

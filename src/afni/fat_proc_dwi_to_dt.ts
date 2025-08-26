@@ -394,6 +394,8 @@ function fat_proc_dwi_to_dt_outputs(
 
 
 /**
+ * fat_proc_dwi_to_dt
+ *
  * This program fits tensors and DT parameters, as well as the uncertainty of DT parameters needed for tractography.
  *
  * Author: AFNI Developers
@@ -420,6 +422,8 @@ function fat_proc_dwi_to_dt_execute(
 
 
 /**
+ * fat_proc_dwi_to_dt
+ *
  * This program fits tensors and DT parameters, as well as the uncertainty of DT parameters needed for tractography.
  *
  * Author: AFNI Developers

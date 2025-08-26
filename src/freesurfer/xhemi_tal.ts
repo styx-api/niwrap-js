@@ -123,6 +123,8 @@ function xhemi_tal_outputs(
 
 
 /**
+ * xhemi-tal
+ *
  * Computes the talairach.xfm for xhemi based on the original (unflipped) talairach.xfm.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function xhemi_tal_execute(
 
 
 /**
+ * xhemi-tal
+ *
  * Computes the talairach.xfm for xhemi based on the original (unflipped) talairach.xfm.
  *
  * Author: FreeSurfer Developers

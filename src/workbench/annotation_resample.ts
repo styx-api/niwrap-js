@@ -184,6 +184,8 @@ function annotation_resample_outputs(
 
 
 /**
+ * annotation-resample
+ *
  * Resample an annotation file to different meshes.
  *
  * Resample an annotation file from the source mesh to the target mesh.
@@ -214,6 +216,8 @@ function annotation_resample_execute(
 
 
 /**
+ * annotation-resample
+ *
  * Resample an annotation file to different meshes.
  *
  * Resample an annotation file from the source mesh to the target mesh.

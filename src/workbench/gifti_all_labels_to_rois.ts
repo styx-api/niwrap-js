@@ -137,6 +137,8 @@ function gifti_all_labels_to_rois_outputs(
 
 
 /**
+ * gifti-all-labels-to-rois
+ *
  * Make rois from all labels in a gifti column.
  *
  * The output metric file has a column for each label in the specified input map, other than the ??? label, each of which contains an ROI of all vertices that are set to the corresponding label.
@@ -165,6 +167,8 @@ function gifti_all_labels_to_rois_execute(
 
 
 /**
+ * gifti-all-labels-to-rois
+ *
  * Make rois from all labels in a gifti column.
  *
  * The output metric file has a column for each label in the specified input map, other than the ??? label, each of which contains an ROI of all vertices that are set to the corresponding label.

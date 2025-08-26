@@ -169,6 +169,8 @@ function v_3d_kruskal_wallis_outputs(
 
 
 /**
+ * 3dKruskalWallis
+ *
  * This program performs nonparametric Kruskal-Wallis test for comparison of multiple treatments.
  *
  * Author: AFNI Developers
@@ -195,6 +197,8 @@ function v_3d_kruskal_wallis_execute(
 
 
 /**
+ * 3dKruskalWallis
+ *
  * This program performs nonparametric Kruskal-Wallis test for comparison of multiple treatments.
  *
  * Author: AFNI Developers

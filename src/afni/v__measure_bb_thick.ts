@@ -287,6 +287,8 @@ function v__measure_bb_thick_outputs(
 
 
 /**
+ * @measure_bb_thick
+ *
  * Compute thickness of mask using ball and box method.
  *
  * Author: AFNI Developers
@@ -313,6 +315,8 @@ function v__measure_bb_thick_execute(
 
 
 /**
+ * @measure_bb_thick
+ *
  * Compute thickness of mask using ball and box method.
  *
  * Author: AFNI Developers

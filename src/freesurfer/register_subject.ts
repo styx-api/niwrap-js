@@ -180,6 +180,8 @@ function register_subject_outputs(
 
 
 /**
+ * register_subject
+ *
  * Tool for registering brain MR volumes.
  *
  * Author: FreeSurfer Developers
@@ -206,6 +208,8 @@ function register_subject_execute(
 
 
 /**
+ * register_subject
+ *
  * Tool for registering brain MR volumes.
  *
  * Author: FreeSurfer Developers

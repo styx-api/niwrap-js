@@ -217,6 +217,8 @@ function makevol_outputs(
 
 
 /**
+ * makevol
+ *
  * A tool to create a volume with given parameters.
  *
  * Author: FreeSurfer Developers
@@ -243,6 +245,8 @@ function makevol_execute(
 
 
 /**
+ * makevol
+ *
  * A tool to create a volume with given parameters.
  *
  * Author: FreeSurfer Developers

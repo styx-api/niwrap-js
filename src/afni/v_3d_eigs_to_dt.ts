@@ -195,6 +195,8 @@ function v_3d_eigs_to_dt_outputs(
 
 
 /**
+ * 3dEigsToDT
+ *
  * Convert set of DTI eigenvectors and eigenvalues to a diffusion tensor, with optional value-scaling and vector-flipping.
  *
  * Author: AFNI Developers
@@ -221,6 +223,8 @@ function v_3d_eigs_to_dt_execute(
 
 
 /**
+ * 3dEigsToDT
+ *
  * Convert set of DTI eigenvectors and eigenvalues to a diffusion tensor, with optional value-scaling and vector-flipping.
  *
  * Author: AFNI Developers

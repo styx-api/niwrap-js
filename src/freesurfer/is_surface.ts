@@ -123,6 +123,8 @@ function is_surface_outputs(
 
 
 /**
+ * is-surface
+ *
  * Determines whether a file is a volume-encoded surface file by examining its dimensions.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function is_surface_execute(
 
 
 /**
+ * is-surface
+ *
  * Determines whether a file is a volume-encoded surface file by examining its dimensions.
  *
  * Author: FreeSurfer Developers

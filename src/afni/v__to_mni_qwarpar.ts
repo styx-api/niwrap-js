@@ -131,6 +131,8 @@ function v__to_mni_qwarpar_outputs(
 
 
 /**
+ * @toMNI_Qwarpar
+ *
  * Transforms datasets to MNI space, then collectively re-transforms them to produce a refined average.
  *
  * Author: AFNI Developers
@@ -157,6 +159,8 @@ function v__to_mni_qwarpar_execute(
 
 
 /**
+ * @toMNI_Qwarpar
+ *
  * Transforms datasets to MNI space, then collectively re-transforms them to produce a refined average.
  *
  * Author: AFNI Developers

@@ -129,6 +129,8 @@ function run_segment_subject_t1_auto_estimate_alveus_ml_sh_outputs(
 
 
 /**
+ * run_segmentSubjectT1_autoEstimateAlveusML.sh
+ *
  * A script to automatically estimate Alveus using machine learning with the given subject T1 image.
  *
  * Author: FreeSurfer Developers
@@ -155,6 +157,8 @@ function run_segment_subject_t1_auto_estimate_alveus_ml_sh_execute(
 
 
 /**
+ * run_segmentSubjectT1_autoEstimateAlveusML.sh
+ *
  * A script to automatically estimate Alveus using machine learning with the given subject T1 image.
  *
  * Author: FreeSurfer Developers

@@ -164,6 +164,8 @@ function mris_remove_intersection_outputs(
 
 
 /**
+ * mris_remove_intersection
+ *
  * Tool to remove intersections in surface files.
  *
  * Author: FreeSurfer Developers
@@ -190,6 +192,8 @@ function mris_remove_intersection_execute(
 
 
 /**
+ * mris_remove_intersection
+ *
  * Tool to remove intersections in surface files.
  *
  * Author: FreeSurfer Developers

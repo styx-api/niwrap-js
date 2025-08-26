@@ -129,6 +129,8 @@ function v__get_afni_res_outputs(
 
 
 /**
+ * @GetAfniRes
+ *
  * Tool to return the voxel resolution of a dataset.
  *
  * Author: AFNI Developers
@@ -155,6 +157,8 @@ function v__get_afni_res_execute(
 
 
 /**
+ * @GetAfniRes
+ *
  * Tool to return the voxel resolution of a dataset.
  *
  * Author: AFNI Developers

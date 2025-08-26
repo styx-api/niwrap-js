@@ -249,6 +249,8 @@ function transformconvert_outputs(
 
 
 /**
+ * transformconvert
+ *
  * Convert linear transformation matrices.
  *
  * This command allows to convert transformation matrices provided by other registration softwares to a format usable in MRtrix3. Example usages are provided below.
@@ -281,6 +283,8 @@ function transformconvert_execute(
 
 
 /**
+ * transformconvert
+ *
  * Convert linear transformation matrices.
  *
  * This command allows to convert transformation matrices provided by other registration softwares to a format usable in MRtrix3. Example usages are provided below.

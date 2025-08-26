@@ -137,6 +137,8 @@ function reg_mni305_2mm_outputs(
 
 
 /**
+ * reg-mni305.2mm
+ *
  * Computes the registration between the FreeSurfer MNI305 2mm space and a subject's FreeSurfer anatomical space.
  *
  * Author: FreeSurfer Developers
@@ -163,6 +165,8 @@ function reg_mni305_2mm_execute(
 
 
 /**
+ * reg-mni305.2mm
+ *
  * Computes the registration between the FreeSurfer MNI305 2mm space and a subject's FreeSurfer anatomical space.
  *
  * Author: FreeSurfer Developers

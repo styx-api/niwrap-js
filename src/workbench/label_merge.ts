@@ -293,6 +293,8 @@ function label_merge_outputs(
 
 
 /**
+ * label-merge
+ *
  * Merge label files into a new file.
  *
  * Takes one or more label files and constructs a new label file by concatenating columns from them.  The input files must have the same number of vertices and the same structure.
@@ -325,6 +327,8 @@ function label_merge_execute(
 
 
 /**
+ * label-merge
+ *
  * Merge label files into a new file.
  *
  * Takes one or more label files and constructs a new label file by concatenating columns from them.  The input files must have the same number of vertices and the same structure.

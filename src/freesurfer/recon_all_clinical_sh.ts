@@ -139,6 +139,8 @@ function recon_all_clinical_sh_outputs(
 
 
 /**
+ * recon-all-clinical.sh
+ *
  * Recon-all-like stream for processing clinical brain MRI scans of arbitrary orientation, resolution, and contrast using SynthSeg and SynthSR.
  *
  * Author: FreeSurfer Developers
@@ -165,6 +167,8 @@ function recon_all_clinical_sh_execute(
 
 
 /**
+ * recon-all-clinical.sh
+ *
  * Recon-all-like stream for processing clinical brain MRI scans of arbitrary orientation, resolution, and contrast using SynthSeg and SynthSR.
  *
  * Author: FreeSurfer Developers

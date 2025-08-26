@@ -198,6 +198,8 @@ function fscalc_outputs(
 
 
 /**
+ * fscalc
+ *
  * A frontend tool to perform mathematical operations on volumes/surfaces of data using mris_calc.
  *
  * Author: FreeSurfer Developers
@@ -224,6 +226,8 @@ function fscalc_execute(
 
 
 /**
+ * fscalc
+ *
  * A frontend tool to perform mathematical operations on volumes/surfaces of data using mris_calc.
  *
  * Author: FreeSurfer Developers

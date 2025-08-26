@@ -200,6 +200,8 @@ function mris_estimate_wm_outputs(
 
 
 /**
+ * mris_estimate_wm
+ *
  * Tool to estimate white matter surfaces using MRI data.
  *
  * Author: FreeSurfer Developers
@@ -226,6 +228,8 @@ function mris_estimate_wm_execute(
 
 
 /**
+ * mris_estimate_wm
+ *
  * Tool to estimate white matter surfaces using MRI data.
  *
  * Author: FreeSurfer Developers

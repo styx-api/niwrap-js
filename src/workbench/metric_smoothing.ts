@@ -252,6 +252,8 @@ function metric_smoothing_outputs(
 
 
 /**
+ * metric-smoothing
+ *
  * Smooth a metric file.
  *
  * Smooth a metric file on a surface.  By default, smooths all input columns on the entire surface, specify -column to use only one input column, and -roi to smooth only where the roi metric is greater than 0, outputting zeros elsewhere.
@@ -296,6 +298,8 @@ function metric_smoothing_execute(
 
 
 /**
+ * metric-smoothing
+ *
  * Smooth a metric file.
  *
  * Smooth a metric file on a surface.  By default, smooths all input columns on the entire surface, specify -column to use only one input column, and -roi to smooth only where the roi metric is greater than 0, outputting zeros elsewhere.

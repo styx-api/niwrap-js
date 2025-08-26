@@ -160,6 +160,8 @@ function v_1d_tsort_outputs(
 
 
 /**
+ * 1dTsort
+ *
  * Sorts each column of the input 1D file and writes result to stdout.
  *
  * Author: AFNI Developers
@@ -186,6 +188,8 @@ function v_1d_tsort_execute(
 
 
 /**
+ * 1dTsort
+ *
  * Sorts each column of the input 1D file and writes result to stdout.
  *
  * Author: AFNI Developers

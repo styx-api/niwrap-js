@@ -251,6 +251,8 @@ function make_average_volume_outputs(
 
 
 /**
+ * make_average_volume
+ *
  * Creates average volumes from a set of subjects.
  *
  * Author: FreeSurfer Developers
@@ -277,6 +279,8 @@ function make_average_volume_execute(
 
 
 /**
+ * make_average_volume
+ *
  * Creates average volumes from a set of subjects.
  *
  * Author: FreeSurfer Developers

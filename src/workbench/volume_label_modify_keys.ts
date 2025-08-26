@@ -149,6 +149,8 @@ function volume_label_modify_keys_outputs(
 
 
 /**
+ * volume-label-modify-keys
+ *
  * Change key values in a volume label file.
  *
  * <remap-file> should have lines of the form 'oldkey newkey', like so:
@@ -183,6 +185,8 @@ function volume_label_modify_keys_execute(
 
 
 /**
+ * volume-label-modify-keys
+ *
  * Change key values in a volume label file.
  *
  * <remap-file> should have lines of the form 'oldkey newkey', like so:

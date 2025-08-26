@@ -245,6 +245,8 @@ function fslmeants_outputs(
 
 
 /**
+ * fslmeants
+ *
  * Prints average timeseries (intensities) to the screen (or saves to a file).
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -271,6 +273,8 @@ function fslmeants_execute(
 
 
 /**
+ * fslmeants
+ *
  * Prints average timeseries (intensities) to the screen (or saves to a file).
  *
  * Author: FMRIB Analysis Group, University of Oxford

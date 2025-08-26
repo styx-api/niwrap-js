@@ -1638,6 +1638,8 @@ function greedy_outputs(
 
 
 /**
+ * greedy
+ *
  * Paul's greedy diffeomorphic registration implementation.
  *
  * Author: Greedy Developers
@@ -1664,6 +1666,8 @@ function greedy_execute(
 
 
 /**
+ * greedy
+ *
  * Paul's greedy diffeomorphic registration implementation.
  *
  * Author: Greedy Developers

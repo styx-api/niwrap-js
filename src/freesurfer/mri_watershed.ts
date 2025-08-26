@@ -404,6 +404,8 @@ function mri_watershed_outputs(
 
 
 /**
+ * mri_watershed
+ *
  * A tool for stripping skull and other non-brain tissues to produce brain volume from T1 volume.
  *
  * Author: FreeSurfer Developers
@@ -430,6 +432,8 @@ function mri_watershed_execute(
 
 
 /**
+ * mri_watershed
+ *
  * A tool for stripping skull and other non-brain tissues to produce brain volume from T1 volume.
  *
  * Author: FreeSurfer Developers

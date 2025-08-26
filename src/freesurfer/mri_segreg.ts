@@ -131,6 +131,8 @@ function mri_segreg_outputs(
 
 
 /**
+ * mri_segreg
+ *
  * MRI Segregation tool.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mri_segreg_execute(
 
 
 /**
+ * mri_segreg
+ *
  * MRI Segregation tool.
  *
  * Author: FreeSurfer Developers

@@ -324,6 +324,8 @@ function extract_region_from_image_outputs(
 
 
 /**
+ * ExtractRegionFromImage
+ *
  * ExtractRegionFromImage can be used to extract a specific region from a given image. The region can be specified via indices, label, or another domain image.
  *
  * Author: ANTs Developers
@@ -350,6 +352,8 @@ function extract_region_from_image_execute(
 
 
 /**
+ * ExtractRegionFromImage
+ *
  * ExtractRegionFromImage can be used to extract a specific region from a given image. The region can be specified via indices, label, or another domain image.
  *
  * Author: ANTs Developers

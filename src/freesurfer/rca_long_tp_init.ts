@@ -171,6 +171,8 @@ function rca_long_tp_init_outputs(
 
 
 /**
+ * rca-long-tp-init
+ *
  * Initialize long timepoint subject for recon-all processing.
  *
  * Author: FreeSurfer Developers
@@ -197,6 +199,8 @@ function rca_long_tp_init_execute(
 
 
 /**
+ * rca-long-tp-init
+ *
  * Initialize long timepoint subject for recon-all processing.
  *
  * Author: FreeSurfer Developers

@@ -169,6 +169,8 @@ function v_3dmatmult_outputs(
 
 
 /**
+ * 3dmatmult
+ *
  * Multiply AFNI datasets slice-by-slice as matrices.
  *
  * Author: AFNI Developers
@@ -195,6 +197,8 @@ function v_3dmatmult_execute(
 
 
 /**
+ * 3dmatmult
+ *
  * Multiply AFNI datasets slice-by-slice as matrices.
  *
  * Author: AFNI Developers

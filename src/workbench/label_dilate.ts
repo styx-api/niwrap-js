@@ -178,6 +178,8 @@ function label_dilate_outputs(
 
 
 /**
+ * label-dilate
+ *
  * Dilate a label file.
  *
  * Fills in label information for all vertices designated as bad, up to the specified distance away from other labels.  If -bad-vertex-roi is specified, all vertices, including those with the unlabeled key, are good, except for vertices with a positive value in the ROI.  If it is not specified, only vertices with the unlabeled key are bad.
@@ -206,6 +208,8 @@ function label_dilate_execute(
 
 
 /**
+ * label-dilate
+ *
  * Dilate a label file.
  *
  * Fills in label information for all vertices designated as bad, up to the specified distance away from other labels.  If -bad-vertex-roi is specified, all vertices, including those with the unlabeled key, are good, except for vertices with a positive value in the ROI.  If it is not specified, only vertices with the unlabeled key are bad.

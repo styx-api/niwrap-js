@@ -205,6 +205,8 @@ function pta_outputs(
 
 
 /**
+ * PTA
+ *
  * Program for Profile Tracking Analysis - estimates nonlinear trajectories through smoothing splines.
  *
  * Author: AFNI Developers
@@ -231,6 +233,8 @@ function pta_execute(
 
 
 /**
+ * PTA
+ *
  * Program for Profile Tracking Analysis - estimates nonlinear trajectories through smoothing splines.
  *
  * Author: AFNI Developers

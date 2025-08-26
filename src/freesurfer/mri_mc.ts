@@ -144,6 +144,8 @@ function mri_mc_outputs(
 
 
 /**
+ * mri_mc
+ *
  * Extract a surface from a label volume using Marching Cubes algorithm.
  *
  * Author: FreeSurfer Developers
@@ -170,6 +172,8 @@ function mri_mc_execute(
 
 
 /**
+ * mri_mc
+ *
  * Extract a surface from a label volume using Marching Cubes algorithm.
  *
  * Author: FreeSurfer Developers

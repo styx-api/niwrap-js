@@ -183,6 +183,8 @@ function v_3d_zcat_outputs(
 
 
 /**
+ * 3dZcat
+ *
  * Concatenates datasets in the slice (z) direction.
  *
  * Author: AFNI Developers
@@ -209,6 +211,8 @@ function v_3d_zcat_execute(
 
 
 /**
+ * 3dZcat
+ *
  * Concatenates datasets in the slice (z) direction.
  *
  * Author: AFNI Developers

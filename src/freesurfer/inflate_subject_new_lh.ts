@@ -129,6 +129,8 @@ function inflate_subject_new_lh_outputs(
 
 
 /**
+ * inflate_subject_new-lh
+ *
  * Tool for inflating the left hemisphere of a subject in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -155,6 +157,8 @@ function inflate_subject_new_lh_execute(
 
 
 /**
+ * inflate_subject_new-lh
+ *
  * Tool for inflating the left hemisphere of a subject in FreeSurfer.
  *
  * Author: FreeSurfer Developers

@@ -148,6 +148,8 @@ function mri_linear_align_binary_outputs(
 
 
 /**
+ * mri_linear_align_binary
+ *
  * A tool for linear alignment of MRI images.
  *
  * Author: FreeSurfer Developers
@@ -174,6 +176,8 @@ function mri_linear_align_binary_execute(
 
 
 /**
+ * mri_linear_align_binary
+ *
  * A tool for linear alignment of MRI images.
  *
  * Author: FreeSurfer Developers

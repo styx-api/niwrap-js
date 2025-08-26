@@ -188,6 +188,8 @@ function surf_dist_outputs(
 
 
 /**
+ * SurfDist
+ *
  * Calculate shortest distance between node pairs on a surface mesh.
  *
  * Author: AFNI Developers
@@ -214,6 +216,8 @@ function surf_dist_execute(
 
 
 /**
+ * SurfDist
+ *
  * Calculate shortest distance between node pairs on a surface mesh.
  *
  * Author: AFNI Developers

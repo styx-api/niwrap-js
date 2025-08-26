@@ -127,6 +127,8 @@ function inflate_subject_rh_outputs(
 
 
 /**
+ * inflate_subject-rh
+ *
  * Freesurfer command to perform an operation on the right hemisphere of a subject's brain image data.
  *
  * Author: FreeSurfer Developers
@@ -153,6 +155,8 @@ function inflate_subject_rh_execute(
 
 
 /**
+ * inflate_subject-rh
+ *
  * Freesurfer command to perform an operation on the right hemisphere of a subject's brain image data.
  *
  * Author: FreeSurfer Developers

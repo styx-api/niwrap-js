@@ -166,6 +166,8 @@ function read_matlab_files_py_outputs(
 
 
 /**
+ * read_matlab_files.py
+ *
  * Describe or convert MATLAB files (.mat) to 1D format.
  *
  * Author: AFNI Developers
@@ -192,6 +194,8 @@ function read_matlab_files_py_execute(
 
 
 /**
+ * read_matlab_files.py
+ *
  * Describe or convert MATLAB files (.mat) to 1D format.
  *
  * Author: AFNI Developers

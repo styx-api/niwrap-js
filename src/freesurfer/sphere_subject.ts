@@ -140,6 +140,8 @@ function sphere_subject_outputs(
 
 
 /**
+ * sphere_subject
+ *
  * A FreeSurfer tool for processing subject data.
  *
  * Author: FreeSurfer Developers
@@ -166,6 +168,8 @@ function sphere_subject_execute(
 
 
 /**
+ * sphere_subject
+ *
  * A FreeSurfer tool for processing subject data.
  *
  * Author: FreeSurfer Developers

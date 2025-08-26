@@ -155,6 +155,8 @@ function ttologp_outputs(
 
 
 /**
+ * ttologp
+ *
  * Tool for computing logp.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -181,6 +183,8 @@ function ttologp_execute(
 
 
 /**
+ * ttologp
+ *
  * Tool for computing logp.
  *
  * Author: FMRIB Analysis Group, University of Oxford

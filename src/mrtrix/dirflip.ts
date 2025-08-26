@@ -262,6 +262,8 @@ function dirflip_outputs(
 
 
 /**
+ * dirflip
+ *
  * Invert the polarity of individual directions so as to optimise a unipolar electrostatic repulsion model.
  *
  * The orientations themselves are not affected, only their polarity; this is necessary to ensure near-optimal distribution of DW directions for eddy-current correction.
@@ -294,6 +296,8 @@ function dirflip_execute(
 
 
 /**
+ * dirflip
+ *
  * Invert the polarity of individual directions so as to optimise a unipolar electrostatic repulsion model.
  *
  * The orientations themselves are not affected, only their polarity; this is necessary to ensure near-optimal distribution of DW directions for eddy-current correction.

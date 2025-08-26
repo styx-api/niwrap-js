@@ -173,6 +173,8 @@ function v_2perm_outputs(
 
 
 /**
+ * 2perm
+ *
  * Generates two random non-overlapping subsets of a given set of integers.
  *
  * Author: AFNI Developers
@@ -199,6 +201,8 @@ function v_2perm_execute(
 
 
 /**
+ * 2perm
+ *
  * Generates two random non-overlapping subsets of a given set of integers.
  *
  * Author: AFNI Developers

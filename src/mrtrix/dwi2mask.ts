@@ -325,6 +325,8 @@ function dwi2mask_outputs(
 
 
 /**
+ * dwi2mask
+ *
  * Generates a whole brain mask from a DWI image.
  *
  * All diffusion weighted and b=0 volumes are used to obtain a mask that includes both brain tissue and CSF.
@@ -359,6 +361,8 @@ function dwi2mask_execute(
 
 
 /**
+ * dwi2mask
+ *
  * Generates a whole brain mask from a DWI image.
  *
  * All diffusion weighted and b=0 volumes are used to obtain a mask that includes both brain tissue and CSF.

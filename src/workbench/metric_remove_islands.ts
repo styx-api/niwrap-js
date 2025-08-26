@@ -149,6 +149,8 @@ function metric_remove_islands_outputs(
 
 
 /**
+ * metric-remove-islands
+ *
  * Remove islands from an roi metric.
  *
  * Finds all connected areas in the ROI, and zeros out all but the largest one, in terms of surface area.
@@ -177,6 +179,8 @@ function metric_remove_islands_execute(
 
 
 /**
+ * metric-remove-islands
+ *
  * Remove islands from an roi metric.
  *
  * Finds all connected areas in the ROI, and zeros out all but the largest one, in terms of surface area.

@@ -170,6 +170,8 @@ function mri_relabel_nonwm_hypos_outputs(
 
 
 /**
+ * mri_relabel_nonwm_hypos
+ *
  * Relabels non-WM hypointensities based on proximity to a nearby label.
  *
  * Author: FreeSurfer Developers
@@ -196,6 +198,8 @@ function mri_relabel_nonwm_hypos_execute(
 
 
 /**
+ * mri_relabel_nonwm_hypos
+ *
  * Relabels non-WM hypointensities based on proximity to a nearby label.
  *
  * Author: FreeSurfer Developers

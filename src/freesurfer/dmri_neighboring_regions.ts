@@ -131,6 +131,8 @@ function dmri_neighboring_regions_outputs(
 
 
 /**
+ * dmri_neighboringRegions
+ *
  * A tool for diffusion MRI analysis involving neighboring regions.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function dmri_neighboring_regions_execute(
 
 
 /**
+ * dmri_neighboringRegions
+ *
  * A tool for diffusion MRI analysis involving neighboring regions.
  *
  * Author: FreeSurfer Developers

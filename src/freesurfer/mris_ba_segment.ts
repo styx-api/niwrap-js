@@ -141,6 +141,8 @@ function mris_ba_segment_outputs(
 
 
 /**
+ * mris_BA_segment
+ *
  * Segments a Brodmann area (MT currently) from a laminar intensity profile overlay.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mris_ba_segment_execute(
 
 
 /**
+ * mris_BA_segment
+ *
  * Segments a Brodmann area (MT currently) from a laminar intensity profile overlay.
  *
  * Author: FreeSurfer Developers

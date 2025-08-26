@@ -141,6 +141,8 @@ function mris_morph_stats_outputs(
 
 
 /**
+ * mris_morph_stats
+ *
  * This program generates statistics which characterize a surface-based deformation field.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function mris_morph_stats_execute(
 
 
 /**
+ * mris_morph_stats
+ *
  * This program generates statistics which characterize a surface-based deformation field.
  *
  * Author: FreeSurfer Developers

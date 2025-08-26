@@ -222,6 +222,8 @@ function featquery_outputs(
 
 
 /**
+ * featquery
+ *
  * Tool to extract statistics and/or time series from FEAT directories.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -248,6 +250,8 @@ function featquery_execute(
 
 
 /**
+ * featquery
+ *
  * Tool to extract statistics and/or time series from FEAT directories.
  *
  * Author: FMRIB Analysis Group, University of Oxford

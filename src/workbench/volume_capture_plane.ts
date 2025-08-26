@@ -201,6 +201,8 @@ function volume_capture_plane_outputs(
 
 
 /**
+ * volume-capture-plane
+ *
  * Interpolate image from plane through volume.
  *
  * NOTE: If you want to generate an image with all of the capabilities of the GUI rendering, see -show-scene.
@@ -235,6 +237,8 @@ function volume_capture_plane_execute(
 
 
 /**
+ * volume-capture-plane
+ *
  * Interpolate image from plane through volume.
  *
  * NOTE: If you want to generate an image with all of the capabilities of the GUI rendering, see -show-scene.

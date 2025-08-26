@@ -186,6 +186,8 @@ function cifti_roi_average_outputs(
 
 
 /**
+ * cifti-roi-average
+ *
  * Average rows in a single cifti file.
  *
  * Average the rows that are within the specified ROIs, and write the resulting average row to a text file, separated by newlines.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.
@@ -214,6 +216,8 @@ function cifti_roi_average_execute(
 
 
 /**
+ * cifti-roi-average
+ *
  * Average rows in a single cifti file.
  *
  * Average the rows that are within the specified ROIs, and write the resulting average row to a text file, separated by newlines.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.

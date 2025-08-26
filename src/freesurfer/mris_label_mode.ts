@@ -168,6 +168,8 @@ function mris_label_mode_outputs(
 
 
 /**
+ * mris_label_mode
+ *
  * This program will add a template into an average surface.
  *
  * Author: FreeSurfer Developers
@@ -194,6 +196,8 @@ function mris_label_mode_execute(
 
 
 /**
+ * mris_label_mode
+ *
  * This program will add a template into an average surface.
  *
  * Author: FreeSurfer Developers

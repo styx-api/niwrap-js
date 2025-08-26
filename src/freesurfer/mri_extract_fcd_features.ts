@@ -142,6 +142,8 @@ function mri_extract_fcd_features_outputs(
 
 
 /**
+ * mri_extract_fcd_features
+ *
  * A tool for extracting focal cortical dysplasia features.
  *
  * Author: FreeSurfer Developers
@@ -168,6 +170,8 @@ function mri_extract_fcd_features_execute(
 
 
 /**
+ * mri_extract_fcd_features
+ *
  * A tool for extracting focal cortical dysplasia features.
  *
  * Author: FreeSurfer Developers

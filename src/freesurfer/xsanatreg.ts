@@ -201,6 +201,8 @@ function xsanatreg_outputs(
 
 
 /**
+ * xsanatreg
+ *
  * A tool for registering source and target COR volumes.
  *
  * Author: FreeSurfer Developers
@@ -227,6 +229,8 @@ function xsanatreg_execute(
 
 
 /**
+ * xsanatreg
+ *
  * A tool for registering source and target COR volumes.
  *
  * Author: FreeSurfer Developers

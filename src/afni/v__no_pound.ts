@@ -120,6 +120,8 @@ function v__no_pound_outputs(
 
 
 /**
+ * @NoPound
+ *
  * Replaces all # characters in AFNI filenames with a -.
  *
  * Author: AFNI Developers
@@ -146,6 +148,8 @@ function v__no_pound_execute(
 
 
 /**
+ * @NoPound
+ *
  * Replaces all # characters in AFNI filenames with a -.
  *
  * Author: AFNI Developers

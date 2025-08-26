@@ -175,6 +175,8 @@ function surface_geodesic_distance_all_to_all_outputs(
 
 
 /**
+ * surface-geodesic-distance-all-to-all
+ *
  * Compute geodesic distances from all vertices.
  *
  * Computes geodesic distance from every vertex to every vertex, outputting a single-hemisphere dconn file.  If you are only interested in a few vertices, see -surface-geodesic-distance.  When -limit is specified, any vertex beyond the limit is assigned the value -1.
@@ -209,6 +211,8 @@ function surface_geodesic_distance_all_to_all_execute(
 
 
 /**
+ * surface-geodesic-distance-all-to-all
+ *
  * Compute geodesic distances from all vertices.
  *
  * Computes geodesic distance from every vertex to every vertex, outputting a single-hemisphere dconn file.  If you are only interested in a few vertices, see -surface-geodesic-distance.  When -limit is specified, any vertex beyond the limit is assigned the value -1.

@@ -166,6 +166,8 @@ function fslselectvols_outputs(
 
 
 /**
+ * fslselectvols
+ *
  * Select volumes from a 4D time series and output a subset 4D volume.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -192,6 +194,8 @@ function fslselectvols_execute(
 
 
 /**
+ * fslselectvols
+ *
  * Select volumes from a 4D time series and output a subset 4D volume.
  *
  * Author: FMRIB Analysis Group, University of Oxford

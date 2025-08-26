@@ -183,6 +183,8 @@ function convert_cdiflist_to_grads_outputs(
 
 
 /**
+ * convert_cdiflist_to_grads
+ *
  * This program reads in a GE cdiflist and outputs gradient file and file of bvalues for subsequent processing.
  *
  * Author: AFNI Developers
@@ -209,6 +211,8 @@ function convert_cdiflist_to_grads_execute(
 
 
 /**
+ * convert_cdiflist_to_grads
+ *
  * This program reads in a GE cdiflist and outputs gradient file and file of bvalues for subsequent processing.
  *
  * Author: AFNI Developers

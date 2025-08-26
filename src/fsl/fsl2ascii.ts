@@ -131,6 +131,8 @@ function fsl2ascii_outputs(
 
 
 /**
+ * fsl2ascii
+ *
  * Convert NIfTI image or analyze 7.5 format file to ASCII text file.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function fsl2ascii_execute(
 
 
 /**
+ * fsl2ascii
+ *
  * Convert NIfTI image or analyze 7.5 format file to ASCII text file.
  *
  * Author: FMRIB Analysis Group, University of Oxford

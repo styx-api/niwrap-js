@@ -211,6 +211,8 @@ function img2stdcoord_outputs(
 
 
 /**
+ * img2stdcoord
+ *
  * Transforms image coordinates using standard space transformations.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -237,6 +239,8 @@ function img2stdcoord_execute(
 
 
 /**
+ * img2stdcoord
+ *
  * Transforms image coordinates using standard space transformations.
  *
  * Author: FMRIB Analysis Group, University of Oxford

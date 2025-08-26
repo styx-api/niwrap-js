@@ -160,6 +160,8 @@ function v__suma_reprefixize_spec_outputs(
 
 
 /**
+ * @suma_reprefixize_spec
+ *
  * A tool for prefixing and working with SUMA specification files.
  *
  * Author: AFNI Developers
@@ -186,6 +188,8 @@ function v__suma_reprefixize_spec_execute(
 
 
 /**
+ * @suma_reprefixize_spec
+ *
  * A tool for prefixing and working with SUMA specification files.
  *
  * Author: AFNI Developers

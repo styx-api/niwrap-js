@@ -243,6 +243,8 @@ function nifti_information_outputs(
 
 
 /**
+ * nifti-information
+ *
  * Display information about a nifti/cifti file.
  *
  * You must specify at least one -print-* option.
@@ -271,6 +273,8 @@ function nifti_information_execute(
 
 
 /**
+ * nifti-information
+ *
  * Display information about a nifti/cifti file.
  *
  * You must specify at least one -print-* option.

@@ -141,6 +141,8 @@ function vno_match_check_outputs(
 
 
 /**
+ * vno_match_check
+ *
  * Checks that all surfaces and surface data files for a subject have the same number of vertices.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function vno_match_check_execute(
 
 
 /**
+ * vno_match_check
+ *
  * Checks that all surfaces and surface data files for a subject have the same number of vertices.
  *
  * Author: FreeSurfer Developers

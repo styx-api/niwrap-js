@@ -222,6 +222,8 @@ function slicetimer_outputs(
 
 
 /**
+ * slicetimer
+ *
  * FMRIB's Interpolation for Slice Timing.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -248,6 +250,8 @@ function slicetimer_execute(
 
 
 /**
+ * slicetimer
+ *
  * FMRIB's Interpolation for Slice Timing.
  *
  * Author: FMRIB Analysis Group, University of Oxford

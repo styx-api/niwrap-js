@@ -166,6 +166,8 @@ function v_3d_pval_outputs(
 
 
 /**
+ * 3dPval
+ *
  * Convert a dataset's statistical sub-bricks to p-values or other statistical representations.
  *
  * Author: AFNI Developers
@@ -192,6 +194,8 @@ function v_3d_pval_execute(
 
 
 /**
+ * 3dPval
+ *
  * Convert a dataset's statistical sub-bricks to p-values or other statistical representations.
  *
  * Author: AFNI Developers

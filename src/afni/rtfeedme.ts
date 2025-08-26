@@ -225,6 +225,8 @@ function rtfeedme_outputs(
 
 
 /**
+ * rtfeedme
+ *
  * Test the real-time plugin by sending all the bricks in 'dataset' to AFNI.
  *
  * Author: AFNI Developers
@@ -251,6 +253,8 @@ function rtfeedme_execute(
 
 
 /**
+ * rtfeedme
+ *
  * Test the real-time plugin by sending all the bricks in 'dataset' to AFNI.
  *
  * Author: AFNI Developers

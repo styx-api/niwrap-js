@@ -157,6 +157,8 @@ function fslswapdim_exe_outputs(
 
 
 /**
+ * fslswapdim_exe
+ *
  * Tool to swap the x, y, z axes dimensions of an image.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -183,6 +185,8 @@ function fslswapdim_exe_execute(
 
 
 /**
+ * fslswapdim_exe
+ *
  * Tool to swap the x, y, z axes dimensions of an image.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -142,6 +142,8 @@ function border_resample_outputs(
 
 
 /**
+ * border-resample
+ *
  * Resample a border file to a different mesh.
  *
  * Resamples a border file, given two spherical surfaces that are in register.  Only borders that have the same structure as current-sphere will be resampled.
@@ -170,6 +172,8 @@ function border_resample_execute(
 
 
 /**
+ * border-resample
+ *
  * Resample a border file to a different mesh.
  *
  * Resamples a border file, given two spherical surfaces that are in register.  Only borders that have the same structure as current-sphere will be resampled.

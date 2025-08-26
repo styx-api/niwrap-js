@@ -148,6 +148,8 @@ function mris_hausdorff_dist_outputs(
 
 
 /**
+ * mris_hausdorff_dist
+ *
  * This program computes the Hausdorff distance between two labels on a surface.
  *
  * Author: FreeSurfer Developers
@@ -174,6 +176,8 @@ function mris_hausdorff_dist_execute(
 
 
 /**
+ * mris_hausdorff_dist
+ *
  * This program computes the Hausdorff distance between two labels on a surface.
  *
  * Author: FreeSurfer Developers

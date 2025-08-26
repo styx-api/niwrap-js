@@ -140,6 +140,8 @@ function surfmaths_outputs(
 
 
 /**
+ * surfmaths
+ *
  * A command-line tool for performing various mathematical operations on surface files.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -166,6 +168,8 @@ function surfmaths_execute(
 
 
 /**
+ * surfmaths
+ *
  * A command-line tool for performing various mathematical operations on surface files.
  *
  * Author: FMRIB Analysis Group, University of Oxford

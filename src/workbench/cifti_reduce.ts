@@ -214,6 +214,8 @@ function cifti_reduce_outputs(
 
 
 /**
+ * cifti-reduce
+ *
  * Perform reduction operation on a cifti file.
  *
  * For the specified direction (default ROW), perform a reduction operation along that direction.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  The reduction operators are as follows:
@@ -260,6 +262,8 @@ function cifti_reduce_execute(
 
 
 /**
+ * cifti-reduce
+ *
  * Perform reduction operation on a cifti file.
  *
  * For the specified direction (default ROW), perform a reduction operation along that direction.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  The reduction operators are as follows:

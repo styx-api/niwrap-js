@@ -195,6 +195,8 @@ function fslcreatehd_outputs(
 
 
 /**
+ * fslcreatehd
+ *
  * Tool to create a new NIfTI header.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -221,6 +223,8 @@ function fslcreatehd_execute(
 
 
 /**
+ * fslcreatehd
+ *
  * Tool to create a new NIfTI header.
  *
  * Author: FMRIB Analysis Group, University of Oxford

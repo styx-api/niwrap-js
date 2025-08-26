@@ -274,6 +274,8 @@ function afdconnectivity_outputs(
 
 
 /**
+ * afdconnectivity
+ *
  * Obtain an estimate of fibre connectivity between two regions using AFD and streamlines tractography.
  *
  * This estimate is obtained by determining a fibre volume (AFD) occupied by the pathway of interest, and dividing by the streamline length.
@@ -316,6 +318,8 @@ function afdconnectivity_execute(
 
 
 /**
+ * afdconnectivity
+ *
  * Obtain an estimate of fibre connectivity between two regions using AFD and streamlines tractography.
  *
  * This estimate is obtained by determining a fibre volume (AFD) occupied by the pathway of interest, and dividing by the streamline length.

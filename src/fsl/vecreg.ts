@@ -231,6 +231,8 @@ function vecreg_outputs(
 
 
 /**
+ * vecreg
+ *
  * Vector Affine/NonLinear Transformation with Orientation Preservation.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -257,6 +259,8 @@ function vecreg_execute(
 
 
 /**
+ * vecreg
+ *
  * Vector Affine/NonLinear Transformation with Orientation Preservation.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -156,6 +156,8 @@ function v_3ddot_beta_outputs(
 
 
 /**
+ * 3ddot_beta
+ *
  * Beta version of updating 3ddot, currently only performing eta2 tests and outputting a full matrix to a text file.
  *
  * Author: AFNI Developers
@@ -182,6 +184,8 @@ function v_3ddot_beta_execute(
 
 
 /**
+ * 3ddot_beta
+ *
  * Beta version of updating 3ddot, currently only performing eta2 tests and outputting a full matrix to a text file.
  *
  * Author: AFNI Developers

@@ -125,6 +125,8 @@ function aff2rigid_outputs(
 
 
 /**
+ * aff2rigid
+ *
  * Tool for converting affine transformations to rigid transformations.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -151,6 +153,8 @@ function aff2rigid_execute(
 
 
 /**
+ * aff2rigid
+ *
  * Tool for converting affine transformations to rigid transformations.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -127,6 +127,8 @@ function v_2swap_outputs(
 
 
 /**
+ * 2swap
+ *
  * Swaps byte pairs on the files listed.
  *
  * Author: AFNI Developers
@@ -153,6 +155,8 @@ function v_2swap_execute(
 
 
 /**
+ * 2swap
+ *
  * Swaps byte pairs on the files listed.
  *
  * Author: AFNI Developers

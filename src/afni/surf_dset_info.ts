@@ -264,6 +264,8 @@ function surf_dset_info_outputs(
 
 
 /**
+ * SurfDsetInfo
+ *
  * Provides information about surface datasets (DSET).
  *
  * Author: AFNI Developers
@@ -290,6 +292,8 @@ function surf_dset_info_execute(
 
 
 /**
+ * SurfDsetInfo
+ *
  * Provides information about surface datasets (DSET).
  *
  * Author: AFNI Developers

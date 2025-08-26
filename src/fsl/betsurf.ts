@@ -214,6 +214,8 @@ function betsurf_outputs(
 
 
 /**
+ * betsurf
+ *
  * BET Surface Finder to extract brain surfaces using T1 and T2 images.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -240,6 +242,8 @@ function betsurf_execute(
 
 
 /**
+ * betsurf
+ *
  * BET Surface Finder to extract brain surfaces using T1 and T2 images.
  *
  * Author: FMRIB Analysis Group, University of Oxford

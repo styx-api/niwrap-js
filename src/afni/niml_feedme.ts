@@ -182,6 +182,8 @@ function niml_feedme_outputs(
 
 
 /**
+ * niml_feedme
+ *
  * Sends volumes from the dataset to AFNI via the NIML socket interface.
  *
  * Author: AFNI Developers
@@ -208,6 +210,8 @@ function niml_feedme_execute(
 
 
 /**
+ * niml_feedme
+ *
  * Sends volumes from the dataset to AFNI via the NIML socket interface.
  *
  * Author: AFNI Developers

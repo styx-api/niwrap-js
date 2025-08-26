@@ -126,6 +126,8 @@ function feat_outputs(
 
 
 /**
+ * feat
+ *
  * fMRI Expert Analysis Tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -152,6 +154,8 @@ function feat_execute(
 
 
 /**
+ * feat
+ *
  * fMRI Expert Analysis Tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford

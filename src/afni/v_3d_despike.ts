@@ -138,6 +138,8 @@ function v_3d_despike_outputs(
 
 
 /**
+ * 3dDespike
+ *
  * Removes 'spikes' from the 3D+time input dataset and writes a new dataset with the spike values replaced by something more pleasing to the eye.
  *
  * Author: AFNI Developers
@@ -164,6 +166,8 @@ function v_3d_despike_execute(
 
 
 /**
+ * 3dDespike
+ *
  * Removes 'spikes' from the 3D+time input dataset and writes a new dataset with the spike values replaced by something more pleasing to the eye.
  *
  * Author: AFNI Developers

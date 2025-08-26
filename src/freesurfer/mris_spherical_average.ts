@@ -226,6 +226,8 @@ function mris_spherical_average_outputs(
 
 
 /**
+ * mris_spherical_average
+ *
  * This tool adds a template into an average surface in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -252,6 +254,8 @@ function mris_spherical_average_execute(
 
 
 /**
+ * mris_spherical_average
+ *
  * This tool adds a template into an average surface in FreeSurfer.
  *
  * Author: FreeSurfer Developers

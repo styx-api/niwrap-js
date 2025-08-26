@@ -285,6 +285,8 @@ function mri_label_volume_outputs(
 
 
 /**
+ * mri_label_volume
+ *
  * A tool to compute volumes of labeled voxels within MRI images, often used in conjunction with FreeSurfer processed data.
  *
  * Author: FreeSurfer Developers
@@ -311,6 +313,8 @@ function mri_label_volume_execute(
 
 
 /**
+ * mri_label_volume
+ *
  * A tool to compute volumes of labeled voxels within MRI images, often used in conjunction with FreeSurfer processed data.
  *
  * Author: FreeSurfer Developers

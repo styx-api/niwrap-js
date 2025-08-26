@@ -261,6 +261,8 @@ function post_recon_all_outputs(
 
 
 /**
+ * post-recon-all
+ *
  * Post-processing script typically run after recon-all in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -287,6 +289,8 @@ function post_recon_all_execute(
 
 
 /**
+ * post-recon-all
+ *
  * Post-processing script typically run after recon-all in FreeSurfer.
  *
  * Author: FreeSurfer Developers

@@ -191,6 +191,8 @@ function v_3d_surf_mask_outputs(
 
 
 /**
+ * 3dSurfMask
+ *
  * Creates volumetric datasets marking voxels based on their location relative to a surface.
  *
  * Author: AFNI Developers
@@ -217,6 +219,8 @@ function v_3d_surf_mask_execute(
 
 
 /**
+ * 3dSurfMask
+ *
  * Creates volumetric datasets marking voxels based on their location relative to a surface.
  *
  * Author: AFNI Developers

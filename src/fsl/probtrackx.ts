@@ -457,6 +457,8 @@ function probtrackx_outputs(
 
 
 /**
+ * probtrackx
+ *
  * Streamlines tracking algorithm for probabilistic tractography.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -483,6 +485,8 @@ function probtrackx_execute(
 
 
 /**
+ * probtrackx
+ *
  * Streamlines tracking algorithm for probabilistic tractography.
  *
  * Author: FMRIB Analysis Group, University of Oxford

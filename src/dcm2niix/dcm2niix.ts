@@ -433,6 +433,8 @@ function dcm2niix_outputs(
 
 
 /**
+ * dcm2niix
+ *
  * Chris Rorden's dcm2niiX - DICOM to NIfTI converter. Converts DICOM files to NIfTI format with optional BIDS sidecar generation.
  *
  * Author: Chris Rorden
@@ -457,6 +459,8 @@ function dcm2niix_execute(
 
 
 /**
+ * dcm2niix
+ *
  * Chris Rorden's dcm2niiX - DICOM to NIfTI converter. Converts DICOM files to NIfTI format with optional BIDS sidecar generation.
  *
  * Author: Chris Rorden

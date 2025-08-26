@@ -138,6 +138,8 @@ function v_3d_mask_to_ascii_outputs(
 
 
 /**
+ * 3dMaskToASCII
+ *
  * Converts a byte-valued 0/1 dataset into an ASCII string, or vice versa.
  *
  * Author: AFNI Developers
@@ -164,6 +166,8 @@ function v_3d_mask_to_ascii_execute(
 
 
 /**
+ * 3dMaskToASCII
+ *
  * Converts a byte-valued 0/1 dataset into an ASCII string, or vice versa.
  *
  * Author: AFNI Developers

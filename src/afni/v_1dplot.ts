@@ -802,6 +802,8 @@ function v_1dplot_outputs(
 
 
 /**
+ * 1dplot
+ *
  * Graphs the columns of a *.1D time series file to the X11 screen, or to an image file (.jpg or .png).
  *
  * Author: AFNI Developers
@@ -828,6 +830,8 @@ function v_1dplot_execute(
 
 
 /**
+ * 1dplot
+ *
  * Graphs the columns of a *.1D time series file to the X11 screen, or to an image file (.jpg or .png).
  *
  * Author: AFNI Developers

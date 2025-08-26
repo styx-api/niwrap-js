@@ -155,6 +155,8 @@ function aparcstatsdiff_outputs(
 
 
 /**
+ * aparcstatsdiff
+ *
  * Utility to calculate percentage differences in aparc morphometry data between two subjects.
  *
  * Author: FreeSurfer Developers
@@ -181,6 +183,8 @@ function aparcstatsdiff_execute(
 
 
 /**
+ * aparcstatsdiff
+ *
  * Utility to calculate percentage differences in aparc morphometry data between two subjects.
  *
  * Author: FreeSurfer Developers

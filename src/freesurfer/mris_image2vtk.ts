@@ -156,6 +156,8 @@ function mris_image2vtk_outputs(
 
 
 /**
+ * mris_image2vtk
+ *
  * Convert image to VTK format with specified thresholds and smoothing parameters.
  *
  * Author: FreeSurfer Developers
@@ -182,6 +184,8 @@ function mris_image2vtk_execute(
 
 
 /**
+ * mris_image2vtk
+ *
  * Convert image to VTK format with specified thresholds and smoothing parameters.
  *
  * Author: FreeSurfer Developers

@@ -169,6 +169,8 @@ function longmc_outputs(
 
 
 /**
+ * longmc
+ *
  * Perform motion correction for the longitudinal recon-all stream when creating the longitudinal timepoint of a subject.
  *
  * Author: FreeSurfer Developers
@@ -195,6 +197,8 @@ function longmc_execute(
 
 
 /**
+ * longmc
+ *
  * Perform motion correction for the longitudinal recon-all stream when creating the longitudinal timepoint of a subject.
  *
  * Author: FreeSurfer Developers

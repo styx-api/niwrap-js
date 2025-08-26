@@ -120,6 +120,8 @@ function renormalize_t1_subject_outputs(
 
 
 /**
+ * renormalize_T1_subject
+ *
  * Renormalize T1 subject images using FreeSurfer scripts.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function renormalize_t1_subject_execute(
 
 
 /**
+ * renormalize_T1_subject
+ *
  * Renormalize T1 subject images using FreeSurfer scripts.
  *
  * Author: FreeSurfer Developers

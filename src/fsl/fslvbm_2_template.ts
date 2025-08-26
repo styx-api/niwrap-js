@@ -403,6 +403,8 @@ function fslvbm_2_template_outputs(
 
 
 /**
+ * fslvbm_2_template
+ *
  * FSL-VBM is a Voxel-Based Morphometry style analysis tool for FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -429,6 +431,8 @@ function fslvbm_2_template_execute(
 
 
 /**
+ * fslvbm_2_template
+ *
  * FSL-VBM is a Voxel-Based Morphometry style analysis tool for FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

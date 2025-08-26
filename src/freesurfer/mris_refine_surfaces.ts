@@ -186,6 +186,8 @@ function mris_refine_surfaces_outputs(
 
 
 /**
+ * mris_refine_surfaces
+ *
  * Refines cortical surfaces around the region specified by the label file.
  *
  * Author: FreeSurfer Developers
@@ -212,6 +214,8 @@ function mris_refine_surfaces_execute(
 
 
 /**
+ * mris_refine_surfaces
+ *
  * Refines cortical surfaces around the region specified by the label file.
  *
  * Author: FreeSurfer Developers

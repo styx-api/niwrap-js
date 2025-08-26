@@ -240,6 +240,8 @@ function lpcregister_outputs(
 
 
 /**
+ * lpcregister
+ *
  * Registers a volume to its FreeSurfer anatomical using Local Pearson Correlation (LPC) (the AFNI lpc_align.py program). Creates a FreeSurfer register.dat file.
  *
  * Author: FreeSurfer Developers
@@ -266,6 +268,8 @@ function lpcregister_execute(
 
 
 /**
+ * lpcregister
+ *
  * Registers a volume to its FreeSurfer anatomical using Local Pearson Correlation (LPC) (the AFNI lpc_align.py program). Creates a FreeSurfer register.dat file.
  *
  * Author: FreeSurfer Developers

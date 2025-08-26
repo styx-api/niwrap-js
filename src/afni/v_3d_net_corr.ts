@@ -300,6 +300,8 @@ function v_3d_net_corr_outputs(
 
 
 /**
+ * 3dNetCorr
+ *
  * Compute correlation matrix of a set of ROIs based on mean time series.
  *
  * Author: AFNI Developers
@@ -326,6 +328,8 @@ function v_3d_net_corr_execute(
 
 
 /**
+ * 3dNetCorr
+ *
  * Compute correlation matrix of a set of ROIs based on mean time series.
  *
  * Author: AFNI Developers

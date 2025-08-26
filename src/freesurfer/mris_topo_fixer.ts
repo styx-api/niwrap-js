@@ -131,6 +131,8 @@ function mris_topo_fixer_outputs(
 
 
 /**
+ * mris_topo_fixer
+ *
  * FreeSurfer tool for fixing topological defects in cortical surface meshes.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mris_topo_fixer_execute(
 
 
 /**
+ * mris_topo_fixer
+ *
  * FreeSurfer tool for fixing topological defects in cortical surface meshes.
  *
  * Author: FreeSurfer Developers

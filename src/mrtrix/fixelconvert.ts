@@ -471,6 +471,8 @@ function fixelconvert_outputs(
 
 
 /**
+ * fixelconvert
+ *
  * Convert between the old format fixel image (.msf / .msh) and the new fixel directory format.
  *
  *
@@ -503,6 +505,8 @@ function fixelconvert_execute(
 
 
 /**
+ * fixelconvert
+ *
  * Convert between the old format fixel image (.msf / .msh) and the new fixel directory format.
  *
  *

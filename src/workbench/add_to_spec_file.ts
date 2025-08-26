@@ -131,6 +131,8 @@ function add_to_spec_file_outputs(
 
 
 /**
+ * add-to-spec-file
+ *
  * Add a file to a specification file.
  *
  * The resulting spec file overwrites the existing spec file.  If the spec file doesn't exist, it is created with default metadata.  The structure argument must be one of the following:
@@ -194,6 +196,8 @@ function add_to_spec_file_execute(
 
 
 /**
+ * add-to-spec-file
+ *
  * Add a file to a specification file.
  *
  * The resulting spec file overwrites the existing spec file.  If the spec file doesn't exist, it is created with default metadata.  The structure argument must be one of the following:

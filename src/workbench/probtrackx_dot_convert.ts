@@ -402,6 +402,8 @@ function probtrackx_dot_convert_outputs(
 
 
 /**
+ * probtrackx-dot-convert
+ *
  * Convert a .dot file from probtrackx to cifti.
  *
  * NOTE: exactly one -row option and one -col option must be used.
@@ -467,6 +469,8 @@ function probtrackx_dot_convert_execute(
 
 
 /**
+ * probtrackx-dot-convert
+ *
  * Convert a .dot file from probtrackx to cifti.
  *
  * NOTE: exactly one -row option and one -col option must be used.

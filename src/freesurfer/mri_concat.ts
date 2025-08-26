@@ -510,6 +510,8 @@ function mri_concat_outputs(
 
 
 /**
+ * mri_concat
+ *
  * Concatenates input data sets.
  *
  * Author: FreeSurfer Developers
@@ -536,6 +538,8 @@ function mri_concat_execute(
 
 
 /**
+ * mri_concat
+ *
  * Concatenates input data sets.
  *
  * Author: FreeSurfer Developers

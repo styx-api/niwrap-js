@@ -267,6 +267,8 @@ function seg2recon_outputs(
 
 
 /**
+ * seg2recon
+ *
  * Creates and populates a subjects directory from an input image and segmentation suitable for running recon-all.
  *
  * Author: FreeSurfer Developers
@@ -293,6 +295,8 @@ function seg2recon_execute(
 
 
 /**
+ * seg2recon
+ *
  * Creates and populates a subjects directory from an input image and segmentation suitable for running recon-all.
  *
  * Author: FreeSurfer Developers

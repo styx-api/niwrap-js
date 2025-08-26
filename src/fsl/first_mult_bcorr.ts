@@ -167,6 +167,8 @@ function first_mult_bcorr_outputs(
 
 
 /**
+ * first_mult_bcorr
+ *
  * Part of FSL (ID: 6.0.5:9e026117), first_mult_bcorr converts label images to an output image.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -193,6 +195,8 @@ function first_mult_bcorr_execute(
 
 
 /**
+ * first_mult_bcorr
+ *
  * Part of FSL (ID: 6.0.5:9e026117), first_mult_bcorr converts label images to an output image.
  *
  * Author: FMRIB Analysis Group, University of Oxford

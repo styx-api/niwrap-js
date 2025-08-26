@@ -125,6 +125,8 @@ function v__time_diff_outputs(
 
 
 /**
+ * @TimeDiff
+ *
  * A tool to compare the modification times of two files.
  *
  * Author: AFNI Developers
@@ -151,6 +153,8 @@ function v__time_diff_execute(
 
 
 /**
+ * @TimeDiff
+ *
  * A tool to compare the modification times of two files.
  *
  * Author: AFNI Developers

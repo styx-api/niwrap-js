@@ -146,6 +146,8 @@ function v_3d_nwarp_xyz_outputs(
 
 
 /**
+ * 3dNwarpXYZ
+ *
  * Transforms the DICOM xyz coordinates in the input XYZfile.1D based on specified warp.
  *
  * Author: AFNI Developers
@@ -172,6 +174,8 @@ function v_3d_nwarp_xyz_execute(
 
 
 /**
+ * 3dNwarpXYZ
+ *
  * Transforms the DICOM xyz coordinates in the input XYZfile.1D based on specified warp.
  *
  * Author: AFNI Developers

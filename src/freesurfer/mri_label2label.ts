@@ -634,6 +634,8 @@ function mri_label2label_outputs(
 
 
 /**
+ * mri_label2label
+ *
  * No description.
  *
  * Author: FreeSurfer Developers
@@ -660,6 +662,8 @@ function mri_label2label_execute(
 
 
 /**
+ * mri_label2label
+ *
  * No description.
  *
  * Author: FreeSurfer Developers

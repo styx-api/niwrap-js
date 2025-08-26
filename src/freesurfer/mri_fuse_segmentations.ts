@@ -179,6 +179,8 @@ function mri_fuse_segmentations_outputs(
 
 
 /**
+ * mri_fuse_segmentations
+ *
  * Fuse a set of segmentations (asegs) into an initial estimate of a longitudinal one.
  *
  * Author: FreeSurfer Developers
@@ -205,6 +207,8 @@ function mri_fuse_segmentations_execute(
 
 
 /**
+ * mri_fuse_segmentations
+ *
  * Fuse a set of segmentations (asegs) into an initial estimate of a longitudinal one.
  *
  * Author: FreeSurfer Developers

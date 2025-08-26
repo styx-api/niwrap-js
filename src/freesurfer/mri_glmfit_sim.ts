@@ -440,6 +440,8 @@ function mri_glmfit_sim_outputs(
 
 
 /**
+ * mri_glmfit-sim
+ *
  * A tool to run corrections for multiple comparisons on volumes or surfaces, using various methods including Monte Carlo simulation, permutation, and Gaussian Random Fields.
  *
  * Author: FreeSurfer Developers
@@ -466,6 +468,8 @@ function mri_glmfit_sim_execute(
 
 
 /**
+ * mri_glmfit-sim
+ *
  * A tool to run corrections for multiple comparisons on volumes or surfaces, using various methods including Monte Carlo simulation, permutation, and Gaussian Random Fields.
  *
  * Author: FreeSurfer Developers

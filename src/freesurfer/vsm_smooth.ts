@@ -153,6 +153,8 @@ function vsm_smooth_outputs(
 
 
 /**
+ * vsm-smooth
+ *
  * Implements a masked smoothing in which the input (vsm) is unchanged in voxels that have a non-zero value. In voxels with a zero value, the value is replaced with vsm smoothed by the given amount. This will likely only change the voxels that are near the edge of the non-zero voxels. This is a simple way to extrapolate the non-zero voxels beyond their range. This works well for a B0 distortion correction voxel shift map (vsm), but it can be applied to other maps.
  *
  * Author: FreeSurfer Developers
@@ -179,6 +181,8 @@ function vsm_smooth_execute(
 
 
 /**
+ * vsm-smooth
+ *
  * Implements a masked smoothing in which the input (vsm) is unchanged in voxels that have a non-zero value. In voxels with a zero value, the value is replaced with vsm smoothed by the given amount. This will likely only change the voxels that are near the edge of the non-zero voxels. This is a simple way to extrapolate the non-zero voxels beyond their range. This works well for a B0 distortion correction voxel shift map (vsm), but it can be applied to other maps.
  *
  * Author: FreeSurfer Developers

@@ -137,6 +137,8 @@ function fftest_outputs(
 
 
 /**
+ * fftest
+ *
  * A command line tool for testing purposes.
  *
  * Author: AFNI Developers
@@ -163,6 +165,8 @@ function fftest_execute(
 
 
 /**
+ * fftest
+ *
  * A command line tool for testing purposes.
  *
  * Author: AFNI Developers

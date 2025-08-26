@@ -130,6 +130,8 @@ function mri_gdfglm_outputs(
 
 
 /**
+ * mri_gdfglm
+ *
  * The mri_gdfglm command has been removed from the current version of FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -156,6 +158,8 @@ function mri_gdfglm_execute(
 
 
 /**
+ * mri_gdfglm
+ *
  * The mri_gdfglm command has been removed from the current version of FreeSurfer.
  *
  * Author: FreeSurfer Developers

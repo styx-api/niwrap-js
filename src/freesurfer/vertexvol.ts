@@ -169,6 +169,8 @@ function vertexvol_outputs(
 
 
 /**
+ * vertexvol
+ *
  * Computes vertex-wise volume (and mid.area).
  *
  * Author: FreeSurfer Developers
@@ -195,6 +197,8 @@ function vertexvol_execute(
 
 
 /**
+ * vertexvol
+ *
  * Computes vertex-wise volume (and mid.area).
  *
  * Author: FreeSurfer Developers

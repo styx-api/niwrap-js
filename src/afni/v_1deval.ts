@@ -208,6 +208,8 @@ function v_1deval_outputs(
 
 
 /**
+ * 1deval
+ *
  * Evaluates an expression that may include columns of data from one or more text files and writes the result to stdout.
  *
  * Author: AFNI Developers
@@ -234,6 +236,8 @@ function v_1deval_execute(
 
 
 /**
+ * 1deval
+ *
  * Evaluates an expression that may include columns of data from one or more text files and writes the result to stdout.
  *
  * Author: AFNI Developers

@@ -196,6 +196,8 @@ function mri_make_uchar_outputs(
 
 
 /**
+ * mri_make_uchar
+ *
  * Tool to adjust intensity of brain MRI images using a Talairach transformation.
  *
  * Author: FreeSurfer Developers
@@ -222,6 +224,8 @@ function mri_make_uchar_execute(
 
 
 /**
+ * mri_make_uchar
+ *
  * Tool to adjust intensity of brain MRI images using a Talairach transformation.
  *
  * Author: FreeSurfer Developers

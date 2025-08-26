@@ -300,6 +300,8 @@ function fsl_tsplot_outputs(
 
 
 /**
+ * fsl_tsplot
+ *
  * Timeseries plotting tool from FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -326,6 +328,8 @@ function fsl_tsplot_execute(
 
 
 /**
+ * fsl_tsplot
+ *
  * Timeseries plotting tool from FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

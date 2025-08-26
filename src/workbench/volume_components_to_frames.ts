@@ -132,6 +132,8 @@ function volume_components_to_frames_outputs(
 
 
 /**
+ * volume-components-to-frames
+ *
  * Convert rgb/complex volume to frames.
  *
  * RGB and complex datatypes are not always well supported, this command allows separating them into standard subvolumes for better support.
@@ -160,6 +162,8 @@ function volume_components_to_frames_execute(
 
 
 /**
+ * volume-components-to-frames
+ *
  * Convert rgb/complex volume to frames.
  *
  * RGB and complex datatypes are not always well supported, this command allows separating them into standard subvolumes for better support.

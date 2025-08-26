@@ -387,6 +387,8 @@ function mri_compute_volume_fractions_outputs(
 
 
 /**
+ * mri_compute_volume_fractions
+ *
  * Computes partial volume fractions for cortex, subcortical GM, WM and CSF.
  *
  * Author: FreeSurfer Developers
@@ -413,6 +415,8 @@ function mri_compute_volume_fractions_execute(
 
 
 /**
+ * mri_compute_volume_fractions
+ *
  * Computes partial volume fractions for cortex, subcortical GM, WM and CSF.
  *
  * Author: FreeSurfer Developers

@@ -144,6 +144,8 @@ function volume_copy_extensions_outputs(
 
 
 /**
+ * volume-copy-extensions
+ *
  * Copy extended data to another volume file.
  *
  * This command copies the information in a volume file that isn't a critical part of the standard header or data matrix, e.g. map names, palette settings, label tables.  If -drop-unknown is not specified, it also copies similar kinds of information set by other software.
@@ -172,6 +174,8 @@ function volume_copy_extensions_execute(
 
 
 /**
+ * volume-copy-extensions
+ *
  * Copy extended data to another volume file.
  *
  * This command copies the information in a volume file that isn't a critical part of the standard header or data matrix, e.g. map names, palette settings, label tables.  If -drop-unknown is not specified, it also copies similar kinds of information set by other software.

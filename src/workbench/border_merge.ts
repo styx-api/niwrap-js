@@ -293,6 +293,8 @@ function border_merge_outputs(
 
 
 /**
+ * border-merge
+ *
  * Merge border files into a new file.
  *
  * Takes one or more border files and makes a new border file from the borders in them.
@@ -325,6 +327,8 @@ function border_merge_execute(
 
 
 /**
+ * border-merge
+ *
  * Merge border files into a new file.
  *
  * Takes one or more border files and makes a new border file from the borders in them.

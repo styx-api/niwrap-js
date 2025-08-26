@@ -190,6 +190,8 @@ function tbss_non_fa_outputs(
 
 
 /**
+ * tbss_non_FA
+ *
  * TBSS processing for non-FA images.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -216,6 +218,8 @@ function tbss_non_fa_execute(
 
 
 /**
+ * tbss_non_FA
+ *
  * TBSS processing for non-FA images.
  *
  * Author: FMRIB Analysis Group, University of Oxford

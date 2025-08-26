@@ -222,6 +222,8 @@ function xcerebralseg_outputs(
 
 
 /**
+ * xcerebralseg
+ *
  * Tool for labeling extracerebral structures including sulcal CSF, skull/bone, head soft tissue, and air inside the head, merged with aparc+aseg.mgz segmentation for a whole head segmentation.
  *
  * Author: FreeSurfer Developers
@@ -248,6 +250,8 @@ function xcerebralseg_execute(
 
 
 /**
+ * xcerebralseg
+ *
  * Tool for labeling extracerebral structures including sulcal CSF, skull/bone, head soft tissue, and air inside the head, merged with aparc+aseg.mgz segmentation for a whole head segmentation.
  *
  * Author: FreeSurfer Developers

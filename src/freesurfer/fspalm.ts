@@ -231,6 +231,8 @@ function fspalm_outputs(
 
 
 /**
+ * fspalm
+ *
  * Prepares and analyzes the output of mri_glmfit for Permutation Analysis of Linear Models (PALM) to correct for multiple comparisons.
  *
  * Author: FreeSurfer Developers
@@ -257,6 +259,8 @@ function fspalm_execute(
 
 
 /**
+ * fspalm
+ *
  * Prepares and analyzes the output of mri_glmfit for Permutation Analysis of Linear Models (PALM) to correct for multiple comparisons.
  *
  * Author: FreeSurfer Developers

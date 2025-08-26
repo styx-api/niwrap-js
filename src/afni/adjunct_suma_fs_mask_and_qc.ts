@@ -195,6 +195,8 @@ function adjunct_suma_fs_mask_and_qc_outputs(
 
 
 /**
+ * adjunct_suma_fs_mask_and_qc
+ *
  * Script for quickly making some QC images for the SUMA/ directory created by @SUMA_Make_Spec_FS after running FreeSurfer's recon-all.
  *
  * Author: AFNI Developers
@@ -221,6 +223,8 @@ function adjunct_suma_fs_mask_and_qc_execute(
 
 
 /**
+ * adjunct_suma_fs_mask_and_qc
+ *
  * Script for quickly making some QC images for the SUMA/ directory created by @SUMA_Make_Spec_FS after running FreeSurfer's recon-all.
  *
  * Author: AFNI Developers

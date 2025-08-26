@@ -527,6 +527,8 @@ function v_3d_vol2_surf_outputs(
 
 
 /**
+ * 3dVol2Surf
+ *
  * Map data from a volume domain to a surface domain.
  *
  * Author: AFNI Developers
@@ -553,6 +555,8 @@ function v_3d_vol2_surf_execute(
 
 
 /**
+ * 3dVol2Surf
+ *
  * Map data from a volume domain to a surface domain.
  *
  * Author: AFNI Developers

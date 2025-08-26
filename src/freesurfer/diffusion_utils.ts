@@ -122,6 +122,8 @@ function diffusion_utils_outputs(
 
 
 /**
+ * diffusionUtils
+ *
  * A utility related to diffusion data, potentially using the DIPY library.
  *
  * Author: FreeSurfer Developers
@@ -148,6 +150,8 @@ function diffusion_utils_execute(
 
 
 /**
+ * diffusionUtils
+ *
  * A utility related to diffusion data, potentially using the DIPY library.
  *
  * Author: FreeSurfer Developers

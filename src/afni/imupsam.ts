@@ -143,6 +143,8 @@ function imupsam_outputs(
 
 
 /**
+ * imupsam
+ *
  * Upsamples a 2D image by a specified factor.
  *
  * Author: AFNI Developers
@@ -169,6 +171,8 @@ function imupsam_execute(
 
 
 /**
+ * imupsam
+ *
  * Upsamples a 2D image by a specified factor.
  *
  * Author: AFNI Developers

@@ -232,6 +232,8 @@ function v_3dretroicor_outputs(
 
 
 /**
+ * 3dretroicor
+ *
  * Performs Retrospective Image Correction for physiological motion effects using a modified RETROICOR algorithm.
  *
  * Author: AFNI Developers
@@ -258,6 +260,8 @@ function v_3dretroicor_execute(
 
 
 /**
+ * 3dretroicor
+ *
  * Performs Retrospective Image Correction for physiological motion effects using a modified RETROICOR algorithm.
  *
  * Author: AFNI Developers

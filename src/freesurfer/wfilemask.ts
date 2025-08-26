@@ -171,6 +171,8 @@ function wfilemask_outputs(
 
 
 /**
+ * wfilemask
+ *
  * Zero-out regions of a surface value file (.w file) using a label.
  *
  * Author: FreeSurfer Developers
@@ -197,6 +199,8 @@ function wfilemask_execute(
 
 
 /**
+ * wfilemask
+ *
  * Zero-out regions of a surface value file (.w file) using a label.
  *
  * Author: FreeSurfer Developers

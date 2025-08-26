@@ -131,6 +131,8 @@ function imcp_outputs(
 
 
 /**
+ * imcp
+ *
  * Copy images from one location to another.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function imcp_execute(
 
 
 /**
+ * imcp
+ *
  * Copy images from one location to another.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -828,6 +828,8 @@ function tckedit_outputs(
 
 
 /**
+ * tckedit
+ *
  * Perform various editing operations on track files.
  *
  * This command can be used to perform various types of manipulations on track data. A range of such manipulations are demonstrated in the examples provided below.
@@ -860,6 +862,8 @@ function tckedit_execute(
 
 
 /**
+ * tckedit
+ *
  * Perform various editing operations on track files.
  *
  * This command can be used to perform various types of manipulations on track data. A range of such manipulations are demonstrated in the examples provided below.

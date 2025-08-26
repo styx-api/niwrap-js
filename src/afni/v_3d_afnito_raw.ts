@@ -139,6 +139,8 @@ function v_3d_afnito_raw_outputs(
 
 
 /**
+ * 3dAFNItoRaw
+ *
  * Convert an AFNI brik file with multiple sub-briks to a raw file with each sub-brik voxel concatenated voxel-wise.
  *
  * Author: AFNI Developers
@@ -165,6 +167,8 @@ function v_3d_afnito_raw_execute(
 
 
 /**
+ * 3dAFNItoRaw
+ *
  * Convert an AFNI brik file with multiple sub-briks to a raw file with each sub-brik voxel concatenated voxel-wise.
  *
  * Author: AFNI Developers

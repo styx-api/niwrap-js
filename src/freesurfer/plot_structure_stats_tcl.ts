@@ -131,6 +131,8 @@ function plot_structure_stats_tcl_outputs(
 
 
 /**
+ * plot_structure_stats.tcl
+ *
  * Script to plot structural statistics.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function plot_structure_stats_tcl_execute(
 
 
 /**
+ * plot_structure_stats.tcl
+ *
  * Script to plot structural statistics.
  *
  * Author: FreeSurfer Developers

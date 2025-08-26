@@ -146,6 +146,8 @@ function connected_components_outputs(
 
 
 /**
+ * connected_components
+ *
  * A tool for identifying connected components in an image.
  *
  * Author: FreeSurfer Developers
@@ -172,6 +174,8 @@ function connected_components_execute(
 
 
 /**
+ * connected_components
+ *
  * A tool for identifying connected components in an image.
  *
  * Author: FreeSurfer Developers

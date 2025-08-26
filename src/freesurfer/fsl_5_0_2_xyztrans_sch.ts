@@ -141,6 +141,8 @@ function fsl_5_0_2_xyztrans_sch_outputs(
 
 
 /**
+ * fsl.5.0.2.xyztrans.sch
+ *
  * A script with unclear functionality, potentially related to terminal operations.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function fsl_5_0_2_xyztrans_sch_execute(
 
 
 /**
+ * fsl.5.0.2.xyztrans.sch
+ *
  * A script with unclear functionality, potentially related to terminal operations.
  *
  * Author: FreeSurfer Developers

@@ -322,6 +322,8 @@ function afni_history_outputs(
 
 
 /**
+ * afni_history
+ *
  * Show AFNI updates per user, dates, or levels.
  *
  * Author: AFNI Developers
@@ -348,6 +350,8 @@ function afni_history_execute(
 
 
 /**
+ * afni_history
+ *
  * Show AFNI updates per user, dates, or levels.
  *
  * Author: AFNI Developers

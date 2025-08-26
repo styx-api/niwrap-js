@@ -193,6 +193,8 @@ function unpackmincdir_outputs(
 
 
 /**
+ * unpackmincdir
+ *
  * Tool for unpacking directories with MINC files.
  *
  * Author: FreeSurfer Developers
@@ -219,6 +221,8 @@ function unpackmincdir_execute(
 
 
 /**
+ * unpackmincdir
+ *
  * Tool for unpacking directories with MINC files.
  *
  * Author: FreeSurfer Developers

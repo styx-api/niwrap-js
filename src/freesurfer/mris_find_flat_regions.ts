@@ -143,6 +143,8 @@ function mris_find_flat_regions_outputs(
 
 
 /**
+ * mris_find_flat_regions
+ *
  * Compute regions in which the surface is almost perpendicular to one of the cardinal axes and write the results to a label file.
  *
  * Author: FreeSurfer Developers
@@ -169,6 +171,8 @@ function mris_find_flat_regions_execute(
 
 
 /**
+ * mris_find_flat_regions
+ *
  * Compute regions in which the surface is almost perpendicular to one of the cardinal axes and write the results to a label file.
  *
  * Author: FreeSurfer Developers

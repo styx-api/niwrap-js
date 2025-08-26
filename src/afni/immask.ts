@@ -162,6 +162,8 @@ function immask_outputs(
 
 
 /**
+ * immask
+ *
  * Masks the input image based on specified criteria and produces the output image.
  *
  * Author: AFNI Developers
@@ -188,6 +190,8 @@ function immask_execute(
 
 
 /**
+ * immask
+ *
  * Masks the input image based on specified criteria and produces the output image.
  *
  * Author: AFNI Developers

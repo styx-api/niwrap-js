@@ -206,6 +206,8 @@ function v_3d_lfcd_outputs(
 
 
 /**
+ * 3dLFCD
+ *
  * Performs degree centrality on a dataset using a given maskfile via the 3dLFCD command.
  *
  * Author: AFNI Developers
@@ -232,6 +234,8 @@ function v_3d_lfcd_execute(
 
 
 /**
+ * 3dLFCD
+ *
  * Performs degree centrality on a dataset using a given maskfile via the 3dLFCD command.
  *
  * Author: AFNI Developers

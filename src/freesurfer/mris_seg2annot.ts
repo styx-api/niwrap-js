@@ -222,6 +222,8 @@ function mris_seg2annot_outputs(
 
 
 /**
+ * mris_seg2annot
+ *
  * Converts a surface-based segmentation into a custom annotation file.
  *
  * Author: FreeSurfer Developers
@@ -248,6 +250,8 @@ function mris_seg2annot_execute(
 
 
 /**
+ * mris_seg2annot
+ *
  * Converts a surface-based segmentation into a custom annotation file.
  *
  * Author: FreeSurfer Developers

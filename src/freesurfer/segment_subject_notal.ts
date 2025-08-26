@@ -120,6 +120,8 @@ function segment_subject_notal_outputs(
 
 
 /**
+ * segment_subject_notal
+ *
  * A script to segment subjects (notal).
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function segment_subject_notal_execute(
 
 
 /**
+ * segment_subject_notal
+ *
  * A script to segment subjects (notal).
  *
  * Author: FreeSurfer Developers

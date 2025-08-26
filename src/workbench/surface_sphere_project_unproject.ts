@@ -142,6 +142,8 @@ function surface_sphere_project_unproject_outputs(
 
 
 /**
+ * surface-sphere-project-unproject
+ *
  * Copy registration deformations to different sphere.
  *
  * Background: A surface registration starts with an input sphere, and moves its vertices around on the sphere until it matches the template data.  This means that the registration deformation is actually represented as the difference between two separate files - the starting sphere, and the registered sphere.  Since the starting sphere of the registration may not have vertex correspondence to any other sphere (often, it is a native sphere), it can be inconvenient to manipulate or compare these deformations across subjects, etc.
@@ -182,6 +184,8 @@ function surface_sphere_project_unproject_execute(
 
 
 /**
+ * surface-sphere-project-unproject
+ *
  * Copy registration deformations to different sphere.
  *
  * Background: A surface registration starts with an input sphere, and moves its vertices around on the sphere until it matches the template data.  This means that the registration deformation is actually represented as the difference between two separate files - the starting sphere, and the registered sphere.  Since the starting sphere of the registration may not have vertex correspondence to any other sphere (often, it is a native sphere), it can be inconvenient to manipulate or compare these deformations across subjects, etc.

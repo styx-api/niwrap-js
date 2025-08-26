@@ -131,6 +131,8 @@ function surface_sphere_triangular_patches_outputs(
 
 
 /**
+ * surface-sphere-triangular-patches
+ *
  * Divide standard sphere into patches.
  *
  * Divide the given undistorted sphere into equally-sized triangular patches.  Patches overlap by a border of 1 vertex.
@@ -159,6 +161,8 @@ function surface_sphere_triangular_patches_execute(
 
 
 /**
+ * surface-sphere-triangular-patches
+ *
  * Divide standard sphere into patches.
  *
  * Divide the given undistorted sphere into equally-sized triangular patches.  Patches overlap by a border of 1 vertex.

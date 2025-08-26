@@ -375,6 +375,8 @@ function fod2fixel_outputs(
 
 
 /**
+ * fod2fixel
+ *
  * Perform segmentation of continuous Fibre Orientation Distributions (FODs) to produce discrete fixels.
  *
  *
@@ -411,6 +413,8 @@ function fod2fixel_execute(
 
 
 /**
+ * fod2fixel
+ *
  * Perform segmentation of continuous Fibre Orientation Distributions (FODs) to produce discrete fixels.
  *
  *

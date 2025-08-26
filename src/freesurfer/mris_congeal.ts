@@ -253,6 +253,8 @@ function mris_congeal_outputs(
 
 
 /**
+ * mris_congeal
+ *
  * Program that registers a set of input surfaces together and generates an atlas.
  *
  * Author: FreeSurfer Developers
@@ -279,6 +281,8 @@ function mris_congeal_execute(
 
 
 /**
+ * mris_congeal
+ *
  * Program that registers a set of input surfaces together and generates an atlas.
  *
  * Author: FreeSurfer Developers

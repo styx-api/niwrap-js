@@ -141,6 +141,8 @@ function tridec_outputs(
 
 
 /**
+ * tridec
+ *
  * Tridec tool for processing brain images.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function tridec_execute(
 
 
 /**
+ * tridec
+ *
  * Tridec tool for processing brain images.
  *
  * Author: FreeSurfer Developers

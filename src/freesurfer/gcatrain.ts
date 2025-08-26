@@ -278,6 +278,8 @@ function gcatrain_outputs(
 
 
 /**
+ * gcatrain
+ *
  * GCA training tool for building a GCA from a group of manually labeled subjects.
  *
  * Author: FreeSurfer Developers
@@ -304,6 +306,8 @@ function gcatrain_execute(
 
 
 /**
+ * gcatrain
+ *
  * GCA training tool for building a GCA from a group of manually labeled subjects.
  *
  * Author: FreeSurfer Developers

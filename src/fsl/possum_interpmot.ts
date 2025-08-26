@@ -156,6 +156,8 @@ function possum_interpmot_outputs(
 
 
 /**
+ * possum_interpmot
+ *
  * Position Interpolation for Movers and Shakers.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -182,6 +184,8 @@ function possum_interpmot_execute(
 
 
 /**
+ * possum_interpmot
+ *
  * Position Interpolation for Movers and Shakers.
  *
  * Author: FMRIB Analysis Group, University of Oxford

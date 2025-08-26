@@ -237,6 +237,8 @@ function v_3dinfill_outputs(
 
 
 /**
+ * 3dinfill
+ *
  * A program to fill holes in volumes.
  *
  * Author: AFNI Developers
@@ -263,6 +265,8 @@ function v_3dinfill_execute(
 
 
 /**
+ * 3dinfill
+ *
  * A program to fill holes in volumes.
  *
  * Author: AFNI Developers

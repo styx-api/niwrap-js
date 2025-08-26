@@ -231,6 +231,8 @@ function fdr_outputs(
 
 
 /**
+ * fdr
+ *
  * False Discovery Rate (FDR) correction tool from FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -257,6 +259,8 @@ function fdr_execute(
 
 
 /**
+ * fdr
+ *
  * False Discovery Rate (FDR) correction tool from FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

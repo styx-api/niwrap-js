@@ -142,6 +142,8 @@ function rca_config_outputs(
 
 
 /**
+ * rca-config
+ *
  * A command-line tool that processes configuration files and arguments.
  *
  * Author: FreeSurfer Developers
@@ -168,6 +170,8 @@ function rca_config_execute(
 
 
 /**
+ * rca-config
+ *
  * A command-line tool that processes configuration files and arguments.
  *
  * Author: FreeSurfer Developers

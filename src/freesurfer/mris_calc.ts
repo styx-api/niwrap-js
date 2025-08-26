@@ -176,6 +176,8 @@ function mris_calc_outputs(
 
 
 /**
+ * mris_calc
+ *
  * Simple calculator that operates on FreeSurfer curvatures and volumes.
  *
  * Author: FreeSurfer Developers
@@ -202,6 +204,8 @@ function mris_calc_execute(
 
 
 /**
+ * mris_calc
+ *
  * Simple calculator that operates on FreeSurfer curvatures and volumes.
  *
  * Author: FreeSurfer Developers

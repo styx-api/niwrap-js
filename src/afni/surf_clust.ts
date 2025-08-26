@@ -476,6 +476,8 @@ function surf_clust_outputs(
 
 
 /**
+ * SurfClust
+ *
  * A program to perform clustering analysis surfaces.
  *
  * Author: AFNI Developers
@@ -502,6 +504,8 @@ function surf_clust_execute(
 
 
 /**
+ * SurfClust
+ *
  * A program to perform clustering analysis surfaces.
  *
  * Author: AFNI Developers

@@ -250,6 +250,8 @@ function n3_bias_field_correction_outputs(
 
 
 /**
+ * N3BiasFieldCorrection
+ *
  * This N3 is a variant of the popular N3 (nonparametric nonuniform normalization) retrospective bias correction algorithm. Based on the assumption that the corruption of the low frequency bias field can be modeled as a convolution of the intensity histogram by a Gaussian, the basic algorithmic protocol is to iterate between deconvolving the intensity histogram by a Gaussian, remapping the intensities, and then spatially smoothing this result by a B-spline modeling of the bias field itself.
  *
  * Author: ANTs Developers
@@ -276,6 +278,8 @@ function n3_bias_field_correction_execute(
 
 
 /**
+ * N3BiasFieldCorrection
+ *
  * This N3 is a variant of the popular N3 (nonparametric nonuniform normalization) retrospective bias correction algorithm. Based on the assumption that the corruption of the low frequency bias field can be modeled as a convolution of the intensity histogram by a Gaussian, the basic algorithmic protocol is to iterate between deconvolving the intensity histogram by a Gaussian, remapping the intensities, and then spatially smoothing this result by a B-spline modeling of the bias field itself.
  *
  * Author: ANTs Developers

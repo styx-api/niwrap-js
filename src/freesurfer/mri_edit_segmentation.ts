@@ -136,6 +136,8 @@ function mri_edit_segmentation_outputs(
 
 
 /**
+ * mri_edit_segmentation
+ *
  * A tool used for editing segmentations.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_edit_segmentation_execute(
 
 
 /**
+ * mri_edit_segmentation
+ *
  * A tool used for editing segmentations.
  *
  * Author: FreeSurfer Developers

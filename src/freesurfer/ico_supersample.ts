@@ -146,6 +146,8 @@ function ico_supersample_outputs(
 
 
 /**
+ * ico_supersample
+ *
  * A tool for refining icosahedron meshes with user-specified parameters.
  *
  * Author: FreeSurfer Developers
@@ -172,6 +174,8 @@ function ico_supersample_execute(
 
 
 /**
+ * ico_supersample
+ *
  * A tool for refining icosahedron meshes with user-specified parameters.
  *
  * Author: FreeSurfer Developers

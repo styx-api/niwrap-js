@@ -205,6 +205,8 @@ function v_3d_blur_to_fwhm_outputs(
 
 
 /**
+ * 3dBlurToFWHM
+ *
  * Blurs a 'master' dataset until it reaches a specified FWHM smoothness (approximately).
  *
  * Author: AFNI Developers
@@ -231,6 +233,8 @@ function v_3d_blur_to_fwhm_execute(
 
 
 /**
+ * 3dBlurToFWHM
+ *
  * Blurs a 'master' dataset until it reaches a specified FWHM smoothness (approximately).
  *
  * Author: AFNI Developers

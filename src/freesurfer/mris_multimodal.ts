@@ -212,6 +212,8 @@ function mris_multimodal_outputs(
 
 
 /**
+ * mris_multimodal
+ *
  * A FreeSurfer tool for processing multimodal surface data.
  *
  * Author: FreeSurfer Developers
@@ -238,6 +240,8 @@ function mris_multimodal_execute(
 
 
 /**
+ * mris_multimodal
+ *
  * A FreeSurfer tool for processing multimodal surface data.
  *
  * Author: FreeSurfer Developers

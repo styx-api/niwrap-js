@@ -543,6 +543,8 @@ function mris_place_surface_outputs(
 
 
 /**
+ * mris_place_surface
+ *
  * This program positions the triangular mesh representing a cortical surface, either the 'white' surface (ie, white/gray boundary) or the 'pial' surface (ie, the gray/csf boundary).
  *
  * Author: FreeSurfer Developers
@@ -569,6 +571,8 @@ function mris_place_surface_execute(
 
 
 /**
+ * mris_place_surface
+ *
  * This program positions the triangular mesh representing a cortical surface, either the 'white' surface (ie, white/gray boundary) or the 'pial' surface (ie, the gray/csf boundary).
  *
  * Author: FreeSurfer Developers

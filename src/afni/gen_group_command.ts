@@ -257,6 +257,8 @@ function gen_group_command_outputs(
 
 
 /**
+ * gen_group_command
+ *
  * Generate group analysis command scripts by parsing wildcard-based lists of input datasets.
  *
  * Author: AFNI Developers
@@ -283,6 +285,8 @@ function gen_group_command_execute(
 
 
 /**
+ * gen_group_command
+ *
  * Generate group analysis command scripts by parsing wildcard-based lists of input datasets.
  *
  * Author: AFNI Developers

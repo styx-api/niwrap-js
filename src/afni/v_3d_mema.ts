@@ -372,6 +372,8 @@ function v_3d_mema_outputs(
 
 
 /**
+ * 3dMEMA
+ *
  * 3dMEMA is a program for performing Mixed Effects Meta Analysis at group level that models both within- and across-subjects variability.
  *
  * Author: AFNI Developers
@@ -398,6 +400,8 @@ function v_3d_mema_execute(
 
 
 /**
+ * 3dMEMA
+ *
  * 3dMEMA is a program for performing Mixed Effects Meta Analysis at group level that models both within- and across-subjects variability.
  *
  * Author: AFNI Developers

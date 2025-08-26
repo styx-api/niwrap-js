@@ -248,6 +248,8 @@ function mri_cc_outputs(
 
 
 /**
+ * mri_cc
+ *
  * Segments the corpus callosum into five separate labels in the subcortical segmentation volume.
  *
  * Author: FreeSurfer Developers
@@ -274,6 +276,8 @@ function mri_cc_execute(
 
 
 /**
+ * mri_cc
+ *
  * Segments the corpus callosum into five separate labels in the subcortical segmentation volume.
  *
  * Author: FreeSurfer Developers

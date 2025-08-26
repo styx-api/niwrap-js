@@ -141,6 +141,8 @@ function spline3_test_outputs(
 
 
 /**
+ * Spline3_test
+ *
  * A tool for cubic spline interpolation.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function spline3_test_execute(
 
 
 /**
+ * Spline3_test
+ *
  * A tool for cubic spline interpolation.
  *
  * Author: FreeSurfer Developers

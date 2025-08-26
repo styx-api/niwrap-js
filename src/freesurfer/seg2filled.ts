@@ -188,6 +188,8 @@ function seg2filled_outputs(
 
 
 /**
+ * seg2filled
+ *
  * Creates a filled.mgz from an aseg-style segmentation using SAMSEG segmentation.
  *
  * Author: FreeSurfer Developers
@@ -214,6 +216,8 @@ function seg2filled_execute(
 
 
 /**
+ * seg2filled
+ *
  * Creates a filled.mgz from an aseg-style segmentation using SAMSEG segmentation.
  *
  * Author: FreeSurfer Developers

@@ -172,6 +172,8 @@ function atlasquery_outputs(
 
 
 /**
+ * atlasquery
+ *
  * Structural lookup tool for FSL atlases.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -198,6 +200,8 @@ function atlasquery_execute(
 
 
 /**
+ * atlasquery
+ *
  * Structural lookup tool for FSL atlases.
  *
  * Author: FMRIB Analysis Group, University of Oxford

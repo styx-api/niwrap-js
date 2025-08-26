@@ -128,6 +128,8 @@ function v__djunct_4d_slices_to_3d_vol_outputs(
 
 
 /**
+ * @djunct_4d_slices_to_3d_vol
+ *
  * Tool description goes here.
  *
  * Author: AFNI Developers
@@ -154,6 +156,8 @@ function v__djunct_4d_slices_to_3d_vol_execute(
 
 
 /**
+ * @djunct_4d_slices_to_3d_vol
+ *
  * Tool description goes here.
  *
  * Author: AFNI Developers

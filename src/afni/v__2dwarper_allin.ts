@@ -155,6 +155,8 @@ function v__2dwarper_allin_outputs(
 
 
 /**
+ * @2dwarper.Allin
+ *
  * Perform 2D registration on each slice of a 3D+time dataset, and combine the results.
  *
  * Author: AFNI Developers
@@ -181,6 +183,8 @@ function v__2dwarper_allin_execute(
 
 
 /**
+ * @2dwarper.Allin
+ *
  * Perform 2D registration on each slice of a 3D+time dataset, and combine the results.
  *
  * Author: AFNI Developers

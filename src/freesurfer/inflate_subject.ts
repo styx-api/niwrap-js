@@ -130,6 +130,8 @@ function inflate_subject_outputs(
 
 
 /**
+ * inflate_subject
+ *
  * Inflate subject script for FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -156,6 +158,8 @@ function inflate_subject_execute(
 
 
 /**
+ * inflate_subject
+ *
  * Inflate subject script for FreeSurfer.
  *
  * Author: FreeSurfer Developers

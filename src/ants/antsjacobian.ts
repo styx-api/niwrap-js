@@ -160,6 +160,8 @@ function antsjacobian_outputs(
 
 
 /**
+ * ANTSJacobian
+ *
  * Calculate the Jacobian determinant of a transformation using ANTs. WARNING: ANTSJacobian may not be working correctly; see CreateJacobianDeterminantImage for an alternative method.
  *
  * Author: ANTs Developers
@@ -186,6 +188,8 @@ function antsjacobian_execute(
 
 
 /**
+ * ANTSJacobian
+ *
  * Calculate the Jacobian determinant of a transformation using ANTs. WARNING: ANTSJacobian may not be working correctly; see CreateJacobianDeterminantImage for an alternative method.
  *
  * Author: ANTs Developers

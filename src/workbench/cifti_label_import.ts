@@ -163,6 +163,8 @@ function cifti_label_import_outputs(
 
 
 /**
+ * cifti-label-import
+ *
  * Make a cifti label file from a cifti file.
  *
  * Creates a cifti label file from a cifti file with label-like values.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):
@@ -199,6 +201,8 @@ function cifti_label_import_execute(
 
 
 /**
+ * cifti-label-import
+ *
  * Make a cifti label file from a cifti file.
  *
  * Creates a cifti label file from a cifti file with label-like values.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):

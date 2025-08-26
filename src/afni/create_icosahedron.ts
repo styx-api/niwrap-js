@@ -215,6 +215,8 @@ function create_icosahedron_outputs(
 
 
 /**
+ * CreateIcosahedron
+ *
  * Tool to create an icosahedron with optional tessellation.
  *
  * Author: AFNI Developers
@@ -241,6 +243,8 @@ function create_icosahedron_execute(
 
 
 /**
+ * CreateIcosahedron
+ *
  * Tool to create an icosahedron with optional tessellation.
  *
  * Author: AFNI Developers

@@ -222,6 +222,8 @@ function mri_seg_diff_outputs(
 
 
 /**
+ * mri_seg_diff
+ *
  * This program computes and merges differences in segmentation volumes, primarily for managing manual edits in FreeSurfer's aseg.mgz.
  *
  * Author: FreeSurfer Developers
@@ -248,6 +250,8 @@ function mri_seg_diff_execute(
 
 
 /**
+ * mri_seg_diff
+ *
  * This program computes and merges differences in segmentation volumes, primarily for managing manual edits in FreeSurfer's aseg.mgz.
  *
  * Author: FreeSurfer Developers

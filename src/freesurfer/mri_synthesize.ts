@@ -158,6 +158,8 @@ function mri_synthesize_outputs(
 
 
 /**
+ * mri_synthesize
+ *
  * This program synthesizes a FLASH acquisition based on previously computed T1/PD maps.
  *
  * Author: FreeSurfer Developers
@@ -184,6 +186,8 @@ function mri_synthesize_execute(
 
 
 /**
+ * mri_synthesize
+ *
  * This program synthesizes a FLASH acquisition based on previously computed T1/PD maps.
  *
  * Author: FreeSurfer Developers

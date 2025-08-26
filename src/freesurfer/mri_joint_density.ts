@@ -136,6 +136,8 @@ function mri_joint_density_outputs(
 
 
 /**
+ * mri_joint_density
+ *
  * Tool for computing joint density from two volumes.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_joint_density_execute(
 
 
 /**
+ * mri_joint_density
+ *
  * Tool for computing joint density from two volumes.
  *
  * Author: FreeSurfer Developers

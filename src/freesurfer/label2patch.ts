@@ -202,6 +202,8 @@ function label2patch_outputs(
 
 
 /**
+ * label2patch
+ *
  * Utility to create patches from label files in Freesurfer.
  *
  * Author: FreeSurfer Developers
@@ -228,6 +230,8 @@ function label2patch_execute(
 
 
 /**
+ * label2patch
+ *
  * Utility to create patches from label files in Freesurfer.
  *
  * Author: FreeSurfer Developers

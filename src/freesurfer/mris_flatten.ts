@@ -198,6 +198,8 @@ function mris_flatten_outputs(
 
 
 /**
+ * mris_flatten
+ *
  * This program will flatten a surface patch.
  *
  * Author: FreeSurfer Developers
@@ -224,6 +226,8 @@ function mris_flatten_execute(
 
 
 /**
+ * mris_flatten
+ *
  * This program will flatten a surface patch.
  *
  * Author: FreeSurfer Developers

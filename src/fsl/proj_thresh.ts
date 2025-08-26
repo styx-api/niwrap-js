@@ -125,6 +125,8 @@ function proj_thresh_outputs(
 
 
 /**
+ * proj_thresh
+ *
  * A tool to apply a threshold to either volumes or surfaces.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -151,6 +153,8 @@ function proj_thresh_execute(
 
 
 /**
+ * proj_thresh
+ *
  * A tool to apply a threshold to either volumes or surfaces.
  *
  * Author: FMRIB Analysis Group, University of Oxford

@@ -347,6 +347,8 @@ function v_3ddelay_outputs(
 
 
 /**
+ * 3ddelay
+ *
  * Estimates the time delay between each voxel time series in a 3D+time dataset and a reference time series.
  *
  * Author: AFNI Developers
@@ -373,6 +375,8 @@ function v_3ddelay_execute(
 
 
 /**
+ * 3ddelay
+ *
  * Estimates the time delay between each voxel time series in a 3D+time dataset and a reference time series.
  *
  * Author: AFNI Developers

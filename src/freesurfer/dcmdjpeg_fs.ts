@@ -419,6 +419,8 @@ function dcmdjpeg_fs_outputs(
 
 
 /**
+ * dcmdjpeg.fs
+ *
  * A tool to decode JPEG-compressed DICOM files.
  *
  * Author: FreeSurfer Developers
@@ -445,6 +447,8 @@ function dcmdjpeg_fs_execute(
 
 
 /**
+ * dcmdjpeg.fs
+ *
  * A tool to decode JPEG-compressed DICOM files.
  *
  * Author: FreeSurfer Developers

@@ -176,6 +176,8 @@ function mri_concatenate_gcam_outputs(
 
 
 /**
+ * mri_concatenate_gcam
+ *
  * Concatenate a combination of input LTAs (linear transform array) and GCAMs (Gaussian classifier atlas, M3Z).
  *
  * Author: FreeSurfer Developers
@@ -202,6 +204,8 @@ function mri_concatenate_gcam_execute(
 
 
 /**
+ * mri_concatenate_gcam
+ *
  * Concatenate a combination of input LTAs (linear transform array) and GCAMs (Gaussian classifier atlas, M3Z).
  *
  * Author: FreeSurfer Developers

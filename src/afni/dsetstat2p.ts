@@ -159,6 +159,8 @@ function dsetstat2p_outputs(
 
 
 /**
+ * dsetstat2p
+ *
  * Converts a statistic to a p-value with reference to a particular dataset.
  *
  * Author: AFNI Developers
@@ -185,6 +187,8 @@ function dsetstat2p_execute(
 
 
 /**
+ * dsetstat2p
+ *
  * Converts a statistic to a p-value with reference to a particular dataset.
  *
  * Author: AFNI Developers

@@ -248,6 +248,8 @@ function fixelreorient_outputs(
 
 
 /**
+ * fixelreorient
+ *
  * Reorient fixel directions.
  *
  * Reorientation is performed by transforming the vector representing the fixel direction with the Jacobian (local affine transform) computed at each voxel in the warp, then re-normalising the vector.
@@ -280,6 +282,8 @@ function fixelreorient_execute(
 
 
 /**
+ * fixelreorient
+ *
  * Reorient fixel directions.
  *
  * Reorientation is performed by transforming the vector representing the fixel direction with the Jacobian (local affine transform) computed at each voxel in the warp, then re-normalising the vector.

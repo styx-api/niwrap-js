@@ -316,6 +316,8 @@ function mri_create_tests_outputs(
 
 
 /**
+ * mri_create_tests
+ *
  * Creates test cases for the registration by mapping the input to a source (half way backward) and to a target (half way forward).
  *
  * Author: FreeSurfer Developers
@@ -342,6 +344,8 @@ function mri_create_tests_execute(
 
 
 /**
+ * mri_create_tests
+ *
  * Creates test cases for the registration by mapping the input to a source (half way backward) and to a target (half way forward).
  *
  * Author: FreeSurfer Developers

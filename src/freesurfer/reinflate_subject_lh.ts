@@ -129,6 +129,8 @@ function reinflate_subject_lh_outputs(
 
 
 /**
+ * reinflate_subject-lh
+ *
  * Utility to reinflate cortical surfaces for left hemisphere in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -155,6 +157,8 @@ function reinflate_subject_lh_execute(
 
 
 /**
+ * reinflate_subject-lh
+ *
  * Utility to reinflate cortical surfaces for left hemisphere in FreeSurfer.
  *
  * Author: FreeSurfer Developers

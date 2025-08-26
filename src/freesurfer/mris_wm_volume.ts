@@ -168,6 +168,8 @@ function mris_wm_volume_outputs(
 
 
 /**
+ * mris_wm_volume
+ *
  * Computes the volume of the enclosed hemisphere white matter surface, ignoring non-white matter voxels in the aseg.
  *
  * Author: FreeSurfer Developers
@@ -194,6 +196,8 @@ function mris_wm_volume_execute(
 
 
 /**
+ * mris_wm_volume
+ *
  * Computes the volume of the enclosed hemisphere white matter surface, ignoring non-white matter voxels in the aseg.
  *
  * Author: FreeSurfer Developers

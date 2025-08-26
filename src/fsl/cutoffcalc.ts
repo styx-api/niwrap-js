@@ -176,6 +176,8 @@ function cutoffcalc_outputs(
 
 
 /**
+ * cutoffcalc
+ *
  * Calculates the minimal period for the highpass filter that still preserves a specified amount of variance in all the design matrix regressors.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -202,6 +204,8 @@ function cutoffcalc_execute(
 
 
 /**
+ * cutoffcalc
+ *
  * Calculates the minimal period for the highpass filter that still preserves a specified amount of variance in all the design matrix regressors.
  *
  * Author: FMRIB Analysis Group, University of Oxford

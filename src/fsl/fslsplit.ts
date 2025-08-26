@@ -163,6 +163,8 @@ function fslsplit_outputs(
 
 
 /**
+ * fslsplit
+ *
  * Split a 4D image into separate volumes or a 3D image into separate slices.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -189,6 +191,8 @@ function fslsplit_execute(
 
 
 /**
+ * fslsplit
+ *
  * Split a 4D image into separate volumes or a 3D image into separate slices.
  *
  * Author: FMRIB Analysis Group, University of Oxford

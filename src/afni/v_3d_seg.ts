@@ -350,6 +350,8 @@ function v_3d_seg_outputs(
 
 
 /**
+ * 3dSeg
+ *
  * Segments brain volumes into tissue classes with optional global and voxelwise priors.
  *
  * Author: AFNI Developers
@@ -376,6 +378,8 @@ function v_3d_seg_execute(
 
 
 /**
+ * 3dSeg
+ *
  * Segments brain volumes into tissue classes with optional global and voxelwise priors.
  *
  * Author: AFNI Developers

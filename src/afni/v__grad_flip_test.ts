@@ -280,6 +280,8 @@ function v__grad_flip_test_outputs(
 
 
 /**
+ * @GradFlipTest
+ *
  * Script to test the correct flip for a data set when using 1dDW_Grad_o_Mat++.
  *
  * Author: AFNI Developers
@@ -306,6 +308,8 @@ function v__grad_flip_test_execute(
 
 
 /**
+ * @GradFlipTest
+ *
  * Script to test the correct flip for a data set when using 1dDW_Grad_o_Mat++.
  *
  * Author: AFNI Developers

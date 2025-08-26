@@ -412,6 +412,8 @@ function ants_cortical_thickness_sh_outputs(
 
 
 /**
+ * antsCorticalThickness.sh
+ *
  * This script performs T1 anatomical brain processing including brain extraction, brain n-tissue segmentation, cortical thickness estimation, and optional registration to a template.
  *
  * Author: ANTs Developers
@@ -438,6 +440,8 @@ function ants_cortical_thickness_sh_execute(
 
 
 /**
+ * antsCorticalThickness.sh
+ *
  * This script performs T1 anatomical brain processing including brain extraction, brain n-tissue segmentation, cortical thickness estimation, and optional registration to a template.
  *
  * Author: ANTs Developers

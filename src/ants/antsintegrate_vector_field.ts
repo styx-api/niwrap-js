@@ -146,6 +146,8 @@ function antsintegrate_vector_field_outputs(
 
 
 /**
+ * ANTSIntegrateVectorField
+ *
  * This tool integrates a vector field, where vectors are voxels, using a region of interest (ROI) mask. The ROI mask controls where the integration is performed and specifies the starting point region.
  *
  * Author: ANTs Developers
@@ -172,6 +174,8 @@ function antsintegrate_vector_field_execute(
 
 
 /**
+ * ANTSIntegrateVectorField
+ *
  * This tool integrates a vector field, where vectors are voxels, using a region of interest (ROI) mask. The ROI mask controls where the integration is performed and specifies the starting point region.
  *
  * Author: ANTs Developers

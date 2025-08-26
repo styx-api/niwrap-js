@@ -221,6 +221,8 @@ function standard_space_roi_outputs(
 
 
 /**
+ * standard_space_roi
+ *
  * Masks input and/or reduces its FOV based on a standard space image or mask, transformed into the space of the input image.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -247,6 +249,8 @@ function standard_space_roi_execute(
 
 
 /**
+ * standard_space_roi
+ *
  * Masks input and/or reduces its FOV based on a standard space image or mask, transformed into the space of the input image.
  *
  * Author: FMRIB Analysis Group, University of Oxford

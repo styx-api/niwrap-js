@@ -238,6 +238,8 @@ function metric_to_volume_mapping_outputs(
 
 
 /**
+ * metric-to-volume-mapping
+ *
  * Map metric file to volume.
  *
  * Maps values from a metric file into a volume file.  You must specify exactly one mapping method option.  The -nearest-vertex method uses the value from the vertex closest to the voxel center (useful for integer values).  The -ribbon-constrained method uses the same method as in -volume-to-surface-mapping, then uses the weights in reverse.  Mapping to lower resolutions than the mesh may require a larger -voxel-subdiv value in order to have all of the surface data participate.
@@ -266,6 +268,8 @@ function metric_to_volume_mapping_execute(
 
 
 /**
+ * metric-to-volume-mapping
+ *
  * Map metric file to volume.
  *
  * Maps values from a metric file into a volume file.  You must specify exactly one mapping method option.  The -nearest-vertex method uses the value from the vertex closest to the voxel center (useful for integer values).  The -ribbon-constrained method uses the same method as in -volume-to-surface-mapping, then uses the weights in reverse.  Mapping to lower resolutions than the mesh may require a larger -voxel-subdiv value in order to have all of the surface data participate.

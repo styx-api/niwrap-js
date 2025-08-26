@@ -306,6 +306,8 @@ function label_resample_outputs(
 
 
 /**
+ * label-resample
+ *
  * Resample a label file to a different mesh.
  *
  * Resamples a label file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
@@ -346,6 +348,8 @@ function label_resample_execute(
 
 
 /**
+ * label-resample
+ *
  * Resample a label file to a different mesh.
  *
  * Resamples a label file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.

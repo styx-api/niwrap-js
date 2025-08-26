@@ -131,6 +131,8 @@ function nsize_outputs(
 
 
 /**
+ * nsize
+ *
  * Zero pads an input image to the nearest larger NxN dimensions.
  *
  * Author: AFNI Developers
@@ -157,6 +159,8 @@ function nsize_execute(
 
 
 /**
+ * nsize
+ *
  * Zero pads an input image to the nearest larger NxN dimensions.
  *
  * Author: AFNI Developers

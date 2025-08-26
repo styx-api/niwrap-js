@@ -767,6 +767,8 @@ function mrinfo_outputs(
 
 
 /**
+ * mrinfo
+ *
  * Display image header information, or extract specific information from the header.
  *
  * By default, all information contained in each image header will be printed to the console in a reader-friendly format.
@@ -807,6 +809,8 @@ function mrinfo_execute(
 
 
 /**
+ * mrinfo
+ *
  * Display image header information, or extract specific information from the header.
  *
  * By default, all information contained in each image header will be printed to the console in a reader-friendly format.

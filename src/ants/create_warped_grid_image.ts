@@ -163,6 +163,8 @@ function create_warped_grid_image_outputs(
 
 
 /**
+ * CreateWarpedGridImage
+ *
  * Create a warped grid image based on the specified deformation field.
  *
  * Author: ANTs Developers
@@ -189,6 +191,8 @@ function create_warped_grid_image_execute(
 
 
 /**
+ * CreateWarpedGridImage
+ *
  * Create a warped grid image based on the specified deformation field.
  *
  * Author: ANTs Developers

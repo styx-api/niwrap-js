@@ -175,6 +175,8 @@ function segment_subject_old_skull_strip_outputs(
 
 
 /**
+ * segment_subject_old_skull_strip
+ *
  * Front-end for MINCs mritotal for computing the talairach transform that maps the input volume to the MNI305.
  *
  * Author: FreeSurfer Developers
@@ -201,6 +203,8 @@ function segment_subject_old_skull_strip_execute(
 
 
 /**
+ * segment_subject_old_skull_strip
+ *
  * Front-end for MINCs mritotal for computing the talairach transform that maps the input volume to the MNI305.
  *
  * Author: FreeSurfer Developers

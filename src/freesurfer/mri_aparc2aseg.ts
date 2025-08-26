@@ -313,6 +313,8 @@ function mri_aparc2aseg_outputs(
 
 
 /**
+ * mri_aparc2aseg
+ *
  * Maps the cortical labels from the automatic cortical parcellation to the automatic segmentation volume.
  *
  * Author: FreeSurfer Developers
@@ -339,6 +341,8 @@ function mri_aparc2aseg_execute(
 
 
 /**
+ * mri_aparc2aseg
+ *
  * Maps the cortical labels from the automatic cortical parcellation to the automatic segmentation volume.
  *
  * Author: FreeSurfer Developers

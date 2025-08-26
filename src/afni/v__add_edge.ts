@@ -274,6 +274,8 @@ function v__add_edge_outputs(
 
 
 /**
+ * @AddEdge
+ *
  * A script to create composite edge-enhanced datasets and drive the AFNI interface to display the results.
  *
  * Author: AFNI Developers
@@ -300,6 +302,8 @@ function v__add_edge_execute(
 
 
 /**
+ * @AddEdge
+ *
  * A script to create composite edge-enhanced datasets and drive the AFNI interface to display the results.
  *
  * Author: AFNI Developers

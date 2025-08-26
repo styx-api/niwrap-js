@@ -149,6 +149,8 @@ function imaver_outputs(
 
 
 /**
+ * imaver
+ *
  * Computes the mean and standard deviation, pixel-by-pixel, of a whole bunch of images.
  *
  * Author: AFNI Developers
@@ -175,6 +177,8 @@ function imaver_execute(
 
 
 /**
+ * imaver
+ *
  * Computes the mean and standard deviation, pixel-by-pixel, of a whole bunch of images.
  *
  * Author: AFNI Developers

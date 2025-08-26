@@ -125,6 +125,8 @@ function adjunct_is_label_py_outputs(
 
 
 /**
+ * adjunct_is_label.py
+ *
  * A subsidiary script of the chauffeur_afni suite for label functionalities.
  *
  * Author: AFNI Developers
@@ -151,6 +153,8 @@ function adjunct_is_label_py_execute(
 
 
 /**
+ * adjunct_is_label.py
+ *
  * A subsidiary script of the chauffeur_afni suite for label functionalities.
  *
  * Author: AFNI Developers

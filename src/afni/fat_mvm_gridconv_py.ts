@@ -145,6 +145,8 @@ function fat_mvm_gridconv_py_outputs(
 
 
 /**
+ * fat_mvm_gridconv.py
+ *
  * Preprocess 'old school' *.grid files for statistical modeling using 3dMVM.
  *
  * Author: AFNI Developers
@@ -171,6 +173,8 @@ function fat_mvm_gridconv_py_execute(
 
 
 /**
+ * fat_mvm_gridconv.py
+ *
  * Preprocess 'old school' *.grid files for statistical modeling using 3dMVM.
  *
  * Author: AFNI Developers

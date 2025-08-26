@@ -357,6 +357,8 @@ function fvcompare_outputs(
 
 
 /**
+ * fvcompare
+ *
  * Simultaneously loads volume, segmentation, and surface data from two subjects in freeview, for comparing across time or different analysis methods.
  *
  * Author: FreeSurfer Developers
@@ -383,6 +385,8 @@ function fvcompare_execute(
 
 
 /**
+ * fvcompare
+ *
  * Simultaneously loads volume, segmentation, and surface data from two subjects in freeview, for comparing across time or different analysis methods.
  *
  * Author: FreeSurfer Developers

@@ -124,6 +124,8 @@ function check_recons_sh_outputs(
 
 
 /**
+ * check_recons.sh
+ *
  * Checks the status of subjects being processed by recon-all in the SUBJECTS_DIR or a specified directory.
  *
  * Author: FreeSurfer Developers
@@ -150,6 +152,8 @@ function check_recons_sh_execute(
 
 
 /**
+ * check_recons.sh
+ *
  * Checks the status of subjects being processed by recon-all in the SUBJECTS_DIR or a specified directory.
  *
  * Author: FreeSurfer Developers

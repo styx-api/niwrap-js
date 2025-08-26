@@ -451,6 +451,8 @@ function mri_binarize_outputs(
 
 
 /**
+ * mri_binarize
+ *
  * A program to binarize a volume or volume-encoded surface file, with options to merge and manipulate binarized output.
  *
  * Author: FreeSurfer Developers
@@ -477,6 +479,8 @@ function mri_binarize_execute(
 
 
 /**
+ * mri_binarize
+ *
  * A program to binarize a volume or volume-encoded surface file, with options to merge and manipulate binarized output.
  *
  * Author: FreeSurfer Developers

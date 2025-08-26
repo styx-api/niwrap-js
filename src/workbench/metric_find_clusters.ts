@@ -226,6 +226,8 @@ function metric_find_clusters_outputs(
 
 
 /**
+ * metric-find-clusters
+ *
  * Filter clusters by surface area.
  *
  * Outputs a metric with nonzero integers for all vertices within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across maps of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -metric-math.
@@ -254,6 +256,8 @@ function metric_find_clusters_execute(
 
 
 /**
+ * metric-find-clusters
+ *
  * Filter clusters by surface area.
  *
  * Outputs a metric with nonzero integers for all vertices within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across maps of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -metric-math.

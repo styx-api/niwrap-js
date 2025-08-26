@@ -257,6 +257,8 @@ function ants_joint_label_fusion_sh_outputs(
 
 
 /**
+ * antsJointLabelFusion.sh
+ *
  * The antsJointLabelFusion script is used for performing label fusion using multiple atlases to improve segmentation accuracy.
  *
  * Author: ANTs Developers
@@ -283,6 +285,8 @@ function ants_joint_label_fusion_sh_execute(
 
 
 /**
+ * antsJointLabelFusion.sh
+ *
  * The antsJointLabelFusion script is used for performing label fusion using multiple atlases to improve segmentation accuracy.
  *
  * Author: ANTs Developers

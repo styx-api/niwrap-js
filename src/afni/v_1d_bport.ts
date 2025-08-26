@@ -217,6 +217,8 @@ function v_1d_bport_outputs(
 
 
 /**
+ * 1dBport
+ *
  * Creates a set of columns of sines and cosines for bandpassing via regression.
  *
  * Author: AFNI Developers
@@ -243,6 +245,8 @@ function v_1d_bport_execute(
 
 
 /**
+ * 1dBport
+ *
  * Creates a set of columns of sines and cosines for bandpassing via regression.
  *
  * Author: AFNI Developers

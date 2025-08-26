@@ -124,6 +124,8 @@ function segment_bs_sh_outputs(
 
 
 /**
+ * segmentBS.sh
+ *
  * Segmentation tool for hippocampal/amygdala and brainstem modules.
  *
  * Author: FreeSurfer Developers
@@ -150,6 +152,8 @@ function segment_bs_sh_execute(
 
 
 /**
+ * segmentBS.sh
+ *
  * Segmentation tool for hippocampal/amygdala and brainstem modules.
  *
  * Author: FreeSurfer Developers

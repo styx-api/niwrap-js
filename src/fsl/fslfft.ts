@@ -138,6 +138,8 @@ function fslfft_outputs(
 
 
 /**
+ * fslfft
+ *
  * A tool to compute the Fourier transform of an input volume and save the result in an output volume.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -164,6 +166,8 @@ function fslfft_execute(
 
 
 /**
+ * fslfft
+ *
  * A tool to compute the Fourier transform of an input volume and save the result in an output volume.
  *
  * Author: FMRIB Analysis Group, University of Oxford

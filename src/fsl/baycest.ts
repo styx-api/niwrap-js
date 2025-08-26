@@ -165,6 +165,8 @@ function baycest_outputs(
 
 
 /**
+ * baycest
+ *
  * Bayesian analysis for chemical exchange saturation transfer z-spectra.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -191,6 +193,8 @@ function baycest_execute(
 
 
 /**
+ * baycest
+ *
  * Bayesian analysis for chemical exchange saturation transfer z-spectra.
  *
  * Author: FMRIB Analysis Group, University of Oxford

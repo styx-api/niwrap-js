@@ -253,6 +253,8 @@ function ants_ai_outputs(
 
 
 /**
+ * antsAI
+ *
  * Program to calculate the optimal linear transform parameters for aligning two images.
  *
  * Author: ANTs Developers
@@ -279,6 +281,8 @@ function ants_ai_execute(
 
 
 /**
+ * antsAI
+ *
  * Program to calculate the optimal linear transform parameters for aligning two images.
  *
  * Author: ANTs Developers

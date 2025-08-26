@@ -9615,6 +9615,8 @@ function c3d_outputs(
 
 
 /**
+ * c3d
+ *
  * C3D is a command-line tool for medical image processing.
  *
  * Author: Convert3D Developers
@@ -9641,6 +9643,8 @@ function c3d_execute(
 
 
 /**
+ * c3d
+ *
  * C3D is a command-line tool for medical image processing.
  *
  * Author: Convert3D Developers

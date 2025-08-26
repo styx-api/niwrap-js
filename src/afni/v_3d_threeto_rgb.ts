@@ -199,6 +199,8 @@ function v_3d_threeto_rgb_outputs(
 
 
 /**
+ * 3dThreetoRGB
+ *
  * Converts 3 sub-bricks of input to an RGB-valued dataset.
  *
  * Author: AFNI Developers
@@ -225,6 +227,8 @@ function v_3d_threeto_rgb_execute(
 
 
 /**
+ * 3dThreetoRGB
+ *
  * Converts 3 sub-bricks of input to an RGB-valued dataset.
  *
  * Author: AFNI Developers

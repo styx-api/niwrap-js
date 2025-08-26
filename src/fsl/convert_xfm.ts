@@ -169,6 +169,8 @@ function convert_xfm_outputs(
 
 
 /**
+ * convert_xfm
+ *
  * convert_xfm is a utility that is used to convert between different transformation file formats. It can read and write ascii 4x4 matrices. In addition, it can be used to concatenate two transforms (using -concat with the second transform) or to find the inverse transformation (using -inverse).
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -195,6 +197,8 @@ function convert_xfm_execute(
 
 
 /**
+ * convert_xfm
+ *
  * convert_xfm is a utility that is used to convert between different transformation file formats. It can read and write ascii 4x4 matrices. In addition, it can be used to concatenate two transforms (using -concat with the second transform) or to find the inverse transformation (using -inverse).
  *
  * Author: FMRIB Analysis Group, University of Oxford

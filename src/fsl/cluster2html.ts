@@ -132,6 +132,8 @@ function cluster2html_outputs(
 
 
 /**
+ * cluster2html
+ *
  * Generates an HTML report from cluster-based FEAT analysis.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -158,6 +160,8 @@ function cluster2html_execute(
 
 
 /**
+ * cluster2html
+ *
  * Generates an HTML report from cluster-based FEAT analysis.
  *
  * Author: FMRIB Analysis Group, University of Oxford

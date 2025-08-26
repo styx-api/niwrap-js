@@ -385,6 +385,8 @@ function mri_surf2volseg_outputs(
 
 
 /**
+ * mri_surf2volseg
+ *
  * Tool that cleans up presurf aseg cortex and WM, maps cortical labels from an annotation into a volume, and labels cerebral WM with closest cortical label.
  *
  * Author: FreeSurfer Developers
@@ -411,6 +413,8 @@ function mri_surf2volseg_execute(
 
 
 /**
+ * mri_surf2volseg
+ *
  * Tool that cleans up presurf aseg cortex and WM, maps cortical labels from an annotation into a volume, and labels cerebral WM with closest cortical label.
  *
  * Author: FreeSurfer Developers

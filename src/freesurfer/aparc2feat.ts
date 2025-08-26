@@ -205,6 +205,8 @@ function aparc2feat_outputs(
 
 
 /**
+ * aparc2feat
+ *
  * Resamples the FreeSurfer automatic cortical segmentation to the FEAT functional space.
  *
  * Author: FreeSurfer Developers
@@ -231,6 +233,8 @@ function aparc2feat_execute(
 
 
 /**
+ * aparc2feat
+ *
  * Resamples the FreeSurfer automatic cortical segmentation to the FEAT functional space.
  *
  * Author: FreeSurfer Developers

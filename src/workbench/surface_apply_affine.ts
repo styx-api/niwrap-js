@@ -195,6 +195,8 @@ function surface_apply_affine_outputs(
 
 
 /**
+ * surface-apply-affine
+ *
  * Apply affine transform to surface file.
  *
  * For flirt matrices, you must use the -flirt option, because flirt matrices are not a complete description of the coordinate transform they represent.  If the -flirt option is not present, the affine must be a nifti 'world' affine, which can be obtained with the -convert-affine command, or aff_conv from the 4dfp suite.
@@ -223,6 +225,8 @@ function surface_apply_affine_execute(
 
 
 /**
+ * surface-apply-affine
+ *
  * Apply affine transform to surface file.
  *
  * For flirt matrices, you must use the -flirt option, because flirt matrices are not a complete description of the coordinate transform they represent.  If the -flirt option is not present, the affine must be a nifti 'world' affine, which can be obtained with the -convert-affine command, or aff_conv from the 4dfp suite.

@@ -150,6 +150,8 @@ function sbtiv_outputs(
 
 
 /**
+ * sbtiv
+ *
  * Tool to calculate the total intracranial volume of a subject by summing individual volumes computed by samseg.
  *
  * Author: FreeSurfer Developers
@@ -176,6 +178,8 @@ function sbtiv_execute(
 
 
 /**
+ * sbtiv
+ *
  * Tool to calculate the total intracranial volume of a subject by summing individual volumes computed by samseg.
  *
  * Author: FreeSurfer Developers

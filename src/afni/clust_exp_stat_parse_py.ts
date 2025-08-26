@@ -278,6 +278,8 @@ function clust_exp_stat_parse_py_outputs(
 
 
 /**
+ * ClustExp_StatParse.py
+ *
  * Parser for statistical data sets and subject data sets, generating several outputs for further analysis.
  *
  * Author: AFNI Developers
@@ -304,6 +306,8 @@ function clust_exp_stat_parse_py_execute(
 
 
 /**
+ * ClustExp_StatParse.py
+ *
  * Parser for statistical data sets and subject data sets, generating several outputs for further analysis.
  *
  * Author: AFNI Developers

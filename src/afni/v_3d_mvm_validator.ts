@@ -138,6 +138,8 @@ function v_3d_mvm_validator_outputs(
 
 
 /**
+ * 3dMVM_validator
+ *
  * Launch the 3dMVM model validation shiny app in a web browser.
  *
  * Author: AFNI Developers
@@ -164,6 +166,8 @@ function v_3d_mvm_validator_execute(
 
 
 /**
+ * 3dMVM_validator
+ *
  * Launch the 3dMVM model validation shiny app in a web browser.
  *
  * Author: AFNI Developers

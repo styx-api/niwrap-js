@@ -184,6 +184,8 @@ function v__move_to_series_dirs_outputs(
 
 
 /**
+ * @move.to.series.dirs
+ *
  * Partition DICOM files into series directories by copying or moving them to new series directories.
  *
  * Author: AFNI Developers
@@ -210,6 +212,8 @@ function v__move_to_series_dirs_execute(
 
 
 /**
+ * @move.to.series.dirs
+ *
  * Partition DICOM files into series directories by copying or moving them to new series directories.
  *
  * Author: AFNI Developers

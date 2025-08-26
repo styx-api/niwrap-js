@@ -139,6 +139,8 @@ function asegstatsdiff_outputs(
 
 
 /**
+ * asegstatsdiff
+ *
  * Compute and report percentage differences in aseg morphometry data between two subjects.
  *
  * Author: FreeSurfer Developers
@@ -165,6 +167,8 @@ function asegstatsdiff_execute(
 
 
 /**
+ * asegstatsdiff
+ *
  * Compute and report percentage differences in aseg morphometry data between two subjects.
  *
  * Author: FreeSurfer Developers

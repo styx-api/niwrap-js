@@ -149,6 +149,8 @@ function extracttxt_outputs(
 
 
 /**
+ * extracttxt
+ *
  * Extracts text from a file based on a search word.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -175,6 +177,8 @@ function extracttxt_execute(
 
 
 /**
+ * extracttxt
+ *
  * Extracts text from a file based on a search word.
  *
  * Author: FMRIB Analysis Group, University of Oxford

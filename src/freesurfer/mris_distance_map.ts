@@ -131,6 +131,8 @@ function mris_distance_map_outputs(
 
 
 /**
+ * mris_distance_map
+ *
  * Tool to compute a distance map of each point on the surface to a reference point.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mris_distance_map_execute(
 
 
 /**
+ * mris_distance_map
+ *
  * Tool to compute a distance map of each point on the surface to a reference point.
  *
  * Author: FreeSurfer Developers

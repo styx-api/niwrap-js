@@ -123,6 +123,8 @@ function mris2rgb_outputs(
 
 
 /**
+ * mris2rgb
+ *
  * A tool from FreeSurfer for converting MRI surface files to RGB images.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function mris2rgb_execute(
 
 
 /**
+ * mris2rgb
+ *
  * A tool from FreeSurfer for converting MRI surface files to RGB images.
  *
  * Author: FreeSurfer Developers

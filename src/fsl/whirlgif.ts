@@ -186,6 +186,8 @@ function whirlgif_outputs(
 
 
 /**
+ * whirlgif
+ *
  * GIF animation tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -212,6 +214,8 @@ function whirlgif_execute(
 
 
 /**
+ * whirlgif
+ *
  * GIF animation tool.
  *
  * Author: FMRIB Analysis Group, University of Oxford

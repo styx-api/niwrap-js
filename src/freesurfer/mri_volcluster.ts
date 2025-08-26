@@ -663,6 +663,8 @@ function mri_volcluster_outputs(
 
 
 /**
+ * mri_volcluster
+ *
  * A tool for finding clusters in a volume, useful for analyzing MRI data.
  *
  * Author: FreeSurfer Developers
@@ -689,6 +691,8 @@ function mri_volcluster_execute(
 
 
 /**
+ * mri_volcluster
+ *
  * A tool for finding clusters in a volume, useful for analyzing MRI data.
  *
  * Author: FreeSurfer Developers

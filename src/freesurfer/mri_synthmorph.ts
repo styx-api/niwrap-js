@@ -258,6 +258,8 @@ function mri_synthmorph_outputs(
 
 
 /**
+ * mri_synthmorph
+ *
  * SynthMorph is a deep-learning tool for brain-specific MRI image registration without preprocessing.
  *
  * Author: FreeSurfer Developers
@@ -284,6 +286,8 @@ function mri_synthmorph_execute(
 
 
 /**
+ * mri_synthmorph
+ *
  * SynthMorph is a deep-learning tool for brain-specific MRI image registration without preprocessing.
  *
  * Author: FreeSurfer Developers

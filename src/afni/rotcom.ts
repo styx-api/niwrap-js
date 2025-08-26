@@ -135,6 +135,8 @@ function rotcom_outputs(
 
 
 /**
+ * rotcom
+ *
  * Prints to stdout the 4x3 transformation matrix+vector that would be applied by 3drotate to the given dataset.
  *
  * Author: AFNI Developers
@@ -161,6 +163,8 @@ function rotcom_execute(
 
 
 /**
+ * rotcom
+ *
  * Prints to stdout the 4x3 transformation matrix+vector that would be applied by 3drotate to the given dataset.
  *
  * Author: AFNI Developers

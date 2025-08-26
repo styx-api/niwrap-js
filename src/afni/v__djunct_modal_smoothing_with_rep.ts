@@ -183,6 +183,8 @@ function v__djunct_modal_smoothing_with_rep_outputs(
 
 
 /**
+ * @djunct_modal_smoothing_with_rep
+ *
  * A script to perform modal smoothing of ROI maps and check for eliminated ROIs. If any ROIs are eliminated during smoothing, they are restored, potentially in a degraded form.
  *
  * Author: AFNI Developers
@@ -209,6 +211,8 @@ function v__djunct_modal_smoothing_with_rep_execute(
 
 
 /**
+ * @djunct_modal_smoothing_with_rep
+ *
  * A script to perform modal smoothing of ROI maps and check for eliminated ROIs. If any ROIs are eliminated during smoothing, they are restored, potentially in a degraded form.
  *
  * Author: AFNI Developers

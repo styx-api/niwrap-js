@@ -262,6 +262,8 @@ function cifti_average_outputs(
 
 
 /**
+ * cifti-average
+ *
  * Average cifti files.
  *
  * Averages cifti files together.  Files without -weight specified are given a weight of 1.  If -exclude-outliers is specified, at each element, the data across all files is taken as a set, its unweighted mean and sample standard deviation are found, and values outside the specified number of standard deviations are excluded from the (potentially weighted) average at that element.
@@ -290,6 +292,8 @@ function cifti_average_execute(
 
 
 /**
+ * cifti-average
+ *
  * Average cifti files.
  *
  * Averages cifti files together.  Files without -weight specified are given a weight of 1.  If -exclude-outliers is specified, at each element, the data across all files is taken as a set, its unweighted mean and sample standard deviation are found, and values outside the specified number of standard deviations are excluded from the (potentially weighted) average at that element.

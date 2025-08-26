@@ -416,6 +416,8 @@ function mris_fwhm_outputs(
 
 
 /**
+ * mris_fwhm
+ *
  * Smooths surface data and/or estimates FWHM.
  *
  * Author: FreeSurfer Developers
@@ -442,6 +444,8 @@ function mris_fwhm_execute(
 
 
 /**
+ * mris_fwhm
+ *
  * Smooths surface data and/or estimates FWHM.
  *
  * Author: FreeSurfer Developers

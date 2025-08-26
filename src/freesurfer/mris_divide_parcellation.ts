@@ -170,6 +170,8 @@ function mris_divide_parcellation_outputs(
 
 
 /**
+ * mris_divide_parcellation
+ *
  * Divides one or more parcellations into divisions perpendicular to the long axis of the label.
  *
  * Author: FreeSurfer Developers
@@ -196,6 +198,8 @@ function mris_divide_parcellation_execute(
 
 
 /**
+ * mris_divide_parcellation
+ *
  * Divides one or more parcellations into divisions perpendicular to the long axis of the label.
  *
  * Author: FreeSurfer Developers

@@ -131,6 +131,8 @@ function gifti_convert_outputs(
 
 
 /**
+ * gifti-convert
+ *
  * Convert a gifti file to a different encoding.
  *
  * The value of <gifti-encoding> must be one of the following:
@@ -164,6 +166,8 @@ function gifti_convert_execute(
 
 
 /**
+ * gifti-convert
+ *
  * Convert a gifti file to a different encoding.
  *
  * The value of <gifti-encoding> must be one of the following:

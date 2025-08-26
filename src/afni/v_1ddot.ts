@@ -180,6 +180,8 @@ function v_1ddot_outputs(
 
 
 /**
+ * 1ddot
+ *
  * Computes the correlation matrix of the input 1D files and their inverse correlation matrix.
  *
  * Author: AFNI Developers
@@ -206,6 +208,8 @@ function v_1ddot_execute(
 
 
 /**
+ * 1ddot
+ *
  * Computes the correlation matrix of the input 1D files and their inverse correlation matrix.
  *
  * Author: AFNI Developers

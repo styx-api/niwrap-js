@@ -125,6 +125,8 @@ function fix_subject_corrected_outputs(
 
 
 /**
+ * fix_subject_corrected
+ *
  * Corrects subject data in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -151,6 +153,8 @@ function fix_subject_corrected_execute(
 
 
 /**
+ * fix_subject_corrected
+ *
  * Corrects subject data in FreeSurfer.
  *
  * Author: FreeSurfer Developers

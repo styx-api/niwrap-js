@@ -141,6 +141,8 @@ function avi2talxfm_outputs(
 
 
 /**
+ * avi2talxfm
+ *
  * Convert voxel-to-voxel transform to MNI transform.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function avi2talxfm_execute(
 
 
 /**
+ * avi2talxfm
+ *
  * Convert voxel-to-voxel transform to MNI transform.
  *
  * Author: FreeSurfer Developers

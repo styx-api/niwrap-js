@@ -136,6 +136,8 @@ function labels_intersect_outputs(
 
 
 /**
+ * labels_intersect
+ *
  * Tool to find the intersection of two label files.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function labels_intersect_execute(
 
 
 /**
+ * labels_intersect
+ *
  * Tool to find the intersection of two label files.
  *
  * Author: FreeSurfer Developers

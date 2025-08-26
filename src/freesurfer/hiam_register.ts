@@ -136,6 +136,8 @@ function hiam_register_outputs(
 
 
 /**
+ * hiam_register
+ *
  * This program registers a surface with an average surface.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function hiam_register_execute(
 
 
 /**
+ * hiam_register
+ *
  * This program registers a surface with an average surface.
  *
  * Author: FreeSurfer Developers

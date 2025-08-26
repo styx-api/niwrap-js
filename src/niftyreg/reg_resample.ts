@@ -228,6 +228,8 @@ function reg_resample_outputs(
 
 
 /**
+ * reg_resample
+ *
  * Tool for resampling floating images to the reference image space using different transformations.
  *
  * Author: NiftyReg Developers
@@ -254,6 +256,8 @@ function reg_resample_execute(
 
 
 /**
+ * reg_resample
+ *
  * Tool for resampling floating images to the reference image space using different transformations.
  *
  * Author: NiftyReg Developers

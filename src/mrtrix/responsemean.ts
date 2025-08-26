@@ -235,6 +235,8 @@ function responsemean_outputs(
 
 
 /**
+ * responsemean
+ *
  * Calculate the mean response function from a set of text files.
  *
  * Author: MRTrix3 Developers
@@ -261,6 +263,8 @@ function responsemean_execute(
 
 
 /**
+ * responsemean
+ *
  * Calculate the mean response function from a set of text files.
  *
  * Author: MRTrix3 Developers

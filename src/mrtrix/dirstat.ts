@@ -327,6 +327,8 @@ function dirstat_outputs(
 
 
 /**
+ * dirstat
+ *
  * Report statistics on a direction set.
  *
  * This command will accept as inputs:
@@ -379,6 +381,8 @@ function dirstat_execute(
 
 
 /**
+ * dirstat
+ *
  * Report statistics on a direction set.
  *
  * This command will accept as inputs:

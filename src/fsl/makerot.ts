@@ -191,6 +191,8 @@ function makerot_outputs(
 
 
 /**
+ * makerot
+ *
  * Tool to create a rotation matrix for a given angle and axis of rotation.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -217,6 +219,8 @@ function makerot_execute(
 
 
 /**
+ * makerot
+ *
  * Tool to create a rotation matrix for a given angle and axis of rotation.
  *
  * Author: FMRIB Analysis Group, University of Oxford

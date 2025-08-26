@@ -126,6 +126,8 @@ function spec_file_relocate_outputs(
 
 
 /**
+ * spec-file-relocate
+ *
  * Recreate spec file in new location.
  *
  * Spec files contain internal relative paths, such that moving or copying a spec file will cause it to lose track of the files it refers to.  This command makes a modified copy of the spec file, changing the relative paths to refer to the new relative locations of the files.
@@ -154,6 +156,8 @@ function spec_file_relocate_execute(
 
 
 /**
+ * spec-file-relocate
+ *
  * Recreate spec file in new location.
  *
  * Spec files contain internal relative paths, such that moving or copying a spec file will cause it to lose track of the files it refers to.  This command makes a modified copy of the spec file, changing the relative paths to refer to the new relative locations of the files.

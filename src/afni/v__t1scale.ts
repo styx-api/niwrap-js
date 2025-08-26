@@ -250,6 +250,8 @@ function v__t1scale_outputs(
 
 
 /**
+ * @T1scale
+ *
  * Fix bias field shading in T1 by scaling it with PD image. You can also get a decent result even without the PD volume.
  *
  * Author: AFNI Developers
@@ -276,6 +278,8 @@ function v__t1scale_execute(
 
 
 /**
+ * @T1scale
+ *
  * Fix bias field shading in T1 by scaling it with PD image. You can also get a decent result even without the PD volume.
  *
  * Author: AFNI Developers

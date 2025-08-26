@@ -138,6 +138,8 @@ function v_3d_extract_group_in_corr_outputs(
 
 
 /**
+ * 3dExtractGroupInCorr
+ *
  * This program breaks the collection of images from a GroupInCorr file back into individual AFNI 3D+time datasets.
  *
  * Author: AFNI Developers
@@ -164,6 +166,8 @@ function v_3d_extract_group_in_corr_execute(
 
 
 /**
+ * 3dExtractGroupInCorr
+ *
  * This program breaks the collection of images from a GroupInCorr file back into individual AFNI 3D+time datasets.
  *
  * Author: AFNI Developers

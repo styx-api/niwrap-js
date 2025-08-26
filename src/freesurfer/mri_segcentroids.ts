@@ -187,6 +187,8 @@ function mri_segcentroids_outputs(
 
 
 /**
+ * mri_segcentroids
+ *
  * Computes the center of mass for individual structures in a segmentation.
  *
  * Author: FreeSurfer Developers
@@ -213,6 +215,8 @@ function mri_segcentroids_execute(
 
 
 /**
+ * mri_segcentroids
+ *
  * Computes the center of mass for individual structures in a segmentation.
  *
  * Author: FreeSurfer Developers

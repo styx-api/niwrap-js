@@ -129,6 +129,8 @@ function run_mris_preproc_outputs(
 
 
 /**
+ * run_mris_preproc
+ *
  * Utility to create pre-smoothed surface data on a target average subject for Qdec application.
  *
  * Author: FreeSurfer Developers
@@ -155,6 +157,8 @@ function run_mris_preproc_execute(
 
 
 /**
+ * run_mris_preproc
+ *
  * Utility to create pre-smoothed surface data on a target average subject for Qdec application.
  *
  * Author: FreeSurfer Developers

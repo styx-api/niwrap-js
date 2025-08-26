@@ -240,6 +240,8 @@ function v_2d_im_reg_outputs(
 
 
 /**
+ * 2dImReg
+ *
  * 2D image registration tool for 3D+time datasets, aligning images on a slice-by-slice basis to a specified base image.
  *
  * Author: AFNI Developers
@@ -266,6 +268,8 @@ function v_2d_im_reg_execute(
 
 
 /**
+ * 2dImReg
+ *
  * 2D image registration tool for 3D+time datasets, aligning images on a slice-by-slice basis to a specified base image.
  *
  * Author: AFNI Developers

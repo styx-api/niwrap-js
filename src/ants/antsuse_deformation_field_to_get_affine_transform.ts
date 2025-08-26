@@ -150,6 +150,8 @@ function antsuse_deformation_field_to_get_affine_transform_outputs(
 
 
 /**
+ * ANTSUseDeformationFieldToGetAffineTransform
+ *
  * Extracts an affine transform from a deformation field. The input deformation field is expected to be in the same physical space as the images you want to transform.
  *
  * Author: ANTs Developers
@@ -176,6 +178,8 @@ function antsuse_deformation_field_to_get_affine_transform_execute(
 
 
 /**
+ * ANTSUseDeformationFieldToGetAffineTransform
+ *
  * Extracts an affine transform from a deformation field. The input deformation field is expected to be in the same physical space as the images you want to transform.
  *
  * Author: ANTs Developers

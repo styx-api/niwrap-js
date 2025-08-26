@@ -268,6 +268,8 @@ function merge_stats_tables_outputs(
 
 
 /**
+ * merge_stats_tables
+ *
  * Merges a set of stats table files into a single stats table where each line is a subject and each column is a segmentation or parcellation.
  *
  * Author: FreeSurfer Developers
@@ -294,6 +296,8 @@ function merge_stats_tables_execute(
 
 
 /**
+ * merge_stats_tables
+ *
  * Merges a set of stats table files into a single stats table where each line is a subject and each column is a segmentation or parcellation.
  *
  * Author: FreeSurfer Developers

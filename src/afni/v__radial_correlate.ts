@@ -334,6 +334,8 @@ function v__radial_correlate_outputs(
 
 
 /**
+ * @radial_correlate
+ *
  * Check datasets for correlation artifacts.
  *
  * Author: AFNI Developers
@@ -360,6 +362,8 @@ function v__radial_correlate_execute(
 
 
 /**
+ * @radial_correlate
+ *
  * Check datasets for correlation artifacts.
  *
  * Author: AFNI Developers

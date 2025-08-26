@@ -186,6 +186,8 @@ function lta_diff_outputs(
 
 
 /**
+ * lta_diff
+ *
  * A tool to compute different distance norms for a single transform or for the difference between two transforms.
  *
  * Author: FreeSurfer Developers
@@ -212,6 +214,8 @@ function lta_diff_execute(
 
 
 /**
+ * lta_diff
+ *
  * A tool to compute different distance norms for a single transform or for the difference between two transforms.
  *
  * Author: FreeSurfer Developers

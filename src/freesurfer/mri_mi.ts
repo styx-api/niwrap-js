@@ -144,6 +144,8 @@ function mri_mi_outputs(
 
 
 /**
+ * mri_mi
+ *
  * Computes mutual information (mi) between two input volumes.
  *
  * Author: FreeSurfer Developers
@@ -170,6 +172,8 @@ function mri_mi_execute(
 
 
 /**
+ * mri_mi
+ *
  * Computes mutual information (mi) between two input volumes.
  *
  * Author: FreeSurfer Developers

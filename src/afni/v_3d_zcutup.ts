@@ -151,6 +151,8 @@ function v_3d_zcutup_outputs(
 
 
 /**
+ * 3dZcutup
+ *
  * Cut slices off a dataset in its z-direction and write a new dataset.
  *
  * Author: AFNI Developers
@@ -177,6 +179,8 @@ function v_3d_zcutup_execute(
 
 
 /**
+ * 3dZcutup
+ *
  * Cut slices off a dataset in its z-direction and write a new dataset.
  *
  * Author: AFNI Developers

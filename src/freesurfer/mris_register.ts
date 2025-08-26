@@ -776,6 +776,8 @@ function mris_register_outputs(
 
 
 /**
+ * mris_register
+ *
  * This program registers a surface to an average surface template.
  *
  * Author: FreeSurfer Developers
@@ -802,6 +804,8 @@ function mris_register_execute(
 
 
 /**
+ * mris_register
+ *
  * This program registers a surface to an average surface template.
  *
  * Author: FreeSurfer Developers

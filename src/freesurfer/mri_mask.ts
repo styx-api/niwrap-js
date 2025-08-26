@@ -312,6 +312,8 @@ function mri_mask_outputs(
 
 
 /**
+ * mri_mask
+ *
  * Applies a mask volume (typically skull stripped).
  *
  * Author: FreeSurfer Developers
@@ -338,6 +340,8 @@ function mri_mask_execute(
 
 
 /**
+ * mri_mask
+ *
  * Applies a mask volume (typically skull stripped).
  *
  * Author: FreeSurfer Developers

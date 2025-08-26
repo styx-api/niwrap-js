@@ -214,6 +214,8 @@ function v_3d_lomb_scargle_outputs(
 
 
 /**
+ * 3dLombScargle
+ *
  * Make a periodogram or amplitude-spectrum of a time series that has a non-constant sampling rate.
  *
  * Author: AFNI Developers
@@ -240,6 +242,8 @@ function v_3d_lomb_scargle_execute(
 
 
 /**
+ * 3dLombScargle
+ *
  * Make a periodogram or amplitude-spectrum of a time series that has a non-constant sampling rate.
  *
  * Author: AFNI Developers

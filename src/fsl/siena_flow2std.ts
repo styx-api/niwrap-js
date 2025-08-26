@@ -144,6 +144,8 @@ function siena_flow2std_outputs(
 
 
 /**
+ * siena_flow2std
+ *
  * Convert edge flow to standard space.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -170,6 +172,8 @@ function siena_flow2std_execute(
 
 
 /**
+ * siena_flow2std
+ *
  * Convert edge flow to standard space.
  *
  * Author: FMRIB Analysis Group, University of Oxford

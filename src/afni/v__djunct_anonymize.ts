@@ -151,6 +151,8 @@ function v__djunct_anonymize_outputs(
 
 
 /**
+ * @djunct_anonymize
+ *
  * Helper program to anonymize files.
  *
  * Author: AFNI Developers
@@ -177,6 +179,8 @@ function v__djunct_anonymize_execute(
 
 
 /**
+ * @djunct_anonymize
+ *
  * Helper program to anonymize files.
  *
  * Author: AFNI Developers

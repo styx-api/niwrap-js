@@ -441,6 +441,8 @@ function run_samseg_outputs(
 
 
 /**
+ * run_samseg
+ *
  * SAMSEG (Sequence Adaptive Multimodal SEGmentation) is a tool for automated segmentation of brain MRI data.
  *
  * Author: FreeSurfer Developers
@@ -467,6 +469,8 @@ function run_samseg_execute(
 
 
 /**
+ * run_samseg
+ *
  * SAMSEG (Sequence Adaptive Multimodal SEGmentation) is a tool for automated segmentation of brain MRI data.
  *
  * Author: FreeSurfer Developers

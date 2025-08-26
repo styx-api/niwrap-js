@@ -501,6 +501,8 @@ function connectomestats_outputs(
 
 
 /**
+ * connectomestats
+ *
  * Connectome group-wise statistics at the edge level using non-parametric permutation testing.
  *
  * For the TFNBS algorithm, default parameters for statistical enhancement have been set based on the work in: 
@@ -548,6 +550,8 @@ function connectomestats_execute(
 
 
 /**
+ * connectomestats
+ *
  * Connectome group-wise statistics at the edge level using non-parametric permutation testing.
  *
  * For the TFNBS algorithm, default parameters for statistical enhancement have been set based on the work in: 

@@ -127,6 +127,8 @@ function inflate_subject_new_rh_outputs(
 
 
 /**
+ * inflate_subject_new-rh
+ *
  * This is a placeholder descriptor for the 'inflate_subject_new-rh' command. The tool appears to be part of FreeSurfer but the specific inputs, outputs or options couldn't be extracted from the help text.
  *
  * Author: FreeSurfer Developers
@@ -153,6 +155,8 @@ function inflate_subject_new_rh_execute(
 
 
 /**
+ * inflate_subject_new-rh
+ *
  * This is a placeholder descriptor for the 'inflate_subject_new-rh' command. The tool appears to be part of FreeSurfer but the specific inputs, outputs or options couldn't be extracted from the help text.
  *
  * Author: FreeSurfer Developers

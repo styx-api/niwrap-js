@@ -219,6 +219,8 @@ function wmsaseg_outputs(
 
 
 /**
+ * wmsaseg
+ *
  * White Matter Hyperintensity Segmentation Tool.
  *
  * Author: FreeSurfer Developers
@@ -245,6 +247,8 @@ function wmsaseg_execute(
 
 
 /**
+ * wmsaseg
+ *
  * White Matter Hyperintensity Segmentation Tool.
  *
  * Author: FreeSurfer Developers

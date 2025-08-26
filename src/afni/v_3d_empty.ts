@@ -169,6 +169,8 @@ function v_3d_empty_outputs(
 
 
 /**
+ * 3dEmpty
+ *
  * Tool to create an 'empty' dataset .HEAD file.
  *
  * Author: AFNI Developers
@@ -195,6 +197,8 @@ function v_3d_empty_execute(
 
 
 /**
+ * 3dEmpty
+ *
  * Tool to create an 'empty' dataset .HEAD file.
  *
  * Author: AFNI Developers

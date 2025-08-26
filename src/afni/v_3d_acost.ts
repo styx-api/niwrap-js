@@ -154,6 +154,8 @@ function v_3d_acost_outputs(
 
 
 /**
+ * 3dAcost
+ *
  * Allineate dataset to a base dataset.
  *
  * Author: AFNI Developers
@@ -180,6 +182,8 @@ function v_3d_acost_execute(
 
 
 /**
+ * 3dAcost
+ *
  * Allineate dataset to a base dataset.
  *
  * Author: AFNI Developers

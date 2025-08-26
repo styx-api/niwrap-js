@@ -136,6 +136,8 @@ function mris_sample_label_outputs(
 
 
 /**
+ * mris_sample_label
+ *
  * This tool samples a label onto a surface model.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mris_sample_label_execute(
 
 
 /**
+ * mris_sample_label
+ *
  * This tool samples a label onto a surface model.
  *
  * Author: FreeSurfer Developers

@@ -122,6 +122,8 @@ function suma_glxdino_outputs(
 
 
 /**
+ * SUMA_glxdino
+ *
  * A simple openGL test program using GLX. If it does not run, then SUMA certainly won't.
  *
  * Author: AFNI Developers
@@ -148,6 +150,8 @@ function suma_glxdino_execute(
 
 
 /**
+ * SUMA_glxdino
+ *
  * A simple openGL test program using GLX. If it does not run, then SUMA certainly won't.
  *
  * Author: AFNI Developers

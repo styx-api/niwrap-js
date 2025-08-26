@@ -316,6 +316,8 @@ function mean_outputs(
 
 
 /**
+ * mean
+ *
  * Diagnostic tool for analyzing and computing mean values for FSL data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -342,6 +344,8 @@ function mean_execute(
 
 
 /**
+ * mean
+ *
  * Diagnostic tool for analyzing and computing mean values for FSL data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

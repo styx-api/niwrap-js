@@ -1118,6 +1118,8 @@ function cifti_resample_dconn_memory_outputs(
 
 
 /**
+ * cifti-resample-dconn-memory
+ *
  * Use lots of memory to resample dconn.
  *
  * This command does the same thing as running -cifti-resample twice, but uses memory up to approximately 2x the size that the intermediate file would be.  This is because the intermediate dconn is kept in memory, rather than written to disk, and the components before and after resampling/dilation have to be in memory at the same time during the relevant computation.  The <template-direction> argument should usually be COLUMN, as dtseries, dscalar, and dlabel all have brainordinates on that direction.  If spheres are not specified for a surface structure which exists in the cifti files, its data is copied without resampling or dilation.  Dilation is done with the 'nearest' method, and is done on <new-sphere> for surface data.  Volume components are padded before dilation so that dilation doesn't run into the edge of the component bounding box.
@@ -1160,6 +1162,8 @@ function cifti_resample_dconn_memory_execute(
 
 
 /**
+ * cifti-resample-dconn-memory
+ *
  * Use lots of memory to resample dconn.
  *
  * This command does the same thing as running -cifti-resample twice, but uses memory up to approximately 2x the size that the intermediate file would be.  This is because the intermediate dconn is kept in memory, rather than written to disk, and the components before and after resampling/dilation have to be in memory at the same time during the relevant computation.  The <template-direction> argument should usually be COLUMN, as dtseries, dscalar, and dlabel all have brainordinates on that direction.  If spheres are not specified for a surface structure which exists in the cifti files, its data is copied without resampling or dilation.  Dilation is done with the 'nearest' method, and is done on <new-sphere> for surface data.  Volume components are padded before dilation so that dilation doesn't run into the edge of the component bounding box.

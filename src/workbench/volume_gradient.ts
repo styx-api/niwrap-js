@@ -233,6 +233,8 @@ function volume_gradient_outputs(
 
 
 /**
+ * volume-gradient
+ *
  * Gradient of a volume file.
  *
  * Computes the gradient of the volume by doing linear regressions for each voxel, considering only its face neighbors unless too few face neighbors exist.  The gradient vector is constructed from the partial derivatives of the resulting linear function, and the magnitude of this vector is the output.  If specified, the volume vector output is arranged with the x, y, and z components from a subvolume as consecutive subvolumes.
@@ -261,6 +263,8 @@ function volume_gradient_execute(
 
 
 /**
+ * volume-gradient
+ *
  * Gradient of a volume file.
  *
  * Computes the gradient of the volume by doing linear regressions for each voxel, considering only its face neighbors unless too few face neighbors exist.  The gradient vector is constructed from the partial derivatives of the resulting linear function, and the magnitude of this vector is the output.  If specified, the volume vector output is arranged with the x, y, and z components from a subvolume as consecutive subvolumes.

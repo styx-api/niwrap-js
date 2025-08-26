@@ -170,6 +170,8 @@ function segment_subject_outputs(
 
 
 /**
+ * segment_subject
+ *
  * Front-end for MINCs mritotal to compute the Talairach transform that maps the input volume to the MNI305 space.
  *
  * Author: FreeSurfer Developers
@@ -196,6 +198,8 @@ function segment_subject_execute(
 
 
 /**
+ * segment_subject
+ *
  * Front-end for MINCs mritotal to compute the Talairach transform that maps the input volume to the MNI305 space.
  *
  * Author: FreeSurfer Developers

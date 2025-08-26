@@ -289,6 +289,8 @@ function mri_wbc_outputs(
 
 
 /**
+ * mri_wbc
+ *
  * A tool for working with functional brain imaging data on surfaces and volumes.
  *
  * Author: FreeSurfer Developers
@@ -315,6 +317,8 @@ function mri_wbc_execute(
 
 
 /**
+ * mri_wbc
+ *
  * A tool for working with functional brain imaging data on surfaces and volumes.
  *
  * Author: FreeSurfer Developers

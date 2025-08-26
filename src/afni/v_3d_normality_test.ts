@@ -148,6 +148,8 @@ function v_3d_normality_test_outputs(
 
 
 /**
+ * 3dNormalityTest
+ *
  * This program tests the input values at each voxel for normality using the Anderson-Darling method.
  *
  * Author: AFNI Developers
@@ -174,6 +176,8 @@ function v_3d_normality_test_execute(
 
 
 /**
+ * 3dNormalityTest
+ *
  * This program tests the input values at each voxel for normality using the Anderson-Darling method.
  *
  * Author: AFNI Developers

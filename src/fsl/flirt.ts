@@ -605,6 +605,8 @@ function flirt_outputs(
 
 
 /**
+ * flirt
+ *
  * FLIRT (FMRIB's Linear Image Registration Tool) is a fully automated robust and accurate tool for linear (affine) intra- and inter-modal brain image registration.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -631,6 +633,8 @@ function flirt_execute(
 
 
 /**
+ * flirt
+ *
  * FLIRT (FMRIB's Linear Image Registration Tool) is a fully automated robust and accurate tool for linear (affine) intra- and inter-modal brain image registration.
  *
  * Author: FMRIB Analysis Group, University of Oxford

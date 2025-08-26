@@ -165,6 +165,8 @@ function imcalc_outputs(
 
 
 /**
+ * imcalc
+ *
  * Tool for arithmetic operations on 2D images, pixel-by-pixel.
  *
  * Author: AFNI Developers
@@ -191,6 +193,8 @@ function imcalc_execute(
 
 
 /**
+ * imcalc
+ *
  * Tool for arithmetic operations on 2D images, pixel-by-pixel.
  *
  * Author: AFNI Developers

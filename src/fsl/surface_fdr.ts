@@ -136,6 +136,8 @@ function surface_fdr_outputs(
 
 
 /**
+ * surface_fdr
+ *
  * Tool to calculate surface FDR correction for vertex analysis.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -162,6 +164,8 @@ function surface_fdr_execute(
 
 
 /**
+ * surface_fdr
+ *
  * Tool to calculate surface FDR correction for vertex analysis.
  *
  * Author: FMRIB Analysis Group, University of Oxford

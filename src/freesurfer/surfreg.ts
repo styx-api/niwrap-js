@@ -260,6 +260,8 @@ function surfreg_outputs(
 
 
 /**
+ * surfreg
+ *
  * Performs surface registration (mris_register) between a subject and a target average subject based on the hemi.reg.template.tif atlas in the average subject.
  *
  * Author: FreeSurfer Developers
@@ -286,6 +288,8 @@ function surfreg_execute(
 
 
 /**
+ * surfreg
+ *
  * Performs surface registration (mris_register) between a subject and a target average subject based on the hemi.reg.template.tif atlas in the average subject.
  *
  * Author: FreeSurfer Developers

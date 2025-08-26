@@ -307,6 +307,8 @@ function brain_skin_outputs(
 
 
 /**
+ * BrainSkin
+ *
  * A program to create an unfolded surface that wraps the brain (skin) and Gyrification Indices.
  *
  * Author: AFNI Developers
@@ -333,6 +335,8 @@ function brain_skin_execute(
 
 
 /**
+ * BrainSkin
+ *
  * A program to create an unfolded surface that wraps the brain (skin) and Gyrification Indices.
  *
  * Author: AFNI Developers

@@ -126,6 +126,8 @@ function uniq_images_outputs(
 
 
 /**
+ * uniq_images
+ *
  * Simple program to read in a list of image filenames, determine which files have unique images inside, and echo out only a list of the filenames with unique images.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function uniq_images_execute(
 
 
 /**
+ * uniq_images
+ *
  * Simple program to read in a list of image filenames, determine which files have unique images inside, and echo out only a list of the filenames with unique images.
  *
  * Author: AFNI Developers

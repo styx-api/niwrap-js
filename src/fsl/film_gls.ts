@@ -365,6 +365,8 @@ function film_gls_outputs(
 
 
 /**
+ * film_gls
+ *
  * General Linear Model fitting with autocorrelation in FMRI.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -391,6 +393,8 @@ function film_gls_execute(
 
 
 /**
+ * film_gls
+ *
  * General Linear Model fitting with autocorrelation in FMRI.
  *
  * Author: FMRIB Analysis Group, University of Oxford

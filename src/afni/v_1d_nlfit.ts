@@ -165,6 +165,8 @@ function v_1d_nlfit_outputs(
 
 
 /**
+ * 1dNLfit
+ *
  * Program to fit a model to a vector of data. The model is given by a symbolic expression, with parameters to be estimated.
  *
  * Author: AFNI Developers
@@ -191,6 +193,8 @@ function v_1d_nlfit_execute(
 
 
 /**
+ * 1dNLfit
+ *
  * Program to fit a model to a vector of data. The model is given by a symbolic expression, with parameters to be estimated.
  *
  * Author: AFNI Developers

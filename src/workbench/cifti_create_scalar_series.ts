@@ -214,6 +214,8 @@ function cifti_create_scalar_series_outputs(
 
 
 /**
+ * cifti-create-scalar-series
+ *
  * Import series data into cifti.
  *
  * Convert a text file containing series of equal length into a cifti file.  The text file should have lines made up of numbers separated by whitespace, with no extra newlines between lines.
@@ -249,6 +251,8 @@ function cifti_create_scalar_series_execute(
 
 
 /**
+ * cifti-create-scalar-series
+ *
  * Import series data into cifti.
  *
  * Convert a text file containing series of equal length into a cifti file.  The text file should have lines made up of numbers separated by whitespace, with no extra newlines between lines.

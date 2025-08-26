@@ -492,6 +492,8 @@ function mri_robust_template_outputs(
 
 
 /**
+ * mri_robust_template
+ *
  * Constructs an unbiased robust template for longitudinal volumes using an iterative method.
  *
  * Author: FreeSurfer Developers
@@ -518,6 +520,8 @@ function mri_robust_template_execute(
 
 
 /**
+ * mri_robust_template
+ *
  * Constructs an unbiased robust template for longitudinal volumes using an iterative method.
  *
  * Author: FreeSurfer Developers

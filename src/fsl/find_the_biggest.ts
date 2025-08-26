@@ -131,6 +131,8 @@ function find_the_biggest_outputs(
 
 
 /**
+ * find_the_biggest
+ *
  * Tool to find the largest volume or surface from a set of inputs.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function find_the_biggest_execute(
 
 
 /**
+ * find_the_biggest
+ *
  * Tool to find the largest volume or surface from a set of inputs.
  *
  * Author: FMRIB Analysis Group, University of Oxford

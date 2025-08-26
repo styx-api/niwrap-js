@@ -174,6 +174,8 @@ function biasfield_outputs(
 
 
 /**
+ * biasfield
+ *
  * Computes the bias field by dividing the (unconformed) orig.mgz by the norm.mgz.
  *
  * Author: FreeSurfer Developers
@@ -200,6 +202,8 @@ function biasfield_execute(
 
 
 /**
+ * biasfield
+ *
  * Computes the bias field by dividing the (unconformed) orig.mgz by the norm.mgz.
  *
  * Author: FreeSurfer Developers

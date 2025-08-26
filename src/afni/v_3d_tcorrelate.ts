@@ -249,6 +249,8 @@ function v_3d_tcorrelate_outputs(
 
 
 /**
+ * 3dTcorrelate
+ *
  * 3dTcorrelate. Computes the correlation coefficient between corresponding voxel time series in two input 3D+time datasets 'xset' and 'yset'.
  *
  * Author: AFNI Developers
@@ -275,6 +277,8 @@ function v_3d_tcorrelate_execute(
 
 
 /**
+ * 3dTcorrelate
+ *
  * 3dTcorrelate. Computes the correlation coefficient between corresponding voxel time series in two input 3D+time datasets 'xset' and 'yset'.
  *
  * Author: AFNI Developers

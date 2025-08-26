@@ -136,6 +136,8 @@ function quotize_outputs(
 
 
 /**
+ * quotize
+ *
  * Turns a text file into a C array of strings initialized into an array 'char *name[]'.
  *
  * Author: AFNI Developers
@@ -162,6 +164,8 @@ function quotize_execute(
 
 
 /**
+ * quotize
+ *
  * Turns a text file into a C array of strings initialized into an array 'char *name[]'.
  *
  * Author: AFNI Developers

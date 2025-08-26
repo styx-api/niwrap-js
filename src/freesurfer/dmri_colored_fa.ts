@@ -131,6 +131,8 @@ function dmri_colored_fa_outputs(
 
 
 /**
+ * dmri_coloredFA
+ *
  * Tool for generating colored FA maps from diffusion MRI data.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function dmri_colored_fa_execute(
 
 
 /**
+ * dmri_coloredFA
+ *
  * Tool for generating colored FA maps from diffusion MRI data.
  *
  * Author: FreeSurfer Developers

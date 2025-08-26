@@ -420,6 +420,8 @@ function tkregisterfv_outputs(
 
 
 /**
+ * tkregisterfv
+ *
  * A script that runs freeview with arguments like tkregister, focusing on LTA files.
  *
  * Author: FreeSurfer Developers
@@ -446,6 +448,8 @@ function tkregisterfv_execute(
 
 
 /**
+ * tkregisterfv
+ *
  * A script that runs freeview with arguments like tkregister, focusing on LTA files.
  *
  * Author: FreeSurfer Developers

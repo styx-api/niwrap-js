@@ -170,6 +170,8 @@ function cifti_vector_operation_outputs(
 
 
 /**
+ * cifti-vector-operation
+ *
  * Do a vector operation on cifti files.
  *
  * Does a vector operation on two cifti files (that must have a multiple of 3 columns).  Either of the inputs may have multiple vectors (more than 3 columns), but not both (at least one must have exactly 3 columns).  The -magnitude and -normalize-output options may not be specified together, or with an operation that returns a scalar (dot product).  The <operation> parameter must be one of the following:
@@ -203,6 +205,8 @@ function cifti_vector_operation_execute(
 
 
 /**
+ * cifti-vector-operation
+ *
  * Do a vector operation on cifti files.
  *
  * Does a vector operation on two cifti files (that must have a multiple of 3 columns).  Either of the inputs may have multiple vectors (more than 3 columns), but not both (at least one must have exactly 3 columns).  The -magnitude and -normalize-output options may not be specified together, or with an operation that returns a scalar (dot product).  The <operation> parameter must be one of the following:

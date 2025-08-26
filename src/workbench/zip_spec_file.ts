@@ -150,6 +150,8 @@ function zip_spec_file_outputs(
 
 
 /**
+ * zip-spec-file
+ *
  * Zip a spec file and its data files.
  *
  * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the directory containing the spec file is used for the base directory.  The spec file must contain only relative paths, and no data files may be outside the base directory.  Scene files inside spec files are not checked for what files they reference, ensure that all data files referenced by the scene files are also referenced by the spec file.
@@ -178,6 +180,8 @@ function zip_spec_file_execute(
 
 
 /**
+ * zip-spec-file
+ *
  * Zip a spec file and its data files.
  *
  * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the directory containing the spec file is used for the base directory.  The spec file must contain only relative paths, and no data files may be outside the base directory.  Scene files inside spec files are not checked for what files they reference, ensure that all data files referenced by the scene files are also referenced by the spec file.

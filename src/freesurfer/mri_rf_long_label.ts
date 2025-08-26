@@ -124,6 +124,8 @@ function mri_rf_long_label_outputs(
 
 
 /**
+ * mri_rf_long_label
+ *
  * The mri_rf_long_label tool has been removed from this version of FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -150,6 +152,8 @@ function mri_rf_long_label_execute(
 
 
 /**
+ * mri_rf_long_label
+ *
  * The mri_rf_long_label tool has been removed from this version of FreeSurfer.
  *
  * Author: FreeSurfer Developers

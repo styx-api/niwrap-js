@@ -141,6 +141,8 @@ function lesion_filling_outputs(
 
 
 /**
+ * LesionFilling
+ *
  * A tool for filling lesions in T1 images using a mask.
  *
  * Author: ANTs Developers
@@ -167,6 +169,8 @@ function lesion_filling_execute(
 
 
 /**
+ * LesionFilling
+ *
  * A tool for filling lesions in T1 images using a mask.
  *
  * Author: ANTs Developers

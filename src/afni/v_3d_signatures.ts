@@ -169,6 +169,8 @@ function v_3d_signatures_outputs(
 
 
 /**
+ * 3dSignatures
+ *
  * 3dSignatures analysis tool for 3D genome organization.
  *
  * Author: AFNI Developers
@@ -195,6 +197,8 @@ function v_3d_signatures_execute(
 
 
 /**
+ * 3dSignatures
+ *
  * 3dSignatures analysis tool for 3D genome organization.
  *
  * Author: AFNI Developers

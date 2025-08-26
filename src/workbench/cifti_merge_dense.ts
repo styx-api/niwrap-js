@@ -197,6 +197,8 @@ function cifti_merge_dense_outputs(
 
 
 /**
+ * cifti-merge-dense
+ *
  * Merge cifti files along dense dimension.
  *
  * The input cifti files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
@@ -225,6 +227,8 @@ function cifti_merge_dense_execute(
 
 
 /**
+ * cifti-merge-dense
+ *
  * Merge cifti files along dense dimension.
  *
  * The input cifti files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.

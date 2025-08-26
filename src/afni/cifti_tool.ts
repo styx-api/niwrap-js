@@ -210,6 +210,8 @@ function cifti_tool_outputs(
 
 
 /**
+ * cifti_tool
+ *
  * Example tool for reading/writing CIFTI-2 datasets.
  *
  * Author: AFNI Developers
@@ -236,6 +238,8 @@ function cifti_tool_execute(
 
 
 /**
+ * cifti_tool
+ *
  * Example tool for reading/writing CIFTI-2 datasets.
  *
  * Author: AFNI Developers

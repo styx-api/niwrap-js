@@ -306,6 +306,8 @@ function v_3d_anova_outputs(
 
 
 /**
+ * 3dANOVA
+ *
  * Performs single-factor Analysis of Variance (ANOVA) on 3D datasets.
  *
  * Author: AFNI Developers
@@ -332,6 +334,8 @@ function v_3d_anova_execute(
 
 
 /**
+ * 3dANOVA
+ *
  * Performs single-factor Analysis of Variance (ANOVA) on 3D datasets.
  *
  * Author: AFNI Developers

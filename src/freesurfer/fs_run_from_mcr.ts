@@ -150,6 +150,8 @@ function fs_run_from_mcr_outputs(
 
 
 /**
+ * fs_run_from_mcr
+ *
  * Replace the shell with the given command.
  *
  * Author: FreeSurfer Developers
@@ -176,6 +178,8 @@ function fs_run_from_mcr_execute(
 
 
 /**
+ * fs_run_from_mcr
+ *
  * Replace the shell with the given command.
  *
  * Author: FreeSurfer Developers

@@ -415,6 +415,8 @@ function rba_outputs(
 
 
 /**
+ * RBA
+ *
  * Region-Based Analysis Program through Bayesian Multilevel Modeling.
  *
  * Author: AFNI Developers
@@ -441,6 +443,8 @@ function rba_execute(
 
 
 /**
+ * RBA
+ *
  * Region-Based Analysis Program through Bayesian Multilevel Modeling.
  *
  * Author: AFNI Developers

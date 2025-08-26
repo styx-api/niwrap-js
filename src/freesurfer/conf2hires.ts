@@ -288,6 +288,8 @@ function conf2hires_outputs(
 
 
 /**
+ * conf2hires
+ *
  * Places the surfaces on high resolution T1 (and maybe T2) volumes based on an initial placement on a conformed volume.
  *
  * Author: FreeSurfer Developers
@@ -314,6 +316,8 @@ function conf2hires_execute(
 
 
 /**
+ * conf2hires
+ *
  * Places the surfaces on high resolution T1 (and maybe T2) volumes based on an initial placement on a conformed volume.
  *
  * Author: FreeSurfer Developers

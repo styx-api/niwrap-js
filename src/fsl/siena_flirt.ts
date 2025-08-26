@@ -136,6 +136,8 @@ function siena_flirt_outputs(
 
 
 /**
+ * siena_flirt
+ *
  * Wrapper for FLIRT image registration within the SIENA framework.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -162,6 +164,8 @@ function siena_flirt_execute(
 
 
 /**
+ * siena_flirt
+ *
  * Wrapper for FLIRT image registration within the SIENA framework.
  *
  * Author: FMRIB Analysis Group, University of Oxford

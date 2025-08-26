@@ -373,6 +373,8 @@ function retro_ts_py_outputs(
 
 
 /**
+ * RetroTS.py
+ *
  * Creates slice-based regressors for regressing out components of heart rate, respiration, and respiration volume per time using independent data files or BIDS formatted files.
  *
  * Author: AFNI Developers
@@ -399,6 +401,8 @@ function retro_ts_py_execute(
 
 
 /**
+ * RetroTS.py
+ *
  * Creates slice-based regressors for regressing out components of heart rate, respiration, and respiration volume per time using independent data files or BIDS formatted files.
  *
  * Author: AFNI Developers

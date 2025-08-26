@@ -359,6 +359,8 @@ function v_3dkmeans_outputs(
 
 
 /**
+ * 3dkmeans
+ *
  * 3d+t Clustering segmentation based on The C clustering library.
  *
  * Author: AFNI Developers
@@ -385,6 +387,8 @@ function v_3dkmeans_execute(
 
 
 /**
+ * 3dkmeans
+ *
  * 3d+t Clustering segmentation based on The C clustering library.
  *
  * Author: AFNI Developers

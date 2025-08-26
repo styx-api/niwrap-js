@@ -212,6 +212,8 @@ function mri_seg_overlap_outputs(
 
 
 /**
+ * mri_seg_overlap
+ *
  * Compute the structural overlap between two segmentation volumes.
  *
  * Author: FreeSurfer Developers
@@ -238,6 +240,8 @@ function mri_seg_overlap_execute(
 
 
 /**
+ * mri_seg_overlap
+ *
  * Compute the structural overlap between two segmentation volumes.
  *
  * Author: FreeSurfer Developers

@@ -124,6 +124,8 @@ function anatomi_cuts_utils_outputs(
 
 
 /**
+ * anatomiCutsUtils
+ *
  * A tool for anatomical segmentation using graph-based methods.
  *
  * Author: FreeSurfer Developers
@@ -150,6 +152,8 @@ function anatomi_cuts_utils_execute(
 
 
 /**
+ * anatomiCutsUtils
+ *
  * A tool for anatomical segmentation using graph-based methods.
  *
  * Author: FreeSurfer Developers

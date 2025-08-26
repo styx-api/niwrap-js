@@ -588,6 +588,8 @@ function v_3d_nlfim_outputs(
 
 
 /**
+ * 3dNLfim
+ *
  * Nonlinear regression for each voxel of the input AFNI 3d+time data set.
  *
  * Author: AFNI Developers
@@ -614,6 +616,8 @@ function v_3d_nlfim_execute(
 
 
 /**
+ * 3dNLfim
+ *
  * Nonlinear regression for each voxel of the input AFNI 3d+time data set.
  *
  * Author: AFNI Developers

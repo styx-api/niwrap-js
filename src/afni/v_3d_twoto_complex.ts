@@ -178,6 +178,8 @@ function v_3d_twoto_complex_outputs(
 
 
 /**
+ * 3dTwotoComplex
+ *
  * Converts 2 sub-bricks of input to a complex-valued dataset.
  *
  * Author: AFNI Developers
@@ -204,6 +206,8 @@ function v_3d_twoto_complex_execute(
 
 
 /**
+ * 3dTwotoComplex
+ *
  * Converts 2 sub-bricks of input to a complex-valued dataset.
  *
  * Author: AFNI Developers

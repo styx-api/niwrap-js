@@ -386,6 +386,8 @@ function make_random_timing_py_outputs(
 
 
 /**
+ * make_random_timing.py
+ *
  * Create random stimulus timing files for use with AFNI 3dDeconvolve.
  *
  * Author: AFNI Developers
@@ -412,6 +414,8 @@ function make_random_timing_py_execute(
 
 
 /**
+ * make_random_timing.py
+ *
  * Create random stimulus timing files for use with AFNI 3dDeconvolve.
  *
  * Author: AFNI Developers

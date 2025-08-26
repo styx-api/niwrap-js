@@ -171,6 +171,8 @@ function mris_label_area_outputs(
 
 
 /**
+ * mris_label_area
+ *
  * Compute the area of specific labels on a surface of a brain hemisphere in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -197,6 +199,8 @@ function mris_label_area_execute(
 
 
 /**
+ * mris_label_area
+ *
  * Compute the area of specific labels on a surface of a brain hemisphere in FreeSurfer.
  *
  * Author: FreeSurfer Developers

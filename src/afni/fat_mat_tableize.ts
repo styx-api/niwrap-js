@@ -213,6 +213,8 @@ function fat_mat_tableize_outputs(
 
 
 /**
+ * fat_mat_tableize
+ *
  * Make tables for AFNI group analysis programs from 3dNetCorr (*.netcc) and 3dTrackID (*.grid) outputs, with optional additional subject information from CSV files.
  *
  * Author: AFNI Developers
@@ -239,6 +241,8 @@ function fat_mat_tableize_execute(
 
 
 /**
+ * fat_mat_tableize
+ *
  * Make tables for AFNI group analysis programs from 3dNetCorr (*.netcc) and 3dTrackID (*.grid) outputs, with optional additional subject information from CSV files.
  *
  * Author: AFNI Developers

@@ -349,6 +349,8 @@ function v_3dttest___outputs(
 
 
 /**
+ * 3dttest++
+ *
  * Gosset (Student) t-test of sets of 3D datasets in AFNI.
  *
  * Author: AFNI Developers
@@ -375,6 +377,8 @@ function v_3dttest___execute(
 
 
 /**
+ * 3dttest++
+ *
  * Gosset (Student) t-test of sets of 3D datasets in AFNI.
  *
  * Author: AFNI Developers

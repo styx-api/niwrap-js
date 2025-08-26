@@ -120,6 +120,8 @@ function v__afni_orient2_raimap_outputs(
 
 
 /**
+ * @AfniOrient2RAImap
+ *
  * Returns the index map for the RAI directions.
  *
  * Author: AFNI Developers
@@ -146,6 +148,8 @@ function v__afni_orient2_raimap_execute(
 
 
 /**
+ * @AfniOrient2RAImap
+ *
  * Returns the index map for the RAI directions.
  *
  * Author: AFNI Developers

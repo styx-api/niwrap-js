@@ -278,6 +278,8 @@ function groupstatsdiff_outputs(
 
 
 /**
+ * groupstatsdiff
+ *
  * Evaluate the differences between two groupstats outputs from recon-all analyses in Freesurfer.
  *
  * Author: FreeSurfer Developers
@@ -304,6 +306,8 @@ function groupstatsdiff_execute(
 
 
 /**
+ * groupstatsdiff
+ *
  * Evaluate the differences between two groupstats outputs from recon-all analyses in Freesurfer.
  *
  * Author: FreeSurfer Developers

@@ -211,6 +211,8 @@ function v_1dsound_outputs(
 
 
 /**
+ * 1dsound
+ *
  * Program to create a sound file from a 1D file (column of numbers).
  *
  * Author: AFNI Developers
@@ -237,6 +239,8 @@ function v_1dsound_execute(
 
 
 /**
+ * 1dsound
+ *
  * Program to create a sound file from a 1D file (column of numbers).
  *
  * Author: AFNI Developers

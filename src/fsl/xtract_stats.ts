@@ -212,6 +212,8 @@ function xtract_stats_outputs(
 
 
 /**
+ * xtract_stats
+ *
  * Quantitative evaluation tool of XTRACT results in neuroimaging.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -238,6 +240,8 @@ function xtract_stats_execute(
 
 
 /**
+ * xtract_stats
+ *
  * Quantitative evaluation tool of XTRACT results in neuroimaging.
  *
  * Author: FMRIB Analysis Group, University of Oxford

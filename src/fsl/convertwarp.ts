@@ -256,6 +256,8 @@ function convertwarp_outputs(
 
 
 /**
+ * convertwarp
+ *
  * Use FSL convertwarp for combining multiple transforms into one.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -282,6 +284,8 @@ function convertwarp_execute(
 
 
 /**
+ * convertwarp
+ *
  * Use FSL convertwarp for combining multiple transforms into one.
  *
  * Author: FMRIB Analysis Group, University of Oxford

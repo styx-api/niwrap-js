@@ -136,6 +136,8 @@ function mri_compute_volume_intensities_outputs(
 
 
 /**
+ * mri_compute_volume_intensities
+ *
  * A tool to compute volume intensities for a given input intensity volume and volume fraction stem.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_compute_volume_intensities_execute(
 
 
 /**
+ * mri_compute_volume_intensities
+ *
  * A tool to compute volume intensities for a given input intensity volume and volume fraction stem.
  *
  * Author: FreeSurfer Developers

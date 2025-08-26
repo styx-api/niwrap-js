@@ -120,6 +120,8 @@ function get_label_thickness_outputs(
 
 
 /**
+ * get_label_thickness
+ *
  * Tool to calculate label thickness.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function get_label_thickness_execute(
 
 
 /**
+ * get_label_thickness
+ *
  * Tool to calculate label thickness.
  *
  * Author: FreeSurfer Developers

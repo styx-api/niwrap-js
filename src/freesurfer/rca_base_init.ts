@@ -145,6 +145,8 @@ function rca_base_init_outputs(
 
 
 /**
+ * rca-base-init
+ *
  * Initialize base subject for recon-all processing.
  *
  * Author: FreeSurfer Developers
@@ -171,6 +173,8 @@ function rca_base_init_execute(
 
 
 /**
+ * rca-base-init
+ *
  * Initialize base subject for recon-all processing.
  *
  * Author: FreeSurfer Developers

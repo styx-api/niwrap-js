@@ -139,6 +139,8 @@ function dmri_violin_plots_outputs(
 
 
 /**
+ * dmri_violinPlots
+ *
  * Generate violin plots for dMRI data.
  *
  * Author: FreeSurfer Developers
@@ -165,6 +167,8 @@ function dmri_violin_plots_execute(
 
 
 /**
+ * dmri_violinPlots
+ *
  * Generate violin plots for dMRI data.
  *
  * Author: FreeSurfer Developers

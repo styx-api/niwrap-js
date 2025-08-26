@@ -173,6 +173,8 @@ function v__djunct_montage_coordinator_outputs(
 
 
 /**
+ * @djunct_montage_coordinator
+ *
  * Small program to calculate how to evenly space a certain number of slices within each view plane of a dataset.
  *
  * Author: AFNI Developers
@@ -199,6 +201,8 @@ function v__djunct_montage_coordinator_execute(
 
 
 /**
+ * @djunct_montage_coordinator
+ *
  * Small program to calculate how to evenly space a certain number of slices within each view plane of a dataset.
  *
  * Author: AFNI Developers

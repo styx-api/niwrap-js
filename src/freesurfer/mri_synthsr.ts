@@ -191,6 +191,8 @@ function mri_synthsr_outputs(
 
 
 /**
+ * mri_synthsr
+ *
  * Implementation of SynthSR that generates a synthetic 1mm MP-RAGE from a scan of any contrast and resolution.
  *
  * Author: FreeSurfer Developers
@@ -217,6 +219,8 @@ function mri_synthsr_execute(
 
 
 /**
+ * mri_synthsr
+ *
  * Implementation of SynthSR that generates a synthetic 1mm MP-RAGE from a scan of any contrast and resolution.
  *
  * Author: FreeSurfer Developers

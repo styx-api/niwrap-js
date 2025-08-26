@@ -153,6 +153,8 @@ function slicedelay_outputs(
 
 
 /**
+ * slicedelay
+ *
  * Creates an FSL custom slice delay file for use with slicetimer for slice-time correction of fMRI.
  *
  * Author: FreeSurfer Developers
@@ -179,6 +181,8 @@ function slicedelay_execute(
 
 
 /**
+ * slicedelay
+ *
  * Creates an FSL custom slice delay file for use with slicetimer for slice-time correction of fMRI.
  *
  * Author: FreeSurfer Developers

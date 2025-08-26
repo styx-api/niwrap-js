@@ -125,6 +125,8 @@ function feat_gm_prepare_outputs(
 
 
 /**
+ * feat_gm_prepare
+ *
  * Prepare 4D grey matter files for higher-level analysis in FEAT.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -151,6 +153,8 @@ function feat_gm_prepare_execute(
 
 
 /**
+ * feat_gm_prepare
+ *
  * Prepare 4D grey matter files for higher-level analysis in FEAT.
  *
  * Author: FMRIB Analysis Group, University of Oxford

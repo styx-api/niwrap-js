@@ -440,6 +440,8 @@ function dwigradcheck_outputs(
 
 
 /**
+ * dwigradcheck
+ *
  * Check the orientation of the diffusion gradient table.
  *
  * Author: MRTrix3 Developers
@@ -466,6 +468,8 @@ function dwigradcheck_execute(
 
 
 /**
+ * dwigradcheck
+ *
  * Check the orientation of the diffusion gradient table.
  *
  * Author: MRTrix3 Developers

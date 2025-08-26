@@ -201,6 +201,8 @@ function defect2seg_outputs(
 
 
 /**
+ * defect2seg
+ *
  * Converts surface defect labels into a segmentation volume and pointsets.
  *
  * Author: FreeSurfer Developers
@@ -227,6 +229,8 @@ function defect2seg_execute(
 
 
 /**
+ * defect2seg
+ *
  * Converts surface defect labels into a segmentation volume and pointsets.
  *
  * Author: FreeSurfer Developers

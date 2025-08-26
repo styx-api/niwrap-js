@@ -245,6 +245,8 @@ function tedana_wrapper_py_outputs(
 
 
 /**
+ * tedana_wrapper.py
+ *
  * Internal wrapper to run tedana.py, typically used within afni_proc.py.
  *
  * Author: AFNI Developers
@@ -271,6 +273,8 @@ function tedana_wrapper_py_execute(
 
 
 /**
+ * tedana_wrapper.py
+ *
  * Internal wrapper to run tedana.py, typically used within afni_proc.py.
  *
  * Author: AFNI Developers

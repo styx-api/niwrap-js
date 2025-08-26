@@ -125,6 +125,8 @@ function tbss_x_outputs(
 
 
 /**
+ * tbss_x
+ *
  * TBSS cross-subject script for processing scalar and vector directories.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -151,6 +153,8 @@ function tbss_x_execute(
 
 
 /**
+ * tbss_x
+ *
  * TBSS cross-subject script for processing scalar and vector directories.
  *
  * Author: FMRIB Analysis Group, University of Oxford

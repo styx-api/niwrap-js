@@ -243,6 +243,8 @@ function siena_outputs(
 
 
 /**
+ * siena
+ *
  * Structural Image Evaluation, using Normalization, of Atrophy tool for evaluating brain atrophy between two timepoints.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -269,6 +271,8 @@ function siena_execute(
 
 
 /**
+ * siena
+ *
  * Structural Image Evaluation, using Normalization, of Atrophy tool for evaluating brain atrophy between two timepoints.
  *
  * Author: FMRIB Analysis Group, University of Oxford

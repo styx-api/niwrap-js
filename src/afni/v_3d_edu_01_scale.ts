@@ -157,6 +157,8 @@ function v_3d_edu_01_scale_outputs(
 
 
 /**
+ * 3dEdu_01_scale
+ *
  * Educational program to create a new AFNI program. Scales and masks dataset volumes.
  *
  * Author: AFNI Developers
@@ -183,6 +185,8 @@ function v_3d_edu_01_scale_execute(
 
 
 /**
+ * 3dEdu_01_scale
+ *
  * Educational program to create a new AFNI program. Scales and masks dataset volumes.
  *
  * Author: AFNI Developers

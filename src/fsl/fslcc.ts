@@ -175,6 +175,8 @@ function fslcc_outputs(
 
 
 /**
+ * fslcc
+ *
  * Cross-correlate two time-series, timepoint by timepoint.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -201,6 +203,8 @@ function fslcc_execute(
 
 
 /**
+ * fslcc
+ *
  * Cross-correlate two time-series, timepoint by timepoint.
  *
  * Author: FMRIB Analysis Group, University of Oxford

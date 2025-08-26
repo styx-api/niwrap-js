@@ -203,6 +203,8 @@ function set_map_names_outputs(
 
 
 /**
+ * set-map-names
+ *
  * Set the name of one or more maps in a file.
  *
  * Sets the name of one or more maps for metric, shape, label, volume, cifti scalar or cifti label files.  You must specify either -name-file, or -from-data-file, or at least one -map option.  The three option types are mutually exclusive.
@@ -231,6 +233,8 @@ function set_map_names_execute(
 
 
 /**
+ * set-map-names
+ *
  * Set the name of one or more maps in a file.
  *
  * Sets the name of one or more maps for metric, shape, label, volume, cifti scalar or cifti label files.  You must specify either -name-file, or -from-data-file, or at least one -map option.  The three option types are mutually exclusive.

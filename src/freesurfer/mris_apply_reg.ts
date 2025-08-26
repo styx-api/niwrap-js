@@ -345,6 +345,8 @@ function mris_apply_reg_outputs(
 
 
 /**
+ * mris_apply_reg
+ *
  * Apply surface registration in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -371,6 +373,8 @@ function mris_apply_reg_execute(
 
 
 /**
+ * mris_apply_reg
+ *
  * Apply surface registration in FreeSurfer.
  *
  * Author: FreeSurfer Developers

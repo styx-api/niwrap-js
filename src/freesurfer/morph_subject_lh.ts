@@ -123,6 +123,8 @@ function morph_subject_lh_outputs(
 
 
 /**
+ * morph_subject-lh
+ *
  * A tool for morphing subject's left hemisphere.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function morph_subject_lh_execute(
 
 
 /**
+ * morph_subject-lh
+ *
  * A tool for morphing subject's left hemisphere.
  *
  * Author: FreeSurfer Developers

@@ -293,6 +293,8 @@ function gtmseg_outputs(
 
 
 /**
+ * gtmseg
+ *
  * Creates an anatomical segmentation for the geometric transfer matrix (GTM) used in PET partial volume correction.
  *
  * Author: FreeSurfer Developers
@@ -319,6 +321,8 @@ function gtmseg_execute(
 
 
 /**
+ * gtmseg
+ *
  * Creates an anatomical segmentation for the geometric transfer matrix (GTM) used in PET partial volume correction.
  *
  * Author: FreeSurfer Developers

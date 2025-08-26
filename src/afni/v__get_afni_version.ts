@@ -126,6 +126,8 @@ function v__get_afni_version_outputs(
 
 
 /**
+ * @get.afni.version
+ *
  * Downloads the source code for a specified AFNI version.
  *
  * Author: AFNI Developers
@@ -152,6 +154,8 @@ function v__get_afni_version_execute(
 
 
 /**
+ * @get.afni.version
+ *
  * Downloads the source code for a specified AFNI version.
  *
  * Author: AFNI Developers

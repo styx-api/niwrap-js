@@ -143,6 +143,8 @@ function fs_update_outputs(
 
 
 /**
+ * fs_update
+ *
  * Utility to update the FreeSurfer installation.
  *
  * Author: FreeSurfer Developers
@@ -169,6 +171,8 @@ function fs_update_execute(
 
 
 /**
+ * fs_update
+ *
  * Utility to update the FreeSurfer installation.
  *
  * Author: FreeSurfer Developers

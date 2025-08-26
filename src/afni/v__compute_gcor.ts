@@ -190,6 +190,8 @@ function v__compute_gcor_outputs(
 
 
 /**
+ * @compute_gcor
+ *
  * Compute GCOR, the global correlation.
  *
  * Author: AFNI Developers
@@ -216,6 +218,8 @@ function v__compute_gcor_execute(
 
 
 /**
+ * @compute_gcor
+ *
  * Compute GCOR, the global correlation.
  *
  * Author: AFNI Developers

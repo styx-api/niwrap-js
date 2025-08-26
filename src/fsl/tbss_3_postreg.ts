@@ -129,6 +129,8 @@ function tbss_3_postreg_outputs(
 
 
 /**
+ * tbss_3_postreg
+ *
  * TBSS post-registration processing.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -155,6 +157,8 @@ function tbss_3_postreg_execute(
 
 
 /**
+ * tbss_3_postreg
+ *
  * TBSS post-registration processing.
  *
  * Author: FMRIB Analysis Group, University of Oxford

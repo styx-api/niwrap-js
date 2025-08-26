@@ -153,6 +153,8 @@ function fsl_prepare_fieldmap_outputs(
 
 
 /**
+ * fsl_prepare_fieldmap
+ *
  * Prepares a fieldmap suitable for FEAT from SIEMENS data and saves output in rad/s format.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -179,6 +181,8 @@ function fsl_prepare_fieldmap_execute(
 
 
 /**
+ * fsl_prepare_fieldmap
+ *
  * Prepares a fieldmap suitable for FEAT from SIEMENS data and saves output in rad/s format.
  *
  * Author: FMRIB Analysis Group, University of Oxford

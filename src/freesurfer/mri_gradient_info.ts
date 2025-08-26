@@ -126,6 +126,8 @@ function mri_gradient_info_outputs(
 
 
 /**
+ * mri_gradient_info
+ *
  * A utility to obtain gradient information from MRI images using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -152,6 +154,8 @@ function mri_gradient_info_execute(
 
 
 /**
+ * mri_gradient_info
+ *
  * A utility to obtain gradient information from MRI images using FreeSurfer.
  *
  * Author: FreeSurfer Developers

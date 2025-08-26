@@ -385,6 +385,8 @@ function v_3d_clust_sim_outputs(
 
 
 /**
+ * 3dClustSim
+ *
  * Program to estimate the probability of false positive (noise-only) clusters.
  *
  * Author: AFNI Developers
@@ -411,6 +413,8 @@ function v_3d_clust_sim_execute(
 
 
 /**
+ * 3dClustSim
+ *
  * Program to estimate the probability of false positive (noise-only) clusters.
  *
  * Author: AFNI Developers

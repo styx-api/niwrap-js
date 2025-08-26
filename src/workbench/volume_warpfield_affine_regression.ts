@@ -208,6 +208,8 @@ function volume_warpfield_affine_regression_outputs(
 
 
 /**
+ * volume-warpfield-affine-regression
+ *
  * Regress affine from warpfield.
  *
  * For all voxels in the warpfield, do a regression that predicts the post-warp coordinate from the source coordinate.  When -roi is specified, only consider voxels with a value greater than 0 in <roi-vol>.
@@ -238,6 +240,8 @@ function volume_warpfield_affine_regression_execute(
 
 
 /**
+ * volume-warpfield-affine-regression
+ *
  * Regress affine from warpfield.
  *
  * For all voxels in the warpfield, do a regression that predicts the post-warp coordinate from the source coordinate.  When -roi is specified, only consider voxels with a value greater than 0 in <roi-vol>.

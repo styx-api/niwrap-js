@@ -135,6 +135,8 @@ function run_segment_subject_sh_outputs(
 
 
 /**
+ * run_SegmentSubject.sh
+ *
  * A command-line tool for subject segmentation in Freesurfer.
  *
  * Author: FreeSurfer Developers
@@ -161,6 +163,8 @@ function run_segment_subject_sh_execute(
 
 
 /**
+ * run_SegmentSubject.sh
+ *
  * A command-line tool for subject segmentation in Freesurfer.
  *
  * Author: FreeSurfer Developers

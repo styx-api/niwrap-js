@@ -353,6 +353,8 @@ function shconv_outputs(
 
 
 /**
+ * shconv
+ *
  * Perform spherical convolution.
  *
  * Provided with matching pairs of response function and ODF images (containing SH coefficients), perform spherical convolution to provide the corresponding SH coefficients of the signal.
@@ -395,6 +397,8 @@ function shconv_execute(
 
 
 /**
+ * shconv
+ *
  * Perform spherical convolution.
  *
  * Provided with matching pairs of response function and ODF images (containing SH coefficients), perform spherical convolution to provide the corresponding SH coefficients of the signal.

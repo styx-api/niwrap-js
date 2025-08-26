@@ -556,6 +556,8 @@ function samseg_outputs(
 
 
 /**
+ * samseg
+ *
  * SAMSEG (Statistical and Algorithmic Methods for Segmentation) is a tool for segmenting neuroimaging data.
  *
  * Author: FreeSurfer Developers
@@ -582,6 +584,8 @@ function samseg_execute(
 
 
 /**
+ * samseg
+ *
  * SAMSEG (Statistical and Algorithmic Methods for Segmentation) is a tool for segmenting neuroimaging data.
  *
  * Author: FreeSurfer Developers

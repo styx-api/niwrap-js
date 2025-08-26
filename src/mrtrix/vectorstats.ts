@@ -405,6 +405,8 @@ function vectorstats_outputs(
 
 
 /**
+ * vectorstats
+ *
  * Statistical testing of vector data using non-parametric permutation testing.
  *
  * This command can be used to perform permutation testing of any form of data. The data for each input subject must be stored in a text file, with one value per row. The data for each row across subjects will be tested independently, i.e. there is no statistical enhancement that occurs between the data; however family-wise error control will be used.
@@ -439,6 +441,8 @@ function vectorstats_execute(
 
 
 /**
+ * vectorstats
+ *
  * Statistical testing of vector data using non-parametric permutation testing.
  *
  * This command can be used to perform permutation testing of any form of data. The data for each input subject must be stored in a text file, with one value per row. The data for each row across subjects will be tested independently, i.e. there is no statistical enhancement that occurs between the data; however family-wise error control will be used.

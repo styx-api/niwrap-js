@@ -185,6 +185,8 @@ function fsr_coreg_outputs(
 
 
 /**
+ * fsr-coreg
+ *
  * Co-registers input data in preparation for FreeSurfer analysis.
  *
  * Author: FreeSurfer Developers
@@ -211,6 +213,8 @@ function fsr_coreg_execute(
 
 
 /**
+ * fsr-coreg
+ *
  * Co-registers input data in preparation for FreeSurfer analysis.
  *
  * Author: FreeSurfer Developers

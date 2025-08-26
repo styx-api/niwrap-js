@@ -161,6 +161,8 @@ function mris_mesh_subdivide_outputs(
 
 
 /**
+ * mris_mesh_subdivide
+ *
  * This program will subdivide a triangular mesh surface.
  *
  * Author: FreeSurfer Developers
@@ -187,6 +189,8 @@ function mris_mesh_subdivide_execute(
 
 
 /**
+ * mris_mesh_subdivide
+ *
  * This program will subdivide a triangular mesh surface.
  *
  * Author: FreeSurfer Developers

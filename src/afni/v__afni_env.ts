@@ -205,6 +205,8 @@ function v__afni_env_outputs(
 
 
 /**
+ * @AfniEnv
+ *
  * Script to set or unset an AFNI environment variable in your .afnirc file.
  *
  * Author: AFNI Developers
@@ -231,6 +233,8 @@ function v__afni_env_execute(
 
 
 /**
+ * @AfniEnv
+ *
  * Script to set or unset an AFNI environment variable in your .afnirc file.
  *
  * Author: AFNI Developers

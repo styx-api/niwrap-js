@@ -374,6 +374,8 @@ function imcat_outputs(
 
 
 /**
+ * imcat
+ *
  * Assembles a set of images into an image matrix (IM) montage of NX by NY images.
  *
  * Author: AFNI Developers
@@ -400,6 +402,8 @@ function imcat_execute(
 
 
 /**
+ * imcat
+ *
  * Assembles a set of images into an image matrix (IM) montage of NX by NY images.
  *
  * Author: AFNI Developers

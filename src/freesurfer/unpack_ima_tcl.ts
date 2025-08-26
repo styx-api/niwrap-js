@@ -120,6 +120,8 @@ function unpack_ima_tcl_outputs(
 
 
 /**
+ * unpack_ima.tcl
+ *
  * A tool to unpack MRI DICOM .ima files.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function unpack_ima_tcl_execute(
 
 
 /**
+ * unpack_ima.tcl
+ *
  * A tool to unpack MRI DICOM .ima files.
  *
  * Author: FreeSurfer Developers

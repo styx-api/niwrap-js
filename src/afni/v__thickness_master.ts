@@ -159,6 +159,8 @@ function v__thickness_master_outputs(
 
 
 /**
+ * @thickness_master
+ *
  * Compute cortical thickness using mask and surface datasets.
  *
  * Author: AFNI Developers
@@ -185,6 +187,8 @@ function v__thickness_master_execute(
 
 
 /**
+ * @thickness_master
+ *
  * Compute cortical thickness using mask and surface datasets.
  *
  * Author: AFNI Developers

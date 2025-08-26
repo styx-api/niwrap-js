@@ -199,6 +199,8 @@ function mri_probe_ima_outputs(
 
 
 /**
+ * mri_probe_ima
+ *
  * Query Siemens IMA files to extract header information.
  *
  * Author: FreeSurfer Developers
@@ -225,6 +227,8 @@ function mri_probe_ima_execute(
 
 
 /**
+ * mri_probe_ima
+ *
  * Query Siemens IMA files to extract header information.
  *
  * Author: FreeSurfer Developers

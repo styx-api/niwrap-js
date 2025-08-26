@@ -149,6 +149,8 @@ function cifti_label_modify_keys_outputs(
 
 
 /**
+ * cifti-label-modify-keys
+ *
  * Change key values in a dlabel file.
  *
  * <remap-file> should have lines of the form 'oldkey newkey', like so:
@@ -183,6 +185,8 @@ function cifti_label_modify_keys_execute(
 
 
 /**
+ * cifti-label-modify-keys
+ *
  * Change key values in a dlabel file.
  *
  * <remap-file> should have lines of the form 'oldkey newkey', like so:

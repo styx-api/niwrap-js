@@ -310,6 +310,8 @@ function dt_recon_outputs(
 
 
 /**
+ * dt_recon
+ *
  * Performs DTI reconstruction from the raw DWI input files.
  *
  * Author: FreeSurfer Developers
@@ -336,6 +338,8 @@ function dt_recon_execute(
 
 
 /**
+ * dt_recon
+ *
  * Performs DTI reconstruction from the raw DWI input files.
  *
  * Author: FreeSurfer Developers

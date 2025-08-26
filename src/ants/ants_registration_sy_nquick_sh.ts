@@ -177,6 +177,8 @@ function ants_registration_sy_nquick_sh_outputs(
 
 
 /**
+ * antsRegistrationSyNQuick.sh
+ *
  * A script to quickly compute a SyN-based registration between two images using ANTS.
  *
  * Author: ANTs Developers
@@ -203,6 +205,8 @@ function ants_registration_sy_nquick_sh_execute(
 
 
 /**
+ * antsRegistrationSyNQuick.sh
+ *
  * A script to quickly compute a SyN-based registration between two images using ANTS.
  *
  * Author: ANTs Developers

@@ -142,6 +142,8 @@ function mris_merge_parcellations_outputs(
 
 
 /**
+ * mris_merge_parcellations
+ *
  * This program computes the Hausdorff distance between two labels on the surface.
  *
  * Author: FreeSurfer Developers
@@ -168,6 +170,8 @@ function mris_merge_parcellations_execute(
 
 
 /**
+ * mris_merge_parcellations
+ *
  * This program computes the Hausdorff distance between two labels on the surface.
  *
  * Author: FreeSurfer Developers

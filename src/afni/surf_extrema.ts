@@ -218,6 +218,8 @@ function surf_extrema_outputs(
 
 
 /**
+ * SurfExtrema
+ *
  * A program finding the local extrema in a dataset.
  *
  * Author: AFNI Developers
@@ -244,6 +246,8 @@ function surf_extrema_execute(
 
 
 /**
+ * SurfExtrema
+ *
  * A program finding the local extrema in a dataset.
  *
  * Author: AFNI Developers

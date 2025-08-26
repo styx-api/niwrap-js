@@ -202,6 +202,8 @@ function mris_warp_outputs(
 
 
 /**
+ * mris_warp
+ *
  * This program will warp a surface using a specified deformation field.
  *
  * Author: FreeSurfer Developers
@@ -228,6 +230,8 @@ function mris_warp_execute(
 
 
 /**
+ * mris_warp
+ *
  * This program will warp a surface using a specified deformation field.
  *
  * Author: FreeSurfer Developers

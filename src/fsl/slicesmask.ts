@@ -136,6 +136,8 @@ function slicesmask_outputs(
 
 
 /**
+ * slicesmask
+ *
  * Tool for masking slices from an image using a mask.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -162,6 +164,8 @@ function slicesmask_execute(
 
 
 /**
+ * slicesmask
+ *
  * Tool for masking slices from an image using a mask.
  *
  * Author: FMRIB Analysis Group, University of Oxford

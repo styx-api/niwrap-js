@@ -312,6 +312,8 @@ function v_3d_warp_outputs(
 
 
 /**
+ * 3dWarp
+ *
  * Warp (spatially transform) one 3D dataset.
  *
  * Author: AFNI Developers
@@ -338,6 +340,8 @@ function v_3d_warp_execute(
 
 
 /**
+ * 3dWarp
+ *
  * Warp (spatially transform) one 3D dataset.
  *
  * Author: AFNI Developers

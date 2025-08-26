@@ -228,6 +228,8 @@ function test_recon_all_csh_outputs(
 
 
 /**
+ * test_recon-all.csh
+ *
  * Script for testing recon-all and other utilities with FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -254,6 +256,8 @@ function test_recon_all_csh_execute(
 
 
 /**
+ * test_recon-all.csh
+ *
  * Script for testing recon-all and other utilities with FreeSurfer.
  *
  * Author: FreeSurfer Developers

@@ -212,6 +212,8 @@ function mri_vol2surf_outputs(
 
 
 /**
+ * mri_vol2surf
+ *
  * This program resamples a volume onto a surface of a subject or the sphere. The output can be viewed on the surface (using tksurfer) or can be used for surface-based intersubject averaging.
  *
  * Author: FreeSurfer Developers
@@ -238,6 +240,8 @@ function mri_vol2surf_execute(
 
 
 /**
+ * mri_vol2surf
+ *
  * This program resamples a volume onto a surface of a subject or the sphere. The output can be viewed on the surface (using tksurfer) or can be used for surface-based intersubject averaging.
  *
  * Author: FreeSurfer Developers

@@ -129,6 +129,8 @@ function run_segment_subject_t1_t2_auto_estimate_alveus_ml_sh_outputs(
 
 
 /**
+ * run_segmentSubjectT1T2_autoEstimateAlveusML.sh
+ *
  * Automated segmentation tool for T1 and T2 weighted images to estimate the Alveus.
  *
  * Author: FreeSurfer Developers
@@ -155,6 +157,8 @@ function run_segment_subject_t1_t2_auto_estimate_alveus_ml_sh_execute(
 
 
 /**
+ * run_segmentSubjectT1T2_autoEstimateAlveusML.sh
+ *
  * Automated segmentation tool for T1 and T2 weighted images to estimate the Alveus.
  *
  * Author: FreeSurfer Developers

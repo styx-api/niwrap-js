@@ -242,6 +242,8 @@ function connectomeedit_outputs(
 
 
 /**
+ * connectomeedit
+ *
  * Perform basic operations on a connectome.
  *
  *
@@ -274,6 +276,8 @@ function connectomeedit_execute(
 
 
 /**
+ * connectomeedit
+ *
  * Perform basic operations on a connectome.
  *
  *

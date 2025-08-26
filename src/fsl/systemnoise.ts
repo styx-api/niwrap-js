@@ -171,6 +171,8 @@ function systemnoise_outputs(
 
 
 /**
+ * systemnoise
+ *
  * Tool for adding system noise to a given signal using FSL's utilities.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -197,6 +199,8 @@ function systemnoise_execute(
 
 
 /**
+ * systemnoise
+ *
  * Tool for adding system noise to a given signal using FSL's utilities.
  *
  * Author: FMRIB Analysis Group, University of Oxford

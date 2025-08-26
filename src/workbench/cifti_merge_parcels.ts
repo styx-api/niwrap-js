@@ -185,6 +185,8 @@ function cifti_merge_parcels_outputs(
 
 
 /**
+ * cifti-merge-parcels
+ *
  * Merge cifti files along parcels dimension.
  *
  * The input cifti files must have matching mappings along the direction not specified, and the mapping along the specified direction must be parcels.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.
@@ -213,6 +215,8 @@ function cifti_merge_parcels_execute(
 
 
 /**
+ * cifti-merge-parcels
+ *
  * Merge cifti files along parcels dimension.
  *
  * The input cifti files must have matching mappings along the direction not specified, and the mapping along the specified direction must be parcels.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.

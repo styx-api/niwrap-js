@@ -136,6 +136,8 @@ function mri_surfacemask_outputs(
 
 
 /**
+ * mri_surfacemask
+ *
  * Tool to produce a new volume where all pixels outside the surface are set to zero.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_surfacemask_execute(
 
 
 /**
+ * mri_surfacemask
+ *
  * Tool to produce a new volume where all pixels outside the surface are set to zero.
  *
  * Author: FreeSurfer Developers

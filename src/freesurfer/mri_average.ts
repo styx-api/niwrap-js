@@ -309,6 +309,8 @@ function mri_average_outputs(
 
 
 /**
+ * mri_average
+ *
  * Averages multiple volumes with various options for alignment, interpolation, and transformations.
  *
  * Author: FreeSurfer Developers
@@ -335,6 +337,8 @@ function mri_average_execute(
 
 
 /**
+ * mri_average
+ *
  * Averages multiple volumes with various options for alignment, interpolation, and transformations.
  *
  * Author: FreeSurfer Developers

@@ -206,6 +206,8 @@ function dmri_match_outputs(
 
 
 /**
+ * dmri_match
+ *
  * Tool for matching diffusion MRI parcellations.
  *
  * Author: FreeSurfer Developers
@@ -232,6 +234,8 @@ function dmri_match_execute(
 
 
 /**
+ * dmri_match
+ *
  * Tool for matching diffusion MRI parcellations.
  *
  * Author: FreeSurfer Developers

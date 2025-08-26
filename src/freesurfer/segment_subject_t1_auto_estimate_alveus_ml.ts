@@ -131,6 +131,8 @@ function segment_subject_t1_auto_estimate_alveus_ml_outputs(
 
 
 /**
+ * segmentSubjectT1_autoEstimateAlveusML
+ *
  * A tool that segments T1-weighted MRI data and automatically estimates the Alveus.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function segment_subject_t1_auto_estimate_alveus_ml_execute(
 
 
 /**
+ * segmentSubjectT1_autoEstimateAlveusML
+ *
  * A tool that segments T1-weighted MRI data and automatically estimates the Alveus.
  *
  * Author: FreeSurfer Developers

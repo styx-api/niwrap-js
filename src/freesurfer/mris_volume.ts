@@ -127,6 +127,8 @@ function mris_volume_outputs(
 
 
 /**
+ * mris_volume
+ *
  * A tool for computing the volume of a closed surface using a divergence formula.
  *
  * Author: FreeSurfer Developers
@@ -153,6 +155,8 @@ function mris_volume_execute(
 
 
 /**
+ * mris_volume
+ *
  * A tool for computing the volume of a closed surface using a divergence formula.
  *
  * Author: FreeSurfer Developers

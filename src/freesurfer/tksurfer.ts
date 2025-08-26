@@ -139,6 +139,8 @@ function tksurfer_outputs(
 
 
 /**
+ * tksurfer
+ *
  * 3D visualization tool for cortical surface models (part of FreeSurfer).
  *
  * Author: FreeSurfer Developers
@@ -165,6 +167,8 @@ function tksurfer_execute(
 
 
 /**
+ * tksurfer
+ *
  * 3D visualization tool for cortical surface models (part of FreeSurfer).
  *
  * Author: FreeSurfer Developers

@@ -181,6 +181,8 @@ function extract_seg_waveform_outputs(
 
 
 /**
+ * extract_seg_waveform
+ *
  * This program extracts an average waveform from an input volume where the average is computed over the voxels in the given segmentation indices. The input volume is mapped to the space of the segmentation given the registration, and if a voxel shift map (VSM) is supplied, it is applied simultaneously as part of the transform.
  *
  * Author: FreeSurfer Developers
@@ -207,6 +209,8 @@ function extract_seg_waveform_execute(
 
 
 /**
+ * extract_seg_waveform
+ *
  * This program extracts an average waveform from an input volume where the average is computed over the voxels in the given segmentation indices. The input volume is mapped to the space of the segmentation given the registration, and if a voxel shift map (VSM) is supplied, it is applied simultaneously as part of the transform.
  *
  * Author: FreeSurfer Developers

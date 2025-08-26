@@ -300,6 +300,8 @@ function mri_gtmseg_outputs(
 
 
 /**
+ * mri_gtmseg
+ *
  * Creates a segmentation that can be used with the geometric transfer matrix (GTM).
  *
  * Author: FreeSurfer Developers
@@ -326,6 +328,8 @@ function mri_gtmseg_execute(
 
 
 /**
+ * mri_gtmseg
+ *
  * Creates a segmentation that can be used with the geometric transfer matrix (GTM).
  *
  * Author: FreeSurfer Developers

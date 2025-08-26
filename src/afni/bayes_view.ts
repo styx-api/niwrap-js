@@ -139,6 +139,8 @@ function bayes_view_outputs(
 
 
 /**
+ * bayes_view
+ *
  * Launch a shiny app to visualize RBA output files. The files must have the .RData extension.
  *
  * Author: AFNI Developers
@@ -165,6 +167,8 @@ function bayes_view_execute(
 
 
 /**
+ * bayes_view
+ *
  * Launch a shiny app to visualize RBA output files. The files must have the .RData extension.
  *
  * Author: AFNI Developers

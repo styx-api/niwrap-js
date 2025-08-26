@@ -213,6 +213,8 @@ function film_cifti_outputs(
 
 
 /**
+ * film_cifti
+ *
  * A tool for statistical analysis of CIFTI files using FILM.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -239,6 +241,8 @@ function film_cifti_execute(
 
 
 /**
+ * film_cifti
+ *
  * A tool for statistical analysis of CIFTI files using FILM.
  *
  * Author: FMRIB Analysis Group, University of Oxford

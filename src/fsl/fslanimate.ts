@@ -140,6 +140,8 @@ function fslanimate_outputs(
 
 
 /**
+ * fslanimate
+ *
  * Tool for creating animations from imaging data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -166,6 +168,8 @@ function fslanimate_execute(
 
 
 /**
+ * fslanimate
+ *
  * Tool for creating animations from imaging data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

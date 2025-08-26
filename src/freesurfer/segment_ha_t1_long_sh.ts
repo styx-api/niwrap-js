@@ -131,6 +131,8 @@ function segment_ha_t1_long_sh_outputs(
 
 
 /**
+ * segmentHA_T1_long.sh
+ *
  * A script for longitudinal segmentation of the hippocampal/amygdala regions.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function segment_ha_t1_long_sh_execute(
 
 
 /**
+ * segmentHA_T1_long.sh
+ *
  * A script for longitudinal segmentation of the hippocampal/amygdala regions.
  *
  * Author: FreeSurfer Developers

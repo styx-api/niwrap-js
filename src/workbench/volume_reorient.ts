@@ -131,6 +131,8 @@ function volume_reorient_outputs(
 
 
 /**
+ * volume-reorient
+ *
  * Change voxel order of a volume file.
  *
  * Changes the voxel order and the header spacing/origin information such that the value of any spatial point is unchanged.  Orientation strings look like 'LPI', which means first index is left to right, second is posterior to anterior, and third is inferior to superior.  The valid characters are:
@@ -166,6 +168,8 @@ function volume_reorient_execute(
 
 
 /**
+ * volume-reorient
+ *
  * Change voxel order of a volume file.
  *
  * Changes the voxel order and the header spacing/origin information such that the value of any spatial point is unchanged.  Orientation strings look like 'LPI', which means first index is left to right, second is posterior to anterior, and third is inferior to superior.  The valid characters are:

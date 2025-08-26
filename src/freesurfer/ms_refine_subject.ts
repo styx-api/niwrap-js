@@ -120,6 +120,8 @@ function ms_refine_subject_outputs(
 
 
 /**
+ * ms_refine_subject
+ *
  * Unknown.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function ms_refine_subject_execute(
 
 
 /**
+ * ms_refine_subject
+ *
  * Unknown.
  *
  * Author: FreeSurfer Developers

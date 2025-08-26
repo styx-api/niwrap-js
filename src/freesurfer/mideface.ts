@@ -433,6 +433,8 @@ function mideface_outputs(
 
 
 /**
+ * mideface
+ *
  * Minimally invasive defacing tool.
  *
  * Author: FreeSurfer Developers
@@ -459,6 +461,8 @@ function mideface_execute(
 
 
 /**
+ * mideface
+ *
  * Minimally invasive defacing tool.
  *
  * Author: FreeSurfer Developers

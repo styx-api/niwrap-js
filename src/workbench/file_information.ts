@@ -237,6 +237,8 @@ function file_information_outputs(
 
 
 /**
+ * file-information
+ *
  * List information about a file's content.
  *
  * List information about the content of a data file.  Only one -only option may be specified.  The information listed when no -only option is present is dependent upon the type of data file.
@@ -303,6 +305,8 @@ function file_information_execute(
 
 
 /**
+ * file-information
+ *
  * List information about a file's content.
  *
  * List information about the content of a data file.  Only one -only option may be specified.  The information listed when no -only option is present is dependent upon the type of data file.

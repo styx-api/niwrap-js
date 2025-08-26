@@ -168,6 +168,8 @@ function talairach_avi_outputs(
 
 
 /**
+ * talairach_avi
+ *
  * Front-end for Avi Snyder's image registration tool. Computes the Talairach transform that maps the input volume to the MNI average_305.
  *
  * Author: FreeSurfer Developers
@@ -194,6 +196,8 @@ function talairach_avi_execute(
 
 
 /**
+ * talairach_avi
+ *
  * Front-end for Avi Snyder's image registration tool. Computes the Talairach transform that maps the input volume to the MNI average_305.
  *
  * Author: FreeSurfer Developers

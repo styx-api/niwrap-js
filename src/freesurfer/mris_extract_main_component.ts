@@ -131,6 +131,8 @@ function mris_extract_main_component_outputs(
 
 
 /**
+ * mris_extract_main_component
+ *
  * Tool for extracting the main component from a surface input.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function mris_extract_main_component_execute(
 
 
 /**
+ * mris_extract_main_component
+ *
  * Tool for extracting the main component from a surface input.
  *
  * Author: FreeSurfer Developers

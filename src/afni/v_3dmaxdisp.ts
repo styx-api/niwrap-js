@@ -144,6 +144,8 @@ function v_3dmaxdisp_outputs(
 
 
 /**
+ * 3dmaxdisp
+ *
  * Reads in a 3D dataset and a DICOM-based affine matrix to output the average and maximum displacement applied to the edge voxels of the 3D dataset's automask.
  *
  * Author: AFNI Developers
@@ -170,6 +172,8 @@ function v_3dmaxdisp_execute(
 
 
 /**
+ * 3dmaxdisp
+ *
  * Reads in a 3D dataset and a DICOM-based affine matrix to output the average and maximum displacement applied to the edge voxels of the 3D dataset's automask.
  *
  * Author: AFNI Developers

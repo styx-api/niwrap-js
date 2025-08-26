@@ -237,6 +237,8 @@ function ap_run_simple_rest_outputs(
 
 
 /**
+ * ap_run_simple_rest
+ *
  * Run a quick afni_proc.py analysis for QC.
  *
  * Author: AFNI Developers
@@ -263,6 +265,8 @@ function ap_run_simple_rest_execute(
 
 
 /**
+ * ap_run_simple_rest
+ *
  * Run a quick afni_proc.py analysis for QC.
  *
  * Author: AFNI Developers

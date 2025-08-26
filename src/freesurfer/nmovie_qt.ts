@@ -120,6 +120,8 @@ function nmovie_qt_outputs(
 
 
 /**
+ * nmovie_qt
+ *
  * An image viewer using Qt for displaying images in sequence.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function nmovie_qt_execute(
 
 
 /**
+ * nmovie_qt
+ *
  * An image viewer using Qt for displaying images in sequence.
  *
  * Author: FreeSurfer Developers

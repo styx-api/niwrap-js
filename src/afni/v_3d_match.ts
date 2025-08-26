@@ -227,6 +227,8 @@ function v_3d_match_outputs(
 
 
 /**
+ * 3dMatch
+ *
  * Find similar subbricks and rearrange order to ease comparison. Part of FATCAT in AFNI.
  *
  * Author: AFNI Developers
@@ -253,6 +255,8 @@ function v_3d_match_execute(
 
 
 /**
+ * 3dMatch
+ *
  * Find similar subbricks and rearrange order to ease comparison. Part of FATCAT in AFNI.
  *
  * Author: AFNI Developers

@@ -152,6 +152,8 @@ function fslreorient2std_outputs(
 
 
 /**
+ * fslreorient2std
+ *
  * A tool for reorienting an image to match the approximate orientation of standard template images (MNI152).
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -178,6 +180,8 @@ function fslreorient2std_execute(
 
 
 /**
+ * fslreorient2std
+ *
  * A tool for reorienting an image to match the approximate orientation of standard template images (MNI152).
  *
  * Author: FMRIB Analysis Group, University of Oxford

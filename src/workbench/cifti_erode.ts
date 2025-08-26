@@ -349,6 +349,8 @@ function cifti_erode_outputs(
 
 
 /**
+ * cifti-erode
+ *
  * Erode a cifti file.
  *
  * For all data values that are empty (for label data, unlabeled, for other data, zero), set the surrounding values to empty.  The surrounding values are defined as the immediate neighbors and all values in the same structure within the specified distance (-merged-volume treats all voxels as one structure).
@@ -379,6 +381,8 @@ function cifti_erode_execute(
 
 
 /**
+ * cifti-erode
+ *
  * Erode a cifti file.
  *
  * For all data values that are empty (for label data, unlabeled, for other data, zero), set the surrounding values to empty.  The surrounding values are defined as the immediate neighbors and all values in the same structure within the specified distance (-merged-volume treats all voxels as one structure).

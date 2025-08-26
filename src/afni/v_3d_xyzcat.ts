@@ -162,6 +162,8 @@ function v_3d_xyzcat_outputs(
 
 
 /**
+ * 3dXYZcat
+ *
  * Catenates datasets spatially.
  *
  * Author: AFNI Developers
@@ -188,6 +190,8 @@ function v_3d_xyzcat_execute(
 
 
 /**
+ * 3dXYZcat
+ *
  * Catenates datasets spatially.
  *
  * Author: AFNI Developers

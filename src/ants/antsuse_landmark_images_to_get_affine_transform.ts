@@ -141,6 +141,8 @@ function antsuse_landmark_images_to_get_affine_transform_outputs(
 
 
 /**
+ * ANTSUseLandmarkImagesToGetAffineTransform
+ *
  * This tool computes an affine transform (rigid or affine) from labeled landmark images. It requires input images to be N-ary, in the same physical space as the images you want to register, and to have the same landmark points defined within them. Landmarks are defined from the center of mass of the labels in the input images. ITK-snap can be used to generate the label images.
  *
  * Author: ANTs Developers
@@ -167,6 +169,8 @@ function antsuse_landmark_images_to_get_affine_transform_execute(
 
 
 /**
+ * ANTSUseLandmarkImagesToGetAffineTransform
+ *
  * This tool computes an affine transform (rigid or affine) from labeled landmark images. It requires input images to be N-ary, in the same physical space as the images you want to register, and to have the same landmark points defined within them. Landmarks are defined from the center of mass of the labels in the input images. ITK-snap can be used to generate the label images.
  *
  * Author: ANTs Developers

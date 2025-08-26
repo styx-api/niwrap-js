@@ -312,6 +312,8 @@ function imreg_outputs(
 
 
 /**
+ * imreg
+ *
  * Registers each 2D image in 'image_sequence' to 'base_image'.
  *
  * Author: AFNI Developers
@@ -338,6 +340,8 @@ function imreg_execute(
 
 
 /**
+ * imreg
+ *
  * Registers each 2D image in 'image_sequence' to 'base_image'.
  *
  * Author: AFNI Developers

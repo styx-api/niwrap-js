@@ -145,6 +145,8 @@ function segment_subject_t1_t2_auto_estimate_alveus_ml_outputs(
 
 
 /**
+ * segmentSubjectT1T2_autoEstimateAlveusML
+ *
  * Tool for automatic estimation of the alveus in MR images using T1 and T2 contrast.
  *
  * Author: FreeSurfer Developers
@@ -171,6 +173,8 @@ function segment_subject_t1_t2_auto_estimate_alveus_ml_execute(
 
 
 /**
+ * segmentSubjectT1T2_autoEstimateAlveusML
+ *
  * Tool for automatic estimation of the alveus in MR images using T1 and T2 contrast.
  *
  * Author: FreeSurfer Developers

@@ -149,6 +149,8 @@ function mri_mergelabels_outputs(
 
 
 /**
+ * mri_mergelabels
+ *
  * A tool to merge two or more label files by concatenating them together.
  *
  * Author: FreeSurfer Developers
@@ -175,6 +177,8 @@ function mri_mergelabels_execute(
 
 
 /**
+ * mri_mergelabels
+ *
  * A tool to merge two or more label files by concatenating them together.
  *
  * Author: FreeSurfer Developers

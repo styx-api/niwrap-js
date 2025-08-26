@@ -255,6 +255,8 @@ function v_5tt2gmwmi_outputs(
 
 
 /**
+ * 5tt2gmwmi
+ *
  * Generate a mask image appropriate for seeding streamlines on the grey matter-white matter interface.
  *
  *
@@ -287,6 +289,8 @@ function v_5tt2gmwmi_execute(
 
 
 /**
+ * 5tt2gmwmi
+ *
  * Generate a mask image appropriate for seeding streamlines on the grey matter-white matter interface.
  *
  *

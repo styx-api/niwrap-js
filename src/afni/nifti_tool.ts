@@ -248,6 +248,8 @@ function nifti_tool_outputs(
 
 
 /**
+ * nifti_tool
+ *
  * Display, modify, or compare nifti headers.
  *
  * Author: AFNI Developers
@@ -274,6 +276,8 @@ function nifti_tool_execute(
 
 
 /**
+ * nifti_tool
+ *
  * Display, modify, or compare nifti headers.
  *
  * Author: AFNI Developers

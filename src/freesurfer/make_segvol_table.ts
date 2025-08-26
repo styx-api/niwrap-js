@@ -219,6 +219,8 @@ function make_segvol_table_outputs(
 
 
 /**
+ * make-segvol-table
+ *
  * Creates a table of volumes of subcortical structures for a given list of subjects using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -245,6 +247,8 @@ function make_segvol_table_execute(
 
 
 /**
+ * make-segvol-table
+ *
  * Creates a table of volumes of subcortical structures for a given list of subjects using FreeSurfer.
  *
  * Author: FreeSurfer Developers

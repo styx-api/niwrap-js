@@ -311,6 +311,8 @@ function dcminfo_outputs(
 
 
 /**
+ * dcminfo
+ *
  * Output DICOM fields in human-readable format.
  *
  *
@@ -343,6 +345,8 @@ function dcminfo_execute(
 
 
 /**
+ * dcminfo
+ *
  * Output DICOM fields in human-readable format.
  *
  *

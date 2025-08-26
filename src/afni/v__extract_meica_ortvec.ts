@@ -189,6 +189,8 @@ function v__extract_meica_ortvec_outputs(
 
 
 /**
+ * @extract_meica_ortvec
+ *
  * Project good MEICA components out of bad ones.
  *
  * Author: AFNI Developers
@@ -215,6 +217,8 @@ function v__extract_meica_ortvec_execute(
 
 
 /**
+ * @extract_meica_ortvec
+ *
  * Project good MEICA components out of bad ones.
  *
  * Author: AFNI Developers

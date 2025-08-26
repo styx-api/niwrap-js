@@ -279,6 +279,8 @@ function mris_skeletonize_outputs(
 
 
 /**
+ * mris_skeletonize
+ *
  * Computes the skeleton of gyri (ie, the crowns) or sulci (ie, the fundi).
  *
  * Author: FreeSurfer Developers
@@ -305,6 +307,8 @@ function mris_skeletonize_execute(
 
 
 /**
+ * mris_skeletonize
+ *
  * Computes the skeleton of gyri (ie, the crowns) or sulci (ie, the fundi).
  *
  * Author: FreeSurfer Developers

@@ -144,6 +144,8 @@ function surface_modify_sphere_outputs(
 
 
 /**
+ * surface-modify-sphere
+ *
  * Change radius and optionally recenter a sphere.
  *
  * This command may be useful if you have used -surface-resample to resample a sphere, which can suffer from problems generally not present in -surface-sphere-project-unproject.  If the sphere should already be centered around the origin, using -recenter may still shift it slightly before changing the radius, which is likely to be undesireable.
@@ -174,6 +176,8 @@ function surface_modify_sphere_execute(
 
 
 /**
+ * surface-modify-sphere
+ *
  * Change radius and optionally recenter a sphere.
  *
  * This command may be useful if you have used -surface-resample to resample a sphere, which can suffer from problems generally not present in -surface-sphere-project-unproject.  If the sphere should already be centered around the origin, using -recenter may still shift it slightly before changing the radius, which is likely to be undesireable.

@@ -278,6 +278,8 @@ function v_3dclust_outputs(
 
 
 /**
+ * 3dclust
+ *
  * Performs simple-minded cluster detection in 3D datasets.
  *
  * Author: AFNI Developers
@@ -304,6 +306,8 @@ function v_3dclust_execute(
 
 
 /**
+ * 3dclust
+ *
  * Performs simple-minded cluster detection in 3D datasets.
  *
  * Author: AFNI Developers

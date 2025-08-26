@@ -311,6 +311,8 @@ function mrstats_outputs(
 
 
 /**
+ * mrstats
+ *
  * Compute images statistics.
  *
  *
@@ -343,6 +345,8 @@ function mrstats_execute(
 
 
 /**
+ * mrstats
+ *
  * Compute images statistics.
  *
  *

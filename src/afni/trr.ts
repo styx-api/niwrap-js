@@ -326,6 +326,8 @@ function trr_outputs(
 
 
 /**
+ * TRR
+ *
  * Test-Retest Reliability Program through Bayesian Multilevel Modeling.
  *
  * Author: AFNI Developers
@@ -352,6 +354,8 @@ function trr_execute(
 
 
 /**
+ * TRR
+ *
  * Test-Retest Reliability Program through Bayesian Multilevel Modeling.
  *
  * Author: AFNI Developers

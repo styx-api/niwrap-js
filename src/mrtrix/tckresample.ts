@@ -429,6 +429,8 @@ function tckresample_outputs(
 
 
 /**
+ * tckresample
+ *
  * Resample each streamline in a track file to a new set of vertices.
  *
  * It is necessary to specify precisely ONE of the command-line options for controlling how this resampling takes place; this may be either increasing or decreasing the number of samples along each streamline, or may involve changing the positions of the samples according to some specified trajectory.
@@ -463,6 +465,8 @@ function tckresample_execute(
 
 
 /**
+ * tckresample
+ *
  * Resample each streamline in a track file to a new set of vertices.
  *
  * It is necessary to specify precisely ONE of the command-line options for controlling how this resampling takes place; this may be either increasing or decreasing the number of samples along each streamline, or may involve changing the positions of the samples according to some specified trajectory.

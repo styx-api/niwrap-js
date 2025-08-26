@@ -162,6 +162,8 @@ function apqc_make_tcsh_py_outputs(
 
 
 /**
+ * apqc_make_tcsh.py
+ *
  * This program creates the single subject (ss) HTML review script '@ss_review_html' which generates images and text for the afni_proc.py quality control (APQC) HTML.
  *
  * Author: AFNI Developers
@@ -188,6 +190,8 @@ function apqc_make_tcsh_py_execute(
 
 
 /**
+ * apqc_make_tcsh.py
+ *
  * This program creates the single subject (ss) HTML review script '@ss_review_html' which generates images and text for the afni_proc.py quality control (APQC) HTML.
  *
  * Author: AFNI Developers

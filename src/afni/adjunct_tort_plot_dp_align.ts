@@ -183,6 +183,8 @@ function adjunct_tort_plot_dp_align_outputs(
 
 
 /**
+ * adjunct_tort_plot_dp_align
+ *
  * Tool to display the rigid-body alignment parameters from TORTOISE's DIFFPREP, useful for analyzing subject motion in DWI data.
  *
  * Author: AFNI Developers
@@ -209,6 +211,8 @@ function adjunct_tort_plot_dp_align_execute(
 
 
 /**
+ * adjunct_tort_plot_dp_align
+ *
  * Tool to display the rigid-body alignment parameters from TORTOISE's DIFFPREP, useful for analyzing subject motion in DWI data.
  *
  * Author: AFNI Developers

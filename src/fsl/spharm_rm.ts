@@ -168,6 +168,8 @@ function spharm_rm_outputs(
 
 
 /**
+ * spharm_rm
+ *
  * Part of FSL - Spherical harmonics removal tool to process neuroimaging data.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -194,6 +196,8 @@ function spharm_rm_execute(
 
 
 /**
+ * spharm_rm
+ *
  * Part of FSL - Spherical harmonics removal tool to process neuroimaging data.
  *
  * Author: FMRIB Analysis Group, University of Oxford

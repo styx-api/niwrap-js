@@ -165,6 +165,8 @@ function mris_rotate_outputs(
 
 
 /**
+ * mris_rotate
+ *
  * Rotate a surface given three angles.
  *
  * Author: FreeSurfer Developers
@@ -191,6 +193,8 @@ function mris_rotate_execute(
 
 
 /**
+ * mris_rotate
+ *
  * Rotate a surface given three angles.
  *
  * Author: FreeSurfer Developers

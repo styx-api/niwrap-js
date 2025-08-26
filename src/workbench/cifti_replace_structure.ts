@@ -386,6 +386,8 @@ function cifti_replace_structure_outputs(
 
 
 /**
+ * cifti-replace-structure
+ *
  * Replace data in a structure in a cifti file.
  *
  * This is a fairly low-level command, you probably want to use -cifti-create-dense-from-template instead.
@@ -450,6 +452,8 @@ function cifti_replace_structure_execute(
 
 
 /**
+ * cifti-replace-structure
+ *
  * Replace data in a structure in a cifti file.
  *
  * This is a fairly low-level command, you probably want to use -cifti-create-dense-from-template instead.

@@ -129,6 +129,8 @@ function fix_subject_corrected_rh_outputs(
 
 
 /**
+ * fix_subject_corrected-rh
+ *
  * A tool related to FreeSurfer subject correction.
  *
  * Author: FreeSurfer Developers
@@ -155,6 +157,8 @@ function fix_subject_corrected_rh_execute(
 
 
 /**
+ * fix_subject_corrected-rh
+ *
  * A tool related to FreeSurfer subject correction.
  *
  * Author: FreeSurfer Developers

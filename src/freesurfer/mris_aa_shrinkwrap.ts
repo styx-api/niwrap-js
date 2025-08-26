@@ -163,6 +163,8 @@ function mris_aa_shrinkwrap_outputs(
 
 
 /**
+ * mris_AA_shrinkwrap
+ *
  * This program positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface and generates surface files for these surfaces as well as a 'curvature' file for the cortical thickness, and a surface file which approximates layer IV of the cortical sheet.
  *
  * Author: FreeSurfer Developers
@@ -189,6 +191,8 @@ function mris_aa_shrinkwrap_execute(
 
 
 /**
+ * mris_AA_shrinkwrap
+ *
  * This program positions the tessellation of the cortical surface at the white matter surface, then the gray matter surface and generates surface files for these surfaces as well as a 'curvature' file for the cortical thickness, and a surface file which approximates layer IV of the cortical sheet.
  *
  * Author: FreeSurfer Developers

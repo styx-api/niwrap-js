@@ -145,6 +145,8 @@ function fsladd_outputs(
 
 
 /**
+ * fsladd
+ *
  * Tool for adding or averaging multiple input volumes.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -171,6 +173,8 @@ function fsladd_execute(
 
 
 /**
+ * fsladd
+ *
  * Tool for adding or averaging multiple input volumes.
  *
  * Author: FMRIB Analysis Group, University of Oxford

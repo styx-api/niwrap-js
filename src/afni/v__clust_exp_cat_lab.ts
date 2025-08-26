@@ -144,6 +144,8 @@ function v__clust_exp_cat_lab_outputs(
 
 
 /**
+ * @ClustExp_CatLab
+ *
  * Helper script to concatenate and label a group of data sets.
  *
  * Author: AFNI Developers
@@ -170,6 +172,8 @@ function v__clust_exp_cat_lab_execute(
 
 
 /**
+ * @ClustExp_CatLab
+ *
  * Helper script to concatenate and label a group of data sets.
  *
  * Author: AFNI Developers

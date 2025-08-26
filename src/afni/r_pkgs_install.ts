@@ -162,6 +162,8 @@ function r_pkgs_install_outputs(
 
 
 /**
+ * rPkgsInstall
+ *
  * A tool for installing, checking, updating, or removing R packages for AFNI.
  *
  * Author: AFNI Developers
@@ -188,6 +190,8 @@ function r_pkgs_install_execute(
 
 
 /**
+ * rPkgsInstall
+ *
  * A tool for installing, checking, updating, or removing R packages for AFNI.
  *
  * Author: AFNI Developers

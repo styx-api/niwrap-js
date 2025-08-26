@@ -160,6 +160,8 @@ function fat_roi_row_outputs(
 
 
 /**
+ * fat_roi_row
+ *
  * Select a single ROI's row out of a connectivity matrix file (*.grid or *.netcc) for viewing and/or further analysis.
  *
  * Author: AFNI Developers
@@ -186,6 +188,8 @@ function fat_roi_row_execute(
 
 
 /**
+ * fat_roi_row
+ *
  * Select a single ROI's row out of a connectivity matrix file (*.grid or *.netcc) for viewing and/or further analysis.
  *
  * Author: AFNI Developers

@@ -207,6 +207,8 @@ function v_3d_brain_sync_outputs(
 
 
 /**
+ * 3dBrainSync
+ *
  * 'Synchronizes' the -inset2 dataset to match the -inset1 dataset, using orthogonal or permutation transformation.
  *
  * Author: AFNI Developers
@@ -233,6 +235,8 @@ function v_3d_brain_sync_execute(
 
 
 /**
+ * 3dBrainSync
+ *
  * 'Synchronizes' the -inset2 dataset to match the -inset1 dataset, using orthogonal or permutation transformation.
  *
  * Author: AFNI Developers

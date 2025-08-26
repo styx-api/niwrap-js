@@ -151,6 +151,8 @@ function mris_annot_to_segmentation_outputs(
 
 
 /**
+ * mris_annot_to_segmentation
+ *
  * Converts annotation files to segmentation volumes in FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -177,6 +179,8 @@ function mris_annot_to_segmentation_execute(
 
 
 /**
+ * mris_annot_to_segmentation
+ *
  * Converts annotation files to segmentation volumes in FreeSurfer.
  *
  * Author: FreeSurfer Developers

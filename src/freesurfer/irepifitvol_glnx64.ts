@@ -131,6 +131,8 @@ function irepifitvol_glnx64_outputs(
 
 
 /**
+ * irepifitvol.glnx64
+ *
  * This tool is a part of the FreeSurfer toolkit, designed for certain volume fitting tasks.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function irepifitvol_glnx64_execute(
 
 
 /**
+ * irepifitvol.glnx64
+ *
  * This tool is a part of the FreeSurfer toolkit, designed for certain volume fitting tasks.
  *
  * Author: FreeSurfer Developers

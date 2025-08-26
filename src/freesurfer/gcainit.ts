@@ -123,6 +123,8 @@ function gcainit_outputs(
 
 
 /**
+ * gcainit
+ *
  * Initializes the GCA for brain processing tasks.
  *
  * Author: FreeSurfer Developers
@@ -149,6 +151,8 @@ function gcainit_execute(
 
 
 /**
+ * gcainit
+ *
  * Initializes the GCA for brain processing tasks.
  *
  * Author: FreeSurfer Developers

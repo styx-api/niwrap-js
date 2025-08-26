@@ -251,6 +251,8 @@ function mrcentroid_outputs(
 
 
 /**
+ * mrcentroid
+ *
  * Determine the centre of mass / centre of gravity of an image.
  *
  *
@@ -283,6 +285,8 @@ function mrcentroid_execute(
 
 
 /**
+ * mrcentroid
+ *
  * Determine the centre of mass / centre of gravity of an image.
  *
  *

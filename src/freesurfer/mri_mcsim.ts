@@ -356,6 +356,8 @@ function mri_mcsim_outputs(
 
 
 /**
+ * mri_mcsim
+ *
  * Monte Carlo simulation tool for surface-based multiple comparisons.
  *
  * Author: FreeSurfer Developers
@@ -382,6 +384,8 @@ function mri_mcsim_execute(
 
 
 /**
+ * mri_mcsim
+ *
  * Monte Carlo simulation tool for surface-based multiple comparisons.
  *
  * Author: FreeSurfer Developers

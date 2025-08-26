@@ -484,6 +484,8 @@ function cifti_correlation_gradient_outputs(
 
 
 /**
+ * cifti-correlation-gradient
+ *
  * Correlate cifti rows and take gradient.
  *
  * For each structure, compute the correlation of the rows in the structure, and take the gradients of the resulting rows, then average them.  Memory limit does not need to be an integer, you may also specify 0 to use as little memory as possible (this may be very slow).
@@ -512,6 +514,8 @@ function cifti_correlation_gradient_execute(
 
 
 /**
+ * cifti-correlation-gradient
+ *
  * Correlate cifti rows and take gradient.
  *
  * For each structure, compute the correlation of the rows in the structure, and take the gradients of the resulting rows, then average them.  Memory limit does not need to be an integer, you may also specify 0 to use as little memory as possible (this may be very slow).

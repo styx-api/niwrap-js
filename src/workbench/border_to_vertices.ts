@@ -149,6 +149,8 @@ function border_to_vertices_outputs(
 
 
 /**
+ * border-to-vertices
+ *
  * Draw borders as vertices in a metric file.
  *
  * Outputs a metric with 1s on vertices that follow a border, and 0s elsewhere.  By default, a separate metric column is created for each border.
@@ -177,6 +179,8 @@ function border_to_vertices_execute(
 
 
 /**
+ * border-to-vertices
+ *
  * Draw borders as vertices in a metric file.
  *
  * Outputs a metric with 1s on vertices that follow a border, and 0s elsewhere.  By default, a separate metric column is created for each border.

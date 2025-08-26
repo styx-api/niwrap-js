@@ -122,6 +122,8 @@ function fsr_getxopts_outputs(
 
 
 /**
+ * fsr-getxopts
+ *
  * Tool to retrieve extended options for a specific context or configuration.
  *
  * Author: FreeSurfer Developers
@@ -148,6 +150,8 @@ function fsr_getxopts_execute(
 
 
 /**
+ * fsr-getxopts
+ *
  * Tool to retrieve extended options for a specific context or configuration.
  *
  * Author: FreeSurfer Developers

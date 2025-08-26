@@ -375,6 +375,8 @@ function cifti_dilate_outputs(
 
 
 /**
+ * cifti-dilate
+ *
  * Dilate a cifti file.
  *
  * For all data values designated as bad, if they neighbor a good value or are within the specified distance of a good value in the same kind of model, replace the value with a distance weighted average of nearby good values, otherwise set the value to zero.  If -nearest is specified, it will use the value from the closest good value within range instead of a weighted average.  When the input file contains label data, nearest dilation is used on the surface, and weighted popularity is used in the volume.
@@ -407,6 +409,8 @@ function cifti_dilate_execute(
 
 
 /**
+ * cifti-dilate
+ *
  * Dilate a cifti file.
  *
  * For all data values designated as bad, if they neighbor a good value or are within the specified distance of a good value in the same kind of model, replace the value with a distance weighted average of nearby good values, otherwise set the value to zero.  If -nearest is specified, it will use the value from the closest good value within range instead of a weighted average.  When the input file contains label data, nearest dilation is used on the surface, and weighted popularity is used in the volume.

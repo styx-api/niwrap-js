@@ -136,6 +136,8 @@ function register_child_outputs(
 
 
 /**
+ * register_child
+ *
  * A tool used for registering MR volumes with a child's atlas in Freesurfer.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function register_child_execute(
 
 
 /**
+ * register_child
+ *
  * A tool used for registering MR volumes with a child's atlas in Freesurfer.
  *
  * Author: FreeSurfer Developers

@@ -210,6 +210,8 @@ function vol2symsurf_outputs(
 
 
 /**
+ * vol2symsurf
+ *
  * A tool that samples a volume onto the surface of the left-right symmetric subject (fsaverage_sym).
  *
  * Author: FreeSurfer Developers
@@ -236,6 +238,8 @@ function vol2symsurf_execute(
 
 
 /**
+ * vol2symsurf
+ *
  * A tool that samples a volume onto the surface of the left-right symmetric subject (fsaverage_sym).
  *
  * Author: FreeSurfer Developers

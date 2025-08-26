@@ -247,6 +247,8 @@ function ants_intermodality_intrasubject_sh_outputs(
 
 
 /**
+ * antsIntermodalityIntrasubject.sh
+ *
  * Performs registration between a scalar image and a T1 image.
  *
  * Author: ANTs Developers
@@ -273,6 +275,8 @@ function ants_intermodality_intrasubject_sh_execute(
 
 
 /**
+ * antsIntermodalityIntrasubject.sh
+ *
  * Performs registration between a scalar image and a T1 image.
  *
  * Author: ANTs Developers

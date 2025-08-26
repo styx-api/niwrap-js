@@ -169,6 +169,8 @@ function v_3d_mann_whitney_outputs(
 
 
 /**
+ * 3dMannWhitney
+ *
  * Performs nonparametric Mann-Whitney two-sample test.
  *
  * Author: AFNI Developers
@@ -195,6 +197,8 @@ function v_3d_mann_whitney_execute(
 
 
 /**
+ * 3dMannWhitney
+ *
  * Performs nonparametric Mann-Whitney two-sample test.
  *
  * Author: AFNI Developers

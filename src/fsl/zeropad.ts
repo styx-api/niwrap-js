@@ -131,6 +131,8 @@ function zeropad_outputs(
 
 
 /**
+ * zeropad
+ *
  * Tool for zero-padding numbers to a specified length.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function zeropad_execute(
 
 
 /**
+ * zeropad
+ *
  * Tool for zero-padding numbers to a specified length.
  *
  * Author: FMRIB Analysis Group, University of Oxford

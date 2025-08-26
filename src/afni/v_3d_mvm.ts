@@ -291,6 +291,8 @@ function v_3d_mvm_outputs(
 
 
 /**
+ * 3dMVM
+ *
  * AFNI Group Analysis Program with Multi-Variate Modeling Approach.
  *
  * Author: AFNI Developers
@@ -317,6 +319,8 @@ function v_3d_mvm_execute(
 
 
 /**
+ * 3dMVM
+ *
  * AFNI Group Analysis Program with Multi-Variate Modeling Approach.
  *
  * Author: AFNI Developers

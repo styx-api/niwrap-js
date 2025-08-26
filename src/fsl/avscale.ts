@@ -148,6 +148,8 @@ function avscale_outputs(
 
 
 /**
+ * avscale
+ *
  * A command line tool for computing affine transformations.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -174,6 +176,8 @@ function avscale_execute(
 
 
 /**
+ * avscale
+ *
  * A command line tool for computing affine transformations.
  *
  * Author: FMRIB Analysis Group, University of Oxford

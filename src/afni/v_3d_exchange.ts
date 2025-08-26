@@ -164,6 +164,8 @@ function v_3d_exchange_outputs(
 
 
 /**
+ * 3dExchange
+ *
  * Replaces voxel values using a mapping file with specified columns.
  *
  * Author: AFNI Developers
@@ -190,6 +192,8 @@ function v_3d_exchange_execute(
 
 
 /**
+ * 3dExchange
+ *
  * Replaces voxel values using a mapping file with specified columns.
  *
  * Author: AFNI Developers

@@ -259,6 +259,8 @@ function tck2fixel_outputs(
 
 
 /**
+ * tck2fixel
+ *
  * Compute a fixel TDI map from a tractogram.
  *
  *
@@ -291,6 +293,8 @@ function tck2fixel_execute(
 
 
 /**
+ * tck2fixel
+ *
  * Compute a fixel TDI map from a tractogram.
  *
  *

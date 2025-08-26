@@ -292,6 +292,8 @@ function c3d_affine_tool_outputs(
 
 
 /**
+ * c3d_affine_tool
+ *
  * RAS affine transform tool.
  *
  * Author: Convert3D Developers
@@ -318,6 +320,8 @@ function c3d_affine_tool_execute(
 
 
 /**
+ * c3d_affine_tool
+ *
  * RAS affine transform tool.
  *
  * Author: Convert3D Developers

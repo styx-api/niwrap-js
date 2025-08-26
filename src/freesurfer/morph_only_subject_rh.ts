@@ -129,6 +129,8 @@ function morph_only_subject_rh_outputs(
 
 
 /**
+ * morph_only_subject-rh
+ *
  * This tool processes morph-specific operations for the right hemisphere of the brain using Freesurfer.
  *
  * Author: FreeSurfer Developers
@@ -155,6 +157,8 @@ function morph_only_subject_rh_execute(
 
 
 /**
+ * morph_only_subject-rh
+ *
  * This tool processes morph-specific operations for the right hemisphere of the brain using Freesurfer.
  *
  * Author: FreeSurfer Developers

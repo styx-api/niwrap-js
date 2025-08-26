@@ -175,6 +175,8 @@ function volume_label_import_outputs(
 
 
 /**
+ * volume-label-import
+ *
  * Import a label volume to workbench format.
  *
  * Creates a label volume from an integer-valued volume file.  The label name and color information is stored in the volume header in a nifti extension, with a similar format as in caret5, see -volume-help.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):
@@ -211,6 +213,8 @@ function volume_label_import_execute(
 
 
 /**
+ * volume-label-import
+ *
  * Import a label volume to workbench format.
  *
  * Creates a label volume from an integer-valued volume file.  The label name and color information is stored in the volume header in a nifti extension, with a similar format as in caret5, see -volume-help.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):

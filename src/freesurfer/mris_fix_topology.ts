@@ -353,6 +353,8 @@ function mris_fix_topology_outputs(
 
 
 /**
+ * mris_fix_topology
+ *
  * Computes a mapping from the unit sphere onto the cortical surface, ensuring a topologically correct surface.
  *
  * Author: FreeSurfer Developers
@@ -379,6 +381,8 @@ function mris_fix_topology_execute(
 
 
 /**
+ * mris_fix_topology
+ *
  * Computes a mapping from the unit sphere onto the cortical surface, ensuring a topologically correct surface.
  *
  * Author: FreeSurfer Developers

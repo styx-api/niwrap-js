@@ -136,6 +136,8 @@ function segment_subfields_t1_longitudinal_outputs(
 
 
 /**
+ * SegmentSubfieldsT1Longitudinal
+ *
  * FreeSurfer tool for segmenting subfields in longitudinal T1-weighted images.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function segment_subfields_t1_longitudinal_execute(
 
 
 /**
+ * SegmentSubfieldsT1Longitudinal
+ *
  * FreeSurfer tool for segmenting subfields in longitudinal T1-weighted images.
  *
  * Author: FreeSurfer Developers

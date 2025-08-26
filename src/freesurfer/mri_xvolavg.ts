@@ -157,6 +157,8 @@ function mri_xvolavg_outputs(
 
 
 /**
+ * mri_xvolavg
+ *
  * Tool to average multiple volumes together (including 4D volumes).
  *
  * Author: FreeSurfer Developers
@@ -183,6 +185,8 @@ function mri_xvolavg_execute(
 
 
 /**
+ * mri_xvolavg
+ *
  * Tool to average multiple volumes together (including 4D volumes).
  *
  * Author: FreeSurfer Developers

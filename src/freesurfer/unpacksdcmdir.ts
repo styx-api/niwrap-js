@@ -131,6 +131,8 @@ function unpacksdcmdir_outputs(
 
 
 /**
+ * unpacksdcmdir
+ *
  * A tool for unpacking SD card directories, typically used in neuroimaging workflows. It seems to have a dependency on Tcl, as indicated by the error messages.
  *
  * Author: FreeSurfer Developers
@@ -157,6 +159,8 @@ function unpacksdcmdir_execute(
 
 
 /**
+ * unpacksdcmdir
+ *
  * A tool for unpacking SD card directories, typically used in neuroimaging workflows. It seems to have a dependency on Tcl, as indicated by the error messages.
  *
  * Author: FreeSurfer Developers

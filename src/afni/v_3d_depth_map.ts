@@ -234,6 +234,8 @@ function v_3d_depth_map_outputs(
 
 
 /**
+ * 3dDepthMap
+ *
  * Calculates the Euclidean Distance Transform (EDT) for 3D volumes, allowing computation of ROI depth maps and applying various adjustments like masking and rimification.
  *
  * Author: AFNI Developers
@@ -260,6 +262,8 @@ function v_3d_depth_map_execute(
 
 
 /**
+ * 3dDepthMap
+ *
  * Calculates the Euclidean Distance Transform (EDT) for 3D volumes, allowing computation of ROI depth maps and applying various adjustments like masking and rimification.
  *
  * Author: AFNI Developers

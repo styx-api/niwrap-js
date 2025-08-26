@@ -137,6 +137,8 @@ function maskdyads_outputs(
 
 
 /**
+ * maskdyads
+ *
  * Tool to mask dyads with threshold.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -163,6 +165,8 @@ function maskdyads_execute(
 
 
 /**
+ * maskdyads
+ *
  * Tool to mask dyads with threshold.
  *
  * Author: FMRIB Analysis Group, University of Oxford

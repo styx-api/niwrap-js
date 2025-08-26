@@ -177,6 +177,8 @@ function rca_fix_ento_outputs(
 
 
 /**
+ * rca-fix-ento
+ *
  * A tool to fix the entorhinal white matter in FreeSurfer using a deep learning network.
  *
  * Author: FreeSurfer Developers
@@ -203,6 +205,8 @@ function rca_fix_ento_execute(
 
 
 /**
+ * rca-fix-ento
+ *
  * A tool to fix the entorhinal white matter in FreeSurfer using a deep learning network.
  *
  * Author: FreeSurfer Developers

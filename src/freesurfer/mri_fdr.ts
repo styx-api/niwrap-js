@@ -208,6 +208,8 @@ function mri_fdr_outputs(
 
 
 /**
+ * mri_fdr
+ *
  * A program that performs False Discovery Rate correction.
  *
  * Author: FreeSurfer Developers
@@ -234,6 +236,8 @@ function mri_fdr_execute(
 
 
 /**
+ * mri_fdr
+ *
  * A program that performs False Discovery Rate correction.
  *
  * Author: FreeSurfer Developers

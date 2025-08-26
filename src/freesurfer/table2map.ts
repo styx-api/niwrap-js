@@ -179,6 +179,8 @@ function table2map_outputs(
 
 
 /**
+ * table2map
+ *
  * A tool to map data from a table onto an output map, optionally using segmentation or parcellation files.
  *
  * Author: FreeSurfer Developers
@@ -205,6 +207,8 @@ function table2map_execute(
 
 
 /**
+ * table2map
+ *
  * A tool to map data from a table onto an output map, optionally using segmentation or parcellation files.
  *
  * Author: FreeSurfer Developers

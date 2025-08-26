@@ -129,6 +129,8 @@ function run_segment_subject_t2_auto_estimate_alveus_ml_sh_outputs(
 
 
 /**
+ * run_segmentSubjectT2_autoEstimateAlveusML.sh
+ *
  * Script to run segmentSubjectT2_autoEstimateAlveusML operation. This script requires a MATLAB Compiler Runtime (MCR) root directory as input, but help output indicates missing library reference for operation.
  *
  * Author: FreeSurfer Developers
@@ -155,6 +157,8 @@ function run_segment_subject_t2_auto_estimate_alveus_ml_sh_execute(
 
 
 /**
+ * run_segmentSubjectT2_autoEstimateAlveusML.sh
+ *
  * Script to run segmentSubjectT2_autoEstimateAlveusML operation. This script requires a MATLAB Compiler Runtime (MCR) root directory as input, but help output indicates missing library reference for operation.
  *
  * Author: FreeSurfer Developers

@@ -233,6 +233,8 @@ function v__anaticor_outputs(
 
 
 /**
+ * @ANATICOR
+ *
  * Script to produce a residual time series cleaned by ANATICOR model.
  *
  * Author: AFNI Developers
@@ -259,6 +261,8 @@ function v__anaticor_execute(
 
 
 /**
+ * @ANATICOR
+ *
  * Script to produce a residual time series cleaned by ANATICOR model.
  *
  * Author: AFNI Developers

@@ -201,6 +201,8 @@ function mri_edit_segmentation_with_surfaces_outputs(
 
 
 /**
+ * mri_edit_segmentation_with_surfaces
+ *
  * This program edits an aseg with the surface.
  *
  * Author: FreeSurfer Developers
@@ -227,6 +229,8 @@ function mri_edit_segmentation_with_surfaces_execute(
 
 
 /**
+ * mri_edit_segmentation_with_surfaces
+ *
  * This program edits an aseg with the surface.
  *
  * Author: FreeSurfer Developers

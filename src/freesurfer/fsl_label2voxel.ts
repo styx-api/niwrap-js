@@ -141,6 +141,8 @@ function fsl_label2voxel_outputs(
 
 
 /**
+ * fsl_label2voxel
+ *
  * Converts labeled volumes to voxels based on specified labels.
  *
  * Author: FreeSurfer Developers
@@ -167,6 +169,8 @@ function fsl_label2voxel_execute(
 
 
 /**
+ * fsl_label2voxel
+ *
  * Converts labeled volumes to voxels based on specified labels.
  *
  * Author: FreeSurfer Developers

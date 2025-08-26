@@ -165,6 +165,8 @@ function map_to_base_outputs(
 
 
 /**
+ * map_to_base
+ *
  * Maps an image or surface from a time point directory (either cross-sectional or longitudinal) to the base space and outputs it in the appropriate base directory.
  *
  * Author: FreeSurfer Developers
@@ -191,6 +193,8 @@ function map_to_base_execute(
 
 
 /**
+ * map_to_base
+ *
  * Maps an image or surface from a time point directory (either cross-sectional or longitudinal) to the base space and outputs it in the appropriate base directory.
  *
  * Author: FreeSurfer Developers

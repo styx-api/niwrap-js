@@ -143,6 +143,8 @@ function v_3dsvm_linpredict_outputs(
 
 
 /**
+ * 3dsvm_linpredict
+ *
  * Linear prediction for weights from 3dsvm.
  *
  * Author: AFNI Developers
@@ -169,6 +171,8 @@ function v_3dsvm_linpredict_execute(
 
 
 /**
+ * 3dsvm_linpredict
+ *
  * Linear prediction for weights from 3dsvm.
  *
  * Author: AFNI Developers

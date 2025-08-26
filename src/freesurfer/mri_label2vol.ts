@@ -329,6 +329,8 @@ function mri_label2vol_outputs(
 
 
 /**
+ * mri_label2vol
+ *
  * Converts a label or a set of labels into a volume.
  *
  * Author: FreeSurfer Developers
@@ -355,6 +357,8 @@ function mri_label2vol_execute(
 
 
 /**
+ * mri_label2vol
+ *
  * Converts a label or a set of labels into a volume.
  *
  * Author: FreeSurfer Developers

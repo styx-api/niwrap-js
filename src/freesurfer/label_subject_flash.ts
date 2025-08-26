@@ -149,6 +149,8 @@ function label_subject_flash_outputs(
 
 
 /**
+ * label_subject_flash
+ *
  * A tool for labeling brain structures in an MRI dataset using FLASH sequences and the FreeSurfer software.
  *
  * Author: FreeSurfer Developers
@@ -175,6 +177,8 @@ function label_subject_flash_execute(
 
 
 /**
+ * label_subject_flash
+ *
  * A tool for labeling brain structures in an MRI dataset using FLASH sequences and the FreeSurfer software.
  *
  * Author: FreeSurfer Developers

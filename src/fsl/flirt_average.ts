@@ -171,6 +171,8 @@ function flirt_average_outputs(
 
 
 /**
+ * flirt_average
+ *
  * Averages multiple input images after linear registration (FLIRT).
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -197,6 +199,8 @@ function flirt_average_execute(
 
 
 /**
+ * flirt_average
+ *
  * Averages multiple input images after linear registration (FLIRT).
  *
  * Author: FMRIB Analysis Group, University of Oxford

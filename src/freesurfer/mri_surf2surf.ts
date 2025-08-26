@@ -730,6 +730,8 @@ function mri_surf2surf_outputs(
 
 
 /**
+ * mri_surf2surf
+ *
  * Resample one surface onto another using FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -756,6 +758,8 @@ function mri_surf2surf_execute(
 
 
 /**
+ * mri_surf2surf
+ *
  * Resample one surface onto another using FreeSurfer.
  *
  * Author: FreeSurfer Developers

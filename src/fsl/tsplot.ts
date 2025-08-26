@@ -207,6 +207,8 @@ function tsplot_outputs(
 
 
 /**
+ * tsplot
+ *
  * Time series plotting tool for FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -233,6 +235,8 @@ function tsplot_execute(
 
 
 /**
+ * tsplot
+ *
  * Time series plotting tool for FSL.
  *
  * Author: FMRIB Analysis Group, University of Oxford

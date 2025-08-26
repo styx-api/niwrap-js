@@ -181,6 +181,8 @@ function v_3d_dtto_dwi_outputs(
 
 
 /**
+ * 3dDTtoDWI
+ *
  * Tool to compute multiple gradient images from tensors and gradient vector coordinates applied to the I0-dataset.
  *
  * Author: AFNI Developers
@@ -207,6 +209,8 @@ function v_3d_dtto_dwi_execute(
 
 
 /**
+ * 3dDTtoDWI
+ *
  * Tool to compute multiple gradient images from tensors and gradient vector coordinates applied to the I0-dataset.
  *
  * Author: AFNI Developers

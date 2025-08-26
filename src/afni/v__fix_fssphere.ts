@@ -175,6 +175,8 @@ function v__fix_fssphere_outputs(
 
 
 /**
+ * @fix_FSsphere
+ *
  * Tool for fixing errors in FreeSurfer spherical surfaces.
  *
  * Author: AFNI Developers
@@ -201,6 +203,8 @@ function v__fix_fssphere_execute(
 
 
 /**
+ * @fix_FSsphere
+ *
  * Tool for fixing errors in FreeSurfer spherical surfaces.
  *
  * Author: AFNI Developers

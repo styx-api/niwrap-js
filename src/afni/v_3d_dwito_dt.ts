@@ -369,6 +369,8 @@ function v_3d_dwito_dt_outputs(
 
 
 /**
+ * 3dDWItoDT
+ *
  * Computes 6 principal direction tensors from multiple gradient vectors and corresponding DTI image volumes.
  *
  * Author: AFNI Developers
@@ -395,6 +397,8 @@ function v_3d_dwito_dt_execute(
 
 
 /**
+ * 3dDWItoDT
+ *
  * Computes 6 principal direction tensors from multiple gradient vectors and corresponding DTI image volumes.
  *
  * Author: AFNI Developers

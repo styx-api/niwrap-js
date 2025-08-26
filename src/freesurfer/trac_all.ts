@@ -409,6 +409,8 @@ function trac_all_outputs(
 
 
 /**
+ * trac-all
+ *
  * Reconstruct white-matter pathways using an atlas of the underlying anatomy.
  *
  * Author: FreeSurfer Developers
@@ -435,6 +437,8 @@ function trac_all_execute(
 
 
 /**
+ * trac-all
+ *
  * Reconstruct white-matter pathways using an atlas of the underlying anatomy.
  *
  * Author: FreeSurfer Developers

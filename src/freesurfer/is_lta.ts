@@ -137,6 +137,8 @@ function is_lta_outputs(
 
 
 /**
+ * IsLTA
+ *
  * Determines if a given file is an LTA (Linear Transform Array) file. Outputs 1 if true, otherwise outputs 0.
  *
  * Author: FreeSurfer Developers
@@ -163,6 +165,8 @@ function is_lta_execute(
 
 
 /**
+ * IsLTA
+ *
  * Determines if a given file is an LTA (Linear Transform Array) file. Outputs 1 if true, otherwise outputs 0.
  *
  * Author: FreeSurfer Developers

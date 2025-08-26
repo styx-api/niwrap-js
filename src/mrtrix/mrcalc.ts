@@ -2680,6 +2680,8 @@ function mrcalc_outputs(
 
 
 /**
+ * mrcalc
+ *
  * Apply generic voxel-wise mathematical operations to images.
  *
  * This command will only compute per-voxel operations. Use 'mrmath' to compute summary statistics across images or along image axes.
@@ -2716,6 +2718,8 @@ function mrcalc_execute(
 
 
 /**
+ * mrcalc
+ *
  * Apply generic voxel-wise mathematical operations to images.
  *
  * This command will only compute per-voxel operations. Use 'mrmath' to compute summary statistics across images or along image axes.

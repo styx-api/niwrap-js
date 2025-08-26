@@ -201,6 +201,8 @@ function v__rename_panga_outputs(
 
 
 /**
+ * @RenamePanga
+ *
  * Creates AFNI bricks from RealTime GE EPI series.
  *
  * Author: AFNI Developers
@@ -227,6 +229,8 @@ function v__rename_panga_execute(
 
 
 /**
+ * @RenamePanga
+ *
  * Creates AFNI bricks from RealTime GE EPI series.
  *
  * Author: AFNI Developers

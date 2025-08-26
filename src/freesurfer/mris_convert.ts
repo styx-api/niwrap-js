@@ -475,6 +475,8 @@ function mris_convert_outputs(
 
 
 /**
+ * mris_convert
+ *
  * This program will convert MRI-surface data formats.
  *
  * Author: FreeSurfer Developers
@@ -501,6 +503,8 @@ function mris_convert_execute(
 
 
 /**
+ * mris_convert
+ *
  * This program will convert MRI-surface data formats.
  *
  * Author: FreeSurfer Developers

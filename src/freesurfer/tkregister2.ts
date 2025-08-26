@@ -171,6 +171,8 @@ function tkregister2_outputs(
 
 
 /**
+ * tkregister2
+ *
  * tkregister2 is a tool from FreeSurfer used for registration of MRI images.
  *
  * Author: FreeSurfer Developers
@@ -197,6 +199,8 @@ function tkregister2_execute(
 
 
 /**
+ * tkregister2
+ *
  * tkregister2 is a tool from FreeSurfer used for registration of MRI images.
  *
  * Author: FreeSurfer Developers

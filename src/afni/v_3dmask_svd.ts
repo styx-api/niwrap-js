@@ -212,6 +212,8 @@ function v_3dmask_svd_outputs(
 
 
 /**
+ * 3dmaskSVD
+ *
  * Computes the principal singular vector of the time series vectors extracted from the input dataset over the input mask.
  *
  * Author: AFNI Developers
@@ -238,6 +240,8 @@ function v_3dmask_svd_execute(
 
 
 /**
+ * 3dmaskSVD
+ *
  * Computes the principal singular vector of the time series vectors extracted from the input dataset over the input mask.
  *
  * Author: AFNI Developers

@@ -186,6 +186,8 @@ function v_3d_zregrid_outputs(
 
 
 /**
+ * 3dZregrid
+ *
  * Alters the input dataset's slice thickness and/or number.
  *
  * Author: AFNI Developers
@@ -212,6 +214,8 @@ function v_3d_zregrid_execute(
 
 
 /**
+ * 3dZregrid
+ *
  * Alters the input dataset's slice thickness and/or number.
  *
  * Author: AFNI Developers

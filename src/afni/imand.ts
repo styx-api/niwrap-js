@@ -143,6 +143,8 @@ function imand_outputs(
 
 
 /**
+ * imand
+ *
  * Image AND operation tool. Only pixels nonzero in all input images (and above the threshold, if given) will be output.
  *
  * Author: AFNI Developers
@@ -169,6 +171,8 @@ function imand_execute(
 
 
 /**
+ * imand
+ *
  * Image AND operation tool. Only pixels nonzero in all input images (and above the threshold, if given) will be output.
  *
  * Author: AFNI Developers

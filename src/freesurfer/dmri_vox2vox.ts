@@ -222,6 +222,8 @@ function dmri_vox2vox_outputs(
 
 
 /**
+ * dmri_vox2vox
+ *
  * Tool for voxel-to-voxel transformations in diffusion MRI data processing.
  *
  * Author: FreeSurfer Developers
@@ -248,6 +250,8 @@ function dmri_vox2vox_execute(
 
 
 /**
+ * dmri_vox2vox
+ *
  * Tool for voxel-to-voxel transformations in diffusion MRI data processing.
  *
  * Author: FreeSurfer Developers

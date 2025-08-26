@@ -155,6 +155,8 @@ function v_1d_marry_outputs(
 
 
 /**
+ * 1dMarry
+ *
  * Joins together 2 (or more) ragged-right .1D files, for use with 3dDeconvolve -stim_times_AM2, or breaks up 1 married file into 2 (or more) single-valued files.
  *
  * Author: AFNI Developers
@@ -181,6 +183,8 @@ function v_1d_marry_execute(
 
 
 /**
+ * 1dMarry
+ *
  * Joins together 2 (or more) ragged-right .1D files, for use with 3dDeconvolve -stim_times_AM2, or breaks up 1 married file into 2 (or more) single-valued files.
  *
  * Author: AFNI Developers

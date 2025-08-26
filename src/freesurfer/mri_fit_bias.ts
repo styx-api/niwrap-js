@@ -240,6 +240,8 @@ function mri_fit_bias_outputs(
 
 
 /**
+ * mri_fit_bias
+ *
  * A tool for intensity normalization and bias correction in MRI images.
  *
  * Author: FreeSurfer Developers
@@ -266,6 +268,8 @@ function mri_fit_bias_execute(
 
 
 /**
+ * mri_fit_bias
+ *
  * A tool for intensity normalization and bias correction in MRI images.
  *
  * Author: FreeSurfer Developers

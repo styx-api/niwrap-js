@@ -191,6 +191,8 @@ function v__quiet_talkers_outputs(
 
 
 /**
+ * @Quiet_Talkers
+ *
  * A script to find and kill AFNI processes.
  *
  * Author: AFNI Developers
@@ -217,6 +219,8 @@ function v__quiet_talkers_execute(
 
 
 /**
+ * @Quiet_Talkers
+ *
  * A script to find and kill AFNI processes.
  *
  * Author: AFNI Developers

@@ -122,6 +122,8 @@ function check_mcr_sh_outputs(
 
 
 /**
+ * checkMCR.sh
+ *
  * Script to check for the presence of Matlab Compiler Runtime (MCR) for Matlab 2019b, used for the hippocampal/amygdala and brainstem modules.
  *
  * Author: FreeSurfer Developers
@@ -148,6 +150,8 @@ function check_mcr_sh_execute(
 
 
 /**
+ * checkMCR.sh
+ *
  * Script to check for the presence of Matlab Compiler Runtime (MCR) for Matlab 2019b, used for the hippocampal/amygdala and brainstem modules.
  *
  * Author: FreeSurfer Developers

@@ -184,6 +184,8 @@ function fs_temp_file_outputs(
 
 
 /**
+ * fs_temp_file
+ *
  * Generates and creates an empty temporary file, printing the resulting path to stdout.
  *
  * Author: FreeSurfer Developers
@@ -210,6 +212,8 @@ function fs_temp_file_execute(
 
 
 /**
+ * fs_temp_file
+ *
  * Generates and creates an empty temporary file, printing the resulting path to stdout.
  *
  * Author: FreeSurfer Developers

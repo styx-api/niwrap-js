@@ -221,6 +221,8 @@ function bmedits2surf_outputs(
 
 
 /**
+ * bmedits2surf
+ *
  * Computes a binary map of surface locations where the brainmask.mgz has been edited.
  *
  * Author: FreeSurfer Developers
@@ -247,6 +249,8 @@ function bmedits2surf_execute(
 
 
 /**
+ * bmedits2surf
+ *
  * Computes a binary map of surface locations where the brainmask.mgz has been edited.
  *
  * Author: FreeSurfer Developers

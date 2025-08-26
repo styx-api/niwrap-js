@@ -235,6 +235,8 @@ function ants_introduction_sh_outputs(
 
 
 /**
+ * antsIntroduction.sh
+ *
  * Script for registration using ANTS with compulsory and optional arguments.
  *
  * Author: ANTs Developers
@@ -261,6 +263,8 @@ function ants_introduction_sh_execute(
 
 
 /**
+ * antsIntroduction.sh
+ *
  * Script for registration using ANTS with compulsory and optional arguments.
  *
  * Author: ANTs Developers

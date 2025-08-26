@@ -289,6 +289,8 @@ function v_3d_zeropad_outputs(
 
 
 /**
+ * 3dZeropad
+ *
  * Adds planes of zeros to a dataset (i.e., pads it out). Negative 'add' count means to cut a dataset down in size.
  *
  * Author: AFNI Developers
@@ -315,6 +317,8 @@ function v_3d_zeropad_execute(
 
 
 /**
+ * 3dZeropad
+ *
  * Adds planes of zeros to a dataset (i.e., pads it out). Negative 'add' count means to cut a dataset down in size.
  *
  * Author: AFNI Developers

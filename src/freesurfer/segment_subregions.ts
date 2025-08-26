@@ -211,6 +211,8 @@ function segment_subregions_outputs(
 
 
 /**
+ * segment_subregions
+ *
  * Cross-sectional and longitudinal segmentation for brain structures like thalamus, brainstem, and hippo-amygdala.
  *
  * Author: FreeSurfer Developers
@@ -237,6 +239,8 @@ function segment_subregions_execute(
 
 
 /**
+ * segment_subregions
+ *
  * Cross-sectional and longitudinal segmentation for brain structures like thalamus, brainstem, and hippo-amygdala.
  *
  * Author: FreeSurfer Developers

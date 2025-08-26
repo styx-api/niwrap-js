@@ -143,6 +143,8 @@ function tal_compare_outputs(
 
 
 /**
+ * tal_compare
+ *
  * Tool for comparing TAL databases.
  *
  * Author: FreeSurfer Developers
@@ -169,6 +171,8 @@ function tal_compare_execute(
 
 
 /**
+ * tal_compare
+ *
  * Tool for comparing TAL databases.
  *
  * Author: FreeSurfer Developers

@@ -192,6 +192,8 @@ function mris_remesh_outputs(
 
 
 /**
+ * mris_remesh
+ *
  * Remeshes a surface to a desired edge length, number of vertices, or average face area.
  *
  * Author: FreeSurfer Developers
@@ -218,6 +220,8 @@ function mris_remesh_execute(
 
 
 /**
+ * mris_remesh
+ *
  * Remeshes a surface to a desired edge length, number of vertices, or average face area.
  *
  * Author: FreeSurfer Developers

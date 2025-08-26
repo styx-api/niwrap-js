@@ -168,6 +168,8 @@ function suma_change_spec_outputs(
 
 
 /**
+ * suma_change_spec
+ *
  * This program changes SUMA's surface specification (Spec) files.
  *
  * Author: AFNI Developers
@@ -194,6 +196,8 @@ function suma_change_spec_execute(
 
 
 /**
+ * suma_change_spec
+ *
  * This program changes SUMA's surface specification (Spec) files.
  *
  * Author: AFNI Developers

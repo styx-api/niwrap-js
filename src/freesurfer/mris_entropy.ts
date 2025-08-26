@@ -160,6 +160,8 @@ function mris_entropy_outputs(
 
 
 /**
+ * mris_entropy
+ *
  * Computes the entropy of a surface activation pattern for FreeSurfer.
  *
  * Author: FreeSurfer Developers
@@ -186,6 +188,8 @@ function mris_entropy_execute(
 
 
 /**
+ * mris_entropy
+ *
  * Computes the entropy of a surface activation pattern for FreeSurfer.
  *
  * Author: FreeSurfer Developers

@@ -138,6 +138,8 @@ function mris_euler_number_outputs(
 
 
 /**
+ * mris_euler_number
+ *
  * This program computes EulerNumber for a cortical surface.
  *
  * Author: FreeSurfer Developers
@@ -164,6 +166,8 @@ function mris_euler_number_execute(
 
 
 /**
+ * mris_euler_number
+ *
  * This program computes EulerNumber for a cortical surface.
  *
  * Author: FreeSurfer Developers

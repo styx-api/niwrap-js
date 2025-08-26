@@ -131,6 +131,8 @@ function fsl_gen_3_d_outputs(
 
 
 /**
+ * fsl_gen_3D
+ *
  * Tool to generate a 3D snapshot of a structural image.
  *
  * Author: FMRIB Analysis Group, University of Oxford
@@ -157,6 +159,8 @@ function fsl_gen_3_d_execute(
 
 
 /**
+ * fsl_gen_3D
+ *
  * Tool to generate a 3D snapshot of a structural image.
  *
  * Author: FMRIB Analysis Group, University of Oxford

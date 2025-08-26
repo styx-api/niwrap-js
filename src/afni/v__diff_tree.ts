@@ -272,6 +272,8 @@ function v__diff_tree_outputs(
 
 
 /**
+ * @diff.tree
+ *
  * Show file differences between 2 directories.
  *
  * Author: AFNI Developers
@@ -298,6 +300,8 @@ function v__diff_tree_execute(
 
 
 /**
+ * @diff.tree
+ *
  * Show file differences between 2 directories.
  *
  * Author: AFNI Developers

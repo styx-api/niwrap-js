@@ -162,6 +162,8 @@ function print_unique_labels_csh_outputs(
 
 
 /**
+ * print_unique_labels.csh
+ *
  * Prints the list of unique labels (with structure name) in the input volume.
  *
  * Author: FreeSurfer Developers
@@ -188,6 +190,8 @@ function print_unique_labels_csh_execute(
 
 
 /**
+ * print_unique_labels.csh
+ *
  * Prints the list of unique labels (with structure name) in the input volume.
  *
  * Author: FreeSurfer Developers

@@ -120,6 +120,8 @@ function inflate_subject_new_outputs(
 
 
 /**
+ * inflate_subject_new
+ *
  * Tool to inflate subject surfaces.
  *
  * Author: FreeSurfer Developers
@@ -146,6 +148,8 @@ function inflate_subject_new_execute(
 
 
 /**
+ * inflate_subject_new
+ *
  * Tool to inflate subject surfaces.
  *
  * Author: FreeSurfer Developers

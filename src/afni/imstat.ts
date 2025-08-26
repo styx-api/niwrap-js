@@ -157,6 +157,8 @@ function imstat_outputs(
 
 
 /**
+ * imstat
+ *
  * Calculation of statistics of one or more images.
  *
  * Author: AFNI Developers
@@ -183,6 +185,8 @@ function imstat_execute(
 
 
 /**
+ * imstat
+ *
  * Calculation of statistics of one or more images.
  *
  * Author: AFNI Developers

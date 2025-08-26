@@ -295,6 +295,8 @@ function v_3d_zipper_zapper_outputs(
 
 
 /**
+ * 3dZipperZapper
+ *
  * A basic program to highlight problematic volumes in data sets, especially EPI/DWI data sets with interleaved acquisition.
  *
  * Author: AFNI Developers
@@ -321,6 +323,8 @@ function v_3d_zipper_zapper_execute(
 
 
 /**
+ * 3dZipperZapper
+ *
  * A basic program to highlight problematic volumes in data sets, especially EPI/DWI data sets with interleaved acquisition.
  *
  * Author: AFNI Developers

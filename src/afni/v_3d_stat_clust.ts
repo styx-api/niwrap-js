@@ -199,6 +199,8 @@ function v_3d_stat_clust_outputs(
 
 
 /**
+ * 3dStatClust
+ *
  * Perform agglomerative hierarchical clustering for user specified parameter sub-bricks, for all voxels whose threshold statistic is above a user specified value.
  *
  * Author: AFNI Developers
@@ -225,6 +227,8 @@ function v_3d_stat_clust_execute(
 
 
 /**
+ * 3dStatClust
+ *
  * Perform agglomerative hierarchical clustering for user specified parameter sub-bricks, for all voxels whose threshold statistic is above a user specified value.
  *
  * Author: AFNI Developers

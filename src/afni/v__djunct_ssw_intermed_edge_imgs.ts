@@ -239,6 +239,8 @@ function v__djunct_ssw_intermed_edge_imgs_outputs(
 
 
 /**
+ * @djunct_ssw_intermed_edge_imgs
+ *
  * Helper script to generate intermediate edge images for SSW-related processing.
  *
  * Author: AFNI Developers
@@ -265,6 +267,8 @@ function v__djunct_ssw_intermed_edge_imgs_execute(
 
 
 /**
+ * @djunct_ssw_intermed_edge_imgs
+ *
  * Helper script to generate intermediate edge images for SSW-related processing.
  *
  * Author: AFNI Developers

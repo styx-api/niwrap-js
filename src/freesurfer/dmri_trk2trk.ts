@@ -416,6 +416,8 @@ function dmri_trk2trk_outputs(
 
 
 /**
+ * dmri_trk2trk
+ *
  * A tool for transforming and analyzing tractography data.
  *
  * Author: FreeSurfer Developers
@@ -442,6 +444,8 @@ function dmri_trk2trk_execute(
 
 
 /**
+ * dmri_trk2trk
+ *
  * A tool for transforming and analyzing tractography data.
  *
  * Author: FreeSurfer Developers

@@ -195,6 +195,8 @@ function fat_proc_select_vols_outputs(
 
 
 /**
+ * fat_proc_select_vols
+ *
  * Tool for building a selector string for AFNI subbricks and/or 1D text files.
  *
  * Author: AFNI Developers
@@ -221,6 +223,8 @@ function fat_proc_select_vols_execute(
 
 
 /**
+ * fat_proc_select_vols
+ *
  * Tool for building a selector string for AFNI subbricks and/or 1D text files.
  *
  * Author: AFNI Developers

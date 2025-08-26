@@ -136,6 +136,8 @@ function mri_dist_surf_label_outputs(
 
 
 /**
+ * mri_dist_surf_label
+ *
  * Computes distances from input surface to label points or waypoints.
  *
  * Author: FreeSurfer Developers
@@ -162,6 +164,8 @@ function mri_dist_surf_label_execute(
 
 
 /**
+ * mri_dist_surf_label
+ *
  * Computes distances from input surface to label points or waypoints.
  *
  * Author: FreeSurfer Developers

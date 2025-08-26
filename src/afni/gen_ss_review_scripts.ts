@@ -359,6 +359,8 @@ function gen_ss_review_scripts_outputs(
 
 
 /**
+ * gen_ss_review_scripts
+ *
  * Generate single subject analysis review scripts.
  *
  * Author: AFNI Developers
@@ -385,6 +387,8 @@ function gen_ss_review_scripts_execute(
 
 
 /**
+ * gen_ss_review_scripts
+ *
  * Generate single subject analysis review scripts.
  *
  * Author: AFNI Developers
