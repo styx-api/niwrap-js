@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKE_RANDOM_TIMING_PY_METADATA: Metadata = {
-    id: "4493459e01494c409f42a0f194bf073010dca9b2.boutiques",
+    id: "d94061dc56db819849ac1da93c4daf17cc0ce89e.boutiques",
     name: "make_random_timing.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -69,7 +69,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.make_random_timing.py": make_random_timing_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,10 +84,6 @@ interface MakeRandomTimingPyOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Stimulus timing output file
-     */
-    stim_output: OutputPathType;
 }
 
 
@@ -379,7 +374,6 @@ function make_random_timing_py_outputs(
 ): MakeRandomTimingPyOutputs {
     const ret: MakeRandomTimingPyOutputs = {
         root: execution.outputFile("."),
-        stim_output: execution.outputFile([(params["prefix"] ?? null), "_*.1D"].join('')),
     };
     return ret;
 }

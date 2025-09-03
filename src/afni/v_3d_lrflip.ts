@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_LRFLIP_METADATA: Metadata = {
-    id: "57b905fab9f06f442859815c246d2b61d1ef0e9b.boutiques",
+    id: "f5cd6873aa1a8c5689f190b079b05e7ae5a6ca99.boutiques",
     name: "3dLRflip",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -52,7 +52,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.3dLRflip": v_3d_lrflip_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,10 +67,6 @@ interface V3dLrflipOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output dataset after flipping
-     */
-    flipped_output: OutputPathType | null;
 }
 
 
@@ -173,7 +168,6 @@ function v_3d_lrflip_outputs(
 ): V3dLrflipOutputs {
     const ret: V3dLrflipOutputs = {
         root: execution.outputFile("."),
-        flipped_output: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "*"].join('')) : null,
     };
     return ret;
 }

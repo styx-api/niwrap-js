@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_EDU_01_SCALE_METADATA: Metadata = {
-    id: "882d93a008679bc5297ea9ae14de61c1a4182b85.boutiques",
+    id: "e947f43445978afbd9eefab135b8411b3384a418.boutiques",
     name: "3dEdu_01_scale",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -48,7 +48,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.3dEdu_01_scale": v_3d_edu_01_scale_outputs,
     };
     return outputsFuncs[t];
 }
@@ -64,10 +63,6 @@ interface V3dEdu01ScaleOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output scaled and/or masked copy of the [0]th volume of the input dataset
-     */
-    outfile: OutputPathType;
 }
 
 
@@ -150,7 +145,6 @@ function v_3d_edu_01_scale_outputs(
 ): V3dEdu01ScaleOutputs {
     const ret: V3dEdu01ScaleOutputs = {
         root: execution.outputFile("."),
-        outfile: execution.outputFile(["OUT_edu_[1-9]*"].join('')),
     };
     return ret;
 }

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_CM_METADATA: Metadata = {
-    id: "86d28ac666c67b4bd4d8d68c8533d068db093ca1.boutiques",
+    id: "6ed0027b8ed77baf1cc48dacbb43734191dfd437.boutiques",
     name: "3dCM",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -53,7 +53,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.3dCM": v_3d_cm_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,9 +69,9 @@ interface V3dCmOutputs {
      */
     root: OutputPathType;
     /**
-     * Center of mass of the dataset.
+     * center of mass of the dataset
      */
-    center_of_mass: OutputPathType;
+    stdout: string[];
 }
 
 
@@ -190,7 +189,7 @@ function v_3d_cm_outputs(
 ): V3dCmOutputs {
     const ret: V3dCmOutputs = {
         root: execution.outputFile("."),
-        center_of_mass: execution.outputFile(["<stdout>"].join('')),
+        stdout: [],
     };
     return ret;
 }
@@ -219,7 +218,7 @@ function v_3d_cm_execute(
     params = execution.params(params)
     const cargs = v_3d_cm_cargs(params, execution)
     const ret = v_3d_cm_outputs(params, execution)
-    execution.run(cargs, undefined);
+    execution.run(cargs, s => ret.stdout.push(s));
     return ret;
 }
 

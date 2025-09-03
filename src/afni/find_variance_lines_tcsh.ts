@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIND_VARIANCE_LINES_TCSH_METADATA: Metadata = {
-    id: "9fa94416b9a9d640828d9ed8f46da535853bee78.boutiques",
+    id: "0e418376195ab0af604b478b75e8482423331a58.boutiques",
     name: "find_variance_lines.tcsh",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -76,21 +76,9 @@ interface FindVarianceLinesTcshOutputs {
      */
     root: OutputPathType;
     /**
-     * Variance maps per run
+     * Output directory containing maps and reports.
      */
-    variance_maps: OutputPathType | null;
-    /**
-     * Scaled variance maps per run
-     */
-    scaled_variance_maps: OutputPathType | null;
-    /**
-     * Cluster reports
-     */
-    cluster_reports: OutputPathType | null;
-    /**
-     * JPEG images showing locations of high variance
-     */
-    jpeg_images: OutputPathType | null;
+    output_directory: OutputPathType | null;
 }
 
 
@@ -279,10 +267,7 @@ function find_variance_lines_tcsh_outputs(
 ): FindVarianceLinesTcshOutputs {
     const ret: FindVarianceLinesTcshOutputs = {
         root: execution.outputFile("."),
-        variance_maps: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), "/variance_map_run*.nii.gz"].join('')) : null,
-        scaled_variance_maps: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), "/scaled_variance_map_run*.nii.gz"].join('')) : null,
-        cluster_reports: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), "/cluster_report_run*.txt"].join('')) : null,
-        jpeg_images: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), "/*.jpg"].join('')) : null,
+        output_directory: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null)].join('')) : null,
     };
     return ret;
 }

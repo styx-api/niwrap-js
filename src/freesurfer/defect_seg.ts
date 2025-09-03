@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DEFECT_SEG_METADATA: Metadata = {
-    id: "9b31a7d103732cf28fbea5f8fb3d389448877d3a.boutiques",
+    id: "e62195c9efa7652fa4b60dc4510ea3f4d8ba50f5.boutiques",
     name: "defect-seg",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -68,29 +68,53 @@ interface DefectSegOutputs {
      */
     surface_defects: OutputPathType;
     /**
-     * Summary of defects indicating numerical ID and number of vertices.
+     * Defects summary with ID and number of vertices for left hemisphere.
      */
-    defects_summary: OutputPathType;
+    lh_defects_summary: OutputPathType;
     /**
-     * Fixed defect labels on the surface.
+     * Fixed defect labels on the left hemisphere surface.
      */
-    defect_labels_fix: OutputPathType;
+    lh_defect_labels_fix: OutputPathType;
     /**
-     * Binary labels for fixed defects.
+     * Binary labels for fixed defects on the left hemisphere.
      */
-    defect_labels_fix_bin: OutputPathType;
+    lh_defect_labels_fix_bin: OutputPathType;
     /**
-     * Annotation file for defects without fixes.
+     * Annotation file for defects without fixes on the left hemisphere.
      */
-    defects_nofix_annot: OutputPathType;
+    lh_defects_nofix_annot: OutputPathType;
     /**
-     * Annotation file for defects with fixes.
+     * Annotation file for defects with fixes on the left hemisphere.
      */
-    defects_fix_annot: OutputPathType;
+    lh_defects_fix_annot: OutputPathType;
     /**
-     * Statistics summary of defects indicating area and average thickness.
+     * Statistics summary of defects indicating area and average thickness on the left hemisphere.
      */
-    defects_stats: OutputPathType;
+    lh_defects_stats: OutputPathType;
+    /**
+     * Defects summary with ID and number of vertices for right hemisphere.
+     */
+    rh_defects_summary: OutputPathType;
+    /**
+     * Fixed defect labels on the Right hemisphere surface.
+     */
+    rh_defect_labels_fix: OutputPathType;
+    /**
+     * Binary labels for fixed defects on the right hemisphere.
+     */
+    rh_defect_labels_fix_bin: OutputPathType;
+    /**
+     * Annotation file for defects without fixes on the right hemisphere.
+     */
+    rh_defects_nofix_annot: OutputPathType;
+    /**
+     * Annotation file for defects with fixes on the right hemisphere.
+     */
+    rh_defects_fix_annot: OutputPathType;
+    /**
+     * Statistics summary of defects indicating area and average thickness on the right hemisphere.
+     */
+    rh_defects_stats: OutputPathType;
 }
 
 
@@ -161,12 +185,18 @@ function defect_seg_outputs(
     const ret: DefectSegOutputs = {
         root: execution.outputFile("."),
         surface_defects: execution.outputFile(["mri/surface.defects.mgz"].join('')),
-        defects_summary: execution.outputFile(["scripts/?h.defects.summary"].join('')),
-        defect_labels_fix: execution.outputFile(["surf/?h.defect_labels.fix.mgz"].join('')),
-        defect_labels_fix_bin: execution.outputFile(["surf/?h.defect_labels.fix.bin.mgz"].join('')),
-        defects_nofix_annot: execution.outputFile(["label/?h.defects.nofix.annot"].join('')),
-        defects_fix_annot: execution.outputFile(["label/?h.defects.fix.annot"].join('')),
-        defects_stats: execution.outputFile(["stats/?h.defects.stats"].join('')),
+        lh_defects_summary: execution.outputFile(["scripts/lh.defects.summary"].join('')),
+        lh_defect_labels_fix: execution.outputFile(["surf/lh.defect_labels.fix.mgz"].join('')),
+        lh_defect_labels_fix_bin: execution.outputFile(["surf/lh.defect_labels.fix.bin.mgz"].join('')),
+        lh_defects_nofix_annot: execution.outputFile(["label/lh.defects.nofix.annot"].join('')),
+        lh_defects_fix_annot: execution.outputFile(["label/lh.defects.fix.annot"].join('')),
+        lh_defects_stats: execution.outputFile(["stats/lh.defects.stats"].join('')),
+        rh_defects_summary: execution.outputFile(["scripts/rh.defects.summary"].join('')),
+        rh_defect_labels_fix: execution.outputFile(["surf/rh.defect_labels.fix.mgz"].join('')),
+        rh_defect_labels_fix_bin: execution.outputFile(["surf/rh.defect_labels.fix.bin.mgz"].join('')),
+        rh_defects_nofix_annot: execution.outputFile(["label/rh.defects.nofix.annot"].join('')),
+        rh_defects_fix_annot: execution.outputFile(["label/rh.defects.fix.annot"].join('')),
+        rh_defects_stats: execution.outputFile(["stats/rh.defects.stats"].join('')),
     };
     return ret;
 }

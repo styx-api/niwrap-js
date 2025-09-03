@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_NWARP_APPLY_METADATA: Metadata = {
-    id: "482fdd065e612d0faece31b8bc78fd21f004b766.boutiques",
+    id: "94650c96cb1695b5fc708a7dc1df1d53d4b95008.boutiques",
     name: "3dNwarpApply",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -78,10 +78,6 @@ interface V3dNwarpApplyOutputs {
      * Warped output dataset
      */
     warped_output: OutputPathType | null;
-    /**
-     * Warp dataset generated during application
-     */
-    generated_warp: OutputPathType | null;
 }
 
 
@@ -259,7 +255,6 @@ function v_3d_nwarp_apply_outputs(
     const ret: V3dNwarpApplyOutputs = {
         root: execution.outputFile("."),
         warped_output: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_", (params["source"] ?? null), "_warped.nii.gz"].join('')) : null,
-        generated_warp: ((params["wprefix"] ?? null) !== null) ? execution.outputFile([(params["wprefix"] ?? null), "_warp_????.nii.gz"].join('')) : null,
     };
     return ret;
 }

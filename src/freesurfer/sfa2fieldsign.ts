@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SFA2FIELDSIGN_METADATA: Metadata = {
-    id: "7f94ee11352613b06c9c4748c7eadb754e7722c8.boutiques",
+    id: "3ddfac468eca45550f7aa9f66a5850af84aa7f1f.boutiques",
     name: "sfa2fieldsign",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -73,27 +73,39 @@ interface Sfa2fieldsignOutputs {
     /**
      * Intersection of polar and eccentricity thresholded fieldsigns
      */
-    fsig_bin: OutputPathType;
+    fsig_bin: OutputPathType | null;
     /**
      * Eccentricity angle (rad) volume masked by fieldsign bin
      */
-    eccen_masked: OutputPathType;
+    eccen_masked: OutputPathType | null;
     /**
      * Polar angle (rad) volume masked by fieldsign bin
      */
-    polar_masked: OutputPathType;
+    polar_masked: OutputPathType | null;
     /**
-     * Masked eccentricity angle sampled on the hemisphere surface
+     * Masked eccentricity angle sampled on the left hemisphere surface
      */
-    eccen_masked_mgh: OutputPathType;
+    left_eccen_masked_mgh: OutputPathType | null;
     /**
-     * Masked polar angle sampled on the hemisphere surface
+     * Masked polar angle sampled on the left hemisphere surface
      */
-    polar_masked_mgh: OutputPathType;
+    left_polar_masked_mgh: OutputPathType | null;
     /**
-     * Masked fieldsign map
+     * Masked fieldsign map on left hemispehre
      */
-    fieldsign_masked_mgh: OutputPathType;
+    left_fieldsign_masked_mgh: OutputPathType | null;
+    /**
+     * Masked eccentricity angle sampled on the right hemisphere surface
+     */
+    right_eccen_masked_mgh: OutputPathType | null;
+    /**
+     * Masked polar angle sampled on the right hemisphere surface
+     */
+    right_polar_masked_mgh: OutputPathType | null;
+    /**
+     * Masked fieldsign map on the right hemisphere
+     */
+    right_fieldsign_masked_mgh: OutputPathType | null;
 }
 
 
@@ -105,7 +117,7 @@ interface Sfa2fieldsignOutputs {
  * @param threshold Sigthresh threshold (Default: 2)
  * @param fwhm Full width at half maximum (FWHM) (Default: 10mm)
  * @param proj_frac Projection fraction (Default: 0.5)
- * @param occip Use ?h.occip.patch.flat
+ * @param occip Use rh.occip.patch.flat
  * @param patch Use specific patch (?)h.patch
  * @param osd Directory under SFA to put output (Default: fieldsign)
  * @param lh Process left hemisphere only
@@ -121,7 +133,7 @@ function sfa2fieldsign_params(
     proj_frac: number | null = 0.5,
     occip: boolean = false,
     patch: string | null = null,
-    osd: string | null = null,
+    osd: string | null = "fieldsign",
     lh: boolean = false,
     rh: boolean = false,
 ): Sfa2fieldsignParameters {
@@ -231,12 +243,15 @@ function sfa2fieldsign_outputs(
 ): Sfa2fieldsignOutputs {
     const ret: Sfa2fieldsignOutputs = {
         root: execution.outputFile("."),
-        fsig_bin: execution.outputFile([(params["sfadir"] ?? null), "/[OSD or fieldsign]/fsig.bin.nii"].join('')),
-        eccen_masked: execution.outputFile([(params["sfadir"] ?? null), "/[OSD or fieldsign]/eccen.masked.nii"].join('')),
-        polar_masked: execution.outputFile([(params["sfadir"] ?? null), "/[OSD or fieldsign]/polar.masked.nii"].join('')),
-        eccen_masked_mgh: execution.outputFile([(params["sfadir"] ?? null), "/[OSD or fieldsign]/?h.eccen.masked.mgh"].join('')),
-        polar_masked_mgh: execution.outputFile([(params["sfadir"] ?? null), "/[OSD or fieldsign]/?h.polar.masked.mgh"].join('')),
-        fieldsign_masked_mgh: execution.outputFile([(params["sfadir"] ?? null), "/[OSD or fieldsign]/?h.fieldsign.masked.mgh"].join('')),
+        fsig_bin: ((params["osd"] ?? null) !== null) ? execution.outputFile([(params["sfadir"] ?? null), "/", (params["osd"] ?? null), "/fsig.bin.nii"].join('')) : null,
+        eccen_masked: ((params["osd"] ?? null) !== null) ? execution.outputFile([(params["sfadir"] ?? null), "/", (params["osd"] ?? null), "/eccen.masked.nii"].join('')) : null,
+        polar_masked: ((params["osd"] ?? null) !== null) ? execution.outputFile([(params["sfadir"] ?? null), "/", (params["osd"] ?? null), "/polar.masked.nii"].join('')) : null,
+        left_eccen_masked_mgh: ((params["osd"] ?? null) !== null) ? execution.outputFile([(params["sfadir"] ?? null), "/", (params["osd"] ?? null), "/lh.eccen.masked.mgh"].join('')) : null,
+        left_polar_masked_mgh: ((params["osd"] ?? null) !== null) ? execution.outputFile([(params["sfadir"] ?? null), "/", (params["osd"] ?? null), "/lh.polar.masked.mgh"].join('')) : null,
+        left_fieldsign_masked_mgh: ((params["osd"] ?? null) !== null) ? execution.outputFile([(params["sfadir"] ?? null), "/", (params["osd"] ?? null), "/lh.fieldsign.masked.mgh"].join('')) : null,
+        right_eccen_masked_mgh: ((params["osd"] ?? null) !== null) ? execution.outputFile([(params["sfadir"] ?? null), "/", (params["osd"] ?? null), "/rh.eccen.masked.mgh"].join('')) : null,
+        right_polar_masked_mgh: ((params["osd"] ?? null) !== null) ? execution.outputFile([(params["sfadir"] ?? null), "/", (params["osd"] ?? null), "/rh.polar.masked.mgh"].join('')) : null,
+        right_fieldsign_masked_mgh: ((params["osd"] ?? null) !== null) ? execution.outputFile([(params["sfadir"] ?? null), "/", (params["osd"] ?? null), "/rh.fieldsign.masked.mgh"].join('')) : null,
     };
     return ret;
 }
@@ -284,7 +299,7 @@ function sfa2fieldsign_execute(
  * @param threshold Sigthresh threshold (Default: 2)
  * @param fwhm Full width at half maximum (FWHM) (Default: 10mm)
  * @param proj_frac Projection fraction (Default: 0.5)
- * @param occip Use ?h.occip.patch.flat
+ * @param occip Use rh.occip.patch.flat
  * @param patch Use specific patch (?)h.patch
  * @param osd Directory under SFA to put output (Default: fieldsign)
  * @param lh Process left hemisphere only
@@ -301,7 +316,7 @@ function sfa2fieldsign(
     proj_frac: number | null = 0.5,
     occip: boolean = false,
     patch: string | null = null,
-    osd: string | null = null,
+    osd: string | null = "fieldsign",
     lh: boolean = false,
     rh: boolean = false,
     runner: Runner | null = null,

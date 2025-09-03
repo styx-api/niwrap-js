@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_MEAN_METADATA: Metadata = {
-    id: "66db8b2cf4b9457a41b7a29a860b777a3814d4b9.boutiques",
+    id: "571ff3f7286d65855127176404d21db428e28a64.boutiques",
     name: "3dMean",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -260,7 +260,7 @@ function v_3d_mean_outputs(
 ): V3dMeanOutputs {
     const ret: V3dMeanOutputs = {
         root: execution.outputFile("."),
-        output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "<+optional_extension>"].join('')) : null,
+        output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
     };
     return ret;
 }

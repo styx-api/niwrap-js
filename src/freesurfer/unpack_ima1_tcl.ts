@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const UNPACK_IMA1_TCL_METADATA: Metadata = {
-    id: "2f44fce6973250c18da864f8fa4ee59aea5aae9d.boutiques",
+    id: "feba8f97ee33b863f2d23ca99c81c725a6e572db.boutiques",
     name: "unpack_ima1.tcl",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -63,9 +63,9 @@ interface UnpackIma1TclOutputs {
      */
     root: OutputPathType;
     /**
-     * Unpacked files stored in the output directory
+     * Output directory containing unpacked files
      */
-    unpacked_files: OutputPathType;
+    output_directory: OutputPathType;
 }
 
 
@@ -124,7 +124,7 @@ function unpack_ima1_tcl_outputs(
 ): UnpackIma1TclOutputs {
     const ret: UnpackIma1TclOutputs = {
         root: execution.outputFile("."),
-        unpacked_files: execution.outputFile([(params["output_directory"] ?? null), "/*"].join('')),
+        output_directory: execution.outputFile([(params["output_directory"] ?? null)].join('')),
     };
     return ret;
 }

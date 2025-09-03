@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__ANIMAL_WARPER_METADATA: Metadata = {
-    id: "d18a46908cadbc841d2123e4a66cc4c7fc5756d3.boutiques",
+    id: "cc064e07f8008181abbbbdaa9ff330c68d4fbd84.boutiques",
     name: "@animal_warper",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -484,8 +484,8 @@ function v__animal_warper_outputs(
     const ret: VAnimalWarperOutputs = {
         root: execution.outputFile("."),
         warp2std: execution.outputFile(["aw_results/", path.basename((params["input_file"] ?? null)), "_warp2std.nii.gz"].join('')),
-        qc_image_initial: execution.outputFile(["aw_results/init_qc_00.input+base*.jpg"].join('')),
-        qc_image_initial_sh: execution.outputFile(["aw_results/init_qc_01.input_sh+base*.jpg"].join('')),
+        qc_image_initial: execution.outputFile(["aw_results/init_qc_00.input+base.jpg"].join('')),
+        qc_image_initial_sh: execution.outputFile(["aw_results/init_qc_01.input_sh+base.jpg"].join('')),
         dset_followers_out: execution.outputFile(["aw_results/DSET_FOLL.nii.gz"].join('')),
         roidset_followers_out: execution.outputFile(["aw_results/ROIDSET_FOLL.nii.gz"].join('')),
         animal_outs_guide: execution.outputFile(["aw_results/animal_outs.txt"].join('')),

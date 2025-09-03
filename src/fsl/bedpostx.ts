@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BEDPOSTX_METADATA: Metadata = {
-    id: "63953cadd31dba0e63cb83d39dff3c9e3f583e39.boutiques",
+    id: "eca810f81792889cfcc3441cdb63663e91cb695b.boutiques",
     name: "bedpostx",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -69,11 +69,11 @@ interface BedpostxOutputs {
      */
     root: OutputPathType;
     /**
-     * Output transformations.
+     * Output transformations directory.
      */
     xfms_output: OutputPathType;
     /**
-     * Output diffusion slices.
+     * Output diffusion slices directory.
      */
     diff_slices_output: OutputPathType;
 }
@@ -202,8 +202,8 @@ function bedpostx_outputs(
 ): BedpostxOutputs {
     const ret: BedpostxOutputs = {
         root: execution.outputFile("."),
-        xfms_output: execution.outputFile([(params["subject_dir"] ?? null), "_bedpostx/xfms/*"].join('')),
-        diff_slices_output: execution.outputFile([(params["subject_dir"] ?? null), "_bedpostx/diff_slices/*"].join('')),
+        xfms_output: execution.outputFile([(params["subject_dir"] ?? null), "_bedpostx/xfms"].join('')),
+        diff_slices_output: execution.outputFile([(params["subject_dir"] ?? null), "_bedpostx/diff_slices"].join('')),
     };
     return ret;
 }

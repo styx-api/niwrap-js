@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SUMA_RENUMBER_FS_METADATA: Metadata = {
-    id: "d6b26ce01bc843b54df7040889d91aaf2856abf4.boutiques",
+    id: "36cc26b0ba811b8c0e9853ad670754a15c232786.boutiques",
     name: "@SUMA_renumber_FS",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -159,17 +159,17 @@ function v__suma_renumber_fs_outputs(
 ): VSumaRenumberFsOutputs {
     const ret: VSumaRenumberFsOutputs = {
         root: execution.outputFile("."),
-        ren_all: execution.outputFile(["*_REN_all.nii.gz"].join('')),
-        ren_gm: execution.outputFile(["*_REN_gm.nii.gz"].join('')),
-        ren_wmat: execution.outputFile(["*_REN_wmat.nii.gz"].join('')),
-        ren_csf: execution.outputFile(["*_REN_csf.nii.gz"].join('')),
-        ren_vent: execution.outputFile(["*_REN_vent.nii.gz"].join('')),
-        ren_othr: execution.outputFile(["*_REN_othr.nii.gz"].join('')),
-        ren_unkn: execution.outputFile(["*_REN_unkn.nii.gz"].join('')),
-        ren_gmrois: execution.outputFile(["*_REN_gmrois.nii.gz"].join('')),
+        ren_all: execution.outputFile(["REN_all.nii.gz"].join('')),
+        ren_gm: execution.outputFile(["REN_gm.nii.gz"].join('')),
+        ren_wmat: execution.outputFile(["REN_wmat.nii.gz"].join('')),
+        ren_csf: execution.outputFile(["REN_csf.nii.gz"].join('')),
+        ren_vent: execution.outputFile(["REN_vent.nii.gz"].join('')),
+        ren_othr: execution.outputFile(["REN_othr.nii.gz"].join('')),
+        ren_unkn: execution.outputFile(["REN_unkn.nii.gz"].join('')),
+        ren_gmrois: execution.outputFile(["REN_gmrois.nii.gz"].join('')),
         fs_ap_wm: execution.outputFile(["fs_ap_wm.nii.gz"].join('')),
         fs_ap_latvent: execution.outputFile(["fs_ap_latvent.nii.gz"].join('')),
-        ren_lbl_table: execution.outputFile(["*_REN_all.niml.lt"].join('')),
+        ren_lbl_table: execution.outputFile(["REN_all.niml.lt"].join('')),
     };
     return ret;
 }

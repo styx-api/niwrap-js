@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_VOLMASK_VTK_METADATA: Metadata = {
-    id: "a3c789f55e6c7a3e7227b6c9374dfc58b3c098e4.boutiques",
+    id: "f8c4ef4d9ac1def35648cc249ff61b45748f1ac2.boutiques",
     name: "mris_volmask_vtk",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -95,13 +95,21 @@ interface MrisVolmaskVtkOutputs {
      */
     edited_aseg_output: OutputPathType;
     /**
-     * Signed distance output for the white matter.
+     * Signed distance output for the left hemisphere white matter.
      */
-    dwhite_output: OutputPathType;
+    lh_dwhite_output: OutputPathType;
     /**
-     * Signed distance output for the pial surface.
+     * Signed distance output for the left hemisphere pial surface.
      */
-    dpial_output: OutputPathType;
+    lh_dpial_output: OutputPathType;
+    /**
+     * Signed distance output for the right hemisphere white matter.
+     */
+    rh_dwhite_output: OutputPathType;
+    /**
+     * Signed distance output for the right hemisphere pial surface.
+     */
+    rh_dpial_output: OutputPathType;
 }
 
 
@@ -317,8 +325,10 @@ function mris_volmask_vtk_outputs(
         left_ribbon_output: ((params["out_root"] ?? null) !== null) ? execution.outputFile(["mri/lh.", (params["out_root"] ?? null), ".mgz"].join('')) : null,
         right_ribbon_output: ((params["out_root"] ?? null) !== null) ? execution.outputFile(["mri/rh.", (params["out_root"] ?? null), ".mgz"].join('')) : null,
         edited_aseg_output: execution.outputFile(["mri/aseg.ribbon.mgz"].join('')),
-        dwhite_output: execution.outputFile(["mri/?h.dwhite.mgz"].join('')),
-        dpial_output: execution.outputFile(["mri/?h.dpial.mgz"].join('')),
+        lh_dwhite_output: execution.outputFile(["mri/lh.dwhite.mgz"].join('')),
+        lh_dpial_output: execution.outputFile(["mri/lh.dpial.mgz"].join('')),
+        rh_dwhite_output: execution.outputFile(["mri/rh.dwhite.mgz"].join('')),
+        rh_dpial_output: execution.outputFile(["mri/rh.dpial.mgz"].join('')),
     };
     return ret;
 }

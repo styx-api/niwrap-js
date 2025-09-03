@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_VEC_RGB_TO_HSL_METADATA: Metadata = {
-    id: "05db8a83da7be7436039f9e5ae40fa617ded47cf.boutiques",
+    id: "602149cdcf2b002a81cb0471578ab9acdabf13ec.boutiques",
     name: "3dVecRGB_to_HSL",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -154,7 +154,7 @@ function v_3d_vec_rgb_to_hsl_outputs(
 ): V3dVecRgbToHslOutputs {
     const ret: V3dVecRgbToHslOutputs = {
         root: execution.outputFile("."),
-        output_hsl_dataset: execution.outputFile([(params["prefix"] ?? null), "_HSL+*.HEAD"].join('')),
+        output_hsl_dataset: execution.outputFile([(params["prefix"] ?? null), "_HSL.HEAD"].join('')),
     };
     return ret;
 }

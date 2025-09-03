@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FAT_MAT_SEL_PY_METADATA: Metadata = {
-    id: "88fca2178c80442aa63260a3d75da0e0c0b65a59.boutiques",
+    id: "56e6453438535be606f5cebd09a0075bd7b18644.boutiques",
     name: "fat_mat_sel.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -84,17 +84,17 @@ interface FatMatSelPyOutputs {
      */
     root: OutputPathType;
     /**
-     * Individual images of matrix plots.
+     * Directory containing individual images of matrix plots.
      */
-    individual_images: OutputPathType;
+    individual_images_directory: OutputPathType;
     /**
-     * Output matrix grid files.
+     * Directory of output matrix grid files.
      */
-    matrix_grids: OutputPathType;
+    matrix_grids_directory: OutputPathType;
     /**
-     * Output 1D dataset files.
+     * Output directory of 1D dataset files.
      */
-    v_1_d_dsets: OutputPathType;
+    v_1_d_dsets_directory: OutputPathType;
 }
 
 
@@ -354,9 +354,9 @@ function fat_mat_sel_py_outputs(
 ): FatMatSelPyOutputs {
     const ret: FatMatSelPyOutputs = {
         root: execution.outputFile("."),
-        individual_images: execution.outputFile(["individual_images/*"].join('')),
-        matrix_grids: execution.outputFile(["matrix_grids/*"].join('')),
-        v_1_d_dsets: execution.outputFile(["1D_dsets/*"].join('')),
+        individual_images_directory: execution.outputFile(["individual_images"].join('')),
+        matrix_grids_directory: execution.outputFile(["matrix_grids"].join('')),
+        v_1_d_dsets_directory: execution.outputFile(["1D_dsets"].join('')),
     };
     return ret;
 }

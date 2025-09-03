@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FABBER_DWI_METADATA: Metadata = {
-    id: "813192af194a967eee2060c82a7369161e5c3dd9.boutiques",
+    id: "c68b5ea0caae52c8c056bdb46bddab4759760e54.boutiques",
     name: "fabber_dwi",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -97,7 +97,7 @@ interface FabberDwiOutputs {
      */
     root: OutputPathType;
     /**
-     * All outputs will be stored in the specified output directory
+     * Specified output directory storing all outputs
      */
     output_files: OutputPathType;
 }
@@ -420,7 +420,7 @@ function fabber_dwi_outputs(
 ): FabberDwiOutputs {
     const ret: FabberDwiOutputs = {
         root: execution.outputFile("."),
-        output_files: execution.outputFile([(params["output_dir"] ?? null), "/*"].join('')),
+        output_files: execution.outputFile([(params["output_dir"] ?? null)].join('')),
     };
     return ret;
 }

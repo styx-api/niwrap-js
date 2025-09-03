@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DIMON_METADATA: Metadata = {
-    id: "c892c771a45028c51f21626d1cce300d014da2d2.boutiques",
+    id: "e3ed5d018fb00fd99a4fcfd1786e665135af510b.boutiques",
     name: "Dimon",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -69,10 +69,6 @@ interface DimonOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Sorted input files with specified prefix
-     */
-    sorted_files: OutputPathType;
     /**
      * Details about sorted files
      */
@@ -222,7 +218,6 @@ function dimon_outputs(
 ): DimonOutputs {
     const ret: DimonOutputs = {
         root: execution.outputFile("."),
-        sorted_files: execution.outputFile([(params["infile_prefix"] ?? null), "*"].join('')),
         sorted_files_details: ((params["infile_list"] ?? null) !== null) ? execution.outputFile([path.basename((params["infile_list"] ?? null)), "_details"].join('')) : null,
     };
     return ret;

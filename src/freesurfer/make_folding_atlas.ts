@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKE_FOLDING_ATLAS_METADATA: Metadata = {
-    id: "5c53218428de33badf3c43ee3c12c11136a54df8.boutiques",
+    id: "7d950e528878826072902a114342355a24eb6c2b.boutiques",
     name: "make_folding_atlas",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -64,7 +64,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "freesurfer.make_folding_atlas": make_folding_atlas_outputs,
     };
     return outputsFuncs[t];
 }
@@ -80,10 +79,6 @@ interface MakeFoldingAtlasOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Average subject folder that contains the atlas files for each iteration.
-     */
-    average_subject_folder: OutputPathType | null;
 }
 
 
@@ -304,7 +299,6 @@ function make_folding_atlas_outputs(
 ): MakeFoldingAtlasOutputs {
     const ret: MakeFoldingAtlasOutputs = {
         root: execution.outputFile("."),
-        average_subject_folder: ((params["output_base"] ?? null) !== null) ? execution.outputFile([(params["output_base"] ?? null), ".i*"].join('')) : null,
     };
     return ret;
 }

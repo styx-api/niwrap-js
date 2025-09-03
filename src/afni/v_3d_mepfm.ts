@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_MEPFM_METADATA: Metadata = {
-    id: "d38c4d0eb3693584d4549cd2a7bc0b493dbd1836.boutiques",
+    id: "bc53fa2a4caa4ba2c5ec1f96f74e24ae31978ff4.boutiques",
     name: "3dMEPFM",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -185,12 +185,12 @@ function v_3d_mepfm_outputs(
 ): V3dMepfmOutputs {
     const ret: V3dMepfmOutputs = {
         root: execution.outputFile("."),
-        dr2_output: execution.outputFile(["DR2_[PREFIX]_*.nii.gz"].join('')),
-        dr2fit_output: execution.outputFile(["DR2fit_[PREFIX]_*.nii.gz"].join('')),
-        ds0_output: execution.outputFile(["DS0_[PREFIX]_*.nii.gz"].join('')),
-        lambda_output: execution.outputFile(["lambda_[PREFIX]_*.nii.gz"].join('')),
-        sigmas_mad_output: execution.outputFile(["sigmas_MAD_[PREFIX]_*.nii.gz"].join('')),
-        costs_output: execution.outputFile(["costs_[PREFIX]_*.nii.gz"].join('')),
+        dr2_output: execution.outputFile(["DR2_[PREFIX].nii.gz"].join('')),
+        dr2fit_output: execution.outputFile(["DR2fit_[PREFIX].nii.gz"].join('')),
+        ds0_output: execution.outputFile(["DS0_[PREFIX].nii.gz"].join('')),
+        lambda_output: execution.outputFile(["lambda_[PREFIX].nii.gz"].join('')),
+        sigmas_mad_output: execution.outputFile(["sigmas_MAD_[PREFIX].nii.gz"].join('')),
+        costs_output: execution.outputFile(["costs_[PREFIX].nii.gz"].join('')),
     };
     return ret;
 }

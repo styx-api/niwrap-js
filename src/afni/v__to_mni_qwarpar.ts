@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__TO_MNI_QWARPAR_METADATA: Metadata = {
-    id: "d56ea262996a4cde8c195ff538d38d88a827a2b1.boutiques",
+    id: "fe5468e596137ff818933f68c4ecd2f95684e846.boutiques",
     name: "@toMNI_Qwarpar",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -124,7 +124,7 @@ function v__to_mni_qwarpar_outputs(
 ): VToMniQwarparOutputs {
     const ret: VToMniQwarparOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile(["*_uni+tlrc.HEAD"].join('')),
+        output_file: execution.outputFile(["uni+tlrc.HEAD"].join('')),
     };
     return ret;
 }

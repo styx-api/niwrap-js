@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IMCUTUP_METADATA: Metadata = {
-    id: "b1adabd616594192ac521f6cca28633dc2132145.boutiques",
+    id: "43fa5585a6eaffb033a1081d2fd7ef7e71ec60a8.boutiques",
     name: "imcutup",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -52,7 +52,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.imcutup": imcutup_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,10 +67,6 @@ interface ImcutupOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output smaller images with the specified prefix numbering format.
-     */
-    output_files: OutputPathType | null;
 }
 
 
@@ -169,7 +164,6 @@ function imcutup_outputs(
 ): ImcutupOutputs {
     const ret: ImcutupOutputs = {
         root: execution.outputFile("."),
-        output_files: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "*"].join('')) : null,
     };
     return ret;
 }

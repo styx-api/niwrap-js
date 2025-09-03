@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MCFLIRT_METADATA: Metadata = {
-    id: "1091e69bcf11c445597aea81550c90105968bc6e.boutiques",
+    id: "e0129e82063dfe59a8084cda3d32a9fd0f3f4341.boutiques",
     name: "mcflirt",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -81,10 +81,6 @@ interface McflirtOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * A list of items which are an existing file name. Transformation matrices.
-     */
-    mat_file: OutputPathType;
     /**
      * Mean timeseries image (if mean_vol=true).
      */
@@ -347,7 +343,6 @@ function mcflirt_outputs(
 ): McflirtOutputs {
     const ret: McflirtOutputs = {
         root: execution.outputFile("."),
-        mat_file: execution.outputFile(["MAT_*"].join('')),
         mean_img: ((params["out_file"] ?? null) !== null) ? execution.outputFile([(params["out_file"] ?? null), "_mean_reg.ext"].join('')) : null,
         out_file: ((params["out_file"] ?? null) !== null) ? execution.outputFile([(params["out_file"] ?? null)].join('')) : null,
         par_file: ((params["out_file"] ?? null) !== null) ? execution.outputFile([(params["out_file"] ?? null), ".par"].join('')) : null,

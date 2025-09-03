@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_MANN_WHITNEY_METADATA: Metadata = {
-    id: "e0fe96cdc7cfcb9551b9f02dac2ae2e304e42627.boutiques",
+    id: "26e22ab3c64e39c35f9f65bfe15c490fbd36999c.boutiques",
     name: "3dMannWhitney",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -49,7 +49,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.3dMannWhitney": v_3d_mann_whitney_outputs,
     };
     return outputsFuncs[t];
 }
@@ -65,10 +64,6 @@ interface V3dMannWhitneyOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output files for the estimated population delta and Wilcoxon-Mann-Whitney statistics.
-     */
-    output_files: OutputPathType;
 }
 
 
@@ -162,7 +157,6 @@ function v_3d_mann_whitney_outputs(
 ): V3dMannWhitneyOutputs {
     const ret: V3dMannWhitneyOutputs = {
         root: execution.outputFile("."),
-        output_files: execution.outputFile([(params["output_prefix"] ?? null), "*"].join('')),
     };
     return ret;
 }

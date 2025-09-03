@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_EXVIVO_SURFACES_METADATA: Metadata = {
-    id: "7ce3e563615260c1b6239fcc9ac31d31931b5872.boutiques",
+    id: "9aa1e71a4ba662f9bb2d5e13ebea8be3ca4a2485.boutiques",
     name: "mris_exvivo_surfaces",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -181,10 +181,10 @@ function mris_exvivo_surfaces_outputs(
 ): MrisExvivoSurfacesOutputs {
     const ret: MrisExvivoSurfacesOutputs = {
         root: execution.outputFile("."),
-        white_surface: execution.outputFile(["<subject_name>_<hemisphere>_white"].join('')),
-        gray_surface: execution.outputFile(["<subject_name>_<hemisphere>_gray"].join('')),
-        curvature_file: execution.outputFile(["<subject_name>_<hemisphere>_curvature"].join('')),
-        layer_iv_surface: execution.outputFile(["<subject_name>_<hemisphere>_layerIV"].join('')),
+        white_surface: execution.outputFile([(params["subject_name"] ?? null), "_", (params["hemisphere"] ?? null), "_white"].join('')),
+        gray_surface: execution.outputFile([(params["subject_name"] ?? null), "_", (params["hemisphere"] ?? null), "_gray"].join('')),
+        curvature_file: execution.outputFile([(params["subject_name"] ?? null), "_", (params["hemisphere"] ?? null), "_curvature"].join('')),
+        layer_iv_surface: execution.outputFile([(params["subject_name"] ?? null), "_", (params["hemisphere"] ?? null), "_layerIV"].join('')),
     };
     return ret;
 }

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_SURF2_VOL_METADATA: Metadata = {
-    id: "fa9697733e4cdedac6e9ad32c1f0b6636170c645.boutiques",
+    id: "14b2b0e145e4a003c0ef00b979511c3cd7e14d9b.boutiques",
     name: "3dSurf2Vol",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -69,7 +69,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.3dSurf2Vol": v_3d_surf2_vol_outputs,
     };
     return outputsFuncs[t];
 }
@@ -85,10 +84,6 @@ interface V3dSurf2VolOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output dataset
-     */
-    output_file: OutputPathType;
 }
 
 
@@ -375,7 +370,6 @@ function v_3d_surf2_vol_outputs(
 ): V3dSurf2VolOutputs {
     const ret: V3dSurf2VolOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile([(params["prefix"] ?? null), "+*[gz]"].join('')),
     };
     return ret;
 }

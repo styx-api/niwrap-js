@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_NEUROIMAGING_BATTERY_METADATA: Metadata = {
-    id: "fda9086beff33e279b7a3690f4eec41fd3bcdc45.boutiques",
+    id: "95e3e2dd95a781fa72c8a244897c1688f10ab37d.boutiques",
     name: "antsNeuroimagingBattery",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -80,9 +80,9 @@ interface AntsNeuroimagingBatteryOutputs {
      */
     root: OutputPathType;
     /**
-     * Output transform files.
+     * Directory containing output transform files.
      */
-    output_transform: OutputPathType;
+    output_directory: OutputPathType;
 }
 
 
@@ -312,7 +312,7 @@ function ants_neuroimaging_battery_outputs(
 ): AntsNeuroimagingBatteryOutputs {
     const ret: AntsNeuroimagingBatteryOutputs = {
         root: execution.outputFile("."),
-        output_transform: execution.outputFile([(params["output_directory"] ?? null), "/", (params["output_name"] ?? null), ".*"].join('')),
+        output_directory: execution.outputFile([(params["output_directory"] ?? null)].join('')),
     };
     return ret;
 }

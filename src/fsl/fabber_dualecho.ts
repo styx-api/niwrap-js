@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FABBER_DUALECHO_METADATA: Metadata = {
-    id: "b1b3ef305e828618a56f324d1685eaa71fa216a8.boutiques",
+    id: "289052fc726f486069f3c7321d2f682e41dc5992.boutiques",
     name: "fabber_dualecho",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -96,9 +96,9 @@ interface FabberDualechoOutputs {
      */
     root: OutputPathType;
     /**
-     * All output files will be stored in the output directory specified by the user.
+     * Output directory specified by the user to store output files.
      */
-    output_files: OutputPathType;
+    output_directory: OutputPathType;
 }
 
 
@@ -405,7 +405,7 @@ function fabber_dualecho_outputs(
 ): FabberDualechoOutputs {
     const ret: FabberDualechoOutputs = {
         root: execution.outputFile("."),
-        output_files: execution.outputFile([(params["output_directory"] ?? null), "/*"].join('')),
+        output_directory: execution.outputFile([(params["output_directory"] ?? null)].join('')),
     };
     return ret;
 }

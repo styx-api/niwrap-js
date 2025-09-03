@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SPHARM_DECO_METADATA: Metadata = {
-    id: "17ed1e33cae4fff9df92d0adb8f450d2e0de7d46.boutiques",
+    id: "3cbbf2779039075f5f650ce59cd2419e01af55c0.boutiques",
     name: "SpharmDeco",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -71,17 +71,9 @@ interface SpharmDecoOutputs {
      */
     root: OutputPathType;
     /**
-     * File for harmonics of each order l.
-     */
-    harmonics_file: OutputPathType;
-    /**
-     * Beta coefficients for each data column.
-     */
-    beta_coefficients: OutputPathType;
-    /**
      * Reconstructed data or surface files named based on PREFIX.
      */
-    reconstructed_data: OutputPathType;
+    reconstructed_data: OutputPathType | null;
 }
 
 
@@ -206,9 +198,7 @@ function spharm_deco_outputs(
 ): SpharmDecoOutputs {
     const ret: SpharmDecoOutputs = {
         root: execution.outputFile("."),
-        harmonics_file: execution.outputFile(["BASES_PREFIX.sph*.1D"].join('')),
-        beta_coefficients: execution.outputFile(["PREFIX.beta.col*.1D.dset"].join('')),
-        reconstructed_data: execution.outputFile(["<PREFIX>_reconstructed"].join('')),
+        reconstructed_data: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_reconstructed"].join('')) : null,
     };
     return ret;
 }

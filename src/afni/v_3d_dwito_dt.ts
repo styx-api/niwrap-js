@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_DWITO_DT_METADATA: Metadata = {
-    id: "9a917bfe0fc87dc6e13908baec1679a6c7340c54.boutiques",
+    id: "c00d4877e12787222087d64be0068a1f3af3d147.boutiques",
     name: "3dDWItoDT",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -70,7 +70,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.3dDWItoDT": v_3d_dwito_dt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -86,10 +85,6 @@ interface V3dDwitoDtOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output dataset
-     */
-    output_dataset: OutputPathType;
 }
 
 
@@ -362,7 +357,6 @@ function v_3d_dwito_dt_outputs(
 ): V3dDwitoDtOutputs {
     const ret: V3dDwitoDtOutputs = {
         root: execution.outputFile("."),
-        output_dataset: execution.outputFile(["<PREFIX>.*"].join('')),
     };
     return ret;
 }

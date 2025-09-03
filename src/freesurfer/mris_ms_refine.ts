@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_MS_REFINE_METADATA: Metadata = {
-    id: "91b7755f469e5c9dbb00e033cd00aadb63d9ea59.boutiques",
+    id: "a72602375dfc7e668271300addd2b337e03a3c9c.boutiques",
     name: "mris_ms_refine",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -184,10 +184,10 @@ function mris_ms_refine_outputs(
 ): MrisMsRefineOutputs {
     const ret: MrisMsRefineOutputs = {
         root: execution.outputFile("."),
-        white_surface: execution.outputFile(["<subject name>/<hemisphere>.white"].join('')),
-        pial_surface: execution.outputFile(["<subject name>/<hemisphere>.pial"].join('')),
-        curvature_file: execution.outputFile(["<subject name>/<hemisphere>.curv"].join('')),
-        layer_iv_surface: execution.outputFile(["<subject name>/<hemisphere>.layerIV"].join('')),
+        white_surface: execution.outputFile([(params["subject_name"] ?? null), "/", (params["hemisphere"] ?? null), ".white"].join('')),
+        pial_surface: execution.outputFile([(params["subject_name"] ?? null), "/", (params["hemisphere"] ?? null), ".pial"].join('')),
+        curvature_file: execution.outputFile([(params["subject_name"] ?? null), "/", (params["hemisphere"] ?? null), ".curv"].join('')),
+        layer_iv_surface: execution.outputFile([(params["subject_name"] ?? null), "/", (params["hemisphere"] ?? null), ".layerIV"].join('')),
     };
     return ret;
 }

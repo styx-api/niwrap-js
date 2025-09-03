@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3DMAXIMA_METADATA: Metadata = {
-    id: "0315ff99294041a685b14686e0066820acd7ec57.boutiques",
+    id: "661dd15298456527027272fd23dafea809da020e.boutiques",
     name: "3dmaxima",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -83,7 +83,11 @@ interface V3dmaximaOutputs {
     /**
      * Output mask dataset with extrema locations
      */
-    output_mask: OutputPathType | null;
+    output_mask_head: OutputPathType | null;
+    /**
+     * Output mask dataset with extrema locations
+     */
+    output_mask_brik: OutputPathType | null;
 }
 
 
@@ -277,7 +281,8 @@ function v_3dmaxima_outputs(
 ): V3dmaximaOutputs {
     const ret: V3dmaximaOutputs = {
         root: execution.outputFile("."),
-        output_mask: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "_mask+orig.[HEAD | BRIK]"].join('')) : null,
+        output_mask_head: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "_mask+orig.HEAD"].join('')) : null,
+        output_mask_brik: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "_mask+orig.BRIK"].join('')) : null,
     };
     return ret;
 }

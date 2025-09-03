@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_FDR_METADATA: Metadata = {
-    id: "316ec0f1abca1c111af4b154202abb9f68062f9b.boutiques",
+    id: "95146d3cb09d5d86688c31f3c0183c9f2a059102.boutiques",
     name: "surface_fdr",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -69,10 +69,6 @@ interface SurfaceFdrOutputs {
      * Output VTK file with FDR thresholded values
      */
     fthresh_vtk: OutputPathType;
-    /**
-     * Additional output NIFTI images
-     */
-    nifti_images: OutputPathType;
 }
 
 
@@ -129,7 +125,6 @@ function surface_fdr_outputs(
         root: execution.outputFile("."),
         pvals_vtk: execution.outputFile([path.basename((params["input_vtk"] ?? null)), "_pvals.vtk"].join('')),
         fthresh_vtk: execution.outputFile([path.basename((params["input_vtk"] ?? null)), "_Fthresh.vtk"].join('')),
-        nifti_images: execution.outputFile([path.basename((params["input_vtk"] ?? null)), "_*"].join('')),
     };
     return ret;
 }

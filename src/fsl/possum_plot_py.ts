@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const POSSUM_PLOT_PY_METADATA: Metadata = {
-    id: "bd2b6b8b85bcd1d3167b1b04cdbf739929894a10.boutiques",
+    id: "19ab21ede9c348f44ba5e2d815ff44745892ba05.boutiques",
     name: "possum_plot.py",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -46,7 +46,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "fsl.possum_plot.py": possum_plot_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -62,10 +61,6 @@ interface PossumPlotPyOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output plot images from POSSUM
-     */
-    output_plots: OutputPathType;
 }
 
 
@@ -124,7 +119,6 @@ function possum_plot_py_outputs(
 ): PossumPlotPyOutputs {
     const ret: PossumPlotPyOutputs = {
         root: execution.outputFile("."),
-        output_plots: execution.outputFile([(params["output_basename"] ?? null), "_*.png"].join('')),
     };
     return ret;
 }

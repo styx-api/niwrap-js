@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DCM2NIIX_AFNI_METADATA: Metadata = {
-    id: "7cf66629029a0771961d7c7125e4684dcd412a4d.boutiques",
+    id: "7c94d4a8bb664938a38b9af031fdc0915f82c3ec.boutiques",
     name: "dcm2niix_afni",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -90,9 +90,9 @@ interface Dcm2niixAfniOutputs {
      */
     root: OutputPathType;
     /**
-     * The main output NIfTI files
+     * The directory containing main output NIfTI files
      */
-    nifti_files: OutputPathType;
+    output_directory: OutputPathType | null;
 }
 
 
@@ -430,7 +430,7 @@ function dcm2niix_afni_outputs(
 ): Dcm2niixAfniOutputs {
     const ret: Dcm2niixAfniOutputs = {
         root: execution.outputFile("."),
-        nifti_files: execution.outputFile(["<OUTPUT_DIRECTORY>/*.nii"].join('')),
+        output_directory: ((params["output_directory"] ?? null) !== null) ? execution.outputFile([(params["output_directory"] ?? null)].join('')) : null,
     };
     return ret;
 }

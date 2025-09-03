@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKE_CORTEX_LABEL_METADATA: Metadata = {
-    id: "2211504b8e9709cb80a7eb6e4d9b734d783a055e.boutiques",
+    id: "231e799f73603ebd33e17c16341a19cbfd26939a.boutiques",
     name: "make_cortex_label",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -65,9 +65,13 @@ interface MakeCortexLabelOutputs {
      */
     root: OutputPathType;
     /**
-     * The output cortex label file.
+     * The left hemisphere output cortex label file.
      */
-    output_label_file: OutputPathType | null;
+    lh_output_label_file: OutputPathType | null;
+    /**
+     * The right hemisphere output cortex label file.
+     */
+    rh_output_label_file: OutputPathType | null;
 }
 
 
@@ -153,7 +157,8 @@ function make_cortex_label_outputs(
 ): MakeCortexLabelOutputs {
     const ret: MakeCortexLabelOutputs = {
         root: execution.outputFile("."),
-        output_label_file: ((params["output_name"] ?? null) !== null) ? execution.outputFile(["?h.", (params["output_name"] ?? null), ".label"].join('')) : null,
+        lh_output_label_file: ((params["output_name"] ?? null) !== null) ? execution.outputFile(["lh.", (params["output_name"] ?? null), ".label"].join('')) : null,
+        rh_output_label_file: ((params["output_name"] ?? null) !== null) ? execution.outputFile(["rh.", (params["output_name"] ?? null), ".label"].join('')) : null,
     };
     return ret;
 }

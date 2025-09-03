@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_MULTIVARIATE_TEMPLATE_CONSTRUCTION2_SH_METADATA: Metadata = {
-    id: "b866ae2f76511eca887345fe0515e30b2318f31e.boutiques",
+    id: "db2efca66d9d39c14e98577f3a638cb0f63e4218.boutiques",
     name: "antsMultivariateTemplateConstruction2.sh",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -13,7 +13,33 @@ const ANTS_MULTIVARIATE_TEMPLATE_CONSTRUCTION2_SH_METADATA: Metadata = {
 
 interface AntsMultivariateTemplateConstruction2ShParameters {
     "@type": "ants.antsMultivariateTemplateConstruction2.sh";
-    "input": string;
+    "dimension": 2 | 3 | 4;
+    "output_prefix"?: string | null | undefined;
+    "image_statistic"?: 0 | 1 | 2 | null | undefined;
+    "sharpening"?: 0 | 1 | 2 | null | undefined;
+    "backup_images"?: 0 | 1 | null | undefined;
+    "parallel_control"?: 0 | 1 | 2 | 3 | 4 | 5 | null | undefined;
+    "single_precision"?: 0 | 1 | null | undefined;
+    "gradient_step"?: number | null | undefined;
+    "iterations"?: number | null | undefined;
+    "cpu_cores"?: number | null | undefined;
+    "num_modalities"?: number | null | undefined;
+    "modality_weights"?: string | null | undefined;
+    "max_iterations"?: string | null | undefined;
+    "shrink_factors"?: string | null | undefined;
+    "smoothing_kernels"?: string | null | undefined;
+    "n4_bias_correction"?: 0 | 1 | null | undefined;
+    "prepend_commands"?: string | null | undefined;
+    "rigid_registration"?: 0 | 1 | null | undefined;
+    "linear_registration"?: 0 | 1 | null | undefined;
+    "similarity_metric"?: string | null | undefined;
+    "transformation_type"?: string | null | undefined;
+    "walltime"?: string | null | undefined;
+    "memory_limit"?: string | null | undefined;
+    "xgrid_args"?: string | null | undefined;
+    "update_template"?: 0 | 1 | null | undefined;
+    "target_volume"?: Array<InputPathType> | null | undefined;
+    "input_images": Array<InputPathType>;
 }
 
 
@@ -62,26 +88,154 @@ interface AntsMultivariateTemplateConstruction2ShOutputs {
      */
     root: OutputPathType;
     /**
-     * The output multivariate template.
+     * Directory containing intermediate templates and shape update warps from each iteration
      */
-    template: OutputPathType;
+    intermediate_templates_dir: OutputPathType;
 }
 
 
 /**
  * Build parameters.
  *
- * @param input Options for setting up and running the multivariate template construction process.
+ * @param dimension ImageDimension: 2 or 3 (for 2 or 3 dimensional registration of single volume), 4 (for template generation of time-series data)
+ * @param input_images List of images in the current directory, eg *_t1.nii.gz. Should be at the end of the command. Optionally, one can specify a .csv or .txt file where each line is the location of the input image. One can also specify more than one file for each image for multi-modal template construction (e.g. t1 and t2). For the multi-modal case, the templates will be consecutively numbered.
+ * @param output_prefix A prefix that is prepended to all output files (default = "antsBTP")
+ * @param image_statistic Image statistic used to summarize images (default 1): 0 = mean, 1 = mean of normalized intensities, 2 = median. Normalization here means dividing each image by its mean intensity.
+ * @param sharpening Sharpening applied to template at each iteration (default 1): 0 = none, 1 = Laplacian, 2 = Unsharp mask
+ * @param backup_images Backup images and results from all iterations (default = 0): Boolean to save the transform files, bias corrected inputs, templates, transforms, and warped images for each iteration. By default, only the templates and the shape update warp field are saved.
+ * @param parallel_control Control for parallel computation (default 0): 0 = run serially, 1 = SGE qsub, 2 = use PEXEC (localhost), 3 = Apple XGrid, 4 = PBS qsub, 5 = SLURM
+ * @param single_precision Use single precision (default 1)
+ * @param gradient_step Gradient step size (default 0.25): smaller in magnitude results in more cautious steps. Use smaller steps to refine template details. 0.25 is an upper (aggressive) limit for this parameter.
+ * @param iterations Iteration limit (default 4): iterations of the template construction (Iteration limit)*NumImages registrations
+ * @param cpu_cores Number of cpu cores to use locally for pexec option (default 2; requires "-c 2")
+ * @param num_modalities Number of modalities used to construct the template (default 1): For example, if one wanted to create a multimodal template consisting of T1,T2,and FA components ("-k 3").
+ * @param modality_weights Modality weights used in the similarity metric (default = 1): specified as e.g. 1x0.5x0.75.
+ * @param max_iterations Max iterations for each pairwise registration (default = 100x100x70x20): specified in the form JxK...xF where J = max iterations at first (coarsest) resolution, K = max iterations at next resolution, F = max iterations at the final resolution
+ * @param shrink_factors Shrink factors in pairwise registration (default = 6x4x2x1): in the same form as max iterations. Must have the same number of components as the iterations and smoothing. The shrink factors are integer factors for downsampling the virtual space (usually the template image) during registration.
+ * @param smoothing_kernels Smoothing kernels in pairwise registration (default = 3x2x1x0): also in the same form as max iterations and shrink factors, with the same number of components. Standard deviation of a Gaussian smoothing kernel applied to the images before downsampling at each level. The kernel may be specified in mm units or voxels with "AxBxCmm" or "AxBxCvox". Missing units implies vox.
+ * @param n4_bias_correction N4BiasFieldCorrection of moving image: 0 off, 1 on (default 1)
+ * @param prepend_commands Commands to prepend to job scripts (e.g., change into appropriate directory, set paths, etc)
+ * @param rigid_registration Do rigid-body registration of inputs to the initial template, before doing the main pairwise registration. 0 off 1 on (default 0). If you are trying to refine or update an existing template, you would use '-r 0'. Rigid initialization is useful when you do not have an initial template, or you want to use a single image as a reference for rigid alignment only.
+ * @param linear_registration Use linear image registration stages during the pairwise (template/subject) deformable registration. Otherwise, registration is limited to SyN or B-spline SyN (see '-t' option). This is '1' by default.
+ * @param similarity_metric Type of similarity metric used for pairwise registration (default = CC). Options are case sensitive. CC = cross-correlation, MI = mutual information, MSQ = mean square difference, DEMONS = demon's metric. A similarity metric per modality can be specified. If the CC metric is chosen, one can also specify the radius in brackets, e.g. '-m "CC[4]"'.
+ * @param transformation_type Type of transformation model used for registration (default = SyN): Options are case sensitive. SyN = Greedy SyN, BSplineSyN = Greedy B-spline SyN, TimeVaryingVelocityField = Time-varying velocity field, TimeVaryingBSplineVelocityField = Time-varying B-spline velocity field. Transformation parameters may be specified with brackets, eg '-t "SyN[0.1,3,0]"'. To use linear registration only, options are: Affine = Affine (runs Rigid + Affine), Rigid = Rigid (runs Rigid only).
+ * @param walltime Walltime (default = 20:00:00): Option for PBS/SLURM qsub specifying requested time per pairwise registration
+ * @param memory_limit Memory limit (default = 8gb): Option for PBS/SLURM qsub specifying requested memory per pairwise registration
+ * @param xgrid_args XGrid arguments (e.g., -x "-p password -h controlhost")
+ * @param update_template Update the template with the full affine transform (default 1). If 0, the rigid component of the affine transform will not be used to update the template. If your template drifts in translation or orientation try "-y 0".
+ * @param target_volume Use this this volume as the target of all inputs. When not used, the script will create an unbiased starting point by averaging all inputs, then aligning the center of mass of all inputs to that of the initial average. If you do not use -z, it is recommended to use "-r 1". Use the full path. For multiple modalities, specify -z modality1.nii.gz -z modality2.nii.gz ... in the same modality order as the input images.
  *
  * @returns Parameter dictionary
  */
 function ants_multivariate_template_construction2_sh_params(
-    input: string,
+    dimension: 2 | 3 | 4,
+    input_images: Array<InputPathType>,
+    output_prefix: string | null = null,
+    image_statistic: 0 | 1 | 2 | null = null,
+    sharpening: 0 | 1 | 2 | null = null,
+    backup_images: 0 | 1 | null = null,
+    parallel_control: 0 | 1 | 2 | 3 | 4 | 5 | null = null,
+    single_precision: 0 | 1 | null = null,
+    gradient_step: number | null = null,
+    iterations: number | null = null,
+    cpu_cores: number | null = null,
+    num_modalities: number | null = null,
+    modality_weights: string | null = null,
+    max_iterations: string | null = null,
+    shrink_factors: string | null = null,
+    smoothing_kernels: string | null = null,
+    n4_bias_correction: 0 | 1 | null = null,
+    prepend_commands: string | null = null,
+    rigid_registration: 0 | 1 | null = null,
+    linear_registration: 0 | 1 | null = null,
+    similarity_metric: string | null = null,
+    transformation_type: string | null = null,
+    walltime: string | null = null,
+    memory_limit: string | null = null,
+    xgrid_args: string | null = null,
+    update_template: 0 | 1 | null = null,
+    target_volume: Array<InputPathType> | null = null,
 ): AntsMultivariateTemplateConstruction2ShParameters {
     const params = {
         "@type": "ants.antsMultivariateTemplateConstruction2.sh" as const,
-        "input": input,
+        "dimension": dimension,
+        "input_images": input_images,
     };
+    if (output_prefix !== null) {
+        params["output_prefix"] = output_prefix;
+    }
+    if (image_statistic !== null) {
+        params["image_statistic"] = image_statistic;
+    }
+    if (sharpening !== null) {
+        params["sharpening"] = sharpening;
+    }
+    if (backup_images !== null) {
+        params["backup_images"] = backup_images;
+    }
+    if (parallel_control !== null) {
+        params["parallel_control"] = parallel_control;
+    }
+    if (single_precision !== null) {
+        params["single_precision"] = single_precision;
+    }
+    if (gradient_step !== null) {
+        params["gradient_step"] = gradient_step;
+    }
+    if (iterations !== null) {
+        params["iterations"] = iterations;
+    }
+    if (cpu_cores !== null) {
+        params["cpu_cores"] = cpu_cores;
+    }
+    if (num_modalities !== null) {
+        params["num_modalities"] = num_modalities;
+    }
+    if (modality_weights !== null) {
+        params["modality_weights"] = modality_weights;
+    }
+    if (max_iterations !== null) {
+        params["max_iterations"] = max_iterations;
+    }
+    if (shrink_factors !== null) {
+        params["shrink_factors"] = shrink_factors;
+    }
+    if (smoothing_kernels !== null) {
+        params["smoothing_kernels"] = smoothing_kernels;
+    }
+    if (n4_bias_correction !== null) {
+        params["n4_bias_correction"] = n4_bias_correction;
+    }
+    if (prepend_commands !== null) {
+        params["prepend_commands"] = prepend_commands;
+    }
+    if (rigid_registration !== null) {
+        params["rigid_registration"] = rigid_registration;
+    }
+    if (linear_registration !== null) {
+        params["linear_registration"] = linear_registration;
+    }
+    if (similarity_metric !== null) {
+        params["similarity_metric"] = similarity_metric;
+    }
+    if (transformation_type !== null) {
+        params["transformation_type"] = transformation_type;
+    }
+    if (walltime !== null) {
+        params["walltime"] = walltime;
+    }
+    if (memory_limit !== null) {
+        params["memory_limit"] = memory_limit;
+    }
+    if (xgrid_args !== null) {
+        params["xgrid_args"] = xgrid_args;
+    }
+    if (update_template !== null) {
+        params["update_template"] = update_template;
+    }
+    if (target_volume !== null) {
+        params["target_volume"] = target_volume;
+    }
     return params;
 }
 
@@ -100,7 +254,161 @@ function ants_multivariate_template_construction2_sh_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("antsMultivariateTemplateConstruction2.sh");
-    cargs.push((params["input"] ?? null));
+    cargs.push(
+        "-d",
+        String((params["dimension"] ?? null))
+    );
+    if ((params["output_prefix"] ?? null) !== null) {
+        cargs.push(
+            "-o",
+            (params["output_prefix"] ?? null)
+        );
+    }
+    if ((params["image_statistic"] ?? null) !== null) {
+        cargs.push(
+            "-a",
+            String((params["image_statistic"] ?? null))
+        );
+    }
+    if ((params["sharpening"] ?? null) !== null) {
+        cargs.push(
+            "-A",
+            String((params["sharpening"] ?? null))
+        );
+    }
+    if ((params["backup_images"] ?? null) !== null) {
+        cargs.push(
+            "-b",
+            String((params["backup_images"] ?? null))
+        );
+    }
+    if ((params["parallel_control"] ?? null) !== null) {
+        cargs.push(
+            "-c",
+            String((params["parallel_control"] ?? null))
+        );
+    }
+    if ((params["single_precision"] ?? null) !== null) {
+        cargs.push(
+            "-e",
+            String((params["single_precision"] ?? null))
+        );
+    }
+    if ((params["gradient_step"] ?? null) !== null) {
+        cargs.push(
+            "-g",
+            String((params["gradient_step"] ?? null))
+        );
+    }
+    if ((params["iterations"] ?? null) !== null) {
+        cargs.push(
+            "-i",
+            String((params["iterations"] ?? null))
+        );
+    }
+    if ((params["cpu_cores"] ?? null) !== null) {
+        cargs.push(
+            "-j",
+            String((params["cpu_cores"] ?? null))
+        );
+    }
+    if ((params["num_modalities"] ?? null) !== null) {
+        cargs.push(
+            "-k",
+            String((params["num_modalities"] ?? null))
+        );
+    }
+    if ((params["modality_weights"] ?? null) !== null) {
+        cargs.push(
+            "-w",
+            (params["modality_weights"] ?? null)
+        );
+    }
+    if ((params["max_iterations"] ?? null) !== null) {
+        cargs.push(
+            "-q",
+            (params["max_iterations"] ?? null)
+        );
+    }
+    if ((params["shrink_factors"] ?? null) !== null) {
+        cargs.push(
+            "-f",
+            (params["shrink_factors"] ?? null)
+        );
+    }
+    if ((params["smoothing_kernels"] ?? null) !== null) {
+        cargs.push(
+            "-s",
+            (params["smoothing_kernels"] ?? null)
+        );
+    }
+    if ((params["n4_bias_correction"] ?? null) !== null) {
+        cargs.push(
+            "-n",
+            String((params["n4_bias_correction"] ?? null))
+        );
+    }
+    if ((params["prepend_commands"] ?? null) !== null) {
+        cargs.push(
+            "-p",
+            (params["prepend_commands"] ?? null)
+        );
+    }
+    if ((params["rigid_registration"] ?? null) !== null) {
+        cargs.push(
+            "-r",
+            String((params["rigid_registration"] ?? null))
+        );
+    }
+    if ((params["linear_registration"] ?? null) !== null) {
+        cargs.push(
+            "-l",
+            String((params["linear_registration"] ?? null))
+        );
+    }
+    if ((params["similarity_metric"] ?? null) !== null) {
+        cargs.push(
+            "-m",
+            (params["similarity_metric"] ?? null)
+        );
+    }
+    if ((params["transformation_type"] ?? null) !== null) {
+        cargs.push(
+            "-t",
+            (params["transformation_type"] ?? null)
+        );
+    }
+    if ((params["walltime"] ?? null) !== null) {
+        cargs.push(
+            "-u",
+            (params["walltime"] ?? null)
+        );
+    }
+    if ((params["memory_limit"] ?? null) !== null) {
+        cargs.push(
+            "-v",
+            (params["memory_limit"] ?? null)
+        );
+    }
+    if ((params["xgrid_args"] ?? null) !== null) {
+        cargs.push(
+            "-x",
+            (params["xgrid_args"] ?? null)
+        );
+    }
+    if ((params["update_template"] ?? null) !== null) {
+        cargs.push(
+            "-y",
+            String((params["update_template"] ?? null))
+        );
+    }
+    if ((params["target_volume"] ?? null) !== null) {
+        cargs.push(
+            "-z",
+            ...(params["target_volume"] ?? null).map(f => execution.inputFile(f))
+        );
+    }
+    cargs.push(...(params["input_images"] ?? null).map(f => execution.inputFile(f)));
     return cargs;
 }
 
@@ -119,7 +427,7 @@ function ants_multivariate_template_construction2_sh_outputs(
 ): AntsMultivariateTemplateConstruction2ShOutputs {
     const ret: AntsMultivariateTemplateConstruction2ShOutputs = {
         root: execution.outputFile("."),
-        template: execution.outputFile(["<output-prefix>Template.nii.gz"].join('')),
+        intermediate_templates_dir: execution.outputFile(["intermediateTemplates"].join('')),
     };
     return ret;
 }
@@ -128,9 +436,9 @@ function ants_multivariate_template_construction2_sh_outputs(
 /**
  * antsMultivariateTemplateConstruction2.sh
  *
- * The antsMultivariateTemplateConstruction2.sh script is part of the Advanced Normalization Tools (ANTs) suite. It is used for constructing multivariate templates.
+ * Multivariate template construction using ANTs registration tools (version 2). All images to be added to the template should be in the same directory, and this script should be invoked from that directory.
  *
- * Author: ANTs Developers
+ * Author: Brian B. Avants, Nick Tustison and Gang Song
  *
  * URL: https://github.com/ANTsX/ANTs
  *
@@ -156,22 +464,74 @@ function ants_multivariate_template_construction2_sh_execute(
 /**
  * antsMultivariateTemplateConstruction2.sh
  *
- * The antsMultivariateTemplateConstruction2.sh script is part of the Advanced Normalization Tools (ANTs) suite. It is used for constructing multivariate templates.
+ * Multivariate template construction using ANTs registration tools (version 2). All images to be added to the template should be in the same directory, and this script should be invoked from that directory.
  *
- * Author: ANTs Developers
+ * Author: Brian B. Avants, Nick Tustison and Gang Song
  *
  * URL: https://github.com/ANTsX/ANTs
  *
- * @param input Options for setting up and running the multivariate template construction process.
+ * @param dimension ImageDimension: 2 or 3 (for 2 or 3 dimensional registration of single volume), 4 (for template generation of time-series data)
+ * @param input_images List of images in the current directory, eg *_t1.nii.gz. Should be at the end of the command. Optionally, one can specify a .csv or .txt file where each line is the location of the input image. One can also specify more than one file for each image for multi-modal template construction (e.g. t1 and t2). For the multi-modal case, the templates will be consecutively numbered.
+ * @param output_prefix A prefix that is prepended to all output files (default = "antsBTP")
+ * @param image_statistic Image statistic used to summarize images (default 1): 0 = mean, 1 = mean of normalized intensities, 2 = median. Normalization here means dividing each image by its mean intensity.
+ * @param sharpening Sharpening applied to template at each iteration (default 1): 0 = none, 1 = Laplacian, 2 = Unsharp mask
+ * @param backup_images Backup images and results from all iterations (default = 0): Boolean to save the transform files, bias corrected inputs, templates, transforms, and warped images for each iteration. By default, only the templates and the shape update warp field are saved.
+ * @param parallel_control Control for parallel computation (default 0): 0 = run serially, 1 = SGE qsub, 2 = use PEXEC (localhost), 3 = Apple XGrid, 4 = PBS qsub, 5 = SLURM
+ * @param single_precision Use single precision (default 1)
+ * @param gradient_step Gradient step size (default 0.25): smaller in magnitude results in more cautious steps. Use smaller steps to refine template details. 0.25 is an upper (aggressive) limit for this parameter.
+ * @param iterations Iteration limit (default 4): iterations of the template construction (Iteration limit)*NumImages registrations
+ * @param cpu_cores Number of cpu cores to use locally for pexec option (default 2; requires "-c 2")
+ * @param num_modalities Number of modalities used to construct the template (default 1): For example, if one wanted to create a multimodal template consisting of T1,T2,and FA components ("-k 3").
+ * @param modality_weights Modality weights used in the similarity metric (default = 1): specified as e.g. 1x0.5x0.75.
+ * @param max_iterations Max iterations for each pairwise registration (default = 100x100x70x20): specified in the form JxK...xF where J = max iterations at first (coarsest) resolution, K = max iterations at next resolution, F = max iterations at the final resolution
+ * @param shrink_factors Shrink factors in pairwise registration (default = 6x4x2x1): in the same form as max iterations. Must have the same number of components as the iterations and smoothing. The shrink factors are integer factors for downsampling the virtual space (usually the template image) during registration.
+ * @param smoothing_kernels Smoothing kernels in pairwise registration (default = 3x2x1x0): also in the same form as max iterations and shrink factors, with the same number of components. Standard deviation of a Gaussian smoothing kernel applied to the images before downsampling at each level. The kernel may be specified in mm units or voxels with "AxBxCmm" or "AxBxCvox". Missing units implies vox.
+ * @param n4_bias_correction N4BiasFieldCorrection of moving image: 0 off, 1 on (default 1)
+ * @param prepend_commands Commands to prepend to job scripts (e.g., change into appropriate directory, set paths, etc)
+ * @param rigid_registration Do rigid-body registration of inputs to the initial template, before doing the main pairwise registration. 0 off 1 on (default 0). If you are trying to refine or update an existing template, you would use '-r 0'. Rigid initialization is useful when you do not have an initial template, or you want to use a single image as a reference for rigid alignment only.
+ * @param linear_registration Use linear image registration stages during the pairwise (template/subject) deformable registration. Otherwise, registration is limited to SyN or B-spline SyN (see '-t' option). This is '1' by default.
+ * @param similarity_metric Type of similarity metric used for pairwise registration (default = CC). Options are case sensitive. CC = cross-correlation, MI = mutual information, MSQ = mean square difference, DEMONS = demon's metric. A similarity metric per modality can be specified. If the CC metric is chosen, one can also specify the radius in brackets, e.g. '-m "CC[4]"'.
+ * @param transformation_type Type of transformation model used for registration (default = SyN): Options are case sensitive. SyN = Greedy SyN, BSplineSyN = Greedy B-spline SyN, TimeVaryingVelocityField = Time-varying velocity field, TimeVaryingBSplineVelocityField = Time-varying B-spline velocity field. Transformation parameters may be specified with brackets, eg '-t "SyN[0.1,3,0]"'. To use linear registration only, options are: Affine = Affine (runs Rigid + Affine), Rigid = Rigid (runs Rigid only).
+ * @param walltime Walltime (default = 20:00:00): Option for PBS/SLURM qsub specifying requested time per pairwise registration
+ * @param memory_limit Memory limit (default = 8gb): Option for PBS/SLURM qsub specifying requested memory per pairwise registration
+ * @param xgrid_args XGrid arguments (e.g., -x "-p password -h controlhost")
+ * @param update_template Update the template with the full affine transform (default 1). If 0, the rigid component of the affine transform will not be used to update the template. If your template drifts in translation or orientation try "-y 0".
+ * @param target_volume Use this this volume as the target of all inputs. When not used, the script will create an unbiased starting point by averaging all inputs, then aligning the center of mass of all inputs to that of the initial average. If you do not use -z, it is recommended to use "-r 1". Use the full path. For multiple modalities, specify -z modality1.nii.gz -z modality2.nii.gz ... in the same modality order as the input images.
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsMultivariateTemplateConstruction2ShOutputs`).
  */
 function ants_multivariate_template_construction2_sh(
-    input: string,
+    dimension: 2 | 3 | 4,
+    input_images: Array<InputPathType>,
+    output_prefix: string | null = null,
+    image_statistic: 0 | 1 | 2 | null = null,
+    sharpening: 0 | 1 | 2 | null = null,
+    backup_images: 0 | 1 | null = null,
+    parallel_control: 0 | 1 | 2 | 3 | 4 | 5 | null = null,
+    single_precision: 0 | 1 | null = null,
+    gradient_step: number | null = null,
+    iterations: number | null = null,
+    cpu_cores: number | null = null,
+    num_modalities: number | null = null,
+    modality_weights: string | null = null,
+    max_iterations: string | null = null,
+    shrink_factors: string | null = null,
+    smoothing_kernels: string | null = null,
+    n4_bias_correction: 0 | 1 | null = null,
+    prepend_commands: string | null = null,
+    rigid_registration: 0 | 1 | null = null,
+    linear_registration: 0 | 1 | null = null,
+    similarity_metric: string | null = null,
+    transformation_type: string | null = null,
+    walltime: string | null = null,
+    memory_limit: string | null = null,
+    xgrid_args: string | null = null,
+    update_template: 0 | 1 | null = null,
+    target_volume: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): AntsMultivariateTemplateConstruction2ShOutputs {
-    const params = ants_multivariate_template_construction2_sh_params(input)
+    const params = ants_multivariate_template_construction2_sh_params(dimension, input_images, output_prefix, image_statistic, sharpening, backup_images, parallel_control, single_precision, gradient_step, iterations, cpu_cores, num_modalities, modality_weights, max_iterations, shrink_factors, smoothing_kernels, n4_bias_correction, prepend_commands, rigid_registration, linear_registration, similarity_metric, transformation_type, walltime, memory_limit, xgrid_args, update_template, target_volume)
     return ants_multivariate_template_construction2_sh_execute(params, runner);
 }
 

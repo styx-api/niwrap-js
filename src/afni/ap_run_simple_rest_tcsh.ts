@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const AP_RUN_SIMPLE_REST_TCSH_METADATA: Metadata = {
-    id: "40f222b46edf6b24d448637aef9886505378580a.boutiques",
+    id: "2f520f36d8190095e664639c463b2a7247eb3ac8.boutiques",
     name: "ap_run_simple_rest.tcsh",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -82,10 +82,6 @@ interface ApRunSimpleRestTcshOutputs {
      * proc results directory (if run)
      */
     proc_results_dir: OutputPathType | null;
-    /**
-     * Text output files from AP and proc scripts
-     */
-    text_output_files: OutputPathType;
 }
 
 
@@ -230,7 +226,6 @@ function ap_run_simple_rest_tcsh_outputs(
         run_ap_script: ((params["subjid"] ?? null) !== null) ? execution.outputFile(["run_ap_", (params["subjid"] ?? null)].join('')) : null,
         proc_script: ((params["subjid"] ?? null) !== null) ? execution.outputFile(["proc.", (params["subjid"] ?? null)].join('')) : null,
         proc_results_dir: ((params["subjid"] ?? null) !== null) ? execution.outputFile([(params["subjid"] ?? null), ".results"].join('')) : null,
-        text_output_files: execution.outputFile(["out.*"].join('')),
     };
     return ret;
 }

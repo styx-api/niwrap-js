@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SCALE_VOLUME_METADATA: Metadata = {
-    id: "6987f91c483f861633afc3be82cefdcfd48e7a50.boutiques",
+    id: "7b94d7257fff5e03d0ac0fc678af0dd8643049e9.boutiques",
     name: "@ScaleVolume",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -181,7 +181,7 @@ function v__scale_volume_outputs(
 ): VScaleVolumeOutputs {
     const ret: VScaleVolumeOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile(["<-prefix PREFIX>_scaled"].join('')),
+        output_file: execution.outputFile([(params["prefix"] ?? null), "_scaled"].join('')),
     };
     return ret;
 }

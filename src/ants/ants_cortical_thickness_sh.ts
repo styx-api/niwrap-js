@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_CORTICAL_THICKNESS_SH_METADATA: Metadata = {
-    id: "1af08fb76713108fbe119513e0ee5dea823c10df.boutiques",
+    id: "44e126ab23855a6ccaa350a4283c4fd57c32b166.boutiques",
     name: "antsCorticalThickness.sh",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -405,7 +405,7 @@ function ants_cortical_thickness_sh_outputs(
         cortical_thickness: execution.outputFile([(params["output_prefix"] ?? null), "CorticalThickness.nii.gz"].join('')),
         brain_extraction_mask: execution.outputFile([(params["output_prefix"] ?? null), "BrainExtractionMask.nii.gz"].join('')),
         brain_segmentation: execution.outputFile([(params["output_prefix"] ?? null), "BrainSegmentation.nii.gz"].join('')),
-        segmentation_posteriors: execution.outputFile([(params["output_prefix"] ?? null), "BrainSegmentationPosteriors*.nii.gz"].join('')),
+        segmentation_posteriors: execution.outputFile([(params["output_prefix"] ?? null), "BrainSegmentationPosteriors.nii.gz"].join('')),
     };
     return ret;
 }

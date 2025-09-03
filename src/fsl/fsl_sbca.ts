@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSL_SBCA_METADATA: Metadata = {
-    id: "98d7df50c2ec06e3fa37a89d3a922a3562fe969e.boutiques",
+    id: "cc06b4f5a54265c1bb689c623d3ac661e891d615.boutiques",
     name: "fsl_sbca",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -85,10 +85,6 @@ interface FslSbcaOutputs {
      * Output seed mask image
      */
     output_seed_mask_image_base: OutputPathType;
-    /**
-     * Output target time courses
-     */
-    output_target_time_courses: OutputPathType;
     /**
      * Output confound time courses
      */
@@ -266,7 +262,6 @@ function fsl_sbca_outputs(
         root: execution.outputFile("."),
         output_seed_mask_image: execution.outputFile([(params["out"] ?? null), "_seeds"].join('')),
         output_seed_mask_image_base: execution.outputFile([(params["out"] ?? null), "_seedmask"].join('')),
-        output_target_time_courses: execution.outputFile([(params["out"] ?? null), "_ttc<X>.txt"].join('')),
         output_confound_time_courses: execution.outputFile([(params["out"] ?? null), "_confounds.txt"].join('')),
     };
     return ret;

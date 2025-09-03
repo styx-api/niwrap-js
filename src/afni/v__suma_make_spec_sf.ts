@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SUMA_MAKE_SPEC_SF_METADATA: Metadata = {
-    id: "b2f1fc4d123e03415cf587f26d4d91d1d54dd486.boutiques",
+    id: "62a849b04e0ddcd72d230cf96fde318b5f4b1e84.boutiques",
     name: "@SUMA_Make_Spec_SF",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -66,7 +66,7 @@ interface VSumaMakeSpecSfOutputs {
     /**
      * All created files are stored in SURFACES directory
      */
-    output_files: OutputPathType;
+    output_directory: OutputPathType;
 }
 
 
@@ -146,7 +146,7 @@ function v__suma_make_spec_sf_outputs(
 ): VSumaMakeSpecSfOutputs {
     const ret: VSumaMakeSpecSfOutputs = {
         root: execution.outputFile("."),
-        output_files: execution.outputFile(["SURFACES/*"].join('')),
+        output_directory: execution.outputFile(["SURFACES"].join('')),
     };
     return ret;
 }

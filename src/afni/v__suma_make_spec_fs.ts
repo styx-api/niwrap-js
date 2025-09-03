@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SUMA_MAKE_SPEC_FS_METADATA: Metadata = {
-    id: "10445ccc3d3a66bb5ebcc9fc5b2ee7040da06041.boutiques",
+    id: "6df18ef78001ce94c84be2c837747b791e1af5e4.boutiques",
     name: "@SUMA_Make_Spec_FS",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -79,7 +79,7 @@ interface VSumaMakeSpecFsOutputs {
     /**
      * All created files are stored in a new SUMA directory
      */
-    suma_output: OutputPathType;
+    suma_output_dir: OutputPathType;
 }
 
 
@@ -267,7 +267,7 @@ function v__suma_make_spec_fs_outputs(
 ): VSumaMakeSpecFsOutputs {
     const ret: VSumaMakeSpecFsOutputs = {
         root: execution.outputFile("."),
-        suma_output: execution.outputFile(["SUMA/*"].join('')),
+        suma_output_dir: execution.outputFile(["SUMA"].join('')),
     };
     return ret;
 }

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FAT_PROC_DECMAP_METADATA: Metadata = {
-    id: "45121a70c28df707b0e175b9138ea43971564311.boutiques",
+    id: "ac47e7cad79ac062c31e79aa1b2269438c541ff1.boutiques",
     name: "fat_proc_decmap",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -241,10 +241,10 @@ function fat_proc_decmap_outputs(
         root: execution.outputFile("."),
         outfile_dec_rgb: execution.outputFile([(params["prefix"] ?? null), "_dec.nii.gz"].join('')),
         outfile_dec_unwt_thr: execution.outputFile([(params["prefix"] ?? null), "_dec_unwt_thr.nii.gz"].join('')),
-        outfile_dec_sca: execution.outputFile([(params["prefix"] ?? null), "_dec_sca*.nii.gz"].join('')),
-        qc_dec_images: execution.outputFile([(params["prefix"] ?? null), "_qc_dec*.png"].join('')),
-        qc_dec_unwt_thrx_images: execution.outputFile([(params["prefix"] ?? null), "_qc_dec_unwt_thrx*.png"].join('')),
-        qc_dec_sca_images: execution.outputFile([(params["prefix"] ?? null), "_qc_dec_sca*.png"].join('')),
+        outfile_dec_sca: execution.outputFile([(params["prefix"] ?? null), "_dec_sca.nii.gz"].join('')),
+        qc_dec_images: execution.outputFile([(params["prefix"] ?? null), "_qc_dec.png"].join('')),
+        qc_dec_unwt_thrx_images: execution.outputFile([(params["prefix"] ?? null), "_qc_dec_unwt_thrx.png"].join('')),
+        qc_dec_sca_images: execution.outputFile([(params["prefix"] ?? null), "_qc_dec_sca.png"].join('')),
     };
     return ret;
 }

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FROM3D_METADATA: Metadata = {
-    id: "86c7a2fb13a1802f4e1927d75aef4bb109495c45.boutiques",
+    id: "a452aa2004b03621e81c06fbf3916b8499a1a1d6.boutiques",
     name: "from3d",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -54,7 +54,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.from3d": from3d_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,10 +69,6 @@ interface From3dOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Extracted 2D images from the 3D dataset
-     */
-    extracted_images: OutputPathType;
 }
 
 
@@ -206,7 +201,6 @@ function from3d_outputs(
 ): From3dOutputs {
     const ret: From3dOutputs = {
         root: execution.outputFile("."),
-        extracted_images: execution.outputFile([(params["prefix"] ?? null), "*.img"].join('')),
     };
     return ret;
 }

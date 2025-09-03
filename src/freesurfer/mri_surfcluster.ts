@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_SURFCLUSTER_METADATA: Metadata = {
-    id: "a70520f8f1d486263670ae25cac56adca853556b.boutiques",
+    id: "74d4f75e78d22eca861a0495968ef1bb531bf386.boutiques",
     name: "mri_surfcluster",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -589,7 +589,7 @@ function mri_surfcluster_outputs(
         root: execution.outputFile("."),
         output_surface_file: ((params["o"] ?? null) !== null) ? execution.outputFile([(params["o"] ?? null)].join('')) : null,
         output_cluster_number_file: ((params["ocn"] ?? null) !== null) ? execution.outputFile([(params["ocn"] ?? null)].join('')) : null,
-        output_labels: ((params["olab"] ?? null) !== null) ? execution.outputFile([(params["olab"] ?? null), "-*.label"].join('')) : null,
+        output_labels: ((params["olab"] ?? null) !== null && (params["ocn"] ?? null) !== null) ? execution.outputFile([(params["olab"] ?? null), "-", (params["ocn"] ?? null), ".label"].join('')) : null,
         output_summary_file: ((params["sum"] ?? null) !== null) ? execution.outputFile([path.basename((params["sum"] ?? null))].join('')) : null,
         output_pointset_file: ((params["pointset"] ?? null) !== null) ? execution.outputFile([path.basename((params["pointset"] ?? null))].join('')) : null,
         output_max_area_file: ((params["maxareafile"] ?? null) !== null) ? execution.outputFile([(params["maxareafile"] ?? null)].join('')) : null,

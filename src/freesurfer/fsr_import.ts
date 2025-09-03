@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSR_IMPORT_METADATA: Metadata = {
-    id: "b30a1cfc4e13a11d981b6cbab57fcadbba24f4a3.boutiques",
+    id: "1bec3afee547e1b0b7ff05c4c9432ea7dab44652.boutiques",
     name: "fsr-import",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -80,10 +80,6 @@ interface FsrImportOutputs {
      * Output directory for FLAIR images
      */
     out_flair: OutputPathType;
-    /**
-     * Output directory for custom modality images based on mode
-     */
-    out_custom_modes: OutputPathType;
 }
 
 
@@ -203,10 +199,9 @@ function fsr_import_outputs(
 ): FsrImportOutputs {
     const ret: FsrImportOutputs = {
         root: execution.outputFile("."),
-        out_t1w: execution.outputFile([(params["outdir"] ?? null), "/t1w/*.mgz"].join('')),
-        out_t2w: execution.outputFile([(params["outdir"] ?? null), "/t2w/*.mgz"].join('')),
-        out_flair: execution.outputFile([(params["outdir"] ?? null), "/flair/*.mgz"].join('')),
-        out_custom_modes: execution.outputFile([(params["outdir"] ?? null), "/*/*.mgz"].join('')),
+        out_t1w: execution.outputFile([(params["outdir"] ?? null), "/t1w"].join('')),
+        out_t2w: execution.outputFile([(params["outdir"] ?? null), "/t2w"].join('')),
+        out_flair: execution.outputFile([(params["outdir"] ?? null), "/flair_input"].join('')),
     };
     return ret;
 }

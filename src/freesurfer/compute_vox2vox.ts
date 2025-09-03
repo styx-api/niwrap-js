@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const COMPUTE_VOX2VOX_METADATA: Metadata = {
-    id: "9a7bf87929e316ff71cbf7100a4c060f4d38576b.boutiques",
+    id: "4d8c087f21e8a558455971df7e63014f2fe6afc7.boutiques",
     name: "compute_vox2vox",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -47,7 +47,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "freesurfer.compute_vox2vox": compute_vox2vox_outputs,
     };
     return outputsFuncs[t];
 }
@@ -63,10 +62,6 @@ interface ComputeVox2voxOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * The resulting transformed voxel-to-voxel 4dfp output file.
-     */
-    output: OutputPathType;
 }
 
 
@@ -129,7 +124,6 @@ function compute_vox2vox_outputs(
 ): ComputeVox2voxOutputs {
     const ret: ComputeVox2voxOutputs = {
         root: execution.outputFile("."),
-        output: execution.outputFile(["<replace_with_output_path_pattern>"].join('')),
     };
     return ret;
 }

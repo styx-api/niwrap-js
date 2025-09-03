@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_ROIMAKER_METADATA: Metadata = {
-    id: "5920f7c4edf531d99fbcd79f62063134f553617f.boutiques",
+    id: "2535dd2581f0ff2810580b75c5be9f74e2e30560.boutiques",
     name: "3dROIMaker",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -313,8 +313,8 @@ function v_3d_roimaker_outputs(
 ): V3dRoimakerOutputs {
     const ret: V3dRoimakerOutputs = {
         root: execution.outputFile("."),
-        gm_map: execution.outputFile([(params["prefix"] ?? null), "_GM+orig.*.HEAD"].join('')),
-        gmi_map: execution.outputFile([(params["prefix"] ?? null), "_GMI+orig.*.HEAD"].join('')),
+        gm_map: execution.outputFile([(params["prefix"] ?? null), "_GM+orig.HEAD"].join('')),
+        gmi_map: execution.outputFile([(params["prefix"] ?? null), "_GMI+orig.HEAD"].join('')),
     };
     return ret;
 }

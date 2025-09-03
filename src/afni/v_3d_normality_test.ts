@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_NORMALITY_TEST_METADATA: Metadata = {
-    id: "84f19a80cec9bb8cc70a78f7b9024502f6081aac.boutiques",
+    id: "14d5ae08c9e5a24d364a73473b07d9f557ff4cdc.boutiques",
     name: "3dNormalityTest",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -141,7 +141,7 @@ function v_3d_normality_test_outputs(
 ): V3dNormalityTestOutputs {
     const ret: V3dNormalityTestOutputs = {
         root: execution.outputFile("."),
-        output_dataset: execution.outputFile([(params["prefix"] ?? null), "+orig.*"].join('')),
+        output_dataset: execution.outputFile([(params["prefix"] ?? null), "+orig"].join('')),
     };
     return ret;
 }

@@ -1,7 +1,7 @@
 {
   "name": "niwrap",
   "version": "0.6.3",
-  "description": "Neuroimaging JavaScript/TypeScript wrappers",
+  "description": "Neuroimaging wrappers.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "types": "dist/types/index.d.ts",

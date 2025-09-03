@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURF_LAYERS_METADATA: Metadata = {
-    id: "5e9aa050f045ea0f592f85e3b66ef116c3891cbb.boutiques",
+    id: "82f1340a337de375fa67ce3116d92a91d287c384.boutiques",
     name: "SurfLayers",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -71,17 +71,9 @@ interface SurfLayersOutputs {
      */
     root: OutputPathType;
     /**
-     * Interpolated surfaces files
+     * Directory containing output files
      */
-    interpolated_surfaces: OutputPathType | null;
-    /**
-     * Additional files if -spec option was used
-     */
-    additional_spec_files: OutputPathType | null;
-    /**
-     * Run script to view output directly
-     */
-    run_view_script: OutputPathType | null;
+    output_dir: OutputPathType | null;
 }
 
 
@@ -232,9 +224,7 @@ function surf_layers_outputs(
 ): SurfLayersOutputs {
     const ret: SurfLayersOutputs = {
         root: execution.outputFile("."),
-        interpolated_surfaces: ((params["outdir"] ?? null) !== null && (params["hemi"] ?? null) !== null) ? execution.outputFile([(params["outdir"] ?? null), "/isurf.", (params["hemi"] ?? null), ".*.gii"].join('')) : null,
-        additional_spec_files: ((params["outdir"] ?? null) !== null) ? execution.outputFile([(params["outdir"] ?? null), "/*"].join('')) : null,
-        run_view_script: ((params["outdir"] ?? null) !== null) ? execution.outputFile([(params["outdir"] ?? null), "/run*tcsh"].join('')) : null,
+        output_dir: ((params["outdir"] ?? null) !== null) ? execution.outputFile([(params["outdir"] ?? null)].join('')) : null,
     };
     return ret;
 }

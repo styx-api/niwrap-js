@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SPLIT_PARTS_GPU_METADATA: Metadata = {
-    id: "bda890fb23c36ebbcf15c9ff09e5ac7bff39d458.boutiques",
+    id: "3cb0fef1cef550a498e946349d3a7ae539b65766.boutiques",
     name: "split_parts_gpu",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -52,7 +52,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "fsl.split_parts_gpu": split_parts_gpu_outputs,
     };
     return outputsFuncs[t];
 }
@@ -68,10 +67,6 @@ interface SplitPartsGpuOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output parts files
-     */
-    output_parts: OutputPathType;
 }
 
 
@@ -158,7 +153,6 @@ function split_parts_gpu_outputs(
 ): SplitPartsGpuOutputs {
     const ret: SplitPartsGpuOutputs = {
         root: execution.outputFile("."),
-        output_parts: execution.outputFile([(params["output_directory"] ?? null), "/part_*"].join('')),
     };
     return ret;
 }

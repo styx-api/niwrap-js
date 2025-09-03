@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__2DWARPER_ALLIN_METADATA: Metadata = {
-    id: "5efa97bed55735b8ea9da82ded571c3714029a2b.boutiques",
+    id: "8350bf12695f1212dc58ebccdf2720b13d67a583.boutiques",
     name: "@2dwarper.Allin",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -148,7 +148,7 @@ function v__2dwarper_allin_outputs(
     const ret: V2dwarperAllinOutputs = {
         root: execution.outputFile("."),
         reg_output: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "_reg+orig.HEAD"].join('')) : null,
-        param_files: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "_param_*.1D"].join('')) : null,
+        param_files: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "_param.1D"].join('')) : null,
     };
     return ret;
 }

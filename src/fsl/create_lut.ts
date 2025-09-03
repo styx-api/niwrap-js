@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CREATE_LUT_METADATA: Metadata = {
-    id: "2fb6d06c984b605b731a3ef2e9b3bde601d28909.boutiques",
+    id: "688762d596401ed60ef6a0443f776bcf58dd7a95.boutiques",
     name: "create_lut",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -45,7 +45,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "fsl.create_lut": create_lut_outputs,
     };
     return outputsFuncs[t];
 }
@@ -61,10 +60,6 @@ interface CreateLutOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Generated lookup table files
-     */
-    output_files: OutputPathType;
 }
 
 
@@ -119,7 +114,6 @@ function create_lut_outputs(
 ): CreateLutOutputs {
     const ret: CreateLutOutputs = {
         root: execution.outputFile("."),
-        output_files: execution.outputFile([(params["output_file_root"] ?? null), ".*"].join('')),
     };
     return ret;
 }

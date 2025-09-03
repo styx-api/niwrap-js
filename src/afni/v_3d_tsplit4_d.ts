@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_TSPLIT4_D_METADATA: Metadata = {
-    id: "3a3e4440f95ee533103d741ae69655e18e88d3db.boutiques",
+    id: "b185565e8ecc1b6cef0d573d633b301533b5c899.boutiques",
     name: "3dTsplit4D",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -48,7 +48,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.3dTsplit4D": v_3d_tsplit4_d_outputs,
     };
     return outputsFuncs[t];
 }
@@ -64,10 +63,6 @@ interface V3dTsplit4DOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Multiple 3D single-brick output files
-     */
-    outfiles: OutputPathType;
 }
 
 
@@ -146,7 +141,6 @@ function v_3d_tsplit4_d_outputs(
 ): V3dTsplit4DOutputs {
     const ret: V3dTsplit4DOutputs = {
         root: execution.outputFile("."),
-        outfiles: execution.outputFile([(params["prefix"] ?? null), "*"].join('')),
     };
     return ret;
 }

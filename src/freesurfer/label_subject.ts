@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_SUBJECT_METADATA: Metadata = {
-    id: "2eaea9f29422b9c705dee85559c5b10d1adba05b.boutiques",
+    id: "560f83aa8a7da243f46defe88685f70de1330eb3.boutiques",
     name: "label_subject",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -132,7 +132,7 @@ function label_subject_outputs(
 ): LabelSubjectOutputs {
     const ret: LabelSubjectOutputs = {
         root: execution.outputFile("."),
-        converted_mnc: execution.outputFile(["/tmp/nu*.mnc"].join('')),
+        converted_mnc: execution.outputFile(["/tmp/nu.mnc"].join('')),
     };
     return ret;
 }

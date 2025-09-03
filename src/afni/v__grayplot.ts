@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__GRAYPLOT_METADATA: Metadata = {
-    id: "958c86831f7afb5a52d51364d6b986bef43d3733.boutiques",
+    id: "8fc11bfd9b06360ba6f058036ff12a0bd62b609b.boutiques",
     name: "@grayplot",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -147,7 +147,7 @@ function v__grayplot_outputs(
 ): VGrayplotOutputs {
     const ret: VGrayplotOutputs = {
         root: execution.outputFile("."),
-        grayplot_img: execution.outputFile(["Grayplot.errts.*.png"].join('')),
+        grayplot_img: execution.outputFile(["Grayplot.errts.png"].join('')),
     };
     return ret;
 }

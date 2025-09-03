@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_FRIEDMAN_METADATA: Metadata = {
-    id: "f420b1764d2a8c3e67aa44bf4d11906383ad53d6.boutiques",
+    id: "6fc9dbbc96f6d8f8ce89bd687ff6a5810f097b3c.boutiques",
     name: "3dFriedman",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -49,7 +49,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.3dFriedman": v_3d_friedman_outputs,
     };
     return outputsFuncs[t];
 }
@@ -65,10 +64,6 @@ interface V3dFriedmanOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Friedman statistics output file
-     */
-    output_file: OutputPathType;
 }
 
 
@@ -159,7 +154,6 @@ function v_3d_friedman_outputs(
 ): V3dFriedmanOutputs {
     const ret: V3dFriedmanOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile([(params["output_prefix"] ?? null), "*"].join('')),
     };
     return ret;
 }

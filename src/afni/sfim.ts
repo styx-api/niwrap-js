@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SFIM_METADATA: Metadata = {
-    id: "b0a8b5208cc61585402c5d268873f5a63b76a9e6.boutiques",
+    id: "f08c1d9c683859e54a6ed55c490080ce59a66757.boutiques",
     name: "sfim",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -49,7 +49,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.sfim": sfim_outputs,
     };
     return outputsFuncs[t];
 }
@@ -65,10 +64,6 @@ interface SfimOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output image file for interval 'i' with task state name.
-     */
-    output_files: OutputPathType | null;
 }
 
 
@@ -162,7 +157,6 @@ function sfim_outputs(
 ): SfimOutputs {
     const ret: SfimOutputs = {
         root: execution.outputFile("."),
-        output_files: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), ".*.i"].join('')) : null,
     };
     return ret;
 }

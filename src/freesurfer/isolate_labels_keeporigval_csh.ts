@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ISOLATE_LABELS_KEEPORIGVAL_CSH_METADATA: Metadata = {
-    id: "a6c0e69eb1ba1ff02a31f0459157a99e801ba645.boutiques",
+    id: "69a06015ac3f44b818171366613d6206d53ee668.boutiques",
     name: "isolate_labels_keeporigval.csh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -49,7 +49,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "freesurfer.isolate_labels_keeporigval.csh": isolate_labels_keeporigval_csh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -65,10 +64,6 @@ interface IsolateLabelsKeeporigvalCshOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output binary label file(s)
-     */
-    output_label_files: OutputPathType;
 }
 
 
@@ -156,7 +151,6 @@ function isolate_labels_keeporigval_csh_outputs(
 ): IsolateLabelsKeeporigvalCshOutputs {
     const ret: IsolateLabelsKeeporigvalCshOutputs = {
         root: execution.outputFile("."),
-        output_label_files: execution.outputFile([(params["outprefix"] ?? null), "_label*.nii.gz"].join('')),
     };
     return ret;
 }

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SUMA_REPREFIXIZE_SPEC_METADATA: Metadata = {
-    id: "a8545098535b72c07ad26ff409d12a14404e4007.boutiques",
+    id: "fa627bee2418bb431c178ee03618cb365ae3df70.boutiques",
     name: "@suma_reprefixize_spec",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -49,7 +49,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.@suma_reprefixize_spec": v__suma_reprefixize_spec_outputs,
     };
     return outputsFuncs[t];
 }
@@ -65,10 +64,6 @@ interface VSumaReprefixizeSpecOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Prefixed SUMA specification files
-     */
-    prefixed_spec_files: OutputPathType;
 }
 
 
@@ -153,7 +148,6 @@ function v__suma_reprefixize_spec_outputs(
 ): VSumaReprefixizeSpecOutputs {
     const ret: VSumaReprefixizeSpecOutputs = {
         root: execution.outputFile("."),
-        prefixed_spec_files: execution.outputFile([(params["output_dir"] ?? null), "/*.spec"].join('')),
     };
     return ret;
 }

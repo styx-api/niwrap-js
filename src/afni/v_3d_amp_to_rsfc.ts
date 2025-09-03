@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_AMP_TO_RSFC_METADATA: Metadata = {
-    id: "322ec34577168f15edf52a084c3d09223b534b09.boutiques",
+    id: "d5ce8762fb367cbe4d637153d3d9f376f76c9167.boutiques",
     name: "3dAmpToRSFC",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -193,12 +193,12 @@ function v_3d_amp_to_rsfc_outputs(
 ): V3dAmpToRsfcOutputs {
     const ret: V3dAmpToRsfcOutputs = {
         root: execution.outputFile("."),
-        output_alff: execution.outputFile([(params["prefix"] ?? null), "_ALFF*"].join('')),
-        output_malff: execution.outputFile([(params["prefix"] ?? null), "_MALFF*"].join('')),
-        output_falff: execution.outputFile([(params["prefix"] ?? null), "_FALFF*"].join('')),
-        output_rsfa: execution.outputFile([(params["prefix"] ?? null), "_RSFA*"].join('')),
-        output_mrsfa: execution.outputFile([(params["prefix"] ?? null), "_MRSFA*"].join('')),
-        output_frsfa: execution.outputFile([(params["prefix"] ?? null), "_FRSFA*"].join('')),
+        output_alff: execution.outputFile([(params["prefix"] ?? null), "_ALFF"].join('')),
+        output_malff: execution.outputFile([(params["prefix"] ?? null), "_MALFF"].join('')),
+        output_falff: execution.outputFile([(params["prefix"] ?? null), "_FALFF"].join('')),
+        output_rsfa: execution.outputFile([(params["prefix"] ?? null), "_RSFA"].join('')),
+        output_mrsfa: execution.outputFile([(params["prefix"] ?? null), "_MRSFA"].join('')),
+        output_frsfa: execution.outputFile([(params["prefix"] ?? null), "_FRSFA"].join('')),
     };
     return ret;
 }

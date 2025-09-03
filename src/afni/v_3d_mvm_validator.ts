@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_MVM_VALIDATOR_METADATA: Metadata = {
-    id: "3810816d3735c07fee9eaec012b3bfc2cb9f95d2.boutiques",
+    id: "e2027a3d76186546c459d0b1c59c43c4261bfe5b.boutiques",
     name: "3dMVM_validator",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -46,7 +46,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.3dMVM_validator": v_3d_mvm_validator_outputs,
     };
     return outputsFuncs[t];
 }
@@ -62,10 +61,6 @@ interface V3dMvmValidatorOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Temporary folder created during the shiny app session.
-     */
-    temp_folder: OutputPathType;
 }
 
 
@@ -131,7 +126,6 @@ function v_3d_mvm_validator_outputs(
 ): V3dMvmValidatorOutputs {
     const ret: V3dMvmValidatorOutputs = {
         root: execution.outputFile("."),
-        temp_folder: execution.outputFile(["__*_3dMVM_validator_temp_delete"].join('')),
     };
     return ret;
 }

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RCBF_PREP_METADATA: Metadata = {
-    id: "cc945b25a058d97a2f09fc2fea371b4100093541.boutiques",
+    id: "e9a80bb420160c8fc88ce713a6923335171436f0.boutiques",
     name: "rcbf-prep",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -67,9 +67,13 @@ interface RcbfPrepOutputs {
      */
     root: OutputPathType;
     /**
-     * Registered and resampled rCBF volume for both hemispheres.
+     * Registered and resampled rCBF volume for left hemisphere.
      */
-    hemisphere_rcbf: OutputPathType;
+    lh_hemisphere_rcbf: OutputPathType;
+    /**
+     * Registered and resampled rCBF volume for right hemisphere.
+     */
+    rh_hemisphere_rcbf_right: OutputPathType;
     /**
      * rCBF volume resampled to MNI305 space.
      */
@@ -186,7 +190,8 @@ function rcbf_prep_outputs(
 ): RcbfPrepOutputs {
     const ret: RcbfPrepOutputs = {
         root: execution.outputFile("."),
-        hemisphere_rcbf: execution.outputFile([(params["outdir"] ?? null), "/?h.rcbf.mgh"].join('')),
+        lh_hemisphere_rcbf: execution.outputFile([(params["outdir"] ?? null), "/lh.rcbf.mgh"].join('')),
+        rh_hemisphere_rcbf_right: execution.outputFile([(params["outdir"] ?? null), "/rh.rcbf.mgh"].join('')),
         mni305_rcbf: execution.outputFile([(params["outdir"] ?? null), "/rcbf.mni305.nii"].join('')),
         roi_stats: execution.outputFile([(params["outdir"] ?? null), "/roi.dat"].join('')),
     };

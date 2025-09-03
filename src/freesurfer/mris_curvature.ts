@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_CURVATURE_METADATA: Metadata = {
-    id: "c0feb8e94edd7af51fd06950f685a4369f1b3884.boutiques",
+    id: "24ef4e388f4999a00f5d0fcc1537c396ec01ca3b.boutiques",
     name: "mris_curvature",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -58,7 +58,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "freesurfer.mris_curvature": mris_curvature_outputs,
     };
     return outputsFuncs[t];
 }
@@ -74,14 +73,6 @@ interface MrisCurvatureOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Mean curvature file
-     */
-    mean_curvature: OutputPathType;
-    /**
-     * Gaussian curvature file
-     */
-    gaussian_curvature: OutputPathType;
 }
 
 
@@ -259,8 +250,6 @@ function mris_curvature_outputs(
 ): MrisCurvatureOutputs {
     const ret: MrisCurvatureOutputs = {
         root: execution.outputFile("."),
-        mean_curvature: execution.outputFile(["<hemi>.<surface>.H"].join('')),
-        gaussian_curvature: execution.outputFile(["<hemi>.<surface>.K"].join('')),
     };
     return ret;
 }

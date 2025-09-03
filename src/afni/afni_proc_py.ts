@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const AFNI_PROC_PY_METADATA: Metadata = {
-    id: "7969059f0ff122f045207188e28f2aea49969161.boutiques",
+    id: "017b6a6a466a207ea728b6a165c4413d9b08cedb.boutiques",
     name: "afni_proc.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -74,7 +74,7 @@ interface AfniProcPyOutputs {
     /**
      * All output files stored in the specified output directory.
      */
-    output_files: OutputPathType | null;
+    output_directory: OutputPathType | null;
 }
 
 
@@ -204,7 +204,7 @@ function afni_proc_py_outputs(
 ): AfniProcPyOutputs {
     const ret: AfniProcPyOutputs = {
         root: execution.outputFile("."),
-        output_files: ((params["out_dir"] ?? null) !== null) ? execution.outputFile([(params["out_dir"] ?? null), "/*"].join('')) : null,
+        output_directory: ((params["out_dir"] ?? null) !== null) ? execution.outputFile([(params["out_dir"] ?? null)].join('')) : null,
     };
     return ret;
 }

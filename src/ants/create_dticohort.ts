@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CREATE_DTICOHORT_METADATA: Metadata = {
-    id: "b6d3b7b7d3095a9db5e406c42360be21bbfd0ce5.boutiques",
+    id: "392ec59826736bb66886c60168c30dead2affec4.boutiques",
     name: "CreateDTICohort",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -72,10 +72,6 @@ interface CreateDticohortOutputs {
      * The directory where the output data will be stored.
      */
     output_directory: OutputPathType;
-    /**
-     * Root name for the series of output files.
-     */
-    filename_series: OutputPathType;
 }
 
 
@@ -203,7 +199,6 @@ function create_dticohort_outputs(
     const ret: CreateDticohortOutputs = {
         root: execution.outputFile("."),
         output_directory: execution.outputFile(["[OUTPUT_DIRECTORY]"].join('')),
-        filename_series: execution.outputFile(["[OUTPUT_DIRECTORY]/[FILENAME_SERIES_ROOT_NAME]_*.nii"].join('')),
     };
     return ret;
 }

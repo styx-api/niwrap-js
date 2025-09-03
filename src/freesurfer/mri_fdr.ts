@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_FDR_METADATA: Metadata = {
-    id: "d059a009f919404bff16458bda6281830a7ddcfa.boutiques",
+    id: "83a765bc4f770e6fa46f8e7c7f74b3a06a668419.boutiques",
     name: "mri_fdr",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -54,7 +54,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "freesurfer.mri_fdr": mri_fdr_outputs,
     };
     return outputsFuncs[t];
 }
@@ -70,14 +69,6 @@ interface MriFdrOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output after applying FDR correction
-     */
-    output_corrected: OutputPathType;
-    /**
-     * Threshold written to text file
-     */
-    output_threshold: OutputPathType;
 }
 
 
@@ -200,8 +191,6 @@ function mri_fdr_outputs(
 ): MriFdrOutputs {
     const ret: MriFdrOutputs = {
         root: execution.outputFile("."),
-        output_corrected: execution.outputFile(["<output>.mgh"].join('')),
-        output_threshold: execution.outputFile(["<output>_threshold.txt"].join('')),
     };
     return ret;
 }

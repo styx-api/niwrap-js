@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_DWUNCERT_METADATA: Metadata = {
-    id: "36a7630a6addf3cde3da6dc8c065b0d3b2cad85a.boutiques",
+    id: "e8a9be74e40ede12828d9073c73b0e69ac655b34.boutiques",
     name: "3dDWUncert",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -210,7 +210,7 @@ function v_3d_dwuncert_outputs(
 ): V3dDwuncertOutputs {
     const ret: V3dDwuncertOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile([(params["output_prefix"] ?? null), "+*.HEAD/", (params["output_prefix"] ?? null), "+*.BRIK"].join('')),
+        output_file: execution.outputFile([(params["output_prefix"] ?? null), "+.HEAD/", (params["output_prefix"] ?? null), "+.BRIK"].join('')),
     };
     return ret;
 }

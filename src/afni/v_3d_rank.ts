@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_RANK_METADATA: Metadata = {
-    id: "3ed67a52ba31b18e397b5efcfba13ef05031c91f.boutiques",
+    id: "377600b01108f8ee0134c0dbf13a87bf9258bb5e.boutiques",
     name: "3dRank",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -153,9 +153,9 @@ function v_3d_rank_outputs(
 ): V3dRankOutputs {
     const ret: V3dRankOutputs = {
         root: execution.outputFile("."),
-        output_dataset_head: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "*.HEAD"].join('')) : null,
-        output_dataset_brik: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "*.BRIK"].join('')) : null,
-        rank_map_file: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "*.1D"].join('')) : null,
+        output_dataset_head: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), ".HEAD"].join('')) : null,
+        output_dataset_brik: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), ".BRIK"].join('')) : null,
+        rank_map_file: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), ".1D"].join('')) : null,
     };
     return ret;
 }

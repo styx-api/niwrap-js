@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ADJUNCT_SUMA_FS_MASK_AND_QC_METADATA: Metadata = {
-    id: "a5fd3e30999988458acf431df9f21ab685cbbe45.boutiques",
+    id: "37b21ccd5c604daa479e5db4fabbf97bb4f18994.boutiques",
     name: "adjunct_suma_fs_mask_and_qc",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -183,12 +183,12 @@ function adjunct_suma_fs_mask_and_qc_outputs(
     const ret: AdjunctSumaFsMaskAndQcOutputs = {
         root: execution.outputFile("."),
         fs_parc_wb_mask: execution.outputFile(["SUMA/fs_parc_wb_mask.nii.gz"].join('')),
-        qc_image_00: execution.outputFile(["SUMA/qc_00*.jpg"].join('')),
-        qc_image_01: execution.outputFile(["SUMA/qc_01*.jpg"].join('')),
-        qc_image_02: execution.outputFile(["SUMA/qc_02*.jpg"].join('')),
-        qc_image_03: execution.outputFile(["SUMA/qc_03*.jpg"].join('')),
-        qc_image_04: execution.outputFile(["SUMA/qc_04*.jpg"].join('')),
-        qc_image_05: execution.outputFile(["SUMA/qc_05*.jpg"].join('')),
+        qc_image_00: execution.outputFile(["SUMA/qc_00.jpg"].join('')),
+        qc_image_01: execution.outputFile(["SUMA/qc_01.jpg"].join('')),
+        qc_image_02: execution.outputFile(["SUMA/qc_02.jpg"].join('')),
+        qc_image_03: execution.outputFile(["SUMA/qc_03.jpg"].join('')),
+        qc_image_04: execution.outputFile(["SUMA/qc_04.jpg"].join('')),
+        qc_image_05: execution.outputFile(["SUMA/qc_05.jpg"].join('')),
     };
     return ret;
 }

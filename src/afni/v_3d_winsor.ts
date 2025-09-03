@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_WINSOR_METADATA: Metadata = {
-    id: "ae0f40a7e76cc9dd4e8f1de77208f94a02310050.boutiques",
+    id: "92e62c723247bd822fe1b796340d17082d011bd9.boutiques",
     name: "3dWinsor",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -214,8 +214,8 @@ function v_3d_winsor_outputs(
 ): V3dWinsorOutputs {
     const ret: V3dWinsorOutputs = {
         root: execution.outputFile("."),
-        outfile_head: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+*.HEAD"].join('')) : null,
-        outfile_brik: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+*.BRIK"].join('')) : null,
+        outfile_head: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".HEAD"].join('')) : null,
+        outfile_brik: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".BRIK"].join('')) : null,
     };
     return ret;
 }

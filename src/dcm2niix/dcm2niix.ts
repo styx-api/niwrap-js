@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DCM2NIIX_METADATA: Metadata = {
-    id: "07620ec7cde095f35f80848a8581ec305b10c9cc.boutiques",
+    id: "73819c0a71818e492428513a9fe865045487dbc0.boutiques",
     name: "dcm2niix",
     package: "dcm2niix",
     container_image_tag: "vnmd/dcm2niix_v1.0.20240202:20241125",

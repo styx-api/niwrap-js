@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LONG_CREATE_ORIG_METADATA: Metadata = {
-    id: "b5bf312a7f38bd0a0811e93327cd17069c91c260.boutiques",
+    id: "82edfa303971a365773e3dcd133b432563fff25d.boutiques",
     name: "long_create_orig",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -63,9 +63,9 @@ interface LongCreateOrigOutputs {
      */
     root: OutputPathType;
     /**
-     * Output directory for processed time point data. Defaults to the specified path.
+     * Output directory within <SUBJECTS_DIR> for processed time point data.
      */
-    output_directory: OutputPathType;
+    output_directory: OutputPathType | null;
 }
 
 
@@ -128,7 +128,7 @@ function long_create_orig_outputs(
 ): LongCreateOrigOutputs {
     const ret: LongCreateOrigOutputs = {
         root: execution.outputFile("."),
-        output_directory: execution.outputFile(["<SUBJECTS_DIR>/<base-id>/longtp/<tp-id>"].join('')),
+        output_directory: ((params["tp_id"] ?? null) !== null) ? execution.outputFile([(params["base_id"] ?? null), "/longtp/", (params["tp_id"] ?? null)].join('')) : null,
     };
     return ret;
 }

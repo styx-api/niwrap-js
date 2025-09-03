@@ -1,5 +1,4 @@
 const esbuild = require('esbuild');
-// const { nodeExternalsPlugin } = require('esbuild-node-externals');
 const { execSync } = require('child_process');
 
 // Build for ESM
@@ -11,7 +10,6 @@ esbuild.build({
   platform: 'neutral',
   format: 'esm',
   sourcemap: true,
-//   plugins: [nodeExternalsPlugin()],
   target: ['es2020']
 }).catch(() => process.exit(1));
 
@@ -24,7 +22,6 @@ esbuild.build({
   platform: 'node',
   format: 'cjs',
   sourcemap: true,
-//   plugins: [nodeExternalsPlugin()],
   target: ['es2020']
 }).catch(() => process.exit(1));
 

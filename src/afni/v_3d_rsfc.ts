@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_RSFC_METADATA: Metadata = {
-    id: "3744bd8abe61303eddd78489bba2b70611a8f241.boutiques",
+    id: "d91fbd04ad0288d9a0f60e391fcec7ea7808ca7a.boutiques",
     name: "3dRSFC",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -330,8 +330,8 @@ function v_3d_rsfc_outputs(
 ): V3dRsfcOutputs {
     const ret: V3dRsfcOutputs = {
         root: execution.outputFile("."),
-        filtered_time_series: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_LFF+orig.*"].join('')) : null,
-        un_bandpassed_series: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_unBP+orig.*"].join('')) : null,
+        filtered_time_series: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_LFF+orig"].join('')) : null,
+        un_bandpassed_series: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_unBP+orig"].join('')) : null,
     };
     return ret;
 }

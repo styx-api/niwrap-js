@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PREWHITEN_METADATA: Metadata = {
-    id: "7d74c352b87a4e7f429a1c4ad6a51155b986a8c2.boutiques",
+    id: "43d8c0085b1b1d413eb876ab522a94ce580ec7be.boutiques",
     name: "prewhiten",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -63,9 +63,9 @@ interface PrewhitenOutputs {
      */
     root: OutputPathType;
     /**
-     * Output files generated in the specified output directory
+     * Specified output directory containing generated output files.
      */
-    output_files: OutputPathType | null;
+    output_directory: OutputPathType | null;
 }
 
 
@@ -131,7 +131,7 @@ function prewhiten_outputs(
 ): PrewhitenOutputs {
     const ret: PrewhitenOutputs = {
         root: execution.outputFile("."),
-        output_files: ((params["output_directory"] ?? null) !== null) ? execution.outputFile([(params["output_directory"] ?? null), "/*"].join('')) : null,
+        output_directory: ((params["output_directory"] ?? null) !== null) ? execution.outputFile([(params["output_directory"] ?? null)].join('')) : null,
     };
     return ret;
 }

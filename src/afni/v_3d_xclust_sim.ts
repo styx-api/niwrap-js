@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_XCLUST_SIM_METADATA: Metadata = {
-    id: "19280688ca72a431cebefdabca1d25ef8f5de5db.boutiques",
+    id: "186c6702b32cf3095da6ff9e5531a64250c00391.boutiques",
     name: "3dXClustSim",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -62,7 +62,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.3dXClustSim": v_3d_xclust_sim_outputs,
     };
     return outputsFuncs[t];
 }
@@ -78,10 +77,6 @@ interface V3dXclustSimOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output multi-threshold files for each -ncase input
-     */
-    out_mthresh: OutputPathType | null;
 }
 
 
@@ -285,7 +280,6 @@ function v_3d_xclust_sim_outputs(
 ): V3dXclustSimOutputs {
     const ret: V3dXclustSimOutputs = {
         root: execution.outputFile("."),
-        out_mthresh: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".mthresh.*.nii"].join('')) : null,
     };
     return ret;
 }

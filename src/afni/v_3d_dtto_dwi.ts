@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_DTTO_DWI_METADATA: Metadata = {
-    id: "1fb2551331e4f3894dddfd8963dc18afa2c8a38e.boutiques",
+    id: "7042b782f9a5e3ff81c37773e6c04bb4cd9fc7c8.boutiques",
     name: "3dDTtoDWI",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -174,7 +174,7 @@ function v_3d_dtto_dwi_outputs(
 ): V3dDttoDwiOutputs {
     const ret: V3dDttoDwiOutputs = {
         root: execution.outputFile("."),
-        output_dwi: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "*.HEAD"].join('')) : null,
+        output_dwi: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), ".HEAD"].join('')) : null,
     };
     return ret;
 }

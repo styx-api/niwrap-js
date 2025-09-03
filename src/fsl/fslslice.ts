@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLSLICE_METADATA: Metadata = {
-    id: "53f7dd3f5b11635dce317a2eaf9912a856142727.boutiques",
+    id: "1c645fca7b64f87a7d6f99545d9fa8a208f06614.boutiques",
     name: "fslslice",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -46,7 +46,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "fsl.fslslice": fslslice_outputs,
     };
     return outputsFuncs[t];
 }
@@ -62,10 +61,6 @@ interface FslsliceOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Extracted 2D slices from the 3D volume
-     */
-    output_slices: OutputPathType | null;
 }
 
 
@@ -128,7 +123,6 @@ function fslslice_outputs(
 ): FslsliceOutputs {
     const ret: FslsliceOutputs = {
         root: execution.outputFile("."),
-        output_slices: ((params["output_basename"] ?? null) !== null) ? execution.outputFile([(params["output_basename"] ?? null), "_slice*.nii.gz"].join('')) : null,
     };
     return ret;
 }

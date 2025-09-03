@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FAT_PROC_DWI_TO_DT_METADATA: Metadata = {
-    id: "802161f8f0acfd7af6348446316cf5b2c086b7ef.boutiques",
+    id: "72543e8d49e7916c1462662d603ce20d12e1454b.boutiques",
     name: "fat_proc_dwi_to_dt",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -73,7 +73,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.fat_proc_dwi_to_dt": fat_proc_dwi_to_dt_outputs,
     };
     return outputsFuncs[t];
 }
@@ -89,10 +88,6 @@ interface FatProcDwiToDtOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output files generated with the specified prefix.
-     */
-    output_files: OutputPathType;
 }
 
 
@@ -387,7 +382,6 @@ function fat_proc_dwi_to_dt_outputs(
 ): FatProcDwiToDtOutputs {
     const ret: FatProcDwiToDtOutputs = {
         root: execution.outputFile("."),
-        output_files: execution.outputFile([(params["prefix"] ?? null), "*"].join('')),
     };
     return ret;
 }

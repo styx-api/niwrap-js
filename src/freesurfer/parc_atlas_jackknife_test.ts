@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PARC_ATLAS_JACKKNIFE_TEST_METADATA: Metadata = {
-    id: "73521a0dbbff55000eb66ba615a4c090cafe9838.boutiques",
+    id: "50939a30caa9f5468a5adf510e908cc63f9ceb3a.boutiques",
     name: "parc_atlas_jackknife_test",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -73,7 +73,7 @@ interface ParcAtlasJackknifeTestOutputs {
      */
     root: OutputPathType;
     /**
-     * Output files written to the directory named 'jackknife'.
+     * Directory named 'jackknife' containing output files
      */
     jackknife_output: OutputPathType;
 }
@@ -228,7 +228,7 @@ function parc_atlas_jackknife_test_outputs(
 ): ParcAtlasJackknifeTestOutputs {
     const ret: ParcAtlasJackknifeTestOutputs = {
         root: execution.outputFile("."),
-        jackknife_output: execution.outputFile(["jackknife/*"].join('')),
+        jackknife_output: execution.outputFile(["jackknife"].join('')),
     };
     return ret;
 }

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__TO_MNI_AWARP_METADATA: Metadata = {
-    id: "5722ec583831094797b5958cc720dc57c1f944a2.boutiques",
+    id: "b4a2edc3a1e3b7747916913c0087ec23a80fbfef.boutiques",
     name: "@toMNI_Awarp",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -46,7 +46,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.@toMNI_Awarp": v__to_mni_awarp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -62,10 +61,6 @@ interface VToMniAwarpOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * The transformed datasets in 1x1x1 mm MNI space.
-     */
-    output_datasets: OutputPathType;
 }
 
 
@@ -124,7 +119,6 @@ function v__to_mni_awarp_outputs(
 ): VToMniAwarpOutputs {
     const ret: VToMniAwarpOutputs = {
         root: execution.outputFile("."),
-        output_datasets: execution.outputFile([(params["directory"] ?? null), "/*"].join('')),
     };
     return ret;
 }

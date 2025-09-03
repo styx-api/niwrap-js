@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FAT_PROC_IMIT2W_FROM_T1W_METADATA: Metadata = {
-    id: "a1967c97adef3727f91855cbde7a0827f8a35dc7.boutiques",
+    id: "b375525e42a458c6ed6c6ee81a979ea909e63af7.boutiques",
     name: "fat_proc_imit2w_from_t1w",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -80,10 +80,6 @@ interface FatProcImit2wFromT1wOutputs {
      * Skull-stripped version of the T1w volume
      */
     skull_stripped_t1w: OutputPathType;
-    /**
-     * QC images of the skull-stripped T1w volume and the final imitation-T2w volume
-     */
-    qc_images: OutputPathType;
 }
 
 
@@ -207,7 +203,6 @@ function fat_proc_imit2w_from_t1w_outputs(
         t2w_contrast_volume: execution.outputFile([(params["prefix"] ?? null), ".nii.gz"].join('')),
         cleaned_t1w_volume: execution.outputFile([(params["prefix"] ?? null), "_orig.nii.gz"].join('')),
         skull_stripped_t1w: execution.outputFile([(params["prefix"] ?? null), "_orig_ss.nii.gz"].join('')),
-        qc_images: execution.outputFile([(params["prefix"] ?? null), "_qc*.nii.gz"].join('')),
     };
     return ret;
 }

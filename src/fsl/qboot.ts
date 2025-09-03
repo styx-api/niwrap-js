@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const QBOOT_METADATA: Metadata = {
-    id: "67a2a2ad368ae35d03edb70213501c9e4f00fd1c.boutiques",
+    id: "6f1ae89fd80e179f1da308a48b586a5b29b5ecb4.boutiques",
     name: "qboot",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -82,9 +82,9 @@ interface QbootOutputs {
      */
     root: OutputPathType;
     /**
-     * Output files saved in the specified log directory
+     * Specified log directory with saved output files.
      */
-    output_files: OutputPathType;
+    log_directory: OutputPathType;
 }
 
 
@@ -320,7 +320,7 @@ function qboot_outputs(
 ): QbootOutputs {
     const ret: QbootOutputs = {
         root: execution.outputFile("."),
-        output_files: execution.outputFile(["logdir/*"].join('')),
+        log_directory: execution.outputFile(["logdir"].join('')),
     };
     return ret;
 }

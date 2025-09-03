@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DCMDIR_INFO_MGH_METADATA: Metadata = {
-    id: "8a0c29bc82d0c5ee9d5b9085f7f1bd5a728df60b.boutiques",
+    id: "3daeb28e82ea718d162a4cbccc3cdf65bad4b314.boutiques",
     name: "dcmdir-info-mgh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -49,7 +49,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "freesurfer.dcmdir-info-mgh": dcmdir_info_mgh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -65,10 +64,6 @@ interface DcmdirInfoMghOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Converted DICOM files to MGZ format with naming sequencename_runR.mgz, where R is the run number
-     */
-    converted_mgz_files: OutputPathType;
 }
 
 
@@ -152,7 +147,6 @@ function dcmdir_info_mgh_outputs(
 ): DcmdirInfoMghOutputs {
     const ret: DcmdirInfoMghOutputs = {
         root: execution.outputFile("."),
-        converted_mgz_files: execution.outputFile(["sequencename_run*.mgz"].join('')),
     };
     return ret;
 }

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FAT_MVM_GRIDCONV_PY_METADATA: Metadata = {
-    id: "60500ab4b4a40d9048e813ee764c1f1904d6bbcf.boutiques",
+    id: "8f0e721df0a1ca6fa03a42bfa5d524680cdb92c9.boutiques",
     name: "fat_mvm_gridconv.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -46,7 +46,6 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.fat_mvm_gridconv.py": fat_mvm_gridconv_py_outputs,
     };
     return outputsFuncs[t];
 }
@@ -62,10 +61,6 @@ interface FatMvmGridconvPyOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * Output converted grid files, with '_MOD.grid' postfix or custom output name provided in the list file.
-     */
-    converted_grid_files: OutputPathType;
 }
 
 
@@ -138,7 +133,6 @@ function fat_mvm_gridconv_py_outputs(
 ): FatMvmGridconvPyOutputs {
     const ret: FatMvmGridconvPyOutputs = {
         root: execution.outputFile("."),
-        converted_grid_files: execution.outputFile(["*_MOD.grid"].join('')),
     };
     return ret;
 }

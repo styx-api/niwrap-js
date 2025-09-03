@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1D_RPLOT_METADATA: Metadata = {
-    id: "27480b27710c773f065fbed14ca57509c39a6ae0.boutiques",
+    id: "84b186572b64b8e9b462daab706b6ba908f73136.boutiques",
     name: "1dRplot",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -323,7 +323,7 @@ function v_1d_rplot_outputs(
 ): V1dRplotOutputs {
     const ret: V1dRplotOutputs = {
         root: execution.outputFile("."),
-        output_plot: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "*.jpg"].join('')) : null,
+        output_plot: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), ".jpg"].join('')) : null,
     };
     return ret;
 }
