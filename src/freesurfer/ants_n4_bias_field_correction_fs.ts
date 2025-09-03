@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_N4_BIAS_FIELD_CORRECTION_FS_METADATA: Metadata = {
-    id: "fa3c503d811c832b99fa1f69e112206d024886d1.boutiques",
+    id: "34bd8726eced3d3149fa743ba7bb319ab5e8bfb5.boutiques",
     name: "AntsN4BiasFieldCorrectionFs",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -91,9 +91,9 @@ function ants_n4_bias_field_correction_fs_params(
     input_file: InputPathType,
     output_file: string,
     mask_file: InputPathType | null = null,
-    shrink_factor: number | null = 4,
+    shrink_factor: number | null = null,
     iterations: Array<number> | null = null,
-    output_dtype: string | null = "float",
+    output_dtype: string | null = null,
     replace_zeros: string | null = null,
 ): AntsN4BiasFieldCorrectionFsParameters {
     const params = {
@@ -248,9 +248,9 @@ function ants_n4_bias_field_correction_fs(
     input_file: InputPathType,
     output_file: string,
     mask_file: InputPathType | null = null,
-    shrink_factor: number | null = 4,
+    shrink_factor: number | null = null,
     iterations: Array<number> | null = null,
-    output_dtype: string | null = "float",
+    output_dtype: string | null = null,
     replace_zeros: string | null = null,
     runner: Runner | null = null,
 ): AntsN4BiasFieldCorrectionFsOutputs {

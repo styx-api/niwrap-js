@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TKSURFERFV_METADATA: Metadata = {
-    id: "cd3fd7dabbb53c8172ce7700f1ac133b0f1b3603.boutiques",
+    id: "bf988123763f896a05fb2580e3b31530c1b73b61.boutiques",
     name: "tksurferfv",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -101,7 +101,7 @@ function tksurferfv_params(
     no_outline: boolean = false,
     neuro_orientation: boolean = false,
     rotate_around_cursor: boolean = false,
-    heat_scale: string | null = "min_to_max",
+    heat_scale: string | null = null,
 ): TksurferfvParameters {
     const params = {
         "@type": "freesurfer.tksurferfv" as const,
@@ -250,7 +250,7 @@ function tksurferfv(
     no_outline: boolean = false,
     neuro_orientation: boolean = false,
     rotate_around_cursor: boolean = false,
-    heat_scale: string | null = "min_to_max",
+    heat_scale: string | null = null,
     runner: Runner | null = null,
 ): TksurferfvOutputs {
     const params = tksurferfv_params(subject, hemi, surface, tksurfer, all_surfaces, vgl, no_vgl, no_outline, neuro_orientation, rotate_around_cursor, heat_scale)

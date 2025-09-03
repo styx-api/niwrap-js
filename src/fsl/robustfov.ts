@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ROBUSTFOV_METADATA: Metadata = {
-    id: "3a5071d68b35032e4f3bb975acdeaa9bc87a8c91.boutiques",
+    id: "7648b7c863e2e040e3c93931aa21307be8c46082.boutiques",
     name: "robustfov",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -91,7 +91,7 @@ interface RobustfovOutputs {
  */
 function robustfov_params(
     input_file: InputPathType,
-    output_image: string | null = "output",
+    output_image: string | null = null,
     brain_size: number | null = null,
     matrix_output: string | null = null,
     debug_flag: boolean = false,
@@ -232,7 +232,7 @@ function robustfov_execute(
  */
 function robustfov(
     input_file: InputPathType,
-    output_image: string | null = "output",
+    output_image: string | null = null,
     brain_size: number | null = null,
     matrix_output: string | null = null,
     debug_flag: boolean = false,

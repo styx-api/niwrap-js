@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BETA2SXA_METADATA: Metadata = {
-    id: "f0f822c3fdfc6946f2efbf9d1eba0fc23f0154a3.boutiques",
+    id: "00432ae4af64a406f4f622cf8d671b764747774c.boutiques",
     name: "beta2sxa",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -85,7 +85,7 @@ function beta2sxa_params(
     beta_files: Array<InputPathType>,
     number_of_conditions: number,
     number_of_per_subjects: number,
-    sxa_output: string | null = "h.beta",
+    sxa_output: string | null = null,
 ): Beta2sxaParameters {
     const params = {
         "@type": "freesurfer.beta2sxa" as const,
@@ -205,7 +205,7 @@ function beta2sxa(
     beta_files: Array<InputPathType>,
     number_of_conditions: number,
     number_of_per_subjects: number,
-    sxa_output: string | null = "h.beta",
+    sxa_output: string | null = null,
     runner: Runner | null = null,
 ): Beta2sxaOutputs {
     const params = beta2sxa_params(beta_files, number_of_conditions, number_of_per_subjects, sxa_output)

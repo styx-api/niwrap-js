@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FEATQUERY_METADATA: Metadata = {
-    id: "3af5fd773a3c2794d8d8e2d956b51362bc61d219.boutiques",
+    id: "58190adc00caa3074855d702497875cc7254a360.boutiques",
     name: "featquery",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -111,7 +111,7 @@ function featquery_params(
     atlas_flag: string | null = null,
     percent_convert_flag: boolean = false,
     thresh_flag: boolean = false,
-    interp_thresh: number | null = 0.5,
+    interp_thresh: number | null = null,
     timeseries_flag: boolean = false,
     weight_flag: boolean = false,
     browser_flag: boolean = false,
@@ -286,7 +286,7 @@ function featquery(
     atlas_flag: string | null = null,
     percent_convert_flag: boolean = false,
     thresh_flag: boolean = false,
-    interp_thresh: number | null = 0.5,
+    interp_thresh: number | null = null,
     timeseries_flag: boolean = false,
     weight_flag: boolean = false,
     browser_flag: boolean = false,

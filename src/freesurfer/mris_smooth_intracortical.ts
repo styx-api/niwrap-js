@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_SMOOTH_INTRACORTICAL_METADATA: Metadata = {
-    id: "40a15a33b82c63e11e7ab868f6bbf4b236de01b3.boutiques",
+    id: "16c978d0be4edfbf1259b9d1d78597ac7ee81f24.boutiques",
     name: "mris_smooth_intracortical",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -98,7 +98,7 @@ function mris_smooth_intracortical_params(
     surf_name: string,
     overlay_dir: string,
     overlay_name: string,
-    output_dir: string | null = "[OVERLAY_DIR]",
+    output_dir: string | null = null,
     output_name: string | null = null,
     tan_size: number | null = null,
     rad_size: number | null = null,
@@ -280,7 +280,7 @@ function mris_smooth_intracortical(
     surf_name: string,
     overlay_dir: string,
     overlay_name: string,
-    output_dir: string | null = "[OVERLAY_DIR]",
+    output_dir: string | null = null,
     output_name: string | null = null,
     tan_size: number | null = null,
     rad_size: number | null = null,

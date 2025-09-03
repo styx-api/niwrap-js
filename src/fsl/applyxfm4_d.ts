@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const APPLYXFM4_D_METADATA: Metadata = {
-    id: "0131340ae6f9af1eb23c9061596acf045e5ada72.boutiques",
+    id: "7c7a426f45ad4adab9a2ca0d47e1a4c6082435c0.boutiques",
     name: "applyxfm4D",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -94,7 +94,7 @@ function applyxfm4_d_params(
     ref_volume: InputPathType,
     output_volume: string,
     transformation_matrix: string,
-    interpolation_method: string | null = "sinc",
+    interpolation_method: string | null = null,
     single_matrix_flag: boolean = false,
     four_digit_flag: boolean = false,
     user_prefix: string | null = null,
@@ -232,7 +232,7 @@ function applyxfm4_d(
     ref_volume: InputPathType,
     output_volume: string,
     transformation_matrix: string,
-    interpolation_method: string | null = "sinc",
+    interpolation_method: string | null = null,
     single_matrix_flag: boolean = false,
     four_digit_flag: boolean = false,
     user_prefix: string | null = null,

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CBLUMWMGYRI_METADATA: Metadata = {
-    id: "564e3588afc9810c3dc5013f2e056c14a2f92213.boutiques",
+    id: "b2c3c3e10c29432429a2203b3a71b0fe8dc29543.boutiques",
     name: "cblumwmgyri",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -88,8 +88,8 @@ interface CblumwmgyriOutputs {
 function cblumwmgyri_params(
     subject: string,
     source_seg: InputPathType | null = null,
-    n_erodes_dilates: number | null = 2,
-    out_seg: string | null = "sourceseg+cblumwmgyri.mgz",
+    n_erodes_dilates: number | null = null,
+    out_seg: string | null = null,
     no_segstats: boolean = false,
     subjects_dir: string | null = null,
 ): CblumwmgyriParameters {
@@ -233,8 +233,8 @@ function cblumwmgyri_execute(
 function cblumwmgyri(
     subject: string,
     source_seg: InputPathType | null = null,
-    n_erodes_dilates: number | null = 2,
-    out_seg: string | null = "sourceseg+cblumwmgyri.mgz",
+    n_erodes_dilates: number | null = null,
+    out_seg: string | null = null,
     no_segstats: boolean = false,
     subjects_dir: string | null = null,
     runner: Runner | null = null,

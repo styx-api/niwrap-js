@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSL_REGFILT_METADATA: Metadata = {
-    id: "da84cf4eed8400abe4e5249776122aacd3bd8e63.boutiques",
+    id: "20a1afacec4c7884747e4f8494d0032f4ce51173.boutiques",
     name: "fsl_regfilt",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -128,8 +128,8 @@ function fsl_regfilt_params(
     freq_filter_flag: boolean = false,
     freq_ic_flag: boolean = false,
     freq_ic_smooth: number | null = null,
-    fthresh: number | null = 0.15,
-    fthresh2: number | null = 0.02,
+    fthresh: number | null = null,
+    fthresh2: number | null = null,
     vn_flag: boolean = false,
     verbose_flag: boolean = false,
     aggressive_flag: boolean = false,
@@ -364,8 +364,8 @@ function fsl_regfilt(
     freq_filter_flag: boolean = false,
     freq_ic_flag: boolean = false,
     freq_ic_smooth: number | null = null,
-    fthresh: number | null = 0.15,
-    fthresh2: number | null = 0.02,
+    fthresh: number | null = null,
+    fthresh2: number | null = null,
     vn_flag: boolean = false,
     verbose_flag: boolean = false,
     aggressive_flag: boolean = false,

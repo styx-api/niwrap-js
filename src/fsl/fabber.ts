@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FABBER_METADATA: Metadata = {
-    id: "101ab2bd38fcd345ee05713b574dfaa5596da053.boutiques",
+    id: "763a4ed025842a4b64029b2963a8037295214888.boutiques",
     name: "fabber",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -257,7 +257,7 @@ function fabber_params(
     model: string,
     data_file: InputPathType,
     data_files: InputPathType | null = null,
-    data_order: string | null = "interleave",
+    data_order: string | null = null,
     mask_file: InputPathType | null = null,
     mt_n: number | null = null,
     supp_data: InputPathType | null = null,
@@ -628,7 +628,7 @@ function fabber(
     model: string,
     data_file: InputPathType,
     data_files: InputPathType | null = null,
-    data_order: string | null = "interleave",
+    data_order: string | null = null,
     mask_file: InputPathType | null = null,
     mt_n: number | null = null,
     supp_data: InputPathType | null = null,

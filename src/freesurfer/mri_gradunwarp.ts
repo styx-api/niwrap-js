@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_GRADUNWARP_METADATA: Metadata = {
-    id: "ea726b9491b22fd7232388a9dbf165e0dd585e33.boutiques",
+    id: "ec463955c0b630f4cada74ea02dab0166b49ce8e.boutiques",
     name: "mri_gradunwarp",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -106,7 +106,7 @@ function mri_gradunwarp_params(
     output_file: string | null = null,
     out_transtbl: string | null = null,
     save_transtbl_only: boolean = false,
-    interpolation_type: string | null = "trilinear",
+    interpolation_type: string | null = null,
     nthreads: number | null = null,
     checkopts: boolean = false,
     version: boolean = false,
@@ -292,7 +292,7 @@ function mri_gradunwarp(
     output_file: string | null = null,
     out_transtbl: string | null = null,
     save_transtbl_only: boolean = false,
-    interpolation_type: string | null = "trilinear",
+    interpolation_type: string | null = null,
     nthreads: number | null = null,
     checkopts: boolean = false,
     version: boolean = false,

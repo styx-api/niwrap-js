@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GRAD_UNWARP_METADATA: Metadata = {
-    id: "c8a86a5da26d5d46183d8506a6feda47afabaf36.boutiques",
+    id: "1de0e1e689455d67e8bfe978e1aface6ac7c1a6a.boutiques",
     name: "grad_unwarp",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -104,7 +104,7 @@ function grad_unwarp_params(
     corfov: boolean = false,
     cor: boolean = false,
     interp: string | null = null,
-    matlab_binary: string | null = "/space/lyon/6/pubsw/common/matlab/6.5/bin/matlab",
+    matlab_binary: string | null = null,
 ): GradUnwarpParameters {
     const params = {
         "@type": "freesurfer.grad_unwarp" as const,
@@ -266,7 +266,7 @@ function grad_unwarp(
     corfov: boolean = false,
     cor: boolean = false,
     interp: string | null = null,
-    matlab_binary: string | null = "/space/lyon/6/pubsw/common/matlab/6.5/bin/matlab",
+    matlab_binary: string | null = null,
     runner: Runner | null = null,
 ): GradUnwarpOutputs {
     const params = grad_unwarp_params(infile, outfile, seriesno, unwarp_type, nojac, corfov, cor, interp, matlab_binary)

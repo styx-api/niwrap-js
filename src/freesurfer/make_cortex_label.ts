@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKE_CORTEX_LABEL_METADATA: Metadata = {
-    id: "231e799f73603ebd33e17c16341a19cbfd26939a.boutiques",
+    id: "02e8e249ee9cf1645a268653adb1ce0c0f6e2aac.boutiques",
     name: "make_cortex_label",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -89,7 +89,7 @@ function make_cortex_label_params(
     subject: string,
     hemi: string | null = null,
     use_a2009s: boolean = false,
-    output_name: string | null = "cortex",
+    output_name: string | null = null,
 ): MakeCortexLabelParameters {
     const params = {
         "@type": "freesurfer.make_cortex_label" as const,
@@ -213,7 +213,7 @@ function make_cortex_label(
     subject: string,
     hemi: string | null = null,
     use_a2009s: boolean = false,
-    output_name: string | null = "cortex",
+    output_name: string | null = null,
     runner: Runner | null = null,
 ): MakeCortexLabelOutputs {
     const params = make_cortex_label_params(subject, hemi, use_a2009s, output_name)

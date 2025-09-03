@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MASKDYADS_METADATA: Metadata = {
-    id: "7202ebf9fac4f093011a592184e5ec67cfb619d5.boutiques",
+    id: "92489f08c2bebaad41fe95a4857c0ee16b5bf952.boutiques",
     name: "maskdyads",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -77,7 +77,7 @@ interface MaskdyadsOutputs {
 function maskdyads_params(
     dyads: InputPathType,
     fsamples: InputPathType,
-    threshold: number | null = 0.05,
+    threshold: number | null = null,
 ): MaskdyadsParameters {
     const params = {
         "@type": "fsl.maskdyads" as const,
@@ -183,7 +183,7 @@ function maskdyads_execute(
 function maskdyads(
     dyads: InputPathType,
     fsamples: InputPathType,
-    threshold: number | null = 0.05,
+    threshold: number | null = null,
     runner: Runner | null = null,
 ): MaskdyadsOutputs {
     const params = maskdyads_params(dyads, fsamples, threshold)

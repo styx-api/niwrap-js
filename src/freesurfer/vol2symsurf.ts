@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOL2SYMSURF_METADATA: Metadata = {
-    id: "f7fafa95d03d4b203414d428de80f8e3b613706f.boutiques",
+    id: "47622a295d51e596078a4f70c2397878b0afcc25.boutiques",
     name: "vol2symsurf",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -105,9 +105,9 @@ function vol2symsurf_params(
     registration_file: InputPathType,
     input_volume: InputPathType,
     fwhm: number,
-    output_stem: string | null = "instem.fsaverage_sym.smFWHM.lh.hemi",
+    output_stem: string | null = null,
     regheader: string | null = null,
-    projection_fraction: number | null = 0.5,
+    projection_fraction: number | null = null,
     no_diff: boolean = false,
     laterality_index: boolean = false,
 ): Vol2symsurfParameters {
@@ -262,9 +262,9 @@ function vol2symsurf(
     registration_file: InputPathType,
     input_volume: InputPathType,
     fwhm: number,
-    output_stem: string | null = "instem.fsaverage_sym.smFWHM.lh.hemi",
+    output_stem: string | null = null,
     regheader: string | null = null,
-    projection_fraction: number | null = 0.5,
+    projection_fraction: number | null = null,
     no_diff: boolean = false,
     laterality_index: boolean = false,
     runner: Runner | null = null,

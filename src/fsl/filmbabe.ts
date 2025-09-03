@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FILMBABE_METADATA: Metadata = {
-    id: "99ed3b3c098c18b899137d170388e99e2fbc4432.boutiques",
+    id: "784460545f9291967864fc7df2bca6649c1b1fe6.boutiques",
     name: "filmbabe",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -161,13 +161,13 @@ function filmbabe_params(
     log_dir: string | null = null,
     log_dir_alias_1: string | null = null,
     log_dir_alias_2: string | null = null,
-    num_iterations: number | null = 5,
-    temporal_ar_mrf_prec: number | null = -1,
-    temporal_ar_mrf_prec_alias: number | null = -1,
+    num_iterations: number | null = null,
+    temporal_ar_mrf_prec: number | null = null,
+    temporal_ar_mrf_prec_alias: number | null = null,
     temporal_ar_flag: boolean = false,
-    num_trace_samples: number | null = 0,
-    num_trace_samples_alias: number | null = 0,
-    temporal_ar_order: number | null = 3,
+    num_trace_samples: number | null = null,
+    num_trace_samples_alias: number | null = null,
+    temporal_ar_order: number | null = null,
 ): FilmbabeParameters {
     const params = {
         "@type": "fsl.filmbabe" as const,
@@ -539,13 +539,13 @@ function filmbabe(
     log_dir: string | null = null,
     log_dir_alias_1: string | null = null,
     log_dir_alias_2: string | null = null,
-    num_iterations: number | null = 5,
-    temporal_ar_mrf_prec: number | null = -1,
-    temporal_ar_mrf_prec_alias: number | null = -1,
+    num_iterations: number | null = null,
+    temporal_ar_mrf_prec: number | null = null,
+    temporal_ar_mrf_prec_alias: number | null = null,
     temporal_ar_flag: boolean = false,
-    num_trace_samples: number | null = 0,
-    num_trace_samples_alias: number | null = 0,
-    temporal_ar_order: number | null = 3,
+    num_trace_samples: number | null = null,
+    num_trace_samples_alias: number | null = null,
+    temporal_ar_order: number | null = null,
     runner: Runner | null = null,
 ): FilmbabeOutputs {
     const params = filmbabe_params(datafile, datafile_alias, mask, mask_alias, designfile, designfile_alias_1, designfile_alias_2, frf, verbose_flag, verbose_flag_alias, debug_level, debug_level_alias_1, debug_level_alias_2, timing_on_flag, help_flag, help_flag_alias, flobs_prior_off_flag, flobs_prior_off_alias, flobs_dir, prior_covar_file, prior_covar_file_alias, prior_mean_file, prior_mean_file_alias, log_dir, log_dir_alias_1, log_dir_alias_2, num_iterations, temporal_ar_mrf_prec, temporal_ar_mrf_prec_alias, temporal_ar_flag, num_trace_samples, num_trace_samples_alias, temporal_ar_order)

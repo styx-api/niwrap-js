@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PVMFIT_METADATA: Metadata = {
-    id: "2f5feeff275440050d46f82516af1c525bc61659.boutiques",
+    id: "85ed04f1e97804c9d67151e0c97c35295e3cbf82.boutiques",
     name: "pvmfit",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -112,8 +112,8 @@ function pvmfit_params(
     mask_file: InputPathType,
     bvec_file: InputPathType,
     bval_file: InputPathType,
-    output_basename: string | null = "pvm",
-    number_of_fibres: number | null = 1,
+    output_basename: string | null = null,
+    number_of_fibres: number | null = null,
     model_type: number | null = null,
     fit_all_models: boolean = false,
     constrained_nonlinear: boolean = false,
@@ -310,8 +310,8 @@ function pvmfit(
     mask_file: InputPathType,
     bvec_file: InputPathType,
     bval_file: InputPathType,
-    output_basename: string | null = "pvm",
-    number_of_fibres: number | null = 1,
+    output_basename: string | null = null,
+    number_of_fibres: number | null = null,
     model_type: number | null = null,
     fit_all_models: boolean = false,
     constrained_nonlinear: boolean = false,

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_EXVIVO_SURFACES_METADATA: Metadata = {
-    id: "9aa1e71a4ba662f9bb2d5e13ebea8be3ca4a2485.boutiques",
+    id: "7a7dc9f85f5cce89c13a4dbb4546d5a342d1b381.boutiques",
     name: "mris_exvivo_surfaces",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -104,7 +104,7 @@ function mris_exvivo_surfaces_params(
     hemisphere: string,
     omit_self_intersection: boolean = false,
     create_curvature_area: boolean = false,
-    average_curvature: number | null = 10,
+    average_curvature: number | null = null,
     white_only: boolean = false,
     formalin: number | null = null,
 ): MrisExvivoSurfacesParameters {
@@ -243,7 +243,7 @@ function mris_exvivo_surfaces(
     hemisphere: string,
     omit_self_intersection: boolean = false,
     create_curvature_area: boolean = false,
-    average_curvature: number | null = 10,
+    average_curvature: number | null = null,
     white_only: boolean = false,
     formalin: number | null = null,
     runner: Runner | null = null,

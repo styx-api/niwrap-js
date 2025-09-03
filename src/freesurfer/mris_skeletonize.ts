@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_SKELETONIZE_METADATA: Metadata = {
-    id: "5fc67afd591602c82c098ab2c9b85ebc7853cabf.boutiques",
+    id: "0fd18a4509433802a711a64ec204f40b5554f22b.boutiques",
     name: "mris_skeletonize",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -123,7 +123,7 @@ function mris_skeletonize_params(
     sphere: string | null = null,
     pointset: string | null = null,
     label: string | null = null,
-    nbrsize: number | null = 2,
+    nbrsize: number | null = null,
     threshold: number | null = null,
     cluster: number | null = null,
     fwhm: number | null = null,
@@ -346,7 +346,7 @@ function mris_skeletonize(
     sphere: string | null = null,
     pointset: string | null = null,
     label: string | null = null,
-    nbrsize: number | null = 2,
+    nbrsize: number | null = null,
     threshold: number | null = null,
     cluster: number | null = null,
     fwhm: number | null = null,

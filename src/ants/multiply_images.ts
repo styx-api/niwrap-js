@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MULTIPLY_IMAGES_METADATA: Metadata = {
-    id: "b6e8db4f48e2712b28e3d2e665c15294bd29849c.boutiques",
+    id: "129479c8d258bc3d54209e4195e6743927a43954.boutiques",
     name: "MultiplyImages",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -91,7 +91,7 @@ function multiply_images_params(
     output_product_image: string,
     second_input: InputPathType | null = null,
     second_input_2: number | null = null,
-    num_threads: number | null = 1,
+    num_threads: number | null = null,
 ): MultiplyImagesParameters {
     const params = {
         "@type": "ants.MultiplyImages" as const,
@@ -215,7 +215,7 @@ function multiply_images(
     output_product_image: string,
     second_input: InputPathType | null = null,
     second_input_2: number | null = null,
-    num_threads: number | null = 1,
+    num_threads: number | null = null,
     runner: Runner | null = null,
 ): MultiplyImagesOutputs {
     const params = multiply_images_params(dimension, first_input, output_product_image, second_input, second_input_2, num_threads)

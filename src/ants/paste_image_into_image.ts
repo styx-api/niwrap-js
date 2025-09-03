@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PASTE_IMAGE_INTO_IMAGE_METADATA: Metadata = {
-    id: "84fede77ce1571671d2df31a0ca7da2716107704.boutiques",
+    id: "9d834deda72a140f802dfa3b6f3bd17b6d523a5e.boutiques",
     name: "PasteImageIntoImage",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -95,9 +95,9 @@ function paste_image_into_image_params(
     input_image: InputPathType,
     output_image: string,
     start_index: string,
-    background_label: number | null = 0,
-    paint_over_non_background_voxels: 0 | 1 | 2 | null = 0,
-    conflict_label: number | null = -1,
+    background_label: number | null = null,
+    paint_over_non_background_voxels: 0 | 1 | 2 | null = null,
+    conflict_label: number | null = null,
 ): PasteImageIntoImageParameters {
     const params = {
         "@type": "ants.PasteImageIntoImage" as const,
@@ -227,9 +227,9 @@ function paste_image_into_image(
     input_image: InputPathType,
     output_image: string,
     start_index: string,
-    background_label: number | null = 0,
-    paint_over_non_background_voxels: 0 | 1 | 2 | null = 0,
-    conflict_label: number | null = -1,
+    background_label: number | null = null,
+    paint_over_non_background_voxels: 0 | 1 | 2 | null = null,
+    conflict_label: number | null = null,
     runner: Runner | null = null,
 ): PasteImageIntoImageOutputs {
     const params = paste_image_into_image_params(image_dimension, input_canvas_image, input_image, output_image, start_index, background_label, paint_over_non_background_voxels, conflict_label)

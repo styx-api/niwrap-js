@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TTOLOGP_METADATA: Metadata = {
-    id: "1dad6c604e07eff7004f91165de03818f938a5ee.boutiques",
+    id: "49396f91283bf3a8b5ba6477cdf5eeae4eab2088.boutiques",
     name: "ttologp",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -87,7 +87,7 @@ function ttologp_params(
     varsfile: InputPathType,
     cbsfile: InputPathType,
     dof: string,
-    outputvol: string | null = "logps",
+    outputvol: string | null = null,
     help_flag: boolean = false,
 ): TtologpParameters {
     const params = {
@@ -204,7 +204,7 @@ function ttologp(
     varsfile: InputPathType,
     cbsfile: InputPathType,
     dof: string,
-    outputvol: string | null = "logps",
+    outputvol: string | null = null,
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): TtologpOutputs {

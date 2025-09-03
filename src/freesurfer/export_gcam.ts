@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const EXPORT_GCAM_METADATA: Metadata = {
-    id: "433fb1878c30c38bab33359daa220e7ac52950c8.boutiques",
+    id: "bd91d1b894313409678dcf687e735865846f54f2.boutiques",
     name: "exportGcam",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -96,7 +96,7 @@ function export_gcam_params(
     out_gcam: string,
     zlib_buffer: number | null = null,
     bbox_threshold: number | null = null,
-    interp_method: "linear" | "nearest" | null = "linear",
+    interp_method: "linear" | "nearest" | null = null,
     test: boolean = false,
 ): ExportGcamParameters {
     const params = {
@@ -251,7 +251,7 @@ function export_gcam(
     out_gcam: string,
     zlib_buffer: number | null = null,
     bbox_threshold: number | null = null,
-    interp_method: "linear" | "nearest" | null = "linear",
+    interp_method: "linear" | "nearest" | null = null,
     test: boolean = false,
     runner: Runner | null = null,
 ): ExportGcamOutputs {

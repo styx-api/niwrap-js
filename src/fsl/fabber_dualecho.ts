@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FABBER_DUALECHO_METADATA: Metadata = {
-    id: "289052fc726f486069f3c7321d2f682e41dc5992.boutiques",
+    id: "45b1cb692ff975ec9d8d38b98d9395afa86e12d2.boutiques",
     name: "fabber_dualecho",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -148,7 +148,7 @@ function fabber_dualecho_params(
     method: string,
     model: string,
     data: InputPathType,
-    data_order: string | null = "interleave",
+    data_order: string | null = null,
     mask_file: InputPathType | null = null,
     mt_list: number | null = null,
     supp_data: InputPathType | null = null,
@@ -492,7 +492,7 @@ function fabber_dualecho(
     method: string,
     model: string,
     data: InputPathType,
-    data_order: string | null = "interleave",
+    data_order: string | null = null,
     mask_file: InputPathType | null = null,
     mt_list: number | null = null,
     supp_data: InputPathType | null = null,

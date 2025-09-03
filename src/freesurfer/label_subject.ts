@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_SUBJECT_METADATA: Metadata = {
-    id: "560f83aa8a7da243f46defe88685f70de1330eb3.boutiques",
+    id: "ba417fe8b013b0b26adddf6cbfa81e3fbc235a5b.boutiques",
     name: "label_subject",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -79,7 +79,7 @@ interface LabelSubjectOutputs {
  */
 function label_subject_params(
     nu_file: InputPathType | null = null,
-    orig_dir: string | null = "/usr/local/freesurfer/subjects",
+    orig_dir: string | null = null,
 ): LabelSubjectParameters {
     const params = {
         "@type": "freesurfer.label_subject" as const,
@@ -183,7 +183,7 @@ function label_subject_execute(
  */
 function label_subject(
     nu_file: InputPathType | null = null,
-    orig_dir: string | null = "/usr/local/freesurfer/subjects",
+    orig_dir: string | null = null,
     runner: Runner | null = null,
 ): LabelSubjectOutputs {
     const params = label_subject_params(nu_file, orig_dir)

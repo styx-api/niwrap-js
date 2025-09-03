@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_FUNC2SPH_METADATA: Metadata = {
-    id: "07527586a882465863cf7ef1f979d3d044731e6d.boutiques",
+    id: "9ad3959f847155588037bf3200d979dd697a7f37.boutiques",
     name: "mri-func2sph",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -89,8 +89,8 @@ function mri_func2sph_params(
     outstem: string,
     hemisphere: "lh" | "rh",
     fvitdir: string,
-    hole_filling_iters: number | null = 100,
-    icosahedron_size: number | null = 10242,
+    hole_filling_iters: number | null = null,
+    icosahedron_size: number | null = null,
     input_type: string | null = null,
     umask: string | null = null,
 ): MriFunc2sphParameters {
@@ -248,8 +248,8 @@ function mri_func2sph(
     outstem: string,
     hemisphere: "lh" | "rh",
     fvitdir: string,
-    hole_filling_iters: number | null = 100,
-    icosahedron_size: number | null = 10242,
+    hole_filling_iters: number | null = null,
+    icosahedron_size: number | null = null,
     input_type: string | null = null,
     umask: string | null = null,
     runner: Runner | null = null,

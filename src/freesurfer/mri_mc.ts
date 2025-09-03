@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_MC_METADATA: Metadata = {
-    id: "9e6e0910561ae66cef8a0a6a59788fbf92c19e5f.boutiques",
+    id: "43e233404e9fd0353036a4e5a6025a4e78aa5b17.boutiques",
     name: "mri_mc",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -85,7 +85,7 @@ function mri_mc_params(
     input_volume: InputPathType,
     label_value: number,
     output_surface: string,
-    connectivity: number | null = 1,
+    connectivity: number | null = null,
 ): MriMcParameters {
     const params = {
         "@type": "freesurfer.mri_mc" as const,
@@ -192,7 +192,7 @@ function mri_mc(
     input_volume: InputPathType,
     label_value: number,
     output_surface: string,
-    connectivity: number | null = 1,
+    connectivity: number | null = null,
     runner: Runner | null = null,
 ): MriMcOutputs {
     const params = mri_mc_params(input_volume, label_value, output_surface, connectivity)

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_MS_REFINE_METADATA: Metadata = {
-    id: "a72602375dfc7e668271300addd2b337e03a3c9c.boutiques",
+    id: "145a15e944079df47fd807d74bc994f80265ca6e.boutiques",
     name: "mris_ms_refine",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -111,7 +111,7 @@ function mris_ms_refine_params(
     residuals: InputPathType,
     omit_self_intersection: boolean = false,
     create_curvature_files: boolean = false,
-    average_curvature: number | null = 10,
+    average_curvature: number | null = null,
     white_only: boolean = false,
 ): MrisMsRefineParameters {
     const params = {
@@ -251,7 +251,7 @@ function mris_ms_refine(
     residuals: InputPathType,
     omit_self_intersection: boolean = false,
     create_curvature_files: boolean = false,
-    average_curvature: number | null = 10,
+    average_curvature: number | null = null,
     white_only: boolean = false,
     runner: Runner | null = null,
 ): MrisMsRefineOutputs {

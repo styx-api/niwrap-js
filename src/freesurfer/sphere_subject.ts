@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SPHERE_SUBJECT_METADATA: Metadata = {
-    id: "e4907d9aa35e3f0d55ae261149fe778f0b917dfd.boutiques",
+    id: "dd5e67306f283a2927121bcaa1f0c596e772e11a.boutiques",
     name: "sphere_subject",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -82,7 +82,7 @@ interface SphereSubjectOutputs {
 function sphere_subject_params(
     input_dir: string,
     output_file: string,
-    license_file: string | null = "/usr/local/freesurfer/.license",
+    license_file: string | null = null,
 ): SphereSubjectParameters {
     const params = {
         "@type": "freesurfer.sphere_subject" as const,
@@ -186,7 +186,7 @@ function sphere_subject_execute(
 function sphere_subject(
     input_dir: string,
     output_file: string,
-    license_file: string | null = "/usr/local/freesurfer/.license",
+    license_file: string | null = null,
     runner: Runner | null = null,
 ): SphereSubjectOutputs {
     const params = sphere_subject_params(input_dir, output_file, license_file)

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FAST_METADATA: Metadata = {
-    id: "2263cc2ed42fac42344f5ff5029ee27588a77584.boutiques",
+    id: "84a959c5904afcf247138370a7cc84e15d4e5dd8.boutiques",
     name: "fast",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -147,7 +147,7 @@ function fast_params(
     output_biascorrected: boolean = false,
     no_bias: boolean = false,
     channels: number | null = null,
-    out_basename: string | null = "fast_out",
+    out_basename: string | null = null,
     use_priors: boolean = false,
     no_pve: boolean = false,
     segment_iters: number | null = null,
@@ -439,7 +439,7 @@ function fast(
     output_biascorrected: boolean = false,
     no_bias: boolean = false,
     channels: number | null = null,
-    out_basename: string | null = "fast_out",
+    out_basename: string | null = null,
     use_priors: boolean = false,
     no_pve: boolean = false,
     segment_iters: number | null = null,

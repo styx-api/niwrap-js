@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FTOZ_METADATA: Metadata = {
-    id: "02b653d1b97e955d8addcef181e7d486deb64fab.boutiques",
+    id: "e4a1cf140a1f114c3574d07e7a280df5a631d9e2.boutiques",
     name: "ftoz",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -87,7 +87,7 @@ function ftoz_params(
     input_file: InputPathType,
     dof1: number,
     dof2: number,
-    output_file: string | null = "zstats",
+    output_file: string | null = null,
     help_flag: boolean = false,
 ): FtozParameters {
     const params = {
@@ -204,7 +204,7 @@ function ftoz(
     input_file: InputPathType,
     dof1: number,
     dof2: number,
-    output_file: string | null = "zstats",
+    output_file: string | null = null,
     help_flag: boolean = false,
     runner: Runner | null = null,
 ): FtozOutputs {

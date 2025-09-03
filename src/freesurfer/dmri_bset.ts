@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DMRI_BSET_METADATA: Metadata = {
-    id: "91724c14abdc0abe94c9b096e04494e0a0e000cf.boutiques",
+    id: "469e3d70202b008f848674ece09aef0855ad92a6.boutiques",
     name: "dmri_bset",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -105,7 +105,7 @@ function dmri_bset_params(
     input_dwi: InputPathType,
     output_dwi: string,
     b_values: Array<number> | null = null,
-    btol: number | null = 0.05,
+    btol: number | null = null,
     bsort: boolean = false,
     bmax: number | null = null,
     input_b_table: InputPathType | null = null,
@@ -286,7 +286,7 @@ function dmri_bset(
     input_dwi: InputPathType,
     output_dwi: string,
     b_values: Array<number> | null = null,
-    btol: number | null = 0.05,
+    btol: number | null = null,
     bsort: boolean = false,
     bmax: number | null = null,
     input_b_table: InputPathType | null = null,

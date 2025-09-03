@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_FUSE_SEGMENTATIONS_METADATA: Metadata = {
-    id: "3537b502225e1b3b7decc0bf6c52548a364aee6d.boutiques",
+    id: "17d51ec1722bbb23f45895a196b89c8b71d5d1b3.boutiques",
     name: "mri_fuse_segmentations",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -94,7 +94,7 @@ function mri_fuse_segmentations_params(
     input_file: InputPathType,
     output_file: string,
     transforms: Array<InputPathType> | null = null,
-    sigma: number | null = 3.0,
+    sigma: number | null = null,
 ): MriFuseSegmentationsParameters {
     const params = {
         "@type": "freesurfer.mri_fuse_segmentations" as const,
@@ -233,7 +233,7 @@ function mri_fuse_segmentations(
     input_file: InputPathType,
     output_file: string,
     transforms: Array<InputPathType> | null = null,
-    sigma: number | null = 3.0,
+    sigma: number | null = null,
     runner: Runner | null = null,
 ): MriFuseSegmentationsOutputs {
     const params = mri_fuse_segmentations_params(asegs, nocc_asegs, norm_volumes, input_file, output_file, transforms, sigma)

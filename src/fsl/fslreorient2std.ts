@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLREORIENT2STD_METADATA: Metadata = {
-    id: "7d2a23aaff44e7b6adc55de71f4f8bdf7a3b0cf3.boutiques",
+    id: "5e6369ad07f486a45aceced58c1fad1460bd0202.boutiques",
     name: "fslreorient2std",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -85,7 +85,7 @@ interface Fslreorient2stdOutputs {
  */
 function fslreorient2std_params(
     input_image: InputPathType,
-    output_image: string | null = "output",
+    output_image: string | null = null,
     matrix_file: string | null = null,
 ): Fslreorient2stdParameters {
     const params = {
@@ -197,7 +197,7 @@ function fslreorient2std_execute(
  */
 function fslreorient2std(
     input_image: InputPathType,
-    output_image: string | null = "output",
+    output_image: string | null = null,
     matrix_file: string | null = null,
     runner: Runner | null = null,
 ): Fslreorient2stdOutputs {

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIENA_FLOW2STD_METADATA: Metadata = {
-    id: "14d113d6d820a92a9866c09d8e160c9b94d46df8.boutiques",
+    id: "ee281143cf78f9ade0c749dc32eb09e063c2ae06.boutiques",
     name: "siena_flow2std",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -79,7 +79,7 @@ interface SienaFlow2stdOutputs {
 function siena_flow2std_params(
     fileroot1: string,
     fileroot2: string,
-    sigma: number | null = 5,
+    sigma: number | null = null,
     debug_flag: boolean = false,
 ): SienaFlow2stdParameters {
     const params = {
@@ -191,7 +191,7 @@ function siena_flow2std_execute(
 function siena_flow2std(
     fileroot1: string,
     fileroot2: string,
-    sigma: number | null = 5,
+    sigma: number | null = null,
     debug_flag: boolean = false,
     runner: Runner | null = null,
 ): SienaFlow2stdOutputs {

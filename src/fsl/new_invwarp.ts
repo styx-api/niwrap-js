@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const NEW_INVWARP_METADATA: Metadata = {
-    id: "a7795ab8fb8c1a3741d41052e9c9b61e19007cdc.boutiques",
+    id: "ccd2309d89287c2f94a353db469d083ace8b7355.boutiques",
     name: "new_invwarp",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -100,8 +100,8 @@ function new_invwarp_params(
     relflag: boolean = false,
     absflag: boolean = false,
     noconstraintflag: boolean = false,
-    jmin: number | null = 0.01,
-    jmax: number | null = 100.0,
+    jmin: number | null = null,
+    jmax: number | null = null,
     debugflag: boolean = false,
     verboseflag: boolean = false,
 ): NewInvwarpParameters {
@@ -261,8 +261,8 @@ function new_invwarp(
     relflag: boolean = false,
     absflag: boolean = false,
     noconstraintflag: boolean = false,
-    jmin: number | null = 0.01,
-    jmax: number | null = 100.0,
+    jmin: number | null = null,
+    jmax: number | null = null,
     debugflag: boolean = false,
     verboseflag: boolean = false,
     runner: Runner | null = null,

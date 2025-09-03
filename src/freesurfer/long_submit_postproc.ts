@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LONG_SUBMIT_POSTPROC_METADATA: Metadata = {
-    id: "9134aeb62a00f2309da855fdc314f3ded0379757.boutiques",
+    id: "d1abcafebd9161802b8d815839829930e9ebecb6.boutiques",
     name: "long_submit_postproc",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -90,8 +90,8 @@ function long_submit_postproc_params(
     flags: string | null = null,
     dir: string | null = null,
     simulate: boolean = false,
-    pause: number | null = 13,
-    max: number | null = 100,
+    pause: number | null = null,
+    max: number | null = null,
     queue: string | null = null,
 ): LongSubmitPostprocParameters {
     const params = {
@@ -252,8 +252,8 @@ function long_submit_postproc(
     flags: string | null = null,
     dir: string | null = null,
     simulate: boolean = false,
-    pause: number | null = 13,
-    max: number | null = 100,
+    pause: number | null = null,
+    max: number | null = null,
     queue: string | null = null,
     runner: Runner | null = null,
 ): LongSubmitPostprocOutputs {

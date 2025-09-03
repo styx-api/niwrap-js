@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTSUSE_LANDMARK_IMAGES_TO_GET_BSPLINE_DISPLACEMENT_FIELD_METADATA: Metadata = {
-    id: "bb975911b3570b50aaf12e5161a598d6bd9e8b04.boutiques",
+    id: "ccd2c57d89d2afd04ff06a69edd6fd4609e3b45b.boutiques",
     name: "ANTSUseLandmarkImagesToGetBSplineDisplacementField",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -95,8 +95,8 @@ function antsuse_landmark_images_to_get_bspline_displacement_field_params(
     output_displacement_field: string,
     mesh_size: string,
     number_of_levels: number,
-    order: number | null = 3,
-    enforce_stationary_boundaries: number | null = 1,
+    order: number | null = null,
+    enforce_stationary_boundaries: number | null = null,
     landmark_weights: InputPathType | null = null,
 ): AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters {
     const params = {
@@ -227,8 +227,8 @@ function antsuse_landmark_images_to_get_bspline_displacement_field(
     output_displacement_field: string,
     mesh_size: string,
     number_of_levels: number,
-    order: number | null = 3,
-    enforce_stationary_boundaries: number | null = 1,
+    order: number | null = null,
+    enforce_stationary_boundaries: number | null = null,
     landmark_weights: InputPathType | null = null,
     runner: Runner | null = null,
 ): AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs {

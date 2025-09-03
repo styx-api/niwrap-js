@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const JKGCATRAIN_METADATA: Metadata = {
-    id: "f73394990345946d6f0f0547594b7d0a8c67904f.boutiques",
+    id: "1b073a4bde95bf0446c7a3c6603565814010d9f8.boutiques",
     name: "jkgcatrain",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -80,7 +80,7 @@ interface JkgcatrainOutputs {
  */
 function jkgcatrain_params(
     gca_directory: string,
-    iteration_number: number | null = 2,
+    iteration_number: number | null = null,
     num_threads: number | null = null,
     no_submit: boolean = false,
     mail_flag: boolean = false,
@@ -208,7 +208,7 @@ function jkgcatrain_execute(
  */
 function jkgcatrain(
     gca_directory: string,
-    iteration_number: number | null = 2,
+    iteration_number: number | null = null,
     num_threads: number | null = null,
     no_submit: boolean = false,
     mail_flag: boolean = false,

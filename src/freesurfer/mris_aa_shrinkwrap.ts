@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_AA_SHRINKWRAP_METADATA: Metadata = {
-    id: "f1b620c2d26413faf9fc31bd238562722d3919d1.boutiques",
+    id: "2d63c7ccecc84866bb484eb66274bebf2817ce3d.boutiques",
     name: "mris_AA_shrinkwrap",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -88,7 +88,7 @@ function mris_aa_shrinkwrap_params(
     output_dir: string,
     omit_self_intersection: boolean = false,
     create_curvature_area: boolean = false,
-    average_curvature: number | null = 10,
+    average_curvature: number | null = null,
     white_only: boolean = false,
 ): MrisAaShrinkwrapParameters {
     const params = {
@@ -216,7 +216,7 @@ function mris_aa_shrinkwrap(
     output_dir: string,
     omit_self_intersection: boolean = false,
     create_curvature_area: boolean = false,
-    average_curvature: number | null = 10,
+    average_curvature: number | null = null,
     white_only: boolean = false,
     runner: Runner | null = null,
 ): MrisAaShrinkwrapOutputs {

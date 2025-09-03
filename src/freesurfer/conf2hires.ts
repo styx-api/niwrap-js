@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONF2HIRES_METADATA: Metadata = {
-    id: "539c4acfba831cfb4f99ac6d61aa594dba2bc3f2.boutiques",
+    id: "b592996cd1ae521e14d730e48c43e30b0cebb9c1.boutiques",
     name: "conf2hires",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -114,7 +114,7 @@ function conf2hires_params(
     subject: string,
     t2: boolean = false,
     no_t2: boolean = false,
-    mm_norm_sigma: number | null = 8,
+    mm_norm_sigma: number | null = null,
     flair: boolean = false,
     no_flair: boolean = false,
     threads: number | null = null,
@@ -353,7 +353,7 @@ function conf2hires(
     subject: string,
     t2: boolean = false,
     no_t2: boolean = false,
-    mm_norm_sigma: number | null = 8,
+    mm_norm_sigma: number | null = null,
     flair: boolean = false,
     no_flair: boolean = false,
     threads: number | null = null,

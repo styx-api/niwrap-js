@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BEDPOSTX_METADATA: Metadata = {
-    id: "eca810f81792889cfcc3441cdb63663e91cb695b.boutiques",
+    id: "8050f909f3316d53a3c9bea79436c827e90f7502.boutiques",
     name: "bedpostx",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -95,12 +95,12 @@ interface BedpostxOutputs {
  */
 function bedpostx_params(
     subject_dir: string,
-    num_fibres: number | null = 3,
-    ard_weight: number | null = 1,
-    burnin: number | null = 1000,
-    num_jumps: number | null = 1250,
-    sample_every: number | null = 25,
-    model_type: number | null = 2,
+    num_fibres: number | null = null,
+    ard_weight: number | null = null,
+    burnin: number | null = null,
+    num_jumps: number | null = null,
+    sample_every: number | null = null,
+    model_type: number | null = null,
     grad_nonlinear: boolean = false,
 ): BedpostxParameters {
     const params = {
@@ -260,12 +260,12 @@ function bedpostx_execute(
  */
 function bedpostx(
     subject_dir: string,
-    num_fibres: number | null = 3,
-    ard_weight: number | null = 1,
-    burnin: number | null = 1000,
-    num_jumps: number | null = 1250,
-    sample_every: number | null = 25,
-    model_type: number | null = 2,
+    num_fibres: number | null = null,
+    ard_weight: number | null = null,
+    burnin: number | null = null,
+    num_jumps: number | null = null,
+    sample_every: number | null = null,
+    model_type: number | null = null,
     grad_nonlinear: boolean = false,
     runner: Runner | null = null,
 ): BedpostxOutputs {

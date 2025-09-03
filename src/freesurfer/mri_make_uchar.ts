@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_MAKE_UCHAR_METADATA: Metadata = {
-    id: "125a7b8010e7a6e47c1c93bba9839070d4e12157.boutiques",
+    id: "63311bf3f2d1c64684d143aa36f8dcf3acc941e4.boutiques",
     name: "mri_make_uchar",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -93,9 +93,9 @@ function mri_make_uchar_params(
     input_volume: InputPathType,
     talairach_xform: InputPathType,
     output_volume: string,
-    first_percentile: number | null = 0.01,
-    wm_percentile: number | null = 0.9,
-    max_radius: number | null = 50,
+    first_percentile: number | null = null,
+    wm_percentile: number | null = null,
+    max_radius: number | null = null,
     cumulative_histo: string | null = null,
     vradvol: string | null = null,
 ): MriMakeUcharParameters {
@@ -248,9 +248,9 @@ function mri_make_uchar(
     input_volume: InputPathType,
     talairach_xform: InputPathType,
     output_volume: string,
-    first_percentile: number | null = 0.01,
-    wm_percentile: number | null = 0.9,
-    max_radius: number | null = 50,
+    first_percentile: number | null = null,
+    wm_percentile: number | null = null,
+    max_radius: number | null = null,
     cumulative_histo: string | null = null,
     vradvol: string | null = null,
     runner: Runner | null = null,

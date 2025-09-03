@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKEVOL_METADATA: Metadata = {
-    id: "7ba1673b88b708e09827f8b5508b94dd83a88054.boutiques",
+    id: "51781bd00634e4c4a1a74fd53fba1f02cde562b4.boutiques",
     name: "makevol",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -90,14 +90,14 @@ interface MakevolOutputs {
  * @returns Parameter dictionary
  */
 function makevol_params(
-    filename: string | null = "new_volume.mgz",
-    width: number | null = 256,
-    height: number | null = 256,
-    depth: number | null = 256,
-    sizex: number | null = 1.0,
-    sizey: number | null = 1.0,
-    sizez: number | null = 1.0,
-    set_method: string | null = "xyz",
+    filename: string | null = null,
+    width: number | null = null,
+    height: number | null = null,
+    depth: number | null = null,
+    sizex: number | null = null,
+    sizey: number | null = null,
+    sizez: number | null = null,
+    set_method: string | null = null,
 ): MakevolParameters {
     const params = {
         "@type": "freesurfer.makevol" as const,
@@ -266,14 +266,14 @@ function makevol_execute(
  * @returns NamedTuple of outputs (described in `MakevolOutputs`).
  */
 function makevol(
-    filename: string | null = "new_volume.mgz",
-    width: number | null = 256,
-    height: number | null = 256,
-    depth: number | null = 256,
-    sizex: number | null = 1.0,
-    sizey: number | null = 1.0,
-    sizez: number | null = 1.0,
-    set_method: string | null = "xyz",
+    filename: string | null = null,
+    width: number | null = null,
+    height: number | null = null,
+    depth: number | null = null,
+    sizex: number | null = null,
+    sizey: number | null = null,
+    sizez: number | null = null,
+    set_method: string | null = null,
     runner: Runner | null = null,
 ): MakevolOutputs {
     const params = makevol_params(filename, width, height, depth, sizex, sizey, sizez, set_method)

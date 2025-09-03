@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_REPOSITION_SURFACE_METADATA: Metadata = {
-    id: "0c77cbb7786fb79ce602e33afe3529727da1fb02.boutiques",
+    id: "322c546bf7c7ff666a99b73686d12c7700055eb0.boutiques",
     name: "mris_reposition_surface",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -92,9 +92,9 @@ function mris_reposition_surface_params(
     volume: InputPathType,
     points: InputPathType,
     output: string,
-    size: number | null = 1,
-    sigma: number | null = 2.0,
-    iterations: number | null = 1,
+    size: number | null = null,
+    sigma: number | null = null,
+    iterations: number | null = null,
 ): MrisRepositionSurfaceParameters {
     const params = {
         "@type": "freesurfer.mris_reposition_surface" as const,
@@ -241,9 +241,9 @@ function mris_reposition_surface(
     volume: InputPathType,
     points: InputPathType,
     output: string,
-    size: number | null = 1,
-    sigma: number | null = 2.0,
-    iterations: number | null = 1,
+    size: number | null = null,
+    sigma: number | null = null,
+    iterations: number | null = null,
     runner: Runner | null = null,
 ): MrisRepositionSurfaceOutputs {
     const params = mris_reposition_surface_params(surf, volume, points, output, size, sigma, iterations)

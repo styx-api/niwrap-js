@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TRACTSTATS2TABLE_METADATA: Metadata = {
-    id: "deb2a42839930436dbac59d0fe2517f06e878809.boutiques",
+    id: "a9107cb6cabb3963dd47a02501b1b628f185d350.boutiques",
     name: "tractstats2table",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -98,7 +98,7 @@ function tractstats2table_params(
     overall: boolean = false,
     byvoxel: boolean = false,
     byvoxel_measure: "AD" | "RD" | "MD" | "FA" | null = null,
-    delimiter: "tab" | "comma" | "space" | "semicolon" | null = "tab",
+    delimiter: "tab" | "comma" | "space" | "semicolon" | null = null,
     transpose: boolean = false,
     debug: boolean = false,
 ): Tractstats2tableParameters {
@@ -261,7 +261,7 @@ function tractstats2table(
     overall: boolean = false,
     byvoxel: boolean = false,
     byvoxel_measure: "AD" | "RD" | "MD" | "FA" | null = null,
-    delimiter: "tab" | "comma" | "space" | "semicolon" | null = "tab",
+    delimiter: "tab" | "comma" | "space" | "semicolon" | null = null,
     transpose: boolean = false,
     debug: boolean = false,
     runner: Runner | null = null,

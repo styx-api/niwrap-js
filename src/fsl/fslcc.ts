@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLCC_METADATA: Metadata = {
-    id: "cfb1bd3500e1b7d85d8f4ea2cecbe94864d3f628.boutiques",
+    id: "8c77a0c7ac1b13ebdc580e6a9218b4bc6e649528.boutiques",
     name: "fslcc",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -88,8 +88,8 @@ function fslcc_params(
     mask: InputPathType | null = null,
     noabs_flag: boolean = false,
     nodemean_flag: boolean = false,
-    threshold: number | null = 0.1,
-    decimal_places: number | null = 2,
+    threshold: number | null = null,
+    decimal_places: number | null = null,
 ): FslccParameters {
     const params = {
         "@type": "fsl.fslcc" as const,
@@ -228,8 +228,8 @@ function fslcc(
     mask: InputPathType | null = null,
     noabs_flag: boolean = false,
     nodemean_flag: boolean = false,
-    threshold: number | null = 0.1,
-    decimal_places: number | null = 2,
+    threshold: number | null = null,
+    decimal_places: number | null = null,
     runner: Runner | null = null,
 ): FslccOutputs {
     const params = fslcc_params(first_input, second_input, mask, noabs_flag, nodemean_flag, threshold, decimal_places)

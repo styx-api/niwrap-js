@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_SMOOTH_METADATA: Metadata = {
-    id: "de9358e87f1400c4ea7c69099e7d714065b4d1f6.boutiques",
+    id: "5ddfe551ff4f30834ad6bb05e5c9ab00a743812a.boutiques",
     name: "mris_smooth",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -106,11 +106,11 @@ interface MrisSmoothOutputs {
 function mris_smooth_params(
     input_surface: InputPathType,
     output_surface: string,
-    average_iters: number | null = 10,
-    smoothing_iters: number | null = 10,
+    average_iters: number | null = null,
+    smoothing_iters: number | null = null,
     no_write: boolean = false,
-    curvature_name: string | null = "curv",
-    area_name: string | null = "area",
+    curvature_name: string | null = null,
+    area_name: string | null = null,
     gaussian_params: Array<number> | null = null,
     normalize_area: boolean = false,
     momentum: number | null = null,
@@ -293,11 +293,11 @@ function mris_smooth_execute(
 function mris_smooth(
     input_surface: InputPathType,
     output_surface: string,
-    average_iters: number | null = 10,
-    smoothing_iters: number | null = 10,
+    average_iters: number | null = null,
+    smoothing_iters: number | null = null,
     no_write: boolean = false,
-    curvature_name: string | null = "curv",
-    area_name: string | null = "area",
+    curvature_name: string | null = null,
+    area_name: string | null = null,
     gaussian_params: Array<number> | null = null,
     normalize_area: boolean = false,
     momentum: number | null = null,

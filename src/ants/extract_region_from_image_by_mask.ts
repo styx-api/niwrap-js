@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const EXTRACT_REGION_FROM_IMAGE_BY_MASK_METADATA: Metadata = {
-    id: "aec2f60db8048987a495410600ad2f857750da61.boutiques",
+    id: "ab525a5463159d5bccf7402118033d761d1bf086.boutiques",
     name: "ExtractRegionFromImageByMask",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -85,8 +85,8 @@ function extract_region_from_image_by_mask_params(
     input_image: InputPathType,
     output_image: InputPathType,
     label_mask_image: InputPathType,
-    label: number | null = 1,
-    pad_radius: number | null = 0,
+    label: number | null = null,
+    pad_radius: number | null = null,
 ): ExtractRegionFromImageByMaskParameters {
     const params = {
         "@type": "ants.ExtractRegionFromImageByMask" as const,
@@ -204,8 +204,8 @@ function extract_region_from_image_by_mask(
     input_image: InputPathType,
     output_image: InputPathType,
     label_mask_image: InputPathType,
-    label: number | null = 1,
-    pad_radius: number | null = 0,
+    label: number | null = null,
+    pad_radius: number | null = null,
     runner: Runner | null = null,
 ): ExtractRegionFromImageByMaskOutputs {
     const params = extract_region_from_image_by_mask_params(image_dimension, input_image, output_image, label_mask_image, label, pad_radius)

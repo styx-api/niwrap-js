@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SEGMENT_BS_SH_METADATA: Metadata = {
-    id: "ea5de6d87d6861bdf790a471d88443f6b20986d7.boutiques",
+    id: "797f0a897e125245194e3910c9310190662644ee.boutiques",
     name: "segmentBS.sh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -71,7 +71,7 @@ interface SegmentBsShOutputs {
  * @returns Parameter dictionary
  */
 function segment_bs_sh_params(
-    matlab_runtime: string | null = "/usr/local/freesurfer/MCRv97",
+    matlab_runtime: string | null = null,
 ): SegmentBsShParameters {
     const params = {
         "@type": "freesurfer.segmentBS.sh" as const,
@@ -166,7 +166,7 @@ function segment_bs_sh_execute(
  * @returns NamedTuple of outputs (described in `SegmentBsShOutputs`).
  */
 function segment_bs_sh(
-    matlab_runtime: string | null = "/usr/local/freesurfer/MCRv97",
+    matlab_runtime: string | null = null,
     runner: Runner | null = null,
 ): SegmentBsShOutputs {
     const params = segment_bs_sh_params(matlab_runtime)

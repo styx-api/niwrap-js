@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TALAIRACH_AFD_METADATA: Metadata = {
-    id: "77c3251247380212cdbe7973621a64bff1fd5736.boutiques",
+    id: "c212fee328b550929bd0ddd93fe736d0f0ccddac.boutiques",
     name: "talairach_afd",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -81,7 +81,7 @@ interface TalairachAfdOutputs {
 function talairach_afd_params(
     subject_name: string | null = null,
     xfm_file: InputPathType | null = null,
-    p_value_threshold: number | null = 0.01,
+    p_value_threshold: number | null = null,
     afd_directory: string | null = null,
     verbose: boolean = false,
 ): TalairachAfdParameters {
@@ -218,7 +218,7 @@ function talairach_afd_execute(
 function talairach_afd(
     subject_name: string | null = null,
     xfm_file: InputPathType | null = null,
-    p_value_threshold: number | null = 0.01,
+    p_value_threshold: number | null = null,
     afd_directory: string | null = null,
     verbose: boolean = false,
     runner: Runner | null = null,

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_DISTANCE_TRANSFORM_METADATA: Metadata = {
-    id: "e70d33e3cab2523df541297c46b2cf585160584b.boutiques",
+    id: "c4c2d1bf510cb8dba032932bf928e1944f01a26b.boutiques",
     name: "mri_distance_transform",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -88,7 +88,7 @@ function mri_distance_transform_params(
     label: number,
     max_distance: number,
     output_volume: string,
-    mode: number | null = 1,
+    mode: number | null = null,
 ): MriDistanceTransformParameters {
     const params = {
         "@type": "freesurfer.mri_distance_transform" as const,
@@ -200,7 +200,7 @@ function mri_distance_transform(
     label: number,
     max_distance: number,
     output_volume: string,
-    mode: number | null = 1,
+    mode: number | null = null,
     runner: Runner | null = null,
 ): MriDistanceTransformOutputs {
     const params = mri_distance_transform_params(input_volume, label, max_distance, output_volume, mode)

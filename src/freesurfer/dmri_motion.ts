@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DMRI_MOTION_METADATA: Metadata = {
-    id: "cab0386753362d60558aa9f8bff96a94f4b5b4f2.boutiques",
+    id: "61dd1bba115f2f3a59d5343efb0333dda6dff3f1.boutiques",
     name: "dmri_motion",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -105,8 +105,8 @@ function dmri_motion_params(
     mat: InputPathType | null = null,
     dwi: Array<InputPathType> | null = null,
     bval: Array<InputPathType> | null = null,
-    threshold: number | null = 100,
-    diffusivity: number | null = 0.001,
+    threshold: number | null = null,
+    diffusivity: number | null = null,
     debug: boolean = false,
     checkopts: boolean = false,
     help: boolean = false,
@@ -291,8 +291,8 @@ function dmri_motion(
     mat: InputPathType | null = null,
     dwi: Array<InputPathType> | null = null,
     bval: Array<InputPathType> | null = null,
-    threshold: number | null = 100,
-    diffusivity: number | null = 0.001,
+    threshold: number | null = null,
+    diffusivity: number | null = null,
     debug: boolean = false,
     checkopts: boolean = false,
     help: boolean = false,

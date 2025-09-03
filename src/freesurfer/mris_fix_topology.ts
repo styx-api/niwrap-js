@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_FIX_TOPOLOGY_METADATA: Metadata = {
-    id: "64e2b9290f868ea668dfb0ff3a646a7a893619d6.boutiques",
+    id: "58396fd034689811ad745779f8b894fb029d9f32.boutiques",
     name: "mris_fix_topology",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -123,11 +123,11 @@ interface MrisFixTopologyOutputs {
 function mris_fix_topology_params(
     subject_name: string,
     hemisphere: string,
-    orig_name: string | null = "orig.nofix",
-    sphere_name: string | null = "qsphere.nofix",
-    inflated_name: string | null = "inflated.nofix",
-    output_name: string | null = "orig",
-    defect_base_name: string | null = "defect",
+    orig_name: string | null = null,
+    sphere_name: string | null = null,
+    inflated_name: string | null = null,
+    output_name: string | null = null,
+    defect_base_name: string | null = null,
     write_fixed_inflated: boolean = false,
     verbose: boolean = false,
     verbose_low: boolean = false,
@@ -422,11 +422,11 @@ function mris_fix_topology_execute(
 function mris_fix_topology(
     subject_name: string,
     hemisphere: string,
-    orig_name: string | null = "orig.nofix",
-    sphere_name: string | null = "qsphere.nofix",
-    inflated_name: string | null = "inflated.nofix",
-    output_name: string | null = "orig",
-    defect_base_name: string | null = "defect",
+    orig_name: string | null = null,
+    sphere_name: string | null = null,
+    inflated_name: string | null = null,
+    output_name: string | null = null,
+    defect_base_name: string | null = null,
     write_fixed_inflated: boolean = false,
     verbose: boolean = false,
     verbose_low: boolean = false,

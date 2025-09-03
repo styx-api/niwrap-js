@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FABBER_QBOLD_METADATA: Metadata = {
-    id: "11adfe4038f22094fff826931064b332128160fc.boutiques",
+    id: "bc7fccaf940c2ed8d3cfd4e3f8b55bd32c98a98f.boutiques",
     name: "fabber_qbold",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -197,7 +197,7 @@ function fabber_qbold_params(
     model: string,
     data: InputPathType,
     data_n: InputPathType | null = null,
-    data_order: string | null = "interleave",
+    data_order: string | null = null,
     mask: InputPathType | null = null,
     mt_n: number | null = null,
     suppdata: InputPathType | null = null,
@@ -561,7 +561,7 @@ function fabber_qbold(
     model: string,
     data: InputPathType,
     data_n: InputPathType | null = null,
-    data_order: string | null = "interleave",
+    data_order: string | null = null,
     mask: InputPathType | null = null,
     mt_n: number | null = null,
     suppdata: InputPathType | null = null,

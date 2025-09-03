@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKE_AVERAGE_SUBJECT_METADATA: Metadata = {
-    id: "2f5649f2dbb16169830c9e1d7c14f590d2030ea1.boutiques",
+    id: "d8d131694715147d0775838921da6857a34d7a75.boutiques",
     name: "make_average_subject",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -120,9 +120,9 @@ function make_average_subject_params(
     sd_out: string | null = null,
     no_link: boolean = false,
     sdir: string | null = null,
-    ico_order: number | null = 7,
+    ico_order: number | null = null,
     transform_file: InputPathType | null = null,
-    surface_registration: string | null = "sphere.reg",
+    surface_registration: string | null = null,
     no_surfaces: boolean = false,
     no_volumes: boolean = false,
     force: boolean = false,
@@ -381,9 +381,9 @@ function make_average_subject(
     sd_out: string | null = null,
     no_link: boolean = false,
     sdir: string | null = null,
-    ico_order: number | null = 7,
+    ico_order: number | null = null,
     transform_file: InputPathType | null = null,
-    surface_registration: string | null = "sphere.reg",
+    surface_registration: string | null = null,
     no_surfaces: boolean = false,
     no_volumes: boolean = false,
     force: boolean = false,

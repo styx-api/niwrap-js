@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSL_BOXPLOT_METADATA: Metadata = {
-    id: "cc8df2c2f3c12b3005cb31dda7546753717126f5.boutiques",
+    id: "f0b59133b6d5e9751a170940a8fa1673c3543966.boutiques",
     name: "fsl_boxplot",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -99,7 +99,7 @@ function fsl_boxplot_params(
     legend_file: InputPathType | null = null,
     x_label: string | null = null,
     y_label: string | null = null,
-    plot_height: number | null = 450,
+    plot_height: number | null = null,
     plot_width: number | null = null,
 ): FslBoxplotParameters {
     const params = {
@@ -273,7 +273,7 @@ function fsl_boxplot(
     legend_file: InputPathType | null = null,
     x_label: string | null = null,
     y_label: string | null = null,
-    plot_height: number | null = 450,
+    plot_height: number | null = null,
     plot_width: number | null = null,
     runner: Runner | null = null,
 ): FslBoxplotOutputs {

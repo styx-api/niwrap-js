@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const QUANTIFY_BRAINSTEM_STRUCTURES_SH_METADATA: Metadata = {
-    id: "458a2cce6618958955b2061c46dc04c83d13a6a3.boutiques",
+    id: "8f988b03c631b10672069219edb78fdf16d29e26.boutiques",
     name: "quantifyBrainstemStructures.sh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -79,7 +79,7 @@ interface QuantifyBrainstemStructuresShOutputs {
  */
 function quantify_brainstem_structures_sh_params(
     output_file: string,
-    subjects_directory: string | null = "/usr/local/freesurfer/subjects",
+    subjects_directory: string | null = null,
 ): QuantifyBrainstemStructuresShParameters {
     const params = {
         "@type": "freesurfer.quantifyBrainstemStructures.sh" as const,
@@ -179,7 +179,7 @@ function quantify_brainstem_structures_sh_execute(
  */
 function quantify_brainstem_structures_sh(
     output_file: string,
-    subjects_directory: string | null = "/usr/local/freesurfer/subjects",
+    subjects_directory: string | null = null,
     runner: Runner | null = null,
 ): QuantifyBrainstemStructuresShOutputs {
     const params = quantify_brainstem_structures_sh_params(output_file, subjects_directory)

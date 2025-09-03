@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const REGISTER_ELDERLY_SUBJECT_METADATA: Metadata = {
-    id: "ebf037d2f39aaad6e9c947d1c24046e604ed947c.boutiques",
+    id: "ad2233c9edd8af3027885768891cdc212574829a.boutiques",
     name: "register_elderly_subject",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -95,7 +95,7 @@ function register_elderly_subject_params(
     input_volume: InputPathType,
     gca_file: InputPathType,
     transform_file: InputPathType,
-    sampling_percentage: number | null = 0.5,
+    sampling_percentage: number | null = null,
 ): RegisterElderlySubjectParameters {
     const params = {
         "@type": "freesurfer.register_elderly_subject" as const,
@@ -221,7 +221,7 @@ function register_elderly_subject(
     input_volume: InputPathType,
     gca_file: InputPathType,
     transform_file: InputPathType,
-    sampling_percentage: number | null = 0.5,
+    sampling_percentage: number | null = null,
     runner: Runner | null = null,
 ): RegisterElderlySubjectOutputs {
     const params = register_elderly_subject_params(output_fsamples, output_norm, input_volume, gca_file, transform_file, sampling_percentage)

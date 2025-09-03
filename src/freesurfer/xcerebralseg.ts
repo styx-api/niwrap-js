@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const XCEREBRALSEG_METADATA: Metadata = {
-    id: "5fb80211d047813ad88a87144a02240628a74311.boutiques",
+    id: "d1772c109f213bb8beac7ed505ba250320b688f8.boutiques",
     name: "xcerebralseg",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -95,10 +95,10 @@ interface XcerebralsegOutputs {
  */
 function xcerebralseg_params(
     subject: string,
-    output_volume: string | null = "apas+head.mgz",
-    atlas: string | null = "/usr/local/freesurfer/average/aseg+spmhead+vermis+pons.ixi.gca",
-    mergevol: string | null = "aparc+aseg.mgz",
-    source_volume: string | null = "nu.mgz",
+    output_volume: string | null = null,
+    atlas: string | null = null,
+    mergevol: string | null = null,
+    source_volume: string | null = null,
     no_stats: boolean = false,
     seg1_name: string | null = null,
     no_pons: boolean = false,
@@ -274,10 +274,10 @@ function xcerebralseg_execute(
  */
 function xcerebralseg(
     subject: string,
-    output_volume: string | null = "apas+head.mgz",
-    atlas: string | null = "/usr/local/freesurfer/average/aseg+spmhead+vermis+pons.ixi.gca",
-    mergevol: string | null = "aparc+aseg.mgz",
-    source_volume: string | null = "nu.mgz",
+    output_volume: string | null = null,
+    atlas: string | null = null,
+    mergevol: string | null = null,
+    source_volume: string | null = null,
     no_stats: boolean = false,
     seg1_name: string | null = null,
     no_pons: boolean = false,

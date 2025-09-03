@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TEXTURE_RUN_LENGTH_FEATURES_METADATA: Metadata = {
-    id: "99c3089b305255bec7d6249a4c2fc94894071c52.boutiques",
+    id: "cdad220e1f92008ab3b0f50c2e99cfb09db10d4d.boutiques",
     name: "TextureRunLengthFeatures",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -122,9 +122,9 @@ interface TextureRunLengthFeaturesOutputs {
 function texture_run_length_features_params(
     image_dimension: number,
     input_image: InputPathType,
-    number_of_bins_per_axis: number | null = 256,
+    number_of_bins_per_axis: number | null = null,
     mask_image: InputPathType | null = null,
-    mask_label: number | null = 1,
+    mask_label: number | null = null,
 ): TextureRunLengthFeaturesParameters {
     const params = {
         "@type": "ants.TextureRunLengthFeatures" as const,
@@ -251,9 +251,9 @@ function texture_run_length_features_execute(
 function texture_run_length_features(
     image_dimension: number,
     input_image: InputPathType,
-    number_of_bins_per_axis: number | null = 256,
+    number_of_bins_per_axis: number | null = null,
     mask_image: InputPathType | null = null,
-    mask_label: number | null = 1,
+    mask_label: number | null = null,
     runner: Runner | null = null,
 ): TextureRunLengthFeaturesOutputs {
     const params = texture_run_length_features_params(image_dimension, input_image, number_of_bins_per_axis, mask_image, mask_label)

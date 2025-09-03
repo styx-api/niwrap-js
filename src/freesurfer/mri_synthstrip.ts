@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_SYNTHSTRIP_METADATA: Metadata = {
-    id: "1bad1037e1505334c7abff4075ad10604d8b54f6.boutiques",
+    id: "786e74922d4cfe6035092d084ee0d127f0b4dbd5.boutiques",
     name: "mri_synthstrip",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -96,7 +96,7 @@ function mri_synthstrip_params(
     output_image: string | null = null,
     mask: InputPathType | null = null,
     gpu: boolean = false,
-    border: number | null = 1,
+    border: number | null = null,
     exclude_csf: boolean = false,
     model_weights: InputPathType | null = null,
 ): MriSynthstripParameters {
@@ -248,7 +248,7 @@ function mri_synthstrip(
     output_image: string | null = null,
     mask: InputPathType | null = null,
     gpu: boolean = false,
-    border: number | null = 1,
+    border: number | null = null,
     exclude_csf: boolean = false,
     model_weights: InputPathType | null = null,
     runner: Runner | null = null,

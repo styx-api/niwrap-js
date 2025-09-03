@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_BRAIN_EXTRACTION_SH_METADATA: Metadata = {
-    id: "acef12aad7368f10e5b7b7798f7a9e605c5cbd67.boutiques",
+    id: "b485303e7e4d99346f604386fa84b160ec8992d4.boutiques",
     name: "antsBrainExtraction.sh",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -126,7 +126,7 @@ function ants_brain_extraction_sh_params(
     translation_search_params: string | null = null,
     random_seeding: boolean = false,
     debug_mode: boolean = false,
-    output_prefix: string | null = "output",
+    output_prefix: string | null = null,
 ): AntsBrainExtractionShParameters {
     const params = {
         "@type": "ants.antsBrainExtraction.sh" as const,
@@ -345,7 +345,7 @@ function ants_brain_extraction_sh(
     translation_search_params: string | null = null,
     random_seeding: boolean = false,
     debug_mode: boolean = false,
-    output_prefix: string | null = "output",
+    output_prefix: string | null = null,
     runner: Runner | null = null,
 ): AntsBrainExtractionShOutputs {
     const params = ants_brain_extraction_sh_params(anatomical_image, template, probability_mask, image_dimension, tissue_classification, brain_extraction_registration_mask, keep_temporary_files, single_floating_point_precision, initial_moving_transform, rotation_search_params, image_file_suffix, translation_search_params, random_seeding, debug_mode, output_prefix)

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RUN_FASTSURFER_SH_METADATA: Metadata = {
-    id: "16844320fdd509dd7f0092a139a8a74ff8fc083a.boutiques",
+    id: "e427508237f58cd6f7c81d687baf33fd7e1e32f2.boutiques",
     name: "run_fastsurfer.sh",
     package: "fastsurfer",
     container_image_tag: "deepmi/fastsurfer:cpu-v2.3.3",
@@ -175,8 +175,8 @@ function run_fastsurfer_sh_params(
     threads: number | null = null,
     device: string | null = null,
     viewagg_device: string | null = null,
-    batch_size: number | null = 1,
-    python_cmd: string | null = "python3.10 -s",
+    batch_size: number | null = null,
+    python_cmd: string | null = null,
     surf_only: boolean = false,
     no_biasfield: boolean = false,
     tal_reg: boolean = false,
@@ -547,8 +547,8 @@ function run_fastsurfer_sh(
     threads: number | null = null,
     device: string | null = null,
     viewagg_device: string | null = null,
-    batch_size: number | null = 1,
-    python_cmd: string | null = "python3.10 -s",
+    batch_size: number | null = null,
+    python_cmd: string | null = null,
     surf_only: boolean = false,
     no_biasfield: boolean = false,
     tal_reg: boolean = false,

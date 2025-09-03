@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CUTOFFCALC_METADATA: Metadata = {
-    id: "be1d34daf387c7a5ae9534c1adf950c1b20fb7f3.boutiques",
+    id: "dca9318c8811671ff1e1ef7d32871dac61a979dc.boutiques",
     name: "cutoffcalc",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -89,9 +89,9 @@ interface CutoffcalcOutputs {
  */
 function cutoffcalc_params(
     input_design: InputPathType,
-    threshold: number | null = 0.9,
-    tr: number | null = 3.0,
-    lower_limit: number | null = 90.0,
+    threshold: number | null = null,
+    tr: number | null = null,
+    lower_limit: number | null = null,
     example_sigma: number | null = null,
     verbose_flag: boolean = false,
     debug_flag: boolean = false,
@@ -225,9 +225,9 @@ function cutoffcalc_execute(
  */
 function cutoffcalc(
     input_design: InputPathType,
-    threshold: number | null = 0.9,
-    tr: number | null = 3.0,
-    lower_limit: number | null = 90.0,
+    threshold: number | null = null,
+    tr: number | null = null,
+    lower_limit: number | null = null,
     example_sigma: number | null = null,
     verbose_flag: boolean = false,
     debug_flag: boolean = false,

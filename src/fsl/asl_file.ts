@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ASL_FILE_METADATA: Metadata = {
-    id: "38f1899f07fdfe5d935e94eec810da34ce453418.boutiques",
+    id: "b145a87b22ac321ce412e95b5179f65b7c044a2f.boutiques",
     name: "asl_file",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -137,7 +137,7 @@ function asl_file_params(
     outfile: string,
     mask: InputPathType | null = null,
     inblockform: "rpt" | "tis" | null = null,
-    inaslform: "diff" | "tc" | "ct" | "tcb" | "ctb" | null = "diff",
+    inaslform: "diff" | "tc" | "ct" | "tcb" | "ctb" | null = null,
     rpts: string | null = null,
     pairs: boolean = false,
     spairs: boolean = false,
@@ -461,7 +461,7 @@ function asl_file(
     outfile: string,
     mask: InputPathType | null = null,
     inblockform: "rpt" | "tis" | null = null,
-    inaslform: "diff" | "tc" | "ct" | "tcb" | "ctb" | null = "diff",
+    inaslform: "diff" | "tc" | "ct" | "tcb" | "ctb" | null = null,
     rpts: string | null = null,
     pairs: boolean = false,
     spairs: boolean = false,

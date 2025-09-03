@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RANDOMISE_METADATA: Metadata = {
-    id: "b0dd992e52b8d3260f3f90555c2f7b4313e2749e.boutiques",
+    id: "57c146a4b03e940f2524254e63f1c931c7391ba4.boutiques",
     name: "randomise",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -151,7 +151,7 @@ interface RandomiseOutputs {
  */
 function randomise_params(
     in_file: InputPathType,
-    base_name: string | null = "randomise",
+    base_name: string | null = null,
     design_mat: InputPathType | null = null,
     tcon: InputPathType | null = null,
     c_thresh: number | null = null,
@@ -483,7 +483,7 @@ function randomise_execute(
  */
 function randomise(
     in_file: InputPathType,
-    base_name: string | null = "randomise",
+    base_name: string | null = null,
     design_mat: InputPathType | null = null,
     tcon: InputPathType | null = null,
     c_thresh: number | null = null,

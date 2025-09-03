@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const NON_LOCAL_SUPER_RESOLUTION_METADATA: Metadata = {
-    id: "51aada9b4dbce0b9d25369841901cb709639d1e3.boutiques",
+    id: "03123827e70ea9c3395947e4a4ca9f4d8e7f6c42.boutiques",
     name: "NonLocalSuperResolution",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -105,9 +105,9 @@ function non_local_super_resolution_params(
     reference_image: InputPathType | null = null,
     patch_radius: "1" | "1x1x1" | null = null,
     search_radius: "3" | "3x3x3" | null = null,
-    intensity_difference_sigma: number | null = 1.0,
-    patch_similarity_sigma: number | null = 1.0,
-    scale_levels: string | null = "32x16x8x2x1",
+    intensity_difference_sigma: number | null = null,
+    patch_similarity_sigma: number | null = null,
+    scale_levels: string | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null = null,
     verbose: 0 | 1 | null = null,
 ): NonLocalSuperResolutionParameters {
@@ -317,9 +317,9 @@ function non_local_super_resolution(
     reference_image: InputPathType | null = null,
     patch_radius: "1" | "1x1x1" | null = null,
     search_radius: "3" | "3x3x3" | null = null,
-    intensity_difference_sigma: number | null = 1.0,
-    patch_similarity_sigma: number | null = 1.0,
-    scale_levels: string | null = "32x16x8x2x1",
+    intensity_difference_sigma: number | null = null,
+    patch_similarity_sigma: number | null = null,
+    scale_levels: string | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null = null,
     verbose: 0 | 1 | null = null,
     runner: Runner | null = null,

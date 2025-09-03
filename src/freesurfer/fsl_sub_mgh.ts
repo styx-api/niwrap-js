@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSL_SUB_MGH_METADATA: Metadata = {
-    id: "4015aeacaae283d33f0b4ca8406dbe45c4046304.boutiques",
+    id: "a2908f01db7314d6e60f5eb43e69fb281e1ffccd.boutiques",
     name: "fsl_sub_mgh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -96,10 +96,10 @@ interface FslSubMghOutputs {
  */
 function fsl_sub_mgh_params(
     estimated_time: number | null = null,
-    queue_name: string | null = "long.q",
+    queue_name: string | null = null,
     architecture: string | null = null,
-    job_priority: number | null = 0,
-    email_address: string | null = "root@fmrib.ox.ac.uk",
+    job_priority: number | null = null,
+    email_address: string | null = null,
     hold_job: string | null = null,
     task_file: InputPathType | null = null,
     job_name: string | null = null,
@@ -316,10 +316,10 @@ function fsl_sub_mgh_execute(
  */
 function fsl_sub_mgh(
     estimated_time: number | null = null,
-    queue_name: string | null = "long.q",
+    queue_name: string | null = null,
     architecture: string | null = null,
-    job_priority: number | null = 0,
-    email_address: string | null = "root@fmrib.ox.ac.uk",
+    job_priority: number | null = null,
+    email_address: string | null = null,
     hold_job: string | null = null,
     task_file: InputPathType | null = null,
     job_name: string | null = null,

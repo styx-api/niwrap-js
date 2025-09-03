@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const APAS2ASEG_METADATA: Metadata = {
-    id: "eda1865146654f4bd355ad2e45b11e2c26036db4.boutiques",
+    id: "b0d97f3396e26e9aab951655046a2c4a8aae1689.boutiques",
     name: "apas2aseg",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -82,7 +82,7 @@ interface Apas2asegOutputs {
 function apas2aseg_params(
     subject: string | null = null,
     input_aparc_aseg: InputPathType | null = null,
-    output_seg: string | null = "apas-aseg.mgz",
+    output_seg: string | null = null,
 ): Apas2asegParameters {
     const params = {
         "@type": "freesurfer.apas2aseg" as const,
@@ -203,7 +203,7 @@ function apas2aseg_execute(
 function apas2aseg(
     subject: string | null = null,
     input_aparc_aseg: InputPathType | null = null,
-    output_seg: string | null = "apas-aseg.mgz",
+    output_seg: string | null = null,
     runner: Runner | null = null,
 ): Apas2asegOutputs {
     const params = apas2aseg_params(subject, input_aparc_aseg, output_seg)

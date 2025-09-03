@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_CC_METADATA: Metadata = {
-    id: "587b9657e3019c8eef25c4532b4599586af52fc7.boutiques",
+    id: "1fdd96fbe56f5787cd8c5cf3784530160d708430.boutiques",
     name: "mri_cc",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -109,7 +109,7 @@ function mri_cc_params(
     compartments: number | null = null,
     thickness: number | null = null,
     skip_voxels: number | null = null,
-    max_rotation: number | null = 7.0,
+    max_rotation: number | null = null,
 ): MriCcParameters {
     const params = {
         "@type": "freesurfer.mri_cc" as const,
@@ -312,7 +312,7 @@ function mri_cc(
     compartments: number | null = null,
     thickness: number | null = null,
     skip_voxels: number | null = null,
-    max_rotation: number | null = 7.0,
+    max_rotation: number | null = null,
     runner: Runner | null = null,
 ): MriCcOutputs {
     const params = mri_cc_params(subject_name, output_file, aseg_file, norm_file, sdir, rotation_lta, force_flag, include_fornix, compartments, thickness, skip_voxels, max_rotation)

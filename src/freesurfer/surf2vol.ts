@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURF2VOL_METADATA: Metadata = {
-    id: "cb9d30b60e852e42d3af84e07bf8e781d39d6242.boutiques",
+    id: "1cf0f3da562a62fd850b038b70c2a68283092622.boutiques",
     name: "surf2vol",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -116,8 +116,8 @@ function surf2vol_params(
     moving_surface: InputPathType,
     fixed_mri: InputPathType,
     moving_mri: InputPathType,
-    output_file: string | null = "out.mgz",
-    output_field: string | null = "out_field.mgz",
+    output_file: string | null = null,
+    output_field: string | null = null,
     output_affine: string | null = null,
     output_surf: string | null = null,
     output_surf_affine: string | null = null,
@@ -371,8 +371,8 @@ function surf2vol(
     moving_surface: InputPathType,
     fixed_mri: InputPathType,
     moving_mri: InputPathType,
-    output_file: string | null = "out.mgz",
-    output_field: string | null = "out_field.mgz",
+    output_file: string | null = null,
+    output_field: string | null = null,
     output_affine: string | null = null,
     output_surf: string | null = null,
     output_surf_affine: string | null = null,

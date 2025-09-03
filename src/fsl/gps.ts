@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GPS_METADATA: Metadata = {
-    id: "9f8526f271cdea71eb6af79b924c2a66cba77b2a.boutiques",
+    id: "bbbc7a8984f462f111c2f4bb171c39c911950aeb.boutiques",
     name: "gps",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -92,7 +92,7 @@ interface GpsOutputs {
 function gps_params(
     ndir: number,
     optws: boolean = false,
-    output: string | null = "bvecs#.txt",
+    output: string | null = null,
     ranseed: number | null = null,
     init: InputPathType | null = null,
     report: boolean = false,
@@ -244,7 +244,7 @@ function gps_execute(
 function gps(
     ndir: number,
     optws: boolean = false,
-    output: string | null = "bvecs#.txt",
+    output: string | null = null,
     ranseed: number | null = null,
     init: InputPathType | null = null,
     report: boolean = false,

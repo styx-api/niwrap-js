@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIMULATE_DISPLACEMENT_FIELD_METADATA: Metadata = {
-    id: "ca776aa44d13ed564a1e49ff2d3269669eb9067c.boutiques",
+    id: "c1c49671ae59650087ced154b39f3497b3151423.boutiques",
     name: "SimulateDisplacementField",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -82,8 +82,8 @@ function dynOutputs(
  * @returns Parameter dictionary
  */
 function simulate_displacement_field_bspline_options_params(
-    number_of_fitting_levels: number | null = 4,
-    number_of_control_points: number | null = 4,
+    number_of_fitting_levels: number | null = null,
+    number_of_control_points: number | null = null,
 ): SimulateDisplacementFieldBsplineOptionsParameters {
     const params = {
         "@type": "ants.SimulateDisplacementField.bspline_options" as const,
@@ -129,7 +129,7 @@ function simulate_displacement_field_bspline_options_cargs(
  * @returns Parameter dictionary
  */
 function simulate_displacement_field_exponential_options_params(
-    smoothing_standard_deviation: number | null = 4,
+    smoothing_standard_deviation: number | null = null,
 ): SimulateDisplacementFieldExponentialOptionsParameters {
     const params = {
         "@type": "ants.SimulateDisplacementField.exponential_options" as const,
@@ -197,9 +197,9 @@ function simulate_displacement_field_params(
     displacement_field_type: "BSpline" | "Exponential",
     domain_image: InputPathType,
     output_field: string,
-    number_of_random_points: number | null = 1000,
-    standard_deviation_displacement_field: number | null = 10,
-    enforce_stationary_boundary: number | null = 1,
+    number_of_random_points: number | null = null,
+    standard_deviation_displacement_field: number | null = null,
+    enforce_stationary_boundary: number | null = null,
     displacement_specific_options: SimulateDisplacementFieldBsplineOptionsParameters | SimulateDisplacementFieldExponentialOptionsParameters | null = null,
 ): SimulateDisplacementFieldParameters {
     const params = {
@@ -333,9 +333,9 @@ function simulate_displacement_field(
     displacement_field_type: "BSpline" | "Exponential",
     domain_image: InputPathType,
     output_field: string,
-    number_of_random_points: number | null = 1000,
-    standard_deviation_displacement_field: number | null = 10,
-    enforce_stationary_boundary: number | null = 1,
+    number_of_random_points: number | null = null,
+    standard_deviation_displacement_field: number | null = null,
+    enforce_stationary_boundary: number | null = null,
     displacement_specific_options: SimulateDisplacementFieldBsplineOptionsParameters | SimulateDisplacementFieldExponentialOptionsParameters | null = null,
     runner: Runner | null = null,
 ): SimulateDisplacementFieldOutputs {

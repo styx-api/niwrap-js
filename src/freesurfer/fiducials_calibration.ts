@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIDUCIALS_CALIBRATION_METADATA: Metadata = {
-    id: "b87cb0a61e77503c416b5bd15c7cec1c1ef97456.boutiques",
+    id: "7cff05669191ed945adc899c12ac56d41b49e3cf.boutiques",
     name: "fiducials_calibration",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -71,7 +71,7 @@ interface FiducialsCalibrationOutputs {
  * @returns Parameter dictionary
  */
 function fiducials_calibration_params(
-    qt_plugin_installation: string | null = "Check Qt installation and platform plugin availability",
+    qt_plugin_installation: string | null = null,
 ): FiducialsCalibrationParameters {
     const params = {
         "@type": "freesurfer.fiducials_calibration" as const,
@@ -166,7 +166,7 @@ function fiducials_calibration_execute(
  * @returns NamedTuple of outputs (described in `FiducialsCalibrationOutputs`).
  */
 function fiducials_calibration(
-    qt_plugin_installation: string | null = "Check Qt installation and platform plugin availability",
+    qt_plugin_installation: string | null = null,
     runner: Runner | null = null,
 ): FiducialsCalibrationOutputs {
     const params = fiducials_calibration_params(qt_plugin_installation)

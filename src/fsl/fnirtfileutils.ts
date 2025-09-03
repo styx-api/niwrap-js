@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FNIRTFILEUTILS_METADATA: Metadata = {
-    id: "4b92ff67bacddb65f4359d0d8064dfaf793a41b8.boutiques",
+    id: "6f393c9c8a9942f1704b3749760c580ba99a3823.boutiques",
     name: "fnirtfileutils",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -107,7 +107,7 @@ function fnirtfileutils_params(
     input_coefs: InputPathType,
     ref_volume: InputPathType | null = null,
     out_field: string | null = null,
-    output_format: string | null = "field",
+    output_format: string | null = null,
     warp_res: number | null = null,
     knot_space: number | null = null,
     jacobian_output: string | null = null,
@@ -299,7 +299,7 @@ function fnirtfileutils(
     input_coefs: InputPathType,
     ref_volume: InputPathType | null = null,
     out_field: string | null = null,
-    output_format: string | null = "field",
+    output_format: string | null = null,
     warp_res: number | null = null,
     knot_space: number | null = null,
     jacobian_output: string | null = null,

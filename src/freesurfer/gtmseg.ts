@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GTMSEG_METADATA: Metadata = {
-    id: "4ab9659e70272d979f39dad258eeff58c22157fc.boutiques",
+    id: "34bcd199df253fe6cc5514cfec9099e8eb5257ca.boutiques",
     name: "gtmseg",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -115,14 +115,14 @@ interface GtmsegOutputs {
  */
 function gtmseg_params(
     subject: string,
-    outvol: string | null = "gtmseg.mgz",
-    usf: number | null = 2,
+    outvol: string | null = null,
+    usf: number | null = null,
     subsegwm: boolean = false,
     keep_hypo: boolean = false,
     keep_cc: boolean = false,
-    dmax: number | null = 5,
-    ctx_annot: string | null = "aparc 1000 2000",
-    wm_annot: string | null = "lobes 3200 4200",
+    dmax: number | null = null,
+    ctx_annot: string | null = null,
+    wm_annot: string | null = null,
     output_usf: number | null = null,
     head: string | null = null,
     subseg_cbwm: boolean = false,
@@ -353,14 +353,14 @@ function gtmseg_execute(
  */
 function gtmseg(
     subject: string,
-    outvol: string | null = "gtmseg.mgz",
-    usf: number | null = 2,
+    outvol: string | null = null,
+    usf: number | null = null,
     subsegwm: boolean = false,
     keep_hypo: boolean = false,
     keep_cc: boolean = false,
-    dmax: number | null = 5,
-    ctx_annot: string | null = "aparc 1000 2000",
-    wm_annot: string | null = "lobes 3200 4200",
+    dmax: number | null = null,
+    ctx_annot: string | null = null,
+    wm_annot: string | null = null,
     output_usf: number | null = null,
     head: string | null = null,
     subseg_cbwm: boolean = false,

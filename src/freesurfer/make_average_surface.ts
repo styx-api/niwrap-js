@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKE_AVERAGE_SURFACE_METADATA: Metadata = {
-    id: "9afad673a77a680068222efbae2c9b8e26d54dc3.boutiques",
+    id: "dcacfeaaf3b9ac96d17eac438d694ef55e584107.boutiques",
     name: "make_average_surface",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -115,11 +115,11 @@ interface MakeAverageSurfaceOutputs {
 function make_average_surface_params(
     subjects: Array<string>,
     fsgd_file: InputPathType | null = null,
-    average_subject_name: string | null = "average",
+    average_subject_name: string | null = null,
     subjects_dir: string | null = null,
     sd_out_dir: string | null = null,
     transform_file: string | null = null,
-    icosahedron_number: number | null = 7,
+    icosahedron_number: number | null = null,
     surf_reg: string | null = null,
     left_hemi: boolean = false,
     right_hemi: boolean = false,
@@ -377,11 +377,11 @@ function make_average_surface_execute(
 function make_average_surface(
     subjects: Array<string>,
     fsgd_file: InputPathType | null = null,
-    average_subject_name: string | null = "average",
+    average_subject_name: string | null = null,
     subjects_dir: string | null = null,
     sd_out_dir: string | null = null,
     transform_file: string | null = null,
-    icosahedron_number: number | null = 7,
+    icosahedron_number: number | null = null,
     surf_reg: string | null = null,
     left_hemi: boolean = false,
     right_hemi: boolean = false,

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VERTEXVOL_METADATA: Metadata = {
-    id: "aedf6bfbc68d398b67ba8bf52f969278f2f9468d.boutiques",
+    id: "898fd4926cfe3b5a863ffabd2c7c51dd3a39db87.boutiques",
     name: "vertexvol",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -89,7 +89,7 @@ function vertexvol_params(
     subject: string,
     left_hemisphere: boolean = false,
     right_hemisphere: boolean = false,
-    output_file: string | null = "?h.volume",
+    output_file: string | null = null,
     use_th3: boolean = false,
     no_th3: boolean = false,
 ): VertexvolParameters {
@@ -219,7 +219,7 @@ function vertexvol(
     subject: string,
     left_hemisphere: boolean = false,
     right_hemisphere: boolean = false,
-    output_file: string | null = "?h.volume",
+    output_file: string | null = null,
     use_th3: boolean = false,
     no_th3: boolean = false,
     runner: Runner | null = null,

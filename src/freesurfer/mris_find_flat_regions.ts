@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_FIND_FLAT_REGIONS_METADATA: Metadata = {
-    id: "44372d93aad1a76a59c052c0d483b056d5c709e5.boutiques",
+    id: "c86aa7c8b5901b904aa92d271ff5970f326850a1.boutiques",
     name: "mris_find_flat_regions",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -82,7 +82,7 @@ interface MrisFindFlatRegionsOutputs {
 function mris_find_flat_regions_params(
     surface: InputPathType,
     wfile: string,
-    threshold: number | null = 0.99,
+    threshold: number | null = null,
 ): MrisFindFlatRegionsParameters {
     const params = {
         "@type": "freesurfer.mris_find_flat_regions" as const,
@@ -189,7 +189,7 @@ function mris_find_flat_regions_execute(
 function mris_find_flat_regions(
     surface: InputPathType,
     wfile: string,
-    threshold: number | null = 0.99,
+    threshold: number | null = null,
     runner: Runner | null = null,
 ): MrisFindFlatRegionsOutputs {
     const params = mris_find_flat_regions_params(surface, wfile, threshold)

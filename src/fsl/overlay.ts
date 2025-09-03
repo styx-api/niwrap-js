@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const OVERLAY_METADATA: Metadata = {
-    id: "f8a4a8f509893b30940a1ef16cf87c7c0609f62c.boutiques",
+    id: "bb3b718f143a2a413a158fc66626ce4772a6ee44.boutiques",
     name: "overlay",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -105,7 +105,7 @@ function overlay_params(
     auto_thresh_bg: boolean = false,
     full_bg_range: boolean = false,
     out_file: string | null = null,
-    out_type: "float" | "int" | null = "float",
+    out_type: "float" | "int" | null = null,
     output_type: "NIFTI" | "NIFTI_PAIR" | "NIFTI_GZ" | "NIFTI_PAIR_GZ" | null = null,
     stat_image2: InputPathType | null = null,
     stat_thresh2: Array<number> | null = null,
@@ -267,7 +267,7 @@ function overlay(
     auto_thresh_bg: boolean = false,
     full_bg_range: boolean = false,
     out_file: string | null = null,
-    out_type: "float" | "int" | null = "float",
+    out_type: "float" | "int" | null = null,
     output_type: "NIFTI" | "NIFTI_PAIR" | "NIFTI_GZ" | "NIFTI_PAIR_GZ" | null = null,
     stat_image2: InputPathType | null = null,
     stat_thresh2: Array<number> | null = null,

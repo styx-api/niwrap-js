@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SMOOTH_DISPLACEMENT_FIELD_METADATA: Metadata = {
-    id: "7b2437454393f060b65a9e4b3b1f97abf404bcc0.boutiques",
+    id: "9720ba2fb6e8073a4e5a9081a747582f3894d2ce.boutiques",
     name: "SmoothDisplacementField",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -98,9 +98,9 @@ function smooth_displacement_field_params(
     input_field: InputPathType,
     output_field: string,
     variance_or_mesh_size_base_level: number,
-    number_of_levels: number | null = 1,
-    spline_order: number | null = 3,
-    estimate_inverse: 0 | 1 | null = 0,
+    number_of_levels: number | null = null,
+    spline_order: number | null = null,
+    estimate_inverse: 0 | 1 | null = null,
     confidence_image: InputPathType | null = null,
 ): SmoothDisplacementFieldParameters {
     const params = {
@@ -235,9 +235,9 @@ function smooth_displacement_field(
     input_field: InputPathType,
     output_field: string,
     variance_or_mesh_size_base_level: number,
-    number_of_levels: number | null = 1,
-    spline_order: number | null = 3,
-    estimate_inverse: 0 | 1 | null = 0,
+    number_of_levels: number | null = null,
+    spline_order: number | null = null,
+    estimate_inverse: 0 | 1 | null = null,
     confidence_image: InputPathType | null = null,
     runner: Runner | null = null,
 ): SmoothDisplacementFieldOutputs {

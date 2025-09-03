@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ASL_MFREE_METADATA: Metadata = {
-    id: "e58261a229054027fd5fa9bba2e27ec983d0c0c7.boutiques",
+    id: "0666015dbb2d42391f49d67e6c249f2896efa551.boutiques",
     name: "asl_mfree",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -127,13 +127,13 @@ function asl_mfree_params(
     bata: InputPathType | null = null,
     batt: InputPathType | null = null,
     bat: boolean = false,
-    bat_grad_thr: number | null = 0.2,
+    bat_grad_thr: number | null = null,
     t1: number | null = null,
     fa: number | null = null,
     std: boolean = false,
     nwb: number | null = null,
     turbo_quasar: boolean = false,
-    shift_factor: number | null = 1,
+    shift_factor: number | null = null,
     verbose: boolean = false,
 ): AslMfreeParameters {
     const params = {
@@ -380,13 +380,13 @@ function asl_mfree(
     bata: InputPathType | null = null,
     batt: InputPathType | null = null,
     bat: boolean = false,
-    bat_grad_thr: number | null = 0.2,
+    bat_grad_thr: number | null = null,
     t1: number | null = null,
     fa: number | null = null,
     std: boolean = false,
     nwb: number | null = null,
     turbo_quasar: boolean = false,
-    shift_factor: number | null = 1,
+    shift_factor: number | null = null,
     verbose: boolean = false,
     runner: Runner | null = null,
 ): AslMfreeOutputs {

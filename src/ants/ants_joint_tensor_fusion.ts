@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_JOINT_TENSOR_FUSION_METADATA: Metadata = {
-    id: "cb4fe8a4aace4f1fb43afc13b52fb4d917f9af4c.boutiques",
+    id: "5bd417526524dd06073d1ab68f8104def16cf5d4.boutiques",
     name: "antsJointTensorFusion",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -125,8 +125,8 @@ function ants_joint_tensor_fusion_params(
     atlas_segmentation: InputPathType,
     output: string,
     dimensionality: 2 | 3 | 4 | null = null,
-    alpha: number | null = 0.1,
-    beta: number | null = 2.0,
+    alpha: number | null = null,
+    beta: number | null = null,
     retain_label_posterior_images: 0 | 1 | null = null,
     retain_atlas_voting_images: 0 | 1 | null = null,
     constrain_nonnegative: 0 | 1 | null = null,
@@ -387,8 +387,8 @@ function ants_joint_tensor_fusion(
     atlas_segmentation: InputPathType,
     output: string,
     dimensionality: 2 | 3 | 4 | null = null,
-    alpha: number | null = 0.1,
-    beta: number | null = 2.0,
+    alpha: number | null = null,
+    beta: number | null = null,
     retain_label_posterior_images: 0 | 1 | null = null,
     retain_atlas_voting_images: 0 | 1 | null = null,
     constrain_nonnegative: 0 | 1 | null = null,

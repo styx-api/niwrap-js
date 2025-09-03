@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const EDDY_CORRECT_METADATA: Metadata = {
-    id: "c21f792dc85e3c8b5478bfa95141438203590207.boutiques",
+    id: "3bce1979212a01e586ad3468dc2d04a7b55e2871.boutiques",
     name: "eddy_correct",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -85,7 +85,7 @@ function eddy_correct_params(
     v_4d_input: InputPathType,
     v_4d_output: string,
     reference_no: number,
-    interp_method: "trilinear" | "spline" | null = "trilinear",
+    interp_method: "trilinear" | "spline" | null = null,
 ): EddyCorrectParameters {
     const params = {
         "@type": "fsl.eddy_correct" as const,
@@ -192,7 +192,7 @@ function eddy_correct(
     v_4d_input: InputPathType,
     v_4d_output: string,
     reference_no: number,
-    interp_method: "trilinear" | "spline" | null = "trilinear",
+    interp_method: "trilinear" | "spline" | null = null,
     runner: Runner | null = null,
 ): EddyCorrectOutputs {
     const params = eddy_correct_params(v_4d_input, v_4d_output, reference_no, interp_method)

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_ENTROPY_METADATA: Metadata = {
-    id: "d0ec05255b1b8c8b390b137853362c1447b2a789.boutiques",
+    id: "5cafa16187d7cec07d44096ca5032b4f4b4ddbb6.boutiques",
     name: "mris_entropy",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -90,7 +90,7 @@ function mris_entropy_params(
     hemi: string,
     wfile: InputPathType,
     curvfile: InputPathType,
-    average_iterations: number | null = 0,
+    average_iterations: number | null = null,
     normalize: boolean = false,
 ): MrisEntropyParameters {
     const params = {
@@ -211,7 +211,7 @@ function mris_entropy(
     hemi: string,
     wfile: InputPathType,
     curvfile: InputPathType,
-    average_iterations: number | null = 0,
+    average_iterations: number | null = null,
     normalize: boolean = false,
     runner: Runner | null = null,
 ): MrisEntropyOutputs {

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_GCAB_TRAIN_METADATA: Metadata = {
-    id: "25854951f0e7de8635b58728b8a09edd107a327e.boutiques",
+    id: "ef9d7261b2616cc2782a4fb8ebf1bb2b2aa2bad4.boutiques",
     name: "mri_gcab_train",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -71,7 +71,7 @@ interface MriGcabTrainOutputs {
  * @returns Parameter dictionary
  */
 function mri_gcab_train_params(
-    removed_info: string | null = "mri_gcab_train has been removed from this version of freesurfer.",
+    removed_info: string | null = null,
 ): MriGcabTrainParameters {
     const params = {
         "@type": "freesurfer.mri_gcab_train" as const,
@@ -166,7 +166,7 @@ function mri_gcab_train_execute(
  * @returns NamedTuple of outputs (described in `MriGcabTrainOutputs`).
  */
 function mri_gcab_train(
-    removed_info: string | null = "mri_gcab_train has been removed from this version of freesurfer.",
+    removed_info: string | null = null,
     runner: Runner | null = null,
 ): MriGcabTrainOutputs {
     const params = mri_gcab_train_params(removed_info)

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const APARCSTATS2TABLE_METADATA: Metadata = {
-    id: "1521fea28c99f52d4d63d7ca1b13780658752d3a.boutiques",
+    id: "a5b02b8f995f62d90daa8ab7ad92ab2234b517fa.boutiques",
     name: "aparcstats2table",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -116,9 +116,9 @@ function aparcstats2table_params(
     subjectsfile: InputPathType | null = null,
     qdec: InputPathType | null = null,
     qdec_long: InputPathType | null = null,
-    parcellation: string | null = "aparc",
-    measure: string | null = "area",
-    delimiter: string | null = "tab",
+    parcellation: string | null = null,
+    measure: string | null = null,
+    delimiter: string | null = null,
     skip_missing: boolean = false,
     parcid_only: boolean = false,
     common_parcs: boolean = false,
@@ -127,7 +127,7 @@ function aparcstats2table_params(
     transpose: boolean = false,
     debug: boolean = false,
     etiv: boolean = false,
-    scale: number | null = 1,
+    scale: number | null = null,
 ): Aparcstats2tableParameters {
     const params = {
         "@type": "freesurfer.aparcstats2table" as const,
@@ -359,9 +359,9 @@ function aparcstats2table(
     subjectsfile: InputPathType | null = null,
     qdec: InputPathType | null = null,
     qdec_long: InputPathType | null = null,
-    parcellation: string | null = "aparc",
-    measure: string | null = "area",
-    delimiter: string | null = "tab",
+    parcellation: string | null = null,
+    measure: string | null = null,
+    delimiter: string | null = null,
     skip_missing: boolean = false,
     parcid_only: boolean = false,
     common_parcs: boolean = false,
@@ -370,7 +370,7 @@ function aparcstats2table(
     transpose: boolean = false,
     debug: boolean = false,
     etiv: boolean = false,
-    scale: number | null = 1,
+    scale: number | null = null,
     runner: Runner | null = null,
 ): Aparcstats2tableOutputs {
     const params = aparcstats2table_params(hemi, tablefile, subjects, subjectsfile, qdec, qdec_long, parcellation, measure, delimiter, skip_missing, parcid_only, common_parcs, parcs_file, report_rois, transpose, debug, etiv, scale)

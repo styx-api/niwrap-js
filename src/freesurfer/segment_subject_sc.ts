@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SEGMENT_SUBJECT_SC_METADATA: Metadata = {
-    id: "af3f234535976de2949cc6612aaedde219cc1d8b.boutiques",
+    id: "8eadb66cf2a9aa5f76642c43c914cc19fc7245b2.boutiques",
     name: "segment_subject_sc",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -84,7 +84,7 @@ interface SegmentSubjectScOutputs {
 function segment_subject_sc_params(
     invol: InputPathType,
     outxfm: InputPathType,
-    log: string | null = "outdir/talarach.log",
+    log: string | null = null,
     debug: boolean = false,
 ): SegmentSubjectScParameters {
     const params = {
@@ -203,7 +203,7 @@ function segment_subject_sc_execute(
 function segment_subject_sc(
     invol: InputPathType,
     outxfm: InputPathType,
-    log: string | null = "outdir/talarach.log",
+    log: string | null = null,
     debug: boolean = false,
     runner: Runner | null = null,
 ): SegmentSubjectScOutputs {

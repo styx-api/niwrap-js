@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TEST_RECON_ALL_CSH_METADATA: Metadata = {
-    id: "ad546a46131f123c3acbd5d9a9ec493899bfd06e.boutiques",
+    id: "51bff24a8ca6e0b6faa3299c7866e98bdf74ea12.boutiques",
     name: "test_recon-all.csh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -118,11 +118,11 @@ interface TestReconAllCshOutputs {
  * @returns Parameter dictionary
  */
 function test_recon_all_csh_params(
-    reference_subj_source_dir: string | null = "/space/freesurfer/subjects/test/weekly_test/subjects/x86_64",
-    reference_subjid: string | null = "bert",
-    test_subject_dest_dir: string | null = "/tmp",
-    test_subjid: string | null = "bert",
-    freesurfer_home: string | null = "/usr/local/freesurfer/stable",
+    reference_subj_source_dir: string | null = null,
+    reference_subjid: string | null = null,
+    test_subject_dest_dir: string | null = null,
+    test_subjid: string | null = null,
+    freesurfer_home: string | null = null,
     norecon: boolean = false,
 ): TestReconAllCshParameters {
     const params = {
@@ -275,11 +275,11 @@ function test_recon_all_csh_execute(
  * @returns NamedTuple of outputs (described in `TestReconAllCshOutputs`).
  */
 function test_recon_all_csh(
-    reference_subj_source_dir: string | null = "/space/freesurfer/subjects/test/weekly_test/subjects/x86_64",
-    reference_subjid: string | null = "bert",
-    test_subject_dest_dir: string | null = "/tmp",
-    test_subjid: string | null = "bert",
-    freesurfer_home: string | null = "/usr/local/freesurfer/stable",
+    reference_subj_source_dir: string | null = null,
+    reference_subjid: string | null = null,
+    test_subject_dest_dir: string | null = null,
+    test_subjid: string | null = null,
+    freesurfer_home: string | null = null,
     norecon: boolean = false,
     runner: Runner | null = null,
 ): TestReconAllCshOutputs {

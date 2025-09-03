@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FABBER_CEST_METADATA: Metadata = {
-    id: "9cab794d98715bd8d4a1be8c6d5403049d1baafc.boutiques",
+    id: "1aa5c99d2a652e0cc5f029f1cc2d6e83c0cbf3b1.boutiques",
     name: "fabber_cest",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -208,7 +208,7 @@ function fabber_cest_params(
     link_to_latest: boolean = false,
     loadmodels: InputPathType | null = null,
     data_multi: InputPathType | null = null,
-    data_order: string | null = "interleave",
+    data_order: string | null = null,
     mask: InputPathType | null = null,
     masked_timepoints: number | null = null,
     suppdata: InputPathType | null = null,
@@ -577,7 +577,7 @@ function fabber_cest(
     link_to_latest: boolean = false,
     loadmodels: InputPathType | null = null,
     data_multi: InputPathType | null = null,
-    data_order: string | null = "interleave",
+    data_order: string | null = null,
     mask: InputPathType | null = null,
     masked_timepoints: number | null = null,
     suppdata: InputPathType | null = null,

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const REREGISTER_SUBJECT_MIXED_METADATA: Metadata = {
-    id: "ca61724bb570a3556d0152f9f5aef400e41c3b8d.boutiques",
+    id: "ca973f45523bf27f4c44624fb53b3730bbd3a5b2.boutiques",
     name: "reregister_subject_mixed",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -90,7 +90,7 @@ interface ReregisterSubjectMixedOutputs {
 function reregister_subject_mixed_params(
     input_volume: InputPathType,
     output_directory: string,
-    threads: number | null = 1,
+    threads: number | null = null,
 ): ReregisterSubjectMixedParameters {
     const params = {
         "@type": "freesurfer.reregister_subject_mixed" as const,
@@ -196,7 +196,7 @@ function reregister_subject_mixed_execute(
 function reregister_subject_mixed(
     input_volume: InputPathType,
     output_directory: string,
-    threads: number | null = 1,
+    threads: number | null = null,
     runner: Runner | null = null,
 ): ReregisterSubjectMixedOutputs {
     const params = reregister_subject_mixed_params(input_volume, output_directory, threads)

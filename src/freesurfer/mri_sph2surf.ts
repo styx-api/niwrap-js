@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_SPH2SURF_METADATA: Metadata = {
-    id: "dd6b3e285073d710fdf923d6ed2c4a5936c19c32.boutiques",
+    id: "913a59fe86f5c1f82a5660d2cba30de30016bd82.boutiques",
     name: "mri-sph2surf",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -96,8 +96,8 @@ function mri_sph2surf_params(
     outstem: string,
     hemi: string,
     subject: string,
-    offset: number | null = 0,
-    svitdir: string | null = "/usr/local/freesurfer/subjects/subject/svit",
+    offset: number | null = null,
+    svitdir: string | null = null,
     umask: string | null = null,
     verbose: boolean = false,
     version: boolean = false,
@@ -257,8 +257,8 @@ function mri_sph2surf(
     outstem: string,
     hemi: string,
     subject: string,
-    offset: number | null = 0,
-    svitdir: string | null = "/usr/local/freesurfer/subjects/subject/svit",
+    offset: number | null = null,
+    svitdir: string | null = null,
     umask: string | null = null,
     verbose: boolean = false,
     version: boolean = false,

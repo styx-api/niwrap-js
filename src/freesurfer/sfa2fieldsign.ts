@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SFA2FIELDSIGN_METADATA: Metadata = {
-    id: "3ddfac468eca45550f7aa9f66a5850af84aa7f1f.boutiques",
+    id: "bde229caa86ae6d08eb65062d2de74295dadea9c.boutiques",
     name: "sfa2fieldsign",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -128,12 +128,12 @@ interface Sfa2fieldsignOutputs {
 function sfa2fieldsign_params(
     sfadir: string,
     register_dat: string,
-    threshold: number | null = 2,
-    fwhm: number | null = 10,
-    proj_frac: number | null = 0.5,
+    threshold: number | null = null,
+    fwhm: number | null = null,
+    proj_frac: number | null = null,
     occip: boolean = false,
     patch: string | null = null,
-    osd: string | null = "fieldsign",
+    osd: string | null = null,
     lh: boolean = false,
     rh: boolean = false,
 ): Sfa2fieldsignParameters {
@@ -311,12 +311,12 @@ function sfa2fieldsign_execute(
 function sfa2fieldsign(
     sfadir: string,
     register_dat: string,
-    threshold: number | null = 2,
-    fwhm: number | null = 10,
-    proj_frac: number | null = 0.5,
+    threshold: number | null = null,
+    fwhm: number | null = null,
+    proj_frac: number | null = null,
     occip: boolean = false,
     patch: string | null = null,
-    osd: string | null = "fieldsign",
+    osd: string | null = null,
     lh: boolean = false,
     rh: boolean = false,
     runner: Runner | null = null,

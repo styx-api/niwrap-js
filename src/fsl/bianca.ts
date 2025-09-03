@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BIANCA_METADATA: Metadata = {
-    id: "bd25ce511d9d69f31a55e55684d0e515a15b3996.boutiques",
+    id: "6b620869b49a5b3966a68eca23151e3aa2f93b06.boutiques",
     name: "bianca",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -115,16 +115,16 @@ function bianca_params(
     training_nums: string | null = null,
     feature_subset: string | null = null,
     mat_feature_num: number | null = null,
-    spatial_weight: number | null = 1,
+    spatial_weight: number | null = null,
     patch_sizes: string | null = null,
     patch_3d: boolean = false,
-    select_pts: string | null = "any",
+    select_pts: string | null = null,
     training_pts: string | null = null,
     non_les_pts: string | null = null,
     load_classifier_data: string | null = null,
     save_classifier_data: string | null = null,
     verbose_flag: boolean = false,
-    out_name: string | null = "output_bianca",
+    out_name: string | null = null,
 ): BiancaParameters {
     const params = {
         "@type": "fsl.bianca" as const,
@@ -322,16 +322,16 @@ function bianca(
     training_nums: string | null = null,
     feature_subset: string | null = null,
     mat_feature_num: number | null = null,
-    spatial_weight: number | null = 1,
+    spatial_weight: number | null = null,
     patch_sizes: string | null = null,
     patch_3d: boolean = false,
-    select_pts: string | null = "any",
+    select_pts: string | null = null,
     training_pts: string | null = null,
     non_les_pts: string | null = null,
     load_classifier_data: string | null = null,
     save_classifier_data: string | null = null,
     verbose_flag: boolean = false,
-    out_name: string | null = "output_bianca",
+    out_name: string | null = null,
     runner: Runner | null = null,
 ): BiancaOutputs {
     const params = bianca_params(master_file, label_feature_num, brain_mask_feature_num, query_subject_num, training_nums, feature_subset, mat_feature_num, spatial_weight, patch_sizes, patch_3d, select_pts, training_pts, non_les_pts, load_classifier_data, save_classifier_data, verbose_flag, out_name)

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIGNAL2IMAGE_METADATA: Metadata = {
-    id: "49c8a2ca24a598e9e83ea9066e0f5bc5c7979e72.boutiques",
+    id: "958f0a5ead17d4b7a6303ac0dad2305278fe6b28.boutiques",
     name: "signal2image",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -113,8 +113,8 @@ function signal2image_params(
     homodyne_flag: boolean = false,
     verbose_flag: boolean = false,
     apodize_flag: boolean = false,
-    cutoff: number | null = 100,
-    rolloff: number | null = 10,
+    cutoff: number | null = null,
+    rolloff: number | null = null,
     save_flag: boolean = false,
     help_flag: boolean = false,
 ): Signal2imageParameters {
@@ -311,8 +311,8 @@ function signal2image(
     homodyne_flag: boolean = false,
     verbose_flag: boolean = false,
     apodize_flag: boolean = false,
-    cutoff: number | null = 100,
-    rolloff: number | null = 10,
+    cutoff: number | null = null,
+    rolloff: number | null = null,
     save_flag: boolean = false,
     help_flag: boolean = false,
     runner: Runner | null = null,

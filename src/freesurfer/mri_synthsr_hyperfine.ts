@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_SYNTHSR_HYPERFINE_METADATA: Metadata = {
-    id: "4e58102f9b885e826be8d96a7d9856f922b77bc5.boutiques",
+    id: "8e843698298fd2b65653e6331368e48d5b51dcb7.boutiques",
     name: "mri_synthsr_hyperfine",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -87,7 +87,7 @@ function mri_synthsr_hyperfine_params(
     t1_image: InputPathType,
     t2_image: InputPathType,
     output: string,
-    threads: number | null = 1,
+    threads: number | null = null,
     cpu: boolean = false,
 ): MriSynthsrHyperfineParameters {
     const params = {
@@ -213,7 +213,7 @@ function mri_synthsr_hyperfine(
     t1_image: InputPathType,
     t2_image: InputPathType,
     output: string,
-    threads: number | null = 1,
+    threads: number | null = null,
     cpu: boolean = false,
     runner: Runner | null = null,
 ): MriSynthsrHyperfineOutputs {

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const EXTRACTTXT_METADATA: Metadata = {
-    id: "4a3bed1da6981adbde061512034e1d96efc6c5c8.boutiques",
+    id: "e850a5e0d69d533ab87c46e7a7929106d6071cba.boutiques",
     name: "extracttxt",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -84,8 +84,8 @@ interface ExtracttxtOutputs {
 function extracttxt_params(
     search_word: string,
     file: InputPathType,
-    num_trailing_lines: number | null = 0,
-    relative_start: number | null = 0,
+    num_trailing_lines: number | null = null,
+    relative_start: number | null = null,
 ): ExtracttxtParameters {
     const params = {
         "@type": "fsl.extracttxt" as const,
@@ -196,8 +196,8 @@ function extracttxt_execute(
 function extracttxt(
     search_word: string,
     file: InputPathType,
-    num_trailing_lines: number | null = 0,
-    relative_start: number | null = 0,
+    num_trailing_lines: number | null = null,
+    relative_start: number | null = null,
     runner: Runner | null = null,
 ): ExtracttxtOutputs {
     const params = extracttxt_params(search_word, file, num_trailing_lines, relative_start)

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VECREG_METADATA: Metadata = {
-    id: "5064b1425f46565055c7ced1a7351b8b583c894d.boutiques",
+    id: "5ea97d63fa87872b1a5f5209794810b9f78da5fa.boutiques",
     name: "vecreg",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -104,7 +104,7 @@ function vecreg_params(
     help_flag: boolean = false,
     secondary_affine: InputPathType | null = null,
     secondary_warp: InputPathType | null = null,
-    interp_method: string | null = "trilinear",
+    interp_method: string | null = null,
     brain_mask: InputPathType | null = null,
     ref_brain_mask: InputPathType | null = null,
 ): VecregParameters {
@@ -291,7 +291,7 @@ function vecreg(
     help_flag: boolean = false,
     secondary_affine: InputPathType | null = null,
     secondary_warp: InputPathType | null = null,
-    interp_method: string | null = "trilinear",
+    interp_method: string | null = null,
     brain_mask: InputPathType | null = null,
     ref_brain_mask: InputPathType | null = null,
     runner: Runner | null = null,

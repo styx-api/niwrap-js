@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONVERT_SCALAR_IMAGE_TO_RGB_METADATA: Metadata = {
-    id: "9ca4a7950c397eac7a9318ce90e2920bf4776ea6.boutiques",
+    id: "3d2bbf73fe4824b5d14e6ad1dad04dc288964f49.boutiques",
     name: "ConvertScalarImageToRGB",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -104,8 +104,8 @@ function convert_scalar_image_to_rgb_params(
     custom_colormap_file: InputPathType | null = null,
     minimum_input: number | null = null,
     maximum_input: number | null = null,
-    minimum_rgb_output: number | null = 0,
-    maximum_rgb_output: number | null = 255,
+    minimum_rgb_output: number | null = null,
+    maximum_rgb_output: number | null = null,
     vtk_lookup_table: string | null = null,
 ): ConvertScalarImageToRgbParameters {
     const params = {
@@ -260,8 +260,8 @@ function convert_scalar_image_to_rgb(
     custom_colormap_file: InputPathType | null = null,
     minimum_input: number | null = null,
     maximum_input: number | null = null,
-    minimum_rgb_output: number | null = 0,
-    maximum_rgb_output: number | null = 255,
+    minimum_rgb_output: number | null = null,
+    maximum_rgb_output: number | null = null,
     vtk_lookup_table: string | null = null,
     runner: Runner | null = null,
 ): ConvertScalarImageToRgbOutputs {
