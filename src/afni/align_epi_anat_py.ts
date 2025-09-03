@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const ALIGN_EPI_ANAT_METADATA: Metadata = {
-    id: "f8698b45584333a566a4ac7a702d9045fad24911.boutiques",
-    name: "align_epi_anat",
+const ALIGN_EPI_ANAT_PY_METADATA: Metadata = {
+    id: "a95d25c6d9f2c0adb3ad36d80c962341239e28e0.boutiques",
+    name: "align_epi_anat.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface AlignEpiAnatParameters {
-    "@type": "afni.align_epi_anat";
+interface AlignEpiAnatPyParameters {
+    "@type": "afni.align_epi_anat.py";
     "epi": InputPathType;
     "anat": InputPathType;
     "epi_base": string;
@@ -44,7 +44,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.align_epi_anat": align_epi_anat_cargs,
+        "afni.align_epi_anat.py": align_epi_anat_py_cargs,
     };
     return cargsFuncs[t];
 }
@@ -61,18 +61,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.align_epi_anat": align_epi_anat_outputs,
+        "afni.align_epi_anat.py": align_epi_anat_py_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `align_epi_anat(...)`.
+ * Output object returned when calling `align_epi_anat_py(...)`.
  *
  * @interface
  */
-interface AlignEpiAnatOutputs {
+interface AlignEpiAnatPyOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -111,7 +111,7 @@ interface AlignEpiAnatOutputs {
  *
  * @returns Parameter dictionary
  */
-function align_epi_anat_params(
+function align_epi_anat_py_params(
     epi: InputPathType,
     anat: InputPathType,
     epi_base: string,
@@ -129,9 +129,9 @@ function align_epi_anat_params(
     volreg_method: "3dvolreg" | "3dWarpDrive" | "3dAllineate" | null = null,
     ex_mode: "quiet" | "echo" | "dry_run" | "script" | null = null,
     overwrite: boolean = false,
-): AlignEpiAnatParameters {
+): AlignEpiAnatPyParameters {
     const params = {
-        "@type": "afni.align_epi_anat" as const,
+        "@type": "afni.align_epi_anat.py" as const,
         "epi": epi,
         "anat": anat,
         "epi_base": epi_base,
@@ -172,8 +172,8 @@ function align_epi_anat_params(
  *
  * @returns Command-line arguments.
  */
-function align_epi_anat_cargs(
-    params: AlignEpiAnatParameters,
+function align_epi_anat_py_cargs(
+    params: AlignEpiAnatPyParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -259,11 +259,11 @@ function align_epi_anat_cargs(
  *
  * @returns Outputs object.
  */
-function align_epi_anat_outputs(
-    params: AlignEpiAnatParameters,
+function align_epi_anat_py_outputs(
+    params: AlignEpiAnatPyParameters,
     execution: Execution,
-): AlignEpiAnatOutputs {
-    const ret: AlignEpiAnatOutputs = {
+): AlignEpiAnatPyOutputs {
+    const ret: AlignEpiAnatPyOutputs = {
         root: execution.outputFile("."),
         anat_aligned: execution.outputFile([path.basename((params["anat"] ?? null)), "+orig"].join('')),
         epi_aligned: execution.outputFile([path.basename((params["epi"] ?? null)), "+orig"].join('')),
@@ -273,7 +273,7 @@ function align_epi_anat_outputs(
 
 
 /**
- * align_epi_anat
+ * align_epi_anat.py
  *
  * Align EPI to anatomical datasets or vice versa.
  *
@@ -284,24 +284,24 @@ function align_epi_anat_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `AlignEpiAnatOutputs`).
+ * @returns NamedTuple of outputs (described in `AlignEpiAnatPyOutputs`).
  */
-function align_epi_anat_execute(
-    params: AlignEpiAnatParameters,
+function align_epi_anat_py_execute(
+    params: AlignEpiAnatPyParameters,
     runner: Runner | null = null,
-): AlignEpiAnatOutputs {
+): AlignEpiAnatPyOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ALIGN_EPI_ANAT_METADATA);
+    const execution = runner.startExecution(ALIGN_EPI_ANAT_PY_METADATA);
     params = execution.params(params)
-    const cargs = align_epi_anat_cargs(params, execution)
-    const ret = align_epi_anat_outputs(params, execution)
+    const cargs = align_epi_anat_py_cargs(params, execution)
+    const ret = align_epi_anat_py_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * align_epi_anat
+ * align_epi_anat.py
  *
  * Align EPI to anatomical datasets or vice versa.
  *
@@ -328,9 +328,9 @@ function align_epi_anat_execute(
  * @param overwrite Overwrite existing files
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `AlignEpiAnatOutputs`).
+ * @returns NamedTuple of outputs (described in `AlignEpiAnatPyOutputs`).
  */
-function align_epi_anat(
+function align_epi_anat_py(
     epi: InputPathType,
     anat: InputPathType,
     epi_base: string,
@@ -349,17 +349,17 @@ function align_epi_anat(
     ex_mode: "quiet" | "echo" | "dry_run" | "script" | null = null,
     overwrite: boolean = false,
     runner: Runner | null = null,
-): AlignEpiAnatOutputs {
-    const params = align_epi_anat_params(epi, anat, epi_base, anat2epi, epi2anat, suffix, add_edge, big_move, giant_move, ginormous_move, keep_rm_files, prep_only, ana_has_skull, epi_strip, volreg_method, ex_mode, overwrite)
-    return align_epi_anat_execute(params, runner);
+): AlignEpiAnatPyOutputs {
+    const params = align_epi_anat_py_params(epi, anat, epi_base, anat2epi, epi2anat, suffix, add_edge, big_move, giant_move, ginormous_move, keep_rm_files, prep_only, ana_has_skull, epi_strip, volreg_method, ex_mode, overwrite)
+    return align_epi_anat_py_execute(params, runner);
 }
 
 
 export {
-      ALIGN_EPI_ANAT_METADATA,
-      AlignEpiAnatOutputs,
-      AlignEpiAnatParameters,
-      align_epi_anat,
-      align_epi_anat_execute,
-      align_epi_anat_params,
+      ALIGN_EPI_ANAT_PY_METADATA,
+      AlignEpiAnatPyOutputs,
+      AlignEpiAnatPyParameters,
+      align_epi_anat_py,
+      align_epi_anat_py_execute,
+      align_epi_anat_py_params,
 };

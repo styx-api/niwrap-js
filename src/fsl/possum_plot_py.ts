@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const POSSUM_PLOT_METADATA: Metadata = {
-    id: "dc6b75f878a7827865c273243da941f0afd83134.boutiques",
-    name: "possum_plot",
+const POSSUM_PLOT_PY_METADATA: Metadata = {
+    id: "bd2b6b8b85bcd1d3167b1b04cdbf739929894a10.boutiques",
+    name: "possum_plot.py",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
 };
 
 
-interface PossumPlotParameters {
-    "@type": "fsl.possum_plot";
+interface PossumPlotPyParameters {
+    "@type": "fsl.possum_plot.py";
     "input_file": InputPathType;
     "output_basename": string;
 }
@@ -29,7 +29,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "fsl.possum_plot": possum_plot_cargs,
+        "fsl.possum_plot.py": possum_plot_py_cargs,
     };
     return cargsFuncs[t];
 }
@@ -46,18 +46,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "fsl.possum_plot": possum_plot_outputs,
+        "fsl.possum_plot.py": possum_plot_py_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `possum_plot(...)`.
+ * Output object returned when calling `possum_plot_py(...)`.
  *
  * @interface
  */
-interface PossumPlotOutputs {
+interface PossumPlotPyOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -77,12 +77,12 @@ interface PossumPlotOutputs {
  *
  * @returns Parameter dictionary
  */
-function possum_plot_params(
+function possum_plot_py_params(
     input_file: InputPathType,
     output_basename: string,
-): PossumPlotParameters {
+): PossumPlotPyParameters {
     const params = {
-        "@type": "fsl.possum_plot" as const,
+        "@type": "fsl.possum_plot.py" as const,
         "input_file": input_file,
         "output_basename": output_basename,
     };
@@ -98,8 +98,8 @@ function possum_plot_params(
  *
  * @returns Command-line arguments.
  */
-function possum_plot_cargs(
-    params: PossumPlotParameters,
+function possum_plot_py_cargs(
+    params: PossumPlotPyParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -118,11 +118,11 @@ function possum_plot_cargs(
  *
  * @returns Outputs object.
  */
-function possum_plot_outputs(
-    params: PossumPlotParameters,
+function possum_plot_py_outputs(
+    params: PossumPlotPyParameters,
     execution: Execution,
-): PossumPlotOutputs {
-    const ret: PossumPlotOutputs = {
+): PossumPlotPyOutputs {
+    const ret: PossumPlotPyOutputs = {
         root: execution.outputFile("."),
         output_plots: execution.outputFile([(params["output_basename"] ?? null), "_*.png"].join('')),
     };
@@ -131,7 +131,7 @@ function possum_plot_outputs(
 
 
 /**
- * possum_plot
+ * possum_plot.py
  *
  * Tool for plotting results from POSSUM simulations in FSL.
  *
@@ -142,24 +142,24 @@ function possum_plot_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `PossumPlotOutputs`).
+ * @returns NamedTuple of outputs (described in `PossumPlotPyOutputs`).
  */
-function possum_plot_execute(
-    params: PossumPlotParameters,
+function possum_plot_py_execute(
+    params: PossumPlotPyParameters,
     runner: Runner | null = null,
-): PossumPlotOutputs {
+): PossumPlotPyOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(POSSUM_PLOT_METADATA);
+    const execution = runner.startExecution(POSSUM_PLOT_PY_METADATA);
     params = execution.params(params)
-    const cargs = possum_plot_cargs(params, execution)
-    const ret = possum_plot_outputs(params, execution)
+    const cargs = possum_plot_py_cargs(params, execution)
+    const ret = possum_plot_py_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * possum_plot
+ * possum_plot.py
  *
  * Tool for plotting results from POSSUM simulations in FSL.
  *
@@ -171,23 +171,23 @@ function possum_plot_execute(
  * @param output_basename Basename for output files (e.g. plot_output)
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `PossumPlotOutputs`).
+ * @returns NamedTuple of outputs (described in `PossumPlotPyOutputs`).
  */
-function possum_plot(
+function possum_plot_py(
     input_file: InputPathType,
     output_basename: string,
     runner: Runner | null = null,
-): PossumPlotOutputs {
-    const params = possum_plot_params(input_file, output_basename)
-    return possum_plot_execute(params, runner);
+): PossumPlotPyOutputs {
+    const params = possum_plot_py_params(input_file, output_basename)
+    return possum_plot_py_execute(params, runner);
 }
 
 
 export {
-      POSSUM_PLOT_METADATA,
-      PossumPlotOutputs,
-      PossumPlotParameters,
-      possum_plot,
-      possum_plot_execute,
-      possum_plot_params,
+      POSSUM_PLOT_PY_METADATA,
+      PossumPlotPyOutputs,
+      PossumPlotPyParameters,
+      possum_plot_py,
+      possum_plot_py_execute,
+      possum_plot_py_params,
 };

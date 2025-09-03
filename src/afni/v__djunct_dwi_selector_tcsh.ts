@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const V__DJUNCT_DWI_SELECTOR_METADATA: Metadata = {
-    id: "5ab9f2d175d71ed28465ef305cf31b5079bd3841.boutiques",
-    name: "@djunct_dwi_selector",
+const V__DJUNCT_DWI_SELECTOR_TCSH_METADATA: Metadata = {
+    id: "4f22b66604fa3c50e883353b69e9abbdd55179a2.boutiques",
+    name: "@djunct_dwi_selector.tcsh",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface VDjunctDwiSelectorParameters {
-    "@type": "afni.@djunct_dwi_selector";
+interface VDjunctDwiSelectorTcshParameters {
+    "@type": "afni.@djunct_dwi_selector.tcsh";
     "dwi": InputPathType;
     "png": InputPathType;
     "outfile": string;
@@ -30,7 +30,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.@djunct_dwi_selector": v__djunct_dwi_selector_cargs,
+        "afni.@djunct_dwi_selector.tcsh": v__djunct_dwi_selector_tcsh_cargs,
     };
     return cargsFuncs[t];
 }
@@ -47,18 +47,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.@djunct_dwi_selector": v__djunct_dwi_selector_outputs,
+        "afni.@djunct_dwi_selector.tcsh": v__djunct_dwi_selector_tcsh_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `v__djunct_dwi_selector(...)`.
+ * Output object returned when calling `v__djunct_dwi_selector_tcsh(...)`.
  *
  * @interface
  */
-interface VDjunctDwiSelectorOutputs {
+interface VDjunctDwiSelectorTcshOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -79,13 +79,13 @@ interface VDjunctDwiSelectorOutputs {
  *
  * @returns Parameter dictionary
  */
-function v__djunct_dwi_selector_params(
+function v__djunct_dwi_selector_tcsh_params(
     dwi: InputPathType,
     png: InputPathType,
     outfile: string,
-): VDjunctDwiSelectorParameters {
+): VDjunctDwiSelectorTcshParameters {
     const params = {
-        "@type": "afni.@djunct_dwi_selector" as const,
+        "@type": "afni.@djunct_dwi_selector.tcsh" as const,
         "dwi": dwi,
         "png": png,
         "outfile": outfile,
@@ -102,8 +102,8 @@ function v__djunct_dwi_selector_params(
  *
  * @returns Command-line arguments.
  */
-function v__djunct_dwi_selector_cargs(
-    params: VDjunctDwiSelectorParameters,
+function v__djunct_dwi_selector_tcsh_cargs(
+    params: VDjunctDwiSelectorTcshParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -123,11 +123,11 @@ function v__djunct_dwi_selector_cargs(
  *
  * @returns Outputs object.
  */
-function v__djunct_dwi_selector_outputs(
-    params: VDjunctDwiSelectorParameters,
+function v__djunct_dwi_selector_tcsh_outputs(
+    params: VDjunctDwiSelectorTcshParameters,
     execution: Execution,
-): VDjunctDwiSelectorOutputs {
-    const ret: VDjunctDwiSelectorOutputs = {
+): VDjunctDwiSelectorTcshOutputs {
+    const ret: VDjunctDwiSelectorTcshOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["outfile"] ?? null)].join('')),
     };
@@ -136,7 +136,7 @@ function v__djunct_dwi_selector_outputs(
 
 
 /**
- * @djunct_dwi_selector
+ * @djunct_dwi_selector.tcsh
  *
  * Selects DWI data and creates a representative image.
  *
@@ -147,24 +147,24 @@ function v__djunct_dwi_selector_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `VDjunctDwiSelectorOutputs`).
+ * @returns NamedTuple of outputs (described in `VDjunctDwiSelectorTcshOutputs`).
  */
-function v__djunct_dwi_selector_execute(
-    params: VDjunctDwiSelectorParameters,
+function v__djunct_dwi_selector_tcsh_execute(
+    params: VDjunctDwiSelectorTcshParameters,
     runner: Runner | null = null,
-): VDjunctDwiSelectorOutputs {
+): VDjunctDwiSelectorTcshOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V__DJUNCT_DWI_SELECTOR_METADATA);
+    const execution = runner.startExecution(V__DJUNCT_DWI_SELECTOR_TCSH_METADATA);
     params = execution.params(params)
-    const cargs = v__djunct_dwi_selector_cargs(params, execution)
-    const ret = v__djunct_dwi_selector_outputs(params, execution)
+    const cargs = v__djunct_dwi_selector_tcsh_cargs(params, execution)
+    const ret = v__djunct_dwi_selector_tcsh_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * @djunct_dwi_selector
+ * @djunct_dwi_selector.tcsh
  *
  * Selects DWI data and creates a representative image.
  *
@@ -177,24 +177,24 @@ function v__djunct_dwi_selector_execute(
  * @param outfile Path to the output file
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `VDjunctDwiSelectorOutputs`).
+ * @returns NamedTuple of outputs (described in `VDjunctDwiSelectorTcshOutputs`).
  */
-function v__djunct_dwi_selector(
+function v__djunct_dwi_selector_tcsh(
     dwi: InputPathType,
     png: InputPathType,
     outfile: string,
     runner: Runner | null = null,
-): VDjunctDwiSelectorOutputs {
-    const params = v__djunct_dwi_selector_params(dwi, png, outfile)
-    return v__djunct_dwi_selector_execute(params, runner);
+): VDjunctDwiSelectorTcshOutputs {
+    const params = v__djunct_dwi_selector_tcsh_params(dwi, png, outfile)
+    return v__djunct_dwi_selector_tcsh_execute(params, runner);
 }
 
 
 export {
-      VDjunctDwiSelectorOutputs,
-      VDjunctDwiSelectorParameters,
-      V__DJUNCT_DWI_SELECTOR_METADATA,
-      v__djunct_dwi_selector,
-      v__djunct_dwi_selector_execute,
-      v__djunct_dwi_selector_params,
+      VDjunctDwiSelectorTcshOutputs,
+      VDjunctDwiSelectorTcshParameters,
+      V__DJUNCT_DWI_SELECTOR_TCSH_METADATA,
+      v__djunct_dwi_selector_tcsh,
+      v__djunct_dwi_selector_tcsh_execute,
+      v__djunct_dwi_selector_tcsh_params,
 };

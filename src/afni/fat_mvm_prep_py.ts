@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const FAT_MVM_PREP_METADATA: Metadata = {
-    id: "be0a3158fe3df52caf8c7307710e4bd60769efcd.boutiques",
-    name: "fat_mvm_prep",
+const FAT_MVM_PREP_PY_METADATA: Metadata = {
+    id: "0c22f3858e28e7ce9c5b403fa3a5edd50daad48f.boutiques",
+    name: "fat_mvm_prep.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface FatMvmPrepParameters {
-    "@type": "afni.fat_mvm_prep";
+interface FatMvmPrepPyParameters {
+    "@type": "afni.fat_mvm_prep.py";
     "prefix": string;
     "csv_file": InputPathType;
     "matrix_files"?: string | null | undefined;
@@ -34,7 +34,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.fat_mvm_prep": fat_mvm_prep_cargs,
+        "afni.fat_mvm_prep.py": fat_mvm_prep_py_cargs,
     };
     return cargsFuncs[t];
 }
@@ -51,18 +51,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.fat_mvm_prep": fat_mvm_prep_outputs,
+        "afni.fat_mvm_prep.py": fat_mvm_prep_py_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `fat_mvm_prep(...)`.
+ * Output object returned when calling `fat_mvm_prep_py(...)`.
  *
  * @interface
  */
-interface FatMvmPrepOutputs {
+interface FatMvmPrepPyOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -91,7 +91,7 @@ interface FatMvmPrepOutputs {
  *
  * @returns Parameter dictionary
  */
-function fat_mvm_prep_params(
+function fat_mvm_prep_py_params(
     prefix: string,
     csv_file: InputPathType,
     matrix_files: string | null = null,
@@ -99,9 +99,9 @@ function fat_mvm_prep_params(
     unionize_rois: boolean = false,
     na_warn_off: boolean = false,
     extern_labels_no: boolean = false,
-): FatMvmPrepParameters {
+): FatMvmPrepPyParameters {
     const params = {
-        "@type": "afni.fat_mvm_prep" as const,
+        "@type": "afni.fat_mvm_prep.py" as const,
         "prefix": prefix,
         "csv_file": csv_file,
         "unionize_rois": unionize_rois,
@@ -126,8 +126,8 @@ function fat_mvm_prep_params(
  *
  * @returns Command-line arguments.
  */
-function fat_mvm_prep_cargs(
-    params: FatMvmPrepParameters,
+function fat_mvm_prep_py_cargs(
+    params: FatMvmPrepPyParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -173,11 +173,11 @@ function fat_mvm_prep_cargs(
  *
  * @returns Outputs object.
  */
-function fat_mvm_prep_outputs(
-    params: FatMvmPrepParameters,
+function fat_mvm_prep_py_outputs(
+    params: FatMvmPrepPyParameters,
     execution: Execution,
-): FatMvmPrepOutputs {
-    const ret: FatMvmPrepOutputs = {
+): FatMvmPrepPyOutputs {
+    const ret: FatMvmPrepPyOutputs = {
         root: execution.outputFile("."),
         mvmtbl: execution.outputFile([(params["prefix"] ?? null), "_MVMtbl.txt"].join('')),
         mvmprep_log: execution.outputFile([(params["prefix"] ?? null), "_MVMprep.log"].join('')),
@@ -187,7 +187,7 @@ function fat_mvm_prep_outputs(
 
 
 /**
- * fat_mvm_prep
+ * fat_mvm_prep.py
  *
  * Combine FATCAT output with CSV data for statistical modeling.
  *
@@ -198,24 +198,24 @@ function fat_mvm_prep_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `FatMvmPrepOutputs`).
+ * @returns NamedTuple of outputs (described in `FatMvmPrepPyOutputs`).
  */
-function fat_mvm_prep_execute(
-    params: FatMvmPrepParameters,
+function fat_mvm_prep_py_execute(
+    params: FatMvmPrepPyParameters,
     runner: Runner | null = null,
-): FatMvmPrepOutputs {
+): FatMvmPrepPyOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_MVM_PREP_METADATA);
+    const execution = runner.startExecution(FAT_MVM_PREP_PY_METADATA);
     params = execution.params(params)
-    const cargs = fat_mvm_prep_cargs(params, execution)
-    const ret = fat_mvm_prep_outputs(params, execution)
+    const cargs = fat_mvm_prep_py_cargs(params, execution)
+    const ret = fat_mvm_prep_py_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * fat_mvm_prep
+ * fat_mvm_prep.py
  *
  * Combine FATCAT output with CSV data for statistical modeling.
  *
@@ -232,9 +232,9 @@ function fat_mvm_prep_execute(
  * @param extern_labels_no Turn off the writing/usage of user-defined labels in the *.grid/*.netcc files.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `FatMvmPrepOutputs`).
+ * @returns NamedTuple of outputs (described in `FatMvmPrepPyOutputs`).
  */
-function fat_mvm_prep(
+function fat_mvm_prep_py(
     prefix: string,
     csv_file: InputPathType,
     matrix_files: string | null = null,
@@ -243,17 +243,17 @@ function fat_mvm_prep(
     na_warn_off: boolean = false,
     extern_labels_no: boolean = false,
     runner: Runner | null = null,
-): FatMvmPrepOutputs {
-    const params = fat_mvm_prep_params(prefix, csv_file, matrix_files, list_match, unionize_rois, na_warn_off, extern_labels_no)
-    return fat_mvm_prep_execute(params, runner);
+): FatMvmPrepPyOutputs {
+    const params = fat_mvm_prep_py_params(prefix, csv_file, matrix_files, list_match, unionize_rois, na_warn_off, extern_labels_no)
+    return fat_mvm_prep_py_execute(params, runner);
 }
 
 
 export {
-      FAT_MVM_PREP_METADATA,
-      FatMvmPrepOutputs,
-      FatMvmPrepParameters,
-      fat_mvm_prep,
-      fat_mvm_prep_execute,
-      fat_mvm_prep_params,
+      FAT_MVM_PREP_PY_METADATA,
+      FatMvmPrepPyOutputs,
+      FatMvmPrepPyParameters,
+      fat_mvm_prep_py,
+      fat_mvm_prep_py_execute,
+      fat_mvm_prep_py_params,
 };

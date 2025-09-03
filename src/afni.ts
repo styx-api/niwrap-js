@@ -10,7 +10,7 @@
 
 export * from './afni/abids_json_info_py'
 export * from './afni/abids_json_tool_py'
-export * from './afni/abids_tool'
+export * from './afni/abids_tool_py'
 export * from './afni/adjunct_apqc_tsnr_general'
 export * from './afni/adjunct_aw_tableize_roi_info_py'
 export * from './afni/adjunct_calc_mont_dims_py'
@@ -18,7 +18,7 @@ export * from './afni/adjunct_combine_str_py'
 export * from './afni/adjunct_is_label_py'
 export * from './afni/adjunct_make_script_and_rst_py'
 export * from './afni/adjunct_select_str_py'
-export * from './afni/adjunct_simplify_cost'
+export * from './afni/adjunct_simplify_cost_py'
 export * from './afni/adjunct_suma_fs_mask_and_qc'
 export * from './afni/adjunct_suma_fs_roi_info'
 export * from './afni/adjunct_tort_plot_dp_align'
@@ -32,10 +32,10 @@ export * from './afni/afni_proc_py'
 export * from './afni/afni_run_r'
 export * from './afni/afni_system_check_py'
 export * from './afni/aiv'
-export * from './afni/align_epi_anat'
+export * from './afni/align_epi_anat_py'
 export * from './afni/analyze_trace'
-export * from './afni/ap_run_simple_rest'
-export * from './afni/apqc_make_html'
+export * from './afni/ap_run_simple_rest_tcsh'
+export * from './afni/apqc_make_html_py'
 export * from './afni/apqc_make_tcsh_py'
 export * from './afni/apsearch'
 export * from './afni/auto_warp_py'
@@ -52,7 +52,7 @@ export * from './afni/clust_exp_hist_table_py'
 export * from './afni/clust_exp_stat_parse_py'
 export * from './afni/column_cat'
 export * from './afni/compare_surfaces'
-export * from './afni/convert_cdiflist_to_grads'
+export * from './afni/convert_cdiflist_to_grads_py'
 export * from './afni/convert_dset'
 export * from './afni/convert_surface'
 export * from './afni/convex_hull'
@@ -67,13 +67,13 @@ export * from './afni/djpeg'
 export * from './afni/drive_suma'
 export * from './afni/dsetstat2p'
 export * from './afni/dtistudio_fiberto_segments'
-export * from './afni/epi_b0_correct'
+export * from './afni/epi_b0_correct_py'
 export * from './afni/examine_xmat'
 export * from './afni/fat_mat2d_plot_py'
 export * from './afni/fat_mat_sel_py'
-export * from './afni/fat_mat_tableize'
+export * from './afni/fat_mat_tableize_py'
 export * from './afni/fat_mvm_gridconv_py'
-export * from './afni/fat_mvm_prep'
+export * from './afni/fat_mvm_prep_py'
 export * from './afni/fat_mvm_scripter_py'
 export * from './afni/fat_proc_align_anat_pair'
 export * from './afni/fat_proc_axialize_anat'
@@ -86,20 +86,20 @@ export * from './afni/fat_proc_filter_dwis'
 export * from './afni/fat_proc_imit2w_from_t1w'
 export * from './afni/fat_proc_map_to_dti'
 export * from './afni/fat_proc_select_vols'
-export * from './afni/fat_roi_row'
+export * from './afni/fat_roi_row_py'
 export * from './afni/fatcat_matplot'
 export * from './afni/fdrval'
 export * from './afni/fftest'
 export * from './afni/file_tool'
 export * from './afni/fim2'
-export * from './afni/find_variance_lines'
+export * from './afni/find_variance_lines_tcsh'
 export * from './afni/firdesign'
 export * from './afni/float_scan'
 export * from './afni/from3d'
 export * from './afni/fsread_annot'
 export * from './afni/gen_epi_review_py'
-export * from './afni/gen_group_command'
-export * from './afni/gen_ss_review_scripts'
+export * from './afni/gen_group_command_py'
+export * from './afni/gen_ss_review_scripts_py'
 export * from './afni/gen_ss_review_table_py'
 export * from './afni/get_afni_model_prf'
 export * from './afni/get_afni_model_prf_6'
@@ -158,7 +158,7 @@ export * from './afni/r_pkgs_install'
 export * from './afni/rba'
 export * from './afni/rbox'
 export * from './afni/read_matlab_files_py'
-export * from './afni/realtime_receiver'
+export * from './afni/realtime_receiver_py'
 export * from './afni/retro_ts_py'
 export * from './afni/rmz'
 export * from './afni/roi2dataset'
@@ -202,7 +202,7 @@ export * from './afni/tokens'
 export * from './afni/trr'
 export * from './afni/uber_align_test_py'
 export * from './afni/uber_proc_py'
-export * from './afni/uber_skel'
+export * from './afni/uber_skel_py'
 export * from './afni/uber_subject_py'
 export * from './afni/un_warp_epi_py'
 export * from './afni/uniq_images'
@@ -239,7 +239,6 @@ export * from './afni/v_2d_im_reg'
 export * from './afni/v_2dcat'
 export * from './afni/v_2perm'
 export * from './afni/v_2swap'
-export * from './afni/v_3_droimaker'
 export * from './afni/v_3d_aboverlap'
 export * from './afni/v_3d_acost'
 export * from './afni/v_3d_afnito3_d'
@@ -344,7 +343,7 @@ export * from './afni/v_3d_nwarp_cat'
 export * from './afni/v_3d_nwarp_funcs'
 export * from './afni/v_3d_nwarp_xyz'
 export * from './afni/v_3d_overlap'
-export * from './afni/v_3d_par2_afni'
+export * from './afni/v_3d_par2_afni_pl'
 export * from './afni/v_3d_periodogram'
 export * from './afni/v_3d_pfm'
 export * from './afni/v_3d_polyfit'
@@ -357,6 +356,7 @@ export * from './afni/v_3d_re_ho'
 export * from './afni/v_3d_reg_ana'
 export * from './afni/v_3d_remlfit'
 export * from './afni/v_3d_retino_phase'
+export * from './afni/v_3d_roimaker'
 export * from './afni/v_3d_roistats'
 export * from './afni/v_3d_row_fillin'
 export * from './afni/v_3d_rprog_demo'
@@ -490,7 +490,7 @@ export * from './afni/v__diff_tree'
 export * from './afni/v__djunct_4d_imager'
 export * from './afni/v__djunct_4d_slices_to_3d_vol'
 export * from './afni/v__djunct_anonymize'
-export * from './afni/v__djunct_dwi_selector'
+export * from './afni/v__djunct_dwi_selector_tcsh'
 export * from './afni/v__djunct_edgy_align_check'
 export * from './afni/v__djunct_modal_smoothing_with_rep'
 export * from './afni/v__djunct_montage_coordinator'
@@ -576,7 +576,7 @@ export * from './afni/xmat_tool_py'
 import { Runner } from 'styxdefs';
 import { abids_json_info_py_execute } from './afni/abids_json_info_py'
 import { abids_json_tool_py_execute } from './afni/abids_json_tool_py'
-import { abids_tool_execute } from './afni/abids_tool'
+import { abids_tool_py_execute } from './afni/abids_tool_py'
 import { adjunct_apqc_tsnr_general_execute } from './afni/adjunct_apqc_tsnr_general'
 import { adjunct_aw_tableize_roi_info_py_execute } from './afni/adjunct_aw_tableize_roi_info_py'
 import { adjunct_calc_mont_dims_py_execute } from './afni/adjunct_calc_mont_dims_py'
@@ -584,7 +584,7 @@ import { adjunct_combine_str_py_execute } from './afni/adjunct_combine_str_py'
 import { adjunct_is_label_py_execute } from './afni/adjunct_is_label_py'
 import { adjunct_make_script_and_rst_py_execute } from './afni/adjunct_make_script_and_rst_py'
 import { adjunct_select_str_py_execute } from './afni/adjunct_select_str_py'
-import { adjunct_simplify_cost_execute } from './afni/adjunct_simplify_cost'
+import { adjunct_simplify_cost_py_execute } from './afni/adjunct_simplify_cost_py'
 import { adjunct_suma_fs_mask_and_qc_execute } from './afni/adjunct_suma_fs_mask_and_qc'
 import { adjunct_suma_fs_roi_info_execute } from './afni/adjunct_suma_fs_roi_info'
 import { adjunct_tort_plot_dp_align_execute } from './afni/adjunct_tort_plot_dp_align'
@@ -598,10 +598,10 @@ import { afni_proc_py_execute } from './afni/afni_proc_py'
 import { afni_run_r_execute } from './afni/afni_run_r'
 import { afni_system_check_py_execute } from './afni/afni_system_check_py'
 import { aiv_execute } from './afni/aiv'
-import { align_epi_anat_execute } from './afni/align_epi_anat'
+import { align_epi_anat_py_execute } from './afni/align_epi_anat_py'
 import { analyze_trace_execute } from './afni/analyze_trace'
-import { ap_run_simple_rest_execute } from './afni/ap_run_simple_rest'
-import { apqc_make_html_execute } from './afni/apqc_make_html'
+import { ap_run_simple_rest_tcsh_execute } from './afni/ap_run_simple_rest_tcsh'
+import { apqc_make_html_py_execute } from './afni/apqc_make_html_py'
 import { apqc_make_tcsh_py_execute } from './afni/apqc_make_tcsh_py'
 import { apsearch_execute } from './afni/apsearch'
 import { auto_warp_py_execute } from './afni/auto_warp_py'
@@ -618,7 +618,7 @@ import { clust_exp_hist_table_py_execute } from './afni/clust_exp_hist_table_py'
 import { clust_exp_stat_parse_py_execute } from './afni/clust_exp_stat_parse_py'
 import { column_cat_execute } from './afni/column_cat'
 import { compare_surfaces_execute } from './afni/compare_surfaces'
-import { convert_cdiflist_to_grads_execute } from './afni/convert_cdiflist_to_grads'
+import { convert_cdiflist_to_grads_py_execute } from './afni/convert_cdiflist_to_grads_py'
 import { convert_dset_execute } from './afni/convert_dset'
 import { convert_surface_execute } from './afni/convert_surface'
 import { convex_hull_execute } from './afni/convex_hull'
@@ -633,13 +633,13 @@ import { djpeg_execute } from './afni/djpeg'
 import { drive_suma_execute } from './afni/drive_suma'
 import { dsetstat2p_execute } from './afni/dsetstat2p'
 import { dtistudio_fiberto_segments_execute } from './afni/dtistudio_fiberto_segments'
-import { epi_b0_correct_execute } from './afni/epi_b0_correct'
+import { epi_b0_correct_py_execute } from './afni/epi_b0_correct_py'
 import { examine_xmat_execute } from './afni/examine_xmat'
 import { fat_mat2d_plot_py_execute } from './afni/fat_mat2d_plot_py'
 import { fat_mat_sel_py_execute } from './afni/fat_mat_sel_py'
-import { fat_mat_tableize_execute } from './afni/fat_mat_tableize'
+import { fat_mat_tableize_py_execute } from './afni/fat_mat_tableize_py'
 import { fat_mvm_gridconv_py_execute } from './afni/fat_mvm_gridconv_py'
-import { fat_mvm_prep_execute } from './afni/fat_mvm_prep'
+import { fat_mvm_prep_py_execute } from './afni/fat_mvm_prep_py'
 import { fat_mvm_scripter_py_execute } from './afni/fat_mvm_scripter_py'
 import { fat_proc_align_anat_pair_execute } from './afni/fat_proc_align_anat_pair'
 import { fat_proc_axialize_anat_execute } from './afni/fat_proc_axialize_anat'
@@ -652,20 +652,20 @@ import { fat_proc_filter_dwis_execute } from './afni/fat_proc_filter_dwis'
 import { fat_proc_imit2w_from_t1w_execute } from './afni/fat_proc_imit2w_from_t1w'
 import { fat_proc_map_to_dti_execute } from './afni/fat_proc_map_to_dti'
 import { fat_proc_select_vols_execute } from './afni/fat_proc_select_vols'
-import { fat_roi_row_execute } from './afni/fat_roi_row'
+import { fat_roi_row_py_execute } from './afni/fat_roi_row_py'
 import { fatcat_matplot_execute } from './afni/fatcat_matplot'
 import { fdrval_execute } from './afni/fdrval'
 import { fftest_execute } from './afni/fftest'
 import { file_tool_execute } from './afni/file_tool'
 import { fim2_execute } from './afni/fim2'
-import { find_variance_lines_execute } from './afni/find_variance_lines'
+import { find_variance_lines_tcsh_execute } from './afni/find_variance_lines_tcsh'
 import { firdesign_execute } from './afni/firdesign'
 import { float_scan_execute } from './afni/float_scan'
 import { from3d_execute } from './afni/from3d'
 import { fsread_annot_execute } from './afni/fsread_annot'
 import { gen_epi_review_py_execute } from './afni/gen_epi_review_py'
-import { gen_group_command_execute } from './afni/gen_group_command'
-import { gen_ss_review_scripts_execute } from './afni/gen_ss_review_scripts'
+import { gen_group_command_py_execute } from './afni/gen_group_command_py'
+import { gen_ss_review_scripts_py_execute } from './afni/gen_ss_review_scripts_py'
 import { gen_ss_review_table_py_execute } from './afni/gen_ss_review_table_py'
 import { get_afni_model_prf_6_bad_execute } from './afni/get_afni_model_prf_6_bad'
 import { get_afni_model_prf_6_execute } from './afni/get_afni_model_prf_6'
@@ -724,7 +724,7 @@ import { r_pkgs_install_execute } from './afni/r_pkgs_install'
 import { rba_execute } from './afni/rba'
 import { rbox_execute } from './afni/rbox'
 import { read_matlab_files_py_execute } from './afni/read_matlab_files_py'
-import { realtime_receiver_execute } from './afni/realtime_receiver'
+import { realtime_receiver_py_execute } from './afni/realtime_receiver_py'
 import { retro_ts_py_execute } from './afni/retro_ts_py'
 import { rmz_execute } from './afni/rmz'
 import { roi2dataset_execute } from './afni/roi2dataset'
@@ -768,7 +768,7 @@ import { tokens_execute } from './afni/tokens'
 import { trr_execute } from './afni/trr'
 import { uber_align_test_py_execute } from './afni/uber_align_test_py'
 import { uber_proc_py_execute } from './afni/uber_proc_py'
-import { uber_skel_execute } from './afni/uber_skel'
+import { uber_skel_py_execute } from './afni/uber_skel_py'
 import { uber_subject_py_execute } from './afni/uber_subject_py'
 import { un_warp_epi_py_execute } from './afni/un_warp_epi_py'
 import { uniq_images_execute } from './afni/uniq_images'
@@ -805,7 +805,6 @@ import { v_2d_im_reg_execute } from './afni/v_2d_im_reg'
 import { v_2dcat_execute } from './afni/v_2dcat'
 import { v_2perm_execute } from './afni/v_2perm'
 import { v_2swap_execute } from './afni/v_2swap'
-import { v_3_droimaker_execute } from './afni/v_3_droimaker'
 import { v_3d_aboverlap_execute } from './afni/v_3d_aboverlap'
 import { v_3d_acost_execute } from './afni/v_3d_acost'
 import { v_3d_afnito3_d_execute } from './afni/v_3d_afnito3_d'
@@ -910,7 +909,7 @@ import { v_3d_nwarp_cat_execute } from './afni/v_3d_nwarp_cat'
 import { v_3d_nwarp_funcs_execute } from './afni/v_3d_nwarp_funcs'
 import { v_3d_nwarp_xyz_execute } from './afni/v_3d_nwarp_xyz'
 import { v_3d_overlap_execute } from './afni/v_3d_overlap'
-import { v_3d_par2_afni_execute } from './afni/v_3d_par2_afni'
+import { v_3d_par2_afni_pl_execute } from './afni/v_3d_par2_afni_pl'
 import { v_3d_periodogram_execute } from './afni/v_3d_periodogram'
 import { v_3d_pfm_execute } from './afni/v_3d_pfm'
 import { v_3d_polyfit_execute } from './afni/v_3d_polyfit'
@@ -923,6 +922,7 @@ import { v_3d_re_ho_execute } from './afni/v_3d_re_ho'
 import { v_3d_reg_ana_execute } from './afni/v_3d_reg_ana'
 import { v_3d_remlfit_execute } from './afni/v_3d_remlfit'
 import { v_3d_retino_phase_execute } from './afni/v_3d_retino_phase'
+import { v_3d_roimaker_execute } from './afni/v_3d_roimaker'
 import { v_3d_roistats_execute } from './afni/v_3d_roistats'
 import { v_3d_row_fillin_execute } from './afni/v_3d_row_fillin'
 import { v_3d_rprog_demo_execute } from './afni/v_3d_rprog_demo'
@@ -1056,7 +1056,7 @@ import { v__diff_tree_execute } from './afni/v__diff_tree'
 import { v__djunct_4d_imager_execute } from './afni/v__djunct_4d_imager'
 import { v__djunct_4d_slices_to_3d_vol_execute } from './afni/v__djunct_4d_slices_to_3d_vol'
 import { v__djunct_anonymize_execute } from './afni/v__djunct_anonymize'
-import { v__djunct_dwi_selector_execute } from './afni/v__djunct_dwi_selector'
+import { v__djunct_dwi_selector_tcsh_execute } from './afni/v__djunct_dwi_selector_tcsh'
 import { v__djunct_edgy_align_check_execute } from './afni/v__djunct_edgy_align_check'
 import { v__djunct_modal_smoothing_with_rep_execute } from './afni/v__djunct_modal_smoothing_with_rep'
 import { v__djunct_montage_coordinator_execute } from './afni/v__djunct_montage_coordinator'
@@ -1186,7 +1186,6 @@ function execute(
         "afni.2dcat": v_2dcat_execute,
         "afni.2perm": v_2perm_execute,
         "afni.2swap": v_2swap_execute,
-        "afni.3DROIMaker": v_3_droimaker_execute,
         "afni.3dABoverlap": v_3d_aboverlap_execute,
         "afni.3dAFNIto3D": v_3d_afnito3_d_execute,
         "afni.3dAFNItoANALYZE": v_3d_afnito_analyze_execute,
@@ -1291,7 +1290,7 @@ function execute(
         "afni.3dNwarpFuncs": v_3d_nwarp_funcs_execute,
         "afni.3dNwarpXYZ": v_3d_nwarp_xyz_execute,
         "afni.3dOverlap": v_3d_overlap_execute,
-        "afni.3dPAR2AFNI": v_3d_par2_afni_execute,
+        "afni.3dPAR2AFNI.pl": v_3d_par2_afni_pl_execute,
         "afni.3dPFM": v_3d_pfm_execute,
         "afni.3dPVmap": v_3d_pvmap_execute,
         "afni.3dPeriodogram": v_3d_periodogram_execute,
@@ -1299,6 +1298,7 @@ function execute(
         "afni.3dPval": v_3d_pval_execute,
         "afni.3dQwarp": v_3d_qwarp_execute,
         "afni.3dREMLfit": v_3d_remlfit_execute,
+        "afni.3dROIMaker": v_3d_roimaker_execute,
         "afni.3dROIstats": v_3d_roistats_execute,
         "afni.3dRSFC": v_3d_rsfc_execute,
         "afni.3dRank": v_3d_rank_execute,
@@ -1482,7 +1482,7 @@ function execute(
         "afni.@djunct_4d_imager": v__djunct_4d_imager_execute,
         "afni.@djunct_4d_slices_to_3d_vol": v__djunct_4d_slices_to_3d_vol_execute,
         "afni.@djunct_anonymize": v__djunct_anonymize_execute,
-        "afni.@djunct_dwi_selector": v__djunct_dwi_selector_execute,
+        "afni.@djunct_dwi_selector.tcsh": v__djunct_dwi_selector_tcsh_execute,
         "afni.@djunct_edgy_align_check": v__djunct_edgy_align_check_execute,
         "afni.@djunct_modal_smoothing_with_rep": v__djunct_modal_smoothing_with_rep_execute,
         "afni.@djunct_montage_coordinator": v__djunct_montage_coordinator_execute,
@@ -1571,7 +1571,7 @@ function execute(
         "afni.Vecwarp": vecwarp_execute,
         "afni.abids_json_info.py": abids_json_info_py_execute,
         "afni.abids_json_tool.py": abids_json_tool_py_execute,
-        "afni.abids_tool": abids_tool_execute,
+        "afni.abids_tool.py": abids_tool_py_execute,
         "afni.adjunct_apqc_tsnr_general": adjunct_apqc_tsnr_general_execute,
         "afni.adjunct_aw_tableize_roi_info.py": adjunct_aw_tableize_roi_info_py_execute,
         "afni.adjunct_calc_mont_dims.py": adjunct_calc_mont_dims_py_execute,
@@ -1579,7 +1579,7 @@ function execute(
         "afni.adjunct_is_label.py": adjunct_is_label_py_execute,
         "afni.adjunct_make_script_and_rst.py": adjunct_make_script_and_rst_py_execute,
         "afni.adjunct_select_str.py": adjunct_select_str_py_execute,
-        "afni.adjunct_simplify_cost": adjunct_simplify_cost_execute,
+        "afni.adjunct_simplify_cost.py": adjunct_simplify_cost_py_execute,
         "afni.adjunct_suma_fs_mask_and_qc": adjunct_suma_fs_mask_and_qc_execute,
         "afni.adjunct_suma_fs_roi_info": adjunct_suma_fs_roi_info_execute,
         "afni.adjunct_tort_plot_dp_align": adjunct_tort_plot_dp_align_execute,
@@ -1592,9 +1592,9 @@ function execute(
         "afni.afni_run_R": afni_run_r_execute,
         "afni.afni_system_check.py": afni_system_check_py_execute,
         "afni.aiv": aiv_execute,
-        "afni.align_epi_anat": align_epi_anat_execute,
-        "afni.ap_run_simple_rest": ap_run_simple_rest_execute,
-        "afni.apqc_make_html": apqc_make_html_execute,
+        "afni.align_epi_anat.py": align_epi_anat_py_execute,
+        "afni.ap_run_simple_rest.tcsh": ap_run_simple_rest_tcsh_execute,
+        "afni.apqc_make_html.py": apqc_make_html_py_execute,
         "afni.apqc_make_tcsh.py": apqc_make_tcsh_py_execute,
         "afni.apsearch": apsearch_execute,
         "afni.auto_warp.py": auto_warp_py_execute,
@@ -1606,7 +1606,7 @@ function execute(
         "afni.cifti_tool": cifti_tool_execute,
         "afni.cjpeg": cjpeg_execute,
         "afni.column_cat": column_cat_execute,
-        "afni.convert_cdiflist_to_grads": convert_cdiflist_to_grads_execute,
+        "afni.convert_cdiflist_to_grads.py": convert_cdiflist_to_grads_py_execute,
         "afni.count": count_execute,
         "afni.dcm2niix_afni": dcm2niix_afni_execute,
         "afni.dicom_hdr": dicom_hdr_execute,
@@ -1614,12 +1614,12 @@ function execute(
         "afni.dicom_to_raw": dicom_to_raw_execute,
         "afni.djpeg": djpeg_execute,
         "afni.dsetstat2p": dsetstat2p_execute,
-        "afni.epi_b0_correct": epi_b0_correct_execute,
+        "afni.epi_b0_correct.py": epi_b0_correct_py_execute,
         "afni.fat_mat2d_plot.py": fat_mat2d_plot_py_execute,
         "afni.fat_mat_sel.py": fat_mat_sel_py_execute,
-        "afni.fat_mat_tableize": fat_mat_tableize_execute,
+        "afni.fat_mat_tableize.py": fat_mat_tableize_py_execute,
         "afni.fat_mvm_gridconv.py": fat_mvm_gridconv_py_execute,
-        "afni.fat_mvm_prep": fat_mvm_prep_execute,
+        "afni.fat_mvm_prep.py": fat_mvm_prep_py_execute,
         "afni.fat_mvm_scripter.py": fat_mvm_scripter_py_execute,
         "afni.fat_proc_align_anat_pair": fat_proc_align_anat_pair_execute,
         "afni.fat_proc_axialize_anat": fat_proc_axialize_anat_execute,
@@ -1632,17 +1632,17 @@ function execute(
         "afni.fat_proc_imit2w_from_t1w": fat_proc_imit2w_from_t1w_execute,
         "afni.fat_proc_map_to_dti": fat_proc_map_to_dti_execute,
         "afni.fat_proc_select_vols": fat_proc_select_vols_execute,
-        "afni.fat_roi_row": fat_roi_row_execute,
+        "afni.fat_roi_row.py": fat_roi_row_py_execute,
         "afni.fdrval": fdrval_execute,
         "afni.fftest": fftest_execute,
         "afni.file_tool": file_tool_execute,
         "afni.fim2": fim2_execute,
-        "afni.find_variance_lines": find_variance_lines_execute,
+        "afni.find_variance_lines.tcsh": find_variance_lines_tcsh_execute,
         "afni.float_scan": float_scan_execute,
         "afni.from3d": from3d_execute,
         "afni.gen_epi_review.py": gen_epi_review_py_execute,
-        "afni.gen_group_command": gen_group_command_execute,
-        "afni.gen_ss_review_scripts": gen_ss_review_scripts_execute,
+        "afni.gen_group_command.py": gen_group_command_py_execute,
+        "afni.gen_ss_review_scripts.py": gen_ss_review_scripts_py_execute,
         "afni.gen_ss_review_table.py": gen_ss_review_table_py_execute,
         "afni.get_afni_model_PRF": get_afni_model_prf_execute,
         "afni.get_afni_model_PRF_6": get_afni_model_prf_6_execute,
@@ -1694,7 +1694,7 @@ function execute(
         "afni.rPkgsInstall": r_pkgs_install_execute,
         "afni.rbox": rbox_execute,
         "afni.read_matlab_files.py": read_matlab_files_py_execute,
-        "afni.realtime_receiver": realtime_receiver_execute,
+        "afni.realtime_receiver.py": realtime_receiver_py_execute,
         "afni.rmz": rmz_execute,
         "afni.rotcom": rotcom_execute,
         "afni.rtfeedme": rtfeedme_execute,
@@ -1711,7 +1711,7 @@ function execute(
         "afni.tokens": tokens_execute,
         "afni.uber_align_test.py": uber_align_test_py_execute,
         "afni.uber_proc.py": uber_proc_py_execute,
-        "afni.uber_skel": uber_skel_execute,
+        "afni.uber_skel.py": uber_skel_py_execute,
         "afni.uber_subject.py": uber_subject_py_execute,
         "afni.unWarpEPI.py": un_warp_epi_py_execute,
         "afni.uniq_images": uniq_images_execute,

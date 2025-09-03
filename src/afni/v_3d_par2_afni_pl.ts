@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const V_3D_PAR2_AFNI_METADATA: Metadata = {
-    id: "8a1625af0dec0ca42ff6be27e5b3b994d19a0b23.boutiques",
-    name: "3dPAR2AFNI",
+const V_3D_PAR2_AFNI_PL_METADATA: Metadata = {
+    id: "f2d0b5e6d8cb6c9ece3fa96d8f963b37f3584021.boutiques",
+    name: "3dPAR2AFNI.pl",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface V3dPar2AfniParameters {
-    "@type": "afni.3dPAR2AFNI";
+interface V3dPar2AfniPlParameters {
+    "@type": "afni.3dPAR2AFNI.pl";
     "input_file": InputPathType;
     "skip_outliers_test": boolean;
     "output_nifti": boolean;
@@ -37,7 +37,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.3dPAR2AFNI": v_3d_par2_afni_cargs,
+        "afni.3dPAR2AFNI.pl": v_3d_par2_afni_pl_cargs,
     };
     return cargsFuncs[t];
 }
@@ -54,18 +54,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.3dPAR2AFNI": v_3d_par2_afni_outputs,
+        "afni.3dPAR2AFNI.pl": v_3d_par2_afni_pl_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `v_3d_par2_afni(...)`.
+ * Output object returned when calling `v_3d_par2_afni_pl(...)`.
  *
  * @interface
  */
-interface V3dPar2AfniOutputs {
+interface V3dPar2AfniPlOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -93,7 +93,7 @@ interface V3dPar2AfniOutputs {
  *
  * @returns Parameter dictionary
  */
-function v_3d_par2_afni_params(
+function v_3d_par2_afni_pl_params(
     input_file: InputPathType,
     skip_outliers_test: boolean = false,
     output_nifti: boolean = false,
@@ -104,9 +104,9 @@ function v_3d_par2_afni_params(
     byte_swap_2: boolean = false,
     byte_swap_4: boolean = false,
     help_flag: boolean = false,
-): V3dPar2AfniParameters {
+): V3dPar2AfniPlParameters {
     const params = {
-        "@type": "afni.3dPAR2AFNI" as const,
+        "@type": "afni.3dPAR2AFNI.pl" as const,
         "input_file": input_file,
         "skip_outliers_test": skip_outliers_test,
         "output_nifti": output_nifti,
@@ -132,8 +132,8 @@ function v_3d_par2_afni_params(
  *
  * @returns Command-line arguments.
  */
-function v_3d_par2_afni_cargs(
-    params: V3dPar2AfniParameters,
+function v_3d_par2_afni_pl_cargs(
+    params: V3dPar2AfniPlParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -181,11 +181,11 @@ function v_3d_par2_afni_cargs(
  *
  * @returns Outputs object.
  */
-function v_3d_par2_afni_outputs(
-    params: V3dPar2AfniParameters,
+function v_3d_par2_afni_pl_outputs(
+    params: V3dPar2AfniPlParameters,
     execution: Execution,
-): V3dPar2AfniOutputs {
-    const ret: V3dPar2AfniOutputs = {
+): V3dPar2AfniPlOutputs {
+    const ret: V3dPar2AfniPlOutputs = {
         root: execution.outputFile("."),
         output_files: execution.outputFile([path.basename((params["input_file"] ?? null)), "_converted"].join('')),
     };
@@ -194,7 +194,7 @@ function v_3d_par2_afni_outputs(
 
 
 /**
- * 3dPAR2AFNI
+ * 3dPAR2AFNI.pl
  *
  * Convert Philips PAR/REC files to AFNI's BRIK/HEAD, NIfTI, or ANALYZE format.
  *
@@ -205,24 +205,24 @@ function v_3d_par2_afni_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `V3dPar2AfniOutputs`).
+ * @returns NamedTuple of outputs (described in `V3dPar2AfniPlOutputs`).
  */
-function v_3d_par2_afni_execute(
-    params: V3dPar2AfniParameters,
+function v_3d_par2_afni_pl_execute(
+    params: V3dPar2AfniPlParameters,
     runner: Runner | null = null,
-): V3dPar2AfniOutputs {
+): V3dPar2AfniPlOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3D_PAR2_AFNI_METADATA);
+    const execution = runner.startExecution(V_3D_PAR2_AFNI_PL_METADATA);
     params = execution.params(params)
-    const cargs = v_3d_par2_afni_cargs(params, execution)
-    const ret = v_3d_par2_afni_outputs(params, execution)
+    const cargs = v_3d_par2_afni_pl_cargs(params, execution)
+    const ret = v_3d_par2_afni_pl_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * 3dPAR2AFNI
+ * 3dPAR2AFNI.pl
  *
  * Convert Philips PAR/REC files to AFNI's BRIK/HEAD, NIfTI, or ANALYZE format.
  *
@@ -242,9 +242,9 @@ function v_3d_par2_afni_execute(
  * @param help_flag Display help message.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `V3dPar2AfniOutputs`).
+ * @returns NamedTuple of outputs (described in `V3dPar2AfniPlOutputs`).
  */
-function v_3d_par2_afni(
+function v_3d_par2_afni_pl(
     input_file: InputPathType,
     skip_outliers_test: boolean = false,
     output_nifti: boolean = false,
@@ -256,17 +256,17 @@ function v_3d_par2_afni(
     byte_swap_4: boolean = false,
     help_flag: boolean = false,
     runner: Runner | null = null,
-): V3dPar2AfniOutputs {
-    const params = v_3d_par2_afni_params(input_file, skip_outliers_test, output_nifti, output_analyze, output_dir, verbose_flag, gzip_files, byte_swap_2, byte_swap_4, help_flag)
-    return v_3d_par2_afni_execute(params, runner);
+): V3dPar2AfniPlOutputs {
+    const params = v_3d_par2_afni_pl_params(input_file, skip_outliers_test, output_nifti, output_analyze, output_dir, verbose_flag, gzip_files, byte_swap_2, byte_swap_4, help_flag)
+    return v_3d_par2_afni_pl_execute(params, runner);
 }
 
 
 export {
-      V3dPar2AfniOutputs,
-      V3dPar2AfniParameters,
-      V_3D_PAR2_AFNI_METADATA,
-      v_3d_par2_afni,
-      v_3d_par2_afni_execute,
-      v_3d_par2_afni_params,
+      V3dPar2AfniPlOutputs,
+      V3dPar2AfniPlParameters,
+      V_3D_PAR2_AFNI_PL_METADATA,
+      v_3d_par2_afni_pl,
+      v_3d_par2_afni_pl_execute,
+      v_3d_par2_afni_pl_params,
 };

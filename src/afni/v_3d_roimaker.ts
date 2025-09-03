@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const V_3_DROIMAKER_METADATA: Metadata = {
-    id: "5b3355492db520e49a5f6a884aa39664389df7ac.boutiques",
-    name: "3DROIMaker",
+const V_3D_ROIMAKER_METADATA: Metadata = {
+    id: "5920f7c4edf531d99fbcd79f62063134f553617f.boutiques",
+    name: "3dROIMaker",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface V3DroimakerParameters {
-    "@type": "afni.3DROIMaker";
+interface V3dRoimakerParameters {
+    "@type": "afni.3dROIMaker";
     "inset": InputPathType;
     "thresh": number;
     "prefix": string;
@@ -47,7 +47,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.3DROIMaker": v_3_droimaker_cargs,
+        "afni.3dROIMaker": v_3d_roimaker_cargs,
     };
     return cargsFuncs[t];
 }
@@ -64,18 +64,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.3DROIMaker": v_3_droimaker_outputs,
+        "afni.3dROIMaker": v_3d_roimaker_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `v_3_droimaker(...)`.
+ * Output object returned when calling `v_3d_roimaker(...)`.
  *
  * @interface
  */
-interface V3DroimakerOutputs {
+interface V3dRoimakerOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -117,7 +117,7 @@ interface V3DroimakerOutputs {
  *
  * @returns Parameter dictionary
  */
-function v_3_droimaker_params(
+function v_3d_roimaker_params(
     inset: InputPathType,
     thresh: number,
     prefix: string,
@@ -138,9 +138,9 @@ function v_3_droimaker_params(
     preinfl_inset: InputPathType | null = null,
     preinfl_inflate: number | null = null,
     dump_no_labtab: boolean = false,
-): V3DroimakerParameters {
+): V3dRoimakerParameters {
     const params = {
-        "@type": "afni.3DROIMaker" as const,
+        "@type": "afni.3dROIMaker" as const,
         "inset": inset,
         "thresh": thresh,
         "prefix": prefix,
@@ -196,8 +196,8 @@ function v_3_droimaker_params(
  *
  * @returns Command-line arguments.
  */
-function v_3_droimaker_cargs(
-    params: V3DroimakerParameters,
+function v_3d_roimaker_cargs(
+    params: V3dRoimakerParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -307,11 +307,11 @@ function v_3_droimaker_cargs(
  *
  * @returns Outputs object.
  */
-function v_3_droimaker_outputs(
-    params: V3DroimakerParameters,
+function v_3d_roimaker_outputs(
+    params: V3dRoimakerParameters,
     execution: Execution,
-): V3DroimakerOutputs {
-    const ret: V3DroimakerOutputs = {
+): V3dRoimakerOutputs {
+    const ret: V3dRoimakerOutputs = {
         root: execution.outputFile("."),
         gm_map: execution.outputFile([(params["prefix"] ?? null), "_GM+orig.*.HEAD"].join('')),
         gmi_map: execution.outputFile([(params["prefix"] ?? null), "_GMI+orig.*.HEAD"].join('')),
@@ -321,7 +321,7 @@ function v_3_droimaker_outputs(
 
 
 /**
- * 3DROIMaker
+ * 3dROIMaker
  *
  * Create a labelled set of ROIs from input data, useful in combining functional and tractographic/structural data.
  *
@@ -332,24 +332,24 @@ function v_3_droimaker_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `V3DroimakerOutputs`).
+ * @returns NamedTuple of outputs (described in `V3dRoimakerOutputs`).
  */
-function v_3_droimaker_execute(
-    params: V3DroimakerParameters,
+function v_3d_roimaker_execute(
+    params: V3dRoimakerParameters,
     runner: Runner | null = null,
-): V3DroimakerOutputs {
+): V3dRoimakerOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(V_3_DROIMAKER_METADATA);
+    const execution = runner.startExecution(V_3D_ROIMAKER_METADATA);
     params = execution.params(params)
-    const cargs = v_3_droimaker_cargs(params, execution)
-    const ret = v_3_droimaker_outputs(params, execution)
+    const cargs = v_3d_roimaker_cargs(params, execution)
+    const ret = v_3d_roimaker_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * 3DROIMaker
+ * 3dROIMaker
  *
  * Create a labelled set of ROIs from input data, useful in combining functional and tractographic/structural data.
  *
@@ -379,9 +379,9 @@ function v_3_droimaker_execute(
  * @param dump_no_labtab Switch for turning off labeltable attachment to the output GM and GMI files.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `V3DroimakerOutputs`).
+ * @returns NamedTuple of outputs (described in `V3dRoimakerOutputs`).
  */
-function v_3_droimaker(
+function v_3d_roimaker(
     inset: InputPathType,
     thresh: number,
     prefix: string,
@@ -403,17 +403,17 @@ function v_3_droimaker(
     preinfl_inflate: number | null = null,
     dump_no_labtab: boolean = false,
     runner: Runner | null = null,
-): V3DroimakerOutputs {
-    const params = v_3_droimaker_params(inset, thresh, prefix, refset, volthr, only_some_top, only_conn_top, inflate, trim_off_wm, wm_skel, skel_thr, skel_stop, skel_stop_strict, csf_skel, mask, neigh_upto_vert, nifti, preinfl_inset, preinfl_inflate, dump_no_labtab)
-    return v_3_droimaker_execute(params, runner);
+): V3dRoimakerOutputs {
+    const params = v_3d_roimaker_params(inset, thresh, prefix, refset, volthr, only_some_top, only_conn_top, inflate, trim_off_wm, wm_skel, skel_thr, skel_stop, skel_stop_strict, csf_skel, mask, neigh_upto_vert, nifti, preinfl_inset, preinfl_inflate, dump_no_labtab)
+    return v_3d_roimaker_execute(params, runner);
 }
 
 
 export {
-      V3DroimakerOutputs,
-      V3DroimakerParameters,
-      V_3_DROIMAKER_METADATA,
-      v_3_droimaker,
-      v_3_droimaker_execute,
-      v_3_droimaker_params,
+      V3dRoimakerOutputs,
+      V3dRoimakerParameters,
+      V_3D_ROIMAKER_METADATA,
+      v_3d_roimaker,
+      v_3d_roimaker_execute,
+      v_3d_roimaker_params,
 };

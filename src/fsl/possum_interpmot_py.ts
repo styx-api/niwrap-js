@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const POSSUM_INTERPMOT_METADATA: Metadata = {
-    id: "19a05108d70a52f83dc7560156ab3b5bd08df5d8.boutiques",
-    name: "possum_interpmot",
+const POSSUM_INTERPMOT_PY_METADATA: Metadata = {
+    id: "5b0453b36626d1d748f6c169ba2d9e57289dd2bd.boutiques",
+    name: "possum_interpmot.py",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
 };
 
 
-interface PossumInterpmotParameters {
-    "@type": "fsl.possum_interpmot";
+interface PossumInterpmotPyParameters {
+    "@type": "fsl.possum_interpmot.py";
     "motion_type": number;
     "tr": number;
     "tr_slice": number;
@@ -34,7 +34,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "fsl.possum_interpmot": possum_interpmot_cargs,
+        "fsl.possum_interpmot.py": possum_interpmot_py_cargs,
     };
     return cargsFuncs[t];
 }
@@ -51,18 +51,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "fsl.possum_interpmot": possum_interpmot_outputs,
+        "fsl.possum_interpmot.py": possum_interpmot_py_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `possum_interpmot(...)`.
+ * Output object returned when calling `possum_interpmot_py(...)`.
  *
  * @interface
  */
-interface PossumInterpmotOutputs {
+interface PossumInterpmotPyOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -87,7 +87,7 @@ interface PossumInterpmotOutputs {
  *
  * @returns Parameter dictionary
  */
-function possum_interpmot_params(
+function possum_interpmot_py_params(
     motion_type: number,
     tr: number,
     tr_slice: number,
@@ -95,9 +95,9 @@ function possum_interpmot_params(
     nvols: number,
     custom_motion_file: InputPathType,
     output_file: string,
-): PossumInterpmotParameters {
+): PossumInterpmotPyParameters {
     const params = {
-        "@type": "fsl.possum_interpmot" as const,
+        "@type": "fsl.possum_interpmot.py" as const,
         "motion_type": motion_type,
         "tr": tr,
         "tr_slice": tr_slice,
@@ -118,8 +118,8 @@ function possum_interpmot_params(
  *
  * @returns Command-line arguments.
  */
-function possum_interpmot_cargs(
-    params: PossumInterpmotParameters,
+function possum_interpmot_py_cargs(
+    params: PossumInterpmotPyParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,11 +143,11 @@ function possum_interpmot_cargs(
  *
  * @returns Outputs object.
  */
-function possum_interpmot_outputs(
-    params: PossumInterpmotParameters,
+function possum_interpmot_py_outputs(
+    params: PossumInterpmotPyParameters,
     execution: Execution,
-): PossumInterpmotOutputs {
-    const ret: PossumInterpmotOutputs = {
+): PossumInterpmotPyOutputs {
+    const ret: PossumInterpmotPyOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["output_file"] ?? null)].join('')),
     };
@@ -156,7 +156,7 @@ function possum_interpmot_outputs(
 
 
 /**
- * possum_interpmot
+ * possum_interpmot.py
  *
  * Position Interpolation for Movers and Shakers.
  *
@@ -167,24 +167,24 @@ function possum_interpmot_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `PossumInterpmotOutputs`).
+ * @returns NamedTuple of outputs (described in `PossumInterpmotPyOutputs`).
  */
-function possum_interpmot_execute(
-    params: PossumInterpmotParameters,
+function possum_interpmot_py_execute(
+    params: PossumInterpmotPyParameters,
     runner: Runner | null = null,
-): PossumInterpmotOutputs {
+): PossumInterpmotPyOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(POSSUM_INTERPMOT_METADATA);
+    const execution = runner.startExecution(POSSUM_INTERPMOT_PY_METADATA);
     params = execution.params(params)
-    const cargs = possum_interpmot_cargs(params, execution)
-    const ret = possum_interpmot_outputs(params, execution)
+    const cargs = possum_interpmot_py_cargs(params, execution)
+    const ret = possum_interpmot_py_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * possum_interpmot
+ * possum_interpmot.py
  *
  * Position Interpolation for Movers and Shakers.
  *
@@ -201,9 +201,9 @@ function possum_interpmot_execute(
  * @param output_file Output file
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `PossumInterpmotOutputs`).
+ * @returns NamedTuple of outputs (described in `PossumInterpmotPyOutputs`).
  */
-function possum_interpmot(
+function possum_interpmot_py(
     motion_type: number,
     tr: number,
     tr_slice: number,
@@ -212,17 +212,17 @@ function possum_interpmot(
     custom_motion_file: InputPathType,
     output_file: string,
     runner: Runner | null = null,
-): PossumInterpmotOutputs {
-    const params = possum_interpmot_params(motion_type, tr, tr_slice, nslices, nvols, custom_motion_file, output_file)
-    return possum_interpmot_execute(params, runner);
+): PossumInterpmotPyOutputs {
+    const params = possum_interpmot_py_params(motion_type, tr, tr_slice, nslices, nvols, custom_motion_file, output_file)
+    return possum_interpmot_py_execute(params, runner);
 }
 
 
 export {
-      POSSUM_INTERPMOT_METADATA,
-      PossumInterpmotOutputs,
-      PossumInterpmotParameters,
-      possum_interpmot,
-      possum_interpmot_execute,
-      possum_interpmot_params,
+      POSSUM_INTERPMOT_PY_METADATA,
+      PossumInterpmotPyOutputs,
+      PossumInterpmotPyParameters,
+      possum_interpmot_py,
+      possum_interpmot_py_execute,
+      possum_interpmot_py_params,
 };

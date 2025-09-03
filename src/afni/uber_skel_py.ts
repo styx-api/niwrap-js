@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const UBER_SKEL_METADATA: Metadata = {
-    id: "9c8b94aec9b6f8e9660a86aa775db219d44ebe60.boutiques",
-    name: "uber_skel",
+const UBER_SKEL_PY_METADATA: Metadata = {
+    id: "95009f6df9fe408c5a8a3786bc0c7164b9b8f38b.boutiques",
+    name: "uber_skel.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface UberSkelParameters {
-    "@type": "afni.uber_skel";
+interface UberSkelPyParameters {
+    "@type": "afni.uber_skel.py";
     "qt_options"?: string | null | undefined;
     "no_gui_flag": boolean;
     "print_script": boolean;
@@ -38,7 +38,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.uber_skel": uber_skel_cargs,
+        "afni.uber_skel.py": uber_skel_py_cargs,
     };
     return cargsFuncs[t];
 }
@@ -61,11 +61,11 @@ function dynOutputs(
 
 
 /**
- * Output object returned when calling `uber_skel(...)`.
+ * Output object returned when calling `uber_skel_py(...)`.
  *
  * @interface
  */
-interface UberSkelOutputs {
+interface UberSkelPyOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -90,7 +90,7 @@ interface UberSkelOutputs {
  *
  * @returns Parameter dictionary
  */
-function uber_skel_params(
+function uber_skel_py_params(
     qt_options: string | null = null,
     no_gui_flag: boolean = false,
     print_script: boolean = false,
@@ -102,9 +102,9 @@ function uber_skel_params(
     history: boolean = false,
     show_valid_opts: boolean = false,
     version: boolean = false,
-): UberSkelParameters {
+): UberSkelPyParameters {
     const params = {
-        "@type": "afni.uber_skel" as const,
+        "@type": "afni.uber_skel.py" as const,
         "no_gui_flag": no_gui_flag,
         "print_script": print_script,
         "help_howto_program": help_howto_program,
@@ -135,8 +135,8 @@ function uber_skel_params(
  *
  * @returns Command-line arguments.
  */
-function uber_skel_cargs(
-    params: UberSkelParameters,
+function uber_skel_py_cargs(
+    params: UberSkelPyParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -195,11 +195,11 @@ function uber_skel_cargs(
  *
  * @returns Outputs object.
  */
-function uber_skel_outputs(
-    params: UberSkelParameters,
+function uber_skel_py_outputs(
+    params: UberSkelPyParameters,
     execution: Execution,
-): UberSkelOutputs {
-    const ret: UberSkelOutputs = {
+): UberSkelPyOutputs {
+    const ret: UberSkelPyOutputs = {
         root: execution.outputFile("."),
     };
     return ret;
@@ -207,7 +207,7 @@ function uber_skel_outputs(
 
 
 /**
- * uber_skel
+ * uber_skel.py
  *
  * Sample uber processing program for initializing user and control variables, with options for both GUI and non-GUI modes.
  *
@@ -218,24 +218,24 @@ function uber_skel_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `UberSkelOutputs`).
+ * @returns NamedTuple of outputs (described in `UberSkelPyOutputs`).
  */
-function uber_skel_execute(
-    params: UberSkelParameters,
+function uber_skel_py_execute(
+    params: UberSkelPyParameters,
     runner: Runner | null = null,
-): UberSkelOutputs {
+): UberSkelPyOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(UBER_SKEL_METADATA);
+    const execution = runner.startExecution(UBER_SKEL_PY_METADATA);
     params = execution.params(params)
-    const cargs = uber_skel_cargs(params, execution)
-    const ret = uber_skel_outputs(params, execution)
+    const cargs = uber_skel_py_cargs(params, execution)
+    const ret = uber_skel_py_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * uber_skel
+ * uber_skel.py
  *
  * Sample uber processing program for initializing user and control variables, with options for both GUI and non-GUI modes.
  *
@@ -256,9 +256,9 @@ function uber_skel_execute(
  * @param version Show version
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `UberSkelOutputs`).
+ * @returns NamedTuple of outputs (described in `UberSkelPyOutputs`).
  */
-function uber_skel(
+function uber_skel_py(
     qt_options: string | null = null,
     no_gui_flag: boolean = false,
     print_script: boolean = false,
@@ -271,17 +271,17 @@ function uber_skel(
     show_valid_opts: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
-): UberSkelOutputs {
-    const params = uber_skel_params(qt_options, no_gui_flag, print_script, save_script, user_var, help_howto_program, help, help_gui, history, show_valid_opts, version)
-    return uber_skel_execute(params, runner);
+): UberSkelPyOutputs {
+    const params = uber_skel_py_params(qt_options, no_gui_flag, print_script, save_script, user_var, help_howto_program, help, help_gui, history, show_valid_opts, version)
+    return uber_skel_py_execute(params, runner);
 }
 
 
 export {
-      UBER_SKEL_METADATA,
-      UberSkelOutputs,
-      UberSkelParameters,
-      uber_skel,
-      uber_skel_execute,
-      uber_skel_params,
+      UBER_SKEL_PY_METADATA,
+      UberSkelPyOutputs,
+      UberSkelPyParameters,
+      uber_skel_py,
+      uber_skel_py_execute,
+      uber_skel_py_params,
 };

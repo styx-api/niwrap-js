@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const GEN_SS_REVIEW_SCRIPTS_METADATA: Metadata = {
-    id: "19293a431a3099e1044a725ff53be407555c7b79.boutiques",
-    name: "gen_ss_review_scripts",
+const GEN_SS_REVIEW_SCRIPTS_PY_METADATA: Metadata = {
+    id: "c1202dafac421d6aa7453f68b0f0e833de6e7f7c.boutiques",
+    name: "gen_ss_review_scripts.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface GenSsReviewScriptsParameters {
-    "@type": "afni.gen_ss_review_scripts";
+interface GenSsReviewScriptsPyParameters {
+    "@type": "afni.gen_ss_review_scripts.py";
     "subject_id"?: string | null | undefined;
     "rm_trs"?: number | null | undefined;
     "num_stim"?: number | null | undefined;
@@ -46,7 +46,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.gen_ss_review_scripts": gen_ss_review_scripts_cargs,
+        "afni.gen_ss_review_scripts.py": gen_ss_review_scripts_py_cargs,
     };
     return cargsFuncs[t];
 }
@@ -63,18 +63,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.gen_ss_review_scripts": gen_ss_review_scripts_outputs,
+        "afni.gen_ss_review_scripts.py": gen_ss_review_scripts_py_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `gen_ss_review_scripts(...)`.
+ * Output object returned when calling `gen_ss_review_scripts_py(...)`.
  *
  * @interface
  */
-interface GenSsReviewScriptsOutputs {
+interface GenSsReviewScriptsPyOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -119,7 +119,7 @@ interface GenSsReviewScriptsOutputs {
  *
  * @returns Parameter dictionary
  */
-function gen_ss_review_scripts_params(
+function gen_ss_review_scripts_py_params(
     subject_id: string | null = null,
     rm_trs: number | null = null,
     num_stim: number | null = null,
@@ -139,9 +139,9 @@ function gen_ss_review_scripts_params(
     verbosity: number | null = null,
     uvars_json: InputPathType | null = null,
     init_uvars_json: InputPathType | null = null,
-): GenSsReviewScriptsParameters {
+): GenSsReviewScriptsPyParameters {
     const params = {
-        "@type": "afni.gen_ss_review_scripts" as const,
+        "@type": "afni.gen_ss_review_scripts.py" as const,
     };
     if (subject_id !== null) {
         params["subject_id"] = subject_id;
@@ -212,8 +212,8 @@ function gen_ss_review_scripts_params(
  *
  * @returns Command-line arguments.
  */
-function gen_ss_review_scripts_cargs(
-    params: GenSsReviewScriptsParameters,
+function gen_ss_review_scripts_py_cargs(
+    params: GenSsReviewScriptsPyParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -344,11 +344,11 @@ function gen_ss_review_scripts_cargs(
  *
  * @returns Outputs object.
  */
-function gen_ss_review_scripts_outputs(
-    params: GenSsReviewScriptsParameters,
+function gen_ss_review_scripts_py_outputs(
+    params: GenSsReviewScriptsPyParameters,
     execution: Execution,
-): GenSsReviewScriptsOutputs {
-    const ret: GenSsReviewScriptsOutputs = {
+): GenSsReviewScriptsPyOutputs {
+    const ret: GenSsReviewScriptsPyOutputs = {
         root: execution.outputFile("."),
         basic_review: execution.outputFile(["./@ss_review_basic"].join('')),
         driver_review: execution.outputFile(["./@ss_review_driver"].join('')),
@@ -359,7 +359,7 @@ function gen_ss_review_scripts_outputs(
 
 
 /**
- * gen_ss_review_scripts
+ * gen_ss_review_scripts.py
  *
  * Generate single subject analysis review scripts.
  *
@@ -370,24 +370,24 @@ function gen_ss_review_scripts_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `GenSsReviewScriptsOutputs`).
+ * @returns NamedTuple of outputs (described in `GenSsReviewScriptsPyOutputs`).
  */
-function gen_ss_review_scripts_execute(
-    params: GenSsReviewScriptsParameters,
+function gen_ss_review_scripts_py_execute(
+    params: GenSsReviewScriptsPyParameters,
     runner: Runner | null = null,
-): GenSsReviewScriptsOutputs {
+): GenSsReviewScriptsPyOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GEN_SS_REVIEW_SCRIPTS_METADATA);
+    const execution = runner.startExecution(GEN_SS_REVIEW_SCRIPTS_PY_METADATA);
     params = execution.params(params)
-    const cargs = gen_ss_review_scripts_cargs(params, execution)
-    const ret = gen_ss_review_scripts_outputs(params, execution)
+    const cargs = gen_ss_review_scripts_py_cargs(params, execution)
+    const ret = gen_ss_review_scripts_py_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * gen_ss_review_scripts
+ * gen_ss_review_scripts.py
  *
  * Generate single subject analysis review scripts.
  *
@@ -416,9 +416,9 @@ function gen_ss_review_scripts_execute(
  * @param init_uvars_json Initialize user variables from the given JSON file
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `GenSsReviewScriptsOutputs`).
+ * @returns NamedTuple of outputs (described in `GenSsReviewScriptsPyOutputs`).
  */
-function gen_ss_review_scripts(
+function gen_ss_review_scripts_py(
     subject_id: string | null = null,
     rm_trs: number | null = null,
     num_stim: number | null = null,
@@ -439,17 +439,17 @@ function gen_ss_review_scripts(
     uvars_json: InputPathType | null = null,
     init_uvars_json: InputPathType | null = null,
     runner: Runner | null = null,
-): GenSsReviewScriptsOutputs {
-    const params = gen_ss_review_scripts_params(subject_id, rm_trs, num_stim, mb_level, slice_pattern, motion_dset, outlier_dset, enorm_dset, mot_limit, out_limit, xmat_regress, xmat_uncensored, stats_dset, final_anat, final_view, prefix, verbosity, uvars_json, init_uvars_json)
-    return gen_ss_review_scripts_execute(params, runner);
+): GenSsReviewScriptsPyOutputs {
+    const params = gen_ss_review_scripts_py_params(subject_id, rm_trs, num_stim, mb_level, slice_pattern, motion_dset, outlier_dset, enorm_dset, mot_limit, out_limit, xmat_regress, xmat_uncensored, stats_dset, final_anat, final_view, prefix, verbosity, uvars_json, init_uvars_json)
+    return gen_ss_review_scripts_py_execute(params, runner);
 }
 
 
 export {
-      GEN_SS_REVIEW_SCRIPTS_METADATA,
-      GenSsReviewScriptsOutputs,
-      GenSsReviewScriptsParameters,
-      gen_ss_review_scripts,
-      gen_ss_review_scripts_execute,
-      gen_ss_review_scripts_params,
+      GEN_SS_REVIEW_SCRIPTS_PY_METADATA,
+      GenSsReviewScriptsPyOutputs,
+      GenSsReviewScriptsPyParameters,
+      gen_ss_review_scripts_py,
+      gen_ss_review_scripts_py_execute,
+      gen_ss_review_scripts_py_params,
 };

@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const EPI_B0_CORRECT_METADATA: Metadata = {
-    id: "a6677e9e92afc1f84d2e14c41fd7dc5daf44fd9c.boutiques",
-    name: "epi_b0_correct",
+const EPI_B0_CORRECT_PY_METADATA: Metadata = {
+    id: "a3a00a001245e6beb2daa81beda534e4b2ca0e0e.boutiques",
+    name: "epi_b0_correct.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface EpiB0CorrectParameters {
-    "@type": "afni.epi_b0_correct";
+interface EpiB0CorrectPyParameters {
+    "@type": "afni.epi_b0_correct.py";
     "prefix": string;
     "input_freq": InputPathType;
     "input_epi": InputPathType;
@@ -51,7 +51,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.epi_b0_correct": epi_b0_correct_cargs,
+        "afni.epi_b0_correct.py": epi_b0_correct_py_cargs,
     };
     return cargsFuncs[t];
 }
@@ -68,18 +68,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.epi_b0_correct": epi_b0_correct_outputs,
+        "afni.epi_b0_correct.py": epi_b0_correct_py_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `epi_b0_correct(...)`.
+ * Output object returned when calling `epi_b0_correct_py(...)`.
  *
  * @interface
  */
-interface EpiB0CorrectOutputs {
+interface EpiB0CorrectPyOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -137,7 +137,7 @@ interface EpiB0CorrectOutputs {
  *
  * @returns Parameter dictionary
  */
-function epi_b0_correct_params(
+function epi_b0_correct_py_params(
     prefix: string,
     input_freq: InputPathType,
     input_epi: InputPathType,
@@ -162,9 +162,9 @@ function epi_b0_correct_params(
     help: boolean = false,
     ver: boolean = false,
     date: boolean = false,
-): EpiB0CorrectParameters {
+): EpiB0CorrectPyParameters {
     const params = {
-        "@type": "afni.epi_b0_correct" as const,
+        "@type": "afni.epi_b0_correct.py" as const,
         "prefix": prefix,
         "input_freq": input_freq,
         "input_epi": input_epi,
@@ -230,8 +230,8 @@ function epi_b0_correct_params(
  *
  * @returns Command-line arguments.
  */
-function epi_b0_correct_cargs(
-    params: EpiB0CorrectParameters,
+function epi_b0_correct_py_cargs(
+    params: EpiB0CorrectPyParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -363,11 +363,11 @@ function epi_b0_correct_cargs(
  *
  * @returns Outputs object.
  */
-function epi_b0_correct_outputs(
-    params: EpiB0CorrectParameters,
+function epi_b0_correct_py_outputs(
+    params: EpiB0CorrectPyParameters,
     execution: Execution,
-): EpiB0CorrectOutputs {
-    const ret: EpiB0CorrectOutputs = {
+): EpiB0CorrectPyOutputs {
+    const ret: EpiB0CorrectPyOutputs = {
         root: execution.outputFile("."),
         warp_dset: execution.outputFile([(params["prefix"] ?? null), "_WARP.nii.gz"].join('')),
         cmds_script: execution.outputFile([(params["prefix"] ?? null), "_cmds.tcsh"].join('')),
@@ -380,7 +380,7 @@ function epi_b0_correct_outputs(
 
 
 /**
- * epi_b0_correct
+ * epi_b0_correct.py
  *
  * B0 distortion correction tool using an acquired frequency (phase) image.
  *
@@ -391,24 +391,24 @@ function epi_b0_correct_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `EpiB0CorrectOutputs`).
+ * @returns NamedTuple of outputs (described in `EpiB0CorrectPyOutputs`).
  */
-function epi_b0_correct_execute(
-    params: EpiB0CorrectParameters,
+function epi_b0_correct_py_execute(
+    params: EpiB0CorrectPyParameters,
     runner: Runner | null = null,
-): EpiB0CorrectOutputs {
+): EpiB0CorrectPyOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(EPI_B0_CORRECT_METADATA);
+    const execution = runner.startExecution(EPI_B0_CORRECT_PY_METADATA);
     params = execution.params(params)
-    const cargs = epi_b0_correct_cargs(params, execution)
-    const ret = epi_b0_correct_outputs(params, execution)
+    const cargs = epi_b0_correct_py_cargs(params, execution)
+    const ret = epi_b0_correct_py_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * epi_b0_correct
+ * epi_b0_correct.py
  *
  * B0 distortion correction tool using an acquired frequency (phase) image.
  *
@@ -442,9 +442,9 @@ function epi_b0_correct_execute(
  * @param date Display date of program's last update in terminal.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `EpiB0CorrectOutputs`).
+ * @returns NamedTuple of outputs (described in `EpiB0CorrectPyOutputs`).
  */
-function epi_b0_correct(
+function epi_b0_correct_py(
     prefix: string,
     input_freq: InputPathType,
     input_epi: InputPathType,
@@ -470,17 +470,17 @@ function epi_b0_correct(
     ver: boolean = false,
     date: boolean = false,
     runner: Runner | null = null,
-): EpiB0CorrectOutputs {
-    const params = epi_b0_correct_params(prefix, input_freq, input_epi, epi_pe_dir, input_mask, input_magn, input_anat, input_json, epi_pe_bwpp, epi_pe_echo_sp, epi_pe_vox_dim, scale_freq, out_cmds, out_pars, wdir_name, blur_sigma, do_recenter_freq, mask_dilate, no_clean, qc_box_focus_ulay, no_qc_image, help, ver, date)
-    return epi_b0_correct_execute(params, runner);
+): EpiB0CorrectPyOutputs {
+    const params = epi_b0_correct_py_params(prefix, input_freq, input_epi, epi_pe_dir, input_mask, input_magn, input_anat, input_json, epi_pe_bwpp, epi_pe_echo_sp, epi_pe_vox_dim, scale_freq, out_cmds, out_pars, wdir_name, blur_sigma, do_recenter_freq, mask_dilate, no_clean, qc_box_focus_ulay, no_qc_image, help, ver, date)
+    return epi_b0_correct_py_execute(params, runner);
 }
 
 
 export {
-      EPI_B0_CORRECT_METADATA,
-      EpiB0CorrectOutputs,
-      EpiB0CorrectParameters,
-      epi_b0_correct,
-      epi_b0_correct_execute,
-      epi_b0_correct_params,
+      EPI_B0_CORRECT_PY_METADATA,
+      EpiB0CorrectPyOutputs,
+      EpiB0CorrectPyParameters,
+      epi_b0_correct_py,
+      epi_b0_correct_py_execute,
+      epi_b0_correct_py_params,
 };

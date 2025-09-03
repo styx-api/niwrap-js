@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const ADJUNCT_SIMPLIFY_COST_METADATA: Metadata = {
-    id: "0291c293f6b2eaf6626f15fdc0c7c7079ef500e7.boutiques",
-    name: "adjunct_simplify_cost",
+const ADJUNCT_SIMPLIFY_COST_PY_METADATA: Metadata = {
+    id: "2d1ab7e94fcc0e16f85ff2939b8b417337e58985.boutiques",
+    name: "adjunct_simplify_cost.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface AdjunctSimplifyCostParameters {
-    "@type": "afni.adjunct_simplify_cost";
+interface AdjunctSimplifyCostPyParameters {
+    "@type": "afni.adjunct_simplify_cost.py";
     "cost_function": string;
 }
 
@@ -28,7 +28,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.adjunct_simplify_cost": adjunct_simplify_cost_cargs,
+        "afni.adjunct_simplify_cost.py": adjunct_simplify_cost_py_cargs,
     };
     return cargsFuncs[t];
 }
@@ -51,11 +51,11 @@ function dynOutputs(
 
 
 /**
- * Output object returned when calling `adjunct_simplify_cost(...)`.
+ * Output object returned when calling `adjunct_simplify_cost_py(...)`.
  *
  * @interface
  */
-interface AdjunctSimplifyCostOutputs {
+interface AdjunctSimplifyCostPyOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -70,11 +70,11 @@ interface AdjunctSimplifyCostOutputs {
  *
  * @returns Parameter dictionary
  */
-function adjunct_simplify_cost_params(
+function adjunct_simplify_cost_py_params(
     cost_function: string,
-): AdjunctSimplifyCostParameters {
+): AdjunctSimplifyCostPyParameters {
     const params = {
-        "@type": "afni.adjunct_simplify_cost" as const,
+        "@type": "afni.adjunct_simplify_cost.py" as const,
         "cost_function": cost_function,
     };
     return params;
@@ -89,8 +89,8 @@ function adjunct_simplify_cost_params(
  *
  * @returns Command-line arguments.
  */
-function adjunct_simplify_cost_cargs(
-    params: AdjunctSimplifyCostParameters,
+function adjunct_simplify_cost_py_cargs(
+    params: AdjunctSimplifyCostPyParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,11 +108,11 @@ function adjunct_simplify_cost_cargs(
  *
  * @returns Outputs object.
  */
-function adjunct_simplify_cost_outputs(
-    params: AdjunctSimplifyCostParameters,
+function adjunct_simplify_cost_py_outputs(
+    params: AdjunctSimplifyCostPyParameters,
     execution: Execution,
-): AdjunctSimplifyCostOutputs {
-    const ret: AdjunctSimplifyCostOutputs = {
+): AdjunctSimplifyCostPyOutputs {
+    const ret: AdjunctSimplifyCostPyOutputs = {
         root: execution.outputFile("."),
     };
     return ret;
@@ -120,7 +120,7 @@ function adjunct_simplify_cost_outputs(
 
 
 /**
- * adjunct_simplify_cost
+ * adjunct_simplify_cost.py
  *
  * Simplifies a cost function name by removing the '+' and anything following it.
  *
@@ -131,24 +131,24 @@ function adjunct_simplify_cost_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `AdjunctSimplifyCostOutputs`).
+ * @returns NamedTuple of outputs (described in `AdjunctSimplifyCostPyOutputs`).
  */
-function adjunct_simplify_cost_execute(
-    params: AdjunctSimplifyCostParameters,
+function adjunct_simplify_cost_py_execute(
+    params: AdjunctSimplifyCostPyParameters,
     runner: Runner | null = null,
-): AdjunctSimplifyCostOutputs {
+): AdjunctSimplifyCostPyOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ADJUNCT_SIMPLIFY_COST_METADATA);
+    const execution = runner.startExecution(ADJUNCT_SIMPLIFY_COST_PY_METADATA);
     params = execution.params(params)
-    const cargs = adjunct_simplify_cost_cargs(params, execution)
-    const ret = adjunct_simplify_cost_outputs(params, execution)
+    const cargs = adjunct_simplify_cost_py_cargs(params, execution)
+    const ret = adjunct_simplify_cost_py_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * adjunct_simplify_cost
+ * adjunct_simplify_cost.py
  *
  * Simplifies a cost function name by removing the '+' and anything following it.
  *
@@ -159,22 +159,22 @@ function adjunct_simplify_cost_execute(
  * @param cost_function The cost function name to be simplified.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `AdjunctSimplifyCostOutputs`).
+ * @returns NamedTuple of outputs (described in `AdjunctSimplifyCostPyOutputs`).
  */
-function adjunct_simplify_cost(
+function adjunct_simplify_cost_py(
     cost_function: string,
     runner: Runner | null = null,
-): AdjunctSimplifyCostOutputs {
-    const params = adjunct_simplify_cost_params(cost_function)
-    return adjunct_simplify_cost_execute(params, runner);
+): AdjunctSimplifyCostPyOutputs {
+    const params = adjunct_simplify_cost_py_params(cost_function)
+    return adjunct_simplify_cost_py_execute(params, runner);
 }
 
 
 export {
-      ADJUNCT_SIMPLIFY_COST_METADATA,
-      AdjunctSimplifyCostOutputs,
-      AdjunctSimplifyCostParameters,
-      adjunct_simplify_cost,
-      adjunct_simplify_cost_execute,
-      adjunct_simplify_cost_params,
+      ADJUNCT_SIMPLIFY_COST_PY_METADATA,
+      AdjunctSimplifyCostPyOutputs,
+      AdjunctSimplifyCostPyParameters,
+      adjunct_simplify_cost_py,
+      adjunct_simplify_cost_py_execute,
+      adjunct_simplify_cost_py_params,
 };

@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const MP_DIFFPOW_METADATA: Metadata = {
-    id: "c5b67359558c4494958df37eab4b65d805a2c063.boutiques",
-    name: "mp_diffpow",
+const MP_DIFFPOW_SH_METADATA: Metadata = {
+    id: "01bf70e2032d7f966a3cd42ea33f66cf2252d515.boutiques",
+    name: "mp_diffpow.sh",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
 };
 
 
-interface MpDiffpowParameters {
-    "@type": "fsl.mp_diffpow";
+interface MpDiffpowShParameters {
+    "@type": "fsl.mp_diffpow.sh";
     "reg_file": InputPathType;
     "diff_reg_file": string;
 }
@@ -29,7 +29,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "fsl.mp_diffpow": mp_diffpow_cargs,
+        "fsl.mp_diffpow.sh": mp_diffpow_sh_cargs,
     };
     return cargsFuncs[t];
 }
@@ -46,18 +46,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "fsl.mp_diffpow": mp_diffpow_outputs,
+        "fsl.mp_diffpow.sh": mp_diffpow_sh_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `mp_diffpow(...)`.
+ * Output object returned when calling `mp_diffpow_sh(...)`.
  *
  * @interface
  */
-interface MpDiffpowOutputs {
+interface MpDiffpowShOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -77,12 +77,12 @@ interface MpDiffpowOutputs {
  *
  * @returns Parameter dictionary
  */
-function mp_diffpow_params(
+function mp_diffpow_sh_params(
     reg_file: InputPathType,
     diff_reg_file: string,
-): MpDiffpowParameters {
+): MpDiffpowShParameters {
     const params = {
-        "@type": "fsl.mp_diffpow" as const,
+        "@type": "fsl.mp_diffpow.sh" as const,
         "reg_file": reg_file,
         "diff_reg_file": diff_reg_file,
     };
@@ -98,8 +98,8 @@ function mp_diffpow_params(
  *
  * @returns Command-line arguments.
  */
-function mp_diffpow_cargs(
-    params: MpDiffpowParameters,
+function mp_diffpow_sh_cargs(
+    params: MpDiffpowShParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -118,11 +118,11 @@ function mp_diffpow_cargs(
  *
  * @returns Outputs object.
  */
-function mp_diffpow_outputs(
-    params: MpDiffpowParameters,
+function mp_diffpow_sh_outputs(
+    params: MpDiffpowShParameters,
     execution: Execution,
-): MpDiffpowOutputs {
-    const ret: MpDiffpowOutputs = {
+): MpDiffpowShOutputs {
+    const ret: MpDiffpowShOutputs = {
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["diff_reg_file"] ?? null)].join('')),
     };
@@ -131,7 +131,7 @@ function mp_diffpow_outputs(
 
 
 /**
- * mp_diffpow
+ * mp_diffpow.sh
  *
  * Generates a file with specific motion parameter calculations useful for accounting for 'spin history' effects and other variations not accounted for by motion correction.
  *
@@ -142,24 +142,24 @@ function mp_diffpow_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `MpDiffpowOutputs`).
+ * @returns NamedTuple of outputs (described in `MpDiffpowShOutputs`).
  */
-function mp_diffpow_execute(
-    params: MpDiffpowParameters,
+function mp_diffpow_sh_execute(
+    params: MpDiffpowShParameters,
     runner: Runner | null = null,
-): MpDiffpowOutputs {
+): MpDiffpowShOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(MP_DIFFPOW_METADATA);
+    const execution = runner.startExecution(MP_DIFFPOW_SH_METADATA);
     params = execution.params(params)
-    const cargs = mp_diffpow_cargs(params, execution)
-    const ret = mp_diffpow_outputs(params, execution)
+    const cargs = mp_diffpow_sh_cargs(params, execution)
+    const ret = mp_diffpow_sh_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * mp_diffpow
+ * mp_diffpow.sh
  *
  * Generates a file with specific motion parameter calculations useful for accounting for 'spin history' effects and other variations not accounted for by motion correction.
  *
@@ -171,23 +171,23 @@ function mp_diffpow_execute(
  * @param diff_reg_file Output file with differenced registration parameters (e.g., diffregparam.dat)
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `MpDiffpowOutputs`).
+ * @returns NamedTuple of outputs (described in `MpDiffpowShOutputs`).
  */
-function mp_diffpow(
+function mp_diffpow_sh(
     reg_file: InputPathType,
     diff_reg_file: string,
     runner: Runner | null = null,
-): MpDiffpowOutputs {
-    const params = mp_diffpow_params(reg_file, diff_reg_file)
-    return mp_diffpow_execute(params, runner);
+): MpDiffpowShOutputs {
+    const params = mp_diffpow_sh_params(reg_file, diff_reg_file)
+    return mp_diffpow_sh_execute(params, runner);
 }
 
 
 export {
-      MP_DIFFPOW_METADATA,
-      MpDiffpowOutputs,
-      MpDiffpowParameters,
-      mp_diffpow,
-      mp_diffpow_execute,
-      mp_diffpow_params,
+      MP_DIFFPOW_SH_METADATA,
+      MpDiffpowShOutputs,
+      MpDiffpowShParameters,
+      mp_diffpow_sh,
+      mp_diffpow_sh_execute,
+      mp_diffpow_sh_params,
 };

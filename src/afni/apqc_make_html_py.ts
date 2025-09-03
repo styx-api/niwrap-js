@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const APQC_MAKE_HTML_METADATA: Metadata = {
-    id: "a958dc9e454decaf99b430f63930ca86b1108a1f.boutiques",
-    name: "apqc_make_html",
+const APQC_MAKE_HTML_PY_METADATA: Metadata = {
+    id: "5a0a0655640ca3011ee8b320cb3dec8f45de5e54.boutiques",
+    name: "apqc_make_html.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface ApqcMakeHtmlParameters {
-    "@type": "afni.apqc_make_html";
+interface ApqcMakeHtmlPyParameters {
+    "@type": "afni.apqc_make_html.py";
     "qc_dir": string;
 }
 
@@ -28,7 +28,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.apqc_make_html": apqc_make_html_cargs,
+        "afni.apqc_make_html.py": apqc_make_html_py_cargs,
     };
     return cargsFuncs[t];
 }
@@ -51,11 +51,11 @@ function dynOutputs(
 
 
 /**
- * Output object returned when calling `apqc_make_html(...)`.
+ * Output object returned when calling `apqc_make_html_py(...)`.
  *
  * @interface
  */
-interface ApqcMakeHtmlOutputs {
+interface ApqcMakeHtmlPyOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -70,11 +70,11 @@ interface ApqcMakeHtmlOutputs {
  *
  * @returns Parameter dictionary
  */
-function apqc_make_html_params(
+function apqc_make_html_py_params(
     qc_dir: string,
-): ApqcMakeHtmlParameters {
+): ApqcMakeHtmlPyParameters {
     const params = {
-        "@type": "afni.apqc_make_html" as const,
+        "@type": "afni.apqc_make_html.py" as const,
         "qc_dir": qc_dir,
     };
     return params;
@@ -89,8 +89,8 @@ function apqc_make_html_params(
  *
  * @returns Command-line arguments.
  */
-function apqc_make_html_cargs(
-    params: ApqcMakeHtmlParameters,
+function apqc_make_html_py_cargs(
+    params: ApqcMakeHtmlPyParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -111,11 +111,11 @@ function apqc_make_html_cargs(
  *
  * @returns Outputs object.
  */
-function apqc_make_html_outputs(
-    params: ApqcMakeHtmlParameters,
+function apqc_make_html_py_outputs(
+    params: ApqcMakeHtmlPyParameters,
     execution: Execution,
-): ApqcMakeHtmlOutputs {
-    const ret: ApqcMakeHtmlOutputs = {
+): ApqcMakeHtmlPyOutputs {
+    const ret: ApqcMakeHtmlPyOutputs = {
         root: execution.outputFile("."),
     };
     return ret;
@@ -123,7 +123,7 @@ function apqc_make_html_outputs(
 
 
 /**
- * apqc_make_html
+ * apqc_make_html.py
  *
  * Tool to generate HTML reports.
  *
@@ -134,24 +134,24 @@ function apqc_make_html_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `ApqcMakeHtmlOutputs`).
+ * @returns NamedTuple of outputs (described in `ApqcMakeHtmlPyOutputs`).
  */
-function apqc_make_html_execute(
-    params: ApqcMakeHtmlParameters,
+function apqc_make_html_py_execute(
+    params: ApqcMakeHtmlPyParameters,
     runner: Runner | null = null,
-): ApqcMakeHtmlOutputs {
+): ApqcMakeHtmlPyOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(APQC_MAKE_HTML_METADATA);
+    const execution = runner.startExecution(APQC_MAKE_HTML_PY_METADATA);
     params = execution.params(params)
-    const cargs = apqc_make_html_cargs(params, execution)
-    const ret = apqc_make_html_outputs(params, execution)
+    const cargs = apqc_make_html_py_cargs(params, execution)
+    const ret = apqc_make_html_py_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * apqc_make_html
+ * apqc_make_html.py
  *
  * Tool to generate HTML reports.
  *
@@ -162,22 +162,22 @@ function apqc_make_html_execute(
  * @param qc_dir Directory where QC files will be saved
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `ApqcMakeHtmlOutputs`).
+ * @returns NamedTuple of outputs (described in `ApqcMakeHtmlPyOutputs`).
  */
-function apqc_make_html(
+function apqc_make_html_py(
     qc_dir: string,
     runner: Runner | null = null,
-): ApqcMakeHtmlOutputs {
-    const params = apqc_make_html_params(qc_dir)
-    return apqc_make_html_execute(params, runner);
+): ApqcMakeHtmlPyOutputs {
+    const params = apqc_make_html_py_params(qc_dir)
+    return apqc_make_html_py_execute(params, runner);
 }
 
 
 export {
-      APQC_MAKE_HTML_METADATA,
-      ApqcMakeHtmlOutputs,
-      ApqcMakeHtmlParameters,
-      apqc_make_html,
-      apqc_make_html_execute,
-      apqc_make_html_params,
+      APQC_MAKE_HTML_PY_METADATA,
+      ApqcMakeHtmlPyOutputs,
+      ApqcMakeHtmlPyParameters,
+      apqc_make_html_py,
+      apqc_make_html_py_execute,
+      apqc_make_html_py_params,
 };

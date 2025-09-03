@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const FAT_ROI_ROW_METADATA: Metadata = {
-    id: "739c802e1b22c2e198a3d50de14679a6f269f722.boutiques",
-    name: "fat_roi_row",
+const FAT_ROI_ROW_PY_METADATA: Metadata = {
+    id: "76894bfbe97ddef932d9c0866a0daefd5bc202e2.boutiques",
+    name: "fat_roi_row.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface FatRoiRowParameters {
-    "@type": "afni.fat_roi_row";
+interface FatRoiRowPyParameters {
+    "@type": "afni.fat_roi_row.py";
     "roi": string;
     "matrix_files"?: string | null | undefined;
     "list_file"?: InputPathType | null | undefined;
@@ -31,7 +31,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.fat_roi_row": fat_roi_row_cargs,
+        "afni.fat_roi_row.py": fat_roi_row_py_cargs,
     };
     return cargsFuncs[t];
 }
@@ -48,18 +48,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.fat_roi_row": fat_roi_row_outputs,
+        "afni.fat_roi_row.py": fat_roi_row_py_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `fat_roi_row(...)`.
+ * Output object returned when calling `fat_roi_row_py(...)`.
  *
  * @interface
  */
-interface FatRoiRowOutputs {
+interface FatRoiRowPyOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -81,14 +81,14 @@ interface FatRoiRowOutputs {
  *
  * @returns Parameter dictionary
  */
-function fat_roi_row_params(
+function fat_roi_row_py_params(
     roi: string,
     matrix_files: string | null = null,
     list_file: InputPathType | null = null,
     extern_labs_no: boolean = false,
-): FatRoiRowParameters {
+): FatRoiRowPyParameters {
     const params = {
-        "@type": "afni.fat_roi_row" as const,
+        "@type": "afni.fat_roi_row.py" as const,
         "roi": roi,
         "extern_labs_no": extern_labs_no,
     };
@@ -110,8 +110,8 @@ function fat_roi_row_params(
  *
  * @returns Command-line arguments.
  */
-function fat_roi_row_cargs(
-    params: FatRoiRowParameters,
+function fat_roi_row_py_cargs(
+    params: FatRoiRowPyParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -147,11 +147,11 @@ function fat_roi_row_cargs(
  *
  * @returns Outputs object.
  */
-function fat_roi_row_outputs(
-    params: FatRoiRowParameters,
+function fat_roi_row_py_outputs(
+    params: FatRoiRowPyParameters,
     execution: Execution,
-): FatRoiRowOutputs {
-    const ret: FatRoiRowOutputs = {
+): FatRoiRowPyOutputs {
+    const ret: FatRoiRowPyOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["roi"] ?? null), "_selected.row"].join('')),
     };
@@ -160,7 +160,7 @@ function fat_roi_row_outputs(
 
 
 /**
- * fat_roi_row
+ * fat_roi_row.py
  *
  * Select a single ROI's row out of a connectivity matrix file (*.grid or *.netcc) for viewing and/or further analysis.
  *
@@ -171,24 +171,24 @@ function fat_roi_row_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `FatRoiRowOutputs`).
+ * @returns NamedTuple of outputs (described in `FatRoiRowPyOutputs`).
  */
-function fat_roi_row_execute(
-    params: FatRoiRowParameters,
+function fat_roi_row_py_execute(
+    params: FatRoiRowPyParameters,
     runner: Runner | null = null,
-): FatRoiRowOutputs {
+): FatRoiRowPyOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FAT_ROI_ROW_METADATA);
+    const execution = runner.startExecution(FAT_ROI_ROW_PY_METADATA);
     params = execution.params(params)
-    const cargs = fat_roi_row_cargs(params, execution)
-    const ret = fat_roi_row_outputs(params, execution)
+    const cargs = fat_roi_row_py_cargs(params, execution)
+    const ret = fat_roi_row_py_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * fat_roi_row
+ * fat_roi_row.py
  *
  * Select a single ROI's row out of a connectivity matrix file (*.grid or *.netcc) for viewing and/or further analysis.
  *
@@ -202,25 +202,25 @@ function fat_roi_row_execute(
  * @param extern_labs_no Switch to turn off the writing/usage of user-defined labels in the *.grid/*.netcc files.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `FatRoiRowOutputs`).
+ * @returns NamedTuple of outputs (described in `FatRoiRowPyOutputs`).
  */
-function fat_roi_row(
+function fat_roi_row_py(
     roi: string,
     matrix_files: string | null = null,
     list_file: InputPathType | null = null,
     extern_labs_no: boolean = false,
     runner: Runner | null = null,
-): FatRoiRowOutputs {
-    const params = fat_roi_row_params(roi, matrix_files, list_file, extern_labs_no)
-    return fat_roi_row_execute(params, runner);
+): FatRoiRowPyOutputs {
+    const params = fat_roi_row_py_params(roi, matrix_files, list_file, extern_labs_no)
+    return fat_roi_row_py_execute(params, runner);
 }
 
 
 export {
-      FAT_ROI_ROW_METADATA,
-      FatRoiRowOutputs,
-      FatRoiRowParameters,
-      fat_roi_row,
-      fat_roi_row_execute,
-      fat_roi_row_params,
+      FAT_ROI_ROW_PY_METADATA,
+      FatRoiRowPyOutputs,
+      FatRoiRowPyParameters,
+      fat_roi_row_py,
+      fat_roi_row_py_execute,
+      fat_roi_row_py_params,
 };

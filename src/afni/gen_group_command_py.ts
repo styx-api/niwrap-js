@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const GEN_GROUP_COMMAND_METADATA: Metadata = {
-    id: "651bed24d25f24b638ede9e2e579da34a9498f9a.boutiques",
-    name: "gen_group_command",
+const GEN_GROUP_COMMAND_PY_METADATA: Metadata = {
+    id: "9e998b67f89b44f6b5b1d301245053ea4eff8a7b.boutiques",
+    name: "gen_group_command.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface GenGroupCommandParameters {
-    "@type": "afni.gen_group_command";
+interface GenGroupCommandPyParameters {
+    "@type": "afni.gen_group_command.py";
     "command_name": string;
     "datasets": Array<string>;
     "prefix"?: string | null | undefined;
@@ -39,7 +39,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.gen_group_command": gen_group_command_cargs,
+        "afni.gen_group_command.py": gen_group_command_py_cargs,
     };
     return cargsFuncs[t];
 }
@@ -56,18 +56,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.gen_group_command": gen_group_command_outputs,
+        "afni.gen_group_command.py": gen_group_command_py_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `gen_group_command(...)`.
+ * Output object returned when calling `gen_group_command_py(...)`.
  *
  * @interface
  */
-interface GenGroupCommandOutputs {
+interface GenGroupCommandPyOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -97,7 +97,7 @@ interface GenGroupCommandOutputs {
  *
  * @returns Parameter dictionary
  */
-function gen_group_command_params(
+function gen_group_command_py_params(
     command_name: string,
     datasets: Array<string>,
     prefix: string | null = null,
@@ -110,9 +110,9 @@ function gen_group_command_params(
     verb: string | null = null,
     write_script: string | null = null,
     other_options: Array<string> | null = null,
-): GenGroupCommandParameters {
+): GenGroupCommandPyParameters {
     const params = {
-        "@type": "afni.gen_group_command" as const,
+        "@type": "afni.gen_group_command.py" as const,
         "command_name": command_name,
         "datasets": datasets,
     };
@@ -158,8 +158,8 @@ function gen_group_command_params(
  *
  * @returns Command-line arguments.
  */
-function gen_group_command_cargs(
-    params: GenGroupCommandParameters,
+function gen_group_command_py_cargs(
+    params: GenGroupCommandPyParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -244,11 +244,11 @@ function gen_group_command_cargs(
  *
  * @returns Outputs object.
  */
-function gen_group_command_outputs(
-    params: GenGroupCommandParameters,
+function gen_group_command_py_outputs(
+    params: GenGroupCommandPyParameters,
     execution: Execution,
-): GenGroupCommandOutputs {
-    const ret: GenGroupCommandOutputs = {
+): GenGroupCommandPyOutputs {
+    const ret: GenGroupCommandPyOutputs = {
         root: execution.outputFile("."),
         output_script: ((params["write_script"] ?? null) !== null) ? execution.outputFile([(params["write_script"] ?? null)].join('')) : null,
     };
@@ -257,7 +257,7 @@ function gen_group_command_outputs(
 
 
 /**
- * gen_group_command
+ * gen_group_command.py
  *
  * Generate group analysis command scripts by parsing wildcard-based lists of input datasets.
  *
@@ -268,24 +268,24 @@ function gen_group_command_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `GenGroupCommandOutputs`).
+ * @returns NamedTuple of outputs (described in `GenGroupCommandPyOutputs`).
  */
-function gen_group_command_execute(
-    params: GenGroupCommandParameters,
+function gen_group_command_py_execute(
+    params: GenGroupCommandPyParameters,
     runner: Runner | null = null,
-): GenGroupCommandOutputs {
+): GenGroupCommandPyOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(GEN_GROUP_COMMAND_METADATA);
+    const execution = runner.startExecution(GEN_GROUP_COMMAND_PY_METADATA);
     params = execution.params(params)
-    const cargs = gen_group_command_cargs(params, execution)
-    const ret = gen_group_command_outputs(params, execution)
+    const cargs = gen_group_command_py_cargs(params, execution)
+    const ret = gen_group_command_py_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * gen_group_command
+ * gen_group_command.py
  *
  * Generate group analysis command scripts by parsing wildcard-based lists of input datasets.
  *
@@ -307,9 +307,9 @@ function gen_group_command_execute(
  * @param other_options List of options to pass along to result
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `GenGroupCommandOutputs`).
+ * @returns NamedTuple of outputs (described in `GenGroupCommandPyOutputs`).
  */
-function gen_group_command(
+function gen_group_command_py(
     command_name: string,
     datasets: Array<string>,
     prefix: string | null = null,
@@ -323,17 +323,17 @@ function gen_group_command(
     write_script: string | null = null,
     other_options: Array<string> | null = null,
     runner: Runner | null = null,
-): GenGroupCommandOutputs {
-    const params = gen_group_command_params(command_name, datasets, prefix, set_labels, subj_prefix, subj_suffix, subs_betas, subs_tstats, type_, verb, write_script, other_options)
-    return gen_group_command_execute(params, runner);
+): GenGroupCommandPyOutputs {
+    const params = gen_group_command_py_params(command_name, datasets, prefix, set_labels, subj_prefix, subj_suffix, subs_betas, subs_tstats, type_, verb, write_script, other_options)
+    return gen_group_command_py_execute(params, runner);
 }
 
 
 export {
-      GEN_GROUP_COMMAND_METADATA,
-      GenGroupCommandOutputs,
-      GenGroupCommandParameters,
-      gen_group_command,
-      gen_group_command_execute,
-      gen_group_command_params,
+      GEN_GROUP_COMMAND_PY_METADATA,
+      GenGroupCommandPyOutputs,
+      GenGroupCommandPyParameters,
+      gen_group_command_py,
+      gen_group_command_py_execute,
+      gen_group_command_py_params,
 };

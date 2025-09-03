@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const AP_RUN_SIMPLE_REST_METADATA: Metadata = {
-    id: "5092ef596210a75b6b040d6dc8cfafbc8fb2a70b.boutiques",
-    name: "ap_run_simple_rest",
+const AP_RUN_SIMPLE_REST_TCSH_METADATA: Metadata = {
+    id: "40f222b46edf6b24d448637aef9886505378580a.boutiques",
+    name: "ap_run_simple_rest.tcsh",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface ApRunSimpleRestParameters {
-    "@type": "afni.ap_run_simple_rest";
+interface ApRunSimpleRestTcshParameters {
+    "@type": "afni.ap_run_simple_rest.tcsh";
     "anat"?: InputPathType | null | undefined;
     "epi": Array<InputPathType>;
     "nt_rm"?: number | null | undefined;
@@ -37,7 +37,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.ap_run_simple_rest": ap_run_simple_rest_cargs,
+        "afni.ap_run_simple_rest.tcsh": ap_run_simple_rest_tcsh_cargs,
     };
     return cargsFuncs[t];
 }
@@ -54,18 +54,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.ap_run_simple_rest": ap_run_simple_rest_outputs,
+        "afni.ap_run_simple_rest.tcsh": ap_run_simple_rest_tcsh_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `ap_run_simple_rest(...)`.
+ * Output object returned when calling `ap_run_simple_rest_tcsh(...)`.
  *
  * @interface
  */
-interface ApRunSimpleRestOutputs {
+interface ApRunSimpleRestTcshOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -105,7 +105,7 @@ interface ApRunSimpleRestOutputs {
  *
  * @returns Parameter dictionary
  */
-function ap_run_simple_rest_params(
+function ap_run_simple_rest_tcsh_params(
     epi: Array<InputPathType>,
     anat: InputPathType | null = null,
     nt_rm: number | null = null,
@@ -116,9 +116,9 @@ function ap_run_simple_rest_params(
     compressor: string | null = null,
     verb: number | null = null,
     echo: boolean = false,
-): ApRunSimpleRestParameters {
+): ApRunSimpleRestTcshParameters {
     const params = {
-        "@type": "afni.ap_run_simple_rest" as const,
+        "@type": "afni.ap_run_simple_rest.tcsh" as const,
         "epi": epi,
         "run_ap": run_ap,
         "run_proc": run_proc,
@@ -154,8 +154,8 @@ function ap_run_simple_rest_params(
  *
  * @returns Command-line arguments.
  */
-function ap_run_simple_rest_cargs(
-    params: ApRunSimpleRestParameters,
+function ap_run_simple_rest_tcsh_cargs(
+    params: ApRunSimpleRestTcshParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -221,11 +221,11 @@ function ap_run_simple_rest_cargs(
  *
  * @returns Outputs object.
  */
-function ap_run_simple_rest_outputs(
-    params: ApRunSimpleRestParameters,
+function ap_run_simple_rest_tcsh_outputs(
+    params: ApRunSimpleRestTcshParameters,
     execution: Execution,
-): ApRunSimpleRestOutputs {
-    const ret: ApRunSimpleRestOutputs = {
+): ApRunSimpleRestTcshOutputs {
+    const ret: ApRunSimpleRestTcshOutputs = {
         root: execution.outputFile("."),
         run_ap_script: ((params["subjid"] ?? null) !== null) ? execution.outputFile(["run_ap_", (params["subjid"] ?? null)].join('')) : null,
         proc_script: ((params["subjid"] ?? null) !== null) ? execution.outputFile(["proc.", (params["subjid"] ?? null)].join('')) : null,
@@ -237,7 +237,7 @@ function ap_run_simple_rest_outputs(
 
 
 /**
- * ap_run_simple_rest
+ * ap_run_simple_rest.tcsh
  *
  * Run a quick afni_proc.py analysis for QC.
  *
@@ -248,24 +248,24 @@ function ap_run_simple_rest_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `ApRunSimpleRestOutputs`).
+ * @returns NamedTuple of outputs (described in `ApRunSimpleRestTcshOutputs`).
  */
-function ap_run_simple_rest_execute(
-    params: ApRunSimpleRestParameters,
+function ap_run_simple_rest_tcsh_execute(
+    params: ApRunSimpleRestTcshParameters,
     runner: Runner | null = null,
-): ApRunSimpleRestOutputs {
+): ApRunSimpleRestTcshOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(AP_RUN_SIMPLE_REST_METADATA);
+    const execution = runner.startExecution(AP_RUN_SIMPLE_REST_TCSH_METADATA);
     params = execution.params(params)
-    const cargs = ap_run_simple_rest_cargs(params, execution)
-    const ret = ap_run_simple_rest_outputs(params, execution)
+    const cargs = ap_run_simple_rest_tcsh_cargs(params, execution)
+    const ret = ap_run_simple_rest_tcsh_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * ap_run_simple_rest
+ * ap_run_simple_rest.tcsh
  *
  * Run a quick afni_proc.py analysis for QC.
  *
@@ -285,9 +285,9 @@ function ap_run_simple_rest_execute(
  * @param echo Same as verbosity level 3
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `ApRunSimpleRestOutputs`).
+ * @returns NamedTuple of outputs (described in `ApRunSimpleRestTcshOutputs`).
  */
-function ap_run_simple_rest(
+function ap_run_simple_rest_tcsh(
     epi: Array<InputPathType>,
     anat: InputPathType | null = null,
     nt_rm: number | null = null,
@@ -299,17 +299,17 @@ function ap_run_simple_rest(
     verb: number | null = null,
     echo: boolean = false,
     runner: Runner | null = null,
-): ApRunSimpleRestOutputs {
-    const params = ap_run_simple_rest_params(epi, anat, nt_rm, run_ap, run_proc, subjid, template, compressor, verb, echo)
-    return ap_run_simple_rest_execute(params, runner);
+): ApRunSimpleRestTcshOutputs {
+    const params = ap_run_simple_rest_tcsh_params(epi, anat, nt_rm, run_ap, run_proc, subjid, template, compressor, verb, echo)
+    return ap_run_simple_rest_tcsh_execute(params, runner);
 }
 
 
 export {
-      AP_RUN_SIMPLE_REST_METADATA,
-      ApRunSimpleRestOutputs,
-      ApRunSimpleRestParameters,
-      ap_run_simple_rest,
-      ap_run_simple_rest_execute,
-      ap_run_simple_rest_params,
+      AP_RUN_SIMPLE_REST_TCSH_METADATA,
+      ApRunSimpleRestTcshOutputs,
+      ApRunSimpleRestTcshParameters,
+      ap_run_simple_rest_tcsh,
+      ap_run_simple_rest_tcsh_execute,
+      ap_run_simple_rest_tcsh_params,
 };

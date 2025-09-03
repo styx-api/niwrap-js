@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const ABIDS_TOOL_METADATA: Metadata = {
-    id: "623988e726ff6bf6b4972b1940f6f0b4f38877f2.boutiques",
-    name: "abids_tool",
+const ABIDS_TOOL_PY_METADATA: Metadata = {
+    id: "12686b7fa3fe6e6788b82863d0eb15e6743d467d.boutiques",
+    name: "abids_tool.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface AbidsToolParameters {
-    "@type": "afni.abids_tool";
+interface AbidsToolPyParameters {
+    "@type": "afni.abids_tool.py";
     "input_files": Array<InputPathType>;
     "tr_match": boolean;
     "add_tr": boolean;
@@ -33,7 +33,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.abids_tool": abids_tool_cargs,
+        "afni.abids_tool.py": abids_tool_py_cargs,
     };
     return cargsFuncs[t];
 }
@@ -56,11 +56,11 @@ function dynOutputs(
 
 
 /**
- * Output object returned when calling `abids_tool(...)`.
+ * Output object returned when calling `abids_tool_py(...)`.
  *
  * @interface
  */
-interface AbidsToolOutputs {
+interface AbidsToolPyOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -80,16 +80,16 @@ interface AbidsToolOutputs {
  *
  * @returns Parameter dictionary
  */
-function abids_tool_params(
+function abids_tool_py_params(
     input_files: Array<InputPathType>,
     tr_match: boolean = false,
     add_tr: boolean = false,
     add_slice_times: boolean = false,
     copy_prefix: Array<string> | null = null,
     help_flag: boolean = false,
-): AbidsToolParameters {
+): AbidsToolPyParameters {
     const params = {
-        "@type": "afni.abids_tool" as const,
+        "@type": "afni.abids_tool.py" as const,
         "input_files": input_files,
         "tr_match": tr_match,
         "add_tr": add_tr,
@@ -111,8 +111,8 @@ function abids_tool_params(
  *
  * @returns Command-line arguments.
  */
-function abids_tool_cargs(
-    params: AbidsToolParameters,
+function abids_tool_py_cargs(
+    params: AbidsToolPyParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -148,11 +148,11 @@ function abids_tool_cargs(
  *
  * @returns Outputs object.
  */
-function abids_tool_outputs(
-    params: AbidsToolParameters,
+function abids_tool_py_outputs(
+    params: AbidsToolPyParameters,
     execution: Execution,
-): AbidsToolOutputs {
-    const ret: AbidsToolOutputs = {
+): AbidsToolPyOutputs {
+    const ret: AbidsToolPyOutputs = {
         root: execution.outputFile("."),
     };
     return ret;
@@ -160,7 +160,7 @@ function abids_tool_outputs(
 
 
 /**
- * abids_tool
+ * abids_tool.py
  *
  * A tool to work with BIDS formatted datasets created with dcm2niix_afni or dcm2niix, mainly to pull information from the matching JSON file and refit the input dataset using 3drefit.
  *
@@ -171,24 +171,24 @@ function abids_tool_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `AbidsToolOutputs`).
+ * @returns NamedTuple of outputs (described in `AbidsToolPyOutputs`).
  */
-function abids_tool_execute(
-    params: AbidsToolParameters,
+function abids_tool_py_execute(
+    params: AbidsToolPyParameters,
     runner: Runner | null = null,
-): AbidsToolOutputs {
+): AbidsToolPyOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(ABIDS_TOOL_METADATA);
+    const execution = runner.startExecution(ABIDS_TOOL_PY_METADATA);
     params = execution.params(params)
-    const cargs = abids_tool_cargs(params, execution)
-    const ret = abids_tool_outputs(params, execution)
+    const cargs = abids_tool_py_cargs(params, execution)
+    const ret = abids_tool_py_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * abids_tool
+ * abids_tool.py
  *
  * A tool to work with BIDS formatted datasets created with dcm2niix_afni or dcm2niix, mainly to pull information from the matching JSON file and refit the input dataset using 3drefit.
  *
@@ -204,9 +204,9 @@ function abids_tool_execute(
  * @param help_flag Show help information and exit.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `AbidsToolOutputs`).
+ * @returns NamedTuple of outputs (described in `AbidsToolPyOutputs`).
  */
-function abids_tool(
+function abids_tool_py(
     input_files: Array<InputPathType>,
     tr_match: boolean = false,
     add_tr: boolean = false,
@@ -214,17 +214,17 @@ function abids_tool(
     copy_prefix: Array<string> | null = null,
     help_flag: boolean = false,
     runner: Runner | null = null,
-): AbidsToolOutputs {
-    const params = abids_tool_params(input_files, tr_match, add_tr, add_slice_times, copy_prefix, help_flag)
-    return abids_tool_execute(params, runner);
+): AbidsToolPyOutputs {
+    const params = abids_tool_py_params(input_files, tr_match, add_tr, add_slice_times, copy_prefix, help_flag)
+    return abids_tool_py_execute(params, runner);
 }
 
 
 export {
-      ABIDS_TOOL_METADATA,
-      AbidsToolOutputs,
-      AbidsToolParameters,
-      abids_tool,
-      abids_tool_execute,
-      abids_tool_params,
+      ABIDS_TOOL_PY_METADATA,
+      AbidsToolPyOutputs,
+      AbidsToolPyParameters,
+      abids_tool_py,
+      abids_tool_py_execute,
+      abids_tool_py_params,
 };

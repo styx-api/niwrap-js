@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const REALTIME_RECEIVER_METADATA: Metadata = {
-    id: "3861e74ecb1900a71d5f24f43aeca5e7e336549d.boutiques",
-    name: "realtime_receiver",
+const REALTIME_RECEIVER_PY_METADATA: Metadata = {
+    id: "4401e83f760536192bb4ea37223936b510523699.boutiques",
+    name: "realtime_receiver.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface RealtimeReceiverParameters {
-    "@type": "afni.realtime_receiver";
+interface RealtimeReceiverPyParameters {
+    "@type": "afni.realtime_receiver.py";
     "show_data"?: "yes" | "no" | null | undefined;
     "write_text_data"?: string | null | undefined;
     "data_choice"?: "motion" | "motion_norm" | "all_extras" | "diff_ratio" | null | undefined;
@@ -39,7 +39,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.realtime_receiver": realtime_receiver_cargs,
+        "afni.realtime_receiver.py": realtime_receiver_py_cargs,
     };
     return cargsFuncs[t];
 }
@@ -62,11 +62,11 @@ function dynOutputs(
 
 
 /**
- * Output object returned when calling `realtime_receiver(...)`.
+ * Output object returned when calling `realtime_receiver_py(...)`.
  *
  * @interface
  */
-interface RealtimeReceiverOutputs {
+interface RealtimeReceiverPyOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -92,7 +92,7 @@ interface RealtimeReceiverOutputs {
  *
  * @returns Parameter dictionary
  */
-function realtime_receiver_params(
+function realtime_receiver_py_params(
     show_data: "yes" | "no" | null = null,
     write_text_data: string | null = null,
     data_choice: "motion" | "motion_norm" | "all_extras" | "diff_ratio" | null = null,
@@ -105,9 +105,9 @@ function realtime_receiver_params(
     swap: boolean = false,
     tcp_port: number | null = null,
     verbosity: number | null = null,
-): RealtimeReceiverParameters {
+): RealtimeReceiverPyParameters {
     const params = {
-        "@type": "afni.realtime_receiver" as const,
+        "@type": "afni.realtime_receiver.py" as const,
         "show_comm_times": show_comm_times,
         "show_demo_data": show_demo_data,
         "swap": swap,
@@ -151,8 +151,8 @@ function realtime_receiver_params(
  *
  * @returns Command-line arguments.
  */
-function realtime_receiver_cargs(
-    params: RealtimeReceiverParameters,
+function realtime_receiver_py_cargs(
+    params: RealtimeReceiverPyParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -232,11 +232,11 @@ function realtime_receiver_cargs(
  *
  * @returns Outputs object.
  */
-function realtime_receiver_outputs(
-    params: RealtimeReceiverParameters,
+function realtime_receiver_py_outputs(
+    params: RealtimeReceiverPyParameters,
     execution: Execution,
-): RealtimeReceiverOutputs {
-    const ret: RealtimeReceiverOutputs = {
+): RealtimeReceiverPyOutputs {
+    const ret: RealtimeReceiverPyOutputs = {
         root: execution.outputFile("."),
     };
     return ret;
@@ -244,7 +244,7 @@ function realtime_receiver_outputs(
 
 
 /**
- * realtime_receiver
+ * realtime_receiver.py
  *
  * Program to receive and display real-time plugin data from AFNI.
  *
@@ -255,24 +255,24 @@ function realtime_receiver_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `RealtimeReceiverOutputs`).
+ * @returns NamedTuple of outputs (described in `RealtimeReceiverPyOutputs`).
  */
-function realtime_receiver_execute(
-    params: RealtimeReceiverParameters,
+function realtime_receiver_py_execute(
+    params: RealtimeReceiverPyParameters,
     runner: Runner | null = null,
-): RealtimeReceiverOutputs {
+): RealtimeReceiverPyOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(REALTIME_RECEIVER_METADATA);
+    const execution = runner.startExecution(REALTIME_RECEIVER_PY_METADATA);
     params = execution.params(params)
-    const cargs = realtime_receiver_cargs(params, execution)
-    const ret = realtime_receiver_outputs(params, execution)
+    const cargs = realtime_receiver_py_cargs(params, execution)
+    const ret = realtime_receiver_py_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * realtime_receiver
+ * realtime_receiver.py
  *
  * Program to receive and display real-time plugin data from AFNI.
  *
@@ -294,9 +294,9 @@ function realtime_receiver_execute(
  * @param verbosity Set the verbosity level
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `RealtimeReceiverOutputs`).
+ * @returns NamedTuple of outputs (described in `RealtimeReceiverPyOutputs`).
  */
-function realtime_receiver(
+function realtime_receiver_py(
     show_data: "yes" | "no" | null = null,
     write_text_data: string | null = null,
     data_choice: "motion" | "motion_norm" | "all_extras" | "diff_ratio" | null = null,
@@ -310,17 +310,17 @@ function realtime_receiver(
     tcp_port: number | null = null,
     verbosity: number | null = null,
     runner: Runner | null = null,
-): RealtimeReceiverOutputs {
-    const params = realtime_receiver_params(show_data, write_text_data, data_choice, serial_port, show_demo_gui, dc_params, extras_on_one_line, show_comm_times, show_demo_data, swap, tcp_port, verbosity)
-    return realtime_receiver_execute(params, runner);
+): RealtimeReceiverPyOutputs {
+    const params = realtime_receiver_py_params(show_data, write_text_data, data_choice, serial_port, show_demo_gui, dc_params, extras_on_one_line, show_comm_times, show_demo_data, swap, tcp_port, verbosity)
+    return realtime_receiver_py_execute(params, runner);
 }
 
 
 export {
-      REALTIME_RECEIVER_METADATA,
-      RealtimeReceiverOutputs,
-      RealtimeReceiverParameters,
-      realtime_receiver,
-      realtime_receiver_execute,
-      realtime_receiver_params,
+      REALTIME_RECEIVER_PY_METADATA,
+      RealtimeReceiverPyOutputs,
+      RealtimeReceiverPyParameters,
+      realtime_receiver_py,
+      realtime_receiver_py_execute,
+      realtime_receiver_py_params,
 };

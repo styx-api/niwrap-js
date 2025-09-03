@@ -3,16 +3,16 @@
 
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
-const FIND_VARIANCE_LINES_METADATA: Metadata = {
-    id: "46cc1bbfa68d9508d98e3c8d1703d0d91c133340.boutiques",
-    name: "find_variance_lines",
+const FIND_VARIANCE_LINES_TCSH_METADATA: Metadata = {
+    id: "9fa94416b9a9d640828d9ed8f46da535853bee78.boutiques",
+    name: "find_variance_lines.tcsh",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface FindVarianceLinesParameters {
-    "@type": "afni.find_variance_lines";
+interface FindVarianceLinesTcshParameters {
+    "@type": "afni.find_variance_lines.tcsh";
     "input_files": Array<InputPathType>;
     "mask"?: string | null | undefined;
     "min_cvox"?: number | null | undefined;
@@ -42,7 +42,7 @@ function dynCargs(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "afni.find_variance_lines": find_variance_lines_cargs,
+        "afni.find_variance_lines.tcsh": find_variance_lines_tcsh_cargs,
     };
     return cargsFuncs[t];
 }
@@ -59,18 +59,18 @@ function dynOutputs(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "afni.find_variance_lines": find_variance_lines_outputs,
+        "afni.find_variance_lines.tcsh": find_variance_lines_tcsh_outputs,
     };
     return outputsFuncs[t];
 }
 
 
 /**
- * Output object returned when calling `find_variance_lines(...)`.
+ * Output object returned when calling `find_variance_lines_tcsh(...)`.
  *
  * @interface
  */
-interface FindVarianceLinesOutputs {
+interface FindVarianceLinesTcshOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
@@ -115,7 +115,7 @@ interface FindVarianceLinesOutputs {
  *
  * @returns Parameter dictionary
  */
-function find_variance_lines_params(
+function find_variance_lines_tcsh_params(
     input_files: Array<InputPathType>,
     mask: string | null = null,
     min_cvox: number | null = null,
@@ -131,9 +131,9 @@ function find_variance_lines_params(
     help: boolean = false,
     hist: boolean = false,
     ver: boolean = false,
-): FindVarianceLinesParameters {
+): FindVarianceLinesTcshParameters {
     const params = {
-        "@type": "afni.find_variance_lines" as const,
+        "@type": "afni.find_variance_lines.tcsh" as const,
         "input_files": input_files,
         "echo": echo,
         "help": help,
@@ -182,8 +182,8 @@ function find_variance_lines_params(
  *
  * @returns Command-line arguments.
  */
-function find_variance_lines_cargs(
-    params: FindVarianceLinesParameters,
+function find_variance_lines_tcsh_cargs(
+    params: FindVarianceLinesTcshParameters,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -273,11 +273,11 @@ function find_variance_lines_cargs(
  *
  * @returns Outputs object.
  */
-function find_variance_lines_outputs(
-    params: FindVarianceLinesParameters,
+function find_variance_lines_tcsh_outputs(
+    params: FindVarianceLinesTcshParameters,
     execution: Execution,
-): FindVarianceLinesOutputs {
-    const ret: FindVarianceLinesOutputs = {
+): FindVarianceLinesTcshOutputs {
+    const ret: FindVarianceLinesTcshOutputs = {
         root: execution.outputFile("."),
         variance_maps: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), "/variance_map_run*.nii.gz"].join('')) : null,
         scaled_variance_maps: ((params["output_dir"] ?? null) !== null) ? execution.outputFile([(params["output_dir"] ?? null), "/scaled_variance_map_run*.nii.gz"].join('')) : null,
@@ -289,7 +289,7 @@ function find_variance_lines_outputs(
 
 
 /**
- * find_variance_lines
+ * find_variance_lines.tcsh
  *
  * Look for bars of high variance that might suggest scanner interference in EPI datasets.
  *
@@ -300,24 +300,24 @@ function find_variance_lines_outputs(
  * @param params The parameters.
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `FindVarianceLinesOutputs`).
+ * @returns NamedTuple of outputs (described in `FindVarianceLinesTcshOutputs`).
  */
-function find_variance_lines_execute(
-    params: FindVarianceLinesParameters,
+function find_variance_lines_tcsh_execute(
+    params: FindVarianceLinesTcshParameters,
     runner: Runner | null = null,
-): FindVarianceLinesOutputs {
+): FindVarianceLinesTcshOutputs {
     runner = runner || getGlobalRunner();
-    const execution = runner.startExecution(FIND_VARIANCE_LINES_METADATA);
+    const execution = runner.startExecution(FIND_VARIANCE_LINES_TCSH_METADATA);
     params = execution.params(params)
-    const cargs = find_variance_lines_cargs(params, execution)
-    const ret = find_variance_lines_outputs(params, execution)
+    const cargs = find_variance_lines_tcsh_cargs(params, execution)
+    const ret = find_variance_lines_tcsh_outputs(params, execution)
     execution.run(cargs, undefined);
     return ret;
 }
 
 
 /**
- * find_variance_lines
+ * find_variance_lines.tcsh
  *
  * Look for bars of high variance that might suggest scanner interference in EPI datasets.
  *
@@ -342,9 +342,9 @@ function find_variance_lines_execute(
  * @param ver Show the current version
  * @param runner Command runner
  *
- * @returns NamedTuple of outputs (described in `FindVarianceLinesOutputs`).
+ * @returns NamedTuple of outputs (described in `FindVarianceLinesTcshOutputs`).
  */
-function find_variance_lines(
+function find_variance_lines_tcsh(
     input_files: Array<InputPathType>,
     mask: string | null = null,
     min_cvox: number | null = null,
@@ -361,17 +361,17 @@ function find_variance_lines(
     hist: boolean = false,
     ver: boolean = false,
     runner: Runner | null = null,
-): FindVarianceLinesOutputs {
-    const params = find_variance_lines_params(input_files, mask, min_cvox, min_nt, nerode, nfirst, percentile, polort, output_dir, do_clean, do_img, echo, help, hist, ver)
-    return find_variance_lines_execute(params, runner);
+): FindVarianceLinesTcshOutputs {
+    const params = find_variance_lines_tcsh_params(input_files, mask, min_cvox, min_nt, nerode, nfirst, percentile, polort, output_dir, do_clean, do_img, echo, help, hist, ver)
+    return find_variance_lines_tcsh_execute(params, runner);
 }
 
 
 export {
-      FIND_VARIANCE_LINES_METADATA,
-      FindVarianceLinesOutputs,
-      FindVarianceLinesParameters,
-      find_variance_lines,
-      find_variance_lines_execute,
-      find_variance_lines_params,
+      FIND_VARIANCE_LINES_TCSH_METADATA,
+      FindVarianceLinesTcshOutputs,
+      FindVarianceLinesTcshParameters,
+      find_variance_lines_tcsh,
+      find_variance_lines_tcsh_execute,
+      find_variance_lines_tcsh_params,
 };

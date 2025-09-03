@@ -176,7 +176,7 @@ export * from './fsl/midtrans'
 export * from './fsl/mist_fa_reg'
 export * from './fsl/mm'
 export * from './fsl/morph_kernel'
-export * from './fsl/mp_diffpow'
+export * from './fsl/mp_diffpow_sh'
 export * from './fsl/msm'
 export * from './fsl/new_invwarp'
 export * from './fsl/old_betall'
@@ -189,9 +189,9 @@ export * from './fsl/pnm_evs'
 export * from './fsl/pointflirt'
 export * from './fsl/popp'
 export * from './fsl/possum'
-export * from './fsl/possum_interpmot'
+export * from './fsl/possum_interpmot_py'
 export * from './fsl/possum_matrix'
-export * from './fsl/possum_plot'
+export * from './fsl/possum_plot_py'
 export * from './fsl/possum_sum'
 export * from './fsl/prelude'
 export * from './fsl/prewhiten'
@@ -422,7 +422,7 @@ import { midtrans_execute } from './fsl/midtrans'
 import { mist_fa_reg_execute } from './fsl/mist_fa_reg'
 import { mm_execute } from './fsl/mm'
 import { morph_kernel_execute } from './fsl/morph_kernel'
-import { mp_diffpow_execute } from './fsl/mp_diffpow'
+import { mp_diffpow_sh_execute } from './fsl/mp_diffpow_sh'
 import { msm_execute } from './fsl/msm'
 import { new_invwarp_execute } from './fsl/new_invwarp'
 import { old_betall_execute } from './fsl/old_betall'
@@ -435,9 +435,9 @@ import { pnm_evs_execute } from './fsl/pnm_evs'
 import { pointflirt_execute } from './fsl/pointflirt'
 import { popp_execute } from './fsl/popp'
 import { possum_execute } from './fsl/possum'
-import { possum_interpmot_execute } from './fsl/possum_interpmot'
+import { possum_interpmot_py_execute } from './fsl/possum_interpmot_py'
 import { possum_matrix_execute } from './fsl/possum_matrix'
-import { possum_plot_execute } from './fsl/possum_plot'
+import { possum_plot_py_execute } from './fsl/possum_plot_py'
 import { possum_sum_execute } from './fsl/possum_sum'
 import { prelude_execute } from './fsl/prelude'
 import { prewhiten_execute } from './fsl/prewhiten'
@@ -681,7 +681,7 @@ function execute(
         "fsl.mist_FA_reg": mist_fa_reg_execute,
         "fsl.mm": mm_execute,
         "fsl.morph_kernel": morph_kernel_execute,
-        "fsl.mp_diffpow": mp_diffpow_execute,
+        "fsl.mp_diffpow.sh": mp_diffpow_sh_execute,
         "fsl.msm": msm_execute,
         "fsl.new_invwarp": new_invwarp_execute,
         "fsl.old_betall": old_betall_execute,
@@ -694,9 +694,9 @@ function execute(
         "fsl.pointflirt": pointflirt_execute,
         "fsl.popp": popp_execute,
         "fsl.possum": possum_execute,
-        "fsl.possum_interpmot": possum_interpmot_execute,
+        "fsl.possum_interpmot.py": possum_interpmot_py_execute,
         "fsl.possum_matrix": possum_matrix_execute,
-        "fsl.possum_plot": possum_plot_execute,
+        "fsl.possum_plot.py": possum_plot_py_execute,
         "fsl.possum_sum": possum_sum_execute,
         "fsl.prelude": prelude_execute,
         "fsl.prewhiten": prewhiten_execute,
