@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GREEDY_METADATA: Metadata = {
-    id: "d2b2cd75881251964bd1af5bd8f198093a5b74b9.boutiques",
+    id: "cb84db88438f1674b1e435e7a18e6b4755de1b18.boutiques",
     name: "greedy",
     package: "greedy",
     container_image_tag: "pyushkevich/itksnap:v3.8.2",
@@ -76,6 +76,22 @@ interface GreedyResliceSurfaceParameters {
 }
 
 
+interface GreedyNnParameters {
+    "@type": "greedy.greedy.nn";
+}
+
+
+interface GreedyLinearParameters {
+    "@type": "greedy.greedy.linear";
+}
+
+
+interface GreedyLabelParameters {
+    "@type": "greedy.greedy.label";
+    "sigma_spec": string;
+}
+
+
 interface GreedyResliceSimplexJacobianParameters {
     "@type": "greedy.greedy.reslice_simplex_jacobian";
     "inmesh": InputPathType;
@@ -138,7 +154,7 @@ interface GreedyParameters {
     "fixed_reslicing_image"?: InputPathType | null | undefined;
     "reslice_moving_image"?: GreedyResliceMovingImageParameters | null | undefined;
     "reslice_surface"?: GreedyResliceSurfaceParameters | null | undefined;
-    "interpolation"?: "NN" | "LINEAR" | "LABEL" | null | undefined;
+    "interpolation"?: GreedyNnParameters | GreedyLinearParameters | GreedyLabelParameters | null | undefined;
     "reslice_background"?: number | null | undefined;
     "reslice_datatype"?: "auto" | "double" | "float" | "uint" | "int" | "ushort" | "short" | "uchar" | "char" | null | undefined;
     "reslice_composite"?: InputPathType | null | undefined;
@@ -181,6 +197,9 @@ function dynCargs(
         "greedy.greedy.search": greedy_search_cargs,
         "greedy.greedy.reslice_moving_image": greedy_reslice_moving_image_cargs,
         "greedy.greedy.reslice_surface": greedy_reslice_surface_cargs,
+        "greedy.greedy.nn": greedy_nn_cargs,
+        "greedy.greedy.linear": greedy_linear_cargs,
+        "greedy.greedy.label": greedy_label_cargs,
         "greedy.greedy.reslice_simplex_jacobian": greedy_reslice_simplex_jacobian_cargs,
     };
     return cargsFuncs[t];
@@ -768,6 +787,107 @@ function greedy_reslice_surface_outputs(
 
 
 /**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
+function greedy_nn_params(
+): GreedyNnParameters {
+    const params = {
+        "@type": "greedy.greedy.nn" as const,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function greedy_nn_cargs(
+    params: GreedyNnParameters,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push("NN");
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
+function greedy_linear_params(
+): GreedyLinearParameters {
+    const params = {
+        "@type": "greedy.greedy.linear" as const,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function greedy_linear_cargs(
+    params: GreedyLinearParameters,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push("LINEAR");
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param sigma_spec The <sigma_spec> parameter to the -ri LABEL command specifies the standard deviation of the Gaussian kernel used to smooth the labels. It can be provided in voxel units (e.g., 0.2vox) or millimeter units (e.g., 0.2mm). Value of 0.2vox works well in most situations
+ *
+ * @returns Parameter dictionary
+ */
+function greedy_label_params(
+    sigma_spec: string,
+): GreedyLabelParameters {
+    const params = {
+        "@type": "greedy.greedy.label" as const,
+        "sigma_spec": sigma_spec,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function greedy_label_cargs(
+    params: GreedyLabelParameters,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push("LABEL");
+    cargs.push((params["sigma_spec"] ?? null));
+    return cargs;
+}
+
+
+/**
  * Output object returned when calling `GreedyResliceSimplexJacobianParameters | null(...)`.
  *
  * @interface
@@ -1017,7 +1137,7 @@ function greedy_params(
     fixed_reslicing_image: InputPathType | null = null,
     reslice_moving_image: GreedyResliceMovingImageParameters | null = null,
     reslice_surface: GreedyResliceSurfaceParameters | null = null,
-    interpolation: "NN" | "LINEAR" | "LABEL" | null = null,
+    interpolation: GreedyNnParameters | GreedyLinearParameters | GreedyLabelParameters | null = null,
     reslice_background: number | null = null,
     reslice_datatype: "auto" | "double" | "float" | "uint" | "int" | "ushort" | "short" | "uchar" | "char" | null = null,
     reslice_composite: InputPathType | null = null,
@@ -1517,7 +1637,7 @@ function greedy_cargs(
     if ((params["interpolation"] ?? null) !== null) {
         cargs.push(
             "-ri",
-            (params["interpolation"] ?? null)
+            ...dynCargs((params["interpolation"] ?? null)["@type"])((params["interpolation"] ?? null), execution)
         );
     }
     if ((params["reslice_background"] ?? null) !== null) {
@@ -1804,7 +1924,7 @@ function greedy_(
     fixed_reslicing_image: InputPathType | null = null,
     reslice_moving_image: GreedyResliceMovingImageParameters | null = null,
     reslice_surface: GreedyResliceSurfaceParameters | null = null,
-    interpolation: "NN" | "LINEAR" | "LABEL" | null = null,
+    interpolation: GreedyNnParameters | GreedyLinearParameters | GreedyLabelParameters | null = null,
     reslice_background: number | null = null,
     reslice_datatype: "auto" | "double" | "float" | "uint" | "int" | "ushort" | "short" | "uchar" | "char" | null = null,
     reslice_composite: InputPathType | null = null,
@@ -1837,7 +1957,10 @@ export {
       GreedyInvertParameters,
       GreedyJacobianOutputs,
       GreedyJacobianParameters,
+      GreedyLabelParameters,
+      GreedyLinearParameters,
       GreedyMetricParameters,
+      GreedyNnParameters,
       GreedyOutputs,
       GreedyParameters,
       GreedyResliceMovingImageOutputs,
@@ -1855,7 +1978,10 @@ export {
       greedy_input_images_params,
       greedy_invert_params,
       greedy_jacobian_params,
+      greedy_label_params,
+      greedy_linear_params,
       greedy_metric_params,
+      greedy_nn_params,
       greedy_params,
       greedy_reslice_moving_image_params,
       greedy_reslice_simplex_jacobian_params,
