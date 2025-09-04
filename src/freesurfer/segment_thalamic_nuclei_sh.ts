@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SEGMENT_THALAMIC_NUCLEI_SH_METADATA: Metadata = {
-    id: "69ea92310c993122b1f5d2cde1689310a297d670.boutiques",
+    id: "84a6eb3421d82b05e58b49ad9846e7c894e8a995.boutiques",
     name: "segmentThalamicNuclei.sh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

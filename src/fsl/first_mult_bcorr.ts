@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIRST_MULT_BCORR_METADATA: Metadata = {
-    id: "f59352ddb8edcfdfccef5cab9b15f8c47dff6a0a.boutiques",
+    id: "2405073c26386db0c12ba2a8300362e7d308d76e.boutiques",
     name: "first_mult_bcorr",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

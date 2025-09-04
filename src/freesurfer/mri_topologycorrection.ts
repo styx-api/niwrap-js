@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_TOPOLOGYCORRECTION_METADATA: Metadata = {
-    id: "40a7e8816236f767c7c17e74f2b35d577fe73190.boutiques",
+    id: "5f5adcd820a3d0675b0294a701f5d9eebf40f347.boutiques",
     name: "mri_topologycorrection",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

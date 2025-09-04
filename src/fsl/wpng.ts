@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const WPNG_METADATA: Metadata = {
-    id: "9f9c70ecbedffb509e726c31bb9501a9ecba01a1.boutiques",
+    id: "7a65600896f72a6fc57a40a60a5fa71d9c9067b8.boutiques",
     name: "wpng",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_RIBBON_METADATA: Metadata = {
-    id: "2304da93e8c915d7208416df97d57e92ea3d0bd3.boutiques",
+    id: "a40554737433b3d1d89c707652c1ac81b900e449.boutiques",
     name: "mri_ribbon",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

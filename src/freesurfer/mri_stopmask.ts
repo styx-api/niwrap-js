@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_STOPMASK_METADATA: Metadata = {
-    id: "38e7fa2abd35271883a0f65f5dbaff1fc083659f.boutiques",
+    id: "1c9df873427ea33c04be53852a0c8cd2cc7265c8.boutiques",
     name: "mri_stopmask",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

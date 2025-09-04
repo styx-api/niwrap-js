@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TBSS_DEPROJECT_METADATA: Metadata = {
-    id: "91649327fbf9b3b5e83213c277b300f6330e7203.boutiques",
+    id: "7be2bd59b3afba55103f25bffec1ef4b17196214.boutiques",
     name: "tbss_deproject",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

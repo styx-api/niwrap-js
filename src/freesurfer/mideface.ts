@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MIDEFACE_METADATA: Metadata = {
-    id: "103c9c8e1c2adfa740ce06f20222e2baa57571f0.boutiques",
+    id: "0687e5e05c5e03fafe6833cb1799a3357f75f896.boutiques",
     name: "mideface",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

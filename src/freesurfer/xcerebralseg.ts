@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const XCEREBRALSEG_METADATA: Metadata = {
-    id: "d1772c109f213bb8beac7ed505ba250320b688f8.boutiques",
+    id: "cc6ba028a87f397d827eb7c7af93eafd8d88d4d3.boutiques",
     name: "xcerebralseg",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

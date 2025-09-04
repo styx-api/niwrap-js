@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RCA_LONG_TP_INIT_METADATA: Metadata = {
-    id: "1ba25741004958df03ca6fd11c8637b4fcf2ca35.boutiques",
+    id: "d4bcfb42f971e1967e6f26ab2697ec78299fa783.boutiques",
     name: "rca-long-tp-init",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

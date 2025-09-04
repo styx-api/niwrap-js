@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TALAIRACH2_METADATA: Metadata = {
-    id: "200a3bdd395b88d5b03ecdc9cf8d79338e29d2f2.boutiques",
+    id: "961c2dcdf92fb148ac4017a4846e6e14777807c9.boutiques",
     name: "talairach2",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

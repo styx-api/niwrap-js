@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TRAC_PATHS_METADATA: Metadata = {
-    id: "f085abb25cd93831e33301f753fc93e1f37fab3b.boutiques",
+    id: "e6e0a90c1596483e2f89bd23a9b38b773f7b3348.boutiques",
     name: "trac-paths",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

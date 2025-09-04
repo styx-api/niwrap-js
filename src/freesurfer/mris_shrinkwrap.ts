@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_SHRINKWRAP_METADATA: Metadata = {
-    id: "96cfd148136c6ebc9a24c2fb8339a045d4233c65.boutiques",
+    id: "dad31b4a11b8cec8d42062a2c9ca9f757d582e84.boutiques",
     name: "mris_shrinkwrap",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

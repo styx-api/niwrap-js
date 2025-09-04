@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_CONCATENATE_LTA_METADATA: Metadata = {
-    id: "954e185b276c52b9e741616fe3781dbd26c9152a.boutiques",
+    id: "38907d5d0cdc2fb65560e3c353ab51490258ebd2.boutiques",
     name: "mri_concatenate_lta",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

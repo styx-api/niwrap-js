@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSL_DEFACE_METADATA: Metadata = {
-    id: "041b839ba243de1989bd5ebe25d965b22cd7d0a8.boutiques",
+    id: "aa385f8d356c96dd0d6919ea7f5354ddd42343d5.boutiques",
     name: "fsl_deface",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

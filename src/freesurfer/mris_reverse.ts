@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_REVERSE_METADATA: Metadata = {
-    id: "a62b3581c919ee2de9ea29c9c8f31b6b9b96227a.boutiques",
+    id: "704c316990d42ff1826268cb554bb6e1cd120722.boutiques",
     name: "mris_reverse",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

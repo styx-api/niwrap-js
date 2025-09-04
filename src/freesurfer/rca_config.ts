@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RCA_CONFIG_METADATA: Metadata = {
-    id: "46eae30104e8ee7e67f818e2a5df2c8456668ef9.boutiques",
+    id: "160467e3c542343d523fa8c1f55238fb2e457b06.boutiques",
     name: "rca-config",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

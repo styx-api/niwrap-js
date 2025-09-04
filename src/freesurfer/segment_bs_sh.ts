@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SEGMENT_BS_SH_METADATA: Metadata = {
-    id: "797f0a897e125245194e3910c9310190662644ee.boutiques",
+    id: "3915aa673c1184ad6e921ee72eab975737034168.boutiques",
     name: "segmentBS.sh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

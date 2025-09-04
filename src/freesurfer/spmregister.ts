@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SPMREGISTER_METADATA: Metadata = {
-    id: "f037d545faca30a5ba9e5094c01f167e854b4f1f.boutiques",
+    id: "631ca3c46e81cdbcc0721229103b0d1a0baf1404.boutiques",
     name: "spmregister",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

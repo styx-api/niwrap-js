@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const OVERLAY_METADATA: Metadata = {
-    id: "bb3b718f143a2a413a158fc66626ce4772a6ee44.boutiques",
+    id: "ac1c797a31f7d90df494c815b67143ce463e0b7a.boutiques",
     name: "overlay",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

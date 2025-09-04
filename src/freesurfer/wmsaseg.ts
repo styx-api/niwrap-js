@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const WMSASEG_METADATA: Metadata = {
-    id: "13c0a73656eaf08524d7d485d6d8e1f97aef6a38.boutiques",
+    id: "dc03aa6f6f16bc8b5912ca6532979e9cc7ed9e4d.boutiques",
     name: "wmsaseg",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

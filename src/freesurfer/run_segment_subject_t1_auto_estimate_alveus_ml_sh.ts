@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RUN_SEGMENT_SUBJECT_T1_AUTO_ESTIMATE_ALVEUS_ML_SH_METADATA: Metadata = {
-    id: "4f9a46fb43606ac0251e70e49508d55ff638b63c.boutiques",
+    id: "757d63d26afce0f743109efcef0de951a08acf10.boutiques",
     name: "run_segmentSubjectT1_autoEstimateAlveusML.sh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

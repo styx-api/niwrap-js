@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const EDDY_OPENMP_METADATA: Metadata = {
-    id: "67a845da3e6ef767722e8f686820b885e4c4676a.boutiques",
+    id: "8aee3850fc475e40bae1fe34268415e79b92fc88.boutiques",
     name: "eddy_openmp",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

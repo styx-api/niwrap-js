@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_ANNOT_DIFF_METADATA: Metadata = {
-    id: "e43af53d28c80f63eea91ad71688942a768343a5.boutiques",
+    id: "c90f8e1815276c38fcf1be63fbfc82687972330c.boutiques",
     name: "mris_annot_diff",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

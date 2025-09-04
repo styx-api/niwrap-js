@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DISTANCEMAP_METADATA: Metadata = {
-    id: "259e601a3311eb3a49b13831be7793fad0b123ab.boutiques",
+    id: "77f8726ec4784b3ad4754b1cb2d936cdc742eb4c.boutiques",
     name: "distancemap",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_SIMULATE_ATROPHY_METADATA: Metadata = {
-    id: "b2e923443b64cd119265f582a44ff716bd98c53c.boutiques",
+    id: "c6841e7af996c077acb15799bc4ff293cd678ceb.boutiques",
     name: "mris_simulate_atrophy",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

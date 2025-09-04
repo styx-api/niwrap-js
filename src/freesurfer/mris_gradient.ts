@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_GRADIENT_METADATA: Metadata = {
-    id: "6a9aec026f78bb086a8f7293da907aa14fad157f.boutiques",
+    id: "f6760899fb661a954861cf6ca458010aedcf71b9.boutiques",
     name: "mris_gradient",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

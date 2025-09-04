@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_REMOVE_INTERSECTION_METADATA: Metadata = {
-    id: "35105f4c486e8643420cf4f167c32a531bdc3428.boutiques",
+    id: "88b4ff5041cef2806f183cade65dd8196d2b1360.boutiques",
     name: "mris_remove_intersection",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

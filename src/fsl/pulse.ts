@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PULSE_METADATA: Metadata = {
-    id: "7757d9d7ddf9eb0a48fa2f196abab1f539be6d58.boutiques",
+    id: "0912bfc18a05bdaa4deb097213d2029cbae7c791.boutiques",
     name: "pulse",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

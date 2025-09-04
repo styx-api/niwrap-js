@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const UNPACKSDCMDIR_METADATA: Metadata = {
-    id: "6006998b82cae3564b1f7b4f079673c72b20cd58.boutiques",
+    id: "f2d2973173264580381ae83a48a3fe0e5aa0e05d.boutiques",
     name: "unpacksdcmdir",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

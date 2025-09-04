@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const POSSUM_SUM_METADATA: Metadata = {
-    id: "ef2112c90178573702ee927a708c1c298290752b.boutiques",
+    id: "38f8ddb18ee62434644777740eb0e6fd7e9b3961.boutiques",
     name: "possum_sum",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

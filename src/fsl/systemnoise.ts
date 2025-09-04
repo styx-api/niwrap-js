@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SYSTEMNOISE_METADATA: Metadata = {
-    id: "9fe5bc1f78d1d88a6ab74a4fea8df0c29e9b2d19.boutiques",
+    id: "92a279faa1adb87bcfc08a174ef9019a6ff64256.boutiques",
     name: "systemnoise",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

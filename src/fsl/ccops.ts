@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CCOPS_METADATA: Metadata = {
-    id: "ec13830c516628de5484263bcb917e0848139c8e.boutiques",
+    id: "bb51a7a0ac6e27a9b2acd7fc208cb1d43bdc08a5.boutiques",
     name: "ccops",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

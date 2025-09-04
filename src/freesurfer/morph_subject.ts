@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MORPH_SUBJECT_METADATA: Metadata = {
-    id: "685f97530d830d12a67cb8468c38864b69d1e65c.boutiques",
+    id: "dab11133f0d14ca55b5d68228d09dee883987b8a.boutiques",
     name: "morph_subject",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

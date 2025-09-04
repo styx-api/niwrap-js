@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TRIDEC_METADATA: Metadata = {
-    id: "b02273ae065ddda351360aefaa95dc302ac759eb.boutiques",
+    id: "17d2ba140c1142170644182d8abc8ce2ba86d70e.boutiques",
     name: "tridec",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

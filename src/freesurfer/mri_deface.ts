@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_DEFACE_METADATA: Metadata = {
-    id: "71c89563a45aef942fd31396ef879363ac766810.boutiques",
+    id: "193371472d0b78279f02c9a40121ebd60bf4ef93.boutiques",
     name: "mri_deface",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

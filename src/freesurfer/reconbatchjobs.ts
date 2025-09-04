@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RECONBATCHJOBS_METADATA: Metadata = {
-    id: "3b88343e632e9bbafdf43ea3df14e2cf0c3f34d1.boutiques",
+    id: "ce7e65e0781cc7894875341c56c45af19d18b272.boutiques",
     name: "reconbatchjobs",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

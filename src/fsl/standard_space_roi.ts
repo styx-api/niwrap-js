@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const STANDARD_SPACE_ROI_METADATA: Metadata = {
-    id: "8ed27df1beca474debe135fb9651f581b560a11f.boutiques",
+    id: "e43e98ad332525e5aa2d61092dbff385de4cf7bd.boutiques",
     name: "standard_space_roi",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

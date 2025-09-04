@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FABBER_QBOLD_METADATA: Metadata = {
-    id: "bc7fccaf940c2ed8d3cfd4e3f8b55bd32c98a98f.boutiques",
+    id: "e3d0351ff53be803c27a9d69aea92f45b113f540.boutiques",
     name: "fabber_qbold",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

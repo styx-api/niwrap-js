@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANATOMICAL_AVERAGE_METADATA: Metadata = {
-    id: "778f5a5c8d722b93a945cefdef351a0babd00a75.boutiques",
+    id: "35182afbd878ebc0a759c3c32fdb15b29c4fa4ff.boutiques",
     name: "AnatomicalAverage",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

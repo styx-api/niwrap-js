@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIGNAL2IMAGE_METADATA: Metadata = {
-    id: "958f0a5ead17d4b7a6303ac0dad2305278fe6b28.boutiques",
+    id: "aef1add427c8348f9cf296ffd6fe0bf93f3bb450.boutiques",
     name: "signal2image",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

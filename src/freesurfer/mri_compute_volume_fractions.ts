@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_COMPUTE_VOLUME_FRACTIONS_METADATA: Metadata = {
-    id: "c96073b430ac3150fa69b6683b53f6001b13902e.boutiques",
+    id: "accbafaf30228c24ceb75d17b4edd13fde8b245c.boutiques",
     name: "mri_compute_volume_fractions",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

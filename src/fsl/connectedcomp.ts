@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONNECTEDCOMP_METADATA: Metadata = {
-    id: "a8f03227989b3a113c5a33bfd20241d307f6493e.boutiques",
+    id: "eba5bca952878964c8b6addf602c2d4d1ab0b535.boutiques",
     name: "connectedcomp",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

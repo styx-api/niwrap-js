@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SEG2RECON_METADATA: Metadata = {
-    id: "a2f2b008cac59cb84f112380cce351f9ae9e939d.boutiques",
+    id: "22df8aaa390ed4db847c18846a8feb2c642ed1eb.boutiques",
     name: "seg2recon",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CLUSTER2HTML_METADATA: Metadata = {
-    id: "ecbc01ebfb590a7f01ad46ceb6051dd24f95ff27.boutiques",
+    id: "925e8e0be1f7da665d4183d8334764fd95443ece.boutiques",
     name: "cluster2html",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

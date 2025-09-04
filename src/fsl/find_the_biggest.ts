@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIND_THE_BIGGEST_METADATA: Metadata = {
-    id: "f239544d494314cd9b9223a5c419f7de4b1e15a8.boutiques",
+    id: "12f6ba8e58309c230c670aa9145f9b48c3d57302.boutiques",
     name: "find_the_biggest",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

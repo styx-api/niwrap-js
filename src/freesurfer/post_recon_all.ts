@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const POST_RECON_ALL_METADATA: Metadata = {
-    id: "443d2c2f1f0c66f957a9df0b715dcdbe0c5294e5.boutiques",
+    id: "c54b224b59c4b007fe53766975991354248ee76a.boutiques",
     name: "post-recon-all",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

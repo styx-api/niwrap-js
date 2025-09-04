@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_ENTROPY_METADATA: Metadata = {
-    id: "5cafa16187d7cec07d44096ca5032b4f4b4ddbb6.boutiques",
+    id: "fc6eb2f6c959a184199ac74e25c7e74b0f12a7f6.boutiques",
     name: "mris_entropy",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

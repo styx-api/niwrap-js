@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BEDPOSTX_DATACHECK_METADATA: Metadata = {
-    id: "eddcb6414c1d17da35164536bb565b595ac54640.boutiques",
+    id: "a42080d72bcf634e50d5dc96b966b9f5052cf873.boutiques",
     name: "bedpostx_datacheck",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

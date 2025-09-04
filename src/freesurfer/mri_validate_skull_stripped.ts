@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_VALIDATE_SKULL_STRIPPED_METADATA: Metadata = {
-    id: "0de0265b82e5cc83b346cf1e1de5cade0f9128b2.boutiques",
+    id: "66a7a4466fdb7b810c88a24d0012d9b6303845fb.boutiques",
     name: "mri_validate_skull_stripped",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

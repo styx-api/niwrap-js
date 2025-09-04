@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RCA_FIX_ENTO_METADATA: Metadata = {
-    id: "64436bb8ee2aa1d776ae3cc1b1413d243ffaba24.boutiques",
+    id: "cabeb6e1416dbf7346f03da383beb1c3461b4ee2.boutiques",
     name: "rca-fix-ento",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

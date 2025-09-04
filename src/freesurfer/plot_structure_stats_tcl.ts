@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PLOT_STRUCTURE_STATS_TCL_METADATA: Metadata = {
-    id: "3de0e97c01ce61e97ae009f4560aa157a2bcc2c6.boutiques",
+    id: "60fce4021e28a4ededdb51863b8fa98cde23f6df.boutiques",
     name: "plot_structure_stats.tcl",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

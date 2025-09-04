@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_APPLY_BIAS_METADATA: Metadata = {
-    id: "8790ac35c67e85f35da9bcad35b81fe9d35d833c.boutiques",
+    id: "46b5e2a3948d9f2b59a26ae51155880173698a3f.boutiques",
     name: "mri_apply_bias",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

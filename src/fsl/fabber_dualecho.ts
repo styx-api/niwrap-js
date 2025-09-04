@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FABBER_DUALECHO_METADATA: Metadata = {
-    id: "45b1cb692ff975ec9d8d38b98d9395afa86e12d2.boutiques",
+    id: "f68dc4d7b7155637ea93ff5746a8c1d85242e7c9.boutiques",
     name: "fabber_dualecho",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

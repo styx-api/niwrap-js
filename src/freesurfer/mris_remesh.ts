@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_REMESH_METADATA: Metadata = {
-    id: "040169fbc540d467ef423e58c64e1b78e83cb580.boutiques",
+    id: "ddaf1cccfdae82e80600ea00ed9aea4f252f25e9.boutiques",
     name: "mris_remesh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

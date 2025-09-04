@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_JOINT_DENSITY_METADATA: Metadata = {
-    id: "47ff381f1abbc5fa3dfbe8ae02cbf80ec452f68c.boutiques",
+    id: "22c5f270509861f3650c308c5077138855fa66db.boutiques",
     name: "mri_joint_density",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

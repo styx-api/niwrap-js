@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SEGMENT_SUBFIELDS_T1_LONGITUDINAL_METADATA: Metadata = {
-    id: "d4b7ee18b602b1f48ca05e9e3df4480075dcd782.boutiques",
+    id: "25d3ff2dd663985a3d9ab2f5f1e43c7c4863d5fc.boutiques",
     name: "SegmentSubfieldsT1Longitudinal",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

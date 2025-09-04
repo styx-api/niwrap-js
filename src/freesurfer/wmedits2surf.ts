@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const WMEDITS2SURF_METADATA: Metadata = {
-    id: "0c7cb381e9d90786951e70e4d39e8ecbb9e43b31.boutiques",
+    id: "b306315ee534cde2a22d9d0e4063c4f878433302.boutiques",
     name: "wmedits2surf",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

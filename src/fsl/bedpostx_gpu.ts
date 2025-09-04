@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BEDPOSTX_GPU_METADATA: Metadata = {
-    id: "02d42bbf7827961e88f74430ee1ce545d0754aae.boutiques",
+    id: "0ea9b49ec7a17d63f8e345183ed679e214ad51fa.boutiques",
     name: "bedpostx_gpu",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IMLN_METADATA: Metadata = {
-    id: "8b01d07542dbd623ad758acd765f26736fdf23cd.boutiques",
+    id: "5bf638523c91848fb3c2e578b81bf2405d5a2b5f.boutiques",
     name: "imln",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

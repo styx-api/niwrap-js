@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const STATTABLEDIFF_METADATA: Metadata = {
-    id: "3d94abfc9639ba1d887cf8a29a5610dc79fd89d8.boutiques",
+    id: "0d32fce001061fdd4d4df206d102f4e4d60f9666.boutiques",
     name: "stattablediff",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

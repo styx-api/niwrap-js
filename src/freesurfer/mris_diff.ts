@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_DIFF_METADATA: Metadata = {
-    id: "b75e9135951f27be6bd2952dbbcb87b5a6184000.boutiques",
+    id: "ea56ba0cce9d9257f1266cde92de0744bd3d23a5.boutiques",
     name: "mris_diff",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

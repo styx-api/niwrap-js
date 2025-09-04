@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TRAIN_GCS_ATLAS_METADATA: Metadata = {
-    id: "b6cf07c4cdf258fcf1766d6d9378e42cf9ae6cdc.boutiques",
+    id: "a1af0dade42962e79b309666f7e6a29a25239ed2.boutiques",
     name: "train-gcs-atlas",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

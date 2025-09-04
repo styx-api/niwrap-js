@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOL2SYMSURF_METADATA: Metadata = {
-    id: "47622a295d51e596078a4f70c2397878b0afcc25.boutiques",
+    id: "f9b74e075d1b520305f8a58ca53902f3545b9e66.boutiques",
     name: "vol2symsurf",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

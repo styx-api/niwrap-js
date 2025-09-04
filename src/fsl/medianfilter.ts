@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MEDIANFILTER_METADATA: Metadata = {
-    id: "edbb2578b67de8a28b88309d6ea82681507894f5.boutiques",
+    id: "a2389674d9029951b0bd3c6321e79ce7b848526d.boutiques",
     name: "medianfilter",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

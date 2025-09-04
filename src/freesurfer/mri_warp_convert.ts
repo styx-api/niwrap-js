@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_WARP_CONVERT_METADATA: Metadata = {
-    id: "88f6767747c349aa6e8d0167d32cd39374ba05cc.boutiques",
+    id: "3533ec1320189a9f8557b0a301115068a3b5f02e.boutiques",
     name: "mri_warp_convert",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

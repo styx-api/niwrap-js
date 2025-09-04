@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TAL_COMPARE_METADATA: Metadata = {
-    id: "48a87dd18545a8514cefe13e747f2239a4b0468e.boutiques",
+    id: "69e7450b13f782d1237ff9c2a94dbb046eb71dae.boutiques",
     name: "tal_compare",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

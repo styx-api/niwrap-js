@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VENTFIX_METADATA: Metadata = {
-    id: "e71901d7b79bb5fd53811d2c81452b885bbecc11.boutiques",
+    id: "06158b94512724cbe2e29b5e7e1c80b3bc5380d4.boutiques",
     name: "ventfix",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

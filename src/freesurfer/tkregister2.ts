@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TKREGISTER2_METADATA: Metadata = {
-    id: "1f24eb8859271e38bd38304bae70f2a0a2fb4f5b.boutiques",
+    id: "fd186deebd01873f84736aa493b727a1bdc0a7fd.boutiques",
     name: "tkregister2",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

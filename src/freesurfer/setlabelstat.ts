@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SETLABELSTAT_METADATA: Metadata = {
-    id: "d596ef8de99453ef4bca6fe2470b698bdc0cefea.boutiques",
+    id: "d8aed72783cf5237b35f2a0127e5b23567df7704.boutiques",
     name: "setlabelstat",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

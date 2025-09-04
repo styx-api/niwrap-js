@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const NMOVIE_QT_METADATA: Metadata = {
-    id: "40a52c883b6ef1eabbaca98341ef5cfeff36ee79.boutiques",
+    id: "3c4302c8f4835c6715ec211ff9b02ab82b8e6b5b.boutiques",
     name: "nmovie_qt",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

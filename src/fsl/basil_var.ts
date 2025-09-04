@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BASIL_VAR_METADATA: Metadata = {
-    id: "ef2d05e150b63d8d6121c52d86fea7583edc0338.boutiques",
+    id: "af55fce1002b3f7888f0adf5f7437293bdd2293e.boutiques",
     name: "basil_var",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

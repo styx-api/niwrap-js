@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const T4IMGS_4DFP_METADATA: Metadata = {
-    id: "f59930980573ba4f92691ede7675eb588b9ae991.boutiques",
+    id: "fa7048ce1e8228df24d2eca1d22d12ad55ecd2d5.boutiques",
     name: "t4imgs_4dfp",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

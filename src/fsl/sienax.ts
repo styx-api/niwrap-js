@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIENAX_METADATA: Metadata = {
-    id: "9430c4304498bb779b2e0636dc95a5c133545c00.boutiques",
+    id: "b974e2bbe9d2e9ce991c8d72f8b93013a254a0d8.boutiques",
     name: "sienax",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

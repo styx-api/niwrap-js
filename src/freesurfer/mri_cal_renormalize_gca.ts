@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_CAL_RENORMALIZE_GCA_METADATA: Metadata = {
-    id: "14248dd0e801de44865ab35dbf488e7e2c657ff0.boutiques",
+    id: "3427802787eacffbf4678b2765d22730cfcc5c16.boutiques",
     name: "mri_cal_renormalize_gca",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_NL_ALIGN_METADATA: Metadata = {
-    id: "6310126949cfa12584523773d4270cc7c8b646c3.boutiques",
+    id: "d2089af8fda6dbbdddaf93e7fb4474ff839ab66a.boutiques",
     name: "mri_nl_align",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

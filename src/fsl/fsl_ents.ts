@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSL_ENTS_METADATA: Metadata = {
-    id: "8a2d1a782e43547a61897d41b2be18ec550b76d7.boutiques",
+    id: "e49e4b917b751f6faa25d1ae47656cb72ad9b776.boutiques",
     name: "fsl_ents",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

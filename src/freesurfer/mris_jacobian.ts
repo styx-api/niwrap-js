@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_JACOBIAN_METADATA: Metadata = {
-    id: "8c5f11cbc9fae8ad16d28449a9a0520092d3d47d.boutiques",
+    id: "c86d79feae349e7fe21b17a4ef927e93ff05549c.boutiques",
     name: "mris_jacobian",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const STAT_NORMALIZE_METADATA: Metadata = {
-    id: "539aab15bed68c488933181c1c8d2ed1041f0cb8.boutiques",
+    id: "832d1e413c9b64b884398894111475c8095d3f30.boutiques",
     name: "stat_normalize",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SWI_PREPROCESS_METADATA: Metadata = {
-    id: "a87ddd55dd6e762a7926ab993ca84eb258e4144c.boutiques",
+    id: "0a62bba43bd4d353f03ef8edbdd3c20d69162315.boutiques",
     name: "swi_preprocess",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

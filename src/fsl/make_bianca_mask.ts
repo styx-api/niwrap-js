@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKE_BIANCA_MASK_METADATA: Metadata = {
-    id: "b23bc1421b387a00216a5567848bbf20043eb78b.boutiques",
+    id: "d7a41bb9eecb4c41174bebb691631bfa9ae59454.boutiques",
     name: "make_bianca_mask",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

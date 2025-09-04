@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MASKDYADS_METADATA: Metadata = {
-    id: "92489f08c2bebaad41fe95a4857c0ee16b5bf952.boutiques",
+    id: "67ad99695821156823afba24766ebeda6faf25ed.boutiques",
     name: "maskdyads",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

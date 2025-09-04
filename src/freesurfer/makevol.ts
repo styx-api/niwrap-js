@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKEVOL_METADATA: Metadata = {
-    id: "51781bd00634e4c4a1a74fd53fba1f02cde562b4.boutiques",
+    id: "8802efdad5a767387b2e4e04a7189b59ea97e217.boutiques",
     name: "makevol",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

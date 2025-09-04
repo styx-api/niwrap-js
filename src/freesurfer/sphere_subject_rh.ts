@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SPHERE_SUBJECT_RH_METADATA: Metadata = {
-    id: "3f5f7069b0a16e269b65f3d28ad8762b4bb84b90.boutiques",
+    id: "640229d9184c505707b191c9861151b0d6328682.boutiques",
     name: "sphere_subject-rh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

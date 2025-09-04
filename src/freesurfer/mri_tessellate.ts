@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_TESSELLATE_METADATA: Metadata = {
-    id: "f45ebf91c0ba77da8568b9b11d9468a5d80fa341.boutiques",
+    id: "317340698b3037c109130e654835bfde8ad2763f.boutiques",
     name: "mri_tessellate",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

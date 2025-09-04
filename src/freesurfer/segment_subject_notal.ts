@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SEGMENT_SUBJECT_NOTAL_METADATA: Metadata = {
-    id: "a7a96a3826fdc962ee75d09bc6629b89ee8c17d9.boutiques",
+    id: "2cc454d43b3f94b2bc424f0960f6cbaa1eee9ce0.boutiques",
     name: "segment_subject_notal",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

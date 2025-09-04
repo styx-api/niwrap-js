@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CHECK_FEAT_METADATA: Metadata = {
-    id: "12981698c3aadb98c6c57d4eb0712b75b792e3aa.boutiques",
+    id: "5c01c982506b5f2701ba4b9d8807b6af43506adb.boutiques",
     name: "checkFEAT",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

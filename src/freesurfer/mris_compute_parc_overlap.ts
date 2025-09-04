@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_COMPUTE_PARC_OVERLAP_METADATA: Metadata = {
-    id: "9b688cf4965e4242fe321ef384e08a9d1310e055.boutiques",
+    id: "a65b1a2318c3059189212d91b81528c2ce7eb0b4.boutiques",
     name: "mris_compute_parc_overlap",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

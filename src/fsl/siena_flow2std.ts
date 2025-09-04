@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIENA_FLOW2STD_METADATA: Metadata = {
-    id: "ee281143cf78f9ade0c749dc32eb09e063c2ae06.boutiques",
+    id: "9f3594c79c77c6b8469bf73b214e62998b7ac4ec.boutiques",
     name: "siena_flow2std",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PROJ_THRESH_METADATA: Metadata = {
-    id: "2118a504958e3891bd47708738d41c67d1537eb5.boutiques",
+    id: "1731767dc8a17e0195e07ca1c0a24ed404c25aff.boutiques",
     name: "proj_thresh",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

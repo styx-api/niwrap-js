@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TBSS_1_PREPROC_METADATA: Metadata = {
-    id: "4f04562a7b05be2549dde3df1b1c7f328fc44461.boutiques",
+    id: "b184879fc1108203f2d8ae4f4577367b975dcb33.boutiques",
     name: "tbss_1_preproc",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

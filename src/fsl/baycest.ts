@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BAYCEST_METADATA: Metadata = {
-    id: "b1c0ecf2ec328aa9f9be6bb6428c3eaadcedcc53.boutiques",
+    id: "562a217bc2c04d91b4043fda288497791350343f.boutiques",
     name: "baycest",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRIS_DISTANCE_TO_LABEL_METADATA: Metadata = {
-    id: "0538a932ce0052cc0bb4e77e20e1d20d65106c51.boutiques",
+    id: "22e44fd776ac40400214cd24d7f9a0b1bcbea8e7.boutiques",
     name: "mris_distance_to_label",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
