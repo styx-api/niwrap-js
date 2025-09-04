@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MESHFILTER_METADATA: Metadata = {
-    id: "429537cadab8d1b6b1a4d57a859b9099ac811408.boutiques",
+    id: "81b6a12d56aece38462e5d295246392629b9a98c.boutiques",
     name: "meshfilter",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

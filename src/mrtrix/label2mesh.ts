@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL2MESH_METADATA: Metadata = {
-    id: "cdcb0167501c7277846754252872bdd4aafe4ee0.boutiques",
+    id: "6c52afdd4cc628f3b852b8dbd81f4fe3c2968fb8.boutiques",
     name: "label2mesh",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

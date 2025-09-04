@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VECTORSTATS_METADATA: Metadata = {
-    id: "24ba2da446c51868e04d07323b5e99fb4f2ccaad.boutiques",
+    id: "bb3edd72079d87de8242594d71273892006e9def.boutiques",
     name: "vectorstats",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

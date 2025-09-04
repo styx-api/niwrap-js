@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TCKSIFT2_METADATA: Metadata = {
-    id: "54877e8482d2c3115015f89454822c875afcff2f.boutiques",
+    id: "14aaf15fab77274145a9c252945d1e6493faa9d5.boutiques",
     name: "tcksift2",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

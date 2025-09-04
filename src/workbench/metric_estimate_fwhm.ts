@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_ESTIMATE_FWHM_METADATA: Metadata = {
-    id: "170cc8e78771282beeff1fcd6f52511afec7b240.boutiques",
+    id: "1dc8ef5c509e7c0da3d3148fdee937da14d79caf.boutiques",
     name: "metric-estimate-fwhm",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

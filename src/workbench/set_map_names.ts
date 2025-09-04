@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SET_MAP_NAMES_METADATA: Metadata = {
-    id: "bce830848c483141d8dd3ed3a4c7191047ce4ffe.boutiques",
+    id: "7f2099c8418ca1e3fe54b4ccfa0b3990d98a392d.boutiques",
     name: "set-map-names",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

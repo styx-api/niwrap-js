@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const AFDCONNECTIVITY_METADATA: Metadata = {
-    id: "b5133d2715848aa2a01d0deab25470cb3815e66e.boutiques",
+    id: "a6fb5580a7faf6e50bbcf57a2c6385623c779645.boutiques",
     name: "afdconnectivity",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

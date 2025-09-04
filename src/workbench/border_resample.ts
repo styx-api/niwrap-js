@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BORDER_RESAMPLE_METADATA: Metadata = {
-    id: "360c84c97f6924c65d5b0371019a66a5668c0f2f.boutiques",
+    id: "9be294dad7cdf118a17d5ba9c35d2223b1ababca.boutiques",
     name: "border-resample",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

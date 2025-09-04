@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DIRORDER_METADATA: Metadata = {
-    id: "81e71a9c447cf1cbb6b544733eb04768520936f0.boutiques",
+    id: "86d673e95dbb0fe3b5812cf7b1b03f9ae588651e.boutiques",
     name: "dirorder",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

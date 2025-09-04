@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_WEDGE_VOLUME_METADATA: Metadata = {
-    id: "8717436927797f17b9d73da5d0bf7d4b30311324.boutiques",
+    id: "e5f6617fc469136137d2ad521599b19078079c17.boutiques",
     name: "surface-wedge-volume",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

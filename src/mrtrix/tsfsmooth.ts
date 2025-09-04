@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TSFSMOOTH_METADATA: Metadata = {
-    id: "661247ae56de33473ab1fe1198f8ec8b74b835b5.boutiques",
+    id: "a24677b3a0e32a059af6e1aaa2200e029ee94f11.boutiques",
     name: "tsfsmooth",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

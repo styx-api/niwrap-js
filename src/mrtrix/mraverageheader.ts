@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRAVERAGEHEADER_METADATA: Metadata = {
-    id: "fd2f9326c744f341eb6c33d25cde30666d1d4b4f.boutiques",
+    id: "157f0794eeda94318eeaa422b5298c388c67f70c.boutiques",
     name: "mraverageheader",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

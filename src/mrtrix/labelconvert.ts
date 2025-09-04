@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABELCONVERT_METADATA: Metadata = {
-    id: "4568f3761d8faacbe019ad83a8f076b8f125f859.boutiques",
+    id: "5aa09ff9ec4b21693b7d07b8329c2bc641669b7c.boutiques",
     name: "labelconvert",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

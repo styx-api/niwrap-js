@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BORDER_TO_ROIS_METADATA: Metadata = {
-    id: "373a5895ca47f4db30fc8c918682860fcff38c65.boutiques",
+    id: "d27e55d16af9c127031efb25bfee0f3793658e98.boutiques",
     name: "border-to-rois",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

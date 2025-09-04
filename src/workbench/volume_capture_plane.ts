@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_CAPTURE_PLANE_METADATA: Metadata = {
-    id: "b2bfd3d4513396540148947511ec229d0418fc44.boutiques",
+    id: "fce982f3ac61b3a6dc85a30dbe38533edd029421.boutiques",
     name: "volume-capture-plane",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

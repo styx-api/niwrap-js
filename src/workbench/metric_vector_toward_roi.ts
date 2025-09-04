@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_VECTOR_TOWARD_ROI_METADATA: Metadata = {
-    id: "39f00246a80e307faadb16ce8706b33001b8daf4.boutiques",
+    id: "6787be48822358a7213f746f7be34a018067adb3.boutiques",
     name: "metric-vector-toward-roi",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_APPLY_WARPFIELD_METADATA: Metadata = {
-    id: "bb56dca2a52a7c8e9da433938bfccacc96707a6b.boutiques",
+    id: "6a441ba1d393e5ce7c0331880f44291c415f3d62.boutiques",
     name: "surface-apply-warpfield",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

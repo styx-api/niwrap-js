@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SPEC_FILE_MERGE_METADATA: Metadata = {
-    id: "2c5e3a5c053998c2a574a6f035a5993430771a18.boutiques",
+    id: "dc8ed74b03797d25ba546c4df5d98037f0153fa7.boutiques",
     name: "spec-file-merge",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

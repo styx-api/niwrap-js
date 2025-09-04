@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRCOLOUR_METADATA: Metadata = {
-    id: "e6c45c8266fa3fbd176831198e96ef4481f849fa.boutiques",
+    id: "9cd4b4f06262529bb32fb59ee13631275aef99fa.boutiques",
     name: "mrcolour",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

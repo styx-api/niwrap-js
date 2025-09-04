@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONVERT_WARPFIELD_METADATA: Metadata = {
-    id: "5aca5599202d9368288de6e4b335fa121d4945c6.boutiques",
+    id: "5fe37befef070c4bb946473c38eed5fa3b83614b.boutiques",
     name: "convert-warpfield",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

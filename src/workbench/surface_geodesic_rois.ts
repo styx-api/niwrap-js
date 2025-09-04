@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_GEODESIC_ROIS_METADATA: Metadata = {
-    id: "17465667f4121005f399362ce1feed5001c531cc.boutiques",
+    id: "72311c67a08117facc775f0d49b6e99ecfb7beb1.boutiques",
     name: "surface-geodesic-rois",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

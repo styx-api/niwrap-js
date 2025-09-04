@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SPEC_FILE_RELOCATE_METADATA: Metadata = {
-    id: "2d2973acdec95aaa23b607a3339fa38ce965c8dd.boutiques",
+    id: "749f2233af5a8f3e4bd24c29117982578dc8bf47.boutiques",
     name: "spec-file-relocate",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

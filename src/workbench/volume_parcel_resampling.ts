@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_PARCEL_RESAMPLING_METADATA: Metadata = {
-    id: "05f92ef977b53987cf5dd7d77550664f10e2cf24.boutiques",
+    id: "5bbe50c5806e2adef7cc3daf350744e6e52e6e64.boutiques",
     name: "volume-parcel-resampling",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

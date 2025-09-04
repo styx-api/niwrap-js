@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_REGRESSION_METADATA: Metadata = {
-    id: "e3641a35c57716914631d8e27cdf8dee58a0c389.boutiques",
+    id: "478fb33cff7af2c028c82b1a87cc021ded62f90d.boutiques",
     name: "metric-regression",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

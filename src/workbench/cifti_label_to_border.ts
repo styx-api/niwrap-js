@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_LABEL_TO_BORDER_METADATA: Metadata = {
-    id: "219fc4b38b48ad206c378cfe5c40df75c43bd2b7.boutiques",
+    id: "47da628bfbf4e955d157fbb860fd530ed67ce718.boutiques",
     name: "cifti-label-to-border",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

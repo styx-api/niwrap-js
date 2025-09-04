@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_MATH_METADATA: Metadata = {
-    id: "5bfe688c77b83ede649dbc7e9363c5afcb76bbc3.boutiques",
+    id: "452fbf26e7e7dec769a52f1743e09cb940aeff81.boutiques",
     name: "cifti-math",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

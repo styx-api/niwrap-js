@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_LABEL_PROBABILITY_METADATA: Metadata = {
-    id: "033d0943e88cf732fa2ad3c67379932026e9c0bb.boutiques",
+    id: "f07d6d6741808c71835239e6130a80db4872e584.boutiques",
     name: "cifti-label-probability",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

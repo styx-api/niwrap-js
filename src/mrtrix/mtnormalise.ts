@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MTNORMALISE_METADATA: Metadata = {
-    id: "f1833d2ac76f43cec968d20e8d2c21a993a925a3.boutiques",
+    id: "3bc2bbe8af34500259b7245db2d18482e852bfea.boutiques",
     name: "mtnormalise",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

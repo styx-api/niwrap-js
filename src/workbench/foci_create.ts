@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FOCI_CREATE_METADATA: Metadata = {
-    id: "b44d5a5c475f62b461f92b071ae7cead58a1f1d0.boutiques",
+    id: "2e6c039919782b63c07e5badc35659f838c016d5.boutiques",
     name: "foci-create",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

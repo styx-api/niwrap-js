@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TCKGLOBAL_METADATA: Metadata = {
-    id: "cae2ccc88f0085f525ed9602a03dca47884d2293.boutiques",
+    id: "31e24266a6d4374cd9c0a8ed5d9d697b1c511208.boutiques",
     name: "tckglobal",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

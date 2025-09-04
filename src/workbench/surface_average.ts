@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_AVERAGE_METADATA: Metadata = {
-    id: "e4592244ed0a54b4182ce9f5b2c0d504dc9489bf.boutiques",
+    id: "eb8455e8a7cbe64873a585671039f835b925b8e1.boutiques",
     name: "surface-average",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

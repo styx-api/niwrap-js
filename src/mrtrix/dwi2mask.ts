@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DWI2MASK_METADATA: Metadata = {
-    id: "9d585c1eb8931fbf6a7b9b4efcfcbe79a0ec151f.boutiques",
+    id: "5345247ad41518ec6a872de4d754e7c58b01dff1.boutiques",
     name: "dwi2mask",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_FLIP_LR_METADATA: Metadata = {
-    id: "d0e70e761eb50274c5b9e68f2aad485f834cf893.boutiques",
+    id: "40cffc47a1b0a452d60871c5a8697c2aec5d0f41.boutiques",
     name: "surface-flip-lr",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

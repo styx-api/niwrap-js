@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIXELCORRESPONDENCE_METADATA: Metadata = {
-    id: "e8b9ecaf4d43ab1afe6a42a47e88079ef6be0ada.boutiques",
+    id: "0cdb6d5a0f6fc504a73335d26a91aed6bead44ba.boutiques",
     name: "fixelcorrespondence",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

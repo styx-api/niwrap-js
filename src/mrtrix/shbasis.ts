@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SHBASIS_METADATA: Metadata = {
-    id: "342d9aaa228ccec745a5fbb2776b3c0c98248b3c.boutiques",
+    id: "8d1c3a9e142d8ac3b0cfbca9e0fcd6b3d41e317e.boutiques",
     name: "shbasis",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

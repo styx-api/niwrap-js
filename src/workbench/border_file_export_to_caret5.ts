@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BORDER_FILE_EXPORT_TO_CARET5_METADATA: Metadata = {
-    id: "c6222e815dc12e3246ef1e271032f35ed2201092.boutiques",
+    id: "5bdb523cf35c997b31a3b9033a83e1125033b032.boutiques",
     name: "border-file-export-to-caret5",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

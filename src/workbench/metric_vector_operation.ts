@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_VECTOR_OPERATION_METADATA: Metadata = {
-    id: "dfabb9ee1c9e2b4449657824237da8d1aff0d925.boutiques",
+    id: "b8b4b874885f0add6a529815e987670c96ebd34a.boutiques",
     name: "metric-vector-operation",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

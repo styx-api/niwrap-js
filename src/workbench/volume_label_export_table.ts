@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_LABEL_EXPORT_TABLE_METADATA: Metadata = {
-    id: "86c9c9cf58b47541d1d528902747ffa6459b6bac.boutiques",
+    id: "8b2a5ebf37ad42d3896a841a48969f292d5ee628.boutiques",
     name: "volume-label-export-table",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

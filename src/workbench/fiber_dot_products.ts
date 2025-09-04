@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIBER_DOT_PRODUCTS_METADATA: Metadata = {
-    id: "6de4250098eba964a2de1317984029cbcc59eda2.boutiques",
+    id: "1bea023ebc341c8821892b782bf2c571990af31a.boutiques",
     name: "fiber-dot-products",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIXELREORIENT_METADATA: Metadata = {
-    id: "1d1bbfeda8f81b813fcbd9b8dd41dc9022366bdd.boutiques",
+    id: "c2bf37ec8d7ea2da68c628776a8974d1b5351f66.boutiques",
     name: "fixelreorient",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

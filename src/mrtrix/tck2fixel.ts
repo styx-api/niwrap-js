@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TCK2FIXEL_METADATA: Metadata = {
-    id: "7fb114318f85708b8964636c42efd5059fa77887.boutiques",
+    id: "90f8734af004cf66512561b61fbe57f5bc2f690a.boutiques",
     name: "tck2fixel",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

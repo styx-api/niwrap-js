@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MASKFILTER_METADATA: Metadata = {
-    id: "d840afad55e7b22d2468db1a39492bd06fd9a30d.boutiques",
+    id: "b76a6dd73084b9b3914644ade090d2c6bf379b1d.boutiques",
     name: "maskfilter",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

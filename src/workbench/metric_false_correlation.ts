@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_FALSE_CORRELATION_METADATA: Metadata = {
-    id: "b999ec07c385ff34f8bea679627480ede5acb598.boutiques",
+    id: "4210406d263a91fc208a58736487b73caec3c5a1.boutiques",
     name: "metric-false-correlation",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

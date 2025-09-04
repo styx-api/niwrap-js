@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SH2POWER_METADATA: Metadata = {
-    id: "51541fdc4332f8deff6104a920269e275945d304.boutiques",
+    id: "a770bfd27441085e1e72ab3538cb5be866f4dd4f.boutiques",
     name: "sh2power",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

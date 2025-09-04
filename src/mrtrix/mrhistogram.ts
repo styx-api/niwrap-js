@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRHISTOGRAM_METADATA: Metadata = {
-    id: "ade91b73497b020ffb26e31a552c8567783427a9.boutiques",
+    id: "5c07265a48110ef8900f48adf78d74320253b0c0.boutiques",
     name: "mrhistogram",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",

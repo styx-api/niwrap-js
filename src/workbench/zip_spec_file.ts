@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ZIP_SPEC_FILE_METADATA: Metadata = {
-    id: "e38a56e73a56a48cda645c57df326064def2b183.boutiques",
+    id: "5bc4445351c0f8efed67b439599fb8b5b4042e41.boutiques",
     name: "zip-spec-file",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

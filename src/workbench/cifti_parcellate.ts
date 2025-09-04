@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_PARCELLATE_METADATA: Metadata = {
-    id: "7a5e906368600f826c9c63355f1cd694fa2a618a.boutiques",
+    id: "09eebc79465dbc1545219d2adbd3332cbcb71232.boutiques",
     name: "cifti-parcellate",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",

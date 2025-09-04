@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_FIND_CLUSTERS_METADATA: Metadata = {
-    id: "8f8c421cfcc6891dc0b34062a0a4b3b1a291fe3e.boutiques",
+    id: "bad1c1bcb6a58fa1b8a2f5e514a762cf71edc56a.boutiques",
     name: "metric-find-clusters",
     package: "workbench",
     container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
