@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_BRAIN_EXTRACTION_SH_METADATA: Metadata = {
-    id: "213a7e9d04883d3a1da6772d0c400d3c8b109028.boutiques",
+    id: "1c9417f2b9955b0d99b45712b650286b61783b3e.boutiques",
     name: "antsBrainExtraction.sh",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -266,9 +266,9 @@ function ants_brain_extraction_sh_outputs(
 ): AntsBrainExtractionShOutputs {
     const ret: AntsBrainExtractionShOutputs = {
         root: execution.outputFile("."),
-        brain_extracted_image: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "_BrainExtractionBrain.nii.gz"].join('')) : null,
-        brain_mask: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "_BrainExtractionMask.nii.gz"].join('')) : null,
-        brain_probability_mask: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "BrainExtractionPrior0GenericAffine.mat"].join('')) : null,
+        brain_extracted_image: execution.outputFile([(params["output_prefix"] ?? ""), "BrainExtractionBrain.nii.gz"].join('')),
+        brain_mask: execution.outputFile([(params["output_prefix"] ?? ""), "BrainExtractionMask.nii.gz"].join('')),
+        brain_probability_mask: execution.outputFile([(params["output_prefix"] ?? ""), "BrainExtractionPrior0GenericAffine.mat"].join('')),
     };
     return ret;
 }
