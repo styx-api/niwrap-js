@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3DRESAMPLE_METADATA: Metadata = {
-    id: "c0aa0fa9560446a135dad492fcfd16c35e59d09a.boutiques",
+    id: "8a3913d033c0e71a4bd6f9bad072454f5fd37c5b.boutiques",
     name: "3dresample",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

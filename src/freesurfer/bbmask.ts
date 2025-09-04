@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BBMASK_METADATA: Metadata = {
-    id: "3655e677c7fb826f63ccb1bcc455303aa52c7b56.boutiques",
+    id: "a836059c0ed308457e36032736d75953ebf2eb7e.boutiques",
     name: "bbmask",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

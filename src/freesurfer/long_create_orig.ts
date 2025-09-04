@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LONG_CREATE_ORIG_METADATA: Metadata = {
-    id: "82edfa303971a365773e3dcd133b432563fff25d.boutiques",
+    id: "ab4e59774c02e65ea0d6e83e65869f67ba49bb38.boutiques",
     name: "long_create_orig",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

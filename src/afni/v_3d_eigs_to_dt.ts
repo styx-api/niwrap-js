@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_EIGS_TO_DT_METADATA: Metadata = {
-    id: "2a859820023438ce7134628316920f709603fea4.boutiques",
+    id: "dbdc99d3e2baf249bb90fe77b70d558550d64576.boutiques",
     name: "3dEigsToDT",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

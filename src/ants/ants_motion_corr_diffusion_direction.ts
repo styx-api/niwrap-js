@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_MOTION_CORR_DIFFUSION_DIRECTION_METADATA: Metadata = {
-    id: "3f81491f1faf2e11f2fe0e69121f28544825a2d4.boutiques",
+    id: "51520fefaa85454741e16e945d90ced605da05d0.boutiques",
     name: "antsMotionCorrDiffusionDirection",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

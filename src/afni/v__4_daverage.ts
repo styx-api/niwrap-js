@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__4_DAVERAGE_METADATA: Metadata = {
-    id: "48ae0996463928a201144da1e797f6f4415ed5c4.boutiques",
+    id: "cfb332d0717a18e6198e0993e02a43b342500a1f.boutiques",
     name: "@4Daverage",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

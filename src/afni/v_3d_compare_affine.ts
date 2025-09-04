@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_COMPARE_AFFINE_METADATA: Metadata = {
-    id: "d33e1943950db976fb3b7c9bb263a88cae31d503.boutiques",
+    id: "04d001195182e6193557b2d3270db9ca8f081ce9.boutiques",
     name: "3dCompareAffine",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

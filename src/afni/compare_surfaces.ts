@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const COMPARE_SURFACES_METADATA: Metadata = {
-    id: "653d6f831efb2cdba11144f083f4857fcc5112b4.boutiques",
+    id: "bb94c4839cb49074e0946b62165af328d09020b8.boutiques",
     name: "CompareSurfaces",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_TRANSFORM_INFO_METADATA: Metadata = {
-    id: "639dde226cefbb6123bb32ff026f6143620a9120.boutiques",
+    id: "28abd0b38cba101254396942e6a9c4a39383ae1d.boutiques",
     name: "antsTransformInfo",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MAKE_AVERAGE_SUBJECT_METADATA: Metadata = {
-    id: "d8d131694715147d0775838921da6857a34d7a75.boutiques",
+    id: "c746adceb1adb4c0559be3ecf5c93fe6c7f33526.boutiques",
     name: "make_average_subject",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

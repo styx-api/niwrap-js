@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__GET_AFNI_ORIENT_METADATA: Metadata = {
-    id: "c762859f5f7c452b51a781a2d7fabbb5993939a9.boutiques",
+    id: "918b4490cd27c9578336b43b6079765db775bef2.boutiques",
     name: "@GetAfniOrient",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

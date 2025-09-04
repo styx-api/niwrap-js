@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_AUTO_TCORRELATE_METADATA: Metadata = {
-    id: "f8dd31b3bdbd84c61b724bec91c847beb95fd339.boutiques",
+    id: "c58c29aebe6d8ed9b1f12f5985d7470add3f97dc.boutiques",
     name: "3dAutoTcorrelate",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

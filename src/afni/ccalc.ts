@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CCALC_METADATA: Metadata = {
-    id: "858c935b6b57b9962c3e64fe8202799fde8e6c22.boutiques",
+    id: "b145289273191dd83b1fd1959696713496ba9bee.boutiques",
     name: "ccalc",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

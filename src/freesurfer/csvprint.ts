@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CSVPRINT_METADATA: Metadata = {
-    id: "88fe426126aea1052da673cfeee9f2078fb01491.boutiques",
+    id: "d678521bcbfff71f3853debd657f7f1d29702d43.boutiques",
     name: "csvprint",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

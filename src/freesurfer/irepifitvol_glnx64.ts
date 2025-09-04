@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IREPIFITVOL_GLNX64_METADATA: Metadata = {
-    id: "844a98eac80577b9cd78380d611cc940c14cec64.boutiques",
+    id: "a086fe8ba3cbfd5163cdfddf0cd873ea526cb155.boutiques",
     name: "irepifitvol.glnx64",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const INFLATE_SUBJECT3_METADATA: Metadata = {
-    id: "a274d70311c1a539bade6099eed3c3f3614e2009.boutiques",
+    id: "2a3467cdf0c5364fc88afa8035d3e46ffcdacfe8.boutiques",
     name: "inflate_subject3",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ADJUNCT_AW_TABLEIZE_ROI_INFO_PY_METADATA: Metadata = {
-    id: "e640a48f377be12b6e77c80d6bd5595370ba1278.boutiques",
+    id: "16877ea12882bb31c98f050fe7943b752aec5a92.boutiques",
     name: "adjunct_aw_tableize_roi_info.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

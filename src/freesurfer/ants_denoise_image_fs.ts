@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_DENOISE_IMAGE_FS_METADATA: Metadata = {
-    id: "ceaab64d93fccf1f1155efcaaae5de0e2ed14132.boutiques",
+    id: "f9289acabc02e5068ccac6d203b039dabfab1bc0.boutiques",
     name: "AntsDenoiseImageFs",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

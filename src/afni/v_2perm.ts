@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_2PERM_METADATA: Metadata = {
-    id: "28ec035abc2bb2469bea6827599cc10fb826ba3c.boutiques",
+    id: "540f8e1f8b85823bcf0dba52846ee4ef33340eca.boutiques",
     name: "2perm",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

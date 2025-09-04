@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURF_MESH_METADATA: Metadata = {
-    id: "6066359d8c294ca53c640b4ebcdab63e664ed84c.boutiques",
+    id: "af151bca250ded8682ed75de04495e4b9cd36e51.boutiques",
     name: "SurfMesh",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

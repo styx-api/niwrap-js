@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ISO_SURFACE_METADATA: Metadata = {
-    id: "891f1d7b5d35cf767a77b8a6bbe7028a6cad880f.boutiques",
+    id: "97d44cc73a450dd708c49801cabdc7adefa67264.boutiques",
     name: "IsoSurface",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

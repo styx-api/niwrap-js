@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_TSPLIT4_D_METADATA: Metadata = {
-    id: "b185565e8ecc1b6cef0d573d633b301533b5c899.boutiques",
+    id: "f793f3b639c9da84b752d9dfa8909607817a79ec.boutiques",
     name: "3dTsplit4D",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

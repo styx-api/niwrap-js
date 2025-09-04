@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__NOISY_SKULL_STRIP_METADATA: Metadata = {
-    id: "e98b609b47a8089d945c591b91e1f67238f32e0b.boutiques",
+    id: "e8c5e242c55a2b267d7a9de26d094a745d15af66.boutiques",
     name: "@NoisySkullStrip",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

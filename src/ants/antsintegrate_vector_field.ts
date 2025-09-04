@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTSINTEGRATE_VECTOR_FIELD_METADATA: Metadata = {
-    id: "25eaf01e25105beba3ae7eb2187714401340f8d4.boutiques",
+    id: "834181e3e327a31ccc73d56b821e216f4579fc76.boutiques",
     name: "ANTSIntegrateVectorField",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_LMER_METADATA: Metadata = {
-    id: "8a20ec1dad15f735378cd37a5c99e69b69118bc1.boutiques",
+    id: "716346bea5e7c26c346b9be754d889886a9feaa2.boutiques",
     name: "3dLMEr",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

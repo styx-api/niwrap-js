@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DIFFUSION_UTILS_METADATA: Metadata = {
-    id: "7be8ebb9754439dfbaa88637615d07589e30bde0.boutiques",
+    id: "630e5deb25babaf629430731349f2f52c949dcea.boutiques",
     name: "diffusionUtils",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

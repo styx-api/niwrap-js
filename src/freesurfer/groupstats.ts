@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GROUPSTATS_METADATA: Metadata = {
-    id: "d0e0e6491ed9bbf234f3fd24a7e51569d8554db5.boutiques",
+    id: "1337c3b328ab17c6f4b432a86eb71e0498c98adf.boutiques",
     name: "groupstats",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

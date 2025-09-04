@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GCAINIT_METADATA: Metadata = {
-    id: "00dfdd96c6b86f2b1c5b47fc4b41253a5bcd0e9f.boutiques",
+    id: "7a2fe85ce0a55a53579f1c2b93d5c87e23c74e9b.boutiques",
     name: "gcainit",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

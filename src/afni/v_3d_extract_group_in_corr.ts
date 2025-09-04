@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_EXTRACT_GROUP_IN_CORR_METADATA: Metadata = {
-    id: "db8b581acc747baf59f28e6dc59ae40bd84d02f5.boutiques",
+    id: "bf4ab9978725a057e015773eda00c5d63ac89f4d.boutiques",
     name: "3dExtractGroupInCorr",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

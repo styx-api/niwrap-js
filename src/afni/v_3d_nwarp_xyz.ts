@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_NWARP_XYZ_METADATA: Metadata = {
-    id: "67cdd4619b5c8cf49e16cb21278fc3347a324697.boutiques",
+    id: "b3e50bef18db95c8d2cd2dc41d63b8a7d7da7351.boutiques",
     name: "3dNwarpXYZ",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

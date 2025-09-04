@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DMRI_EXTRACT_SURFACE_MEASUREMENTS_METADATA: Metadata = {
-    id: "1571ae7852c5d0ff3bb69988315d8db4d363f2a7.boutiques",
+    id: "ba58cc768fedfd8c0bd03df98664733dd0e1a4e1.boutiques",
     name: "dmri_extractSurfaceMeasurements",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

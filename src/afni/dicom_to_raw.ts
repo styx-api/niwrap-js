@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DICOM_TO_RAW_METADATA: Metadata = {
-    id: "ca648caf3773ae863aa716fd8d0405d25e6caa2c.boutiques",
+    id: "0a2cbde328d9c72d2d7fb7cc92352b0a51cb72ce.boutiques",
     name: "dicom_to_raw",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

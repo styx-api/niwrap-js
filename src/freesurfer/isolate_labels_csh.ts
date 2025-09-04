@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ISOLATE_LABELS_CSH_METADATA: Metadata = {
-    id: "3b540edf6cbbc409752b8941b289e046f63fe950.boutiques",
+    id: "e20006c5ec4b137448d99abb3104cf26b17519ce.boutiques",
     name: "isolate_labels.csh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

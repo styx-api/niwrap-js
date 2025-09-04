@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__FAST_ROI_METADATA: Metadata = {
-    id: "d18cbef8d851f59f23b93093ca933ae2433a09f2.boutiques",
+    id: "be9840e265ca2a4c3bef07aff8593f44a38ea15a.boutiques",
     name: "@fast_roi",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_INTRODUCTION_SH_METADATA: Metadata = {
-    id: "6f0329e230aecd9f473f8bfee09a2f70f75f8d5f.boutiques",
+    id: "2466e97f47783a3d8aa1ce52756260c6e54db2c7.boutiques",
     name: "antsIntroduction.sh",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_LOCAL_HISTOG_METADATA: Metadata = {
-    id: "a76400adcb984e82c7f568b9ba39dc70fabc3b25.boutiques",
+    id: "29b9c068d0dd2ea7db278ff9e7df60f9fb5c6103.boutiques",
     name: "3dLocalHistog",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

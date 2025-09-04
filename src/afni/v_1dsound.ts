@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1DSOUND_METADATA: Metadata = {
-    id: "a2187dd6e3b2350eeb3cfc198b09c50fce524010.boutiques",
+    id: "628c042af33e7cfd3d20ba716e2c0a2d1c6e98b6.boutiques",
     name: "1dsound",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURF2_VOL_COORD_METADATA: Metadata = {
-    id: "6fe6474a33c8e23675d3aa29e680feb2c2b37bc1.boutiques",
+    id: "83f5c27753a488afc50b351a43a27d3604840686.boutiques",
     name: "Surf2VolCoord",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

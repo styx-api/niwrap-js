@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANNOT2STD_METADATA: Metadata = {
-    id: "94260c16cb751cafe61816e78c1cd15d1558bf0f.boutiques",
+    id: "45b8175f1d07bf65b5ac1029d277b1f4d1aa942b.boutiques",
     name: "annot2std",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

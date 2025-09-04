@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONVERT_TO_JPG_METADATA: Metadata = {
-    id: "8809a82ad329669ba7c0f84e2805ba33736f42f2.boutiques",
+    id: "05ba9d9a81340f45633926fc4c293fdf619a95ab.boutiques",
     name: "ConvertToJpg",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

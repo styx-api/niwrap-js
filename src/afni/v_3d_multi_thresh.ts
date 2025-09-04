@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_MULTI_THRESH_METADATA: Metadata = {
-    id: "0cd522f82df292e38bac580f53ce63e58f4d0ba1.boutiques",
+    id: "f72f5d78b27fbaeb74d57fefdb1f807e2d3688b6.boutiques",
     name: "3dMultiThresh",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

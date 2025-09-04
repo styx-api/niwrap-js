@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IMAND_METADATA: Metadata = {
-    id: "b40e806d98777d64f69b492452a28ccfcaf0b51d.boutiques",
+    id: "987cb10db225be56d6e8bb2ec32c65ec1c02e5c3.boutiques",
     name: "imand",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

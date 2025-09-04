@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IFH2HDR_METADATA: Metadata = {
-    id: "e59ad437a43879fdeda8a194eb2d5e26f853b35c.boutiques",
+    id: "53f38f2257522a311eff6febece86eb780805751.boutiques",
     name: "ifh2hdr",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

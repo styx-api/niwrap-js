@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_DIFF_METADATA: Metadata = {
-    id: "7213e0a8a950ad09edafb5b67833470abda8875b.boutiques",
+    id: "8694f200d58e60edf8f8355fa427160988463ac9.boutiques",
     name: "3dDiff",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

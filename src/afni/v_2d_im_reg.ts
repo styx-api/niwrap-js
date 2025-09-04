@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_2D_IM_REG_METADATA: Metadata = {
-    id: "d47b19dea6381753231a4f8437ee507f05018c19.boutiques",
+    id: "32da490dea2c5596f84ae91dd7499565aaa2b274.boutiques",
     name: "2dImReg",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PASTE_IMAGE_INTO_IMAGE_METADATA: Metadata = {
-    id: "9d834deda72a140f802dfa3b6f3bd17b6d523a5e.boutiques",
+    id: "9434da4462a4b038646e9361e0a0659838206323.boutiques",
     name: "PasteImageIntoImage",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

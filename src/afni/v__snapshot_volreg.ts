@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SNAPSHOT_VOLREG_METADATA: Metadata = {
-    id: "0ab483377c7792acf3771a7e98a2455e1c16e3fd.boutiques",
+    id: "ea426c0369e8313557cfb4056ece5365e472d055.boutiques",
     name: "@snapshot_volreg",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

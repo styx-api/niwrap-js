@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TIME_SCCAN_METADATA: Metadata = {
-    id: "636d05858d3ab57e8c195487beafbfd59af74276.boutiques",
+    id: "df24e51b7f0bd36e46f31654254028b83351eca4.boutiques",
     name: "TimeSCCAN",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

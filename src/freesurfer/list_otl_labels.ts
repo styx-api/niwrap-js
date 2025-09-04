@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LIST_OTL_LABELS_METADATA: Metadata = {
-    id: "bd7fd10424a3f1c598cf12650090350577b5ac40.boutiques",
+    id: "859a8dfc62a45a6e9d9a78823fda063b71532ae7.boutiques",
     name: "list_otl_labels",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

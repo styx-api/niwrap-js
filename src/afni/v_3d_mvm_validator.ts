@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_MVM_VALIDATOR_METADATA: Metadata = {
-    id: "e2027a3d76186546c459d0b1c59c43c4261bfe5b.boutiques",
+    id: "a3d780f06ce379cf9ef7ff9d1932a56c6f599810.boutiques",
     name: "3dMVM_validator",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

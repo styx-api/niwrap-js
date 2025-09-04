@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const QHULL_METADATA: Metadata = {
-    id: "36c4abb8c29f69fab57cfb4a2bc32d5fb32edf2e.boutiques",
+    id: "7cf282f989e22a92a6d1e41d86ce6515a481efaa.boutiques",
     name: "qhull",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

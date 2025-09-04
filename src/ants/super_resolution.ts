@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SUPER_RESOLUTION_METADATA: Metadata = {
-    id: "cd1212b3e1e62a6349afb70d130bc6b89439a7a0.boutiques",
+    id: "43633248dbf860a4c25d3ebe276d5309b6f64610.boutiques",
     name: "SuperResolution",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

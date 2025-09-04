@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__COMMAND_GLOBB_METADATA: Metadata = {
-    id: "19059f03ec1fbfb49f8e3392d02a5af22e17fec6.boutiques",
+    id: "953bb7b12ef5b6600c31268fb6295e56ede7c7ab.boutiques",
     name: "@CommandGlobb",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

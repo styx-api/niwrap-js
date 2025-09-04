@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1D_MARRY_METADATA: Metadata = {
-    id: "451c2e1e1510e8db86d7d55846288c13e106eaf6.boutiques",
+    id: "cc94cabd89bb70b7939757f293061c23f4519b11.boutiques",
     name: "1dMarry",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

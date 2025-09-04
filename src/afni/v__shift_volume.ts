@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SHIFT_VOLUME_METADATA: Metadata = {
-    id: "cc600997e0c495954f45b1b016157de5ebc451b5.boutiques",
+    id: "e886b20c9364e4346612208307ee63b19d531072.boutiques",
     name: "@Shift_Volume",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

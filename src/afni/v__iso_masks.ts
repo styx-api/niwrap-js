@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__ISO_MASKS_METADATA: Metadata = {
-    id: "efb13b19016645aff7a7273058c6f68edcfc682d.boutiques",
+    id: "9aefd10622f856917f37760a8b99e0cabbede244.boutiques",
     name: "@IsoMasks",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

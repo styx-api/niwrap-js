@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SMOOTH_IMAGE_METADATA: Metadata = {
-    id: "c743ecca2407454064c39d3994944e2822b5560a.boutiques",
+    id: "0b9f787af4c1a0fcf3db27f547e0fd544c29f18f.boutiques",
     name: "SmoothImage",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

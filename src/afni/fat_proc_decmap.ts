@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FAT_PROC_DECMAP_METADATA: Metadata = {
-    id: "ac47e7cad79ac062c31e79aa1b2269438c541ff1.boutiques",
+    id: "ca491f287d5cb34d79116906fd02296391367e14.boutiques",
     name: "fat_proc_decmap",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

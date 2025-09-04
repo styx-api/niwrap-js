@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3DAXIALIZE_METADATA: Metadata = {
-    id: "a6d7c2a7a9db46fb00a81d8e8f737c33f01dcc59.boutiques",
+    id: "c1898d45d46d749a0dc725e71c68225ccc7797f4.boutiques",
     name: "3daxialize",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

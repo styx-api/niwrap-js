@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const QUICK_ALPHA_VALS_PY_METADATA: Metadata = {
-    id: "43400d28d72275606480ec0f8739d52a9c960123.boutiques",
+    id: "240a9d3e24a1a2d167b06636e882d90d255a2a3c.boutiques",
     name: "quick.alpha.vals.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GEMS_COMPUTE_ATLAS_PROBS_METADATA: Metadata = {
-    id: "bb2ad12b36b45df1472550e075ee393432a9c45e.boutiques",
+    id: "515f7d1aaa2b2e2bd3ac13b072dede9d860ff7a0.boutiques",
     name: "gems_compute_atlas_probs",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

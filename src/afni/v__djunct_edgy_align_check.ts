@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__DJUNCT_EDGY_ALIGN_CHECK_METADATA: Metadata = {
-    id: "aa6a4a0022ad0531d548adba7cc36b0a1b5b39ae.boutiques",
+    id: "263194bcd65e1cbac2926808163efba80932de8e.boutiques",
     name: "@djunct_edgy_align_check",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

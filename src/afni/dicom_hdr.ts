@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DICOM_HDR_METADATA: Metadata = {
-    id: "06030930d3116d7bf58316357750a3ae68688ced.boutiques",
+    id: "f0edec277c064e3934045c9faf56bc0c162e5eeb.boutiques",
     name: "dicom_hdr",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

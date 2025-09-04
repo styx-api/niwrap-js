@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const KELLY_KAPOWSKI_METADATA: Metadata = {
-    id: "8cf867e1228b8566e73919051e43b36f34a80495.boutiques",
+    id: "b97e23c74e979e25131d125caf2f3c375778673f.boutiques",
     name: "KellyKapowski",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

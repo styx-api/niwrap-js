@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FLIRT_NEWDEFAULT_20080811_SCH_METADATA: Metadata = {
-    id: "feb43e2c92a18f6dadfa470638890ab96bd75d9d.boutiques",
+    id: "a098601132318cbfe2ff266fbec4a2a5cae16d22.boutiques",
     name: "flirt.newdefault.20080811.sch",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

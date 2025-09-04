@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSDCMDECOMPRESS_METADATA: Metadata = {
-    id: "30d6a93931c489cde2efd8a6696b27e23a3c1869.boutiques",
+    id: "67cffa7eac1e8233815a6f4a9ab769accda8f46c.boutiques",
     name: "fsdcmdecompress",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

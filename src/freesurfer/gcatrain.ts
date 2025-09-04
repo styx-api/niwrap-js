@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GCATRAIN_METADATA: Metadata = {
-    id: "f3164466ba4445f68d034989d08be3e16d734a52.boutiques",
+    id: "75583f5bb61b5d186dab3b53e5c1fde169f86d48.boutiques",
     name: "gcatrain",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

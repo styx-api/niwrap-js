@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const APARCSTATSDIFF_METADATA: Metadata = {
-    id: "4a3d5285bb31b350d627388c14efaeed5f882361.boutiques",
+    id: "cfdd4096c5662aa4f9a9611baf465343bb043a77.boutiques",
     name: "aparcstatsdiff",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

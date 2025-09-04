@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GCA_APPLY_METADATA: Metadata = {
-    id: "3eeb1cba1d7c8f0e6b004894e26c4716c5d93e5d.boutiques",
+    id: "694182fb584f9038ebca1a169c46117c3e0d43c0.boutiques",
     name: "gca-apply",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

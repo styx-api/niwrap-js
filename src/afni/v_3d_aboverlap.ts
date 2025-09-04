@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_ABOVERLAP_METADATA: Metadata = {
-    id: "da965209d42fc668bebfda9fab7d92b0cef8fd70.boutiques",
+    id: "38bc7ba550719cb365421b65b249f4f2cd07a334.boutiques",
     name: "3dABoverlap",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

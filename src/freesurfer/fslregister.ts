@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLREGISTER_METADATA: Metadata = {
-    id: "9ec9754c04caff23125f7deb97b579d2e3e28e25.boutiques",
+    id: "6bd3805871440ca11998e2002e3f8711494bc7d6.boutiques",
     name: "fslregister",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FS_CHECK_VERSION_METADATA: Metadata = {
-    id: "ac2742ad52c0ec9531a37b18769e9a1969669e97.boutiques",
+    id: "64bf79bdbdbb8ec6bf819241f1e5d3ea6e450803.boutiques",
     name: "fs-check-version",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_MEDIAN_FILTER_METADATA: Metadata = {
-    id: "8cec9e9f62ab9dcd134fce2ee61c1b34025a38f7.boutiques",
+    id: "617c14931eec5b5191d306af9970a225bbd22fa6.boutiques",
     name: "3dMedianFilter",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

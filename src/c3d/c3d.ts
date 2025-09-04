@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const C3D_METADATA: Metadata = {
-    id: "35e4245bf63783bc0aef1a9e52c17d86b5999c95.boutiques",
+    id: "85914b6dd698c9ef51ecebdc85ba5d9e1bd8f06c.boutiques",
     name: "c3d",
     package: "c3d",
     container_image_tag: "pyushkevich/itksnap:v3.8.2",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SCRIPT_CHECK_METADATA: Metadata = {
-    id: "d81cacac508059d0cecc8bef5d4a8425946e1d54.boutiques",
+    id: "ecd2a9292bb7df5d7ef5d0acef0705326b404a49.boutiques",
     name: "@ScriptCheck",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

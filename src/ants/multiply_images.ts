@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MULTIPLY_IMAGES_METADATA: Metadata = {
-    id: "129479c8d258bc3d54209e4195e6743927a43954.boutiques",
+    id: "457d757cba165176527dd842180ce013edc61605.boutiques",
     name: "MultiplyImages",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

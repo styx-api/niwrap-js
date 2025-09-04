@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABELS_INTERSECT_METADATA: Metadata = {
-    id: "983785cc757edbd08493db2a0f88b60b6b753bcf.boutiques",
+    id: "5d639bbfd162e906e9059ca104ed147ca988037e.boutiques",
     name: "labels_intersect",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

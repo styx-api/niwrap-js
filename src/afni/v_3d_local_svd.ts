@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_LOCAL_SVD_METADATA: Metadata = {
-    id: "f1614ff47ed09d8614f9811ea2b7772cb319daa0.boutiques",
+    id: "a7863df1586bb3bd5cd811b383b5caf113d92580.boutiques",
     name: "3dLocalSVD",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

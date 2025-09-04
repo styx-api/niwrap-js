@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DMRI_SAVE_HISTOGRAMS_METADATA: Metadata = {
-    id: "bb194c65a1426660b384fcbf85e8e5301e4425c1.boutiques",
+    id: "9c13eb2eb3b781b53fc909106a2b27e609b6ea8f.boutiques",
     name: "dmri_saveHistograms",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FAT_MVM_SCRIPTER_PY_METADATA: Metadata = {
-    id: "da61b76b3f825a46611c99151eed256c6fae9763.boutiques",
+    id: "9b3bc9fd729815c1d4263ce94ba8f03463293f18.boutiques",
     name: "fat_mvm_scripter.py",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

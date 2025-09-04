@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DMRI_AC_SH_METADATA: Metadata = {
-    id: "a5e9ef0f18ba9932988056847d608cbe806d5bed.boutiques",
+    id: "287622351d46590c1391cebf35d45dbab7c6ab7e.boutiques",
     name: "dmri_ac.sh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

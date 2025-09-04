@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BBREGISTER_METADATA: Metadata = {
-    id: "5afef238c6734753905291f538bd2eab731681c0.boutiques",
+    id: "7463c20db1e37dac761678dd13e5d83f67e9b51f.boutiques",
     name: "bbregister",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

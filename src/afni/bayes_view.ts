@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BAYES_VIEW_METADATA: Metadata = {
-    id: "21ede4a2b31dfb05d448cf196912dc72f15188bb.boutiques",
+    id: "9505bae1fe22a390a7c949d3eee05a64bdd40fb6.boutiques",
     name: "bayes_view",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FS_TEMP_FILE_METADATA: Metadata = {
-    id: "0af9f914376b0b96f8401ddfbac1babb938c4e65.boutiques",
+    id: "e13f522a68dfa61e1b1658e6733c2322a574a1cc.boutiques",
     name: "fs_temp_file",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

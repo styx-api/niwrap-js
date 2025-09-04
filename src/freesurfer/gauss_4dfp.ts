@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GAUSS_4DFP_METADATA: Metadata = {
-    id: "1b33166dfa5b19856253a99beba28cbf386876d7.boutiques",
+    id: "6d11d8425528912df342c19328cabab937d18ae5.boutiques",
     name: "gauss_4dfp",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

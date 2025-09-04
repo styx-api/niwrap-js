@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURF_CLUST_METADATA: Metadata = {
-    id: "7db6f82a57760f7846747e87ee25e2273bf54f9f.boutiques",
+    id: "af3d67f2fd2388454b25618145b4abdd170406fc.boutiques",
     name: "SurfClust",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTSJACOBIAN_METADATA: Metadata = {
-    id: "4c1495ce17166625b172b3fbe727bd30b17f079f.boutiques",
+    id: "d3e1548784785ff25ca205e88e434be38d8b149c.boutiques",
     name: "ANTSJacobian",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_SHARPEN_METADATA: Metadata = {
-    id: "bcc67a227d911d875ee67c8740d94a7a8b8e5f4f.boutiques",
+    id: "89056aeedfed68e218f19e717bb779c41496827e.boutiques",
     name: "3dSharpen",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

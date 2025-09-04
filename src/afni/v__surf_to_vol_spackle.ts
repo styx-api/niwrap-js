@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__SURF_TO_VOL_SPACKLE_METADATA: Metadata = {
-    id: "b6dc12ea2739e07bf96f46f96b9e18d749e7c831.boutiques",
+    id: "f935e80f0e8c3a679fc91decb05be875ab2940b9.boutiques",
     name: "@surf_to_vol_spackle",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

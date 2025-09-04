@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_DEGREE_CENTRALITY_METADATA: Metadata = {
-    id: "6b26eb322a598bdf48e84565bbf6674c9e7c8cf4.boutiques",
+    id: "92d1c07bfff26718b69be19ce1645a7154290cb7.boutiques",
     name: "3dDegreeCentrality",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

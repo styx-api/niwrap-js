@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const RMZ_METADATA: Metadata = {
-    id: "7b3623e5a5e9b6c5f11ff499f54a7ef56d132993.boutiques",
+    id: "3b8f3cf4c3c1f22210c3b2448f1539b6a30c6f8e.boutiques",
     name: "rmz",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

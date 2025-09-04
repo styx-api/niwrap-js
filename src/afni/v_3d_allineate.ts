@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_ALLINEATE_METADATA: Metadata = {
-    id: "05acda1bcc694397c89e84c0f214f9da9cbb22ef.boutiques",
+    id: "9ce154d883bf2de1c0766bcc756cdff4dc6a028d.boutiques",
     name: "3dAllineate",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FS_TUTORIAL_DATA_METADATA: Metadata = {
-    id: "bd2bd293ebd9f33142807aa996b1099448b46897.boutiques",
+    id: "57fbe6fd6f6adb6dc73c2b2a53ea70fb27a95b17.boutiques",
     name: "fs_tutorial_data",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

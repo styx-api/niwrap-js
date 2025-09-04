@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3DVOLREG_AFNI_METADATA: Metadata = {
-    id: "a987f8d62b507b62d7469f463040360283d6fc83.boutiques",
+    id: "f05024124f93d18d98ace7dc462475521ea11012.boutiques",
     name: "3dvolreg.afni",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

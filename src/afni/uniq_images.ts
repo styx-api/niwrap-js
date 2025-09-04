@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const UNIQ_IMAGES_METADATA: Metadata = {
-    id: "c07bc3b4b116658ca0c5dfc0c96a9903033bb6fc.boutiques",
+    id: "acfae7c985924ad5290478ad1896665b095375db.boutiques",
     name: "uniq_images",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

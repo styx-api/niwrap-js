@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const WARP_TENSOR_IMAGE_MULTI_TRANSFORM_METADATA: Metadata = {
-    id: "09b6e7210a53554c4b15442a89fd20d17d52efdc.boutiques",
+    id: "013f15045b6bdcf60fcdbe3fce339b08b8439b03.boutiques",
     name: "WarpTensorImageMultiTransform",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

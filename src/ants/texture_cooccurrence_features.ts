@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TEXTURE_COOCCURRENCE_FEATURES_METADATA: Metadata = {
-    id: "f339459e9d1dff3e54ce35265e05c10ef9820098.boutiques",
+    id: "36fd8d98a5b73dfdbef9caea9f2224df1cbd0850.boutiques",
     name: "TextureCooccurrenceFeatures",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

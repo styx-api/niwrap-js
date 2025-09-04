@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IMREG_METADATA: Metadata = {
-    id: "818a93bfe29ae4f138331b2556d371211371266b.boutiques",
+    id: "f9b37911bbee55f16e00b06af7413164ae887501.boutiques",
     name: "imreg",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

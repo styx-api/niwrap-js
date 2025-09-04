@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_GRAYPLOT_METADATA: Metadata = {
-    id: "9cc45e81af02b7ce8653e8e48c2ead1d99631336.boutiques",
+    id: "f6e3887ef52f450f8f7c42c285ca11d1dca72962.boutiques",
     name: "3dGrayplot",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

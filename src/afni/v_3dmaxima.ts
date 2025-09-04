@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3DMAXIMA_METADATA: Metadata = {
-    id: "661dd15298456527027272fd23dafea809da020e.boutiques",
+    id: "942fd5d4e896fb166b717953b82c141e702ff733.boutiques",
     name: "3dmaxima",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

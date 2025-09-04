@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IMAGE_MATH_METADATA: Metadata = {
-    id: "82ab1b6a89b333ecedac9318d1094ca4109c3bdb.boutiques",
+    id: "fadbb78c295789002a291f08bcdf90f7f7e37437.boutiques",
     name: "ImageMath",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

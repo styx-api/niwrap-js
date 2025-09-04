@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__RADIAL_CORRELATE_METADATA: Metadata = {
-    id: "0864ffc94296f3c83a9716405be98eb83c332604.boutiques",
+    id: "5487acf3efc87dd7d0a2394d13d967b2af4422ba.boutiques",
     name: "@radial_correlate",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

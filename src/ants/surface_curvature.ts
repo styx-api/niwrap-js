@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_CURVATURE_METADATA: Metadata = {
-    id: "87f1cb724fe10ba50c1127e085f66ffe3a26f96f.boutiques",
+    id: "bee64dd192f7fe0d06abc691a98d37f32e1acc45.boutiques",
     name: "SurfaceCurvature",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

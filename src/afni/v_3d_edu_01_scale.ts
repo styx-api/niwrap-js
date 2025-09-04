@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_EDU_01_SCALE_METADATA: Metadata = {
-    id: "e947f43445978afbd9eefab135b8411b3384a418.boutiques",
+    id: "bf9e7a5bd7bc4419390243111049a4474109df28.boutiques",
     name: "3dEdu_01_scale",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

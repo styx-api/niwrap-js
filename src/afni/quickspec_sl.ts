@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const QUICKSPEC_SL_METADATA: Metadata = {
-    id: "e5cdd0aedd96bc6df0f947244131010bf4fd383f.boutiques",
+    id: "fd331c76ba98dd01a788379c9648276752fb1af2.boutiques",
     name: "quickspecSL",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

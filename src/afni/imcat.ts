@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const IMCAT_METADATA: Metadata = {
-    id: "bce786a5067ed7717ffe2af0c0412eb468654e62.boutiques",
+    id: "6a0a0bce655557ed4d9e4948bfaf9cd151a149da.boutiques",
     name: "imcat",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

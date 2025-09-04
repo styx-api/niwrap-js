@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_AMP_TO_RSFC_METADATA: Metadata = {
-    id: "d5ce8762fb367cbe4d637153d3d9f376f76c9167.boutiques",
+    id: "d93e2359a57d357c7b1980a76378dde19262abcb.boutiques",
     name: "3dAmpToRSFC",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

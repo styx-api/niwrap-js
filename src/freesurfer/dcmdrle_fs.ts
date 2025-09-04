@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DCMDRLE_FS_METADATA: Metadata = {
-    id: "46c0ce2e6f9c8a200078216d5100f33419da71f7.boutiques",
+    id: "f1d616215cb1ba8369eba24de9e2bdabd7a39054.boutiques",
     name: "dcmdrle.fs",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

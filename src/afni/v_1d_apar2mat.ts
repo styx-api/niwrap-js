@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1D_APAR2MAT_METADATA: Metadata = {
-    id: "ca46e845c2aeb2bfc0d1ca66f53ca7adef2d7e64.boutiques",
+    id: "a38c141c8e7dcaa9be485e9b5281ec9cbae1bc6c.boutiques",
     name: "1dApar2mat",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

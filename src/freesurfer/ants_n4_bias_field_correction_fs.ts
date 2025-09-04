@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_N4_BIAS_FIELD_CORRECTION_FS_METADATA: Metadata = {
-    id: "34bd8726eced3d3149fa743ba7bb319ab5e8bfb5.boutiques",
+    id: "f7c05eb76747f2bed1da5f76ca71a39e0e609b4c.boutiques",
     name: "AntsN4BiasFieldCorrectionFs",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

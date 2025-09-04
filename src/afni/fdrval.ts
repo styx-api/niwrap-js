@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FDRVAL_METADATA: Metadata = {
-    id: "a0de8ec4e0e3a36fbc893d3b8b4292e32543fc80.boutiques",
+    id: "6580e1aa03a1bd1fe5cac6a65e7103bb65bb0dd7.boutiques",
     name: "fdrval",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

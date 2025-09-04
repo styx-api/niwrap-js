@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1DSUM_METADATA: Metadata = {
-    id: "951ee34d4f572f020c977d77aecef1c12039b08f.boutiques",
+    id: "076f7885b357064e414a836c5044b162ef80dacc.boutiques",
     name: "1dsum",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

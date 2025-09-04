@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_NEUROIMAGING_BATTERY_METADATA: Metadata = {
-    id: "95e3e2dd95a781fa72c8a244897c1688f10ab37d.boutiques",
+    id: "3c073ef3644ad5eb7696969346c7947932d963ad.boutiques",
     name: "antsNeuroimagingBattery",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

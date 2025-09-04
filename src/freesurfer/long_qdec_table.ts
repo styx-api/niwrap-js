@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LONG_QDEC_TABLE_METADATA: Metadata = {
-    id: "85d998ffbeab5b312320b201cbb085bfe7125309.boutiques",
+    id: "c025c5fd9851de6697e79b90c45e7c207fca34ea.boutiques",
     name: "long_qdec_table",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

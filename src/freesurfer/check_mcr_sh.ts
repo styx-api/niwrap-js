@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CHECK_MCR_SH_METADATA: Metadata = {
-    id: "3cf223c7fdc62b166c1577a94bc2b4f19d6881da.boutiques",
+    id: "26a2d886f94b630d8a88df334863e396bb69e62a.boutiques",
     name: "checkMCR.sh",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

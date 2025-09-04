@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const NICAT_METADATA: Metadata = {
-    id: "f07ebd8a4a69a3eed0a7d3aacc42caa99277edd7.boutiques",
+    id: "ca9eebfe58a16733378505aca09b8609d16496d5.boutiques",
     name: "nicat",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

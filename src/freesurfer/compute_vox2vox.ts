@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const COMPUTE_VOX2VOX_METADATA: Metadata = {
-    id: "4d8c087f21e8a558455971df7e63014f2fe6afc7.boutiques",
+    id: "73b2097f0e34a9af6523d118eff4b6ab65435900.boutiques",
     name: "compute_vox2vox",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

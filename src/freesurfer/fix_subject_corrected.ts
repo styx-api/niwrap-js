@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIX_SUBJECT_CORRECTED_METADATA: Metadata = {
-    id: "e9683c6b2300288726f90faacf8034788b095c6c.boutiques",
+    id: "37aedcb6955e632e84589ffaec6cf6b262cfcf65.boutiques",
     name: "fix_subject_corrected",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

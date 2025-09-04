@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSREALPATH_METADATA: Metadata = {
-    id: "72d52c391bbfeb21a2f969aa0469ec4c8267957d.boutiques",
+    id: "8239db172af5555995f2868bbea7ad04857bacdb.boutiques",
     name: "fsrealpath",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_FWHMX_METADATA: Metadata = {
-    id: "6272d178703339c8d6eba97fc0341f4e17ad91e9.boutiques",
+    id: "408b0ca2210d336d7abec8bdaf127930c857b898.boutiques",
     name: "3dFWHMx",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

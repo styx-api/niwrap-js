@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V__MAKE_PLUG_DIFF_METADATA: Metadata = {
-    id: "d1ce49de5eb108e0627f42d6a6246b152634ab14.boutiques",
+    id: "b2f0f17eb81cb2af9f53307b7c9521014f7908a4.boutiques",
     name: "@make_plug_diff",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CREATE_WARPED_GRID_IMAGE_METADATA: Metadata = {
-    id: "43b75b2bbf1de43489ea85a551208078dcde662b.boutiques",
+    id: "e77b860defec17e64141d0e139550e9625747193.boutiques",
     name: "CreateWarpedGridImage",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",

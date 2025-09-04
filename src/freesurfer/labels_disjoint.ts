@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABELS_DISJOINT_METADATA: Metadata = {
-    id: "b496ffd6d7aa4a8f3534391ff07d8324297f776c.boutiques",
+    id: "86418874c210febfd9899f1bd03f4fd4b41547fb.boutiques",
     name: "labels_disjoint",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
