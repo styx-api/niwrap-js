@@ -373,7 +373,7 @@ function volume_to_surface_mapping_ribbon_constrained_outputs(
 ): VolumeToSurfaceMappingRibbonConstrainedOutputs {
     const ret: VolumeToSurfaceMappingRibbonConstrainedOutputs = {
         root: execution.outputFile("."),
-        output_weights: (dynOutputs((params["output_weights"] ?? null)["@type"])?.((params["output_weights"] ?? null), execution) ?? null),
+        output_weights: (params["output_weights"] ?? null) ? (dynOutputs((params["output_weights"] ?? null)["@type"])?.((params["output_weights"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -557,7 +557,7 @@ function volume_to_surface_mapping_outputs(
     const ret: VolumeToSurfaceMappingOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
-        ribbon_constrained: (dynOutputs((params["ribbon_constrained"] ?? null)["@type"])?.((params["ribbon_constrained"] ?? null), execution) ?? null),
+        ribbon_constrained: (params["ribbon_constrained"] ?? null) ? (dynOutputs((params["ribbon_constrained"] ?? null)["@type"])?.((params["ribbon_constrained"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }

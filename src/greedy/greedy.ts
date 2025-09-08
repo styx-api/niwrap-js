@@ -1746,12 +1746,12 @@ function greedy_outputs(
     const ret: GreedyOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["output"] ?? null) !== null) ? execution.outputFile([(params["output"] ?? null)].join('')) : null,
-        invert: (dynOutputs((params["invert"] ?? null)["@type"])?.((params["invert"] ?? null), execution) ?? null),
-        root_: (dynOutputs((params["root"] ?? null)["@type"])?.((params["root"] ?? null), execution) ?? null),
-        jacobian: (dynOutputs((params["jacobian"] ?? null)["@type"])?.((params["jacobian"] ?? null), execution) ?? null),
-        reslice_moving_image: (dynOutputs((params["reslice_moving_image"] ?? null)["@type"])?.((params["reslice_moving_image"] ?? null), execution) ?? null),
-        reslice_surface: (dynOutputs((params["reslice_surface"] ?? null)["@type"])?.((params["reslice_surface"] ?? null), execution) ?? null),
-        reslice_simplex_jacobian: (dynOutputs((params["reslice_simplex_jacobian"] ?? null)["@type"])?.((params["reslice_simplex_jacobian"] ?? null), execution) ?? null),
+        invert: (params["invert"] ?? null) ? (dynOutputs((params["invert"] ?? null)["@type"])?.((params["invert"] ?? null), execution) ?? null) : null,
+        root_: (params["root"] ?? null) ? (dynOutputs((params["root"] ?? null)["@type"])?.((params["root"] ?? null), execution) ?? null) : null,
+        jacobian: (params["jacobian"] ?? null) ? (dynOutputs((params["jacobian"] ?? null)["@type"])?.((params["jacobian"] ?? null), execution) ?? null) : null,
+        reslice_moving_image: (params["reslice_moving_image"] ?? null) ? (dynOutputs((params["reslice_moving_image"] ?? null)["@type"])?.((params["reslice_moving_image"] ?? null), execution) ?? null) : null,
+        reslice_surface: (params["reslice_surface"] ?? null) ? (dynOutputs((params["reslice_surface"] ?? null)["@type"])?.((params["reslice_surface"] ?? null), execution) ?? null) : null,
+        reslice_simplex_jacobian: (params["reslice_simplex_jacobian"] ?? null) ? (dynOutputs((params["reslice_simplex_jacobian"] ?? null)["@type"])?.((params["reslice_simplex_jacobian"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }

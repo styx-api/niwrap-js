@@ -258,7 +258,7 @@ function convert_matrix4_to_matrix2_outputs(
         root: execution.outputFile("."),
         counts_out: execution.outputFile([(params["counts_out"] ?? null)].join('')),
         opt_distances_distance_out: ((params["opt_distances_distance_out"] ?? null) !== null) ? execution.outputFile([(params["opt_distances_distance_out"] ?? null)].join('')) : null,
-        individual_fibers: (dynOutputs((params["individual_fibers"] ?? null)["@type"])?.((params["individual_fibers"] ?? null), execution) ?? null),
+        individual_fibers: (params["individual_fibers"] ?? null) ? (dynOutputs((params["individual_fibers"] ?? null)["@type"])?.((params["individual_fibers"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }

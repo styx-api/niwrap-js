@@ -240,7 +240,7 @@ function cifti_label_to_border_outputs(
 ): CiftiLabelToBorderOutputs {
     const ret: CiftiLabelToBorderOutputs = {
         root: execution.outputFile("."),
-        border: ((params["border"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) ?? null),
+        border: (params["border"] ?? null) ? (params["border"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) : null,
     };
     return ret;
 }

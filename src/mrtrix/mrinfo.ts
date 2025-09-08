@@ -759,8 +759,8 @@ function mrinfo_outputs(
         json_all: ((params["json_all"] ?? null) !== null) ? execution.outputFile([(params["json_all"] ?? null)].join('')) : null,
         export_grad_mrtrix: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
         export_pe_table: ((params["export_pe_table"] ?? null) !== null) ? execution.outputFile([(params["export_pe_table"] ?? null)].join('')) : null,
-        export_grad_fsl: (dynOutputs((params["export_grad_fsl"] ?? null)["@type"])?.((params["export_grad_fsl"] ?? null), execution) ?? null),
-        export_pe_eddy: (dynOutputs((params["export_pe_eddy"] ?? null)["@type"])?.((params["export_pe_eddy"] ?? null), execution) ?? null),
+        export_grad_fsl: (params["export_grad_fsl"] ?? null) ? (dynOutputs((params["export_grad_fsl"] ?? null)["@type"])?.((params["export_grad_fsl"] ?? null), execution) ?? null) : null,
+        export_pe_eddy: (params["export_pe_eddy"] ?? null) ? (dynOutputs((params["export_pe_eddy"] ?? null)["@type"])?.((params["export_pe_eddy"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }

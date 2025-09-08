@@ -980,10 +980,10 @@ function cifti_convert_outputs(
 ): CiftiConvertOutputs {
     const ret: CiftiConvertOutputs = {
         root: execution.outputFile("."),
-        from_gifti_ext: (dynOutputs((params["from_gifti_ext"] ?? null)["@type"])?.((params["from_gifti_ext"] ?? null), execution) ?? null),
-        to_nifti: (dynOutputs((params["to_nifti"] ?? null)["@type"])?.((params["to_nifti"] ?? null), execution) ?? null),
-        from_nifti: (dynOutputs((params["from_nifti"] ?? null)["@type"])?.((params["from_nifti"] ?? null), execution) ?? null),
-        from_text: (dynOutputs((params["from_text"] ?? null)["@type"])?.((params["from_text"] ?? null), execution) ?? null),
+        from_gifti_ext: (params["from_gifti_ext"] ?? null) ? (dynOutputs((params["from_gifti_ext"] ?? null)["@type"])?.((params["from_gifti_ext"] ?? null), execution) ?? null) : null,
+        to_nifti: (params["to_nifti"] ?? null) ? (dynOutputs((params["to_nifti"] ?? null)["@type"])?.((params["to_nifti"] ?? null), execution) ?? null) : null,
+        from_nifti: (params["from_nifti"] ?? null) ? (dynOutputs((params["from_nifti"] ?? null)["@type"])?.((params["from_nifti"] ?? null), execution) ?? null) : null,
+        from_text: (params["from_text"] ?? null) ? (dynOutputs((params["from_text"] ?? null)["@type"])?.((params["from_text"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }

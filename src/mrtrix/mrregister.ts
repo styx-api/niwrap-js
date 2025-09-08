@@ -1223,9 +1223,9 @@ function mrregister_outputs(
         affine_2tomidway: ((params["affine_2tomidway"] ?? null) !== null) ? execution.outputFile([(params["affine_2tomidway"] ?? null)].join('')) : null,
         affine_log: ((params["affine_log"] ?? null) !== null) ? execution.outputFile([(params["affine_log"] ?? null)].join('')) : null,
         nl_warp_full: ((params["nl_warp_full"] ?? null) !== null) ? execution.outputFile([(params["nl_warp_full"] ?? null)].join('')) : null,
-        transformed: ((params["transformed"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) ?? null),
-        transformed_midway: ((params["transformed_midway"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) ?? null),
-        nl_warp: (dynOutputs((params["nl_warp"] ?? null)["@type"])?.((params["nl_warp"] ?? null), execution) ?? null),
+        transformed: (params["transformed"] ?? null) ? (params["transformed"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) : null,
+        transformed_midway: (params["transformed_midway"] ?? null) ? (params["transformed_midway"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) : null,
+        nl_warp: (params["nl_warp"] ?? null) ? (dynOutputs((params["nl_warp"] ?? null)["@type"])?.((params["nl_warp"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }

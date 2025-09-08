@@ -316,8 +316,8 @@ function metric_convert_outputs(
 ): MetricConvertOutputs {
     const ret: MetricConvertOutputs = {
         root: execution.outputFile("."),
-        to_nifti: (dynOutputs((params["to_nifti"] ?? null)["@type"])?.((params["to_nifti"] ?? null), execution) ?? null),
-        from_nifti: (dynOutputs((params["from_nifti"] ?? null)["@type"])?.((params["from_nifti"] ?? null), execution) ?? null),
+        to_nifti: (params["to_nifti"] ?? null) ? (dynOutputs((params["to_nifti"] ?? null)["@type"])?.((params["to_nifti"] ?? null), execution) ?? null) : null,
+        from_nifti: (params["from_nifti"] ?? null) ? (dynOutputs((params["from_nifti"] ?? null)["@type"])?.((params["from_nifti"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }

@@ -615,10 +615,10 @@ function cifti_separate_outputs(
 ): CiftiSeparateOutputs {
     const ret: CiftiSeparateOutputs = {
         root: execution.outputFile("."),
-        volume_all: (dynOutputs((params["volume_all"] ?? null)["@type"])?.((params["volume_all"] ?? null), execution) ?? null),
-        label: ((params["label"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) ?? null),
-        metric: ((params["metric"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) ?? null),
-        volume: ((params["volume"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) ?? null),
+        volume_all: (params["volume_all"] ?? null) ? (dynOutputs((params["volume_all"] ?? null)["@type"])?.((params["volume_all"] ?? null), execution) ?? null) : null,
+        label: (params["label"] ?? null) ? (params["label"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) : null,
+        metric: (params["metric"] ?? null) ? (params["metric"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) : null,
+        volume: (params["volume"] ?? null) ? (params["volume"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) : null,
     };
     return ret;
 }
